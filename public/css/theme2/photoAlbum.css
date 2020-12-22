@@ -1,0 +1,33 @@
+/*1st box of styles*/
+
+DIV.ppr_rup.ppr_priv_photoviewer .heroNav.right, .rtl DIV.ppr_rup.ppr_priv_photoviewer .heroNav.right DIV.ppr_rup.ppr_priv_photoviewer .heroNav.right, .rtl DIV.ppr_rup.ppr_priv_photoviewer .heroNav.right {
+    background: url("../../images/arrow.png");
+    height: 40px;
+    width: 45px;
+    right: 15px;
+}
+
+DIV.ppr_rup.ppr_priv_photoviewer .heroNav.left, .rtl DIV.ppr_rup.ppr_priv_photoviewer .heroNav.left {
+    background: url("../../images/arrow.png");
+    background-position: 0 -39px;
+    height: 40px;
+    width: 45px;
+    left: 15px;
+}
+
+.loader {
+    background-image: url("../../images/loading.gif");
+    width: 100px;
+    height: 100px;
+}
+
+/*inline style*/
+
+#photo_album_span {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+}

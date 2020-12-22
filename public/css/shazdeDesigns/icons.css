@@ -1,0 +1,784 @@
+.icons {
+    font-family: 'Shazde_Regular2' !important;
+}
+
+/*....................*/
+.foodIcon:before{
+    content: '\E0A1';
+    font-family: 'Shazde_Regular2' !important;
+}
+.caltureIcon:before{
+    content: '\E0E9';
+    font-family: 'Shazde_Regular2' !important;
+}
+.manSportIcon:before{
+    content: '\E0EB';
+    font-family: 'Shazde_Regular2' !important;
+}
+.fullWalletIcon:before{
+    content: '\E0AD';
+    font-family: 'Shazde_Regular2' !important;
+}
+.emptySquer:before{
+    content: '\E093';
+    font-family: 'Shazde_Regular2' !important;
+}
+.emptyRightArrowLine:before{
+    content: '\E03B';
+    font-family: 'Shazde_Regular2' !important;
+}
+.emptySquerTick:before{
+    content: '\E02A';
+    font-family: 'Shazde_Regular2' !important;
+}
+.twoHouseIcon:before{
+    content: '\E020';
+    font-family: 'Shazde_Regular2' !important;
+}
+.filterIcon:before{
+    content: '\E0DA';
+    font-family: 'Shazde_Regular2' !important;
+}
+.closeIconWithCircle:before{
+    content: '\E02D';
+    font-family: 'Shazde_Regular2' !important;
+}
+.closeIconWithCircleAfter:after{
+    content: '\E02D';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addVideo360Icon:before{
+    content: '\E1F3';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addVideo360IconAfter:after{
+    content: '\E1F3';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addFriendIcon:before{
+    content: '\E1F4';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addFriendIconAfter:after{
+    content: '\E1F4';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addVideoIcon:before{
+    content: '\E0B2';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addVideoIconAfter:after{
+    content: '\E0B2';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addPhotoIcon:before{
+    content: '\E0B1';
+    font-family: 'Shazde_Regular2' !important;
+}
+.addPhotoIconAfter:after{
+    content: '\E0B1';
+    font-family: 'Shazde_Regular2' !important;
+}
+.doubleQuet:before{
+    content: '\E0B8';
+    font-family: 'Shazde_Regular2' !important;
+}
+.doubleQuetAfter:after{
+    content: '\E0B8';
+    font-family: 'Shazde_Regular2' !important;
+}
+.flagIcon:before{
+    content: '\E025';
+    font-family: 'Shazde_Regular2' !important;
+}
+.flagIconAfter:after{
+    content: '\E025';
+    font-family: 'Shazde_Regular2' !important;
+}
+.emptyCameraIcon:before{
+    content: '\E010';
+    font-family: 'Shazde_Regular2' !important;
+}
+.emptyCameraIconAfter:after{
+    content: '\E010';
+    font-family: 'Shazde_Regular2' !important;
+}
+.fullCameraIcon:before{
+    content: '\E0A4';
+    font-family: 'Shazde_Regular2' !important;
+}
+.hotel:before {
+    content: '\E000';
+}
+.ticket:before {
+    content: '\E004';
+}
+.atraction:before {
+    content: '\E002';
+    font-family: 'Shazde_Regular2' !important;
+}
+.restaurant:before {
+    content: '\E001';
+}
+.soghat:before {
+    content: '\E005';
+}
+.ghazamahali:before {
+    content: '\E006';
+}
+.majara:before {
+    content: '\E009';
+}
+.majaraIcon:before {
+    content: '\E009';
+    font-family: Shazde_Regular2 !important;
+}
+.moreInfoIcon{
+    font-family: monospace;
+}
+.sanaye:before {
+    content: '\E00A';
+}
+.lebas:before {
+    content: '\E05A';
+}
+.boom:before {
+    content: '\E05B';
+}
+.boomIcon:before {
+    content: '\E05B';
+    font-family: 'Shazde_Regular2' !important;
+
+}
+
+.estelah:before {
+    content: '\E06C';
+}
+.location:before {
+    content: '\E019';
+    font-family: 'Shazde_Regular' !important
+}
+.locationIcon:before {
+    content: '\E019';
+    font-family: 'Shazde_Regular' !important
+}
+.downArrow {
+    font-size: 40px;
+}
+.downArrow:before {
+    content: '\E04A';
+    color: #30b4a6;
+}
+.topArrowFull:before {
+    content: '\E044';
+    font-family: 'Shazde_Regular' !important
+}
+.plus:before {
+    content: '\E031';
+    font-family: 'Shazde_Regular' !important
+}
+.plus2:before {
+    content: '\E02F';
+    font-family: 'Shazde_Regular' !important
+}
+.plusIconAfter:after {
+    content: '\E02F';
+    font-family: 'Shazde_Regular' !important
+}
+.calendarIcon:before{
+    content: "\e015";
+    font-family: 'Shazde_Regular' !important
+}
+.calendarIconA:after{
+    content: "\e015";
+    font-family: 'Shazde_Regular' !important
+}
+.minus:before {
+    content: '\E034';
+}
+.trashIcon:before{
+    content: '\E073';
+    font-family: 'Shazde_Regular' !important
+}
+.userIcon:before{
+    content: '\E06E';
+    font-family: 'Shazde_Regular2' !important
+}
+.userIconA:after{
+    content: '\E06E';
+    font-family: 'Shazde_Regular2' !important
+}
+.editIcon:before{
+    content: '\E00E';
+    font-family: 'Shazde_Regular' !important
+}
+.close:before {
+    content: '\E02C';
+    font-family: 'Shazde_Regular' !important;
+}
+.iconClose:before {
+    font-family: 'Shazde_Regular' !important;
+    content: '\E02C';
+}
+.iconFullClose:before {
+    font-family: 'Shazde_Regular' !important;
+    content: '\E02E';
+}
+.iconCloseAfter:after {
+    font-family: 'Shazde_Regular' !important;
+    content: '\E02C';
+}
+.sendIcon:before{
+    content: "\E01B";
+    font-family: 'Shazde_Regular' !important;
+}
+.sendIconAfter:after{
+    content: "\E01B";
+    font-family: 'Shazde_Regular' !important;
+}
+.redStar:before {
+    content: '\E00B';
+}
+.iconFamily:before{
+    font-family: 'Shazde_Regular' !important;
+}
+.searchIcon:before{
+    content: "\e056";
+    font-family: "Shazde_Regular"!important;
+}
+
+
+.hotelIcon::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E000';
+}
+
+.restaurantIcon::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E001';
+}
+
+.touristAttractions::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E002';
+}
+
+.souvenirIcon::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E005';
+}
+
+.traditionalFood::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E006';
+}
+
+.adventure::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E009';
+}
+
+.adventureIcon::before {
+    font-family: Shazde_Regular2 !important;
+    content: '\E009';
+}
+
+/*..........city page Icons..........*/
+.cityPageIcon {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 35px;
+    color: #30b4a6;
+}
+
+/*..........phone popUp Icons..........*/
+.phoneIcons {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 40px;
+    direction: rtl;
+    line-height: 40px;
+    color: #30b4a6;
+    margin: 2% 5% 2% 0;
+}
+.phoneIcon {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 50px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.textIcon {
+    color: black;
+    font-size: 19px;
+    margin-top: -1%;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.mirorIcon{
+    display: inline-block;
+    transform: rotate(90deg);
+}
+
+.LikeIcon:before{
+    content: '\E057' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.DisLikeIcon:before{
+    content: '\E058' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.LikeIconEmpty:before{
+    content: '\E1F9';
+    font-family: Shazde_Regular2 !important;
+}
+.DisLikeIconEmpty:before{
+    content: '\E1F8';
+    font-family: Shazde_Regular2 !important;
+}
+
+.CommentIcon:before{
+    content: '\E06C';
+    font-family: Shazde_Regular2 !important;
+}
+.EmptyCommentIcon:before{
+    content: '\E06B';
+    font-family: Shazde_Regular2 !important;
+}
+.ShareIcon:before{
+    content: '\E1F6';
+    font-family: Shazde_Regular2 !important;
+}
+.tvIcon:before{
+    content: '\E01E' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.earthIcon:before{
+    content: '\E017' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.earthIconAfter:after{
+    content: '\E017' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.telephoneIcon:before{
+    content: '\E026' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.telephoneIconAfter:after{
+    content: '\E026' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.clockIcon:before{
+    content: '\E016' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.clockIconAfter:after{
+    content: '\E016' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.emptyShareIcon:before{
+    content: '\e1f5' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.emptyShareIconAfter:after{
+    content: '\e1f5' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.HeartIcon:before{
+    content: '\e012' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.HeartIconAfter:after{
+    content: '\e012' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.empty-heart:before{
+    content: '\e011' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.empty-heartAfter:after{
+    content: '\e011' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.fill-heart:before{
+    content: '\e012' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.fill-heartAfter:after{
+    content: '\e012' !important;
+    font-family: Shazde_Regular2 !important;
+}
+
+.BookMarkIcon:before{
+    content: "\E0DE" !important;
+    font-family: Shazde_Regular2 !important;
+    color: var(--koochita-yellow);
+}
+.spinnerIcon:before{
+    content: "\E036" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.BookMarkIconEmpty:before{
+    content: "\e0dd" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.BookMarkIconEmptyAfter:after{
+    content: "\e0dd" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.suitCaseIcon:before{
+    content: "\E0C3" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.addMemberIcon:before{
+    content: "\E087" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.twoManIcon:before{
+    content: "\E014" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.bookIcon:before{
+    content: "\E09D" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.questionIcon:before{
+    content: "\E054" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.addSafarnamehIcon:before{
+    content: "\E09C" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.addressBarIcon:before{
+    content: "\E01A" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.medalsIcon:before{
+    content: "\E070" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.plusCircleIcon:before{
+    content: "\E030" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.festivalIcon:before{
+    content: "\E059" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.tickIcon:before{
+    content: "\E02B" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.warningIcon:before{
+    content: "\E052" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.safarnameIcon:before{
+    content: '\E0D9' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.settingIcon:before{
+    content: "\E090" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.MyTripsIcon:before{
+    content: "\e0c5" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.messageIcon:before{
+    content: "\E0CA" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.MsgIcon:before{
+    content: "\e05f" !important;
+}
+.UserIcon:before{
+    content: "\e0aa" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.leftBigArrowIcon:before{
+    content: '\E080';
+    font-family: Shazde_Regular2 !important;
+}
+.downArrowIcon:before{
+    content: '\E04A';
+    font-family: Shazde_Regular2 !important;
+}
+.downArrowIconAfter:after{
+    content: '\E04A';
+    font-family: Shazde_Regular2 !important;
+}
+.leftArrowFullIcon:before{
+    content: '\E043';
+    font-family: Shazde_Regular2 !important;
+}
+.leftArrowIcon:before{
+    content: '\E041';
+    font-family: Shazde_Regular2 !important;
+}
+.buildingIcon:before{
+    content: '\E020';
+    font-family: Shazde_Regular2 !important;
+}
+.upArrowIcon{
+    display: inline-block;
+    transform: rotate(180deg);
+}
+.upArrowIcon:before{
+    content: '\E04A';
+    font-family: Shazde_Regular2 !important;
+}
+.threeDotIcon:before{
+    content: '\E091';
+    font-family: Shazde_Regular2 !important;
+}
+.threeDotIconVertical:before{
+    content: '\E092';
+    font-family: Shazde_Regular2 !important;
+}
+.threeLineIcon:before{
+    content: '\E035';
+    font-family: Shazde_Regular2 !important;
+}
+.starRatingGreen::before {
+    content: '\E00B';
+    cursor: pointer;
+    font-family: Shazde_Regular2 !important;
+    color: var(--koochita-light-green);
+    font-size: 25px;
+}
+.fullStarRating::before {
+    content: '\E00B';
+    font-family: Shazde_Regular2 !important;
+}
+.emptyStarRating::before {
+    content: '\e00d';
+    font-family: Shazde_Regular2 !important;
+}
+.fullStarRatingAfter::after {
+    content: '\E00B';
+    font-family: Shazde_Regular2 !important;
+}
+
+.starRating::before {
+    content: '\E00B';
+    cursor: pointer;
+    font-family: Shazde_Regular2 !important;
+    color: white;
+    font-size: 25px;
+}
+
+.starRatingGold::before {
+    content: '\E00B';
+    cursor: pointer;
+    font-family: Shazde_Regular2 !important;
+    color: var(--koochita-yellow);
+    font-size: 25px;
+}
+
+.starRatingGrey::before {
+    content: '\E00B';
+    cursor: pointer;
+    font-family: Shazde_Regular2 !important;
+    color: #e5e5e5;
+    font-size: 25px;
+}
+
+.ui_bubble_rating {
+    display: inline-block;
+    position: relative;
+}
+.ui_bubble_rating:before,
+.ui_bubble_rating:after {
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    font-size: inherit;
+    line-height: 1;
+    font-family: "Shazde_Regular"!important;
+    -ms-transform: rotate(-0.001deg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    speak: none;
+}
+.ui_bubble_rating:before {
+    color: transparent;
+    display: block;
+    content: "\e00a\e00a\e00a\e00a\e00a";
+}
+.ui_bubble_rating:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--koochita-light-green);
+}
+.ui_bubble_rating.bubble_0:after,
+.ui_bubble_rating.bubble_00:after {
+    content: "\e00d\e00d\e00d\e00d\e00d";
+}
+.ui_bubble_rating.bubble_05:after {
+    content: "\e00c\e00d\e00d\e00d\e00d";
+}
+.ui_bubble_rating.bubble_1:after,
+.ui_bubble_rating.bubble_10:after {
+    content: "\e00b\e00d\e00d\e00d\e00d";
+}
+.ui_bubble_rating.bubble_15:after {
+    content: "\e00b\e00c\e00d\e00d\e00d";
+}
+.ui_bubble_rating.bubble_2:after,
+.ui_bubble_rating.bubble_20:after {
+    content: "\e00b\e00b\e00d\e00d\e00d";
+}
+.ui_bubble_rating.bubble_25:after {
+    content: "\e00b\e00b\e00c\e00d\e00d";
+}
+.ui_bubble_rating.bubble_3:after,
+.ui_bubble_rating.bubble_30:after {
+    content: "\e00b\e00b\e00b\e00d\e00d";
+}
+.ui_bubble_rating.bubble_35:after {
+    content: "\e00b\e00b\e00b\e00c\e00d";
+}
+.ui_bubble_rating.bubble_4:after,
+.ui_bubble_rating.bubble_40:after {
+    content: "\e00b\e00b\e00b\e00b\e00d";
+}
+.ui_bubble_rating.bubble_45:after {
+    content: "\e00b\e00b\e00b\e00b\e00c";
+}
+.ui_bubble_rating.bubble_5:after,
+.ui_bubble_rating.bubble_50:after {
+    content: "\e00b\e00b\e00b\e00b\e00b";
+}
+.rtl .ui_bubble_rating:before,
+.rtl .ui_bubble_rating:after {
+    -webkit-transform: scale(-1, 1);
+    -moz-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0,mirror=1)";
+    transform: scale(-1, 1);
+}
+
+
+.bubble_50:after {
+    content: "\e00b\e00b\e00b\e00b\e00b" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+.bubble_40:after {
+    content: "\e00d\e00b\e00b\e00b\e00b" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+.bubble_30:after {
+    content: "\e00d\e00d\e00b\e00b\e00b" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+.bubble_20:after {
+    content: "\e00d\e00d\e00d\e00b\e00b" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+.bubble_10:after {
+    content: "\e00d\e00d\e00d\e00d\e00b" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+.bubble_0:after {
+    content: "\e00d\e00d\e00d\e00d\e00d" !important;
+    font-family: 'Shazde_Regular2' !important;
+}
+
+
+
+.ui_star_rating {
+    display: inline-block;
+    position: relative;
+}
+.ui_star_rating:before,
+.ui_star_rating:after {
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    font-size: inherit;
+    line-height: 1;
+    font-family: "Shazde_Regular"!important;
+    -ms-transform: rotate(-0.001deg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    speak: none;
+}
+.ui_star_rating:before {
+    content: "\e088\e088\e088\e088\e088";
+    color: #C4C4C4;
+    display: block;
+}
+.ui_star_rating:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #636363;
+}
+.ui_star_rating.star_05:after {
+    content: "\e089";
+}
+.ui_star_rating.star_1:after,
+.ui_star_rating.star_10:after {
+    content: "\e088";
+}
+.ui_star_rating.star_15:after {
+    content: "\e088\e089";
+}
+.ui_star_rating.star_2:after,
+.ui_star_rating.star_20:after {
+    content: "\e088\e088";
+}
+.ui_star_rating.star_25:after {
+    content: "\e088\e088\e089";
+}
+.ui_star_rating.star_3:after,
+.ui_star_rating.star_30:after {
+    content: "\e088\e088\e088";
+}
+.ui_star_rating.star_35:after {
+    content: "\e088\e088\e088\e089";
+}
+.ui_star_rating.star_4:after,
+.ui_star_rating.star_40:after {
+    content: "\e088\e088\e088\e088";
+}
+.ui_star_rating.star_45:after {
+    content: "\e088\e088\e088\e088\e089";
+}
+.ui_star_rating.star_5:after,
+.ui_star_rating.star_50:after {
+    content: "\e088\e088\e088\e088\e088";
+}
+
+@media print {
+    .ui_bubble_rating:before {
+        color: transparent;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .phoneIcon {
+        font-size: 40px;
+    }
+
+    .textIcon {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .phoneIcon {
+        font-size: 30px;
+    }
+
+    .textIcon {
+        font-size: 12px;
+    }
+}

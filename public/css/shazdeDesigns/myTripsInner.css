@@ -1,0 +1,1044 @@
+/*1st box of styles*/
+#targetHelp_7, #targetHelp_8, #targetHelp_9, #targetHelp_10{
+    margin-right: 0px !important;
+}
+
+.calendar2 {
+    top: 113% !important;
+    left: 27% !important;
+}
+
+.icon-circle-arrow-right {
+    opacity: 1;
+    color: black;
+    font-size: 22px;
+    font-style: normal;
+    transform: rotate(180deg);
+    display: flex;
+}
+
+.icon-circle-arrow-right:before{
+    content: '\E041';
+    font-family: Shazde_Regular2 !important;
+}
+
+
+.icon-circle-arrow-left {
+    opacity: 1;
+    color: black;
+    font-size: 22px;
+    font-style: normal;
+    display: flex;
+}
+.icon-circle-arrow-left:before{
+    content: '\E041';
+    font-family: Shazde_Regular2 !important;
+}
+/*2nd box of Styles*/
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    color: #666666;
+}
+
+input[type="checkbox"] + label span, input[type="radio"] + label span {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    margin: -2px 10px 0 0;
+    vertical-align: middle;
+    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label span {
+    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+
+}
+
+.labelForCheckBox:before {
+    background-color: transparent !important;
+    border: none !important;
+    content: "" !important;
+}
+
+#result div:hover {
+    color: var(--koochita-light-green);
+}
+
+.ui_tabs {
+    white-space: inherit !important;
+}
+
+.helpSpans p {
+    font-size: 14px;
+    line-height: 2em;
+    text-align: justify;
+}
+
+.nextBtnsHelp {
+    margin-left: 5px !important;
+}
+
+/*inline styles*/
+
+#trip-header-region {
+    direction: ltr;
+    position: relative;
+}
+
+#targetHelp_6 {
+    display: inline;
+}
+
+.helpBtnTimeChange {
+    background-size: 28px;
+    background-position: 0 -29px;
+    width: 28px;
+    height: 28px;
+    background-image: url('../../images/help_share.png');
+    background-repeat: no-repeat;
+}
+
+#targetHelp_11, #targetHelp_12, #targetHelp_13 {
+    float: left;
+}
+
+#targetHelp_7, #targetHelp_8, #targetHelp_9, #targetHelp_10 {
+    margin-right: 7px;
+    float: left;
+}
+
+#tripNotePElement {
+    padding-right: 26px;
+    padding-top: 7px;
+    text-align: justify;
+    padding-bottom: 7px;
+    width: 100%;
+    border-bottom: 1px solid #CCC;
+}
+
+#targetHelp_14 {
+    float: right;
+    position: relative
+}
+
+#targetHelp_15 {
+    position: relative;
+    float: right;
+    /*margin-right: 5px*/
+}
+
+#targetHelp_16 {
+    position: relative;
+    float: left
+}
+
+.removeBtnTargetHelp_16 {
+    background: url('../../images/estelah.png') no-repeat -7px -36px;
+    background-size: 30px;
+    float: left;
+    margin: 0 !important;
+}
+
+#targetHelp_17 {
+    margin: 5px auto 10px;
+    width: 54px;
+    position: relative
+}
+
+.showDetailsBtnTargetHelp_17 {
+    background: url('../../images/tripplace.png') no-repeat;
+    background-size: 60%;
+    background-position-x: center;
+    padding: 6px 12px;
+}
+
+.showDetailsBtnTargetHelp_17MainDiv {
+    margin: 5px auto 10px;
+    width: 54px;
+    position: relative
+}
+
+.placeDetailsToggleBar {
+    background: #e4e4e4;
+    border-radius: 5px;
+}
+
+#addPlacePrompt, #note, .addPlaceToTripPromptTitle {
+    position: fixed;
+    width: 39%;
+    left: 30%;
+    right: auto;
+    top: 32%;
+    bottom: auto;
+}
+
+.addPlacePromptTitle {
+    direction: rtl;
+    margin-bottom: 29px !important;
+    font-size: 24px !important;
+    font-weight: bold;
+}
+
+#placePromptError {
+    margin-top: 10px;
+    direction: rtl
+}
+
+#membersPane, #addPlaceToTripPrompt, #invitePane, #addDateToPlace {
+    position: fixed;
+    width: 39%;
+    left: 30%;
+    right: auto;
+    top: 23%;
+    bottom: auto;
+}
+
+.membersPaneTitle, .addNoteTitle, .invitePaneTitle, .addDateToPlaceTitle, .editTripPromptTitle {
+    direction: rtl;
+    margin-bottom: 29px !important;
+    font-size: 30px !important;
+    font-weight: bold;
+}
+
+#members, #notePrompt {
+    direction: rtl;
+}
+
+.editTripDateLabel {
+    direction: rtl;
+    margin-bottom: 29px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--koochita-light-green);
+}
+
+.darkModeOption {
+    display: none;
+}
+
+.successBtn {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+#errorAssignPlace {
+    margin-top: 10px
+}
+
+#friendId {
+    width: 60%;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+}
+
+#nickName {
+    width: 60%;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+}
+
+#errorInvite {
+    margin-top: 10px;
+    color: red
+}
+#errorText {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: red
+}
+
+#editDateTripPrompt, #editTripPrompt, #deleteTrip, #deleteTripPlace, #deleteMember {
+    position: fixed;
+    left: 37%;
+    right: auto;
+    top: 29%;
+    bottom: auto;
+    width: 400px;
+}
+
+.editTripPromptTitle {
+    color: var(--koochita-light-green) !important;
+}
+
+#date_btn_start_edit_label, #date_btn_end_edit_label {
+    position: relative;
+    margin: 6px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    box-shadow: 0 7px 12px -7px #e5e5e5 inset;
+}
+
+#date_btn_start_edit_span, #date_btn_end_edit_span {
+    color: #30b4a6 !important;
+    font-size: 20px;
+    line-height: 32px;
+    position: absolute;
+    right: 7px;
+}
+
+#date_input_start_edit_2, #date_input_end_edit_2, #date_input_start_edit, #date_input_end_edit {
+    padding: 7px;
+    position: absolute;
+    top: 1px;
+    right: 35px;
+    border: none;
+    background: transparent;
+}
+
+#error2 {
+    color: red;
+}
+
+#tripNameEdit {
+    direction: rtl
+}
+
+#date_btn_start_label, #date_btn_end_label {
+    position: relative;
+    margin: 6px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    box-shadow: 0 7px 12px -7px #e5e5e5 inset;
+}
+
+#date_btn_start, #date_btn_start {
+    color: #30b4a6 !important;
+    font-size: 20px;
+    line-height: 32px;
+    position: absolute;
+    right: 7px;
+}
+
+
+#mainDivKeyAndResults {
+    margin-top: 20px;
+    border: 2px solid #CCC;
+    border-radius: 7px;
+}
+
+#key {
+    border: none;
+    margin-top: 10px;
+}
+
+#result {
+    max-height: 160px;
+    overflow: auto;
+    margin-top: 10px;
+}
+
+#visitTimeLabel {
+    float: left;
+    padding: 5px 0;
+    color: var(--koochita-light-green);
+}
+
+#map {
+    border: 2px solid black;
+    height: 200px
+}
+
+#sendCommentBtn {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    border-radius: 5%;
+    width: 100%;
+    margin-top: 17px;
+}
+
+#newComment {
+    width: 100%;
+    padding: 5px;
+    float: right !important;
+    border-radius: 5px;
+    border: 1px solid #ccc
+}
+
+#tripNote {
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    padding: 5px;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 110px;
+}
+
+.isNotInFilterCurrent {
+    border: 1px solid #ccc;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 2px;
+    width: 12px;
+    height: 12px;
+    float: left
+}
+
+.isNotInFilter {
+    border: 1px solid #333;
+    background-color: black;
+    border-radius: 50%;
+    margin-right: 2px;
+    width: 12px;
+    height: 12px;
+    float: left
+}
+
+
+#editTripPrompt{
+    padding: 20px;
+}
+.memberList{
+    max-height: 55vh;
+    overflow: auto;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.memberCard{
+    padding: 10px;
+    border-radius: 20px;
+    width: 180px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    background: #fcc15633;
+    box-shadow: 5px 4px 10px #80808080;
+    transition: 1s;
+    position: relative;
+    overflow: hidden;
+}
+
+.memberCard .cont{
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.memberCard .loading{
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background: #ffebc6e0;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+
+    background: red;
+    color: white;
+    font-size: 9px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-bottom: 8px;
+    position: absolute;
+    top: 35px;
+}
+
+/*.memberCard .loading img{*/
+/*    width: 100px;*/
+/*}*/
+
+.memberCard .access{
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    transform: rotateY(180deg);
+}
+
+.memberCard .access .header{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: solid lightgray 1px;
+    padding-bottom: 5px;
+}
+
+.memberCard .access .back{
+    color: var(--koochita-green);
+    cursor: pointer;
+    font-size: 16px;
+    border: solid 1px;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    transition: .3s;
+}
+.memberCard .access .back:hover{
+    color: white;
+    background: var(--koochita-green);
+    border-color: var(--koochita-green);
+}
+
+.memberCard.rotate180{
+    transform: rotateY(180deg);
+}
+.memberCard.accessType .cont{
+    display: none !important;
+}
+.memberCard.accessType .access{
+    display: flex !important;
+}
+
+.memberCard .img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.memberCard .name{
+    font-weight: normal;
+    margin: 10px 0px;
+    font-size: 18px;
+    text-align: center;
+    color: black;
+}
+.memberCard .btn{
+    text-align: center;
+    border: solid 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s;
+    padding: 3px 0px;
+    font-size: 15px;
+}
+.memberCard .accessBut{
+    color: var(--koochita-blue);
+    width: 100%;
+}
+.memberCard .accessBut:hover{
+    color: white;
+    border-color: var(--koochita-blue);
+    background: var(--koochita-blue);
+}
+.memberCard .msgBut{
+    color: var(--koochita-green);
+    width: 45%;
+}
+.memberCard .msgBut:hover{
+    color: white;
+    border-color: var(--koochita-green);
+    background: var(--koochita-green);
+}
+.memberCard .deleteBut {
+    color: red;
+    width: 45%;
+}
+.memberCard .deleteBut:hover{
+    color: white;
+    border-color: red;
+    background: red;
+}
+.memberCard .row{
+    display: flex;
+    width: 100%;
+    margin: 0;
+    justify-content: space-between;
+    margin-top: 4px;
+    align-items: center;
+    padding: 0;
+}
+.memberCard .input{
+    font-size: 15px;
+}
+.memberCard .input .ui_input_checkbox{
+    margin-bottom: 5px;
+}
+.memberCard .input .ui_input_checkbox .labelForCheckBox{
+    margin-bottom: 0px;
+}
+.inviteFBut{
+    background: var(--koochita-green);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.inviteFBut:before{
+    margin-left: 5px;
+}
+
+.inviteFriendSearchResult{
+    position: absolute;
+    background: white;
+    width: 100%;
+    border: solid lightgray 1px;
+    border-radius: 5px;
+    max-height: 210px;
+    padding: 10px;
+    overflow: auto;
+    font-size: 14px;
+    z-index: 9;
+}
+
+.inviteFriendSearchResult .result{
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: .3s;
+}
+
+.inviteFriendSearchResult .notFind{
+    text-align: center;
+    color: gray;
+}
+
+.inviteFriendSearchResult .result:hover{
+    background: var(--koochita-blue);
+    color: white;
+}
+
+.choosenResult{
+    margin-top: 10px;
+    border-top: solid #cccccc 1px;
+    padding-top: 5px;
+}
+
+.choosenResult .choosenUserName{
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.choosenResult .input{
+    display: flex;
+    justify-content: space-around;
+}
+
+.acceptRow{
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.acceptRow .acceptBut{
+    background: #a0ff0e;
+    padding: 3px 5px;
+    border-radius: 9px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.acceptRow .deleteBut{
+    background: red;
+    padding: 3px 5px;
+    border-radius: 9px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: white;
+}
+
+.placeCard{
+    transition: .3s;
+}
+.placeCard.fullShow{
+    padding-bottom: 20px;
+    background: var(--koochita-blue);
+    border-bottom: none;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.placeCard .title{
+    color: black;
+}
+
+.placeCard .header{
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.placeCard .images{
+    width: calc(100% - 10px);
+    margin: 0px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 200px;
+}
+
+.placeCard .footerCard{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.placeCard .footerCard .buttonsSec{
+    display: flex;
+    justify-content: center;
+}
+
+.placeCard .footerCard .buttonsSec button{
+    margin: 0px 5px;
+}
+
+.placeCard .footerCard .showMoreInfoPlace{
+    margin: 5px auto !important;
+    margin-top: 10px !important;
+}
+
+.placeCard .chooseDate{
+    background: var(--koochita-light-green);
+    border: none;
+    color: white;
+    border-radius: 15px;
+    padding: 2px 8px;
+    box-shadow: 0px 0px 3px 0px #b1b1b1;
+}
+.placeCard .trip-add-dates{
+    padding: 0;
+    border: none;
+    margin-right: 5px;
+}
+
+.placeCard .date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 33px;
+    width: 100%;
+    font-style: normal;
+    color: black;
+    cursor: pointer;
+    padding: 0px 10px;
+}
+.placeCard .date .tripCommentCount{
+    display: block;
+    margin-right: auto;
+    background: var(--koochita-blue);
+    color: white;
+    border-radius: 10px;
+    font-size: 9px;
+    padding: 2px 5px;
+}
+
+.placeDetailsToggleBar{
+    transition: .3s;
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0px;
+    background: var(--koochita-blue) !important;
+    border-radius: 5px;
+    width: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.placeDetailsToggleBar.showPlaceInfo{
+    width: 100%;
+    padding: 12px;
+    max-height: 10000px;
+    border-radius: 0px 0px 10px 10px;
+    margin-bottom: 10px;
+}
+
+.placeDetailsToggleBar > div {
+    background: white;
+    height: 400px;
+    width: 48%;
+    border-radius: 10px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+    padding: 15px;
+}
+
+.placeDetailsToggleBar .rightSec{
+
+}
+.placeDetailsToggleBar .rightSec .placeInfo{
+    display: flex;
+    align-items: center;
+    padding: 10px 0px;
+    height: 135px;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .img{
+    width: 170px;
+    margin-left: 15px;
+    max-height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .info .name{
+    display: flex;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .info .placeName{
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .rating{
+
+}
+.placeDetailsToggleBar .rightSec .placeInfo .reviewCount{
+    color: gray;
+    font-size: 10px;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .city{
+    font-size: 9px;
+    color: gray;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+.placeDetailsToggleBar .rightSec .placeInfo .address{
+    font-size: 11px;
+    color: #353535;
+}
+.placeDetailsToggleBar .leftSec{
+    position: relative;
+}
+.placeDetailsToggleBar .leftSec .notRow{
+    font-size: 15px;
+    text-align: center;
+    margin: 60px auto;
+    background: var(--koochita-blue);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 25px;
+    width: max-content;
+    opacity: .3;
+}
+.placeDetailsToggleBar .leftSec .userComments{
+    overflow-y: auto;
+    height: 300px;
+}
+.placeDetailsToggleBar .leftSec .sendIcon{
+    border: none;
+    border-radius: 5px;
+    margin-right: auto;
+    margin-top: 2px;
+    position: absolute;
+    left: 6px;
+    color: var(--koochita-blue);
+    background: unset;
+    padding: 0;
+    font-size: 30px;
+    line-height: 25px;
+    transform: rotate(225deg);
+}
+.placeDetailsToggleBar .leftSec input{
+    width: 100%;
+    border-radius: 10px;
+    border: solid 1px #a2a2a2;
+    padding: 4px 10px;
+}
+.placeDetailsToggleBar .leftSec .yourComments{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 5px 0px;
+}
+.placeDetailsToggleBar .leftSec .header{
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: solid 1px #ececec;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+.placeDetailsToggleBar .leftSec .placeName{
+
+}
+.placeDetailsToggleBar .leftSec .userRow{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: solid 1px #eeeeee;
+}
+.placeDetailsToggleBar .leftSec .userInfo{
+    display: flex;
+    align-items: center;
+}
+.placeDetailsToggleBar .leftSec .removeBtnTargetHelp_16{
+    margin-right: auto;
+}
+.placeDetailsToggleBar .leftSec .img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.placeDetailsToggleBar .leftSec .img > img{
+    width: 100%;
+}
+.placeDetailsToggleBar .leftSec .name{
+    font-size: 14px;
+    margin-right: 7px;
+    font-weight: bold;
+}
+.placeDetailsToggleBar .leftSec .date{
+    font-size: 13px;
+    color: gray;
+    margin-right: 10px;
+}
+.placeDetailsToggleBar .leftSec .delete{
+    font-size: 13px;
+    color: gray;
+    margin-right: 10px;
+}
+.placeDetailsToggleBar .leftSec .text{
+    margin-right: 18px;
+}
+.placeDetailsToggleBar .tabSection{
+    width: 100%;
+    height: auto;
+    justify-content: space-around;
+    padding: 0px;
+    margin-bottom: 10px;
+    display: none !important;
+}
+.placeDetailsToggleBar .tabSection > div {
+    padding: 10px 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.placeDetailsToggleBar .tabSection .active{
+    background: #006b95 !important;
+    margin-top: 5px;
+    border-radius: 10px 10px 0px 0px;
+    color: white;
+}
+
+#addPlaceModal .modalBody{
+    width: 700px;
+    margin-bottom: 120px;
+}
+
+.mapSec{
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+}
+
+#saves-all-trips .trip-tile-container .trip-tile{
+    border-radius: 10px;
+}
+#saves-single-trip-container .trip-header .saves-back-button{
+    left: 0px;
+}
+.saves-header-buttons{
+    width: 100%;
+    display: flex;
+    position: relative;
+    /*justify-content: center;*/
+}
+.saves-header-buttons > div:nth-of-type(1){
+    margin-right: auto;
+}
+
+@media (max-width: 1187px) {
+    .placeDetailsToggleBar .rightSec .placeInfo .info .name{
+        flex-direction: column;
+    }
+
+    .placeCard{
+        width: 33% !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #addPlaceModal .modalBody{
+        width: 100%;
+    }
+
+    .placeCard{
+        width: 50% !important;
+    }
+
+    .placeCard{
+        width: 49% !important;
+        display: inline-flex;
+    }
+    .placeDetailsToggleBar.showPlaceInfo{
+        display: block;
+    }
+    .placeCard.fullShow{
+        padding-bottom: 5px;
+    }
+    .placeDetailsToggleBar > div{
+        width: 100%;
+    }
+    .placeDetailsToggleBar .tabSection{
+        display: flex !important;
+    }
+    .placeDetailsToggleBar .rightSec{
+        display: none;
+    }
+    .placeDetailsToggleBar .leftSec{
+        display: none;
+    }
+    .placeDetailsToggleBar .rightSec.show{
+        display: flex;
+    }
+    .placeDetailsToggleBar .leftSec.show{
+        display: flex;
+    }
+    .placeDetailsToggleBar .leftSec .header{
+        font-size: 16px;
+    }
+    .placeDetailsToggleBar .leftSec .notRow{
+        font-size: 11px;
+    }
+
+    #targetHelp_10{
+        margin: 0;
+        border-right: none;
+    }
+    .saves-header-buttons{
+        justify-content: center;
+    }
+    .saves-header-buttons > div:nth-of-type(1){
+        margin-right: 0px;
+    }
+    #saves-single-trip-container .trip-header .saves-header-button{
+        min-width: 50px !important;
+        font-size: 9px !important;
+    }
+    #saves-single-trip-container .trip-header .saves-header-button .ui_icon{
+        font-size: 22px !important;
+    }
+}
+@media (max-width: 600px) {
+    .memberList{
+        max-height: 80vh;
+    }
+}
+@media (max-width: 500px) {
+    .placeCard{
+        width: 100% !important;
+        display: inline-flex;
+    }
+}
+@media (max-width: 450px) {
+    .userAccessRow{
+        flex-direction: column;
+    }
+}

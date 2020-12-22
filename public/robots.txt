@@ -1,2 +1,5 @@
 User-agent: *
 Disallow:
+
+# Sitemap files
+Sitemap: https://koochita.com/sitemap.xml

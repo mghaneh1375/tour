@@ -1,0 +1,114 @@
+/*1st Box Of Styles*/
+
+#searchspan {
+
+    display: none;
+}
+
+#estelah .col-xs-3 {
+    margin-right: 40px;
+    float: right;
+    margin-top: 20px;
+}
+
+#estelah .col-xs-3 div {
+    float: right;
+
+}
+
+#estelah .estelahatrow {
+    border-bottom: 1px solid var(--koochita-light-green);
+    padding: 10px;
+
+
+}
+
+.menu .word_mean {
+    height: 28px;
+    width: 70%;
+    direction: rtl;
+    padding: 3px;
+}
+
+#result > p {
+    float: right;
+    clear: both;
+}
+
+.translateImage {
+    background-image: url('../../images/estelah.png');
+    background-position: 0 0;
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+/*inline style*/
+
+.addWordMainDiv {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #F5F5F5;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+#destContainer {
+    text-align: right;
+}
+
+#justFarsi {
+    width: 40%;
+    border-radius: 6px;
+    margin-top: 5px;
+    direction: rtl
+}
+
+#srcContainer {
+    text-align: left;
+}
+
+#goyeshCities {
+    width: 40%;
+    border-radius: 6px;
+    margin-top: 5px;
+    direction: rtl
+}
+
+#word {
+    max-width: 200px
+}
+
+#result {
+    max-width: 200px;
+    min-width: 200px;
+    float: left;
+    max-height: 160px;
+    color: #6d6d6d;
+    overflow: auto;
+    margin-top: 10px;
+}
+
+#estelah > div {
+    height: auto;
+    padding: 10px 10px 50px 10px;
+}
+
+#tagMainBox {
+    border: 1px solid var(--koochita-light-green);
+    padding: 0;
+    text-align: center;
+    max-height: 400px;
+    overflow: auto
+}
+
+#tagNameDiv {
+    background: var(--koochita-light-green);
+    padding: 10px;
+}
+
+.opacityMode {
+    display: none;
+    z-index: 10000000
+}

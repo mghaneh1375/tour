@@ -1,0 +1,1772 @@
+
+.mapIconsCommon{
+    width: 60px;
+    height: 60px;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: .2s;
+    margin-left: 10px;
+}
+.offMapIcons{
+    background: #494949 !important;
+}
+.mapIconIcon{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: solid 2px;
+    font-size: 32px;
+}
+.boomgardyMapIcon{
+    background: #00aeef;
+}
+.hotelMapIcon{
+    background: #00516f;
+}
+.amakenMapIcon{
+    background: #ec008c;
+}
+.restaurantMapIcon{
+    background: #fff200;
+}
+.majaraMapIcon{
+    background: #ed1c24;
+}
+.moreInfoMapIcon{
+    background: #01771a;
+}
+.mapMenuList {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    max-width: 100%;
+    z-index: 999;
+    background-color: #00000073;
+}
+.mapMoreInfoPlace{
+    direction: rtl;
+    display: block;
+    background: white;
+    width: 0px;
+    height: 275px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    padding: 0px;
+    overflow: hidden;
+    transition: .3s;
+    max-width: 90%;
+    z-index: 9999;
+    box-shadow: 0 0 5px 0px #646464;
+}
+.closeMapMoreInfo{
+    position: absolute;
+    top: -21px;
+    left: 0px;
+    font-size: 75px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+.imgMapMoreDiv{
+    position: relative;
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 160px;
+    overflow: hidden;
+}
+.contentMapMore{
+    padding-right: 10px;
+}
+.linkMapMore div{
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+.nameMapMore{
+    color: black;
+    font-size: 20px;
+    margin-top: 5px;
+}
+.nameMapMore:hover{
+    color: black;
+}
+.rateMapMore{
+    font-size: 16px;
+    margin-top: 3px;
+    color: #666666;
+}
+.mapMoreState{
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #666666;
+}
+.mapMoreIcon{
+    position: absolute;
+    left: 10px;
+    width: 50px;
+    bottom: 10px;
+}
+.mapMoreIconImg{
+    width: 100%;
+}
+.mapMoreInfoImg{
+    width: 100%;
+    height: 150px;
+    max-height: 150px;
+}
+
+.moreMapSaveButtonDiv{
+    position: absolute;
+    top: 0px;
+    font-size: 25px;
+    right: 5px;
+    cursor: pointer;
+}
+.moreMapSaveButtonDiv:hover .empty-heart{
+    color: red;
+}
+.showMapMoreInfo{
+    width: 300px;
+    padding: 10px;
+}
+
+.suggestionPackDiv{
+    position: relative;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    max-width: 350px;
+    background: transparent !important;
+}
+
+.suggestionPackContent{
+    padding: 12px;
+    background: white;
+}
+
+.imageGoldPin{
+    position: absolute;
+    top: -15px;
+    right: 20px;
+    z-index: 1;
+}
+
+.suggestionPackMainBody{
+    background: white;
+    width: 100%;
+    flex-basis: auto;
+    position: relative;
+}
+.suggestionPackDetailDiv{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    direction: rtl;
+    padding: 10px 0 0;
+    margin-bottom: -4px;
+}
+
+.suggestionPackName{
+    font-size: 16px;
+    line-height: 20px;
+    color: #333333;
+    display: block;
+    margin-bottom: 4px;
+    text-decoration: none !important;
+}
+
+.suggestionPackName:hover{
+    color: #333333;
+}
+
+.suggestionPackReviewRow{
+    display: flex;
+    width: 100%;
+    margin-bottom: 4px;
+    color: #b7b7b7;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: medium;
+}
+
+.suggestionPackReviewCount{
+    margin: 0 5px;
+}
+
+.suggestionPackCityRow{
+    padding-top: 2px;
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+    margin-bottom: 4px;
+    color: #b7b7b7;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.suggestionPackPicLink{
+    position: relative;
+    display: block;
+    border-radius: 2px;
+    background-color: #fff;
+    opacity: 1;
+    transition: opacity linear 100ms;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 0;
+    height: 200px;
+}
+
+.suggestionPackPicDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.suggestionPackPic{
+    transition: .2s;
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+}
+
+.suggestionPackPic:hover{
+    opacity: .9;
+    transform: scale(1.1);
+}
+
+.suggestionPlaceHolderDiv{
+    width: 100%;
+}
+
+.topPlacesDivInCity{
+    margin: 40px 10px;
+    padding: 20px 20px;
+    background: var(--koochita-dark-green);
+    margin-top: 0px;
+}
+
+.topPlacesDivInCityHeader{
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.topPlacesDivInCityHeader a {
+    margin: 0 5px;
+    color: var(--koochita-yellow);
+}
+
+.topPlacesDivInCityHeader div{
+    margin: 0px;
+}
+
+.nagLogoRowSuggestion{
+    width: 50px;
+}
+
+.smallReviewMainDivShown{
+    padding: 10px;
+    width: 97%;
+    border: solid 1px #f3f3f3;
+    margin: 1%;
+    box-shadow: 0 0 5px 0px #646464;
+    margin-bottom: 15px;
+    direction: rtl;
+    background: white;
+}
+
+.smallReviewMainPic{
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 210px;
+}
+
+.sendQuestionBtn {
+    background-color: #f2f2f2;
+    color: var(--koochita-blue);
+    padding: 13px 10px;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    width: fit-content;
+    padding-bottom: 5px;
+}
+
+.sendingQuestionLoading{
+    background: var(--koochita-blue);
+    color: #cccccc;
+    justify-content: center;
+    font-size: 12px;
+    display: flex;
+    min-width: 145px;
+    align-items: center;
+    padding: 0;
+    margin-right: auto;
+}
+
+.quantityOfLikesSmallReview{
+    width: 100%;
+    font-size: 23px;
+    padding-top: 10px;
+    text-align: right;
+    line-height: 15px;
+    justify-content: flex-end;
+    display: flex;
+    color: #1876a3;
+    border-top: 1px solid #e5e5e5;
+    align-items: center;
+
+}
+
+.smallReviewcommentPhotosShow{
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.smallReviewshowMoreText{
+    position: relative;
+    cursor: pointer;
+    width: 30px;
+    height: 10px;
+    display: inline-block;
+}
+
+.smallReviewshowMoreText::before{
+    content: '\E091';
+    font-family: shazdemosafer-tour !important;
+    font-size: 35px;
+    color: var(--koochita-light-green);
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+}
+
+.smallReviewShowMore{
+    font-size: 12px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.quantityOfLikesSmallReview > div{
+    display: flex;
+    margin-right: 10px;
+    cursor: pointer;
+
+    text-align: start;
+    align-items: center;
+}
+
+.postsMainDivInSpecificMode .photosCol{
+    border-top: 1px solid #E5E5E5;
+}
+
+.photosCol > div{
+    margin-top: 2px;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.postsMainDivInSpecificMode .photosCol > div:nth-child(1){
+    height: 210px;
+}
+
+.numberOfPhotosMainDiv{
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    color: white;
+    text-align: center;
+    padding: 4px 20px;
+    border: none !important;
+}
+
+.numberOfPhotos{
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.commentContentsShow > p{
+    word-break: normal;
+    text-align: justify;
+}
+
+.showLessText{
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+
+.commentWriterPicShow{
+    width: 55px;
+    height: 55px;
+    background-color: #E5E5E5;
+    display: flex;
+    float: right;
+    margin-left: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.commentWriterExperienceDetails{
+    color: #666666;
+    margin-bottom: 10px;
+    direction: rtl;
+    text-align: right;
+    width: calc(100% - 35px);
+}
+
+.reviewPlaceHolderTextLineSmallReview{
+    width: 100%;
+    margin-bottom: 10px;
+    height: 7px;
+}
+
+.commentContentsShowPlaceHolder{
+    display: flex;
+    flex-direction: column;
+}
+
+.reviewPicPlaceHolder{
+    width: 100%;
+    height: 200px;
+    border-radius: 5px;
+}
+
+/*smallShowReview*/
+
+.fullReviewBody{
+    background: white;
+    border-radius: 5px;
+    width: 700px;
+    direction: rtl;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.closeFullReview{
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    font-size: 22px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+
+.mainFullReviewDiv{
+    float: right;
+    direction: rtl;
+    background: white;
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+    padding: 15px;
+}
+
+.moreOptionFullReview {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    background: var(--koochita-red);
+    color: white;
+    font-size: 40px;
+    border-radius: 0px 10px 10px 0px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.moreOptionFullReviewIcon {
+    position: relative;
+}
+
+.moreOptionFullReviewIcon::before {
+    content: '\E091';
+    font-family: shazdemosafer-tour !important;
+    font-size: 35px;
+    display: flex;
+    color: #666;
+}
+
+.moreOptionFullReviewDetails {
+    background-color: #E5E5E5;
+    color: #7f7f7f;
+    padding: 10px;
+    position: absolute;
+    top: 45px;
+    left: 5px;
+    font-weight: 500;
+    z-index: 1;
+}
+
+.moreOptionFullReviewDetails > span {
+    padding: 5px 0;
+    display: block;
+    text-align: right;
+    cursor: pointer;
+}
+
+.moreOptionFullReviewDetails > span:hover {
+    color: var(--koochita-blue);
+}
+
+.moreOptionFullReviewDetails > span:not(:last-child) {
+    border-bottom: 1px solid #999999;
+}
+
+.moreOptionFullReviewDetails > a {
+    padding: 5px 0;
+    display: block;
+    text-align: right;
+    cursor: pointer;
+    color: #7f7f7f;
+}
+
+.moreOptionFullReviewDetails > a:hover {
+    color: var(--koochita-blue);
+}
+
+.moreOptionFullReviewDetails > a:not(:last-child) {
+    border-bottom: 1px solid #999999;
+}
+
+.fullReviewPlaceAndTime {
+    display: flex;
+    flex-direction: column;
+    font-size: 11px;
+}
+
+.commentPhotosMainDiv{
+    width: 100%;
+    direction: ltr;
+    display: flex;
+}
+.fullReveiwPhotosCol.firstCol {
+    padding: 0 0 0 5px !important;
+}
+.fullReveiwPhotosCol.secondCol{
+    padding: 0px !important;
+}
+
+.quintupletPhotoDiv .firstCol > div {
+    height: 133px;
+}
+
+.doublePhotoDiv .firstCol > div {
+    height: 200px;
+}
+
+.singlePhotoDiv .firstCol{
+    width: 100% !important;
+}
+
+.singlePhotoDiv .firstCol > div {
+    height: 200px;
+    width: 100% !important;
+}
+
+.tripletPhotoDiv .firstCol > div {
+    height: 142px;
+}
+
+.quadruplePhotoDiv .firstCol > div {
+    height: 200px;
+}
+
+.secondCol {
+    padding: 0;
+}
+
+.quintupletPhotoDiv .secondCol > div {
+    height: 200px;
+}
+
+.doublePhotoDiv .secondCol > div {
+    height: 200px;
+}
+
+.tripletPhotoDiv .secondCol > div {
+    height: 290px;
+}
+
+.quadruplePhotoDiv .secondCol > div {
+    height: 200px;
+}
+
+.morePhotoLinkPosts {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    padding-top: 15px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.morePhotoLinkPosts > span {
+    width: 100%;
+    font-size: 22px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.quantityOfLikes .feedbackStatistic {
+    color: #666666;
+}
+
+.quantityOfLikes > span, .feedbackStatistic > span {
+    color: var(--koochita-blue);
+}
+
+.fullReveiwPhotosCol{
+}
+
+.fullReveiwPhotosCol > div {
+    margin-top: 4px;
+    border: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.fullReveiwPhotosCol img {
+    cursor: pointer;
+    width: 100%;
+}
+
+.postsMainDivInSpecificMode .fullReveiwPhotosCol {
+    border-top: 1px solid #E5E5E5;
+}
+
+.fullReviewRatingsDetailsShow{
+    color: #666666;
+    margin-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.fullReviewMiddle{
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.fullReviewCommentPhotosShow{
+    font-size: 12px;
+    padding-bottom: 10px;
+    display: flex;
+    /*border-bottom: 1px solid #e5e5e5;*/
+}
+
+.commentRatingHeader {
+    padding: 3px 0px;
+    display: inline-block;
+    width: 60%;
+    float: right;
+    font-size: 12px;
+}
+
+.commentRatingHeader > span {
+    color: var(--koochita-red);
+    /*cursor: pointer;*/
+}
+
+.commentRatingsDetailsBtn {
+    display: inline-block;
+    width: 35%;
+    float: left;
+    text-align: left;
+    padding-left: 30px;
+    font-size: 13px;
+    position: relative;
+    cursor: pointer;
+}
+
+.commentRatingsDetailsBtnIcon {
+    width: auto;
+    display: inline-block;
+    pointer-events: none;
+    position: absolute;
+    left: 10px;
+    top: 4px;
+}
+
+.commentRatingsDetailsBtnIcon > i {
+    float: left;
+    color: #666666;
+    font-size: 10px;
+}
+
+.commentRatingsDetailsBox {
+    background: #e5e5e5;
+    padding: 15px 9px;
+    width: 100%;
+}
+
+.commentRatingsDetailsBox .starRating, .commentRatingsDetailsBox .starRatingGreen {
+    cursor: default;
+}
+
+.commentFeedbackChoices {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid #E5E5E5;
+    padding: 3px 0px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #666666;
+    margin: 5px 0px;
+}
+
+.postsActionsChoices {
+    padding: 0 9px;
+    font-size: 15px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.postCommentChoice, .postShareChoice {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.postShareChoice, .postCommentChoice{
+    position: relative;
+}
+
+.postCommentChoice:hover {
+    color: var(--koochita-blue);
+}
+
+.commentsLikeIconFeedback::before {
+    content: '\E1F9';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -9px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.commentsLikeClickedIconFeedback::before {
+    content: '\E057';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -9px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.commentsDislikeIconFeedback::before {
+    content: '\E1F8';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -4px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.commentsDislikeClickedIconFeedback::before {
+    content: '\E058';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -4px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.showCommentsIconFeedback::before {
+    content: '\E06B';
+    font-family: Shazde_Regular2 !important;
+    font-size: 26px;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    cursor: pointer;
+}
+
+.showCommentsClickedIconFeedback::before {
+    content: '\E06C';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -8px;
+    right: 9px;
+    cursor: pointer;
+}
+
+.commentsShareIconFeedback::before {
+    content: '\E1F5';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    position: absolute;
+    top: -1px;
+    cursor: pointer;
+    line-height: 0;
+}
+.commentsShareClickedIconFeedback{
+    width: 25px;
+    height: 25px;
+    position: relative;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.commentsShareClickedIconFeedback::before {
+    content: '\E1F6';
+    font-family: Shazde_Regular2 !important;
+    font-size: 20px;
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.wholeAnsSection{
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+}
+
+.commentsMainBox {
+    border-bottom: 1px solid #e5e5e5;
+    width: 100%;
+}
+
+.eachCommentMainBox {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    direction: rtl;
+}
+
+.ansCommentTimeAgo{
+    font-size: 11px;
+    margin-right: 5px;
+    color: #9e9e9e;
+    font-weight: normal;
+}
+
+.commentReplyDesc {
+    color: #666666;
+    font-size: 10px;
+    line-height: 2;
+    float: right;
+    margin-right: 5px;
+}
+
+.replayReview.replayBtn{
+    color: var(--koochita-blue);
+    cursor: pointer;
+}
+
+.commentsMainBox {
+    border-bottom: 1px solid #e5e5e5;
+    width: 100%;
+}
+
+.ansOfQuestion{
+    border-top: 1px solid #E5E5E5;
+    padding-top: 10px;
+    margin-bottom: 0px;
+}
+
+.commentsWriterProfilePic {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    float: right;
+    margin: 5px 0 0 5px;
+}
+
+.commentsContentMainBox {
+    display: inline-block;
+    width: calc(100% - 30px);
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    padding: 2px 10px 7px;
+    text-align: justify;
+    float: right;
+    position: relative;
+    direction: rtl;
+}
+.ansCommentTimeAgo{
+    font-size: 11px;
+    margin-right: 5px;
+    color: #9e9e9e;
+    font-weight: normal;
+}
+
+.commentsActionsBtns {
+    display: flex;
+    float: right;
+    margin-right: 50px;
+    position: relative;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+
+.commentsActionsBtns > div:not(:nth-child(3)) {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 8px 3px;
+}
+
+.replyCommentBox {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+.replyBtn {
+    background-color: var(--koochita-yellow);
+    border-radius: 5px;
+    padding: 2px 6px;
+    cursor: pointer;
+}
+
+.commentReplyDesc {
+    color: #666666;
+    font-size: 10px;
+    line-height: 2;
+    float: right;
+    margin-right: 5px;
+}
+
+.likeActionBtn::before {
+    content: '\E1F9';
+    font-family: Shazde_Regular2 !important;
+    font-size: 30px;
+    position: absolute;
+    top: -5px;
+    right: 28px;
+}
+
+.likeActionClickedBtn::before {
+    content: '\E057';
+    font-family: Shazde_Regular2 !important;
+    font-size: 30px;
+    position: absolute;
+    top: -5px;
+    right: -2px;
+    color: red;
+}
+
+.dislikeActionBtn::before {
+    content: '\E1F8';
+    font-family: Shazde_Regular2 !important;
+    font-size: 30px;
+    position: absolute;
+    top: -2px;
+    right: 59px;
+}
+
+.dislikeActionClickedBtn::before {
+    content: '\E058';
+    font-family: Shazde_Regular2 !important;
+    font-size: 30px;
+    position: absolute;
+    top: -2px;
+    right: 29px;
+    color: darkred;
+}
+
+.commentsStatisticsBar {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    bottom: -30px;
+    right: 0;
+    z-index: 9;
+}
+.replayReview.replayBtn{
+    color: var(--koochita-blue);
+    cursor: pointer;
+}
+
+.commentsStatisticSpan {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+}
+
+.likeStatisticIcon::before {
+    content: '\e057';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    float: right;
+    position: absolute;
+    top: -10px;
+    right: 5px;
+}
+
+.dislikeStatisticIcon::before {
+    content: '\e058';
+    font-family: Shazde_Regular2 !important;
+    font-size: 25px;
+    float: right;
+    position: absolute;
+    top: -6px;
+    right: 5px;
+}
+
+.numberOfCommentsIcon::before {
+    content: '\e06C';
+    font-family: Shazde_Regular2 !important;
+    font-size: 20px;
+    float: right;
+    position: absolute;
+    top: -2px;
+    right: 9px;
+}
+
+.newCommentPlaceMainDiv, .answerPlaceMainDiv, .newAnswerPlaceMainDiv {
+    margin: 10px 0 5px;
+    display: inline-block;
+    width: 100%;
+}
+
+.newAnswerPlaceMainDiv{
+    display: flex;
+    direction: rtl;
+    text-align: right;
+    width: 100%;
+}
+
+.ansTextAreaReview{
+    width: calc(100% - 55px) !important;
+    margin-right: 50px !important;
+}
+
+.newCommentPlaceMainDiv button, .replyToCommentMainDiv button {
+    background: none;
+    float: left;
+    margin-bottom: 8px;
+}
+
+.newCommentWriterProfilePic > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.replyToCommentMainDiv {
+    display: inline-block;
+    width: 99%;
+    margin: 30px 0 15px;
+}
+
+.newCommentWriterProfilePic, .answerWriterProfilePic, .newAnswerWriterProfilePic {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    float: right;
+    margin-left: 5px;
+}
+
+.newCommentPlaceMainDiv .inputBox, .newAnswerPlaceMainDiv .inputBox {
+    width: calc(100% - 60px);
+    float: right;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.replyToCommentMainDiv .inputBox {
+    width: calc(100% - 50px);
+    float: right;
+    position: relative;
+}
+
+.newCommentPlaceMainDiv .emojionearea .emojionearea-editor{
+    min-height: 20px;
+}
+.newCommentPlaceMainDiv .emojionearea-button{
+    position: absolute !important;
+    right: 5px !important;
+    bottom: 5px !important;
+}
+
+.replyToCommentMainDiv .emojionearea .emojionearea-editor{
+    min-height: 20px;
+}
+.replyToCommentMainDiv .emojionearea-button{
+    position: absolute !important;
+    right: 5px !important;
+    bottom: 5px !important;
+}
+.replyToCommentMainDiv .inputBoxInput, .newAnswerPlaceMainDiv .inputBoxInput {
+    position: unset !important;
+    background: inherit;
+    margin-top: 15px;
+}
+.replyToCommentMainDiv .emojionearea .emojionearea-picker.emojionearea-picker-position-top{
+    left: auto !important;
+    right: 0 !important;
+}
+
+.newCommentPlaceMainDiv .emojionearea .emojionearea-picker.emojionearea-picker-position-top{
+    left: auto !important;
+    right: 0 !important;
+}
+
+.newCommentPlaceMainDiv .inputBoxInput, .newAnswerPlaceMainDiv .inputBoxInput {
+    text-align: right;
+    font-size: 12px;
+    border: none;
+    /*height: 39px;*/
+    background: inherit;
+    position: unset !important;
+}
+
+.replyToCommentMainDiv .inputBoxInput {
+    transition: 0s;
+    text-align: right;
+    font-size: 12px;
+    border: none;
+    height: 39px;
+}
+
+.newCommentPlaceMainDiv textarea, .newAnswerPlaceMainDiv textarea {
+    text-align: right;
+    margin-top: 15px;
+    height: 35px;
+    resize: none;
+    width: 94%;
+    float: right;
+}
+
+.replyToCommentMainDiv textarea {
+    text-align: right;
+    margin-top: 15px;
+    height: 35px;
+    resize: none;
+    width: 100%;
+    float: right;
+    color: black;
+}
+
+.newCommentPlaceMainDiv .commentSmileyIcon {
+    top: 20px;
+    left: 7px;
+}
+
+.replyToCommentMainDiv .commentSmileyIcon {
+    top: 20px;
+    left: 7px;
+}
+
+.replyCommentTitle, .replyWriterUsername, .replyAnswerTitle {
+    color: var(--koochita-blue);
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    font-size: 10px;
+    direction: rtl;
+    cursor: default;
+}
+
+.newAnswerPlaceMainDiv {
+    margin: 0px;
+    border-top: 1px solid #E5E5E5;
+    padding: 10px 0px 0px 0px;
+}
+.questAnsText{
+    display: flex;
+    direction: rtl;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.ansOfQuestionsUserInfo{
+    display: flex;
+    align-items: center;
+}
+
+.newAnswerWriterProfilePic {
+    width: 45px;
+    height: 45px;
+}
+
+.postsMainDivFooter, .questionsMainDivFooter {
+    background-color: white;
+    padding: 10px;
+    margin-top: 10px;
+    color: #666666;
+}
+
+
+.likedislikeAnsReviews{
+    align-items: center;
+    font-size: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    direction: rtl;
+    cursor: pointer;
+}
+.likedislikeAnsReviews:after{
+    font-size: 32px;
+    direction: ltr;
+    width: 30px;
+}
+
+.LikeIconEmpty.likedislikeAnsReviews:before{
+    content: '';
+}
+.LikeIconEmpty.likedislikeAnsReviews:after{
+    content: '\E1F9';
+    font-family: Shazde_Regular2 !important;
+}
+.LikeIconEmpty.likedislikeAnsReviews.coloredFullIcon{
+    color: var(--koochita-green);
+}
+.LikeIconEmpty.likedislikeAnsReviews.coloredFullIcon:after{
+    content: '\E057' !important;
+}
+
+.DisLikeIconEmpty.likedislikeAnsReviews:before{
+    content: '';
+}
+.DisLikeIconEmpty.likedislikeAnsReviews:after{
+    content: '\E1F8';
+    font-family: Shazde_Regular2 !important;
+}
+.DisLikeIconEmpty.likedislikeAnsReviews.coloredFullIcon{
+    color: darkred;
+}
+.DisLikeIconEmpty.likedislikeAnsReviews.coloredFullIcon:after{
+    content: '\E058' !important;
+}
+
+.userProfileNameFullReview{
+    display: flex;
+    align-items: center
+}
+
+.borderInMobile{
+    width: calc(100% - 50px);
+    margin-right: 50px;
+
+    border-right: solid 1px #cccccc;
+    padding-right: 10px;
+    margin-bottom: 15px;
+}
+
+.inputBox {
+    padding: 2px 10px;
+    font-size: 0.8em;
+    display: inline-block;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    line-height: 1.42857143;
+    width: auto;
+    /*margin: 10px 0;*/
+    /*border: 1px solid #cccccc;*/
+    border: none;
+}
+
+.submitAnsInReview{
+    background-color: #f2f2f2;
+    color: var(--koochita-blue);
+    padding: 2px;
+    border: none;
+}
+
+.inputBoxInput {
+    width: 100%;
+    text-align: center;
+    border: none;
+    /*float: left;*/
+    background-color: transparent;
+}
+
+.fullReviewLikeAnsSeeAllSection{
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 45px);
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.fullReviewSeeAnses{
+    color: #16174f;
+    float: left;
+    cursor: pointer;
+}
+
+.fullReviewText{
+    font-size: 15px;
+    margin: 10px 0;
+    white-space: pre-line
+}
+
+.commentActions, .answersActions{
+
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    height: 32px;
+    width: 45px;
+    background-color: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    direction: rtl;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 5px;
+    padding: 5px 10px;
+}
+
+.answersActions {
+    top: 15px !important;
+}
+
+.answersActionsIcon, .commentActionsIcon {
+    position: relative;
+}
+
+.answersActionsIcon::before, .commentActionsIcon::before {
+    content: '\E091';
+    font-family: shazdemosafer-tour !important;
+    font-size: 35px;
+    display: flex;
+    color: #666;
+}
+
+
+.questionsActionsMoreDetails {
+    background-color: #E5E5E5;
+    color: #7f7f7f;
+    padding: 10px;
+    position: absolute;
+    top: 45px;
+    left: 5px;
+    font-weight: 500;
+    z-index: 1;
+}
+
+.questionsActionsMoreDetails > span {
+    padding: 5px 0;
+    display: block;
+    text-align: right;
+    cursor: pointer;
+}
+.questionsActionsMoreDetails > span:hover {
+    color: var(--koochita-blue);
+}
+.questionsActionsMoreDetails > span:not(:last-child) {
+    border-bottom: 1px solid #999999;
+}
+
+.questionsActionsMoreDetails > a {
+    padding: 5px 0;
+    display: block;
+    text-align: right;
+    cursor: pointer;
+    color: #7f7f7f;
+}
+.questionsActionsMoreDetails > a:hover {
+    color: var(--koochita-blue);
+}
+.questionsActionsMoreDetails > a:not(:last-child) {
+    border-bottom: 1px solid #999999;
+}
+.answersWriterExperiencePlace{
+    color: #16174f;
+    cursor: pointer;
+}
+
+.questionPack{
+    position: relative;
+    background: white;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.questionSubMenuBar{
+    padding: 8px 0;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.questionSubMenuBar .replyBtn {
+    padding: 2px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    float: left;
+}
+
+
+@media only screen and (max-width: 767px) {
+    .commentWriterExperienceParticipation, .userProfileName, .userProfileNameAnswers{
+        margin-top: 10px;
+    }
+
+    .fullReviewLikeAnsSeeAllSection{
+        width: 100%;
+    }
+
+    .replyToCommentMainDiv{
+        background-color: #f2f2f2;
+        background-color: #4dc7bc1a;
+        border-radius: 10px;
+        padding: 5px 5px 0px 0px;
+        width: 99%;
+        margin: 40px 0 0px;
+    }
+
+    .commentsWriterProfilePic{
+        width: 30px;
+        height: 30px;
+    }
+
+    .eachCommentMainBox{
+        background-color: #f2f2f2;
+        background-color: #fcc15617;
+        border-radius: 10px;
+        padding: 5px 5px 0px 0px;
+    }
+
+    .borderInMobile{
+        border-right: solid 1px #cccccc;
+        width: calc(100% - 15px);
+        margin-right: 15px;
+        padding-right: 10px;
+        margin-bottom: 15px;
+    }
+
+    .newCommentPlaceMainDiv{
+        background-color: #ebebeb;
+        padding: 5px 5px 0px 0px;
+        border-radius: 5px;
+    }
+
+    .newCommentPlaceMainDiv .inputBox {
+        background: none;
+        border: none;
+        width: 100%;
+    }
+
+    .replyToCommentMainDiv .inputBox{
+        background: none;
+        border: none;
+        width: 100%;
+    }
+
+    .commentWriterPicShow{
+        width: 45px;
+        height: 45px;
+    }
+
+    .fullReviewAnsText{
+        width: calc(100% + 60px);
+        margin-right: -40px;
+        margin-top: 15px;
+    }
+
+    .newCommentPlaceMainDiv, .answerPlaceMainDiv, .newAnswerPlaceMainDiv, .ansTextAreaReview{
+        background: #4dc7bc1a;
+    }
+
+    .commentsContentMainBox{
+        background: none;
+    }
+
+    .suggestionPackDiv{
+        margin-bottom: 15px;
+        width: 80%;
+    }
+
+    .mainSuggestion .swiper-button-prev, .mainSuggestion .swiper-button-next{
+        display: none;
+    }
+
+    .suggestionPackDiv .suggestionPackContent{
+        box-shadow: 3px 0px 8px 1px #00000052;
+    }
+
+    .topPlacesDivInCity{
+        background: white;
+        border-top: solid 1px #4dc7bc52;
+        border-bottom: solid 1px #4dc7bc52;
+        margin: 15px 0px;
+        padding: 10px 0px;
+    }
+
+    .topPlacesDivInCityHeader{
+        margin-bottom: 5px;
+        padding: 0px 10px;
+    }
+
+    .topPlacesDivInCityHeader a{
+        color: #333;
+    }
+
+    .topPlacesDivInCityHeader a h3{
+        font-weight: normal;
+    }
+
+    .commentRatingHeader,.commentRatingsDetailsBtn{
+        font-size: 10px;
+        padding: 10px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .commentRatingsDetailsBtnIcon{
+        position: relative;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        display: flex;
+        align-items: center;
+    }
+
+    .mainFullReviewDiv{
+        border-top: solid 1px #4dc7bc52;
+        border-bottom: solid 1px #4dc7bc52;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .moreOptionFullReview{
+        left: 0px;
+    }
+    .fullReviewBody{
+        width: 90%;
+        padding: 0px;
+        max-height: calc(100vh - 90px);
+        height: fit-content;
+    }
+
+    .mainFullReviewDiv{
+        padding: 10px;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+
+    .commentFeedbackChoices{
+        padding: 5px 0px 0px 0px;
+    }
+
+    .replyToCommentMainDiv {
+        width: 100%;
+    }
+
+    .postsActionsChoices {
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .commentsLikeIconFeedback::before, .commentsLikeClickedIconFeedback::before {
+        top: -11px;
+    }
+
+    .commentsDislikeIconFeedback::before, .commentsDislikeClickedIconFeedback::before {
+        top: -7px;
+    }
+
+    .commentRatingsDetailsBox > div > b {
+        font-size: 13px;
+        line-height: 2.5;
+    }
+
+    .commentRatingsDetailsBox > div > b:nth-child(1) {
+        padding-right: 0;
+    }
+}
+
+@media (max-width:540px) {
+
+    .mapMenuList{
+        flex-direction: column;
+    }
+
+    .mapIconsCommon{
+        width: 35px;
+        height: 35px;
+        margin-left: 0px;
+        margin-bottom: 10px;
+    }
+
+    .mapIconIcon{
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+
+    .postsActionsChoices{
+        font-size: 15px;
+        /*margin-top: 5px;*/
+    }
+
+    .showCommentsIconFeedback::before{
+        right: 12px;
+    }
+
+    .fullReviewText{
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .commentRatingHeader{
+        width: 100%;
+    }
+
+    .starRating {
+        line-height: 0.6;
+    }
+
+    .commentRatingsDetailsBtn {
+        padding-left: 15px;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .commentRatingsDetailsBtnIcon {
+        left: 0;
+    }
+
+    .postsActionsChoices {
+        font-size: 14px;
+    }
+
+    .commentsLikeIconFeedback::before, .commentsLikeClickedIconFeedback::before {
+        top: -10px;
+    }
+
+    .commentsDislikeIconFeedback::before, .commentsDislikeClickedIconFeedback::before {
+        top: -6px;
+    }
+
+    .commentRatingsDetailsBox > div > b:nth-child(1) {
+        float: right;
+        padding-right: 0;
+        line-height: 3;
+        width: 100%;
+    }
+
+    .commentRatingsDetailsBox > div > b:nth-child(2) {
+        float: right;
+        padding-right: 0;
+        line-height: 3;
+        width: 100%;
+    }
+
+    .commentRatingsDetailsBox > div > b:nth-child(3) {
+        padding-left: 0;
+        line-height: 3;
+        width: 40%;
+    }
+
+    .commentRatingsDetailsBox > div > div {
+        width: 60%;
+        padding-right: 0;
+    }
+
+    .commentRatingsDetailsBox > div > div span::before {
+        font-size: 20px;
+    }
+
+    .userProfileName {
+        font-size: 13px;
+    }
+
+    .commentReplyDesc {
+        font-size: 9px;
+    }
+
+    .ansTextAreaReview{
+        width: calc(100% - 20px) !important;
+        margin-right: 15px !important;
+    }
+
+    .answersActionsQp{
+        left: 5px;
+        top: 5px !important;
+    }
+}
+
+@media only screen and (max-width: 370px) {
+    .fullReviewLikeAnsSeeAllSection{
+        display: block;
+    }
+
+    .fullReviewSeeAnses{
+        text-align: left;
+    }
+
+    .fullReviewLikeAnsSeeAllSection > div{
+        width: 100%;
+    }
+}
+
+

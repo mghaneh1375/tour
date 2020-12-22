@@ -44,6 +44,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
+        $this->mapBusinessWebRoutes();
+
         $this->mapWebRoutes();
 
         //
@@ -61,6 +63,14 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
+    }
+
+    protected function mapBusinessWebRoutes()
+    {
+        Route::middleware('web')
+//             ->domain('business.'.env('ROUTURL'))
+            ->namespace($this->namespace.'\Business')
+            ->group(base_path('routes/businessRoutes.php'));
     }
 
     /**

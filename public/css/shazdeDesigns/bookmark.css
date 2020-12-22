@@ -1,0 +1,344 @@
+/*1st box of styles*/
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    color: #666666;
+}
+
+input[type="checkbox"] + label span {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    margin: -2px 10px 0 0;
+    vertical-align: middle;
+    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label span {
+    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+}
+
+.labelForCheckBox:before {
+    background-color: transparent !important;
+    border: none !important;
+    content: "" !important;
+}
+
+#saves-all-trips .all-trips-header .header-sort-container .sort-options li.selected:after {
+    position: relative !important;
+    right: 5px !important;
+}
+
+.ui_tabs {
+    white-space: inherit !important;
+}
+
+.helpSpans p {
+    font-size: 14px;
+    line-height: 2em;
+    text-align: justify;
+}
+
+.nextBtnsHelp {
+    margin-left: 5px !important;
+}
+
+/*inline styles*/
+
+#sort-option-recent {
+    padding: 0 10px;
+    border-radius: 2px;
+    margin-top: 15px;
+}
+
+#sort-option-recent::after {
+    display: none;
+}
+
+#targetHelp_9 {
+    float: left;
+}
+
+#saves-all-trips #targetHelp_9 .sort-text {
+    padding-right: 0;
+}
+
+#targetHelp_6 {
+    width: 33.33333%;
+    float: right;
+}
+
+#targetHelp_7 {
+    width: 33.333333%;
+    float: right;
+}
+
+#targetHelp_8 {
+    width: 33.333333%;
+    float: right;
+}
+
+#saves-view-tabs {
+    position: relative;
+    margin-right: 12px;
+}
+
+#initHelpDiv, #initHelpDivElse {
+    background-size: 28px;
+    background-position: 0 -29px;
+    width: 28px;
+    height: 28px;
+    background-repeat: no-repeat;
+}
+
+#trip-dates-region {
+    display: none;
+}
+
+#manageTripsBtn {
+    padding: 1px 13px !important;
+}
+
+#manageTripsBtn > span {
+    color: var(--koochita-light-green);
+}
+
+.tripsRowExpandableDiv {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+}
+
+#placeInfo {
+    position: fixed;
+    width: 40%;
+    left: 31%;
+    right: auto;
+    top: 41%;
+    bottom: auto;
+}
+
+#addPlaceToTripPrompt {
+    position: fixed;
+    width: 39%;
+    left: 30%;
+    right: auto;
+    top: 24%;
+    bottom: auto;
+}
+
+#manageTripVerifyBtn {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+#managePlaceTextDiv {
+    direction: rtl;
+    margin-bottom: 29px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#expandableTripDate {
+    float: left;
+    padding: 5px 0;
+    color: var(--koochita-light-green);
+}
+
+#expandableTripTitleText {
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 5px 0;
+}
+
+#map {
+    border: 2px solid black;
+    height: 200px
+}
+
+#newComment {
+    width: 100%;
+    padding: 5px;
+    float: right !important;
+    border-radius: 5px;
+    border: 1px solid #ccc
+}
+
+#keyAndResultMainDiv {
+    margin-top: 20px;
+    border: 2px solid #CCC;
+    border-radius: 7px;
+}
+
+#key {
+    border: none;
+    margin-top: 10px;
+}
+
+#result {
+    max-height: 160px;
+    overflow: auto;
+    margin-top: 10px;
+}
+
+#bookMarkPlaceSuggestion {
+    cursor: pointer;
+    padding: 5px 20px;
+    border-bottom: 1px solid #CCC
+}
+
+#tripNote {
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    padding: 5px;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 110px;
+}
+
+#eliminateUserBtn {
+    margin-right: 10px;
+    padding: 0 9px;
+}
+
+#DetailsLink {
+    cursor: pointer;
+    text-align: center;
+    color: #16174f;
+}
+
+.filtersDivBookmark {
+    border: 1px solid #ccc;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 2px;
+    width: 12px;
+    height: 12px;
+    float: left
+}
+
+.filtersDivBookmarkElse {
+    border: 1px solid #333;
+    background-color: black;
+    border-radius: 50%;
+    margin-right: 2px;
+    width: 12px;
+    height: 12px;
+    float: left
+}
+
+.tripDetailsMoreInfoBtnBookMarkPlace {
+    margin: 10px auto 10px !important;
+    background-size: 60% !important;
+    background-position-x: center !important;
+    padding: 6px 12px;
+}
+
+#sendBtnBookMarkPlace {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    border-radius: 5%;
+    width: 100%;
+    margin-top: 17px;
+}
+
+.trip-settings-header {
+    display: inline-block;
+    width: 100%;
+}
+
+.footerOptimizer {
+    width: 100%;
+    height: 80px;
+}
+
+@media (min-width: 767px) {
+
+    #saves-view-tabs {
+       width: 60%;
+    }
+}
+
+@media (max-width: 767px) {
+
+    #saves-all-trips .trips-header {
+        display: flex;
+        justify-content: center;
+    }
+
+    #saves-view-tabs {
+        margin-right: 0;
+    }
+
+    .helpBtnIcon {
+        position: absolute;
+        top: -45px;
+        left: 20px;
+    }
+
+    #saves-all-trips .trip-tile.ui_card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .trip-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .trip-settings-header {
+        width: 230px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .trip-settings-header > span {
+        width: 50%;
+        text-align: right;
+        font-weight: 600;
+    }
+
+    .trip-settings-header > div {
+        width: 50%;
+        text-align: left;
+    }
+}
+
+@media (max-width: 420px) {
+
+    #saves-body #saves-view-tabs-container #saves-view-tabs {
+        padding: 8px 0 0;
+    }
+
+    #saves-view-tabs .ui_tab {
+        padding: 0;
+        font-size: 13px;
+    }
+
+    .expandableDivSettings {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .expandableDivSettings > div:first-child {
+        margin-bottom: 10px;
+    }
+
+    .expandableDivSettings > div {
+        width: 100%;
+    }
+}

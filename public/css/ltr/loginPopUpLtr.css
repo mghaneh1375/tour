@@ -1,0 +1,21 @@
+.loginCloseIcon{
+    left: auto;
+    right: 10px;
+}
+.loginInputDiv{
+    float: left;
+}
+.loginRegisterButton{
+    float: right;
+}
+.loginPopUpContent{
+    direction: ltr;
+}
+.registerRightSection{
+    /*padding-left: 15px;*/
+    /*padding-right: 0px;*/
+}
+.closeLoginPopup{
+    right: 0px;
+    left: 10px;
+}

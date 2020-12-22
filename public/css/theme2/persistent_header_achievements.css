@@ -1,0 +1,71 @@
+.modules-membercenter-city-tiles #CITY_TILES {
+    margin: 20px 0 0;
+}
+.modules-membercenter-persistent-header-achievements {
+    top: 0;
+    background-color: #2C2C2C;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header {
+    width: 983px;
+    margin: 0 auto;
+    padding-left: 2px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    list-style: none;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header li {
+    cursor: pointer;
+    float: right;
+    margin-right: 45px;
+    position: relative;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header .active,
+.modules-membercenter-persistent-header-achievements .persistent-header .active a {
+    color: #FC0;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header a {
+    color: #fff;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header li.settings.arrow::after {
+    content: "";
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    border-style: solid;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #fff transparent;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header .settingsArrow {
+    height: 6px;
+    width: 10px;
+    top: 14px;
+    right: -15px;
+    position: absolute;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header .active .settingsArrow {
+}
+.modules-membercenter-persistent-header-achievements .persistent-header .settingsDropDown {
+    display: none;
+    min-width: 120px;
+    padding: 15px 30px 20px;
+    -webkit-box-shadow: 2px 2px 5px rgba(50, 50, 50, 0.2);
+    -moz-box-shadow: 2px 2px 5px rgba(50, 50, 50, 0.2);
+    box-shadow: 2px 2px 5px 0 rgba(50, 50, 50, 0.2);
+    border: 1px solid #E6E6E6;
+    background: #fff;
+    left: -45px;
+    position: absolute;
+    z-index: 1000;
+    text-align: right;
+}
+.modules-membercenter-persistent-header-achievements .persistent-header .settingsDropDown a {
+    color: #069;
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 30px;
+    display: block;
+}

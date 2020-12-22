@@ -1,0 +1,657 @@
+/*1st box style*/
+input[type="checkbox"], input[type="radio"] {
+    display: none !important;
+}
+
+input[type="checkbox"] + label, input[type="radio"] + label {
+    color: #666666;
+}
+
+input[type="checkbox"] + label span, input[type="radio"] + label span {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    margin: -2px 10px 0 0;
+    vertical-align: middle;
+    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label span {
+    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+}
+
+.filterGroupTitle {
+    color: #963019 !important;
+}
+
+.moreItems {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.lessItems {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.moreItems2 {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.lessItems2 {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+/*2nd box style*/
+
+.dateLabel {
+    position: relative;
+    width: 100%;
+    height: 28px;
+    /*border: 1px solid #e5e5e5;*/
+    border-radius: 3px;
+    /*box-shadow: 0 7px 12px -7px #e5e5e5 inset;*/
+    margin: 0 !important;
+    cursor: pointer;
+    float: right;
+    max-width: 45%;
+    text-align: right;
+}
+
+.inputDateLabel {
+    background: transparent;
+    width: 90%;
+    border: none;
+    font-size: 12px;
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    cursor: pointer;
+    text-align: right;
+}
+
+.passengerText {
+    float: right;
+    font-size: 13px;
+    color: #666666;
+    margin-top: 3px;
+}
+
+.minusPlusIcons {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 20px;
+    line-height: 20px;
+    color: #30b4a6;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.plus:before {
+    content: '\E031';
+}
+
+.minus:before {
+    content: '\E034';
+}
+
+/*3rd box style*/
+
+.icons {
+    font-family: 'Shazde_Regular2' !important;
+    color: #30b4a6;
+}
+
+.location:before {
+    content: '\E019';
+}
+
+.reservBtn, .specOfferBtn {
+    color: #fff;
+    line-height: 10px;
+    width: 115px;
+    border-radius: 12px;
+    margin: 2% 5%;
+}
+
+.specOfferBtn {
+    background: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+.reservBtn {
+    background: #963019;
+    border-color: #963019;
+}
+
+.viewOfferBtn {
+    background: var(--koochita-yellow);
+    border-color: var(--koochita-yellow);
+    color: black;
+    line-height: 20px;
+    width: 130px;
+    border-radius: 7px;
+    text-align: center;
+    margin: 3px 0;
+}
+
+.editSearchBtn {
+    background: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    color: #fff;
+    line-height: 16px;
+    width: 135px;
+    border-radius: 7px;
+}
+
+.btn:hover, .btn:active {
+    color: #fff;
+    opacity: .8;
+}
+
+.otherOffer {
+    display: block;
+    text-align: center;
+    color: #050c93 !important;
+}
+
+.tenPercentSave {
+    display: block;
+    text-align: center;
+    color: #ff0000 !important;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    font-size: 0.9em;
+}
+
+.ordering {
+    display: inline-block;
+    width: 19%;
+    font-size: 14px;
+}
+
+.orders {
+    cursor: pointer;
+    width: 60%;
+    padding-bottom: 12px;
+    text-align: center;
+}
+
+.selectOrder {
+    border-bottom: 2px solid var(--koochita-light-green);
+    color: var(--koochita-light-green);
+}
+
+/*4th box styles*/
+
+.Boxes {
+    display: inline-block;
+    padding: 0px 5px !important;
+    border-left: 1px solid lightgray;
+    height: 140px;
+}
+
+.lowDistance {
+    width: 23%;
+    position: absolute;
+    left: -8px;
+    background-color: white !important;
+    padding: 10px;
+    z-index: 10000013;
+    box-shadow: 0px 1px 8px 3px #cccccc;
+}
+
+.inputDistance {
+    padding: 5px;
+    color: #464646;
+}
+
+.errDistance {
+    color: #ff1515;
+    font-size: 0.7em;
+}
+
+.textDistance {
+    margin: 5px 0;
+    color: #92321b;
+    font-size: 0.7em;
+}
+
+/*5th box styles*/
+
+.boxOffer {
+    background-color: white;
+    height: 65px;
+    box-shadow: 0px 0px 3px 3px #E5E5E5;
+    margin: 15px 0;
+    text-align: right;
+    padding: 10px 15px;
+}
+
+.boxAlarm {
+    background-color: #f9f9f9;
+    height: 65px;
+    box-shadow: 0px 0px 3px 3px #E5E5E5;
+    text-align: right;
+    padding: 10px 15px;
+}
+
+.viewOffersBtn {
+    background: var(--koochita-yellow);
+    border-color: var(--koochita-yellow);
+    line-height: 22px;
+    width: 125px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    padding: 4px 6px !important;
+}
+
+.alarm {
+    background: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    color: #fff;
+    line-height: 32px;
+    font-size: 1.4em;
+    width: 125px;
+    border-radius: 7px;
+}
+
+/*6th box of styles*/
+
+/*hotel list Icon*/
+
+.shTIcon {
+    font-family: shazde_regular2 !important;
+    font-size: 20px;
+}
+
+.bottomArrowIcon:before {
+    content: '\E04A';
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    cursor: pointer;
+}
+
+/*ermia codes*/
+
+/*7th box style*/
+
+/* Range Slider css */
+@import "https://propeller.in/components/range-slider/css/nouislider.min.css";
+/*Propeller Range Slider css*/
+@import "https://propeller.in/components/range-slider/css/range-slider.css";
+
+.pmd-range-slider .noUi-base {
+    z-index: 100;
+}
+
+.closeXicon:after {
+    font-family: shazde_regular2 !important;
+    font-size: 20px;
+    content: '\E02C';
+    position: relative;
+    cursor: pointer;
+    color: white;
+    font-size: 1.5em;
+    float: left;
+}
+
+.closeXicon2:after {
+    font-family: shazde_regular2 !important;
+    font-size: 20px;
+    content: '\E02C';
+    position: relative;
+    cursor: pointer;
+    color: var(--koochita-light-green);
+    font-size: 1.5em;
+    float: left;
+}
+
+.noUi-target * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-touch-action: none;
+    touch-action: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.pmd-range-slider .noUi-handle {
+    border: none;
+    box-shadow: none;
+    border-radius: 50%;
+    background: var(--koochita-light-green);
+    width: 14px;
+    height: 14px;
+    left: -7px;
+    top: -6px;
+    cursor: pointer;
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 20px;
+    height: 20px;
+    left: -10px;
+    top: -9px;
+}
+
+.noUi-horizontal .noUi-handle-lower .noUi-tooltip {
+    /*display: none;*/
+    background-color: var(--koochita-light-green);
+}
+
+.noUi-horizontal .noUi-handle-upper .noUi-tooltip {
+    /*display: none;*/
+    background-color: var(--koochita-light-green);
+}
+
+.pmd-range-slider .noUi-handle:before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--koochita-light-green);
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+}
+
+.pmd-range-slider .noUi-connect {
+    background: var(--koochita-light-green);
+}
+
+/*8th box styles*/
+
+.shTIcon {
+    font-family: shazde_regular2 !important;
+    font-size: 20px;
+}
+
+.passengerIcon:before {
+    content: '\E0DF';
+    color: var(--koochita-light-green);
+}
+
+.minusPlusIcons {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 25px;
+    line-height: 25px;
+    color: #30b4a6;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+}
+
+.plus:before {
+    content: '\E031';
+}
+
+.minus:before {
+    content: '\E034';
+}
+
+.calendarIcon {
+    color: #30b4a6 !important;
+    font-size: 22px;
+    top: -2px;
+}
+
+.searchBottomArrowIcone:before {
+    content: '\E04A';
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
+}
+
+.searchTopArrowIcone:before {
+    content: '\E044';
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
+}
+
+.arrowPassengerIcone:before {
+    left: 10%;
+}
+
+/*9th box styles*/
+
+.childrenPopUpAlert {
+    width: 100%;
+    margin-bottom: 5px;
+    color: red;
+    font-size: 0.8em;
+}
+
+.childAge {
+    width: 32%;
+    height: 45px;
+    float: right;
+}
+
+#container1 {
+    top: 400px !important;
+}
+
+/*10th box styles*/
+
+.roomBox {
+    width: 18%;
+    padding: 5px 8px;
+    border: 2px solid #E5E5E5;
+    /*display: inline-block;*/
+    position: absolute;
+    right: 46%;
+    border-radius: 10px;
+    text-align: right;
+    font-weight: 700;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.numBetweenMinusPlusBtn {
+    float: left;
+    margin-top: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*calender section*/
+.calenderBox {
+    width: 22%;
+    padding: 7px 8px;
+    border: 2px solid #E5E5E5;
+    display: inline-block;
+    position: absolute;
+    right: 22%;
+    border-radius: 10px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.dateLabel {
+    position: relative;
+    width: 150px;
+    height: 30px;
+    border-radius: 3px;
+    margin: 0 !important;
+    cursor: pointer;
+    float: right;
+    max-width: 40%;
+}
+
+.inputDateLabel {
+    background: transparent;
+    width: 85px;
+    border: none;
+    position: absolute;
+    top: 7px;
+    right: 24%;
+    cursor: pointer;
+    text-align: center;
+}
+
+/*search btn section*/
+.srchBox {
+    display: inline-block;
+    position: absolute;
+    right: 65%;
+}
+
+.srchBtn {
+    background-color: var(--koochita-light-green);
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 2.2em;
+    border-radius: 10px;
+    padding: 5px 30px;
+}
+
+/*pop up*/
+.roomPassengerPopUp {
+    text-align: center !important;
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    top: 55px;
+    right: 12%;
+    left: 12%;
+    border-radius: 5px;
+    z-index: 999;
+    border: 2px solid #e5e5e5;
+}
+
+.rowOfPopUp {
+    height: 28px;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+.selectAgeChild {
+    direction: rtl;
+    border: none !important;
+}
+
+.getAlarm {
+    position: fixed;
+    left: 25%;
+    right: 25%;
+    top: 19%;
+    bottom: auto;
+    overflow: auto;
+    max-height: 500px;
+    z-index: 10000001;
+    direction: rtl;
+    text-align: right;
+}
+
+.alarmInputCityName {
+    padding: 10px;
+    border: solid lightgrey 2.5px;
+    border-radius: 10px;
+    font-size: 15px;
+    width: 300px;
+}
+
+.alarmHeaderText {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.alarmSubHeaderText {
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+.alarmPopUpBotton {
+    background-color: var(--koochita-light-green);
+    color: white;
+}
+
+/*inline styles*/
+
+#alarm {
+    background-color: #000000bd;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
+}
+
+#alarm > span {
+    padding: 10px 10px 20px !important;
+    z-index: 1000;
+}
+
+#alarm > span > div:nth-child(1) {
+    float: left;
+}
+
+#alarm > span > div:nth-child(3) {
+    padding: 0;
+}
+
+#alarm > span > div:nth-child(3) > div:nth-child(1) {
+    display: inline-block;
+}
+
+#resultDest {
+    max-height: 160px;
+    overflow: auto;
+}
+
+#alarm > span > div:last-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#alarm > span > div:last-child > div:last-child {
+    float: left;
+}
+
+#emailWarningDiv {
+    width: 60% !important;
+    display: inline-block;
+    padding: 0;
+}
+
+#otherOfferDiv {
+    margin: 10px 0;
+}
+
+#otherOfferDiv > label {
+    color: #2c2c2c;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+

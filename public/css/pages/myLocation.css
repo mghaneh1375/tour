@@ -1,0 +1,521 @@
+
+.lds-ring{
+    width: 20px;
+    height: 20px;
+}
+.lds-ring div{
+    border: 2px solid #d5d5d5;
+    border-color: #d5d5d5 transparent transparent transparent;
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+}
+.gm-control-active.gm-fullscreen-control{
+    display: none;
+}
+.searchSec{
+    align-items: center;
+    justify-content: space-between;
+}
+.searchSec input{
+    border: none;
+    font-size: 12px;
+    margin-left: 10px;
+    width: 200px;
+}
+.searchSec .searchButton{
+    border: none;
+    background: white;
+    font-size: 20px;
+    line-height: 20px;
+    color: var(--koochita-blue);
+    transform: rotate(90deg);
+}
+.searchSec .threeLineIcon{
+    font-size: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: #5f5f5f;
+}
+
+.bodySec{
+    direction: rtl;
+    text-align: right;
+    position: relative;
+    display: flex;
+    height: calc(100vh - 55px);
+}
+.bodySec.fullMap .mapSection{
+    width: 100%;
+}
+.mapSection{
+    width: calc(100% - 320px);
+    position: relative;
+    transition: .3s;
+}
+.mapSection .mapDiv{
+    width: 100%;
+    height: 100%;
+}
+.bText{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 10px;
+}
+
+.filtersSec{
+    justify-content: space-evenly;
+    padding-bottom: 5px;
+}
+.filtersSec .filKind{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    cursor: pointer;
+    background: white;
+}
+.filtersSec .filKind .name{
+    font-size: .3em;
+}
+.filtersSec .filKind .icon{
+    font-size: .75em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    margin-bottom: 5px;
+}
+.filtersSec .filKind.amakenFilter .icon  {
+    background: #ec008c;
+}
+.filtersSec .filKind.hotelFilter .icon{
+    background: #00516f;
+}
+.filtersSec .filKind.restaurantFilter .icon {
+    background: #fcee23;
+}
+.filtersSec .filKind.advantureFilter .icon {
+    background: #ed1c24;
+}
+.filtersSec .filKind.boomgardyFilter .icon {
+    background: #00aeef;
+}
+
+.filtersSec .filKind.offFilter .icon{
+    background: white;
+    color: inherit;
+}
+
+.hideOnPhone.screenFooterStyle{
+    display: none;
+}
+.bodySec .listSection{
+    width: 320px;
+    height: 100%;
+    background: white;
+    transition: .3s;
+    position: relative;
+}
+.bodySec.fullMap .listSection{
+    width: 0px;
+}
+.sideSection{
+    position: absolute;
+    z-index: 9;
+    direction: rtl;
+    height: 140px;
+}
+.sideSection > div{
+    background: white;
+    box-shadow: 0px 0px 4px 1px #868686;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    width: 300px;
+    margin: 10px;
+    position: relative;
+}
+
+.bodySec.fullMap .listSection .leftArrowIcon{
+    box-shadow: 0px 0px 4px 1px #868686;
+}
+.bodySec.fullMap .listSection .leftArrowIcon:before{
+    transform: rotate(0deg);
+}
+.bodySec .listSection .leftArrowIcon:before{
+    transform: rotate(180deg);
+}
+.bodySec .listSection .leftArrowIcon{
+    position: absolute;
+    width: 20px;
+    height: 65px;
+    left: -20px;
+    z-index: 9;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 35%;
+    border-radius: 10px 0px 0px 10px;
+    box-shadow: none;
+    cursor: pointer;
+    font-size: 25px;
+    overflow: hidden;
+}
+
+.bodySec .listSection .placeList{
+    width: 100%;
+    background: white;
+    margin-top: 140px;
+    height: calc(100% - 140px);
+    overflow: auto;
+    direction: ltr;
+    position: relative;
+}
+.bodySec.fullMap .listSection .content{
+    overflow: hidden;
+    direction: rtl;
+}
+.bodySec .listSection .content{
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+.placeList .placeCard{
+    direction: rtl;
+    margin: 10px 10px;
+    background: white;
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: solid #efefef 1px;
+    position: relative;
+}
+.placeList .placeCard .img{
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.placeList .placeCard .info{
+    margin-right: 10px;
+    width: calc(100% - 80px);
+}
+.placeList .placeCard .info .name{
+    font-size: 1em;
+    color: black;
+    cursor: pointer;
+}
+
+.placeList .placeCard .info .star{
+    font-size: .8em;
+    color: gray;
+}
+.placeList .placeCard .info .address{
+    font-size: .7em;
+    color: gray;
+}
+.placeListLoading{
+    position: absolute;
+    top: 150px;
+    right: 0px;
+    width: 100%;
+    height: calc(100% - 140px);
+    background: #0000008c;
+    z-index: 9;
+    overflow: hidden;
+}
+
+.placeSearchMapResults{
+    background: white;
+    position: absolute;
+    width: 100%;
+    top: 80%;
+    z-index: 9;
+    font-size: 11px;
+    right: 0;
+    border-radius: 0px 0px 10px 10px;
+    transition: .3s;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: none;
+}
+.placeSearchMapResults.showResult{
+    box-shadow: 0px 4px 4px 1px #868686;
+    padding: 13px;
+    max-height: 300px;
+    overflow: auto;
+    z-index: 99;
+}
+.placeSearchMapResults .res{
+    padding: 7px 5px;
+    margin: 7px 0px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    transition: .3s;
+}
+.placeSearchMapResults .res:hover{
+    background: var(--koochita-light-green);
+}
+.placeSearchMapResults .res .name{
+    margin-right: 8px;
+}
+.placeSearchMapResults .res .icon{
+
+}
+.placeSearchMapResults .defaults{
+    font-weight: bold;
+    border-bottom: solid 1px #d5d5d5;
+}
+.mobileListSection{
+    display: none;
+}
+
+.showPlacePage{
+    display: block;
+    font-size: 10px;
+    text-align: center;
+    margin-top: 10px;
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+}
+
+.mobileListContent .showPlacePage{
+    position: relative;
+}
+.selectedPlace .showPlacePage{
+    position: absolute;
+    left: 0;
+}
+
+.bodySec .mobileListSection .fingerTopListSec.topArrowFull:before{
+    color: #c5c5c5;
+    font-size: 50px;
+    position: absolute;
+    top: -10px;
+    right: 25px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mobileListSection.fullMobileList .fingerTopListSec.topArrowFull:before {
+    transform: rotate(-180deg);
+    top: 5px;
+}
+
+@media (max-width: 767px) {
+    .leaflet-control-zoom.leaflet-bar.leaflet-control{
+        display: none;
+    }
+    body{
+        overflow: hidden;
+    }
+    .gapForMobileFooter{
+        display: none;
+    }
+    .placeSearchMapResults{
+        width: 85%;
+        right: 30px;
+    }
+    .hideOnScreen.mobileHeader{
+        display: none;
+    }
+    .bodySec{
+        overflow: hidden;
+        height: 100vh;
+        position: unset;
+    }
+    .gmnoprint{
+        display: none;
+    }
+    .mapSection{
+        width: 100%;
+    }
+    .bodySec .listSection{
+        display: none;
+    }
+    .bodySec .mobileListSection{
+        display: block;
+        background: white;
+        position: absolute;
+        bottom: 50px;
+        right: 0px;
+        width: 100%;
+        height: 70px;
+        z-index: 999;
+        border-radius: 20px 20px 0px 0px;
+        box-shadow: 0px 0px 4px 1px #c1c1c1;
+    }
+    .bodySec .mobileListSection.fullMobileList{
+        border-radius: 0px;
+    }
+    .bodySec .mobileListSection .topSecMobileList{
+        margin: 0px 10px;
+        padding-bottom: 5px;
+        border-bottom: solid #e6e6e6 1px;
+    }
+    .bodySec .mobileListSection .fingerTopListSec{
+        width: 97px;
+        height: 4px;
+        background: #c5c5c5;
+        border-radius: 20px;
+        margin-top: 15px;
+        margin-right: auto;
+        margin-left: auto;
+        position: relative;
+    }
+    .bodySec .mobileListSection .nearName{
+        text-align: center;
+        font-size: 18px;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .bodySec .mobileListSection .mobileListContent{
+        max-height: 100%;
+        background: white;
+        padding-bottom: 60px;
+        overflow-y: hidden;
+    }
+    .bodySec .mobileListSection.fullMobileList .mobileListContent{
+        overflow-y: auto;
+    }
+
+    .searchSec input{
+        width: 100%;
+    }
+    .sideSection{
+        z-index: 999;
+        transition: .3s;
+        height: 100px;
+        width: 100%;
+    }
+    .sideSection.fullMobileList{
+        background: white;
+    }
+
+    .sideSection > div{
+        width: 96%;
+        border-radius: 35px;
+    }
+    .sideSection .filtersSec{
+        background: transparent;
+        box-shadow: none;
+        overflow-x: auto;
+        border-radius: 0px;
+        margin: 0;
+        width: 100%;
+        padding: 0;
+        white-space: nowrap;
+        display: block;
+        padding-bottom: 5px
+    }
+    .sideSection .filtersSec::-webkit-scrollbar {
+        display: none;
+    }
+    .sideSection .filtersSec .filKind{
+        flex-direction: row-reverse;
+        color: black;
+        border-radius: 20px;
+        padding: 5px;
+        min-width: 85px;
+        justify-content: space-around;
+        margin-right: 10px;
+        display: inline-flex;
+    }
+    .sideSection .filtersSec .filKind .icon{
+        font-size: 12px;
+        width: 20px;
+        height: 20px;
+        margin-bottom: 0px;
+    }
+
+    .sideSection .filtersSec .filKind .name{
+        margin-left: 5px;
+        font-size: .45em;
+        font-weight: bold;
+    }
+    .sideSection .filtersSec .filKind.offFilter{
+        background: white;
+        color: #757575;
+    }
+    .filtersSec .filKind.amakenFilter {
+        background: #ec008c;
+        background: white;
+    }
+    .filtersSec .filKind.hotelFilter{
+        background: #00516f;
+        background: white;
+    }
+    .filtersSec .filKind.restaurantFilter{
+        background: #e4d900;
+        background: white;
+    }
+    .filtersSec .filKind.advantureFilter{
+        background: #ed1c24;
+        background: white;
+    }
+    .filtersSec .filKind.boomgardyFilter{
+        background: #00aeef;
+        background: white;
+    }
+
+    .mobileListContent .typesList{
+        padding: 0px 10px;
+    }
+    .mobileListContent .typesList .typeRow{
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        border-bottom: solid 1px #f1f1f1;
+    }
+    .mobileListContent .typesList .typeRow .header{
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .mobileListContent .typesList .typeRow .header:before{
+        margin-left: 5px;
+        font-weight: normal;
+    }
+    .mobileListContent .typesList .typeRow .body{
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    .mobileListContent .typesList .typeRow .body::-webkit-scrollbar {
+        display: none;
+    }
+    .mobileListContent .typesList .placeCard{
+        display: inline-flex;
+        flex-direction: column;
+        width: 160px;
+        justify-content: center;
+        align-items: center;
+        border-bottom: none;
+    }
+    .mobileListContent .typesList .placeCard .info{
+        text-align: center;
+        margin: 0;
+        width: 90%;
+        overflow: hidden;
+    }
+    .mobileListContent .typesList .placeCard .img{
+        width: 150px;
+        height: 120px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+    .mobileListContent .placeListLoading{
+        top: 50px;
+        height: 100%;
+    }
+}

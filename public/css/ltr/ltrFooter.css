@@ -1,0 +1,28 @@
+.footerPhoneMenuBar{
+    direction: rtl;
+}
+.footerPhoneMenuBar > div{
+    direction: rtl;
+}
+.footerMenuBarLinks{
+    direction: rtl;
+}
+.footerMenuBarLinks .iconFamily.UserIcon{
+    margin-left: 0px !important;
+    margin-right: 2px !important;
+}
+.closeFooterPopupIcon{
+    left: auto;
+    right: 5px;
+}
+.profilePicFooter.type2{
+    margin-left: 0px;
+    margin-right: 10px;
+}
+.pSC_cityDetails:nth-of-type(even){
+    border-left: solid #a1a1a1 1px;
+    border-right: none;
+}
+.pSC_choiseDetailsText{
+    text-align: center;
+}

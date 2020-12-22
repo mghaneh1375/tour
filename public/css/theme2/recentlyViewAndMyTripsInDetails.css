@@ -1,0 +1,105 @@
+#my-trips-not {
+    display: none;
+    bottom: auto;
+    left: 210px;
+    position: absolute;
+    top: 10px
+}
+
+#masthead-recent {
+    background-color: #f9f9f9;
+}
+
+#masthead-recent > div:nth-child(1) {
+    text-align: right;
+    padding: 0 24px;
+}
+
+#masthead-trips {
+    overflow: auto;
+    max-height: 400px;
+}
+
+#trips-tiles > div > div:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    border: 2px solid #a0a0a0;
+    cursor: pointer;
+}
+
+.backBackground {
+    background-size: 100% 100%;
+    background: repeat 0 0;
+}
+
+.regularBackground {
+    background-color: #cfcfcf;
+}
+
+#trips-tiles > div > div:nth-child(3) {
+    font-size: 1.2em;
+}
+
+#trips-tiles > div > div:nth-child(4) {
+    padding: 5px;
+    font-size: 11px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid var(--koochita-light-green);
+}
+
+#trips-tiles > div > div:nth-child(4) > p {
+    color: var(--koochita-light-green);
+    display: inline;
+}
+
+#trips-tiles > div > div:nth-child(5) {
+    padding: 5px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid var(--koochita-light-green);
+}
+
+#bookmarkmenu {
+    display: none;
+    bottom: auto;
+    left: 250px;
+    position: absolute;
+    top: 10px;
+}
+
+#masthead-recent {
+    background-color: #f9f9f9;
+}
+
+#masthead-recent > div {
+    text-align: right;
+    padding: 0 24px;
+}
+
+/*1st style box before bokmarmenu*/
+
+.ui_overlay:before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: -10px;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+    -webkit-filter: drop-shadow(0 0 0 #b7b7b7);
+    filter: drop-shadow(0 0 0 #b7b7b7);
+    box-shadow: 0 0 0 #b7b7b7 \9;
+    -webkit-filter: drop-shadow(0 0 0 #999);
+    filter: drop-shadow(0 0 0 #999);
+}
+
+.text-align-rightImp {
+    text-align: right !important;
+}
+
+#mediaLeftRecentViewDetails {
+    padding: 0 12px !important;
+    margin: 0 !important;
+}

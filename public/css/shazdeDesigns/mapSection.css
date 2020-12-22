@@ -1,0 +1,154 @@
+
+#nearbyDiv {
+    display: inline-block;
+    width: 100%;
+    background: white;
+    margin-top: 15px;
+    padding: 15px;
+}
+
+#nearbyDiv .poiGrid {
+    border-color: #CCCCCC !important;
+}
+
+#nearbyDiv .poiGrid .poiTile .imgWrap {
+    max-width: 94px;
+    max-height: 80px;
+}
+
+#nearbyDiv .poiGrid .poiTile .imgWrap img {
+    min-width: 80px;
+}
+
+#nearbyDiv .poiGrid .poiTile .poiInfo span {
+    font-size: 16px;
+}
+
+#nearbyMainContainer {
+    width: 100%;
+    float: right;
+}
+
+.hr_btf_wrap .nearbyContainer.block_wrap {
+    margin-bottom: 0;
+}
+
+.mapSetting {
+    display: flex;
+    position: absolute;
+    width: max-content;
+    margin-right: 10px;
+    bottom: 25px;
+    direction: rtl;
+    right: 50px;
+}
+
+.mapSetting > div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    position: static;
+    background-color: #30b4a6;
+    width: max-content;
+    cursor: pointer;
+    padding: 0 3px;
+}
+
+.mapSetting > div:nth-child(1) h1 {
+    color: white;
+    font-size: 120%;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.mapSetting > div:nth-child(2) {
+    width: max-content;
+    background-color: ghostwhite;
+    padding: 0.5% 5px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.mapSetting > div:nth-child(2) > center {
+    display: flex;
+    align-items: center;
+    width: max-content;
+}
+
+.mapSetting > div:nth-child(2) img{
+    cursor: pointer;
+    width: 30px;
+    height: 100%;
+    margin-right: 5px;
+}
+
+.closeShowMainMap{
+    width: 15%;
+    height: 48%;
+    float: left;
+    transform: scaleX(1);
+}
+
+.disableSettingArrow{
+    transform: scaleX(-1) !important;
+}
+
+@media (max-width: 630px) and (min-width: 481px) {
+
+    .mapSetting > div:nth-child(1) h1 {
+        font-size: 10px;
+    }
+
+    .mapSetting > div:nth-child(1) {
+        padding: 0 3px;
+    }
+
+    .mapSetting > div:nth-child(2) {
+         padding: 0.5% 0;
+    }
+
+    .mapSetting > div:nth-child(2) img {
+        margin-right: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .mapSetting {
+        flex-direction: column;
+        bottom: 65px;
+    }
+
+    .mapSetting > div:nth-child(1) {
+        position: absolute;
+        right: 0;
+        bottom: -40px;
+    }
+
+    .mapSetting > div:nth-child(2) {
+        padding: 0.5% 0;
+    }
+
+    .mapSetting > div:nth-child(2) img {
+        margin-right: 2px;
+        width: 28px;
+    }
+
+    .closeShowMainMap {
+        transform: rotate(90deg);
+    }
+
+    .disableSettingArrow {
+        transform: rotate(270deg) !important;
+    }
+}
+
+@media (max-width: 370px) {
+
+    .mapSetting > div:nth-child(2) img {
+        width: 23px;
+    }
+}

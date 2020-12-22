@@ -1,0 +1,108 @@
+#errorAssignPlace {
+    margin-top: 10px
+}
+
+#ansSubmitted {
+    position: fixed;
+    width: 60%;
+    left: 20%;
+    right: auto;
+    top: 40%;
+    bottom: auto;
+    overflow: hidden
+}
+
+#questionSubmitted {
+    position: fixed;
+    width: 33%;
+    left: 33%;
+    right: auto;
+    top: 40%;
+    bottom: auto;
+    overflow: hidden
+}
+
+#photoSubmitted {
+    position: fixed;
+    width: 60%;
+    left: 20%;
+    right: auto;
+    top: 40%;
+    bottom: auto;
+    overflow: hidden;
+}
+
+/*#reportPane, #rules {*/
+/*    position: fixed;*/
+/*    left: 24%;*/
+/*    right: 24%;*/
+/*    top: 19%;*/
+/*    bottom: auto;*/
+/*    overflow: auto;*/
+/*    max-height: 500px;*/
+/*}*/
+
+/*#reportPane .body_text .submitOptions button {*/
+/*    color: #FFF;*/
+/*    background-color: var(--koochita-light-green);*/
+/*    border-color: var(--koochita-light-green);*/
+/*}*/
+
+#errMsgReport {
+    color: red
+}
+
+#rules > div:nth-child(1) {
+    color: var(--koochita-light-green)
+}
+
+#rules .body_text ul {
+    list-style-type: disc;
+    margin-right: 30px
+}
+
+
+#lastSpanHotelDetailsPopUp {
+    z-index: 100000 !important;
+    position: absolute;
+    bottom: auto;
+    direction: rtl;
+    margin: -25px 20px 0 0
+}
+
+#hotelDetailsPopUpDarkMode {
+    display: none;
+    z-index: 9;
+}
+
+.rtl {
+    direction: rtl;
+}
+
+.tripResponse{
+    width: 150px;
+    height: 150px;
+    border: 2px solid rgb(160, 160, 160);
+    cursor: pointer;
+}
+
+.details-pop-up .ui_close_x {
+    left: 0;
+    right: inherit;
+}
+
+.details-pop-up .ui_close_x::before {
+    color: var(--koochita-light-green);
+}
+
+@media (min-width: 992px) {
+    
+}
+
+@media (max-width: 400px) {
+
+    #addPlaceToTripPrompt {
+        width: 90%;
+        left: 5%;
+    }
+}

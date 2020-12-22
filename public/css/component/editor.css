@@ -1,0 +1,1462 @@
+.addPhotoBtn{
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    border-color: var(--koochita-light-green) !important;
+    background-color: var(--koochita-light-green) !important;
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, .25);
+    color: #fff;
+    cursor: pointer;
+}
+/*1st box of styles*/
+.uploadPicCropLeftSection{
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.errorField {
+    background-color: #f26C4F;
+}
+
+.rotateRight {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/rotateRight.png');
+    background-size: contain;
+}
+
+.rotateLeft {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/rotateLeft.png');
+    background-size: contain;
+}
+
+.flipHorizontal {
+    width: 22px;
+    height: 22px;
+    margin: 3px 3px;
+    background: url('../../images/cropImagesIcons/flip.png');
+    background-size: contain;
+}
+
+.flipVertical {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/reflect.png');
+    background-size: contain;
+}
+
+.cropping {
+    width: 22px;
+    height: 23px;
+    margin: 3px 3px;
+    background: url('../../images/cropImagesIcons/cropping.png');
+    background-size: contain;
+}
+
+.clearing {
+    width: 23px;
+    height: 23px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/clearing.png');
+    background-size: contain;
+}
+
+.innerPic {
+    background: url("../../images/cropImagesIcons/bck.png");
+    width: 300px;
+    height: 285px;
+    background-size: cover;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-112%);
+}
+
+.uploadPicChoosePic {
+    position: relative;
+    height: 185px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.termsLabel {
+    display: inline-block;
+}
+
+.uploadBtn {
+    padding: 3px 15px;
+    margin-right: 5px;
+}
+
+/*2nd box of styles*/
+
+.epTitle {
+    display: inline-block;
+    position: relative;
+    margin: 7px 0px;
+    font-weight: 500;
+}
+
+.epRedNotice {
+    font-size: 0.9em;
+    color: #963019;
+}
+
+.epBlackNotice {
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.epInputBox {
+    width: 100%;
+    display: inline-block;
+    padding: 2px 7px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    line-height: 30px;
+    margin: 0 0 10px;
+}
+
+.epInputBoxText {
+    padding-left: 15px;
+    border-left: 1px solid #d8d8d8;
+    display: inline-block;
+    min-width: 90px
+}
+.uploadPicInfoSection{
+
+}
+
+.epInputBoxInput {
+    width: 60%;
+    padding-left: 3%;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    outline: none;
+}
+
+.epInputBoxRequired {
+    display: inline-block;
+    position: relative
+}
+
+.epInputIconRequired {
+    font-size: 0.5em;
+    color: #92321b;
+    position: absolute;
+    top: -5px;
+    left: -10px;
+}
+
+.epAddresText {
+    width: 100%;
+    height: 120px;
+    resize: none;
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    padding: 8px;
+}
+
+.epAddPlace {
+    background: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    color: white;
+    float: left;
+    padding: 7px;
+}
+
+.epPicBox {
+    padding: 7px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.epPic {
+    background-color: #e5e5e5;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.epEditPicText {
+    text-align: left;
+    color: #30b4a6;
+}
+
+.epPicText {
+    padding: 5px 0;
+}
+
+/*/////////////////////////////*/
+.epHeaderBar {
+    margin-top: -12px;
+    height: 48px; /* Matches top of .uploaderDlg */
+    width: 100%;
+    line-height: 48px;
+    background: var(--koochita-light-green);
+}
+
+.epHeaderBar h3 {
+    float: right;
+    position: relative;
+    color: #000;
+    font-size: 14px;
+    line-height: 48px;
+    padding-right: 14px;
+    max-width: 65%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/*3rd box of styles*/
+
+.img-container {
+    margin: 5px 15px;
+    padding: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+/*4th box of styles*/
+
+.docs-buttons {
+    padding: 10px 0;
+    border-top: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+}
+
+.editBtnsGroup {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 7px;
+}
+
+.editBtns {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+.upload {
+    float: left;
+}
+
+.editSection {
+    padding: 0;
+    width: 50%;
+    right: auto;
+    /*height: 90%;*/
+    top: 5%;
+    position: fixed;
+    left: 25%;
+}
+
+
+.editSection > div:nth-child(1) > div:nth-child(1) {
+    max-height: 600px;
+    overflow: auto
+}
+
+.ui_close_x {
+    /*right: 94.5%;*/
+    right: 511px;
+}
+
+.ui_close_x:before {
+    color: var(--koochita-light-green);
+    left: 0;
+}
+
+#guidelinesOverlay {
+    position: fixed;
+    right: 460px;
+    left: auto;
+    top: 82px;
+    bottom: auto;
+}
+
+.itemRow .row {
+    margin: 0;
+    padding: 12px 0 0;
+}
+
+.itemRow .row .col-xs-5 {
+    padding: 15px;
+    float: right;
+}
+
+.itemRow .row .col-xs-7 {
+    padding: 15px 15px 50px;
+    border-left: 1px solid #cccccc;
+    float: right;
+    position: relative;
+}
+
+.itemRow .row .col-xs-7 .epPicBox:first-child {
+    width: 232px;
+    display: inline-block;
+}
+
+.itemRow .row .col-xs-7 .epPicBox:nth-child(2) {
+    width: 119px;
+    display: inline-block;
+}
+
+.itemRow .row .col-xs-7 div:last-child {
+    margin: 10px 0;
+    text-align: justify
+}
+
+.photoTemplateTypeDesc {
+    text-align: justify;
+}
+
+#photoEditor.ui_overlay:before {
+    display: none;
+}
+
+#photoEditor .secondStepFooter {
+    /*display: flex;*/
+    /*align-items: flex-start;*/
+}
+
+.secondStepFooter .termsLabel > div {
+    display: flex;
+}
+
+.secondStepPolicyCheckBox {
+    display: flex;
+    padding-top: 5px;
+}
+
+.secondStepPolicyText {
+    padding: 0 5px 0 10px;;
+    text-align: justify;
+    font-size: 8px;
+    line-height: 2;
+}
+
+.secondFooterVerification {
+    position: relative;
+}
+
+.imageVerificationBtn {
+    position: relative;
+    margin-left: 0;
+    margin-right: auto;
+    width: fit-content;
+    margin-top: 15px;
+}
+
+.imageVerificationBtn > button {
+    border: none;
+    border-radius: 4px;
+    padding: 5px 8px;
+    background: #93331f;
+    color: white;
+    font-weight: 700;
+}
+
+#rectanglePicUploadPhoto {
+    width: 213px;
+    height: 168px;
+    transform: rotate(0deg);
+}
+
+#squarePicUploadPhoto {
+    width: 100px;
+    height: 100px;
+    transform: rotate(0deg);
+}
+
+#photoTags {
+    border: none !important;
+    float: right !important;
+}
+
+#description {
+    min-height: 100px;
+    max-height: 100px;
+    overflow: auto;
+}
+
+#pic {
+    padding: 9px 16px 8px;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: none
+}
+
+#dropArea > .footer > div > div {
+    margin: 5px 0;
+}
+
+#dropArea > .footer > div > div > div {
+    display: inline-block;
+    padding: 0px 5px;
+    text-align: justify;
+}
+
+#dropArea > .footer > div > div > div > div {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#photoUploadTipsLink > span:first-child {
+    color: #16174f;
+}
+
+.dragPhotosMainDiv {
+    height: 200px;
+    border: 2px dashed #9996;
+    margin: 20px 60px 10px;
+}
+
+#photoEditor .ui_close_x {
+    right: initial;
+    left: 0;
+}
+
+#editPane .ui_close_x {
+    right: initial;
+    left: 0;
+    top: -12px;
+}
+
+.bodyEditFrame {
+    overflow: auto;
+    max-height: 93%;
+}
+
+.bodyEditFrame .row {
+    margin: 0;
+}
+
+.bodyEditFrame .return {
+    float: left;
+}
+
+.returnBtnEditPhoto {
+    border-radius: 4px;
+    background-color: #93331f;
+    color: white;
+    padding: 3px 15px;
+    font-size: 14px;
+    border: 1px solid transparent;
+    line-height: 17px;
+    cursor: pointer;
+}
+
+.darkModalEditor {
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+}
+
+
+.footerTextBox {
+    padding: 10px 15px;
+    text-align: justify;
+    font-size: 12px;
+    line-height: 2;
+    background: white;
+}
+
+.footerPolicyLink {
+    color: #0c0593;
+}
+
+
+/*succes styles*/
+
+.successScreen {
+    height: 70vh;
+}
+
+.successTextBox {
+    padding: 30px;
+    line-height: 25px
+}
+
+.successText {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.successTextDes {
+    font-size: 1.2em;
+    color: #761c19;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+.uploadNextPicBtnBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.uploadNextPicBtn {
+    width: 100%;
+    font-size: 2em;
+    padding: 15px 0;
+    line-height: 20px;
+    border-radius: 10px;
+}
+
+.uploadNextPicDeny {
+    position: relative;
+    width: 300px;
+    float: left;
+    text-align: left;
+    color: blue;
+    cursor: pointer;
+}
+
+.uploadedImgDiv{
+    width: 100%;
+    display: flex;
+    top: 50%;
+    max-height: 200px;
+    flex-wrap: nowrap;
+    overflow-y: scroll;
+    flex-direction: row;
+}
+
+.uploadedImgShowDiv{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.uploadedImgPic{
+    width: 100%;
+}
+
+
+#editPane > div:nth-child(1) > div:nth-child(1) {
+    max-height: 600px;
+    overflow: auto
+}
+
+#actions {
+    margin: 20px 20px 0;
+}
+
+#photoEditor, #editPane {
+    padding: 0;
+    top: 5%;
+    position: fixed;
+    left: 25%;
+    right: 25%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 999;
+    background: white;
+}
+
+#editPane {
+    top: 5% !important;
+}
+
+#photoUploadHeader, .photoUploadHeader {
+    color: white;
+}
+.whiteClose:before{
+    color: white;
+}
+.addPhotographerModal{
+    z-index: 9991;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    backdrop-filter: blur(2px);
+    background-color: #000000bf;
+}
+.closeAddPhotographer{
+    position: absolute;
+    left: 10px;
+    top: -3px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.photoUploader {
+    /*width: 860px;*/
+    height: 100%;
+    padding-top: 12px;
+    box-sizing: border-box;
+}
+.photoUploader .headerBar {
+    position: relative;
+    margin-top: -12px;
+    display: block;
+    height: 48px; /* Matches top of .uploaderDlg */
+    width: 100%;
+    line-height: 48px;
+    background: var(--koochita-light-green);
+}
+.photoUploader .headerBar h3 {
+    float: right;
+    position: relative;
+    color: #000;
+    font-size: 14px;
+    line-height: 48px;
+    padding-right:14px;
+    max-width: 65%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0px;
+}
+.photoUploader .guidelines {
+    position: relative;
+    margin-right: 12px;
+    padding-right: 12px;
+}
+
+.photoUploader .headerBar .headerLink {
+    position: relative;
+    float: right;
+    padding-right: 12px;
+    margin-right: 12px;
+    font-weight: bold;
+    color: #069;
+    font-size: 11px;
+    cursor: pointer;
+}
+.photoUploader .headerBar .headerLink:before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 0;
+    height: 24px;
+    width: 1px;
+    background: #ccc;
+}
+.inputUploadPhotosError{
+    background: red !important;
+    color: white !important;
+}
+.tickInputUploadPhotosError{
+    border: solid 2px;
+    border-radius: 5px;
+    color: red;
+    background-position-y: -2px !important;
+}
+.ui_modal.photoUploadOverlay .body_text,
+.ui_modal.photoUploadOverlay .body_text .photoUploadInner {
+    height: 100%;
+    direction: rtl;
+}
+.photoUploader .footer {
+    margin-bottom: 15px;
+}
+.uploaderDlg a {
+    color: #069;
+}
+.uploaderDlg .footer .addMore {
+    display: table-cell;
+    float: left;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-top: 18px;
+}
+.uploaderDlg .footer .upload {
+    margin-left: 12px;
+    float: left;
+}
+.uploaderDlg .footer .uploadForm {
+    display: table-cell;
+    vertical-align: middle;
+    margin-top: 18px;
+}
+.uploaderDlg .footer .uploadForm.error {
+    line-height: 18px;
+}
+.uploaderDlg .footer .uploadForm .termsLabel {
+    float: right;
+}
+.uploaderDlg .footer .uploadForm .iAgree {
+    vertical-align: middle;
+}
+.uploaderDlg .footer .uploadForm .errorText {
+    font-weight: bold;
+    display: none;
+}
+.uploaderDlg .footer .uploadForm.error .errorText {
+    display: block;
+    color: #e43a42;
+}
+.uploaderDlg .footer .uploadForm.error label {
+    color: #e43a42;
+}
+.uploaderDlg .footer .photoReleaseBox {
+    vertical-align: middle;
+}
+
+.uploaderDlg .preview {
+    position: relative;
+    float: left;
+    width: 330px;
+    height: 286px;
+    overflow: hidden;
+}
+.uploaderDlg .preview .editBtn {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 23px;
+    height: 22px;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+    border-color: #e6e6e6 #ccc #ccc #e6e6e6;
+    box-shadow: 1px 1px 0 0 rgba(0,0,0,.07);
+}
+.uploaderDlg .preview .editBtn:hover {
+    text-decoration: none;
+    background-color: #e6e6e6;
+    border-color: #e6e6e6;
+}
+.uploaderDlg .preview .editBtn:active {
+    background-color: #dfdfdf;
+    border-color: #dfdfdf;
+    box-shadow: none;
+}
+.uploaderDlg .preview .imgContainer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    background: #F4F3F0;
+}
+.uploaderDlg .preview .imgContainer:before {
+    /* Vertical center trick */
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.uploaderDlg .preview .imgContainer img {
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+}
+.uploaderDlg .photoForm {
+    margin: 18px 0 0 372px;
+}
+.uploaderDlg .photoForm.hasRoomType {
+    margin-top: 6px;
+}
+.uploaderDlg .uploadList {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 72px; /* Height of footer */
+    width: 100%;
+    overflow: auto;
+}
+.uploaderDlg .uploadList .itemRow {
+    position: relative;
+    clear: both;
+    margin: 6px 18px;
+    padding: 6px;
+    background: #FFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ECEAE2 #ECEAE2 #DDDBD0 #ECEAE2;
+}
+.uploaderDlg .uploadList .itemRow:after {
+    /* Clearfix: Ensure that the columns are balanced */
+    content: '';
+    clear: both;
+    display: table;
+}
+.uploaderDlg .uploadList .itemRow:hover {
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.2);
+}
+.uploaderDlg .template {
+    display: none;
+}
+.uploaderDlg .itemRow .progress,
+.uploaderDlg .itemRow .action {
+    display: none;
+}
+.uploaderDlg .itemRow.loading .progress {
+    display: block;
+}
+.uploaderDlg .itemRow.loaded:hover .action {
+    display: block;
+}
+.uploaderDlg .uploadList .itemRow.addMore {
+    border: 1px dashed #DDDBD0;
+    padding: 18px;
+    text-align: center;
+}
+.uploaderDlg .uploadList .itemRow.addMore:hover {
+    box-shadow: none;
+}
+.uploaderDlg .uploadList .itemRow.addMore .dragDropMsg {
+    font-weight: bold;
+    display: inline-block;
+    padding-left: 12px;
+}
+
+.uploaderDlg .formFieldTitle {
+    font-weight: bold;
+}
+.uploaderDlg .formFieldTitle span {
+    font-weight: normal;
+}
+.uploaderDlg .error .category .formFieldTitle {
+    color: #e43a42;
+}
+.uploaderDlg .category {
+    height: 100%;
+    margin-bottom: 20px;
+}
+.uploaderDlg .category .column {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    margin-top: 6px;
+}
+.uploaderDlg .category .column.first {
+    border-right: 1px solid #E9E8E3;
+    padding-right: 12px;
+}
+.uploaderDlg .category .column.second {
+    padding-left: 12px;
+}
+.uploaderDlg .category .columnTitle {
+    font-style: italic;
+}
+.uploaderDlg .category .radioOption {
+    width: 45%;
+    padding: 6px 5% 0 0;
+    float: left;
+}
+.uploaderDlg .category .column .radioOption {
+    float: none;
+    width: auto;
+    padding-right: 0;
+}
+.uploaderDlg .category .radioOption input {
+    float: left;
+}
+.uploaderDlg .category .radioOption label {
+    display: block;
+    margin-left: 16px;
+    font-weight: normal;
+}
+
+.uploaderDlg .description {
+    width: 86%;
+    overflow: hidden; /* Prevents it from being on the same line as a category */
+    padding-top: 12px;
+}
+.uploaderDlg .description input {
+    width: 100%;
+    padding: 0 6px;
+    height: 36px;
+    font-size: 1.0em;
+    resize: none;
+    box-sizing: border-box;
+    display: block;
+    font-family: inherit;
+    box-shadow: inset 0 1px 2px 0 rgba(50, 50, 50, 0.3);
+    border: 1px solid #dbdad5;
+}
+.uploaderDlg .description input:focus {
+    border: 2px solid #00AF87;
+    padding-left: 5px;
+    outline: none;
+    box-shadow: none;
+}
+.uploaderDlg .description .maxChars {
+    text-align: right;
+    float: right;
+    font-size: 10px;
+}
+
+.uploaderDlg .ui_select .closed_text {
+    margin-top: 6px;
+    min-width: 145px;
+    max-width: 95%;
+}
+
+.uploaderDlg.noFiles {
+    padding: 18px;
+}
+
+.uploaderDlg .sometimesVisible {
+    display: none;
+}
+.uploaderDlg.hasFiles .uploadList,
+.uploaderDlg.noFiles .startScreen,
+.uploaderDlg.dragging .dragScreen,
+.uploaderDlg.invalidDrag .invalidDragScreen,
+.uploaderDlg.uploading .progressScreen,
+.uploaderDlg.uploadComplete .doneScreen {
+    display: block;
+}
+
+.uploaderDlg.hasFiles .footer {
+    display: table;
+}
+
+.uploaderDlg .infoScreen {
+    position: relative;
+    text-align: center;
+    background: #fff;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 0;
+}
+/* Combined with font-size:0 on .startScreen, this trick vertically centers text */
+.uploaderDlg .infoScreen:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.uploaderDlg .infoScreen .inner {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    width: 100%;
+}
+.uploaderDlg .dropOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.uploaderDlg .startScreen {
+    margin-top: 10px;
+}
+
+.uploaderDlg .startScreen .separator {
+    position: relative;
+    margin: 30px 0;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+.uploaderDlg .startScreen .separator .text {
+    display: inline-block;
+    background: #fff;
+    position: relative;
+    padding: 0 12px;
+}
+
+.uploaderDlg .startScreen .separator:before {
+    content: '';
+    position: absolute;
+    margin-top: 8px;
+    left: 20%;
+    width: 60%;
+    height: 1px;
+    background: #ccc;
+}
+
+.uploaderDlg .startScreen .dragDropText {
+    font-size: 14px;
+    font-weight: bold;
+    height: 175px;
+    border: 2px dashed #9996;
+    margin: 20px 8% 10px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploaderDlg .dragScreen {
+    border: 4px solid #00AF87;
+}
+
+.uploaderDlg .invalidDragScreen {
+    border: 4px solid #F00;
+}
+
+.uploaderDlg .dropText {
+    font-weight: bold;
+    font-size: 14px;
+    color: #00AF87;
+}
+
+.uploaderDlg .dropImg {
+    display: inline-block;
+    margin-top: 18px;
+}
+
+.uploaderDlg .errorMsg {
+    background: #fce6e8;
+    border: 1px solid #e43a42;
+    color: #e43a42;
+    font-weight: bold;
+    padding: 12px;
+    margin: 6px 18px;
+}
+
+
+.progressScreen .progressBar {
+    width: 50%;
+    height: 8px;
+    padding: 2px;
+    background: #E9E8E3;
+    display: inline-block;
+}
+.progressScreen .progressBar .progress {
+    width: 53px;
+    background: #00AF87;
+    height: 100%;
+}
+.progressScreen .progressTitle {
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.progressScreen .progressText {
+    font-weight: bold;
+}
+
+.doneScreen .pendingText {
+    color: #999;
+    margin-bottom: 12px;
+    margin-right: -1em;
+    font-size: 15px;
+}
+.doneScreen .thankyouText {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.doneScreen .thankyouInfo {
+    color: #000;
+    margin-top: 12px;
+}
+.doneScreen .thankyouCloseBtn {
+    margin-top: 78px;
+    min-width: 160px;
+}
+
+.icon.clock {
+    position: relative;
+    display: inline-block;
+    border-radius: 100%;
+    height: 33px;
+    width: 33px;
+    box-shadow: 0 1px 4px 0 #ccc;
+    background: #fff;
+}
+.icon.clock:before,
+.icon.clock:after {
+    content: '';
+    position: absolute;
+    background: #ccc;
+}
+.icon.clock:before {
+    top: 50%;
+    left: 25%;
+    width: 25.5%;
+    height: 6.5%;
+}
+.icon.clock:after {
+    top: 15%;
+    left: 50%;
+    width: 6.5%;
+    height: 41.5%;
+}
+
+
+.guidelinesOverlayParent .guidelinesOverlay a {
+    color: #069;
+}
+.guidelinesOverlayParent .guidelinesOverlay ul {
+    list-style: initial;
+}
+.guidelinesOverlayParent .guidelinesOverlay li {
+    margin: 6px 0 0 16px;
+}
+.guidelinesOverlayParent .guidelinesOverlay .listFtr {
+    margin-top: 6px;
+}
+.guidelinesOverlayParent .guidelinesOverlay .listHdr {
+    font-weight: bold;
+}
+
+
+.photoErrorOverlay {
+    padding: 24px;
+}
+.photoErrorOverlay .ui_close_x {
+    display: none;
+}
+.photoErrorOverlay .errorText {
+    font-weight: bold;
+    max-width: 400px;
+}
+.photoErrorOverlay .buttonContainer {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.uploaderThanks.ui_modal {
+    background-color: #00AF87;
+    padding: 36px;
+}
+.uploaderThanks .thanksOverlayInner {
+    color: #fff;
+    line-height: initial;
+}
+.uploaderThanks .thanksOverlayInner .thankyouName {
+    font-weight: bold;
+    font-size: 1.75em;
+    padding: 0 0 2px;
+}
+.uploaderThanks .thanksOverlayInner .thankyouText {
+    font-weight: bold;
+    font-size: 1.75em;
+    padding: 0;
+}
+.uploaderThanks .thanksOverlayInner .thankyouInfo {
+    margin: 10px 0 25px;
+    opacity: 0.7;
+    font-size: 1.1670em;
+}
+.uploaderThanks .thanksOverlayInner .thankyouCloseBtn {
+    background-color: #fff;
+    color: #00AF87;
+    padding: 9px 50px 8px;
+    border-color: #fff #f4f3f0 #f4f3f0 #fff;
+}
+.uploaderThanks .thanksOverlayInner .thankyouCloseBtn:hover {
+    background-color: #f4f3f0;
+}
+.uploaderThanks .ui_close_x:before {
+    color: #fff;
+}
+
+.photoUploadOverlay.tabletUploader .photoUploader {
+    width: 100%;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg.noFiles {
+    padding: 18px 18px 30px;
+}
+.photoUploadOverlay.tabletUploader .tipsLink {
+    font-size: 1.1670em;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .inner {
+    width: inherit;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay {
+    margin-top: 48px;
+    text-align: left;
+    font-size: 1.1670em;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay .listHdr {
+    margin: 0 0 6px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay li {
+    margin: 2px 0 0 16px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .preview {
+    width: 372px;
+    height: 372px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .preview .editBtn {
+    width: 38px;
+    height: 38px;
+    background: url('/img2/photolb/icon_editPhoto_2x.png') no-repeat center center #f0f0f0;
+    background-size: 38px 38px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .itemRow .action {
+    display: block;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .photoForm {
+    margin: 18px 0 0 414px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .category .radioOption {
+    margin-top: 14px;
+}
+.photoUploadOverlay.tabletUploader .photoUploader .footer {
+    margin-bottom: 12px;
+    height: 100px;
+}
+.photoUploadOverlay.tabletUploader .photoUploader .footer .addMore {
+    margin-top: 29px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .inner {
+    width: 100%;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressTitle {
+    margin-bottom: 48px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressBar {
+    height: 30px;
+    margin-left: 48px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressText {
+    display: none;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .inner .ui_close_x {
+    position: relative;
+    display: inline-block;
+    top: -5px;
+}
+.photoUploadOverlay.tabletUploader .uploadList:after {
+    padding: 30px;
+    content: "";
+}
+.guidelinesOverlayParent.tabletUploader {
+    top: 45px !important;
+}
+
+.btnActionEditFrame{
+    min-width: 150px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.photographerErrors{
+    color: red;
+    position: absolute;
+    bottom: 0px;
+    margin-bottom: 0px;
+}
+
+@media (max-width: 1340px) {
+    #photoEditor, #editPane {
+        left: 20%;
+        right: 20%;
+    }
+}
+
+@media (max-width: 1120px) {
+    #photoEditor, #editPane {
+        left: 15%;
+        right: 15%;
+    }
+}
+
+@media (max-width: 960px) {
+    #photoEditor, #editPane {
+        left: 10%;
+        right: 10%;
+    }
+}
+
+@media (max-width: 850px) {
+    #photoEditor, #editPane {
+        left: 5%;
+        right: 5%;
+    }
+
+    .uploaderDlg .startScreen .dragDropText {
+        height: 150px;
+    }
+}
+
+@media (max-width: 767px) {
+    .uploadPicMainSection{
+        flex-direction: column;
+    }
+    #photoEditor .body_text{
+        height: 100vh !important;
+    }
+
+    .uploaderDlg .infoScreen{
+        height: 70vh;
+    }
+
+    .uploadPicInfoSection{
+        padding: 0 !important;
+        margin-top: 15px !important;
+    }
+    .stFooter {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .separator {
+        display: none;
+    }
+
+    .dragDropText {
+        display: none !important;
+    }
+
+    #photoEditor, #editPane {
+        left: 0%;
+        right: 0%;
+        top: 0% !important;
+        width: 100%;
+        height: 100vh;
+        overflow-y: hidden;
+    }
+
+    .itemRow .row .col-xs-7 {
+        border-left: none;
+        border-bottom: 1px solid #cccccc;
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5%;
+    }
+
+    .itemRow .row .col-xs-5 {
+        width: 90%;
+        margin: 0 5%;
+        padding: 15px 15px 35px;
+    }
+
+    .uploaderDlg .startScreen .dragDropText {
+        margin: 40px 30px 50px;
+    }
+    .uploaderDlg .infoScreen .inner{
+        height: 70% !important;
+    }
+
+    .uploadPicChoosePic {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .uploaderDlg .startScreen {
+        height: 90vh;
+    }
+    .secondFooterVerification{
+        width: 100%;
+        display: flex;
+        direction: ltr;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .photographerErrors{
+        position: relative;
+    }
+
+
+    .editSection{
+        right: 1%;
+        left: 1%;
+        width: 98%;
+        top: 0px;
+    }
+
+    .editReviewPicturesSection{
+        z-index: 9999;
+    }
+}
+
+@media (max-width: 552px) {
+    .imageVerificationBtn{
+        bottom: 10px;
+    }
+    .itemRow .row {
+        padding: 0;
+    }
+
+    .itemRow .row .col-xs-7 {
+        width: 96%;
+        margin: 0 2%;
+    }
+
+    .itemRow .row .col-xs-7 div:last-child {
+        margin: 10px 0 0;
+    }
+
+    .bodyEditFrame .row {
+        margin: 0;
+    }
+}
+
+@media (max-width: 456px) {
+    .uploadPicCropLeftSection{
+        justify-content: center;
+    }
+    #actions{
+        margin-top: 0px;
+    }
+    .docs-buttons{
+        flex-wrap: wrap;
+    }
+    .btnActionEditFrame{
+        justify-content: space-evenly;
+    }
+
+    .itemRow .row .col-xs-7 > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 440px) {
+    .uploadBtn {
+        margin: 0 5px 5px 0;
+    }
+}
+
+@media (max-width: 370px) {
+
+    .docs-buttons {
+        display: inherit;
+    }
+
+    .editBtnsGroup {
+        display: inline-block;
+    }
+
+    .btnActionEditFrame {
+        margin-top: 10px;
+    }
+}

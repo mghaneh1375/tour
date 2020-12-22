@@ -1,0 +1,311 @@
+
+/*calendar styles*/
+
+/* ---------- CALENDAR ---------- */
+.calendarModal{
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalBack{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: #000000ad;
+    display: none;
+    z-index: 999999;
+}
+
+.ticketIcon {
+    font-family: shazde_regular2 !important;
+    display: inline-block;
+}
+.rightArrowIcone:before {
+    content: '\E047';
+    color: var(--koochita-light-green);
+    font-size: 2.5em;
+    position: absolute;
+    top:-10px;
+}
+.leftArrowIcone:before {
+    content: '\E04D ';
+    color: var(--koochita-light-green);
+    font-size: 2.5em;
+    position: absolute;
+    top:-10px;
+}
+.rightInCalender:before {
+    right: 25%;
+}
+.leftInCalender:before {
+    left: 27%;
+}
+.rightInCalenderGre:before {
+    right: 20%;
+}
+.leftInCalenderGre:before {
+    left: 17%;
+}
+.calenderBase {
+    width: 75%;
+    height: auto;
+    direction: rtl;
+    background: white;
+    z-index: 999999999;
+    padding: 1%;
+    border: solid #cccccc;
+    position: absolute;
+}
+
+.calendar {
+    text-align: center;
+    direction: rtl;
+    width: 100%;
+}
+
+.calendar header {
+    position: relative;
+    margin-bottom: 3%;
+}
+
+.calendar h2 {
+    text-transform: uppercase;
+}
+
+.calendar thead {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.calendar tbody {
+    color: #7c8a95;
+}
+
+.calendar td {
+    /*display: inline-block;*/
+    height: 2em;
+    line-height: 2em;
+    font-size: 75%;
+    color: black;
+    width: 13%;
+}
+
+.calendar td:nth-child(5) {
+    border-left: 1px solid #aeaeae;
+}
+
+.calendar .prev-month,
+.calendar .next-month {
+    color: #ebebeb;
+    border: 2px solid transparent;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+}
+
+/******for gregorian calendar******/
+.calendarGre {
+    text-align: center;
+    direction: ltr;
+}
+
+.calendarGre header {
+    margin-bottom: 3%;
+    position: relative;
+}
+
+.calendarGre h2 {
+    text-transform: uppercase;
+}
+
+.calendarGre thead {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.calendarGre tbody {
+    color: #7c8a95;
+}
+
+.calendarGre td {
+    display: inline-block;
+    height: 2em;
+    line-height: 2em;
+    font-size: 75%;
+    color: black;
+    width: 14%;
+}
+
+.calendarGre td:nth-child(6) {
+    border-left: 1px solid #aeaeae;
+}
+
+.calendarGre .prev-month,
+.calendarGre .next-month {
+    color: #ebebeb;
+    border: 2px solid transparent;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+}
+
+
+.tableDiv {
+    border: 2px solid transparent;
+    width: 45%;
+    height: 102%;
+    margin: 0 auto;
+    border-radius: 50% !important;
+    cursor: pointer;
+}
+
+.tableDiv:hover {
+    border: 2px solid var(--koochita-light-green);
+}
+
+.current-day {
+    background: var(--koochita-light-green);
+    color: white !important;
+}
+
+.event {
+    cursor: pointer;
+    position: relative;
+}
+
+.event:after {
+    background: #00addf;
+    border-radius: 50%;
+    bottom: .5em;
+    display: block;
+    content: '';
+    height: .5em;
+    left: 50%;
+    margin: -.25em 0 0 -.25em;
+    position: absolute;
+    width: .5em;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 3%;
+}
+
+.event.current-day:after {
+    background: #f9f9f9;
+}
+
+.btn-prev,
+.btn-next {
+    border: 2px solid #cbd1d2;
+    border-radius: 50%;
+    color: #cbd1d2;
+    height: 2em;
+    font-size: .75em;
+    line-height: 2em;
+    margin: -1em;
+    position: absolute;
+    top: 50%;
+    width: 2em;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+    background: #cbd1d2;
+    color: #f9f9f9;
+}
+
+.btn-prev {
+    left: 6em;
+}
+
+.btn-next {
+    right: 6em;
+}
+
+.between {
+    color: var(--koochita-light-green);
+}
+
+
+/*bottom button*/
+.bottomBtn {
+    width: 100%;
+    border-top: 1px solid #aeaeae;
+    padding-top: 2%;
+}
+
+.differentCalendarBtn {
+    float: left;
+    margin-left: 5%;
+    color: var(--koochita-light-green);
+    background-color: white;
+    border: none;
+    font-size: 120%;
+}
+
+.cancelBtn {
+    float: right;
+    margin-right: 5%;
+    color: #92321b;
+    background-color: white;
+    border: none;
+    font-size: 120%;
+}
+
+#calendarJalali1 {
+    display: inline-block;
+    width: 49%;
+}
+
+#select_month_go, #select_month_back {
+    width: 30%;
+    font-size: 95%;
+}
+
+#calendarJalali1 > div > table > thead > tr, #calendarJalali2 > div > table > thead > tr, #calendarGregorian1 > div > table > thead > tr,
+#calendarGregorian2 > div > table > thead > tr {
+    border-bottom: 1px solid #aeaeae;
+}
+
+#calendarJalali2 {
+    display: inline-block;
+    width: 49%;
+    margin-right: 3px;
+    padding-right: 7px;
+    border-right: 2px solid var(--koochita-light-green);
+}
+
+#calendarGregorian {
+    display: none;
+    direction: ltr;
+}
+
+#calendarGregorian1 {
+    display: inline-block;
+    width: 49%;
+}
+
+#select_month_gre_go, #select_month_gre_back {
+    width: 45%;
+    font-size: 95%;
+}
+
+#calendarGregorian2 {
+    display: inline-block;
+    width: 49%;
+    margin-left: 3px;
+    padding-left: 7px;
+    border-left: 2px solid var(--koochita-light-green);
+}
+
+#GregorianButton {
+    display: none;
+}

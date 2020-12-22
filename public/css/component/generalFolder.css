@@ -1,0 +1,1948 @@
+
+.loginPaneInLoginPopUp{
+    float: left;
+}
+
+textarea:focus, input:focus, select:focus, button:focus, a:focus,
+
+textarea, input, select, button, a {
+    outline: none;
+}
+
+.labelForCheckBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.labelForCheckBox:before {
+    background-color: transparent !important;
+    border: none !important;
+    content: "" !important;
+}
+
+.loginDividerBorder {
+    border-right: 1px solid #cccccc;
+}
+
+.registerPaneInLoginPopUp > button > img {
+    width: 20px;
+    float: right;
+    margin-left: 10px
+}
+
+.resendActivationCode{
+    background: var(--koochita-blue);
+    border-color: var(--koochita-blue);
+}
+
+.resendActivationCode:hover{
+    background: var(--koochita-blue);
+    border-color: var(--koochita-blue);
+}
+
+#resendActivationCode {
+    background: #963019;
+    border-color: #963019;
+    margin-top: 15px;
+}
+
+#reminderTimePane {
+    padding-top: 8px;
+    font-size: 10px;
+}
+
+.loginInputTemp {
+    width: 100%;
+    padding: 7px;
+    text-align: center;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    direction: ltr;
+}
+
+.forgetPassLink {
+    cursor: pointer;
+    font-size: 11px;
+    padding-top: 8px;
+    display: block;
+    color: #16174f;
+}
+
+.loginSubBtn {
+    background: var(--koochita-blue) !important;
+    border-color: var(--koochita-blue) !important;
+    padding-left: 22px;
+    padding-right: 20px;
+    border-radius: 10px;;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0 !important;
+}
+
+.loginReturnBtn {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginErr, #loginErrEmail, #loginErrActivationCode {
+    margin-top: 10px;
+    color: #963019;
+}
+
+.registerPaneInLoginPopUp > button {
+    width: 90%;
+    margin: 0 5px 15px 5px;
+    background: var(--koochita-light-green);
+    color: #FFF;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+.registerPaneInLoginPopUp > button > div {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(2) > div {
+    background-position: 0 0;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(3) > div {
+    background-position: 0 -41px;
+}
+
+.registerPaneInLoginPopUp > button:nth-child(4) > div {
+    background-position: 0 -21px;
+}
+
+.registerPaneInLoginPopUp > button > span {
+    float: right;
+}
+
+#EnterUsername-loginPopUp > div:nth-child(2) > div > span {
+    font-size: 14px;
+}
+
+#EnterUsername-loginPopUp > div:nth-child(2) > div:nth-child(1) > div > div {
+    margin-left: 30px;
+    transform: scale(0.77);
+    -webkit-transform: scale(0.77);
+    transform-origin: right;
+    -webkit-transform-origin: right;
+}
+
+#submitAndFinishBtn {
+    margin-top: 20px;
+    background: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+    padding-left: 22px;
+    padding-right: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginErrUserName {
+    margin-top: 10px;
+    color: #963019;
+}
+
+#ForgetPassword > div:nth-child(2),
+#Phone_ForgetPass > div:nth-child(2) {
+    direction: rtl;
+    text-align: center;
+}
+
+#ForgetPassword button.btn.showDetailsBtn {
+    width: 90%;
+    margin: 0 5px 15px 5px;
+    background: var(--koochita-blue);
+    color: #FFF;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#ForgetPassword .emailLogo {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    background-position: 0 0;
+}
+
+#ForgetPassword .phoneLogo {
+    background-size: 20px;
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-image: url('../../images/loginPopup.png');
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    background-position: 0 -41px;
+}
+
+#ForgetPassword .returnBtnForgetPass {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 3px 0;
+}
+
+#loginPopUp .ui_close_x::before {
+    color: var(--koochita-light-green);
+}
+
+.ui_modal .header_text {
+    text-align: justify;
+}
+
+.loginButtonsMainDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 85%;
+}
+
+.googleA {
+    color: black;
+}
+
+.googleA:hover {
+    color: var(--koochita-light-green);
+}
+
+.mainLoginPupUpBack{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    /*backdrop-filter: blur(2px);*/
+    background-color: #000000bf;
+    display: flex;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loginCloseIcon{
+    position: absolute;
+    top: 0px;
+    font-size: 35px;
+    left: 10px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+
+.mainDivLoginMainLogo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginPopUpContent {
+    display: flex;
+    background: white;
+    position: absolute;
+    top: 7%;
+    padding: 35px 15px;
+    direction: rtl;
+    flex-direction: column;
+    width: 700px;
+}
+
+.registerMainLogo{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.loginMainLogo {
+    margin-bottom: 20px;
+    height: 50px;
+}
+
+.closeLoginPopup{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 30px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+
+.registerRightSection{
+    width: 60%;
+    padding: 35px 0px;
+    padding-right: 15px
+}
+
+.loginPopUpLable{
+    font-weight: bold;
+    font-size: 17px;
+    margin-top: 15px;
+}
+
+.loginRowsPopup{
+    font-weight: 700 !important;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.loginRowsPopupInline{
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loginInputLabel{
+    min-width: 75px;
+}
+
+.mainContentInfos{
+    padding-right: 0px;
+    padding-left: 15px;
+}
+
+.registerLeftSection{
+    width: 40%;
+    background: var(--koochita-dark-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    max-height: 70vh;
+}
+
+.loginPopUpContent{
+    padding-top: 0px;
+}
+
+.loginHeader img{
+    margin-right: 10px;
+}
+
+.loginTextHeader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginTextHeader .text{
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.googleA{
+    /*background: #4c83ff;*/
+    /*background: #fbc155;*/
+    background: #4285f4;
+}
+
+.not_signed_inyx5syaq6qblq{
+    color: #545454;
+}
+
+.loginTextHeader .abcRioButtonIcon{
+    padding: 8px;
+    background: white;
+    margin: 1px;
+}
+
+.loginTextHeader .abcRioButtonContents{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: white;
+    padding: 0px 10px;
+}
+
+.registerFSection{
+    margin-top: 20px;
+    background: var(--koochita-blue);
+    padding: 15px;
+}
+
+.loginInputDiv{
+    float: right;
+}
+
+.loginFSection{
+    margin-top: 20px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.loginFSection .headerTextF{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.loginFSection .forgetPassBut{
+    color: darkred;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.loginInput{
+    border-radius: 10px;
+    border: solid 1px black;
+    padding: 7px;
+    width: 100%;
+}
+
+.bottomLoginText{
+    color: white;
+    font-size: 11px;
+    padding-right: 10px;
+    padding-top: 5px;
+    opacity: .9;
+}
+
+.loginRegisterButton{
+    color: white;
+    background: var(--koochita-red);
+    border: none;
+    padding: 6px 15px;
+    border-radius: 10px;
+    float: left;
+}
+
+.pcMarginTop10{
+    margin-top: 10px;
+}
+
+.deletePicIconsPhotoAlbum{
+    position: absolute;
+    color: red;
+    background-color: #303134;
+    font-size: 33px;
+    z-index: 9;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    top: -10px;
+    left: -5px;
+}
+
+.photoAlbumWhere{
+    font-size: 9px;
+    display: block;
+    color: #9aa0a6;
+}
+
+.albumContent{
+    max-height: 75vh;
+    overflow: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leftColPhotosModalMainDiv{
+    display: flex;
+    margin-bottom: 20px;
+}
+
+
+.tripModalBack{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    background: #0000009c;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: none;
+    z-index: 99;
+    direction: rtl;
+}
+
+.tripModalBase {
+    width: 100%;
+    overflow: hidden;
+    background: white;
+    height: auto;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.tripModalBase > div:nth-child(2) > button {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+#tripsForPlace {
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+}
+
+#tripsForPlace .row {
+    display: inline-block;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+    margin: 0;
+}
+
+#tripsForPlace .row:after, #tripsForPlace .row::before {
+    display: none;
+}
+
+#tripsForPlace .row .addPlaceBoxes {
+    width: auto;
+    margin: 10px;
+    display: inline-block;
+    float: none;
+    overflow-y: hidden;
+}
+
+#tripsForPlace .row .addPlaceBoxes a {
+    margin: 0 0 21px 0;
+}
+
+.tripCloseIcon{
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 30px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+
+.tripHeader{
+    display: block;
+    margin: -5px 0 8px;
+    font-size: 26px;
+    line-height: 30px;
+    color: #4a4a4a;
+    direction: rtl;
+}
+
+.is-create-trip {
+    color: #00AF87 !important;
+    background-blend-mode: overlay;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    margin: 0 0 10px 0;
+    border-radius: 2px;
+    display: -webkit-box;
+    display: flex;
+    line-height: initial;
+    transition: background-color .2s ease, corder-color .2s ease;
+    border: 1px solid #f5f5f5;
+    justify-content: space-around;
+    background-color: #e5e5e5;
+}
+
+.is-create-trip .tile-content {
+    align-self: center;
+    margin: 10px;
+    padding: 0;
+    box-sizing: inherit;
+    cursor: pointer;
+}
+
+.addedTrip{
+    width: 150px;
+    height: 150px;
+    background-color: #e5e5e5;
+    margin-bottom: 0;
+    border: 2px solid rgb(160, 160, 160);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tripImage{
+    width: 50%;
+    height: 50%;
+}
+
+.selectedTrip{
+    border: 2px solid rgb(77, 199, 188);
+}
+
+.tripNameInput{
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid #f5f5f5;
+    border-radius: 2px;
+    background-color: #fff;
+    box-sizing: border-box;
+    box-shadow: inset 0 2px 1px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.tripNameInput:focus{
+    border-color: rgb(77, 199, 188);
+}
+
+.saves-create-trip-button{
+    border-color: var(--koochita-light-green);
+    background-color: var(--koochita-light-green);
+    color: #fff;
+    float: left;
+    margin-top: 15px;
+}
+
+.saves-create-trip-button.disabled{
+    opacity: .35;
+    border-color: transparent;
+    box-shadow: none;
+    cursor: auto;
+}
+
+.tripDates{
+    display: flex;
+    justify-content: space-between;
+}
+.tripCalenderSection{
+    position: relative;
+    margin: 6px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    box-shadow: 0 7px 12px -7px #e5e5e5 inset;
+    display: flex;
+    align-items: center;
+    padding: 0px 6px;
+}
+.tripCalenderSection .calendarIcon{
+    color: #30b4a6 !important;
+    font-size: 20px;
+    line-height: 32px;
+    font-weight: normal;
+}
+.tripCalenderSection input{
+    padding: 7px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: normal;
+}
+.tripDateFooter{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.stateName {
+    font-size: 12px;
+    padding-right: 21px;
+}
+
+.mainDivSearchInputPhonePage > div {
+    position: absolute;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.mainDivSearchInputPhonePage > div:nth-child(1) {
+    width: 45%;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) {
+    width: 60%;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) > div:nth-child(1) {
+    width: 70%;
+    float: right;
+    max-height: 300px;
+    overflow: auto;
+    border-radius: 0 25px 25px 0;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) > div:nth-child(2) {
+    width: 30%;
+    border-radius: 25px 0 0 25px;
+    margin: 0 !important;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) > div:nth-child(1) > div {
+    padding: 10px !important;
+}
+
+.searchDivForScroll-phoneButton > button {
+    font-size: 30px;
+    line-height: 54px;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) > div:nth-child(2) > button {
+    font-size: 35px;
+    line-height: 64px;
+}
+
+.mainDivSearchInputPhonePage > div:not(:first-child) > div input {
+    width: 100%;
+    font-size: 35px;
+    line-height: 50px !important;
+    float: right;
+    border: none;
+    margin-right: 5px
+}
+
+.searchPanes {
+    position: fixed;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: auto;
+    overflow: auto;
+    max-height: 80%;
+    z-index: 10000001;
+    padding: 20px 16px;
+    direction: rtl;
+    box-shadow: none;
+    background: white;
+}
+
+.searchPanes > div:nth-child(3) > select, .searchPanes > div:nth-child(3) > div {
+    margin-top: 25px;
+}
+
+.searchPanes > div:nth-child(3) > div > button {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+.spSearchDivForScroll {
+    position: relative;
+}
+
+div.prw_rup.prw_search_typeahead .typeahead_align {
+    display: flex;
+    align-items: center;
+}
+
+.spGoWhere {
+    color: var(--koochita-blue);
+    font-weight: 500;
+    float: right;
+    margin-left: 5px;
+    font-size: 25px;
+}
+
+div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
+    float: right;
+    width: auto;
+    padding: 0;
+    height: 40px;
+    border: none;
+    box-shadow: none !important;
+    font-size: inherit;
+}
+
+.spBorderBottom {
+    border-bottom: 2px solid var(--koochita-light-green);
+    margin: 10px 0 0;
+}
+
+.spIcons {
+    float: right;
+    margin: 0px 0 0 3px;
+    padding-top: 5px;
+}
+
+.textsOfRecently {
+    padding: 4px 0px 10px 0px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #14151880;
+    font-size: 17px;
+}
+
+.textsOfRecently:hover {
+    background: #14151800;
+}
+
+.textsOfRecently_text {
+    font-size: 1vw !important;
+    line-height: 1.5vw;
+    text-align: center;
+    padding: 5px;
+    white-space: normal;
+    color: white !important;
+    background-color: #000000d6;
+}
+
+.pop-up-Panes {
+    position: fixed;
+    left: 30%;
+    right: 30%;
+    top: 19%;
+    bottom: auto;
+    overflow: auto;
+    max-height: 500px;
+    z-index: 10000001;
+}
+
+.pop-up-Panes > div:nth-child(3) > select, .pop-up-Panes > div:nth-child(3) > div {
+    margin-top: 25px;
+}
+
+.pop-up-Panes > div:nth-child(3) > div > button {
+    color: #FFF;
+    background-color: var(--koochita-light-green);
+    border-color: var(--koochita-light-green);
+}
+
+#searchDivForScroll {
+    padding: 3px 4px 3px;
+}
+
+#searchDivForScroll > div:nth-child(1) {
+    padding: 10px !important;
+}
+
+#result {
+    overflow-y: auto;
+    border: 2px solid var(--koochita-light-green);
+    border-top: 0;
+    width: 45%;
+    padding: 10px 5px 6px;
+    display: inline-block;
+    max-height: 375px;
+}
+
+#result > div {
+    display: block;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.visitSuggestionDiv {
+    overflow-y: auto;
+    max-height: 80vh;
+    border: 2px solid var(--koochita-light-green);
+    border-top: 0;
+    width: 50%;
+    padding: 10px 5px 5px;
+    float: left;
+}
+
+.visitSuggestion4Box {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.visitSuggestionText {
+    font-size: 18px;
+    text-align: center;
+    padding: 5px 0 10px;
+    color: gray;
+}
+
+.spBoxOfSuggestion {
+    padding: 1px;
+    width: 25%;
+}
+
+.spImageWrapper {
+    height: 100%;
+}
+
+#searchPane .ui_close_x {
+    width: 70px;
+    height: 70px;
+    left: 0 !important;
+    position: absolute;
+    right: auto;
+}
+
+#searchPane .ui_close_x:before {
+    font-size: 50px;
+    line-height: 70px;
+    color: var(--koochita-light-green);
+}
+.mainSearchpoi{
+    position: relative;
+    padding-top: 100%;
+}
+
+.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget.ui_column.is-6-mobile.ng-scope,
+.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget.ui_column.is-6-mobile.ng-scope .poi {
+    width: 100%;
+    flex-basis: auto;
+}
+
+div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prw_common_thumbnail_no_style_responsive22{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.mainSearchImgTop{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+a:hover {
+    color: var(--koochita-light-green);
+}
+
+.searchPaneDiv{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
+    /*backdrop-filter: blur(2px);*/
+    background-color: #000000bf;
+}
+
+.closeSearchPan{
+    position: absolute;
+    left: 10px;
+    top: 0px;
+    COLOR: var(--koochita-light-green);
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.globalSearchBlackBackGround{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    background-color: #000000d1;
+    /*backdrop-filter: blur(2px);*/
+    z-index: 9999999;
+    display: none;
+    justify-content: center;
+}
+
+.globalSearchWithBox{
+    border-radius: 5px;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    direction: rtl;
+    padding: 35px;
+    text-align: right;
+    color: black;
+    margin-top: 100px;
+    flex-direction: column;
+    position: relative;
+}
+
+.globalSearchInputField{
+    border: none;
+    border-bottom: solid lightgray;
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.globalSearchInputField:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+.globalSearchResult{
+    width: 100%;
+    text-align: right;
+    border: none;
+    box-shadow: 0px 5px 9px 0px grey;
+    overflow-y: scroll;
+    max-height: 50vh;
+    /*padding: 15px;*/
+}
+
+.globalSearchCloseIcon {
+    color: var(--koochita-light-green);
+    font-size: 2em;
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+
+.notifAlert {
+    width: fit-content;
+    text-align: center;
+    position: fixed;
+    bottom: -30%;
+    right: auto;
+    left: auto;
+    direction: rtl;
+    z-index: 999999;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0px 0px 12px 3px grey;
+    background-color: #0076ac;
+
+    padding: 10px;
+    font-size: 1.2em;
+    color: white;
+    transition: .5s;
+}
+
+.greenAlert{
+    background-color: var(--koochita-light-green);
+}
+
+.redAlert{
+    background-color: #8b0000;
+}
+
+.topAlert{
+    bottom: 0px;
+}
+
+.rightAlert{
+    right: 1%;
+    left: auto;
+}
+
+.leftAlert {
+    right: auto;
+    left: 1%;
+}
+
+.alertDarkBack {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .8);
+    backdrop-filter: blur(2px);
+    position: fixed;
+    top: 0;
+    z-index: 999999;
+    justify-content: center;
+    display: none;
+}
+
+.alertBox {
+    background-color: white;
+    z-index: 10000;
+    position: fixed;
+    top: 10%;
+    direction: rtl;
+    border-radius: 10px;
+}
+
+.alertTitle {
+    padding: 10px;
+    font-size: 1.2em;
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.offerTitle {
+    background-color: var(--koochita-yellow);
+}
+
+.warningTitle {
+    background-color: #761c19;
+}
+
+.alertDescriptionBox {
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.alertDescription {
+    font-size: 18px;
+    padding: 5px 0 25px;
+    font-weight: bold;
+}
+
+.alertBtn {
+    width: fit-content;
+    line-height: 20px;
+    padding: 6px 12px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: white;
+}
+
+.alertBtn:hover {
+    opacity: 0.75;
+}
+
+.rightBtn {
+    background-color: #761c19;
+    margin-left: 15px;
+}
+
+.leftBtn {
+    float: left;
+    background-color: var(--koochita-green);
+    margin-right: 15px;
+}
+
+.reportBackGround{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000000c2;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99991;
+    top: 0px;
+    right: 0px;
+}
+
+.radionReportInput{
+    display: flex;
+}
+
+.reportBodyDiv{
+    background: white;
+    position: relative;
+    width: 900px;
+    border-radius: 5px;
+    direction: rtl;
+    padding: 60px;
+}
+
+.closeReport{
+    left: 10px !important;
+    right: auto !important;
+    top: 10px !important;
+}
+
+.reportHeaderTxt{
+    display: block;
+    margin: -5px 0 8px;
+    font-size: 26px;
+    line-height: 30px;
+    color: #4a4a4a;
+}
+
+.reportContainer{
+    width: 100%;
+    font-size: 12px;
+    margin-top: 20px;
+    margin-right: 40px;
+}
+
+.reportsRow{
+    margin-top: 5px;
+}
+
+.submitReportOptions{
+    direction: ltr;
+}
+
+.reportLabel{
+    display:flex;
+    cursor: pointer;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.reportLabel > div{
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+
+#pop-up-create-trip {
+    z-index: 1000000000001;
+    visibility: hidden
+}
+
+#pop-up-create-trip > div:nth-child(2) {
+    direction: rtl;
+}
+
+#pop-up-create-trip label {
+    color: #2c2c2c;
+    font-size: 100% !important;
+}
+
+#date-pop-up {
+    z-index: 10000000001;
+    visibility: hidden;
+}
+
+#date-pop-up > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:not(:last-child) {
+    width: 50%;
+    float: right;
+}
+
+#date-pop-up > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div > label {
+    position: relative;
+    margin: 6px 0;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    box-shadow: 0 7px 12px -7px #e5e5e5 inset;
+}
+
+#date-pop-up > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div > label > span {
+    color: #30b4a6 !important;
+    font-size: 20px;
+    line-height: 32px;
+    position: absolute;
+    right: 7px;
+}
+
+#date-pop-up > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div > label > input {
+    padding: 7px;
+    position: absolute;
+    top: -5px;
+    right: 35px;
+    border: none;
+    background: transparent;
+}
+
+#date-pop-up > div:nth-child(2) > div:nth-child(5) {
+    margin-top: 10px;
+}
+
+#error {
+    float: right;
+    padding: 10px;
+    color: #963019
+}
+
+.clear-both {
+    clear: both;
+}
+
+/*pop up create*/
+
+#trip-title-input-region > div > label {
+    color: #2c2c2c;
+    font-size: 100% !important;
+}
+
+#date_input_start_label, #date_input_end_label {
+    position: relative;
+    margin: 6px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    box-shadow: 0 7px 12px -7px #e5e5e5 inset;
+}
+
+#date_input_start_label > span, #date_input_end_label > span {
+    color: #30b4a6 !important;
+    font-size: 20px;
+    line-height: 32px;
+    position: absolute;
+    right: 7px;
+}
+
+.rtl {
+    direction: rtl;
+}
+
+
+.newSafarnamehSection{
+    width: 100%;
+    background: white;
+    direction: rtl;
+    text-align: right;
+    max-width: 100%;
+    height: 97vh;
+    overflow: hidden;
+}
+
+.newSafarnamehSection .row{
+    width: 100%;
+    margin: 0px;
+}
+
+.nsHeader{
+    height: 50px;
+    background-color: var(--koochita-light-green);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 27px;
+    padding: 0px 15px;
+}
+
+.nsHeader .iconClose{
+    cursor: pointer;
+    font-size: 35px;
+}
+
+.nsContenet{
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.backSafarnameh{
+    border: none;
+    background: white;
+    margin: 0px 12px;
+    color: var(--koochita-blue);
+}
+
+.submitSafarnameh{
+    background: var(--koochita-green);
+    border-color: var(--koochita-green);
+    border-radius: 11px;
+}
+
+.newSafarnamehImgSection{
+    display: flex;
+    margin-top: 10px;
+    margin-right: 15px;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.notPicSafarnameh{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid gray;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    color: gray;
+}
+
+.submitSarnamehButton{
+    background: var(--koochita-blue);
+    border: none;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.textEditor{
+    height: 60vh;
+    border: solid 1px var(--ck-color-toolbar-border) !important;
+    border-top: none !important;
+    border-radius: 5px !important;
+}
+
+.addPlaceButton{
+    border: none;
+    background: var(--koochita-green);
+    font-size: 10px;
+    cursor: pointer;
+    color: white;
+    font-weight: 100;
+    padding: 3px 5px;
+    border-radius: 10px;
+}
+
+.newSafarnamehFooter{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-top: solid 1px #cccccc;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.searchResultPlacess{
+    display: none;
+    position: absolute;
+    width: 90%;
+    background: white;
+    border: solid 1px gray;
+    border-radius: 10px;
+    max-height: 50vh;
+    overflow: auto;
+    z-index: 999;
+}
+.searchResultPlacess > div{
+    margin-bottom: 10px;
+    margin: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+.searchResultPlacess > div:hover{
+    background: #6666;
+    border-radius: 10px;
+}
+.placeSuggKind{
+    float: right;
+}
+
+.placeSuggestionBody{
+    background: white;
+    width: 80%;
+    direction: rtl;
+    text-align: right;
+    padding: 15px 0px;
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: 90vh;
+    position: relative;
+    overflow: inherit;
+}
+
+.closeSuggestionModal{
+    position: absolute;
+    font-size: 30px;
+    left: 10px;
+    top: 0px;
+    z-index: 99;
+    cursor: pointer;
+    color: var(--koochita-light-green);
+}
+
+.ourSuggestion{
+    display: flex;
+    flex-wrap: wrap;
+    transition: .5s;
+    padding-bottom: 10px;
+    overflow: auto;
+    max-height:30vh;
+}
+
+.ourSuggestionMainPage{
+    display: flex;
+    flex-wrap: wrap;
+    transition: .5s;
+    padding-bottom: 10px;
+    overflow: auto;
+}
+
+.showFullSuggestion{
+    height: 30vh !important;
+    overflow: auto;
+}
+
+.suggEach{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+    transition: .4s;
+    padding-left: 20px;
+    width: 185px;
+    position: relative;
+    border-radius: 60px;
+    background-color: #fcc15642;
+    height: 70px;
+}
+
+.suggEach:hover{
+    background-color: #e4e4e4;
+    border-radius: 60px;
+}
+
+.deletePickPlace{
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 80px;
+    color: red;
+}
+
+.suggEach:hover .deletePickPlace{
+    display: flex;
+}
+
+.suggPic{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative;
+}
+
+.suggInfo{
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 80px);
+    font-size: 12px;
+}
+
+.suggInfoState{
+    font-size: 9px;
+    color: #666666;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.showAllSuggestion{
+    text-align: center;
+    color: blue;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 12px;
+
+}
+
+.ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all.ui-datepicker-rtl{
+    z-index: 99999 !important;
+}
+
+
+.followerModal .header{
+    padding-top: 4px;
+    border-bottom: solid 1px #e2e2e2;
+    display: flex;
+}
+.followerModal .header > div{
+    width: 50%;
+    text-align: center;
+    color: gray;
+    padding-top: 5px;
+    transition: .3s;
+    cursor: pointer;
+}
+.followerModal .header > div.selected{
+    color: var(--koochita-blue);
+    font-weight: bold;
+    border-bottom: solid 2px;
+}
+.followerModal .body{
+    max-height: calc(100vh - 145px);
+    min-height: 50vh;
+    overflow-y: auto;
+    transition: .5s;
+}
+.followerModal .body.openSearch{
+    min-height: calc(100vh - 145px);
+}
+.followerModal .body .peopleRow{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+.followerModal .body .peopleRow .pic{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.followerModal .body .peopleRow .name{
+    margin-right: 12px;
+    color: black;
+}
+.followerModal .body .peopleRow .button{
+    margin-right: auto;
+    border: solid gray 1px;
+    padding: 2px 10px;
+    font-size: 11px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.followerModal .body .peopleRow .sendMsgButton{
+    margin-right: auto;
+    padding: 2px 10px;
+    font-size: 11px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background: var(--koochita-light-green);
+    color: white;
+    margin-left: 5px;
+}
+.followerModal .body .peopleRow .button:before{
+    content: 'دنبال کردن';
+}
+.followerModal .body .peopleRow .button.followed:before{
+    content: 'دنبال شده';
+}
+.followerModal .body .peopleRow .button.followed{
+    background: var(--koochita-blue);
+    color: white;
+    padding: 3px 10px;
+    border: var(--koochita-blue);
+}
+.followerModal .body .peopleRow .button.followed:after{
+    content: "\E02B" !important;
+    font-family: Shazde_Regular2 !important;
+}
+.followerModal .body .emptyPeople{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25%;
+    opacity: .5;
+    filter: grayscale(1);
+}
+.followerModal .body .emptyPeople > img{
+    width: 100px;
+}
+.followerModal .body .emptyPeople .text{
+    margin-top: 10px;
+}
+.followerModal .peopleRow.placeHolder {
+    opacity: .4;
+}
+.followerModal .peopleRow.placeHolder .resultLineAnim{
+    width: 33%;
+    margin-bottom: 0px;
+}
+.followerModal .peopleRow.placeHolder .buttonP.resultLineAnim{
+    margin-right: auto;
+    width: 70px;
+    height: 30px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+@media (max-width: 991px){
+    .ourSuggestion{
+        max-height: 25vh;
+    }
+
+    .placeSuggKind{
+        float: none;
+    }
+
+    .deletePickPlace{
+        display: flex;
+        position: absolute;
+        width: 20px;
+        left: 20px;
+        font-size: 29px;
+        z-index: 99;
+        top: 0px;
+        height: fit-content;
+        justify-content: normal;
+        align-items: unset;
+        right: auto;
+    }
+
+    .searchPanes {
+        left: 5%;
+        right: 5%;
+    }
+
+    .spBoxOfSuggestion {
+        width: 33.3333%;
+    }
+
+    .textsOfRecently_text {
+        font-size: 1.5vw !important;
+        line-height: 2vw;
+    }
+
+    .tripModalBase{
+        /*width: 95%;*/
+        /*padding: 25px;*/
+    }
+}
+
+@media (max-width: 800px){
+    .loginPopUpContent{
+        top: 0;
+    }
+
+    .loginInputDiv{
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .pcMarginTop10{
+        margin: 0px;
+    }
+
+    .loginPopUpContent{
+        width: 100%;
+    }
+
+    .registerRightSection{
+        width: 100%;
+    }
+
+    .registerLeftSection{
+        display: none;
+    }
+
+    .registerFSection{
+        padding: 5px;
+        margin-top: 10px;
+    }
+
+    .loginHeader img{
+        margin-bottom: 0px;
+    }
+
+    .nameRegisterDiv{
+        /*width: 70%;*/
+        padding: 0px;
+    }
+
+    .loginFSection .headerTextF{
+        margin-bottom: 5px;
+    }
+
+    .buttonRegisterDiv{
+        /*width: 27%;*/
+        padding: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    #tripsForPlace{
+        height: 75vh;
+    }
+    #tripsForPlace .row{
+        height: 100%;
+        max-height: 100%;
+    }
+    .nsContenet{
+        /*max-height: 100vh;*/
+        padding-bottom: 55px;
+    }
+
+    .newSafarnamehSection{
+        height: 100vh;
+    }
+
+    .newSafarnamehFooter{
+        position: fixed;
+        bottom: 0px;
+        background: #ffffffd1;
+        padding: 10px;
+    }
+
+    .notifAlert {
+        position: fixed;
+        bottom: -30%;
+        z-index: 999999;
+        border-radius: 10px;
+    }
+
+    .topAlert{
+        bottom: 74px;
+    }
+
+    .spGoWhere{
+        font-size: 17px;
+    }
+
+    div.prw_rup.prw_search_typeahead .typeahead_align {
+        margin-top: 20px;
+    }
+
+    div.ppr_rup.ppr_priv_homepage_shelves .homepage_shelves_widget:last-child {
+        margin-bottom: 100px;
+    }
+
+    #searchDivForScroll {
+        width: 100%;
+    }
+
+    .ui_modal.searchPanes {
+        padding: 16px;
+        left: 2%;
+        right: 2%;
+        top: 1%;
+        max-height: 98%;
+        overflow: hidden;
+    }
+
+    .mainContainerSearch {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+
+    #result {
+        display: block;
+        /*width: auto;*/
+        margin: 0;
+        position: absolute;
+        z-index: 9;
+        background: white;
+        width: 100%;
+        top: 0;
+        max-height: 85%;
+    }
+
+    .visitSuggestionDiv {
+        width: auto;
+        border-top: 2px solid var(--koochita-light-green);
+        margin-top: 40px;
+    }
+
+    .textsOfRecently_text {
+        font-size: 3vw !important;
+        line-height: 3.5vw;
+    }
+
+    .leftColPhotosModalMainDiv{
+        margin-bottom: 30px;
+    }
+
+    .albumContent{
+        max-height: 55vh;
+    }
+
+    .showingPhotosModal .rightColPhotosShowingModal{
+        height: 55px;
+        width: 60px;
+        border-radius: 5px;
+    }
+
+    .alertBox {
+        width: 90%;
+        top: 15%;
+    }
+
+    .alertBtn {
+        width: 100px;
+    }
+}
+
+@media (max-width: 700px) {
+    .reportBodyDiv{
+        padding: 20px;
+    }
+    .reportContainer{
+        margin-top: 10px;
+        margin-right: 15px;
+    }
+    .reportLabel > div{
+        font-size: 11px;
+        max-width: 85%;
+    }
+}
+
+@media (max-width: 630px) {
+
+    .loginInputTemp, .loginButtonsMainDiv {
+        width: 100%;
+    }
+
+    .ui_modal .header_text {
+        line-height: 1.8;
+        font-size: 14px;
+    }
+
+    .searchPanes {
+        left: 2%;
+        right: 2%
+    }
+}
+
+@media (max-width: 480px) {
+    .tripDates{
+        flex-direction: column;
+    }
+    .loginPopUpContent{
+        height: 100vh !important;
+        top: 0px !important;
+        left: 0px !important;
+        overflow-y: scroll;
+    }
+
+    .mainContentInfos > div {
+        width: 100%;
+    }
+
+    .loginDividerBorder {
+        border-bottom: 1px solid #cccccc;
+        border-right: none;
+        margin-bottom: 10px;
+    }
+
+    .spBoxOfSuggestion {
+        width: 50%;
+    }
+}
+
+@media (max-width: 400px) {
+    .topAlert{
+        bottom: 67px;
+    }
+
+    #searchDivForScroll > div:nth-child(1) {
+        padding: 10px 0 !important;
+    }
+
+    #result {
+        margin: 0;
+    }
+}
+
+@media (max-width: 375px) {
+    .spGoWhere{
+        font-size: 14px;
+    }
+    div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
+        font-size: 13px;
+    }
+}

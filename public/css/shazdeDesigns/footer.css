@@ -1,0 +1,2561 @@
+/*footer styles*/
+
+textarea:focus, input:focus, select:focus, button:focus, a:focus,
+textarea, input, select, button, a {
+    outline: none;
+}
+
+footer {
+    font-size: initial;
+}
+
+footer ul {
+    list-style: none;
+}
+.screenFooterStyle {
+    background-color: var(--koochita-yellow);
+    direction: rtl;
+    padding: 20px;
+    text-align: right;
+    /*margin-top: 1%;*/
+}
+
+.footTitle {
+    font-size: 17px;
+    font-weight: 800;
+    padding: 0 4px 4px;
+    color: var(--koochita-dark-green);
+}
+
+.footMenu {
+    font-weight: 800;
+}
+
+.footMenu > a {
+    color: var(--koochita-red) !important;
+}
+
+.footShowTabletMenu {
+    display: none;
+}
+
+footer li > a {
+    color: #16174f !important;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+footer li a:visited {
+    text-decoration: none !important;
+}
+
+footer li a:active {
+    text-decoration: none !important;
+}
+
+footer li {
+    padding: 4px;
+}
+
+footer a:hover {
+    text-decoration: none !important;
+    color: #16174f;
+}
+
+footer li > img, .small-ico {
+    width: 22px;
+    float: right;
+    margin-left: 7px;
+    height: 22px;
+}
+
+.socialLink {
+    font-size: 14px;
+    color: #16174f;
+}
+.socialLink .koochiatTvIcon{
+    background-image: url('../../images/icons/social/kooTvBIcon.svg');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.footerIcon {
+    background-image: url('../../images/footer.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.footerIconHor {
+    width: 40px;
+    height: 40px;
+    background-size: 40px;
+    margin-top: 7px;
+}
+
+.linkedin {
+    background-image: url('../../images/icons/social/linkedin.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.facebook {
+    background-image: url('../../images/icons/social/facebook.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.pinterest {
+    background-image: url('../../images/icons/social/pintrest.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.instagram {
+    background-image: url('../../images/icons/social/instagram.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.telegram {
+    background-image: url('../../images/icons/social/telegram.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.aparat {
+    background-image: url('../../images/icons/social/aparat.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.twitter {
+    background-image: url('../../images/icons/social/twitter.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.youtubeBackground {
+    background-image: url('../../images/icons/social/youtube.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.bogenBackground {
+    background-image: url('../../images/icons/social/bogen.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.sisootechBackground {
+    background-image: url('../../images/icons/social/sisootech.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.newsBackground {
+    background-image: url('../../images/icons/social/news.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.whatsappBackground {
+    background-image: url('../../images/icons/social/whatapp.webp');
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.gapForMobileFooter{
+    width: 100%;
+    height: 100px;
+}
+
+
+.selectLanguage {
+    background: #FFF;
+    border: 2px solid;
+    font-size: 12px;
+}
+
+.footerLogoSocialBox {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.footerLogo {
+    width: 19%;
+    clear: right;
+}
+
+.footerSocialMediaBox {
+    width: 19%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footerRside {
+    float: right;
+    width: 75%;
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 24px !important;
+    text-align: justify;
+}
+
+#aboutShazde {
+    overflow: hidden;
+}
+
+.aboutShazdeLink > a {
+    color: var(--koochita-red) !important;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.aboutShazdeLink > a:hover {
+    text-decoration: underline !important;
+}
+
+.aboutShazdeLinkMargin {
+    margin-top: 60px;
+}
+
+.footerLsideBoxes {
+    float: left;
+    margin-right: 4%;
+}
+
+#socialMedias > ul > li:not(:first-child) {
+    padding: 0 4px;
+}
+
+#socialMedias > ul > li:not(:first-child) > div:nth-child(2) {
+    display: inline-block;
+    position: absolute;
+    margin-right: 4px;
+}
+
+#socialMedias > ul > li:last-child > a {
+    margin-right: 4px
+}
+
+.footMoreLessBtn {
+    color: var(--koochita-dark-green);
+    text-align: center;
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 5px;
+    display: none;
+}
+
+.aboutShazdeMoreLess {
+    height: auto !important;
+}
+
+
+/*phone style*/
+
+.phoneFooterStyle {
+    position: relative;
+    bottom: 0;
+    /*background-color: var(--koochita-yellow);*/
+    color: #16174f;
+    direction: rtl;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+}
+
+.phoneFooterLogo {
+    width: 170px;
+    position: absolute;
+    top: -8px;
+    z-index: 9;
+}
+
+.phoneDescription {
+    width: 100%;
+    padding-top: 10px;
+    background: var(--koochita-yellow);
+
+    font-size: 1em;
+    font-weight: 500;
+    text-align: justify;
+    padding-top: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.phoneDescriptionText {
+    overflow: auto;
+    padding: 0 5px;
+    cursor: default;
+}
+
+.footerPhoneMenuBar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--koochita-yellow);
+    /*border-radius: 20px 20px 0px 0px;*/
+    box-shadow: -1px 0 6px 1px #cccccc;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 700;
+    font-size: initial;
+    direction: rtl;
+    z-index: 1051;
+}
+
+.footerPhoneMenuBar > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 15px 0px;
+    height: 60px;
+    /* margin: 100%; */
+    /* flex-direction: column-reverse; */
+    text-align: right;
+    direction: ltr;
+}
+
+.footerPhoneMenuBar > div.profileBtn{
+    direction: rtl;
+}
+.footerPhoneMenuBar > div.profileBtn .profilePicFooter.type2{
+    position: absolute;
+    top: -18px;
+    right: 10px;
+    border: solid 3px var(--koochita-yellow);
+    width: 45px;
+    height: 45px;
+}
+.footerPhoneMenuBar > div > div.profileBtnText {
+    flex-direction: column;
+    display: flex;
+    text-align: right;
+}
+
+.profileBtnText > span:nth-child(1){
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.profileBtnText > span:nth-child(2){
+    color: var(--koochita-blue);
+}
+
+.profilePic.circleBase {
+    background-color: #999999;
+}
+
+.circleBase {
+    border-radius: 50%;
+}
+
+.profilePicFooter.type2 {
+    width: 35px;
+    height: 35px;
+    background: #ccc;
+    margin-right: 10px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.newMsgMainFooterCount{
+    position: absolute;
+    background: var(--koochita-red);
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    right: 15px;
+    top: 0px;
+}
+
+.ui_icon.more-horizontal {
+    font-size: 30px;
+}
+
+.ui_icon.plus-circle {
+    font-size: 25px;
+    margin-left: 5px;
+}
+
+.ui_icon.search {
+    font-size: 25px;
+    margin-left: 2px;
+    padding-top: 5px;
+}
+
+.ui_icon.member {
+    font-size: 25px;
+    margin-left: 7px;
+    padding-top: 5px;
+}
+
+.ui_icon.memberPossibilities {
+    font-size: 23px;
+    margin-left: 2px;
+}
+
+.ui_icon.memberPossibilities::before {
+    content: '\E0C7';
+    font-family: Shazde_Regular2 !important;
+
+}
+
+/*pop up on phone( phone popUp : pp)*/
+
+footer .mainPopUp {
+    direction: rtl;
+    width: 80%;
+    height: calc(100% - 60px);
+    z-index: 200;
+    position: fixed;
+    background-color: white;
+}
+
+.leftPopUp {
+    left: 0;
+}
+
+.lp_phoneMenuBar {
+    position: fixed;
+    bottom: 60px;
+    width: 80%;
+    box-shadow: 0px -5px 15px #cccccc;
+    background-color: white;
+    border-bottom: 2px solid #30b4a6;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 5px;
+    border-radius: 15px 0px 0px 0px;
+    right: 0px;
+}
+
+.lp_eachMenu {
+    width: 23%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 0 9px;
+    border-top: 5px solid white;
+    border: solid 1px gray;
+    border-radius: 8px;
+    margin: 5px 0px;
+    position: relative;
+    font-weight: normal;
+}
+
+.lp_selectedMenu {
+    background: var(--koochita-yellow);
+    color: white;
+}
+
+.lp_selectedMenu > div:nth-child(2) {
+    text-align: center;
+}
+
+.ui_icon.search.lp_icons {
+    font-size: 35px;
+    margin: 0;
+    padding: 0;
+}
+
+.lp_icons {
+    font-size: 35px;
+}
+
+.lp_eachMenu > div:nth-child(2) {
+    font-size: initial;
+}
+
+.ui_icon.casino:before {
+    content: "\e0dd";
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    font-size: inherit;
+    line-height: 1;
+    font-family: 'Shazde_Regular' !important;
+    -ms-transform: rotate(-.001deg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    speak: none;
+}
+
+
+/*the others style*/
+
+.lp_others_content {
+    padding: 10px;
+    height: 100%;
+}
+
+.lp_others_titles {
+    font-size: 2em;
+    font-weight: 500;
+    padding: 0 0 25px;
+    margin: 0;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.lp_others_titles .trips-header {
+    font-size: 1em;
+    font-weight: 500;
+    padding: 0 0 25px;
+    margin: 0;
+    color: black;
+}
+
+.lp_others_noMessages {
+    font-size: 1.5em;
+}
+
+.lp_others_createTrip {
+    width: 300px;
+    height: 300px;
+    background-color: #e5e5e5;
+    color: var(--koochita-blue);
+    font-size: 3em;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lp_others_createTripText {
+    font-size: 0.5em;
+    font-weight: 600;
+}
+
+.lp_others_recentView{
+    padding: 18px 24px;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    justify-content: space-around;
+    font-size: 2.25em;
+}
+
+.lp_others_rvPicBox {
+    height: 160px;
+}
+
+.userInfoMobileFooterBody {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    padding-bottom: 0px;
+    overflow: auto;
+    height: calc(100vh - 60px);
+}
+
+.userInfoMobileFooterBody > div:first-child {
+    display: flex;
+}
+
+
+/*the style of article footer & menu in phone*/
+.lp_ar_searchTitle {
+    color: #761c19;
+    text-align: center;
+    font-weight: 600;
+}
+
+.lp_ar_filters {
+    border-bottom: 3px solid rgba(0, 0, 0, .075);
+    display: flex;
+    margin: 5px 0;
+}
+
+.lp_ar_eachFilters {
+    width: 50%;
+    text-align: center;
+    line-height: 30px;
+}
+
+.lp_ar_selectedMenu {
+    border-bottom: 5px solid #761c19;
+}
+
+.lp_ar_rightFilters {
+    border-left: 2px solid rgba(0, 0, 0, .075);
+}
+
+.lp_ar_borderBottom {
+    border-bottom: 10px solid #f3f3f3;
+    margin: 10px -7px;
+}
+
+.lp_ar_contentOfFilters{
+    height: calc(100vh - 145px) !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+footer .modules-membercenter-member-profile {
+    width: 60%;
+}
+
+footer .modules-membercenter-member-profile .profileBlock {
+    overflow: hidden;
+    margin-bottom: 50px;
+}
+
+footer .profileInfosDetails > p {
+    font-size: 17px;
+    margin: 5px 0;
+}
+
+footer .ageSince {
+    display: flex;
+}
+
+footer .ageSince > div:nth-child(1) {
+    margin-left: 10px;
+}
+
+footer .modules-membercenter-member-profile .profileBlock .avatarUrl {
+    float: right;
+    border-radius: 100%;
+    margin-left: 50px;
+}
+
+footer .modules-membercenter-member-profile .profInfo {
+    overflow: hidden;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+footer .editInfoBtn {
+    border: 1px solid #007ac3;
+    margin-bottom: 10px;
+    color: #007ac3;
+    font-size: 14px;
+    display: flex;
+    padding: 10px;
+    width: max-content;
+    cursor: pointer;
+}
+
+footer .aboutMeDesc .glyphicon.glyphicon-chevron-down, footer .aboutMeDesc .glyphicon.glyphicon-chevron-up {
+    line-height: 20px;
+    margin: 0 5px;
+}
+
+footer .editProfileMenu {
+    flex-direction: column;
+    width: max-content;
+    border: #dedede 1px solid;
+    box-shadow: 0 0 20px 0 rgba(50, 50, 50, 0.2);
+    position: absolute;
+    padding: 5px;
+    background-color: white;
+    z-index: 1;
+}
+
+footer .editProfileMenu > a {
+    padding: 5px;
+    color: #16174f;
+}
+
+footer .profileBtnActionMobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+}
+
+.pp_btns {
+    width: 110px;
+    margin: 10px 0;
+    color: white !important;
+}
+
+footer .profileScoreMainDiv {
+    background: white;
+    right: 25px;
+    position: fixed;
+    bottom: 150px;
+    width: calc(80% - 50px);
+}
+
+footer #myHonorsText .class > div {
+    background-image: url('../../images/help_share.png')
+}
+
+footer .modules-membercenter-progress-header {
+    width: 100%;
+    height: 25px;
+    position: relative;
+    font-family: Helvetica, Arial, 'Sans-Serif';
+    font-size: 18px;
+    font-weight: bold;
+    color: #2C2C2C;
+}
+
+footer #myHonorsText {
+    text-align: right;
+    position: relative;
+    border-bottom: 1px solid #c4c4c4;
+    padding-top: 24px;
+    width: 100%;
+}
+
+footer #myHonorsText > h3 {
+    position: absolute;
+    top: 10px;
+    background: white;
+    padding-left: 5px;
+}
+
+footer .memberPointInfo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+    border: solid 1px gray;
+    /* border-color: var(--koochita-red); */
+    border-radius: 5px;
+    padding-bottom: 5px;
+    box-shadow: 1px 1px 4px 1px #0000005e;
+}
+
+footer .memberPointInfo .modules-membercenter-total-points {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 13px 0;
+    flex-direction: column;
+    /*border-bottom: 1px solid #c4c4c4;*/
+}
+
+footer .modules-membercenter-total-points .label {
+    /*margin-bottom: 10px;*/
+    font-size: 14px;
+    color: #656565;
+    text-align: right;
+    padding: 0 2px;
+}
+
+footer b.modules-membercenter-total-points .points {
+    font-size: 25px;
+}
+
+footer .modules-membercenter-total-points .points {
+    font-size: 40px;
+    text-align: center;
+    white-space: nowrap;
+    color: #963019;
+}
+
+footer .modules-membercenter-total-points .targets {
+    padding: 26px 0;
+    width: 89px;
+    text-align: center;
+}
+
+footer .modules-membercenter-total-points .points_to_go {
+    float: right;
+    font: lighter 22px helvetica, arial, sans-serif !important;
+    font-family: helvetica, arial, sans-serif !important;
+    color: #666 !important;
+    text-align: center;
+    width: 100% !important;
+}
+
+footer .mainDivTotalPoint {
+    width: 100% !important;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /*justify-content: space-between;*/
+}
+
+footer .mainDivTotalPoint a {
+    font-size: 0.797em;
+}
+
+footer .modules-membercenter-total-points .points_to_go > span  {
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 0;
+}
+
+footer .modules-membercenter-total-points .points_to_go b {
+    color: #963019;
+    font-weight: normal;
+    margin-left: 10px;
+    font-size: 30px;
+}
+
+footer .modules-membercenter-total-points .points_to_go > span > span {
+    text-align: right;
+    line-height: 1.2;
+    font-size: 18px;
+}
+
+footer .memberPointInfo .modules-membercenter-level-progress {
+    display: table-cell;
+    vertical-align: top;
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+}
+
+footer .modules-membercenter-level-progress .progress_info {
+    position: relative;
+}
+
+footer .modules-membercenter-level-progress .labels {
+    padding-bottom: 5px;
+    display: flex;
+}
+
+footer .modules-membercenter-level-progress .label {
+    font-size: 11px;
+    color: #666;
+    padding: 10px 0 0;
+    width: 50%;
+}
+
+footer .modules-membercenter-level-progress .label:first-child {
+    text-align: right;
+    padding-right: 10px;
+}
+
+footer .modules-membercenter-level-progress .label:last-child {
+    text-align: left;
+    padding-left: 15px;
+}
+
+footer .modules-membercenter-level-progress .progress_indicator {
+    height: 28px;
+    position: relative;
+    padding: 17px 20px;
+    padding-bottom: 0px;
+}
+
+footer .modules-membercenter-level-progress .myBadge {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: url('../../images/profile.png') no-repeat -13px -344px !important;
+    background-size: 56px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #fff;
+}
+
+footer .modules-membercenter-level-progress .current_badge {
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
+footer .modules-membercenter-level-progress .meter {
+    height: 5px;
+    background: #E1DED6;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    padding: 0;
+    margin: 0 45px;
+}
+
+footer .modules-membercenter-level-progress .meter > span {
+    height: 100%;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    background-color: #963019;
+}
+
+footer .modules-membercenter-level-progress .progress {
+    -webkit-transition: all 1s linear;
+    -moz-transition: all 1s linear;
+    -o-transition: all 1s linear;
+    -ms-transition: all 1s linear;
+    transition: all 1s linear;
+    width: 0;
+}
+
+footer .modules-membercenter-level-progress .next_badge {
+    top: 0;
+    right: 15px;
+    position: absolute;
+}
+
+footer .userProfileActivitiesMainDiv {
+    padding: 0 0 20px;
+}
+
+footer .mainDivHeaderText {
+    padding: 10px 0;
+    border-bottom: 1px solid
+    #e5e5e5;
+    margin: 20px 0;
+    position: relative;
+}
+
+footer .mainDivHeaderText > h3 {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 32px;
+    position: absolute;
+    top: 5px;
+    right: -5px;
+    background: white;
+    padding: 0 10px;
+    color: var(--koochita-blue);
+    margin: 0;
+}
+
+footer .activitiesMainDiv {
+    padding: 5px 15px;
+}
+
+footer .activitiesLinesDiv:first-child {
+    padding: 0 0 10px;
+}
+
+footer .activitiesLinesDiv {
+    border-bottom: 1px solid
+    #E5E5E5;
+    padding: 15px 0;
+    position: relative;
+}
+
+footer .activitiesLinesDiv:first-child > div {
+    top: 0;
+}
+
+footer .activityTitle {
+    position: absolute;
+    font-size: 14px;
+    color: #888888;
+    top: 19px;
+    right: 0;
+    cursor: default;
+    padding: 0 5px;
+    background-color: white;
+}
+
+footer .activityNumbers {
+    position: absolute;
+    font-size: 14px;
+    color: var(--koochita-blue);
+    top: 19px;
+    left: 0;
+    cursor: pointer;
+    padding: 0 5px;
+    background-color: white;
+}
+
+/*end of the others style*/
+
+/*lp search styles*/
+/*PSC (phone search city) styles:*/
+
+.pSC_tilte {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1em;
+    padding: 30px 20px;
+    color: var(--koochita-blue);
+    padding-bottom: 0px !important;
+}
+
+.pSC_tilte > div:first-child {
+    cursor: pointer;
+}
+
+.pSC_tilte .btn-danger {
+    background-color: darkred;
+    border-color: darkred;
+    border-radius: 7px;
+    padding: 5px 20px;
+    font-size: 12px
+}
+
+.pSC_cityTilte {
+    font-weight: bold;
+    word-spacing: -2px;
+    color: var(--koochita-green);
+}
+
+.pSC_cityDescription {
+    font-size: 14px;
+    padding: 5px 20px;
+    text-align: center;
+    line-height: 1.8;
+    cursor: pointer;
+}
+
+.pSC_boxOfDetails {
+    font-size: 1em;
+    text-align: center;
+    padding: 12px 10px;
+    padding-bottom: 10px;
+}
+
+.pSC_choiseDetailsText {
+    font-size: 18px;
+    border-bottom: 2px solid #a1a1a1;
+    border-bottom: 1px solid var(--koochita-green);
+    color: #444444;
+    padding-bottom: 6px;
+    word-spacing: -2px;
+}
+
+.pSC_boxOfCityDetailsText:hover {
+    border-bottom: 2px solid #f0ad4e;
+}
+
+.pSC_boxOfCityDetailsText {
+    padding: 15px 0 13px;
+    font-weight: 700;
+    border-bottom: 2px solid white;
+    cursor: default;
+}
+
+.pSC_boxOfCityDetailsText span {
+    cursor: pointer;
+}
+
+.pSC_boxOfCityDetailsText2 {
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pSC_boxOfCityDetails {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /*border-bottom: solid #a1a1a1 1px;*/
+}
+
+.newCityInPhoneFooter{
+    background: darkred;
+    border: none;
+    font-size: 13px;
+    padding: 7px;
+    border-radius: 5px;
+}
+.pSC_cityDetails {
+    width: 100%;
+    padding: 10px 12px;
+    text-align: right;
+    border-width: 2px 2px 2px 0;
+    cursor: pointer;
+    border: none;
+    border-bottom: solid #a1a1a1 1px;
+    border-bottom: solid 1px #0d66501f;
+    color: #2d2d2d;
+}
+
+.pSC_cityDetails:before{
+    font-size: 21px;
+    line-height: 10px;
+    margin-left: 8px;
+    color: var(--koochita-green);
+}
+
+.mobileFooterCategoryBottom{
+    width: 100%;
+    margin-top: 15px;
+}
+
+.pSC_cityDetails.pSC_cityDetails_selected {
+    border-bottom: solid #f0ad4e;
+}
+
+.pSC_cityDetails:hover {
+    border-bottom: solid #f0ad4e;
+}
+
+.pSC_cityDetails:nth-of-type(even){
+    /*border-right: solid #a1a1a1 1px;*/
+}
+.koochitaTvRowPhoneFooter{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none !important;
+    flex-direction: column-reverse;
+}
+
+.pSC_boxOfCityDetails:last-child  {
+    /*border-bottom: 2px solid #a1a1a1;*/
+}
+
+.rightPopUp {
+    right: 0;
+}
+
+.masthead-recent-class {
+    margin: 20px 40px;
+    background-color: #f9f9f9;
+}
+
+.lp_others_recentView > div:nth-child(2) {
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.lp_others_rating {
+    text-align: center;
+}
+
+.bottomBarContainer {
+    width: 100%;
+    height: 180px;
+}
+
+footer .mainContainerBookmarked {
+    height: 100%;
+    border-top: 1px solid #cccccc;
+    padding-top: 3px;
+}
+
+footer .masthead-trips-class {
+    padding: 18px 24px 14px 24px;
+    text-align: center;
+    background-color: #f9f9f9;
+    position: relative;
+    margin: 10px 0;
+    overflow: unset !important;
+}
+
+footer .masthead-trips-tiles-region-class {
+    min-width: 150px;
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+footer .trips-tiles-class {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+footer a.single-tile.is-create-trip {
+    background-color: #fff;
+    border: 1px solid #f5f5f5;
+    justify-content: space-around;
+    -webkit-transition: background-color .2s ease, corder-color .2s ease;
+    transition: background-color .2s ease, corder-color .2s ease;
+    background-blend-mode: overlay;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    margin: 0 0 10px 0;
+    border-radius: 2px;
+    display: -webkit-box;
+    display: flex;
+    line-height: initial;
+}
+
+footer a.single-tile > .tile-content {
+    -ms-grid-row-align: center;
+    align-self: center;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+footer a.single-tile .ui_icon.plus {
+    color: #00AF87;
+    font-size: 28px;
+}
+
+footer a.single-tile .create-trip-text {
+    color: #00AF87;
+    font-size: 14px;
+}
+
+footer .create-trip-text {
+    margin-top: 5px;
+}
+
+footer .placeDetailsLeftBar > div:nth-child(1) {
+    color: black;
+}
+
+footer .placeDetailsLeftBar > div:not(:first-child) {
+    color: #666;
+}
+
+footer .phoneDescriptionSelects {
+    display: flex;
+}
+
+footer .phoneDescriptionSelects > div {
+    width: 48%;
+    margin: 10px 1% 0;
+    display: flex;
+    padding: 2px 7px;
+    font-size: 0.8em;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    line-height: 30px;
+}
+
+footer .phoneDescriptionSelects .inputBoxText {
+    width: 47%;
+    border-left: 1px solid #d8d8d8;
+    display: inline-block;
+}
+
+footer .phoneDescriptionSelects .inputBoxText > div:nth-child(1) {
+    text-align: center;
+}
+
+footer .phoneDescriptionSelects select.inputBoxInput {
+    width: 100%;
+    text-align: center;
+    border: none;
+    float: left;
+    background-color: transparent;
+}
+
+footer .overflowOptimizer {
+    display: none;
+    width: 100%;
+    height: 400px;
+}
+
+#loginPopUp .ui_close_x {
+    right: 0;
+}
+
+footer .modal {
+    /*backdrop-filter: blur(2px);*/
+    overflow-y: hidden !important;
+}
+
+footer .tripsBoxesMainDiv {
+    overflow: auto;
+    white-space: nowrap;
+    height: inherit;
+    padding: 0 10px;
+}
+
+footer .profileMenuResponsive {
+    border: solid #e5e5e5;
+    border-width: 2px 0;
+}
+
+footer .profileMenuResponsive > div:nth-child(odd) {
+    border-left: 2px solid #E5E5E5;
+}
+
+footer .profileMenuResponsive > div:nth-child(even) {
+    border-right: 2px solid #E5E5E5;
+}
+
+footer .profileMenuLinks {
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-size: 14px;
+    padding: 10px 0;
+    cursor: pointer;
+    border: solid #e5e5e5;
+    border-width: 2px 0;
+}
+
+.footerSocialDivPhone{
+    background-color: var(--koochita-yellow);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.footerSocialDivPhone a{
+    min-width: 15%;
+}
+.footerLanguageSectionPhone{
+    display: flex;
+    margin-top: 11px;
+    padding: 0px 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.footerLanguageDivPhone{
+    width: 65px;
+    margin: 10px;
+    display: flex;
+    margin-right: 14px;
+    margin-bottom: 10px;
+    direction: ltr;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+    padding: 0px 5px;
+    font-size: 12px;
+    border: var(--koochita-yellow) solid 2px;
+}
+.footerLanguageTextPhone{
+    height: 100%;
+    border-right: solid 1px gray;
+    padding-right: 5px;
+    margin-right: 5px;
+}
+.footerLanguageInputPhone{
+
+}
+.chooseLanguagePhone{
+    border: none;
+    background: inherit;
+}
+
+.closeFooterPopupIcon{
+    position: absolute;
+    top: 5px;
+    font-size: 30px;
+    line-height: 28px;
+    width: 30px;
+    left: 8px;
+    height: auto !important;
+    color: var(--koochita-yellow);
+    border: solid 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+.closeFooterPopupIcon:before{
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
+.eatery_filters{
+    height: auto;
+    overflow: hidden;
+}
+
+.shareSection{
+    position: relative;
+}
+
+.footerSearchBar{
+    transform: none;
+    align-items: center;
+}
+
+.footerSafarnmaehCategoryRow{
+
+}
+.footerSafarnmaehCategoryRow .subSafarnamehCategory{
+    display: none;
+    width: 100%;
+}
+.footerSafarnmaehCategoryRow .subSafarnamehCategory .subSec{
+    display: none;
+    width: 100%;
+    transition: .3s;
+    margin-right: -600px;
+}
+.footerSafarnmaehCategoryRow .subSafarnamehCategory .subSec.show{
+    margin-right: 0;
+}
+
+
+.footerSafarnmaehCategoryRow .mainSafarnamehCategory{
+    width: 100%;
+}
+.footerSafarnmaehCategoryRow .safarnamehRow{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: solid 1px #dcdcdc75;
+}
+.footerSafarnmaehCategoryRow .safarnamehRow.back{
+    background: var(--koochita-blue);
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin-right: auto;
+}
+.footerSafarnmaehCategoryRow .safarnamehRow.back .name{
+    font-weight: bold;
+    background: var(--koochita-blue);
+    color: white;
+    margin: 0px;
+}
+.footerSafarnmaehCategoryRow .safarnamehRow .name{
+    margin-right: auto;
+    color: black;
+}
+.footerSafarnmaehCategoryRow .safarnamehRow .next{
+    transform: rotate(180deg);
+    font-size: 20px;
+}
+
+footer .safarnamehSearchRowFooter{
+    margin-top: 25px;
+    border-top: solid #80808052;
+}
+footer .safarnamehSearchRowFooter .inputs{
+
+}
+footer .safarnamehSearchRowFooter .header{
+    display: flex;
+    width: 100%;
+}
+footer .safarnamehSearchRowFooter .header > div{
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+footer .safarnamehSearchRowFooter .title{
+    width: 50%;
+    font-size: 12px;
+}
+footer .safarnamehSearchRowFooter .tab{
+    width: 25%;
+    font-weight: bold;
+}
+footer .safarnamehSearchRowFooter .tab.selected{
+    border-bottom: solid 3px var(--koochita-blue);
+    background: white;
+    color: var(--koochita-blue);
+}
+footer .safarnamehSearchRowFooter .safarnamehInput{
+    width: 100%;
+    background: #f2f2f2;
+    padding: 5px;
+    border: none;
+    margin-top: 10px;
+    font-size: 20px;
+}
+footer .safarnamehSearchRowFooter  .searchIcon{
+    position: absolute;
+    left: 4px;
+    cursor: pointer;
+    border: none;
+    background: var(--koochita-blue);
+    color: white;
+    height: 30px;
+    width: 30px;
+    top: 2px;
+    border-radius: 7px;
+}
+footer .profileFooterPopUp{
+    height: 100vh;
+    overflow: auto;
+}
+footer .profileFooterPopUp .firsLine{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+footer .profileFooterPopUp .firsLine .pic{
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+footer .profileFooterPopUp .firsLine .infos{
+    display: flex;
+    justify-content: space-evenly;
+    width: calc(100% - 60px);
+    text-align: center;
+}
+footer .profileFooterPopUp .firsLine .infos .inf{
+
+}
+footer .profileFooterPopUp .firsLine .infos .inf .number{
+    font-weight: bold;
+    font-size: 18px;
+    color: var(--koochita-blue);
+}
+footer .profileFooterPopUp .firsLine .infos .inf .name{
+    font-size: 11px;
+    color: black
+}
+footer .profileFooterPopUp .firsLine .pic > img{
+    height: 100%;
+}
+footer .profileFooterPopUp .secondLine {
+    padding: 5px 25px;
+    font-size: 18px;
+    padding-right: 5px;
+    font-weight: normal;
+}
+footer .profileFooterPopUp .buttonsLine {
+
+}
+footer .profileFooterPopUp .buttonsLine .bLine{
+    display: flex;
+    width: 100%;
+}
+footer .profileFooterPopUp .buttonsLine .bLine > div{
+    color: var(--koochita-blue);
+    border: solid 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px;
+    border: solid 1px var(--koochita-blue);
+    border-radius: 10px;
+    border-color: gray;
+    color: var(--koochita-blue);
+}
+footer .profileFooterPopUp .buttonsLine .bLine > div:nth-of-type(1){
+    border-right: none;
+}
+footer .profileFooterPopUp .buttonsLine .bLine > div:nth-of-type(n){
+    border-left: none;
+}
+footer .profileFooterPopUp .buttonsLine .sBLine > div{
+    width: 100%;
+}
+footer .profileFooterPopUp .buttonsLine .mBLine > div{
+    width: 100%;
+    border-top: none;
+    position: relative;
+}
+footer .profileFooterPopUp .buttonsLine .mBLine > div .name{
+    font-size: 9px;
+}
+footer .profileFooterPopUp .buttonsLine .mBLine > div .icon{
+    font-size: 32px;
+    line-height: 19px;
+    margin: 8px 0px;
+    color: gray;
+}
+footer .logoutButton{
+    /*position: absolute;*/
+    bottom: 0;
+    width: 100%;
+    background: var(--koochita-red);
+    right: 0;
+    text-align: center;
+    color: white;
+    padding: 10px 0px;
+    border-radius: 30px 30px 0px 0px;
+    margin-top: 35px;
+}
+footer .logoutButton .icon{
+
+}
+footer .logoutButton .name{
+
+}
+footer .footerMsgCountNumber{
+    color: var(--koochita-red);
+    left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: solid;
+    font-weight: bold;
+    padding: 0px 10px;
+}
+
+.loginHelperSection.footerLoginHelperSection .login-button{
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+}
+.loginHelperSection.footerLoginHelperSection .helperDescriptionDiv{
+    bottom: 85px;
+    right: 10px;
+    left: auto;
+    top: auto;
+}
+
+footer .profileMobileFooterImg{
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+footer .overallMobileFooterModal{
+    position: absolute;
+    bottom: 70px;
+    right: 24px;
+    background: white;
+    padding: 51px 5px;
+    box-shadow: 0px -3px 6px #cccccc;
+    border-radius: 25px 25px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 14px;
+    padding-top: 3px;
+    border: solid 1px gray;
+    color: black;
+    font-size: 12px;
+}
+footer .overallMobileFooterModal:before{
+    font-size: 43px;
+    line-height: 35px;
+    padding-top: 7px;
+    color: #333;
+    padding-bottom: 1px;
+}
+footer .overallMobileFooterModal:after{
+    position: absolute;
+    left: 14px;
+    font-size: 19px;
+    font-weight: bold;
+    color: #333;
+}
+footer .overallMobileFooterModal.BookMarkIconEmpty:before{
+    font-size: 30px;
+    color: #333;
+    padding-bottom: 1px;
+}
+footer .notInfoFooterModalImg{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    filter: grayscale(1);
+}
+footer .notInfoFooterModalImg .text{
+    margin: 11px 0px;
+    opacity: .3;
+    text-align: center;
+}
+
+footer .bookMarkSSec{
+    border-bottom: solid 1px #d4d4d4;
+    position: relative;
+    margin-bottom: 15px;
+    width: 48%;
+}
+footer .bookMarkSSec .imgSec{
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+footer .bookMarkSSec .BookMarkIcon{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 25px;
+}
+footer .bookMarkSSec .BookMarkIcon:after{
+    position: absolute;
+    right: 0;
+    color: black;
+}
+footer .bookMarkSSec .infoSec{
+    position: relative;
+    padding: 10px;
+    padding-top: 5px;
+}
+footer .bookMarkSSec .infoSec .name{
+    font-size: 11px;
+}
+footer .bookMarkSSec .infoSec .type{
+    position: absolute;
+    top: -16px;
+    right: 0px;
+    background: white;
+    padding: 2px 7px;
+    border-radius: 10px 0px 0px 0px;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+}
+footer .bookMarkSSec .infoSec .type:before{
+    display: none;
+    margin-left: 5px;
+    font-size: 18px;
+}
+footer .bookMarkSSec .infoSec .state{
+    color: gray;
+    font-size: 7px;
+}
+.myTripFooter{
+    display: flex;
+    flex-wrap: wrap;
+ }
+.myTripFooter .myTripCard{
+    color: black;
+    padding: 0px 0px;
+    display: flex;
+    flex-direction: column;
+    border: solid 1px #808080a6;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px 1px #00000061;
+    margin-bottom: 15px;
+    width: 230px;
+    margin: 15px;
+}
+.myTripFooter .myTripCard .name{
+    padding: 2px 5px;
+    font-weight: bold;
+}
+.myTripFooter .myTripCard .date{
+    font-size: 10px;
+    display: flex;
+    font-style: normal;
+    color: black;
+    margin: 5px 0px;
+    padding: 0px 5px;
+    align-items: center;
+}
+.myTripFooter .myTripCard .date .from{
+    margin: 0px 5px;
+    font-size: 13px;
+}
+.myTripFooter .myTripCard .picsSec{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.myTripFooter .myTripCard .picsSec .pic{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.myTripFooter .myTripCard .picsSec .pic img{
+    width: 100%;
+}
+.myTripFooter .myTripCard .picsSec.pic_1 div{
+    height: 200px;
+}
+.myTripFooter .myTripCard .picsSec.pic_2 div{
+    height: 200px;
+}
+.myTripFooter .myTripCard .picsSec.pic_3 div{
+    height: 100px;
+}
+.myTripFooter .myTripCard .picsSec.pic_4 div{
+    height: 100px;
+}
+.myTripFooter .myTripCard .picsSec.pic_1 div:nth-of-type(1){
+    width: 100%;
+}
+.myTripFooter .myTripCard .picsSec.pic_2 div:nth-of-type(1){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_2 div:nth-of-type(2){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_3 div:nth-of-type(1){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_3 div:nth-of-type(2){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_3 div:nth-of-type(3){
+    width: 100%;
+}
+.myTripFooter .myTripCard .picsSec.pic_4 div:nth-of-type(1){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_4 div:nth-of-type(2){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_4 div:nth-of-type(3){
+    width: 50%;
+}
+.myTripFooter .myTripCard .picsSec.pic_4 div:nth-of-type(4){
+    width: 50%;
+}
+.myTripFooter .myTripCard .placeCount{
+    font-size: 13px;
+    padding: 5px 10px;
+}
+
+
+
+.mobileFiltersButtonTabs{
+    position: fixed;
+    bottom: 48px;
+    display: flex;
+    justify-content: center;
+    font-size: 17px;
+    direction: rtl;
+    width: 100%;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+.mobileFiltersButtonTabs .tabs{
+    display: flex;
+    border-radius: 20px 20px 0px 0px;
+    overflow: hidden;
+    border: solid 1px #ddd;
+    box-shadow: 0px 0px 5px 1px #000000a1;
+    background: white;
+    z-index: 1;
+}
+.mobileFiltersButtonTabs .tabs .tab{
+    padding: 10px 9px;
+    margin-bottom: 7px;
+    background: white !important;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+}
+.mobileFiltersButtonTabs .tabs div:nth-of-type(1){
+    border-left: solid 1px #ddd;
+    margin-left: 4px;
+}
+.mobileFiltersButtonTabs .tabs div:nth-of-type(2){
+    border-right: solid 1px #ddd;
+}
+.mobileFiltersButtonTabs .tabs .twoHouseIcon.selected{
+    background: var(--koochita-blue) !important;
+    color: white;
+}
+.filterGroupTitle{
+    color: gray !important;
+}
+.gombadi{
+    height: 90vh;
+    overflow: hidden;
+    width: 95%;
+    bottom: 0px;
+    direction: rtl;
+    position: absolute;
+    max-width: 500px;
+}
+.gombadi .mobileFooterFilterPic{
+    position: relative;
+    border-radius: 10000px 10000px 0px 0px;
+    overflow: hidden;
+    border: solid 2px black;
+    border-bottom: none;
+}
+.gombadi .gradientWhite{
+    background: linear-gradient(0deg, white, transparent);
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    height: 84px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+.gombadi .gradientWhite .closeThisModal{
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: var(--koochita-red);
+    border: solid 1px;
+    margin-left: 10px;
+    line-height: 16px;
+    width: 19px;
+}
+.squerRadioInputSec{
+    display: flex;
+    align-items: center;
+}
+.squerRadioInputSec .inputRadionSquer{
+    display: flex;
+    align-items: center;
+}
+.squerRadioInputSec .inputRadionSquer .labelBox{
+    width: 20px;
+    height: 20px;
+    border: solid 1px gray;
+    border-radius: 0px;
+    margin-left: 5px;
+    background: none !important;
+    margin-left: 5px !important;
+}
+.squerRadioInputSec .inputRadionSquer .name{
+    background: none !important;
+    width: auto;
+}
+
+.squerRadioInputSec input[type="checkbox"]:checked + .inputRadionSquer .name,
+.squerRadioInputSec input[type="radio"]:checked + .inputRadionSquer .name{
+    color: var(--koochita-green);
+    background: none !important;
+}
+
+.squerRadioInputSec input[type="checkbox"]:checked + .inputRadionSquer .labelBox,
+.squerRadioInputSec input[type="radio"]:checked + .inputRadionSquer .labelBox{
+    border-color: var(--koochita-green);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none !important;
+}
+
+.squerRadioInputSec input[type="checkbox"]:checked + .inputRadionSquer .labelBox:before,
+.squerRadioInputSec input[type="radio"]:checked + .inputRadionSquer .labelBox:before{
+    content: '\E02B';
+    font-family: 'Shazde_Regular2' !important;
+    color: var(--koochita-green);
+    font-size: 18px;
+}
+
+
+.specialFooterRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 155px;
+    overflow: hidden;
+    margin: 5px 0px;
+}
+
+
+.minGombad{
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: -33px;
+    transition: 1s;
+}
+.minGombad.open{
+    bottom: 51px;
+}
+.minGombad .gomb{
+    border-radius: 50px 50px 0px 0px;
+    background: white;
+    font-size: 12px;
+    height: 84px;
+    margin: 0px 4px;
+    display: flex;
+    border: solid 1px var(--koochita-yellow);
+    border-bottom: none;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    width: 60px;
+    text-align: center;
+    padding: 0px !important;
+    justify-content: end;
+}
+.minGombad .gomb .topGomb{
+    background: var(--koochita-blue);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    color: white;
+    font-size: 23px;
+}
+.minGombad .gomb .text{
+    width: 100%;
+    padding: 0px 5px;
+    height: 47%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+.minGombad .gomb.selectOrder .topGomb{
+    color: var(--koochita-yellow);
+}
+.minGombad .gomb.selectOrder .text{
+    background: var(--koochita-yellow);
+}
+
+.minGombad .gomb.selectOrder .offEye{
+    display: none;
+}
+.minGombad .gomb.selectOrder .onEye{
+    display: block;
+}
+.minGombad .gomb .offEye{
+    display: block;
+}
+.minGombad .gomb .onEye{
+    display: none;
+}
+
+
+@media (max-width: 1300px) {
+    .footerRside {
+        font-size: 13px !important;
+        line-height: 22px !important;
+    }
+    .aboutShazdeLink > a {
+        font-size: 13px;
+        font-weight: 800;
+    }
+    .footerIconHor {
+        width: 35px;
+        height: 35px;
+        background-size: 35px;
+    }
+    .footerLsideBoxes {
+        margin-right: 3%;
+    }
+}
+
+@media (max-width: 1175px) {
+    .footerRside {
+        font-size: 12px !important;
+        line-height: 20px !important;
+    }
+    .aboutShazdeLink > a {
+        font-size: 12px;
+        font-weight: 800;
+    }
+    .footerIconHor {
+        width: 32px;
+        height: 32px;
+        background-size: 32px;
+    }
+    .footerLsideBoxes {
+        margin-right: 2%;
+    }
+}
+
+@media (max-width: 1055px) {
+    .footerRside {
+        font-size: 11px !important;
+        line-height: 19px !important;
+    }
+    .footerIconHor {
+        width: 30px;
+        height: 30px;
+        background-size: 30px;
+    }
+    .footerLsideBoxes {
+        margin-right: 1%;
+    }
+}
+
+@media (max-width: 992px){
+    .FilterTopController{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .footerPhoneMenuBar {
+        display: none;
+    }
+
+    .footerRside {
+        width: 80%;
+        overflow: hidden;
+    }
+    .aboutShazdeMoreLess {
+        height: 95px !important;
+    }
+    .aboutShazdeLink > a {
+        font-size: 11px;
+        font-weight: 800;
+    }
+    .aboutShazdeLinkMargin {
+        margin-top: 20px;
+    }
+    .footerIconHor {
+        width: 25px;
+        height: 25px;
+        background-size: 25px;
+    }
+    .footMoreLessBtn {
+        display: block;
+    }
+    .footerLsideBoxes {
+        text-align: center;
+        line-height: 12px;
+        margin: 0 4%;
+        overflow: hidden;
+    }
+    .footTitle {
+        line-height: 20px !important;
+    }
+    .footMenu > a {
+        font-size: 10px !important;
+    }
+    .footShowTabletMenu {
+        display: block;
+    }
+    .footHideTabletMenu {
+        display: none;
+    }
+}
+
+@media (max-width: 880px) {
+    .footerRside {
+        font-size: 10px !important;
+    }
+    .aboutShazdeLink > a {
+        font-size: 10px;
+        font-weight: 800;
+    }
+    .footerIconHor {
+        width: 23px;
+        height: 23px;
+        background-size: 23px;
+    }
+    .footerLsideBoxes {
+        margin: 0 3%;
+    }
+}
+
+@media (max-width: 767px){
+
+    .eatery_filters{
+        height: calc(100vh - 225px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .shareSection{
+        position: absolute;
+        top: 0px;
+    }
+    .FilterTopController{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse;
+    }
+
+    .footerPhoneMenuBar {
+        display: flex;
+    }
+    .footerIconHor{
+        width: 40px;
+        height: 35px;
+        background-size: 35px;
+    }
+    footer .logoutSectionMobile{
+        display: flex;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        margin-top: auto;
+    }
+
+    .loginHelperSection.footerLoginHelperSection .login-button{
+        width: 25%;
+        background: unset;
+    }
+    .loginHelperSection.footerLoginHelperSection .footerMenuBarLinks{
+        width: 70px;
+        height: 70px;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+
+    .headerSearchBar{
+        width: calc(100% - 23px);
+        justify-content: space-evenly;
+        background: none;
+        display: flex;
+        height: auto;
+        padding: 5px 9px 5px 5px;
+        border: solid 1px gray;
+        margin: 0px 12px;
+        margin-top: 10px;
+    }
+    .headerSearchBar .footerSearchBar{
+        width: 48%;
+        border-radius: 5px;
+        color: white;
+        padding: 12px 0px;
+        box-shadow: 2px 2px 1px 1px #bfbfbf;
+        border: solid 2px wheat;
+        margin: 0px;
+        margin-bottom: 2px;
+    }
+    .headerSearchBar .footerSearchBar .icc{
+        font-size: 15px;
+        text-align: center;
+        width: 100%;
+        color: white;
+    }
+    .headerSearchBar .footerSearchBar .icc:before{
+        font-size: 20px;
+    }
+
+    .headerSearchBar.cityButtonsSec{
+        border: none;
+        margin: 0px 0px;
+        width: calc(100% - 20px);
+        padding: 0;
+        justify-content: space-between;
+        flex-direction: column;
+        line-height: 30px;
+        position: absolute;
+        bottom: 27px;
+    }
+    .headerSearchBar.cityButtonsSec .footerSearchBar.cityButton{
+        background: white;
+        border: solid 1px gray;
+        width: 100%;
+    }
+
+
+    .footerMenuBarLinks {
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    .filterBoxMobile{
+        display: none;
+        position: absolute;
+        left: 0px;
+        z-index: 9;
+        height: calc(100% - 170px);
+        top: 30px;
+    }
+    .filterBoxShadow{
+        background: white;
+        border: solid 1px gray;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 3px 4px 9px 1px #0000005e;
+        width: 150px;
+        max-height: 93%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .filterBoxShadow .clearAll{
+        font-size: 12px;
+        text-align: center;
+        color: var(--koochita-red);
+        border-bottom: solid 1px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .filterBoxShadow .filtersRows{
+        max-height: calc(100% - 55px);
+        overflow: auto;
+        padding: 0px 5px;
+        padding-left: 0px;
+        position: relative;
+    }
+    .filterBoxShadow .filtersRows .filters{
+        display: flex;
+        font-size: 14px;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        margin-top: 10px;
+        border: solid 1px lightgray;
+        border-radius: 26px;
+        background: #fcc1564f;
+        position: relative;
+    }
+    .filterBoxShadow .filtersRows .filters .name{
+        color: black;
+    }
+    .filterBoxShadow .filtersRows .filters .iconClose{
+        color: var(--koochita-red);
+        position: absolute;
+        right: -11px;
+        font-size: 20px;
+        z-index: 99;
+    }
+}
+
+@media (max-height: 700px) {
+
+    .overflowOptimizer {
+        display: block;
+    }
+
+    .pSC_boxOfDetails {
+        overflow: auto;
+        /*height: inherit;*/
+    }
+
+    .pSC_tilte {
+        padding: 15px 20px;
+    }
+
+}
+
+@media (max-width: 630px) {
+    .lp_icons {
+        font-weight: normal;
+    }
+
+    .lp_eachMenu > div:nth-child(2) {
+        font-size: 13px;
+        font-weight: normal;
+    }
+
+    .lp_others_titles, .lp_others_titles .trips-header {
+        font-size: 1.5em;
+        padding: 0 0 15px;
+    }
+
+    .lp_others_recentView > div:nth-child(2) {
+        font-size: 15px;
+    }
+
+    .lp_others_recentView {
+        padding: 10px;
+    }
+
+    .lp_others_rvPicBox {
+        padding: 0;
+    }
+
+    .masthead-recent-class {
+        margin: 20px;
+    }
+
+    .phoneDescriptionText {
+        font-size: 12px;
+    }
+
+    .pSC_cityDetails {
+        font-size: 13px;
+    }
+
+    footer .modules-membercenter-total-points .targets {
+        padding: 17px 0;
+    }
+
+    footer .modules-membercenter-total-points .points {
+        font-size: 30px;
+    }
+
+    footer .mainDivTotalPoint > a {
+        font-size: 11px;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go b {
+        font-size: 25px;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go > span > span {
+        font-size: 14px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .lp_icons {
+        font-size: 30px;
+    }
+
+    .ui_icon.search.lp_icons {
+        font-size: 30px;
+    }
+
+    .lp_eachMenu > div:nth-child(2) {
+        font-size: 10px;
+    }
+
+
+    .lp_others_recentView {
+        flex-direction: column;
+    }
+
+    .lp_others_recentView > div {
+        width: 100%;
+    }
+
+    .lp_others_recentView > div:nth-child(2) {
+        margin-top: 5px;
+    }
+
+    .phoneDescriptionSelects {
+        flex-direction: column;
+    }
+
+    .phoneDescriptionSelects > div {
+        width: 98%;
+    }
+
+    footer .mainDivTotalPoint {
+        width: 26%;
+    }
+
+    footer .mainDivTotalPoint > a {
+        font-size: 10px;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go {
+        width: 46%;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go > span {
+        padding: 0 5px 0 0;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go b {
+        margin-left: 5px;
+    }
+
+    footer .profileInfosDetails {
+        padding: 0 10px 0 0;
+    }
+
+    footer .profileInfosDetails > p {
+        font-size: 13px;
+    }
+
+    footer .ageSince > div:nth-child(1) {
+        font-size: 10px;
+    }
+
+    footer .profileBlock > div:nth-child(2) {
+        padding: 0 0 0 5px;
+    }
+
+    footer .modules-membercenter-member-profile {
+        width: 65%;
+    }
+
+    .profileBtnActionMobile {
+        width: 35%;
+    }
+
+    .modules-membercenter-member-profile .aboutMeDesc {
+        margin: 0 0 0 15px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .masthead-recent-class {
+        margin: 20px 0;
+    }
+
+    .mainPopUp, .lp_phoneMenuBar {
+        width: 85%;
+    }
+
+    .footerPhoneMenuBar > div {
+        font-size: 12px;
+    }
+
+    .ui_icon.search, .ui_icon.plus-circle, .ui_icon.member {
+        font-size: 20px;
+    }
+
+    .userInfoMobileFooterBody {
+        padding: 20px 10px;
+        padding-bottom: 0px;
+    }
+
+    footer #myHonorsText > h3 {
+        font-size: 17px;
+    }
+
+    footer .modules-membercenter-total-points .targets {
+        padding: 13px 0;
+        width: 22%;
+    }
+
+    footer .modules-membercenter-total-points .label {
+        font-size: 10px;
+        padding: 0;
+    }
+
+    footer .modules-membercenter-total-points .points {
+        font-size: 25px;
+    }
+
+    footer .mainDivTotalPoint a {
+        font-size: 9px;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go b {
+        font-size: 20px;
+        margin-left: 5px;
+    }
+
+    footer .modules-membercenter-total-points .points_to_go > span > span {
+        font-size: 13px;
+    }
+
+    .pp_btns {
+        width: 90px;
+        padding: 6px 5px;
+    }
+
+    .ui_icon.memberPossibilities {
+        font-size: 18px;
+    }
+
+    .ui_icon.more-horizontal {
+        display: none;
+    }
+
+    footer .activitiesMainDiv {
+        padding: 0;
+    }
+}
+
+.fassadsad {
+    width: 20%;
+}
+
+
+footer .memberPointInfo .head{
+    color: #0076ac;
+    font-size: 20px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.phoneMainFooter{
+    padding: 0;
+    padding-top: 12px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    margin-top: 0;
+}

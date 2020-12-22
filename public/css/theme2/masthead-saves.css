@@ -1,0 +1,1528 @@
+.styleguide {
+    box-sizing: border-box;
+    font-family: Arial, Tahoma, "Bitstream Vera Sans", sans-serif;
+    font-size: 1rem;
+    color: #2c2c2c;
+    font-weight: 400;
+    line-height: 1.4; /*!minireset.css v0.0.2 | MIT License | github.com/jgthms/minireset.css */;
+}
+
+@keyframes spinAround {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.styleguide html, .styleguide body, .styleguide p, .styleguide ol, .styleguide ul, .styleguide li, .styleguide dl, .styleguide dt, .styleguide dd, .styleguide blockquote, .styleguide figure, .styleguide fieldset, .styleguide legend, .styleguide textarea, .styleguide pre, .styleguide iframe, .styleguide hr, .styleguide h1, .styleguide h2, .styleguide h3, .styleguide h4, .styleguide h5, .styleguide h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.styleguide h1, .styleguide h2, .styleguide h3, .styleguide h4, .styleguide h5, .styleguide h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+.styleguide ul {
+    list-style: none;
+}
+
+.styleguide button, .styleguide input, .styleguide select, .styleguide textarea {
+    margin: 0;
+}
+
+.styleguide html {
+    box-sizing: border-box;
+}
+
+.styleguide * {
+    box-sizing: inherit;
+}
+
+.styleguide *:before, .styleguide *:after {
+    box-sizing: inherit;
+}
+
+.styleguide img, .styleguide embed, .styleguide object, .styleguide audio, .styleguide video {
+    height: auto;
+    max-width: 100%;
+}
+
+.styleguide iframe {
+    border: 0;
+}
+
+.styleguide table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.styleguide td, .styleguide th {
+    padding: 0;
+    text-align: left;
+}
+
+.styleguide html {
+    background-color: #fff;
+    font-size: 14px;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    min-width: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-rendering: optimizeLegibility;
+}
+
+.styleguide article, .styleguide aside, .styleguide figure, .styleguide footer, .styleguide header, .styleguide hgroup, .styleguide section {
+    display: block;
+}
+
+.styleguide body, .styleguide button, .styleguide input, .styleguide select, .styleguide textarea {
+    font-family: Arial, Tahoma, "Bitstream Vera Sans", sans-serif;
+}
+
+.styleguide code, .styleguide pre {
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
+    font-family: "Inconsolata", "Consolas", "Monaco", monospace;
+}
+
+.styleguide body {
+    color: #2c2c2c;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.styleguide a {
+    color: #00AF87;
+    cursor: pointer;
+    text-decoration: none;
+    transition: none 86ms ease-out;
+}
+
+.styleguide a:hover {
+    color: #2c2c2c;
+}
+
+.styleguide code {
+    background-color: #f5f5f5;
+    color: #ff3860;
+    font-size: .8em;
+    font-weight: normal;
+    padding: .25em .5em .25em;
+}
+
+.styleguide hr {
+    background-color: #dbdbdb;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 1.5rem 0;
+}
+
+.styleguide img {
+    max-width: 100%;
+}
+
+.styleguide input[type="checkbox"], .styleguide input[type="radio"] {
+    vertical-align: baseline;
+}
+
+.styleguide small {
+    font-size: .8em;
+}
+
+.styleguide span {
+    font-style: inherit;
+    font-weight: inherit;
+}
+
+.styleguide strong {
+    color: #2c2c2c;
+    font-weight: 700;
+}
+
+.styleguide pre {
+    background-color: #f5f5f5;
+    color: #2c2c2c;
+    font-size: .8em;
+    white-space: pre;
+    word-wrap: normal;
+}
+
+.styleguide pre code {
+    background: none;
+    color: inherit;
+    display: block;
+    font-size: 1em;
+    overflow-x: auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.styleguide table {
+    width: 100%;
+}
+
+.styleguide table td, .styleguide table th {
+    text-align: left;
+    vertical-align: top;
+}
+
+.styleguide table th {
+    color: #2c2c2c;
+}
+
+.styleguide .is-block {
+    display: block;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-block-mobile {
+        display: block !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-block-tablet {
+        display: block !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-block-tablet-only {
+        display: block !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-block-touch {
+        display: block !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-block-desktop {
+        display: block !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-block-desktop-only {
+        display: block !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-block-widescreen {
+        display: block !important;
+    }
+}
+
+.styleguide .is-flex {
+    display: flex;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-flex-mobile {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-flex-tablet {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-flex-tablet-only {
+        display: flex !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-flex-touch {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-flex-desktop {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-flex-desktop-only {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-flex-widescreen {
+        display: flex !important;
+    }
+}
+
+.styleguide .is-inline {
+    display: inline;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-inline-mobile {
+        display: inline !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-inline-tablet {
+        display: inline !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-inline-tablet-only {
+        display: inline !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-inline-touch {
+        display: inline !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-inline-desktop {
+        display: inline !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-inline-desktop-only {
+        display: inline !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-inline-widescreen {
+        display: inline !important;
+    }
+}
+
+.styleguide .is-inline-block {
+    display: inline-block;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-inline-block-mobile {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-inline-block-tablet {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-inline-block-tablet-only {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-inline-block-touch {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-inline-block-desktop {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-inline-block-desktop-only {
+        display: inline-block !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-inline-block-widescreen {
+        display: inline-block !important;
+    }
+}
+
+.styleguide .is-inline-flex {
+    display: inline-flex;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-inline-flex-mobile {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-inline-flex-tablet {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-inline-flex-tablet-only {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-inline-flex-touch {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-inline-flex-desktop {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-inline-flex-desktop-only {
+        display: inline-flex !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-inline-flex-widescreen {
+        display: inline-flex !important;
+    }
+}
+
+.styleguide .is-clearfix:after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+
+.styleguide .is-pulled-left {
+    float: left;
+}
+
+.styleguide .is-pulled-right {
+    float: right;
+}
+
+.styleguide .is-clipped {
+    overflow: hidden !important;
+}
+
+.styleguide .is-overlay {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.styleguide .has-text-centered {
+    text-align: center;
+}
+
+.styleguide .has-text-left {
+    text-align: left;
+}
+
+.styleguide .has-text-right {
+    text-align: right;
+}
+
+.styleguide .is-hidden {
+    display: none !important;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .is-hidden-mobile {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .is-hidden-tablet {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .styleguide .is-hidden-tablet-only {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .styleguide .is-hidden-touch {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .styleguide .is-hidden-desktop {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1187px) {
+    .styleguide .is-hidden-desktop-only {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1188px) {
+    .styleguide .is-hidden-widescreen {
+        display: none !important;
+    }
+}
+
+.styleguide .is-disabled {
+    pointer-events: none;
+}
+
+.styleguide .is-marginless {
+    margin: 0 !important;
+}
+
+.styleguide .is-paddingless {
+    padding: 0 !important;
+}
+
+.styleguide .is-unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.styleguide .pagination, .styleguide .ui_pagination, .styleguide .pagination-list {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.styleguide .pagination-previous, .styleguide .pagination-next, .styleguide .pagination-link, .styleguide .pagination-ellipsis {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    align-items: center;
+    border: none;
+    border-radius: 3px;
+    box-shadow: none;
+    display: inline-flex;
+    font-size: 1rem;
+    height: 2.285em;
+    justify-content: flex-start;
+    line-height: 1.5;
+    padding-left: .75em;
+    padding-right: .75em;
+    position: relative;
+    vertical-align: top;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: .875rem;
+    padding-left: .5em;
+    padding-right: .5em;
+    justify-content: center;
+    text-align: center;
+}
+
+.styleguide .pagination-previous:focus, .styleguide .pagination-previous.is-focused, .styleguide .pagination-previous:active, .styleguide .pagination-previous.is-active, .styleguide .pagination-next:focus, .styleguide .pagination-next.is-focused, .styleguide .pagination-next:active, .styleguide .pagination-next.is-active, .styleguide .pagination-link:focus, .styleguide .pagination-link.is-focused, .styleguide .pagination-link:active, .styleguide .pagination-link.is-active, .styleguide .pagination-ellipsis:focus, .styleguide .pagination-ellipsis.is-focused, .styleguide .pagination-ellipsis:active, .styleguide .pagination-ellipsis.is-active {
+    outline: none;
+}
+
+.styleguide .pagination-previous[disabled], .styleguide .pagination-previous.is-disabled, .styleguide .pagination-next[disabled], .styleguide .pagination-next.is-disabled, .styleguide .pagination-link[disabled], .styleguide .pagination-link.is-disabled, .styleguide .pagination-ellipsis[disabled], .styleguide .pagination-ellipsis.is-disabled {
+    pointer-events: none;
+}
+
+.styleguide .pagination-previous, .styleguide .pagination-next, .styleguide .pagination-link {
+    border: 1px solid #dbdbdb;
+    min-width: 2.5em;
+}
+
+.styleguide .pagination-previous:hover, .styleguide .pagination-next:hover, .styleguide .pagination-link:hover {
+    border-color: #b5b5b5;
+    color: #2c2c2c;
+}
+
+.styleguide .pagination-previous:focus, .styleguide .pagination-next:focus, .styleguide .pagination-link:focus {
+    border-color: #00AF87;
+}
+
+.styleguide .pagination-previous:active, .styleguide .pagination-next:active, .styleguide .pagination-link:active {
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.2);
+}
+
+.styleguide .pagination-previous[disabled], .styleguide .pagination-previous.is-disabled, .styleguide .pagination-next[disabled], .styleguide .pagination-next.is-disabled, .styleguide .pagination-link[disabled], .styleguide .pagination-link.is-disabled {
+    background: #dbdbdb;
+    color: #7a7a7a;
+    opacity: .5;
+    pointer-events: none;
+}
+
+.styleguide .pagination-previous, .styleguide .pagination-next {
+    padding-left: .75em;
+    padding-right: .75em;
+}
+
+.styleguide .pagination-link.is-current {
+    background-color: #00AF87;
+    border-color: #00AF87;
+    color: #fff;
+}
+
+.styleguide .pagination-ellipsis {
+    color: #b5b5b5;
+    pointer-events: none;
+}
+
+.styleguide .pagination-list li:not(:first-child) {
+    margin-left: .375rem;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .pagination, .styleguide .ui_pagination {
+        flex-wrap: wrap;
+    }
+
+    .styleguide .pagination-previous, .styleguide .pagination-next {
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: calc(50% - .375rem);
+    }
+
+    .styleguide .pagination-next {
+        margin-left: .75rem;
+    }
+
+    .styleguide .pagination-list {
+        margin-top: .75rem;
+    }
+
+    .styleguide .pagination-list li {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .pagination-list {
+        flex-grow: 1;
+        flex-shrink: 1;
+        justify-content: flex-start;
+        order: 1;
+    }
+
+    .styleguide .pagination-previous, .styleguide .pagination-next {
+        margin-left: .75rem;
+    }
+
+    .styleguide .pagination-previous {
+        order: 2;
+    }
+
+    .styleguide .pagination-next {
+        order: 3;
+    }
+
+    .styleguide .pagination, .styleguide .ui_pagination {
+        justify-content: space-between;
+    }
+
+    .styleguide .pagination.is-centered .pagination-previous, .styleguide .is-centered.ui_pagination .pagination-previous {
+        margin-left: 0;
+        order: 1;
+    }
+
+    .styleguide .pagination.is-centered .pagination-list, .styleguide .is-centered.ui_pagination .pagination-list {
+        justify-content: center;
+        order: 2;
+    }
+
+    .styleguide .pagination.is-centered .pagination-next, .styleguide .is-centered.ui_pagination .pagination-next {
+        order: 3;
+    }
+
+    .styleguide .pagination.is-right .pagination-previous, .styleguide .is-right.ui_pagination .pagination-previous {
+        margin-left: 0;
+        order: 1;
+    }
+
+    .styleguide .pagination.is-right .pagination-next, .styleguide .is-right.ui_pagination .pagination-next {
+        order: 2;
+        margin-right: .75rem;
+    }
+
+    .styleguide .pagination.is-right .pagination-list, .styleguide .is-right.ui_pagination .pagination-list {
+        justify-content: flex-end;
+        order: 3;
+    }
+}
+
+.styleguide .card-header {
+    align-items: stretch;
+    box-shadow: 0 1px 2px rgba(10, 10, 10, 0.1);
+    display: flex;
+}
+
+.styleguide .card-header-title {
+    align-items: center;
+    color: #2c2c2c;
+    display: flex;
+    flex-grow: 1;
+    font-weight: 700;
+    padding: .75rem;
+}
+
+.styleguide .card-header-icon {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: .75rem;
+}
+
+.styleguide .card-image {
+    display: block;
+    position: relative;
+}
+
+.styleguide .card-content {
+    padding: 1.5rem;
+}
+
+.styleguide .card-content .title + .subtitle {
+    margin-top: -1.5rem;
+}
+
+.styleguide .card-footer {
+    border-top: 1px solid #dbdbdb;
+    align-items: stretch;
+    display: flex;
+}
+
+.styleguide .card-footer-item {
+    align-items: center;
+    display: flex;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: .75rem;
+}
+
+.styleguide .card-footer-item:not(:last-child) {
+    border-right: 1px solid #dbdbdb;
+}
+
+.styleguide .card, .styleguide .ui_card {
+    background-color: #fff;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    color: #2c2c2c;
+    max-width: 100%;
+    position: relative;
+}
+
+.styleguide .card .media:not(:last-child), .styleguide .ui_card .media:not(:last-child), .styleguide .card .ui_media:not(:last-child), .styleguide .ui_card .ui_media:not(:last-child) {
+    margin-bottom: .75rem;
+}
+
+.styleguide .level-item {
+    align-items: center;
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.styleguide .level-item .title, .styleguide .level-item .subtitle {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .level-item:not(:last-child) {
+        margin-bottom: .75rem;
+    }
+}
+
+.styleguide .level-left, .styleguide .level-right {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.styleguide .level-left .level-item:not(:last-child), .styleguide .level-right .level-item:not(:last-child) {
+    margin-right: .75rem;
+}
+
+.styleguide .level-left .level-item.is-flexible, .styleguide .level-right .level-item.is-flexible {
+    flex-grow: 1;
+}
+
+.styleguide .level-left {
+    align-items: center;
+    justify-content: flex-start;
+}
+
+@media screen and (max-width: 767px) {
+    .styleguide .level-left + .level-right {
+        margin-top: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .level-left {
+        display: flex;
+    }
+}
+
+.styleguide .level-right {
+    align-items: center;
+    justify-content: flex-end;
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .level-right {
+        display: flex;
+    }
+}
+
+.styleguide .level, .styleguide .ui_level {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.styleguide .level:not(:last-child), .styleguide .ui_level:not(:last-child) {
+    margin-bottom: 1.5rem;
+}
+
+.styleguide .level code, .styleguide .ui_level code {
+    border-radius: 3px;
+}
+
+.styleguide .level img, .styleguide .ui_level img {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.styleguide .level.is-mobile, .styleguide .is-mobile.ui_level {
+    display: flex;
+}
+
+.styleguide .level.is-mobile > .level-item:not(:last-child), .styleguide .is-mobile.ui_level > .level-item:not(:last-child) {
+    margin-bottom: 0;
+}
+
+.styleguide .level.is-mobile > .level-item:not(.is-narrow), .styleguide .is-mobile.ui_level > .level-item:not(.is-narrow) {
+    flex-grow: 1;
+}
+
+@media screen and (min-width: 768px) {
+    .styleguide .level, .styleguide .ui_level {
+        display: flex;
+    }
+
+    .styleguide .level > .level-item:not(.is-narrow), .styleguide .ui_level > .level-item:not(.is-narrow) {
+        flex-grow: 1;
+    }
+}
+
+.styleguide .media-left, .styleguide .media-right {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.styleguide .media-left {
+    margin-right: 1rem;
+}
+
+.styleguide .media-right {
+    margin-left: 1rem;
+}
+
+.styleguide .media-content {
+    flex-basis: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    text-align: left;
+}
+
+.styleguide .media, .styleguide .ui_media {
+    align-items: flex-start;
+    display: flex;
+    text-align: left;
+}
+
+.styleguide .media .content:not(:last-child), .styleguide .ui_media .content:not(:last-child) {
+    margin-bottom: .75rem;
+}
+
+.styleguide .media .media, .styleguide .ui_media .media, .styleguide .media .ui_media, .styleguide .ui_media .ui_media {
+    border-top: 1px solid rgba(219, 219, 219, 0.5);
+    display: flex;
+    padding-top: .75rem;
+}
+
+.styleguide .media .media .content:not(:last-child), .styleguide .ui_media .media .content:not(:last-child), .styleguide .media .ui_media .content:not(:last-child), .styleguide .ui_media .ui_media .content:not(:last-child), .styleguide .media .media .control:not(:last-child), .styleguide .ui_media .media .control:not(:last-child), .styleguide .media .ui_media .control:not(:last-child), .styleguide .ui_media .ui_media .control:not(:last-child) {
+    margin-bottom: .5rem;
+}
+
+.styleguide .media .media .media, .styleguide .ui_media .media .media, .styleguide .media .ui_media .media, .styleguide .ui_media .ui_media .media, .styleguide .media .media .ui_media, .styleguide .ui_media .media .ui_media, .styleguide .media .ui_media .ui_media, .styleguide .ui_media .ui_media .ui_media {
+    padding-top: .5rem;
+}
+
+.styleguide .media .media .media + .media, .styleguide .ui_media .media .media + .media, .styleguide .media .ui_media .media + .media, .styleguide .ui_media .ui_media .media + .media, .styleguide .media .media .ui_media + .media, .styleguide .ui_media .media .ui_media + .media, .styleguide .media .ui_media .ui_media + .media, .styleguide .ui_media .ui_media .ui_media + .media, .styleguide .media .media .media + .ui_media, .styleguide .ui_media .media .media + .ui_media, .styleguide .media .ui_media .media + .ui_media, .styleguide .ui_media .ui_media .media + .ui_media, .styleguide .media .media .ui_media + .ui_media, .styleguide .ui_media .media .ui_media + .ui_media, .styleguide .media .ui_media .ui_media + .ui_media, .styleguide .ui_media .ui_media .ui_media + .ui_media {
+    margin-top: .5rem;
+}
+
+.styleguide .media + .media, .styleguide .ui_media + .media, .styleguide .media + .ui_media, .styleguide .ui_media + .ui_media {
+    border-top: 1px solid rgba(219, 219, 219, 0.5);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.styleguide .media.is-large + .media, .styleguide .is-large.ui_media + .media, .styleguide .media.is-large + .ui_media, .styleguide .is-large.ui_media + .ui_media {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+}
+
+html {
+    font-size: 14px;
+}
+
+.ui_popover.rooms_guests_children, .ui_popover.date_picker_modal {
+    z-index: 10001;
+    margin-top: -11px;
+}
+
+.ui_popover.date_picker_modal {
+    z-index: 10001;
+}
+
+.clearDatesBox {
+    text-align: center;
+    padding: 18px 0;
+    margin: 0 15px;
+    border-width: 1px 0 0;
+    border-style: solid;
+    border-color: #e5e5e5;
+    font-size: 14px;
+    color: #069;
+}
+
+.clearDatesBox:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.declutter-control .ui_icon.times {
+    font-size: 12px;
+    color: #069;
+}
+
+@-webkit-keyframes fadeInWaitFadeOut {
+    0%, 50%, 100% {
+        opacity: 0;
+    }
+    5%, 45% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInWaitFadeOut {
+    0%, 50%, 100% {
+        opacity: 0;
+    }
+    5%, 45% {
+        opacity: 1;
+    }
+}
+
+.trips-flyout-container {
+    padding: 0 !important;
+    line-height: initial;
+}
+
+.trips-flyout-container .ui_spinner:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+#masthead-saves-container {
+    display: -webkit-box;
+    display: flex;
+}
+
+#masthead-saves-container a, #masthead-saves-container a:hover {
+    text-decoration: none;
+}
+
+#masthead-saves-container #masthead-trips {
+    z-index: 100000000 !important;
+    padding: 18px 24px 14px 24px;
+    border-right: 1px solid #e5e5e5;
+    text-align: center;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+#masthead-saves-container #masthead-trips .trips-header-container {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+#masthead-saves-container #masthead-trips .trips-header-container .trips-header {
+    white-space: nowrap;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 16px;
+    text-align: left;
+    font-weight: bold;
+    display: inline-block;
+}
+
+#masthead-saves-container #masthead-trips .trips-header-container .trips-header:hover {
+    text-decoration: underline;
+}
+
+#masthead-saves-container #masthead-trips .trips-header-container .trips-see-all {
+    color: #069;
+    font-size: 14px;
+    -webkit-transition: color .2s ease;
+    transition: color .2s ease;
+}
+
+#masthead-saves-container #masthead-trips .trips-header-container .trips-see-all:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#masthead-saves-container #masthead-trips .trips-tip {
+    color: #666;
+    line-height: 18px;
+    max-width: 150px;
+    text-align: left;
+    padding-bottom: 24px;
+}
+
+#masthead-saves-container #masthead-trips .trips-tip .login-cta {
+    color: #069;
+}
+
+#masthead-saves-container #masthead-trips .trips-tip .login-cta:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region {
+    min-width: 150px;
+    min-height: 150px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles {
+    display: -webkit-box;
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles.row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    width: 310px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles.column {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    width: 150px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile {
+    background-blend-mode: overlay;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    margin: 0 0 10px 0;
+    border-radius: 2px;
+    display: -webkit-box;
+    display: flex;
+    line-height: initial;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip {
+    color: #fff;
+    background-size: cover;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    -webkit-transition: background-color .2s ease;
+    transition: background-color .2s ease;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip.no-cover-photo {
+    color: #333;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip.no-cover-photo:hover {
+    background-color: #777;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip.has-cover-photo .tile-content {
+    background: #fff;
+    background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0, #000 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(100%, #000));
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0, #000 100%);
+    background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0, #000 100%);
+    background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0, #000 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, #000 100%);
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip .tile-content {
+    align-self: flex-end;
+    text-align: left;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50%;
+    padding: 10px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip .tile-content .tile-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 130px;
+    white-space: nowrap;
+}
+
+@supports (-webkit-line-clamp:2) {
+    #masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip .tile-content .tile-title {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        max-height: 38px;
+        height: auto;
+    }
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip .tile-content .tile-visit-dates {
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-trip:hover {
+    background-color: #666;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-create-trip {
+    background-color: #fff;
+    border: 1px solid #f5f5f5;
+    justify-content: space-around;
+    -webkit-transition: background-color .2s ease, corder-color .2s ease;
+    transition: background-color .2s ease, corder-color .2s ease;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-create-trip:hover {
+    background-color: #e5e5e5;
+    border-color: #e5e5e5;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-create-trip .tile-content {
+    -ms-grid-row-align: center;
+    align-self: center;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-create-trip .tile-content .ui_icon {
+    color: #00AF87;
+    font-size: 28px;
+}
+
+#masthead-saves-container #masthead-trips #masthead-trips-tiles-region #trips-tiles .single-tile.is-create-trip .tile-content .create-trip-text {
+    color: #00AF87;
+    font-size: 14px;
+}
+
+#masthead-saves-container #masthead-recent {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    padding-top: 18px;
+    text-align: center;
+    max-height: 400px;
+    position: relative;
+    z-index: 1000000000 !important;
+}
+
+#masthead-saves-container #masthead-recent .recent-header-container {
+    text-align: left;
+    padding-left: 24px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+#masthead-saves-container #masthead-recent .recent-header-container .recent-header {
+    white-space: nowrap;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 16px;
+    text-align: left;
+    font-weight: bold;
+    display: inline-block;
+}
+
+#masthead-saves-container #masthead-recent .recent-header-container .recent-header:hover {
+    text-decoration: underline;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container {
+    min-height: 120px;
+    max-height: 343px;
+    width: 290px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container #dropdown-test3-card {
+    position: relative;
+    background-color: #00AF87;
+    color: #fff;
+    text-align: left;
+    display: none;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container #dropdown-test3-card .ui_close_x:before {
+    color: #fff;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container #dropdown-test3-card .test-title {
+    padding: 16px 20px 8px 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container #dropdown-test3-card .test-content {
+    padding: 0 20px 16px 20px;
+    font-size: 12px;
+}
+
+#masthead-saves-container #masthead-recent .masthead-recent-cards-container .empty-recent {
+    font-size: 13px;
+    color: #b7b7b7;
+    padding: 25px;
+}
+
+#masthead-saves-container #masthead-recent .see-all-button-container {
+    padding: 14px;
+}
+
+#masthead-saves-container #masthead-recent .see-all-button-container .see-all-button {
+    color: #00AF87;
+    font-size: 14px;
+    padding: 6px;
+    border: 1px #00AF87 solid;
+    border-radius: 2px;
+    margin: 0 20px;
+    cursor: pointer;
+    display: inherit;
+    -webkit-transition: color .2s ease;
+    transition: color .2s ease;
+}
+
+#masthead-saves-container #masthead-recent .see-all-button-container .see-all-button:hover {
+    color: #078171;
+}
+
+#masthead-recent .masthead-recent-card {
+    padding: 18px 24px;
+    border-bottom: 1px solid #f5f5f5;
+    display: -webkit-box;
+    display: flex;
+    text-align: left;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    color: #333;
+    -webkit-transition: background-color .2s ease;
+    transition: background-color .2s ease;
+}
+
+#masthead-recent .masthead-recent-card .media-left {
+    margin-right: 10px;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#masthead-recent .masthead-recent-card .media-left .thumbnail {
+    display: block;
+    width: 55px;
+    height: 55px;
+    border-radius: 2px;
+    background-size: cover;
+    background-position: 50%;
+}
+
+#masthead-recent .masthead-recent-card .media-left .thumbnail.ui_icon:before {
+    font-size: 55px;
+    color: #ddd;
+}
+
+#masthead-recent .masthead-recent-card .content-right {
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    color: #b7b7b7;
+    font-size: 12px;
+    line-height: initial;
+}
+
+#masthead-recent .masthead-recent-card .content-right .poi-title, #masthead-recent .masthead-recent-card .content-right .rating, #masthead-recent .masthead-recent-card .content-right .geo {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 170px;
+    overflow: hidden;
+}
+
+#masthead-recent .masthead-recent-card .content-right .rating {
+    padding-bottom: 4px;
+}
+
+#masthead-recent .masthead-recent-card .content-right .poi-title {
+    display: inline-block;
+    font-size: 14px;
+    color: #4a4a4a;
+    line-height: 15px;
+}
+
+#masthead-recent .masthead-recent-card .content-right .ui_bubble_rating {
+    padding-right: 5px;
+}
+
+#masthead-recent .masthead-recent-card:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+#masthead-recent .masthead-recent-card:hover .poi-title {
+    color: #000;
+}
+
+.saves-settings-modal .modal-card, .saves-settings-delete-confirm .modal-card, .saves-settings-change-dates-confirm .modal-card {
+    width: 560px !important;
+    top: -50px;
+}
+
+.saves-settings-modal .modal-card-foot .button.first-button, .saves-settings-delete-confirm .modal-card-foot .button.first-button, .saves-settings-change-dates-confirm .modal-card-foot .button.first-button {
+    margin-left: 18px;
+}
+
+.saves-settings-modal .modal-card-foot .button.last-button, .saves-settings-delete-confirm .modal-card-foot .button.last-button, .saves-settings-change-dates-confirm .modal-card-foot .button.last-button {
+    position: absolute;
+    right: 48px;
+    top: 20px;
+}
+
+.saves-settings-delete-confirm .modal-card-body .label, .saves-settings-change-dates-confirm .modal-card-body .label {
+    font-weight: normal;
+}
+
+.saves-settings-modal .modal-card-body .label {
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+
+.saves-settings-modal .modal-card-body .trip-title-message {
+    position: absolute;
+    right: 0;
+    font-style: italic;
+    padding-top: 4px;
+}
+
+.saves-settings-modal .modal-card-body .clear-dates {
+    margin-top: 10px;
+}
+
+.saves-settings-modal .modal-card-body .clear-dates .dates-checkbox {
+    color: #00AF87;
+    padding-right: 5px;
+}
+
+.saves-settings-modal .modal-card-body .clear-dates .dates-checkbox-message {
+    position: relative;
+    top: 1px;
+}
+
+.saves-settings-modal .modal-card-body .clear-dates .dates-checkbox-message:hover {
+    cursor: pointer;
+}
+
+.saves-settings-modal .trip-title-control {
+    position: relative;
+    margin-bottom: 3em;
+}
+
+.trip-dates {
+    margin-top: 20px;
+}
+
+.trip-dates .trip-date-container {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 3px;
+    pointer-events: none;
+}
+
+.trip-dates .trip-date-container:hover {
+    cursor: pointer;
+    border-color: #aaa;
+}
+
+.trip-dates .trip-date-container.selected {
+    border-color: #82af71;
+}
+
+.trip-dates .trip-date-container span {
+    font-size: 24px;
+    color: #aaa;
+    height: inherit;
+    width: inherit;
+    background: none;
+    pointer-events: auto;
+}
+
+.trip-dates .trip-date-container .trip-start-date, .trip-dates .trip-date-container .trip-end-date {
+    border: none;
+    width: 88%;
+    height: 34px;
+    box-shadow: none;
+    padding-left: 3px !important;
+    pointer-events: auto;
+}
+
+.trip-dates .trip-date-container .trip-start-date:hover, .trip-dates .trip-date-container .trip-end-date:hover {
+    cursor: pointer;
+}
+
+.saves-first-trip-education {
+    text-align: center;
+}
+
+.saves-first-trip-education .modal-card {
+    width: 560px !important;
+    top: -50px;
+}
+
+.saves-first-trip-education .ui_icon {
+    font-size: 60px;
+    color: #666;
+}
+
+.saves-first-trip-education .first-label {
+    color: #00AF87;
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.saves-first-trip-education .second-label {
+    color: #333;
+    padding: 10px 0 20px 0;
+    display: block;
+    font-size: 16px;
+}
+
+.saves-first-trip-education .modal-card-foot {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+.saves-first-trip-education .modal-card-foot .ui_button {
+    background-color: #00AF87;
+    padding: 10px;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar {
+    z-index: 10005;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar .ui_popover.rooms_guests_children, .ui_popover.date_picker_modal.my-trips-calendar .ui_popover.date_picker_modal {
+    z-index: 10001;
+    margin-top: -11px;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar .ui_popover.date_picker_modal {
+    z-index: 10001;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar .clearDatesBox {
+    text-align: center;
+    padding: 18px 0;
+    margin: 0 15px;
+    border-width: 1px 0 0;
+    border-style: solid;
+    border-color: #e5e5e5;
+    font-size: 14px;
+    color: #069;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar .clearDatesBox:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar .declutter-control .ui_icon.times {
+    font-size: 12px;
+    color: #069;
+}
+
+.ui_popover.date_picker_modal.my-trips-calendar.ui_overlay.date_picker_modal.no_x .ui_close_x {
+    display: none;
+}

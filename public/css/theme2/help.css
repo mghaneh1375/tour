@@ -1,0 +1,55 @@
+/*.targetHelp {*/
+    /*position: relative;*/
+    /*border: 5px solid #333;*/
+    /*padding: 10px;*/
+    /*background-color: white;*/
+    /*z-index: 1000001;*/
+    /*cursor: auto;*/
+/*}*/
+
+.bubbles {
+    /*position: absolute;*/
+    height: 20px;
+    margin-top: 20px;
+}
+
+.helpBubble {
+    cursor: pointer;
+}
+
+.nextBtnsHelp {
+    float: right;
+}
+
+.backBtnsHelp {
+    float: right;
+    margin-right: 5px;
+}
+
+.exitBtnHelp {
+    float: left;
+}
+
+.helpSpans {
+    position: fixed;
+    border: 5px solid #333;
+    padding: 10px;
+    z-index: 10000001;
+    background-color: white;
+    width: 400px;
+    height: auto;
+    cursor: auto;
+    direction: rtl;
+}
+
+.introjs-arrow {
+    border: 5px solid white;
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 48%;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: white;
+    border-left-color: transparent;
+}

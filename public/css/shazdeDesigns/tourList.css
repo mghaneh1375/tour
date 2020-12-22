@@ -1,0 +1,1056 @@
+/*1st box of styles*/
+
+input[type="checkbox"], input[type="radio"] {
+    display: none !important;
+}
+
+input[type="checkbox"] + label, input[type="radio"] + label {
+    color: #666666;
+}
+
+input[type="checkbox"] + label span, input[type="radio"] + label span {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    margin: -2px 0 0 0;
+    vertical-align: middle;
+    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label span {
+    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+}
+
+.moreItems {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.lessItems {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.moreItems2 {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+.lessItems2 {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: -webkit-right;
+}
+
+/*2nd box of styles*/
+
+
+.shTIcon {
+    font-family: shazde_regular2 !important;
+    font-size: 20px;
+}
+
+.passengerIcon:before {
+    content: '\E0DF';
+    color: var(--koochita-light-green);
+}
+
+.minusPlusIcons {
+    font-family: 'Shazde_Regular2' !important;
+    font-size: 25px;
+    line-height: 25px;
+    color: #30b4a6;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+}
+
+.plus:before {
+    content: '\E031';
+}
+
+.minus:before {
+    content: '\E034';
+}
+
+.calendarIcon {
+    color: #30b4a6 !important;
+    font-size: 22px;
+    top: -2px;
+}
+
+.searchBottomArrowIcone:before {
+    content: '\E04A';
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
+}
+
+.searchTopArrowIcone:before {
+    content: '\E044';
+    position: absolute;
+    top: 14px;
+    cursor: pointer;
+}
+
+.arrowPassengerIcone:before {
+    left: 10%;
+}
+
+/*3rd box of styles*/
+
+
+.numBetweenMinusPlusBtn {
+    float: left;
+    margin-top: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*calender section*/
+.calenderBox {
+    width: 22%;
+    padding: 7px 8px;
+    border: 2px solid #E5E5E5;
+    display: inline-block;
+    position: absolute;
+    right: 22%;
+    border-radius: 10px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.dateLabel {
+    position: relative;
+    width: 150px;
+    height: 30px;
+    border-radius: 3px;
+    margin: 0 !important;
+    cursor: pointer;
+    float: right;
+    max-width: 40%;
+}
+
+.inputDateLabel {
+    background: transparent;
+    width: 85px;
+    border: none;
+    position: absolute;
+    top: 7px;
+    right: 24%;
+    cursor: pointer;
+    text-align: center;
+}
+
+/*room section*/
+.roomBox {
+    width: 18%;
+    padding: 5px 8px;
+    border: 2px solid #E5E5E5;
+    display: inline-block;
+    position: absolute;
+    right: 46%;
+    border-radius: 10px;
+    text-align: right;
+    font-weight: 700;
+}
+
+/*search btn section*/
+.srchBox {
+    display: inline-block;
+    position: absolute;
+    right: 65%;
+}
+
+.srchBtn {
+    background-color: var(--koochita-light-green);
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 2.2em;
+    border-radius: 10px;
+    padding: 5px 30px;
+}
+
+/*pop up*/
+.roomPassengerPopUp {
+    text-align: center !important;
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    top: 55px;
+    right: 12%;
+    left: 12%;
+    border-radius: 5px;
+    z-index: 999;
+    border: 2px solid #e5e5e5;
+}
+
+.rowOfPopUp {
+    height: 28px;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    clear: both;
+}
+
+.selectAgeChild {
+    direction: rtl;
+    border: none !important;
+}
+
+/*4th box of styles*/
+
+
+.childrenPopUpAlert {
+    width: 100%;
+    margin-bottom: 5px;
+    color: red;
+    font-size: 0.8em;
+}
+
+.childAge {
+    width: 32%;
+    height: 45px;
+    float: right;
+}
+
+#container1 {
+    top: 400px !important;
+}
+
+
+.filterGroupTitle {
+    color: #963019 !important;
+}
+
+/*tour list changes*/
+@font-face {
+    font-weight: normal;
+    font-style: normal;
+    font-family: 'shazdemosafer-tour';
+    src: url('../../fonts/shazdemosafer-tour.otf');
+    src: url('../../fonts/shazdemosafer-tour.otf') format('embedded-opentype'), url('../../fonts/shazdemosafer-tour.woff2?v003.200') format('woff2'), url('../../fonts/shazdemosafer-tour.woff?v003.200') format('woff'), url('../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200') format('truetype');
+}
+
+#PAGE {
+    min-width: 1140px;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.greenFontColor {
+    color: var(--koochita-light-green);
+}
+
+.redFontColor {
+    color: #963019;
+}
+
+#tourMainDiv {
+    max-width: 1580px !important
+}
+
+.tourMainDivHeading {
+    max-width: 1460px !important;
+    padding: 0 !important;
+}
+
+#mainDivMiddleOne {
+    width: 61% !important;
+}
+
+#mainDivRightOne {
+    width: 20% !important;
+}
+
+#mainDivLeftOne {
+    width: 20% !important;
+}
+
+#tourListHeading {
+    float: right;
+    direction: rtl;
+    font-size: 22px;
+    margin-top: 5px;
+    width: 60%;
+    padding-right: 140px;
+}
+
+#tourListHeading > span {
+    color: var(--koochita-light-green);
+}
+
+#searchDiv {
+    height: 50px;
+    margin-bottom: 25px;
+    width: 40%;
+}
+
+#tourSearchBox {
+    /*right: 90%;*/
+    z-index: 10;
+    position: relative;
+    right: 0;
+}
+
+#tourSearchBox > button {
+    position: relative;
+    z-index: 10;
+}
+
+#tourSearchInitiatePointBox {
+    left: 95%;
+    top: 0;
+    width: 90%;
+    border-radius: 0 10px 10px 0;
+    border-left: 0;
+}
+
+#tourSearchDestinationPointBox {
+    left: 180%;
+    width: 90%;
+    top: 0;
+    border-radius: 0 10px 10px 0;
+    border-left: 0;
+}
+
+#tourSearchDestinationPointBox > label, #tourSearchDestinationPointBox > label > input,
+#tourSearchInitiatePointBox > label > input, #tourSearchInitiatePointBox > label {
+    cursor: text;
+}
+
+.returnDate {
+    right: -20% !important;
+}
+
+.rightFilterBarHeading {
+    text-align: center;
+    color: #963019;
+}
+
+.rightFilterBarHeading > b {
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.rightFiltersCheckboxesMainDivs, .leftFiltersCheckboxesMainDivs {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 0 !important;
+}
+
+.rightFiltersCheckboxesMainDivs {
+    overflow-y: hidden;
+    height: 65px;
+}
+
+.withoutHeadingFilter {
+    height: auto;
+}
+
+.autoHeight {
+    height: auto;
+}
+
+.rightFilterBarDivsHeading {
+    padding-top: 10px !important;
+    font-size: 14px !important;
+    overflow: inherit !important
+}
+
+.rightFiltersCheckboxesDivs {
+    display: inline-block !important;
+    float: right;
+    margin-right: 0 !important;
+}
+
+.rightFiltersCheckboxesHidden, .lefFiltersCheckboxesHidden {
+    display: none;
+}
+
+.rightFiltersCheckboxesDivs > span {
+    padding: 0 4px;
+}
+
+.destinationCityFiltersBox {
+    background-color: #ededed;
+    border-radius: 10px;
+    display: inline-block;
+    position: relative;
+    padding: 3px;
+}
+
+.destinationCityFiltersMainDiv {
+    margin-bottom: 20px;
+}
+
+.destinationCityFiltersBox:nth-child(odd) {
+    margin-bottom: 20px;
+}
+
+.destinationCityFiltersHeadings {
+    position: absolute;
+    top: -18px;
+    left: 7px;
+    color: #b1b1b1
+}
+
+.destinationCityFiltersBoxNotation {
+    font-size: 9px;
+}
+
+.moreCities {
+    position: absolute;
+    bottom: 0;
+    left: 7px;
+    color: darkblue;
+    font-size: 10px;
+    z-index: 1;
+}
+
+.tourDetailsCriticsBox {
+    border-left: 1px solid #e5e5e5;
+    padding-right: 20px;
+}
+
+.showFilterChoices {
+    background: white;
+    color: darkred;
+    border: 0;
+    position: relative;
+}
+
+.showFilterChoices > span {
+    position: absolute;
+    font-size: 10px;
+    right: 5px;
+    top: -8px;
+}
+
+.moreChoices {
+    text-align: left;
+    color: darkblue;
+    margin: 0 0 10px 10px;
+    display: none;
+}
+
+.moreChoices > button {
+    background-color: white;
+    border: 0;
+}
+
+.mainDivMiddleClassifyBars {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.mainDivMiddleClassifyBars > b {
+    width: 19%;
+    padding: 0 10px;
+    height: 100%;
+    display: inline-block;
+    float: right;
+    font-size: 11px;
+
+}
+
+.mainDivMiddleClassifyBars > span {
+    /*width: 14%;*/
+    display: inline-block;
+    padding: 0 10px;
+    text-align: center;
+    height: 100%;
+    float: right;
+}
+
+#main2ndDivMiddleClassifyBar {
+    padding-top: 5px;
+}
+
+#filterBarAlert {
+    display: inline-block;
+    background: #e45d5d;
+    width: 100%;
+    padding: 10px 4px;
+}
+
+#removeFilterSpan {
+    color: rebeccapurple;
+    float: left;
+}
+
+#filterBarAlertText {
+    font-size: 11px;
+    float: right;
+    text-align: justify;
+}
+
+.tourDetailsMainBox {
+    background-color: #f7f7f7;
+    display: inline-block;
+    width: 99%;
+    margin: 5px 5px 0;
+    border: 1px #e5e5e5 solid;
+    padding: 5px;
+    /*height: 130px;*/
+    position: relative;
+}
+
+.circleBase {
+    border-radius: 50%;
+    /*behavior: url(PIE.htc); !* remove if you don't care about IE8 *!*/
+}
+
+.type2 {
+    width: 45px;
+    height: 45px;
+    background: #ccc;
+    /*border: 3px solid #000;*/
+    position: absolute;
+}
+
+#tourDetailsMainBoxLogoBox {
+    top: -10px;
+    left: -10px;
+}
+
+#littleBoxLogoBox {
+    left: 10px;
+    top: -28px;
+}
+
+.tourDetailsMainBox > div {
+    display: inline-block;
+    float: right;
+}
+
+#tourDetailsMiddleBox {
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+}
+
+#tourDetailsRightBox {
+    padding-right: 0;
+}
+
+/*@media (max-width: 1090px) {*/
+/*    #tourDetailsRightBox {*/
+/*        padding-left: 5px;*/
+/*    }*/
+/*    #tourDetailsRightBoxTexts , #tourDetailsMiddleBox , #tourDetailsLeftBox > div:nth-child(3) , .moreOfferBtnFullBar > button{*/
+/*        font-size: 10px ;*/
+/*        line-height: 1.7;*/
+/*    }*/
+/*}*/
+
+/*@media (max-width: 1090px) {*/
+/*    .moreOfferBtnFullBar > button{*/
+/*        font-size: 9px !important;*/
+/*    }*/
+/*}*/
+
+/*@media  (max-width: 1120px) {*/
+/*    #tourDetailsMiddleBox {*/
+/*        padding-left: 4px;*/
+/*    }*/
+/*}*/
+
+#tourDetailsRightBoxTexts {
+    display: inline-block;
+    float: left;
+}
+
+#tourDetailsRightBoxImg {
+    display: inline-block;
+    float: right;
+    border: 1px solid black;
+    width: 60%;
+    height: 100px;
+}
+
+.priceDiv {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.tourDetailsPriceBox > div > hr {
+    margin: 0;
+    border-top: 1px solid red;
+    width: 40px;
+    position: absolute;
+    top: 8px;
+    right: 75px;
+}
+
+.afterDiscountPrice {
+    color: red;
+    position: absolute;
+    right: 75px;
+    top: 15px;
+}
+
+.discountAlerts {
+    display: inline-block;
+    width: 50%;
+}
+
+.moreOffersBtn {
+    display: inline-block;
+    float: left;
+    width: 50%;
+}
+
+.moreOffersBtn > button {
+    float: left;
+    font-size: 12px;
+    color: black;
+    padding: 5px 2px;
+}
+
+.discountAlerts > span {
+    float: right;
+    font-size: 8px;
+    color: red;
+}
+
+.tourDetailsMainBox > div > center > div {
+    display: inline-block;
+    background: white;
+    padding: 2px;
+    font-size: 10px;
+    margin: 5px 2px;
+}
+
+@media (max-width: 1250px) {
+    .tourDetailsMoreInfoLeftBox > div {
+        padding-left: 0;
+    }
+}
+
+.tourDetailsMainBoxMoreInfo {
+    padding: 0 10px;
+    position: relative;
+    display: inline-block;
+    margin-top: -6px;
+}
+
+.tourDetailsMainBoxMoreInfo > div {
+    background-color: #ededed;
+    height: 115px;
+}
+
+@media (max-width: 1354px) {
+    .tourDetailsMoreInfoRightBox {
+        width: 10% !important;
+    }
+
+    .tourDetailsMoreInfoLeftBox {
+        width: 90% !important;
+    }
+}
+
+.tourDetailsMoreInfoRightBox {
+    float: right;
+    border-left: 2px solid white;
+    width: 8%;
+}
+
+.tourDetailsMoreInfoRightBox > div {
+    text-align: center;
+    padding: 2px 5px;
+}
+
+.tourDetailsMoreInfoRightBox > hr {
+    margin: 0 10px;
+    border-top: 1px solid;
+}
+
+.tourDetailsMoreInfoLeftBox {
+    float: left;
+    border-right: 1px solid white;
+    width: 92%;
+    padding: 10px 0;
+}
+
+.tourDetailsMoreInfoLeftBox > div {
+    float: right;
+    margin-bottom: 5px;
+}
+
+.tourDetailsMoreInfoLeftBox > div > div {
+    padding: 3px 0;
+
+}
+
+#mainDivMainBlock {
+    position: relative;
+}
+
+.toggleTourDetailsMoreInfo, .toggleTourDetailsLessInfo {
+    position: absolute;
+    bottom: -13px;
+    left: 10px;
+    background-color: #ededed;
+    border: 1px solid #e5e5e5;
+    border-radius: 0 0 5px 5px;
+    width: 50px;
+}
+
+#toggleTourDetailsLittleBoxMoreInfo {
+    bottom: 150px;
+    left: -35px;
+    transform: rotate(90deg);
+}
+
+.fastReserveTour {
+    background-color: var(--koochita-light-green);
+    position: absolute;
+    transform: rotate(90deg);
+    width: 44px;
+    padding: 3px;
+    color: white;
+    box-shadow: rgb(136, 136, 136) 0 4px 5px;
+}
+
+#fastReserveTour1 {
+    left: -15px;
+    top: 70px;
+}
+
+#fastReserveTour2 {
+    left: -33px;
+    bottom: 65px;
+}
+
+.discountBoxTour {
+    background-color: red;
+    position: absolute;
+    transform: rotate(90deg);
+    width: 33px;
+    padding: 0 8px;
+    color: white;
+
+}
+
+#discountBoxTour1 {
+    right: 5px;
+}
+
+#discountBoxTour2 {
+    top: 0;
+}
+
+.mustSeeTour {
+    background-color: var(--koochita-light-green);
+    position: absolute;
+    width: 45px;
+    padding: 3px;
+    color: white;
+    z-index: 1;
+}
+
+#mustSeeTour1 {
+    right: 85px;
+    bottom: -2px;
+}
+
+#mustSeeTour2 {
+    right: -22px;
+    top: 62px;
+}
+
+.groupDiscountTour {
+    background-color: darkred;
+    position: absolute;
+    width: 76px;
+    padding: 3px;
+    color: white;
+    z-index: 1;
+}
+
+#groupDiscountTour1 {
+    right: 5px;
+    bottom: -2px;
+}
+
+#groupDiscountTour2 {
+    top: 35px;
+    right: -22px;
+}
+
+.mainDivLittleBlock {
+    background-color: #f7f7f7;
+    /*display: inline-block;*/
+    width: 30%;
+    margin: 30px 0;
+    border: 1px #e5e5e5 solid;
+    padding: 5px 2%;
+    position: relative;
+    display: none;
+    float: right;
+}
+
+.tourDetailsLittleBox {
+    /*display: inline-block;*/
+    position: relative;
+}
+
+.tourDetailsLittleBox > b {
+    display: inline-block;
+    width: 100%;
+    margin: 5px 0;
+}
+
+#tourDetailsLittleBoxImg {
+    display: inline-block;
+    float: right;
+    border: 1px solid black;
+    width: 92%;
+    height: 100px;
+    margin: 5px 4%;
+}
+
+.tourDetailsLittleBox > div > div {
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+}
+
+.tourDetailsLittleBox2ndDiv {
+    width: 92%;
+    margin: 10px 4%;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.tourKindDivs {
+    margin: 0 3px;
+    width: 63px;
+    padding: 0 !important;
+}
+
+.tourKindIcons {
+    margin-bottom: 0;
+    background: #e5e5e5;
+    width: 100% !important;
+    font-size: 35px;
+    height: 45px !important;
+    position: relative;
+    color: white;
+}
+
+.tourKindIcons::before {
+    position: absolute;
+    top: -1px;
+    left: 15px;
+}
+
+.tourKindNames {
+    margin-bottom: 0;
+    color: black;
+    background: inherit;
+    position: absolute;
+    top: 14px;
+    font-weight: 500;
+}
+
+#cityKindTour::before {
+    content: '\E0E0';
+    font-family: shazdemosafer-tour;
+    left: 13px;
+}
+
+#hikingKindTour::before {
+    content: '\E0E1';
+    font-family: shazdemosafer-tour;
+}
+
+#villageKindTour::before {
+    content: '\E0E2';
+    font-family: shazdemosafer-tour;
+}
+
+#adventureKindTour::before {
+    content: '\E0E3';
+    font-family: shazdemosafer-tour;
+}
+
+#healthKindTour::before {
+    content: '\E0E4';
+    font-family: shazdemosafer-tour;
+}
+
+#recreationalKindTour::before {
+    content: '\E0E5';
+    font-family: shazdemosafer-tour;
+}
+
+#artisticKindTour::before {
+    content: '\E0E6';
+    font-family: shazdemosafer-tour;
+}
+
+#sportsKindTour::before {
+    content: '\E0E7';
+    font-family: shazdemosafer-tour;
+}
+
+#scientificKindTour::before {
+    content: '\E0E8';
+    font-family: shazdemosafer-tour;
+}
+
+#culturalKindTour::before {
+    content: '\E0E9';
+    font-family: shazdemosafer-tour;
+}
+
+#ProfessionalKindTour::before {
+    content: '\E0EA';
+    font-family: shazdemosafer-tour;
+}
+
+#cityKindTourName {
+    left: 11px;
+}
+
+#hikingKindTourName {
+    left: 2px;
+}
+
+#villageKindTourName {
+    left: 7px;
+}
+
+#adventureKindTourName {
+    left: 7px;
+}
+
+#healthKindTourName {
+    left: 15px;
+}
+
+#recreationalKindTourName {
+    left: 15px;
+}
+
+#artisticKindTourName {
+    left: 20px;
+}
+
+#sportsKindTourName {
+    left: 17px;
+}
+
+#scientificKindTourName {
+    left: 20px;
+}
+
+#culturalKindTourName {
+    left: 15px;
+}
+
+#ProfessionalKindTourName {
+    left: 10px;
+}
+
+.rightFiltersCheckboxesDivs > label {
+    width: 100% !important;
+    margin-bottom: 3px;
+}
+
+.tourLevelGradeDiv {
+    margin: 0 10px;
+    width: 40px;
+}
+
+.tourLevelIcons {
+    background: #e5e5e5;
+    width: 100% !important;
+    font-size: 40px;
+    height: 40px !important;
+    position: relative;
+    color: black;
+    margin-bottom: 0;
+}
+
+.tourLevelIcons::before {
+    position: absolute;
+}
+
+#easyLevelTour::before {
+    content: '\E0EC';
+    font-family: shazdemosafer-tour;
+    top: -10px;
+    left: 1px;
+}
+
+#lightLevelTour::before {
+    content: '\E0ED';
+    font-family: shazdemosafer-tour;
+    top: -9px;
+    left: -1px;
+}
+
+#activeLevelTour::before {
+    content: '\E0F4';
+    font-family: shazdemosafer-tour;
+    top: -9px;
+    left: 39px;
+}
+
+#hardLevelTour::before {
+    content: '\E0F5';
+    font-family: shazdemosafer-tour;
+    top: -8px;
+    left: -1px;
+}
+
+#professionalLevelTour::before {
+    content: '\E0EB';
+    font-family: shazdemosafer-tour;
+    top: -9px;
+    left: 0;
+}
+
+#blindLevelTour::before {
+    content: '\E0F6';
+    font-family: shazdemosafer-tour;
+    top: -8px;
+    left: -4px;
+}
+
+#disabledLevelTour::before {
+    content: '\E0F8';
+    font-family: shazdemosafer-tour;
+    top: -8px;
+    left: -1px;
+}
+
+#studentLevelTour::before {
+    content: '\E0EC';
+    font-family: shazdemosafer-tour;
+    top: -9px;
+    left: 1px;
+}
+
+/*tour list changes end */

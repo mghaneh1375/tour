@@ -1,0 +1,663 @@
+.photoUploader {
+    /*width: 860px;*/
+    height: 100%;
+    padding-top: 12px;
+    box-sizing: border-box;
+}
+.photoUploader .headerBar {
+    position: relative;
+    margin-top: -12px;
+    display: block;
+    height: 48px; /* Matches top of .uploaderDlg */
+    width: 100%;
+    line-height: 48px;
+    background: var(--koochita-light-green);
+}
+.photoUploader .headerBar h3 {
+    float: right;
+    position: relative;
+    color: #000;
+    font-size: 14px;
+    line-height: 48px;
+    padding-right:14px;
+    max-width: 65%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0px;
+}
+.photoUploader .guidelines {
+    position: relative;
+    margin-right: 12px;
+    padding-right: 12px;
+}
+
+.photoUploader .headerBar .headerLink {
+    position: relative;
+    float: right;
+    padding-right: 12px;
+    margin-right: 12px;
+    font-weight: bold;
+    color: #069;
+    font-size: 11px;
+    cursor: pointer;
+}
+.photoUploader .headerBar .headerLink:before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 0;
+    height: 24px;
+    width: 1px;
+    background: #ccc;
+}
+
+.ui_modal.photoUploadOverlay .body_text,
+.ui_modal.photoUploadOverlay .body_text .photoUploadInner {
+    height: 100%;
+    direction: rtl;
+}
+
+/*.uploaderDlg {*/
+/*  position: absolute;*/
+/*  overflow: hidden;*/
+/*  width: 100%;*/
+/*  top: 48px; !* Matches height of .headerBar *!*/
+/*  bottom: 0;*/
+/*  box-sizing: border-box;*/
+/*}*/
+
+
+.photoUploader .footer {
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*width: 100%;*/
+    /*padding: 7px;*/
+    /*box-sizing: border-box;*/
+    /*overflow: hidden;*/
+    /*border: 0;*/
+    margin: 15px 0;
+    padding: 15px 15px 0;
+    border-top: 1px solid #cccccc;
+}
+.uploaderDlg a {
+    color: #069;
+}
+.uploaderDlg .footer .addMore {
+    display: table-cell;
+    float: left;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-top: 18px;
+}
+.uploaderDlg .footer .upload {
+    /*display: table-cell;*/
+    float: left;
+    /*vertical-align: middle;*/
+    /*margin: 18px 18px 0 6px;*/
+}
+.uploaderDlg .footer .uploadForm {
+    display: table-cell;
+    vertical-align: middle;
+    margin-top: 18px;
+}
+.uploaderDlg .footer .uploadForm.error {
+    line-height: 18px;
+}
+.uploaderDlg .footer .uploadForm .termsLabel {
+    float: right;
+}
+.uploaderDlg .footer .uploadForm .iAgree {
+    vertical-align: middle;
+}
+.uploaderDlg .footer .uploadForm .errorText {
+    font-weight: bold;
+    display: none;
+}
+.uploaderDlg .footer .uploadForm.error .errorText {
+    display: block;
+    color: #e43a42;
+}
+.uploaderDlg .footer .uploadForm.error label {
+    color: #e43a42;
+}
+.uploaderDlg .footer .photoReleaseBox {
+    vertical-align: middle;
+}
+
+.uploaderDlg .preview {
+    position: relative;
+    float: left;
+    width: 330px;
+    height: 286px;
+    overflow: hidden;
+}
+.uploaderDlg .preview .editBtn {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 23px;
+    height: 22px;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+    border-color: #e6e6e6 #ccc #ccc #e6e6e6;
+    box-shadow: 1px 1px 0 0 rgba(0,0,0,.07);
+}
+.uploaderDlg .preview .editBtn:hover {
+    text-decoration: none;
+    background-color: #e6e6e6;
+    border-color: #e6e6e6;
+}
+.uploaderDlg .preview .editBtn:active {
+    background-color: #dfdfdf;
+    border-color: #dfdfdf;
+    box-shadow: none;
+}
+.uploaderDlg .preview .imgContainer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    background: #F4F3F0;
+}
+.uploaderDlg .preview .imgContainer:before {
+    /* Vertical center trick */
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.uploaderDlg .preview .imgContainer img {
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+}
+.uploaderDlg .photoForm {
+    margin: 18px 0 0 372px;
+}
+.uploaderDlg .photoForm.hasRoomType {
+    margin-top: 6px;
+}
+.uploaderDlg .uploadList {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 72px; /* Height of footer */
+    width: 100%;
+    overflow: auto;
+}
+.uploaderDlg .uploadList .itemRow {
+    position: relative;
+    clear: both;
+    margin: 6px 18px;
+    padding: 6px;
+    background: #FFF;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ECEAE2 #ECEAE2 #DDDBD0 #ECEAE2;
+}
+.uploaderDlg .uploadList .itemRow:after {
+    /* Clearfix: Ensure that the columns are balanced */
+    content: '';
+    clear: both;
+    display: table;
+}
+.uploaderDlg .uploadList .itemRow:hover {
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.2);
+}
+.uploaderDlg .template {
+    display: none;
+}
+.uploaderDlg .itemRow .progress,
+.uploaderDlg .itemRow .action {
+    display: none;
+}
+.uploaderDlg .itemRow.loading .progress {
+    display: block;
+}
+.uploaderDlg .itemRow.loaded:hover .action {
+    display: block;
+}
+.uploaderDlg .uploadList .itemRow.addMore {
+    border: 1px dashed #DDDBD0;
+    padding: 18px;
+    text-align: center;
+}
+.uploaderDlg .uploadList .itemRow.addMore:hover {
+    box-shadow: none;
+}
+.uploaderDlg .uploadList .itemRow.addMore .dragDropMsg {
+    font-weight: bold;
+    display: inline-block;
+    padding-left: 12px;
+}
+
+.uploaderDlg .formFieldTitle {
+    font-weight: bold;
+}
+.uploaderDlg .formFieldTitle span {
+    font-weight: normal;
+}
+.uploaderDlg .error .category .formFieldTitle {
+    color: #e43a42;
+}
+.uploaderDlg .category {
+    height: 100%;
+    margin-bottom: 20px;
+}
+.uploaderDlg .category .column {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    margin-top: 6px;
+}
+.uploaderDlg .category .column.first {
+    border-right: 1px solid #E9E8E3;
+    padding-right: 12px;
+}
+.uploaderDlg .category .column.second {
+    padding-left: 12px;
+}
+.uploaderDlg .category .columnTitle {
+    font-style: italic;
+}
+.uploaderDlg .category .radioOption {
+    width: 45%;
+    padding: 6px 5% 0 0;
+    float: left;
+}
+.uploaderDlg .category .column .radioOption {
+    float: none;
+    width: auto;
+    padding-right: 0;
+}
+.uploaderDlg .category .radioOption input {
+    float: left;
+}
+.uploaderDlg .category .radioOption label {
+    display: block;
+    margin-left: 16px;
+    font-weight: normal;
+}
+
+.uploaderDlg .description {
+    width: 86%;
+    overflow: hidden; /* Prevents it from being on the same line as a category */
+    padding-top: 12px;
+}
+.uploaderDlg .description input {
+    width: 100%;
+    padding: 0 6px;
+    height: 36px;
+    font-size: 1.0em;
+    resize: none;
+    box-sizing: border-box;
+    display: block;
+    font-family: inherit;
+    box-shadow: inset 0 1px 2px 0 rgba(50, 50, 50, 0.3);
+    border: 1px solid #dbdad5;
+}
+.uploaderDlg .description input:focus {
+    border: 2px solid #00AF87;
+    padding-left: 5px;
+    outline: none;
+    box-shadow: none;
+}
+.uploaderDlg .description .maxChars {
+    text-align: right;
+    float: right;
+    font-size: 10px;
+}
+
+.uploaderDlg .ui_select .closed_text {
+    margin-top: 6px;
+    min-width: 145px;
+    max-width: 95%;
+}
+
+.uploaderDlg.noFiles {
+    padding: 18px;
+}
+
+.uploaderDlg .sometimesVisible {
+    display: none;
+}
+.uploaderDlg.hasFiles .uploadList,
+.uploaderDlg.noFiles .startScreen,
+.uploaderDlg.dragging .dragScreen,
+.uploaderDlg.invalidDrag .invalidDragScreen,
+.uploaderDlg.uploading .progressScreen,
+.uploaderDlg.uploadComplete .doneScreen {
+    display: block;
+}
+
+.uploaderDlg.hasFiles .footer {
+    display: table;
+}
+
+.uploaderDlg .infoScreen {
+    position: relative;
+    text-align: center;
+    background: #fff;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 0;
+}
+/* Combined with font-size:0 on .startScreen, this trick vertically centers text */
+.uploaderDlg .infoScreen:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.uploaderDlg .infoScreen .inner {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    width: 100%;
+}
+.uploaderDlg .dropOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.uploaderDlg .startScreen {
+    margin-top: 10px;
+}
+
+.uploaderDlg .startScreen .separator {
+    position: relative;
+    margin: 30px 0;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+.uploaderDlg .startScreen .separator .text {
+    display: inline-block;
+    background: #fff;
+    position: relative;
+    padding: 0 12px;
+}
+
+.uploaderDlg .startScreen .separator:before {
+    content: '';
+    position: absolute;
+    margin-top: 8px;
+    left: 20%;
+    width: 60%;
+    height: 1px;
+    background: #ccc;
+}
+
+.uploaderDlg .startScreen .dragDropText {
+    font-size: 14px;
+    font-weight: bold;
+    height: 175px;
+    border: 2px dashed #9996;
+    margin: 20px 8% 10px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploaderDlg .dragScreen {
+    border: 4px solid #00AF87;
+}
+
+.uploaderDlg .invalidDragScreen {
+    border: 4px solid #F00;
+}
+
+.uploaderDlg .dropText {
+    font-weight: bold;
+    font-size: 14px;
+    color: #00AF87;
+}
+
+.uploaderDlg .dropImg {
+    display: inline-block;
+    margin-top: 18px;
+}
+
+.uploaderDlg .errorMsg {
+    background: #fce6e8;
+    border: 1px solid #e43a42;
+    color: #e43a42;
+    font-weight: bold;
+    padding: 12px;
+    margin: 6px 18px;
+}
+
+.uploaderDlg .ui_button {
+    font-family: Arial, Tahoma, "Bitstream Vera Sans", sans-serif;
+}
+
+.progressScreen .progressBar {
+    width: 50%;
+    height: 8px;
+    padding: 2px;
+    background: #E9E8E3;
+    display: inline-block;
+}
+.progressScreen .progressBar .progress {
+    width: 53px;
+    background: #00AF87;
+    height: 100%;
+}
+.progressScreen .progressTitle {
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.progressScreen .progressText {
+    font-weight: bold;
+}
+
+.doneScreen .pendingText {
+    color: #999;
+    margin-bottom: 12px;
+    margin-right: -1em;
+    font-size: 15px;
+}
+.doneScreen .thankyouText {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.doneScreen .thankyouInfo {
+    color: #000;
+    margin-top: 12px;
+}
+.doneScreen .thankyouCloseBtn {
+    margin-top: 78px;
+    min-width: 160px;
+}
+
+.icon.clock {
+    position: relative;
+    display: inline-block;
+    border-radius: 100%;
+    height: 33px;
+    width: 33px;
+    box-shadow: 0 1px 4px 0 #ccc;
+    background: #fff;
+}
+.icon.clock:before,
+.icon.clock:after {
+    content: '';
+    position: absolute;
+    background: #ccc;
+}
+.icon.clock:before {
+    top: 50%;
+    left: 25%;
+    width: 25.5%;
+    height: 6.5%;
+}
+.icon.clock:after {
+    top: 15%;
+    left: 50%;
+    width: 6.5%;
+    height: 41.5%;
+}
+
+
+.guidelinesOverlayParent .guidelinesOverlay a {
+    color: #069;
+}
+.guidelinesOverlayParent .guidelinesOverlay ul {
+    list-style: initial;
+}
+.guidelinesOverlayParent .guidelinesOverlay li {
+    margin: 6px 0 0 16px;
+}
+.guidelinesOverlayParent .guidelinesOverlay .listFtr {
+    margin-top: 6px;
+}
+.guidelinesOverlayParent .guidelinesOverlay .listHdr {
+    font-weight: bold;
+}
+
+
+.photoErrorOverlay {
+    padding: 24px;
+}
+.photoErrorOverlay .ui_close_x {
+    display: none;
+}
+.photoErrorOverlay .errorText {
+    font-weight: bold;
+    max-width: 400px;
+}
+.photoErrorOverlay .buttonContainer {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.uploaderThanks.ui_modal {
+    background-color: #00AF87;
+    padding: 36px;
+}
+.uploaderThanks .thanksOverlayInner {
+    color: #fff;
+    line-height: initial;
+}
+.uploaderThanks .thanksOverlayInner .thankyouName {
+    font-weight: bold;
+    font-size: 1.75em;
+    padding: 0 0 2px;
+}
+.uploaderThanks .thanksOverlayInner .thankyouText {
+    font-weight: bold;
+    font-size: 1.75em;
+    padding: 0;
+}
+.uploaderThanks .thanksOverlayInner .thankyouInfo {
+    margin: 10px 0 25px;
+    opacity: 0.7;
+    font-size: 1.1670em;
+}
+.uploaderThanks .thanksOverlayInner .thankyouCloseBtn {
+    background-color: #fff;
+    color: #00AF87;
+    padding: 9px 50px 8px;
+    border-color: #fff #f4f3f0 #f4f3f0 #fff;
+}
+.uploaderThanks .thanksOverlayInner .thankyouCloseBtn:hover {
+    background-color: #f4f3f0;
+}
+.uploaderThanks .ui_close_x:before {
+    color: #fff;
+}
+
+.photoUploadOverlay.tabletUploader .photoUploader {
+    width: 100%;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg.noFiles {
+    padding: 18px 18px 30px;
+}
+.photoUploadOverlay.tabletUploader .tipsLink {
+    font-size: 1.1670em;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .inner {
+    width: inherit;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay {
+    margin-top: 48px;
+    text-align: left;
+    font-size: 1.1670em;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay .listHdr {
+    margin: 0 0 6px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay li {
+    margin: 2px 0 0 16px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .preview {
+    width: 372px;
+    height: 372px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .preview .editBtn {
+    width: 38px;
+    height: 38px;
+    background: url('/img2/photolb/icon_editPhoto_2x.png') no-repeat center center #f0f0f0;
+    background-size: 38px 38px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .itemRow .action {
+    display: block;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .photoForm {
+    margin: 18px 0 0 414px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .category .radioOption {
+    margin-top: 14px;
+}
+.photoUploadOverlay.tabletUploader .photoUploader .footer {
+    margin-bottom: 12px;
+    height: 100px;
+}
+.photoUploadOverlay.tabletUploader .photoUploader .footer .addMore {
+    margin-top: 29px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .inner {
+    width: 100%;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressTitle {
+    margin-bottom: 48px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressBar {
+    height: 30px;
+    margin-left: 48px;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressText {
+    display: none;
+}
+.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .inner .ui_close_x {
+    position: relative;
+    display: inline-block;
+    top: -5px;
+}
+.photoUploadOverlay.tabletUploader .uploadList:after {
+    padding: 30px;
+    content: "";
+}
+.guidelinesOverlayParent.tabletUploader {
+    top: 45px !important;
+}
+
+@media (max-width: 767px) {
+    .uploaderDlg .infoScreen{
+        height: 70vh;
+    }
+}

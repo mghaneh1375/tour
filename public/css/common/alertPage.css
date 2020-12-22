@@ -1,0 +1,136 @@
+.notifAlert {
+    width: fit-content;
+    text-align: center;
+    position: fixed;
+    bottom: -30%;
+    right: auto;
+    left: auto;
+    direction: rtl;
+    z-index: 10000;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0px 0px 12px 3px grey;
+    background-color: #0076ac;
+
+    padding: 10px;
+    font-size: 1.2em;
+    color: white;
+    transition: .5s;
+}
+
+.greenAlert{
+    background-color: var(--koochita-light-green);
+}
+
+.redAlert{
+    background-color: #8b0000;
+}
+
+.topAlert{
+    bottom: 0px;
+}
+
+.rightAlert{
+    right: 1%;
+    left: auto;
+}
+
+.leftAlert {
+    right: auto;
+    left: 1%;
+}
+
+
+@media (max-width:766px) {
+    .notifAlert {
+        position: fixed;
+        bottom: -30%;
+        z-index: 9999;
+        border-radius: 10px;
+    }
+
+    .topAlert{
+        bottom: 74px;
+    }
+}
+
+@media (max-width:400px) {
+
+    .topAlert{
+        bottom: 67px;
+    }
+}
+
+.alertDarkBack {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .8);
+    backdrop-filter: blur(2px);
+    position: fixed;
+    top: 0;
+    z-index: 999999;
+    justify-content: center;
+    display: none;
+}
+.alertBox {
+    background-color: white;
+    z-index: 10000;
+    position: fixed;
+    top: 10%;
+    direction: rtl;
+    border-radius: 10px;
+}
+.alertTitle {
+    padding: 10px;
+    font-size: 1.2em;
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+.offerTitle {
+    background-color: var(--koochita-yellow);
+}
+.warningTitle {
+    background-color: #761c19;
+}
+.alertDescriptionBox {
+    padding: 10px 20px;
+    text-align: center;
+}
+.alertDescription {
+    font-size: 18px;
+    padding: 5px 0 25px;
+    font-weight: bold;
+}
+.alertBtn {
+    width: fit-content;
+    line-height: 20px;
+    padding: 6px 12px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: white;
+}
+.alertBtn:hover {
+    opacity: 0.75;
+}
+.rightBtn {
+    background-color: #761c19;
+    margin-left: 15px;
+}
+.leftBtn {
+    float: left;
+    background-color: var(--koochita-green);
+    margin-right: 15px;
+}
+
+@media (max-width:766px) {
+    .alertBox {
+        width: 90%;
+        top: 15%;
+    }
+
+    .alertBtn {
+        width: 100px;
+    }
+}

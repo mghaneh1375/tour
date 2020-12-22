@@ -1,0 +1,74 @@
+.mainDiv {
+    width: 90%;
+    margin: 5% auto;
+    direction: rtl;
+}
+.inputBox {
+    padding: 2px 7px;
+    font-size: 0.8em;
+    display: inline-block;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    line-height: 30px;
+    margin: 10px 0;
+}
+.inputBoxText {
+    width: 35%;
+    border-left: 1px solid #d8d8d8;
+    display: inline-block;
+}
+.inputBoxInput {
+    width: 65%;
+    text-align: center;
+    border: none;
+    float: left;
+    background-color: transparent;
+}
+.inputBoxSelect {
+    width: 20%;
+    border: none;
+    background-color: transparent;
+}
+/*input[type="checkbox"] {*/
+/*background-color: var(--koochita-light-green);*/
+/*}*/
+
+.afterBuyBtn {
+    color: white;
+    line-height: 15px;
+    display: inline-block;
+    border-radius: 7px;
+    text-align: center;
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+.afterBuyIcon {
+    font-family: shazde_regular2 !important;
+    display: inline-block;
+}
+
+.redStar:before {
+    content: '\E00B';
+    font-size: 0.5em;
+    color: #92321b;
+    position: absolute;
+    top: -5px;
+    left: -10px;
+}
+.bottomArrowIcon:before {
+    content: '\E04A';
+    color: black;
+}
+
+.check-box__item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.inlineBorder {
+    border-bottom: 1.8px solid #aeaeae;
+    margin: 10px 0;
+}

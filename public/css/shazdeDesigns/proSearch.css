@@ -1,0 +1,504 @@
+#elevator {
+    position: absolute;
+    border-radius: 6px;
+    width: 100px;
+    height: 30px;
+    background-color: var(--koochita-light-green);
+    color: white;
+    display: none;
+}
+
+#elevator > center {
+    margin-top: 5px;
+}
+
+.cityFiltersProSearch {
+    position: absolute;
+    float: right;
+    color: white;
+    top: 40px;
+    background-color: var(--koochita-light-green);
+    border-radius: 6px;
+    width: 100px;
+    height: 30px
+}
+
+.cityFiltersProSearch > center > span {
+    line-height: 28px;
+    margin-right: 8px;
+    float: right;
+    cursor: pointer
+}
+
+.cityFiltersProSearch > center > span > span {
+    line-height: 28px;
+    margin-left: 10px
+}
+
+.selectedFiltersProSearch {
+    position: absolute;
+    float: right;
+    color: #6d6d6d;
+    border-radius: 6px;
+    background-color: #f4f4f4;
+    width: 1px;
+    height: 1px
+}
+
+#greenBtnProSearch {
+    margin-left: 10px;
+    background-color: var(--koochita-light-green);
+    color: white;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    display: none;
+}
+
+.mg-tp-35 {
+    margin-top: 35px
+}
+
+.color-black {
+    color: black;
+}
+
+.float-right {
+    float: right;
+}
+
+.mg-rt-7 {
+    margin-right: 7px;
+}
+
+#searchspan {
+    direction: rtl;
+    overflow: hidden;
+    background-color: #f4f4f4;
+    height: 0;
+    position: fixed;
+    left: 0;
+    right: auto;
+    top: 0;
+    bottom: auto
+}
+
+.mg-tp-50 {
+    margin-top: 50px;
+}
+
+.boxOfWhereIsHere {
+    display: flex;
+    color: #0c0593;
+    font-size: 1.4em;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 15px;
+}
+
+#nameOfWhereIsHere {
+    font-weight: 500;
+    margin: 5px;
+}
+
+#addToFilterCityBtn {
+    cursor: pointer;
+    text-align: center;
+    margin-top: 5px;
+    width: max-content;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: var(--koochita-light-green);
+    color: white
+}
+
+.destinationMainDiv {
+    margin-top: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid;
+    position: relative;
+    padding: 0;
+}
+
+.boxOfCityNameProSearch {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: var(--koochita-blue);
+}
+
+.whereMainDiv {
+    display: flex;
+}
+
+#textOfWhere {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 10px;
+    width: 50px;
+}
+
+#textOfWhere2 {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 10px;
+    width: 50px;
+}
+
+.enterCityNameProSearch {
+    width: 200px !important;
+    position: relative;
+}
+
+.ui_input_checkbox > div {
+    margin-top: 2px;
+}
+
+#GEO_SCOPED_SEARCH_INPUT {
+    color: #6d6d6d;
+    border-color: #6d6d6d !important;
+}
+
+#currentCity {
+    margin: 0;
+    color: var(--koochita-blue);
+    display: flex;
+}
+
+#resultCity {
+    width: 200px;
+    max-height: 135px;
+    color: #6d6d6d;
+    margin: 0 60px 5px 0;
+    background: white;
+    /*padding: 10px;*/
+    overflow: auto;
+}
+
+#resultCity > p:last-child {
+    margin: 0;
+}
+
+#dividerUpBoxProSearch {
+    background-color: #FFFFFF;
+    height: 5px;
+    box-shadow: 0 5px 6px #888888;
+}
+
+#dividerCenterBoxProSearch {
+    border-bottom: 1px solid black;
+    width: 85%;
+    position: absolute;
+    bottom: 16px;
+    left: 33px;
+}
+
+#mainDivProSearch > center:nth-child(3) {
+    margin-top: 40px;
+    padding: 0
+}
+
+#mainDivProSearch > center:nth-child(3) > div:nth-child(2) {
+    position: relative !important;
+}
+
+#mainDivProSearch > center:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) {
+    color: #6d6d6d;
+    height: inherit;
+}
+
+#mainDivProSearch > center:nth-child(3) > div:nth-child(2) > div:nth-child(1) {
+    border-bottom: 2px solid #6d6d6d;
+    padding: 0px !important;
+}
+
+#mainDivProSearch > center:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div {
+    float: right;
+    width: 50px;
+    cursor: pointer;
+    position: relative
+}
+
+#mainDivProSearch > center:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div > center {
+    top: 104%;
+    left: 15%;
+    width: 70%;
+    position: absolute
+}
+
+#GEO_SCOPED_SEARCH_INPUT2 {
+    color: #6d6d6d;
+    border: none;
+    border-color: #6d6d6d !important;
+}
+
+#filterDiv {
+    height: 100px;
+    position: relative !important;
+}
+
+#resultPlace {
+    max-height: 200px;
+    color: var(--koochita-light-green);
+    overflow: auto;
+    margin-top: 25%;
+}
+
+#filterDivCM {
+    margin-top: 20px
+}
+
+/*#mainDivProSearch > div:nth-child(4) {*/
+/*height: 200px;*/
+/*margin-top: 4%;*/
+/*}*/
+
+.boxOfMainDivCompareProSearch {
+    display: flex;
+    justify-content: space-between;
+    margin: 70px 0 10px;
+}
+
+#mainDivCompareProSearch {
+    width: 22%;
+    height: 180px;
+    position: relative;
+    background-color: #ffe3b1;
+}
+
+#mainDivCompareProSearch > div > span {
+    cursor: pointer;
+    position: absolute;
+    top: -12px;
+    background-color: #dddddd
+}
+
+#mainDivCompareProSearch > div > div:nth-child(2) {
+    height: 30px;
+}
+
+#mainDivCompareProSearch > div > div:nth-child(3) {
+    height: 150px;
+}
+
+#mainDivCompareProSearch > div > div:nth-child(4) {
+    position: absolute;
+    left: 5px;
+    bottom: 4px;
+}
+
+#mainDivCompareProSearchBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#compare {
+    border: none;
+    background-color: var(--koochita-light-green);
+    margin-bottom: 10px;
+}
+
+#myCloseBtn {
+    height: 50px;
+    background: url('../../images/menu-icon.png') no-repeat no-repeat;
+    background-size: 100% 100%;
+    border: none;
+    width: 50px;
+    position: fixed;
+    top: 93%;
+    color: white;
+    cursor: pointer;
+    left: 48%;
+}
+
+/*1st box of Styles*/
+
+.rotate-text {
+    -webkit-animation: rotation 1s 1 linear;
+}
+
+.center {
+    margin: auto;
+    width: 83%;
+    padding: 10px;
+}
+
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+    }
+}
+
+.boxOfLamps {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+}
+
+.boxOfLamps > div {
+    width: 14%;
+    position: relative;
+}
+
+.boxOfLamps img {
+    position: absolute;
+    bottom: 17px;
+}
+
+.boxOfLamps > div > div {
+    position: absolute;
+    top: -17px;
+    text-align: center;
+}
+
+.ui_input_checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.searchElement {
+    cursor: pointer;
+    border-bottom: 2px solid gray;
+    padding-bottom: 5px;
+}
+
+#searchspan .ui_close_x:before {
+    font-size: 60px;
+    line-height: 70px;
+    color: var(--koochita-light-green);
+}
+
+#close_span_search {
+    width: 70px !important;
+    height: 70px !important;
+    color: var(--koochita-light-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+DIV.ppr_rup.ppr_priv_masthead_search .body_text {
+    margin: 0 10%;
+    overflow: auto;
+    height: inherit;
+}
+
+.compareDivsMainDiv {
+    height: 305px;
+    overflow: auto;
+}
+
+.proSearchFindCityList{
+    cursor: pointer;
+}
+.proSearchFindCityList:hover{
+    background-color: lightgrey;
+}
+
+@media (max-width: 767px) {
+
+    DIV.ppr_rup.ppr_priv_masthead_search .body_text {
+        margin: 0 5%;
+    }
+
+    .boxOfLamps {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 630px) {
+    #GEO_SCOPED_SEARCH_INPUT2 {
+        border-bottom: solid 1px;
+    }
+    #close_span_search {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    #searchspan .ui_close_x:before {
+        font-size: 40px;
+        line-height: 1.2;
+    }
+
+    .boxOfWhereIsHere {
+        padding: 0;
+    }
+
+    .whereMainDiv {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .whereMainDiv > div:first-child {
+        width: 260px;
+        padding: 0;
+    }
+
+    #textOfWhere {
+        width: 50px;
+    }
+
+    #addToFilterCityBtn {
+        margin: 10px 0;
+    }
+
+    .destinationMainDiv {
+        flex-direction: column;
+        margin-top: 40px;
+        border-bottom: none;
+    }
+
+    .destinationMainDiv .col-xs-5 {
+        width: 240px;
+    }
+
+    .boxOfLamps {
+        padding: 0;
+        width: 100%;
+        justify-content: center;
+        position: inherit;
+        top: 90px;
+        border-bottom: 3px solid;
+    }
+
+    .boxOfLamps img {
+        bottom: -2px;
+    }
+
+    .boxOfLamps > div > div {
+        top: 3px;
+        text-align: center;
+    }
+
+    .whereSearchBtnMainDiv {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0;
+        width: 260px;
+    }
+
+    .boxOfMainDivCompareProSearch {
+
+    }
+}
+
+@media (max-width: 370px) {
+    DIV.ppr_rup.ppr_priv_masthead_search .body_text {
+        margin: 0 3%;
+    }
+
+    .boxOfLamps > div > div {
+        font-size: 10px;
+    }
+}

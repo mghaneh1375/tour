@@ -1,0 +1,381 @@
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #bebebe;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #969696;
+}
+
+textarea:focus, input:focus, textarea, input {
+    outline: none !important;
+    box-shadow: none !important;
+    transition: border-color initial;
+}
+
+#MAINWRAP > div:nth-child(1).globalNav2011_reset #PAGE {
+    width: auto;
+}
+
+.globalNav2011_reset #MAIN {
+    width: auto !important;
+    max-width: 1188px;
+}
+
+.globalNav2011_reset #BODYCON {
+    width: auto !important;
+}
+
+/*1st box of styles*/
+.glyphicon {
+    font-family: 'Glyphicons Halflings' !important;
+}
+
+.bubble_40:after {
+    content: "\e00d\e00b\e00b\e00b\e00b" !important;
+}
+
+.bubble_30:after {
+    content: "\e00d\e00d\e00b\e00b\e00b" !important;
+}
+
+.bubble_20:after {
+    content: "\e00d\e00d\e00d\e00b\e00b" !important;
+}
+
+.bubble_10:after {
+    content: "\e00d\e00d\e00d\e00d\e00b" !important;
+}
+
+/*2nd box of styles*/
+
+.global-nav-links-menu a {
+    color: #FFF !important;
+}
+
+.persistent-header a:hover {
+    color: #963019 !important;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    footer {
+        /*width: 1024px;*/
+    }
+}
+
+.loader {
+    background-image: url("../../images/loading.gif");
+
+    width: 100px;
+    height: 100px;
+}
+
+.bg-color-greenImp {
+    background-color: var(--koochita-light-green) !important
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-bar-container .global-nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-green .ui_icon {
+    display: flex;
+    align-items: center;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-actions>div {
+    display: flex;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-logo img {
+    width: 55px;
+}
+
+#bookmarkicon {
+    z-index: 100;
+    cursor: pointer;
+}
+
+#bookmarkicon > span {
+    z-index: 100000010101001 !important;
+    display: flex;
+    align-items: center;
+}
+
+#targetHelp_4 {
+    display: flex;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav_action_profile .name {
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav_action_profile .name::before {
+    position: inherit;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-links-container .global-nav-links-menu {
+    display: flex;
+}
+
+.masthead_notifctr_dropdown:before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: -10px;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+    -webkit-filter: drop-shadow(0 0 0 #b7b7b7);
+    filter: drop-shadow(0 0 0 #b7b7b7);
+    box-shadow: 0 0 0 #b7b7b7 \9;
+    -webkit-filter: drop-shadow(0 0 0 #999);
+    filter: drop-shadow(0 0 0 #999);
+}
+
+.dropMenu .subLink:hover,
+.dropMenu .subItem .subLink:hover,
+.dropMenu .taLnk:hover a,
+.subItem .subLink:hover,
+.subItemNoLink .subNoLink:hover,
+.expandSubItem .expandSubLink:hover {
+    color: #16174f !important;
+}
+
+#profile-drop {
+    display: none;
+    position: absolute;
+    bottom: auto;
+    z-index: 10000;
+    background: none 0% 0% repeat scroll rgb(255, 255, 255);
+    padding: 0 18px;
+    left: 20px;
+    top: 48px;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+#MAINWRAP > div:nth-child(1) {
+    background-color: var(--koochita-yellow);
+    position: relative;
+}
+
+.modules-membercenter-persistent-header-achievements {
+    background-color: var(--koochita-yellow) !important;
+    /*margin-top: 20px;*/
+}
+
+#profileLinkColor1, #BadgeCollectionLinkColor1, #messageLinkColor1, #bookingLinkColor1, #paymentOptionsLinkColor1, .settingColor1 {
+    color: #963019 !important
+}
+
+#profileLinkColor2, #BadgeCollectionLinkColor2, #targetHelp_5 > a, #messageLinkColor2, #bookingLinkColor2, #paymentOptionsLinkColor2, .settingColor2 {
+    color: #16174f
+}
+
+#helpSpan_5 > div:nth-child(2) {
+    color: black !important;
+    line-height: 1.428 !important;
+    font-weight: normal !important;
+    direction: rtl !important;
+    text-align: start
+}
+
+#settingDropDownMainDiv {
+    width: 200px !important;
+    display: none;
+}
+
+#MediaLeftBodyProfile {
+    padding: 0 12px !important;
+    margin: 0 !important;
+}
+
+#cs-rating-location-link > img {
+    width: 100%;
+    vertical-align: middle
+}
+
+.tripStyleBodyProfile {
+    color: white;
+    background-color: var(--koochita-light-green);
+}
+
+.tagTextBodyPlace {
+    padding: 0 12px;
+}
+
+.line-height-1428-imp {
+    line-height: 1.428 !important;
+}
+
+.clea-both {
+    clear: both;
+}
+
+.z-index-100 {
+    z-index: 100;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.direction-ltr {
+    direction: ltr
+}
+
+.color-black {
+    color: black;
+}
+
+.text-align-rightImp {
+    text-align: right !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.margin-rt-40per {
+    margin-right: 40%;
+}
+
+.badgeDesc.badgeContainer.badgesPage {
+    position: absolute;
+    right: 10px;
+    left: 10px;
+    bottom: auto;
+    top: 140px;
+    padding: 30px 10px;
+    visibility: hidden;
+}
+
+.badgesPage.ui_overlay::before {
+    display: none;
+}
+
+.badgesPage .ui_popover.arrow_right .arrow, .badgesPage .ui_popover.arrow_right .arrow:before {
+    display: none;
+}
+
+.modules-membercenter-badge-collection-header .sub-header {
+    text-align: justify;
+    margin-top: 10px;
+}
+
+.modules-membercenter-persistent-header-achievements .persistent-header {
+    width: auto !important;
+    padding: 0;
+    max-width: 1188px;
+}
+
+.modules-membercenter-persistent-header-achievements .persistent-header li {
+    text-align: center;
+}
+
+#BODYCON h1:not(.overrideDefaultStyle) {
+    padding: 10px 10px !important;
+}
+
+.mc-badge-collection-container .modules-membercenter-badge-collection .memberBadges {
+    float: inherit;
+    display: inline-block;
+}
+
+.saveLeftNav .menu_bar a.saveLink:hover, .saveLeftNav .menu_bar a.saveLink strong:hover {
+    text-decoration: none;
+}
+
+@media (max-width: 1023px) {
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-bar-container {
+        height: auto;
+        direction: rtl !important;
+        padding: 0;
+    }
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-links {
+        display: flex;
+        align-items: center;
+        /* -webkit-box-flex: 1; */
+        -moz-box-flex: 1;
+         -webkit-flex: auto;
+        -ms-flex: 1 0 100%;
+         flex: 1 1 auto;
+         order: inherit;
+        overflow: visible;
+         height: auto;
+         margin-top: 0;
+         margin-left: 0;
+    }
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-links:before {
+        display: none;
+    }
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-links .global-nav-link {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-bar-container .global-nav-actions,
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-links {
+        display: none;
+    }
+
+    DIV.ppr_rup.ppr_priv_global_nav .global-nav-single-line.has-links .global-nav-bar-container {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 680px) {
+    /*.modules-membercenter-badge-collection ul.badgeListBadgePage {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*}*/
+
+    .badgesPageMainDiv .modules-membercenter-badge-collection .memberBadges {
+        margin-right: 0;
+        width: 300px;
+    }
+
+    #MAIN.badgesPageMainDiv .heading.wrap .header {
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    #MAIN.badgesPageMainDiv .modules-membercenter-badge-collection-header .sub-header {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .badgesPageMainDiv .modules-membercenter-badge-collection, #MAIN.badgesPageMainDiv .heading.wrap {
+        margin: 10px;
+    }
+}

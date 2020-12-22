@@ -1,0 +1,201 @@
+#masthead-recent-card-recent-view {
+    text-align: right !important;
+}
+
+#media-left-recent-view {
+    padding: 0 12px !important;
+    margin: 0 !important;
+}
+
+#my-trips-not {
+    display: none;
+    bottom: auto;
+    left: -20px;
+    position: absolute;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, .2);
+    top: 45px;
+}
+
+#masthead-recent {
+    background-color: #f9f9f9;
+}
+
+#masthead-recent > div:nth-child(1) {
+    text-align: right;
+    padding: 0 24px;
+}
+
+#masthead-trips {
+    overflow: auto;
+    max-height: 400px;
+}
+
+#trips-tiles > div:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    border: 2px solid #a0a0a0;
+    cursor: pointer;
+}
+
+#placeCount0 {
+    background-size: 100% 100%;
+    background: repeat 0 0;
+}
+
+#placeCount0Else {
+    background-color: #cfcfcf;
+}
+
+#trips-tiles > div:nth-child(3) {
+    font-size: 1.2em;
+}
+
+#trips-tiles > div:nth-child(3) > div {
+    padding: 5px;
+    font-size: 11px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid var(--koochita-light-green);
+}
+
+#trips-tiles > div:nth-child(3) > div > p {
+    color: var(--koochita-light-green);
+    display: inline;
+}
+
+.ui_overlay:before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: -14px;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid white;
+    -webkit-filter: drop-shadow(0 0 0 #b7b7b7);
+    filter: drop-shadow(0 0 0 #b7b7b7);
+    box-shadow: 0 0 0 #b7b7b7 \9;
+    -webkit-filter: drop-shadow(0 0 0 #999);
+    filter: drop-shadow(0 0 0 #999);
+    z-index: 10;
+}
+
+#bookmarkmenu {
+    display: none;
+    bottom: auto;
+    left: -20px;
+    position: absolute;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, .2);
+    top: 55px;
+}
+
+#bookmarkmenu.ui_overlay:before {
+    content: '';
+    position: absolute;
+    left: 45px;
+    top: -8px;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid white;
+    -webkit-filter: drop-shadow(0 0 0 #b7b7b7);
+    filter: drop-shadow(0 0 0 #b7b7b7);
+    box-shadow: 0 0 0 #b7b7b7 \9;
+    -webkit-filter: drop-shadow(0 0 0 #999);
+    filter: drop-shadow(0 0 0 #999);
+    z-index: 10;
+}
+
+#masthead-recent {
+    background-color: #f9f9f9;
+}
+
+#masthead-recent > div:nth-child(1) {
+    text-align: right;
+    padding: 0 24px;
+}
+
+
+#profile-drop-mainDiv {
+    z-index: 1000000000000 !important;
+}
+
+#profile-drop {
+    display: none;
+    position: absolute;
+    bottom: auto;
+    z-index: 10000;
+    background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+    padding: 0 18px;
+    left: -13px;
+    top: 55px;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+#profile-drop.ui_overlay:before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: -8px;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 8px solid white;
+    -webkit-filter: drop-shadow(0 0 0 #b7b7b7);
+    filter: drop-shadow(0 0 0 #b7b7b7);
+    box-shadow: 0 0 0 #b7b7b7 \9;
+    -webkit-filter: drop-shadow(0 0 0 #999);
+    filter: drop-shadow(0 0px 0 #999);
+    z-index: 10;
+}
+
+.subItemHeaderNavBar{
+    list-style-type: none;
+    margin: 10px 0px;
+    color: black;
+}
+
+.subItemHeaderNavBar > a{
+    color: black;
+}
+
+.subItemHeaderNavBar:hover > a{
+    color: var(--koochita-light-green) !important;
+}
+
+.global-nav-profile-menu{
+    padding: 0px;
+    width: 100px;
+}
+
+.photoviewerSidebarWrapper .captionArea {
+    direction: rtl !important;
+}
+
+.photoviewerSidebarWrapper .location {
+    text-align: center;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-logo {
+    margin-right: 0;
+}
+
+DIV.ppr_rup.ppr_priv_global_nav .global-nav-logo img {
+    width: 50px;
+}
+
+.nameOfIconHeaders{
+    font-size: 12px !important;
+    color: black;
+    text-align: center;
+}
+
+#searchPane.ui_overlay:before {
+    display: none;
+}

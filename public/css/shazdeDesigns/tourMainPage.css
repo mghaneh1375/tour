@@ -1,0 +1,401 @@
+/*home rebarnded style*/
+.tourInputsMainDiv {
+    background-color: white;
+    float: right;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    width: 550px;
+}
+
+.tourInputsDivs {
+    padding: 12px 0 0 !important;
+    width: 75px !important;
+
+}
+
+.tourInputsMainDiv > span {
+    float: right;
+    padding: 12px 10px;
+    display: inline-block;
+}
+
+.tourInputsMainDiv > #searchDivForScroll {
+    border: 0 !important;
+    border-radius: 0;
+}
+
+.tourInputsMainDiv > #searchDivForScroll > div {
+    padding-top: 0;
+}
+
+.tourInputsMainDiv > .searchDivForScroll-button {
+    margin-bottom: 0;
+    float: left !important;
+}
+
+.tour_inputs {
+    padding: 0 !important;
+    text-align: center;
+    background-color: #c6f1ff;
+}
+
+.tourInputsBtn {
+    float: left !important;
+    padding: 4px !important;
+    margin: 5px !important;
+    border-radius: 12px !important;
+    width: 120px !important;
+}
+
+#tourSearchPops, #tourSearchPopsError {
+    position: absolute;
+    background-color: white;
+    left: 40%;
+    top: 120px;
+    z-index: 10000000;
+    text-align: right;
+    width: 400px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#tourSearchPops > b, #tourSearchPopsError > b {
+    direction: rtl;
+    float: right;
+}
+
+#tourSearchPopsCloseBtn, #tourErrorPopsCloseBtn {
+    float: left;
+    background: var(--koochita-light-green);
+    border: 0;
+}
+
+#tourSearchPopsHeaderText, #tourErrorPopsHeaderText, #tourPopsResearchDesc {
+    color: darkred;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.tourErrorPopsTexts {
+    direction: rtl;
+    float: right;
+}
+
+#tourSearchPops > hr, #tourSearchPopsError > hr {
+    border-top: 2px solid #e0e0e0;
+}
+
+#tourSearchPops > label, #tourSearchPopsError > label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#tourSearchPopProvinceFilterText {
+    direction: rtl;
+    float: right;
+    text-align: justify;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+#provinceFilterInput {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    text-align: right;
+    font-size: 12px;
+    padding: 5px 10px;
+    float: right;
+    margin-bottom: 5px;
+}
+
+.provinceFilterDiv {
+    width: 35%;
+    float: right;
+    background: darkred;
+    color: white;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+.provinceFilterDiv > span {
+    float: right;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.provinceFilterDiv > button {
+    float: left;
+    border: 0;
+    background: white;
+}
+
+#tourSearchPopsErrorTexts {
+    float: left;
+    font-size: 10px;
+    color: red;
+}
+
+#tourSearchPopSubmit, #tourResearchPopSubmit {
+    float: left;
+    border-radius: 5px;
+    border: 0;
+    width: 75px;
+    color: white;
+    background-color: var(--koochita-light-green);
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#tourResearchPopSubmit {
+    width: 140px;
+}
+
+/*1st box of styles*/
+
+.homepage_shelves_widget {
+    min-height: 100px
+}
+
+.icon-mainpage {
+    width: 50px;
+    height: 50px;
+    background: #FFF;
+    position: absolute;
+    bottom: -14%;
+    right: 43%;
+    border-radius: 100%;
+    border: 1px solid #CCC
+}
+
+.icon-mainpage span {
+    color: var(--koochita-light-green);
+    font-size: 26px;
+    line-height: 50px
+}
+
+#middle-box:hover {
+    background: #ededed !important
+}
+
+.o-slider-next {
+    left: 24%;
+    right: auto
+}
+
+.o-slider-prev span {
+    top: 250px !important
+}
+
+.o-slider-next span {
+    top: 250px !important
+}
+
+.o-slider-pagination {
+    width: 25% !important;
+    top: 450px
+}
+
+.loader {
+    background-image: url("../../images/loading.gif");
+    width: 100px;
+    height: 100px;
+}
+
+/*2nd box of styles*/
+
+.phoneBanner {
+    background-image: url("../../images/phoneBanner.jpg");
+    background-size: 100% 100%;
+    height: 90vh;
+}
+
+@media screen and (max-width: 600px) {
+    /*DIV.ppr_rup.ppr_priv_homepage_hero .placement_wrap .placement_wrap_cell {*/
+    /*display: grid !important;*/
+    /*}*/
+    /*.o-sliderContainer {*/
+    /*height: 250px;*/
+    /*}*/
+    .nearby_cuisines .ui_columns.is-multiline .ui_column, .recently_viewed .ui_columns.is-multiline .ui_column, .recommended_poi_list .ui_columns.is-multiline .ui_column, .poi_by_tag .ui_columns.is-multiline .ui_column, .flights_airline_reviews .ui_columns.is-multiline .ui_column, .attraction_products_by_group .ui_columns.is-multiline .ui_column, .poi_by_taxonomy .ui_columns.is-multiline .ui_column {
+        width: 386px !important;
+    }
+
+    .image_wrapper.landscape.landscapeWide .image {
+        width: -webkit-fill-available !important;
+    }
+
+    .ui_column .thumbnail {
+        height: 250px !important;
+    }
+
+    .image_wrapper {
+        height: -webkit-fill-available;
+    }
+
+    DIV.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.poi_name {
+        font-size: 30px;
+        line-height: 30px;
+    }
+
+    DIV.prw_rup.prw_shelves_shelf_widget .shelf_container.rebrand .shelf_header .ui_icon.travelers-choice-badge {
+        display: inherit;
+    }
+
+    h3 {
+        font-size: 200%;
+    }
+
+    DIV.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.poi_name {
+        font-size: 32px;
+        line-height: 40px;
+    }
+
+    DIV.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.tags {
+        padding-top: 4px;
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    DIV.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.rating-widget .reviewCount {
+        font-size: 24px;
+        line-height: 32px;
+        margin: 0 10px;
+    }
+
+    body {
+        font-size: x-large;
+    }
+}
+
+/*3rd box of styles*/
+/*{{--calender in phone--}}*/
+
+@media screen and (max-width: 600px) {
+    #ui-datepicker-div {
+        width: 17em !important;
+    }
+
+    .ui-datepicker-multi-2 .ui-datepicker-group {
+        width: 100% !important;
+    }
+}
+
+/*4th box of styles*/
+
+.dateLabel {
+    position: relative;
+    width: 150px;
+    height: 30px;
+    /*border: 1px solid #e5e5e5;*/
+    border-radius: 3px;
+    /*box-shadow: 0 7px 12px -7px #e5e5e5 inset;*/
+    margin: 0 !important;
+    cursor: pointer;
+    float: right;
+    max-width: 40%;
+}
+
+.dateLabel_phone {
+    height: 30px;
+}
+
+.inputDateLabel {
+    background: transparent;
+    width: 100px;
+    border: none;
+    /*font-size: 75%;*/
+    position: absolute;
+    top: 5px;
+    right: 35px;
+    cursor: pointer;
+}
+
+.inputDateLabel_phone {
+    width: 85%;
+    border: none;
+    font-size: 30px;
+    line-height: 40px;
+    position: absolute;
+    top: 7px;
+    right: 65px;
+}
+
+.minusPlusBtn {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    display: inline-block;
+    background-image: url('../../images/icons.jpg');
+    background-size: 72px;
+}
+
+@media screen and (max-width: 600px) {
+    .minusPlusBtn {
+        width: 44px;
+        height: 44px;
+        background-size: 185px;
+    }
+}
+
+/*{{--.minusPlusBtn_phone {--}}*/
+/*{{--width: 26px;--}}*/
+/*{{--height: 26px;--}}*/
+/*{{--display: inline-block;--}}*/
+/*{{--background-image: url('../../images/icons.jpg');--}}*/
+/*{{--background-size: 115px;--}}*/
+/*{{--background-repeat: no-repeat;--}}*/
+/*{{--}--}}*/
+
+.searchDivForScroll {
+    max-height: 390px;
+    overflow: auto;
+    float: right;
+    border: solid #E5E5E5 !important;
+    border-radius: 0 10px 10px 0 !important;
+}
+
+.searchDivForScroll_phone {
+    max-height: 290px;
+    overflow: auto;
+    border: solid #E5E5E5 !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.searchDivForScroll-button {
+    float: right;
+    border-style: inherit !important;
+    border-radius: 10px 0 0 10px !important;
+    margin-bottom: 8px;
+}
+
+.searchDivForScroll-phoneButton {
+    width: 42%;
+    margin: 0 !important;
+    border-style: inherit !important;
+    border-radius: 0 0 0 10px !important;
+    font-size: 20px;
+}
+
+/*5th box of styles*/
+
+.bubble_40:after {
+    content: "\e00d\e00b\e00b\e00b\e00b" !important;
+}
+.bubble_30:after {
+    content: "\e00d\e00d\e00b\e00b\e00b" !important;
+}
+.bubble_20:after {
+    content: "\e00d\e00d\e00d\e00b\e00b" !important;
+}
+.bubble_10:after {
+    content: "\e00d\e00d\e00d\e00d\e00b" !important;
+}
+.photoviewerSidebarWrapper .captionArea{
+    direction: rtl !important;
+}
+.photoviewerSidebarWrapper .location{
+    text-align: center;
+}
+.glyphicon {
+    font-family: 'Glyphicons Halflings' !important;
+}
