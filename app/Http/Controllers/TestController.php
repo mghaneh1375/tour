@@ -6,7 +6,7 @@ use App\models\AbstractLog;
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\Adab;
-use App\models\places\places\Amaken;
+use App\models\places\Amaken;
 use App\models\Block;
 use App\models\places\Hotel;
 use App\models\LogModel;

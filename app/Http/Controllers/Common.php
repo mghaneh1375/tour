@@ -3,7 +3,7 @@
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
-use App\models\places\places\Amaken;
+use App\models\places\Amaken;
 use App\models\Cities;
 use App\models\CityPic;
 use App\models\DefaultPic;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
-use App\models\places\places\Amaken;
+use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\Cities;
 use App\models\CityPic;

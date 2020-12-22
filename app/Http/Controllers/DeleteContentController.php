@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Alert;
-use App\models\places\places\Amaken;
+use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\places\Hotel;
 use App\models\LogFeedBack;

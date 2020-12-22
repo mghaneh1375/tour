@@ -8,7 +8,7 @@ use App\models\Activity;
 use App\models\Adab;
 use App\models\AirLine;
 use App\models\Alert;
-use App\models\places\places\Amaken;
+use App\models\places\Amaken;
 use App\models\BannerPics;
 use App\models\places\Boomgardy;
 use App\models\Cities;
