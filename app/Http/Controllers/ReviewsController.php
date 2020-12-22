@@ -40,6 +40,21 @@ use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {
+    public function showReviewPage($id)
+    {
+        $activity = Activity::where('name', 'نظر')->first();
+        $review = LogModel::where('id', $id)->where('activityId', $activity->id)->first();
+        if($review == null)
+            return redirect()->back();
+
+
+        $kindPlace = Place::find($review->kindPlaceId);
+        $place = createSuggestionPack($review->kindPlaceId, $review->placeId);
+        $reviewId = $review->id;
+
+        return view('pages.placeDetails.ReviewPage', compact(['place', 'kindPlace', 'reviewId']));
+    }
+
     public function reviewUploadPic(Request $request)
     {
         $location = __DIR__ . '/../../../../assets/limbo';

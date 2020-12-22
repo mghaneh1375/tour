@@ -944,21 +944,19 @@ class AjaxController extends Controller {
         return;
     }
 
-    public function getSingleReview(Request $request)
+    public function getSingleReview()
     {
-        if(isset($request->reviewId)){
-            $review = LogModel::find($request->reviewId);
+        if(isset($_GET['id'])){
+            $review = LogModel::find($_GET['id']);
             if($review != null) {
                 $review = reviewTrueType($review);
-                echo json_encode(['status' => 'ok', 'result' => $review]);
+                return response()->json(['status' => 'ok', 'result' => $review]);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
     public function searchSuggestion(Request $request)

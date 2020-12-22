@@ -3,6 +3,10 @@
 }
 
 /*....................*/
+.playIcon:before{
+    content: '\E0C0';
+    font-family: 'Shazde_Regular2' !important;
+}
 .foodIcon:before{
     content: '\E0A1';
     font-family: 'Shazde_Regular2' !important;

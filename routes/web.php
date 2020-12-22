@@ -205,13 +205,13 @@ Route::post('log/storeSeen', 'LogController@storeUserSeenLog')->name('log.storeS
 Route::group(array('middleware' => 'nothing'), function () {
     Route::get('searchPlace', 'AjaxController@searchPlace')->name('search.place');
 
+    Route::get('getSingleReview', 'AjaxController@getSingleReview')->name('getSingleReview');
+
     Route::get('searchForFoodMaterial', 'AjaxController@searchForFoodMaterial')->name('search.foodMaterial');
 
     Route::post('searchSuggestion', 'AjaxController@searchSuggestion')->name('searchSuggestion');
 
     Route::post('getSingleQuestion', 'AjaxController@getSingleQuestion')->name('getSingleQuestion');
-
-    Route::post('getSingleReview', 'AjaxController@getSingleReview')->name('getSingleReview');
 
     Route::post('getTags', 'AjaxController@getTags')->name('getTags');
 
@@ -253,7 +253,10 @@ Route::group(array('middleware' => 'nothing'), function () {
 });
 
 //review section
-Route::group(array('middleware' => 'nothing'), function () {
+Route::middleware('nothing')->group(function () {
+
+    Route::get('reviewPage/{id}', 'ReviewsController@showReviewPage')->name('review.page')->middleware('shareData');
+
     Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
 
     Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');

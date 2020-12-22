@@ -128,24 +128,21 @@
 
         sidePics = _pics;
         $('#photoAlbumTitle').text(_title);
+        $('#sidePhotoModal').empty();
 
-        for(i = 0; i < sidePics.length; i++){
-                var t;
+        for(var i = 0; i < sidePics.length; i++){
                 var re;
                 var text = srcSidePic;
                 var fk = Object.keys(sidePics[i]);
                 for (var x of fk) {
-                    t = '##' + x + '##';
-                    re = new RegExp(t, "g");
+                    re = new RegExp(`##${x}##`, "g");
                     text = text.replace(re, sidePics[i][x]);
                 }
 
-                t = '##picIndex##';
-                re = new RegExp(t, "g");
+                re = new RegExp('##picIndex##', "g");
                 text = text.replace(re, 'chooseAlbumMainPhoto(' + i + ')');
 
-                t = '##index##';
-                re = new RegExp(t, "g");
+                re = new RegExp('##index##', "g");
                 text = text.replace(re, i);
 
                 $('#sidePhotoModal').append(text);

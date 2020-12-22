@@ -84,7 +84,7 @@ function createSuggestionPack($_kindPlaceId, $_placeId){
     $activityId = Activity::whereName('نظر')->first()->id;
 
     $kindPlace = Place::find($_kindPlaceId);
-    $place = \DB::table($kindPlace->tableName)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId', 'fullRate'])->find($_placeId);
+    $place = \DB::table($kindPlace->tableName)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId', 'fullRate', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
     if($place != null) {
         $city = Cities::whereId($place->cityId);
 

@@ -247,20 +247,27 @@
         }
 
         .step1ListContent{
-            width: 49%;
-            height: 80vh;
-            padding-top: 5%;
-        }
-        .step1ListContent .videoCardList{
             padding: 10px;
             overflow: auto;
             max-width: 450px;
-            height: 100%;
             margin-right: auto;
+            position: fixed;
+            left: 0px;
+            height: 100vh;
+            top: 0px;
+            background: #ce7b75ab;
+        }
+        .step1ListContent .title{
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            margin: 20px 0px;
+            text-shadow: 3px 5px 7px #000000;
         }
         .step1ListContent .videoCardList .videoCard{
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -268,9 +275,23 @@
             border-radius: 20px;
             box-shadow: 0px 0px 10px 2px black;
             cursor: pointer;
+            margin-bottom: 25px;
+            position: relative;
         }
-        .step1ListContent .videoCardList .videoCard:nth-of-type(even){
-            margin-right: auto;
+        .step1ListContent .videoCardList .videoCard.playIcon:before{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: #00000061;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 70px;
+            transition: .3s;
+        }
+        .step1ListContent .videoCardList .videoCard.playIcon:hover:before{
+            transform: scale(1.2);
         }
         .step1Content{
             width: 49%;
@@ -350,6 +371,7 @@
                 max-width: 100% !important;
                 height: auto;
                 overflow: auto;
+                position: relative;
             }
             .step1ListContent .videoCardList{
                 margin: 0px;
@@ -404,14 +426,17 @@
                 </div>
                 <div class="step1ListContent hideOnScreen">
                     <div class="videoCardList">
-                        <div class="videoCard">
-                            <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(0)">
+                        <div class="videoCard playIcon" onclick="showCookAlum(0)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                         </div>
-                        <div class="videoCard">
-                            <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(1)">
+                        <div class="videoCard" onclick="showCookAlum(1)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                         </div>
-                        <div class="videoCard">
-                            <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(2)">
+                        <div class="videoCard playIcon" onclick="showCookAlum(2)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
+                        </div>
+                        <div class="videoCard" onclick="showCookAlum(3)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/2332.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                         </div>
                     </div>
                 </div>
@@ -421,15 +446,22 @@
                 </div>
             </div>
             <div class="step1ListContent hideOnPhone">
+                <div class="title">
+                    <div>آثار ارسالی</div>
+                    <div> شما</div>
+                </div>
                 <div class="videoCardList">
-                    <div class="videoCard">
-                        <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(0)">
+                    <div class="videoCard playIcon" onclick="showCookAlum(0)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                     </div>
-                    <div class="videoCard">
-                        <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(1)">
+                    <div class="videoCard" onclick="showCookAlum(1)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                     </div>
-                    <div class="videoCard">
-                        <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(2)">
+                    <div class="videoCard playIcon" onclick="showCookAlum(2)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
+                    </div>
+                    <div class="videoCard" onclick="showCookAlum(3)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/2332.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
                     </div>
                 </div>
             </div>
@@ -531,6 +563,14 @@
                 id: 2,
                 sidePic: "{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}",
                 video: "{{URL::asset('images/festival/cookFestival/sample/vid1.mp4')}}",
+                userPic: "{{getUserPic(0)}}",
+                userName: "Koochita",
+                showInfo: false,
+            },
+            {
+                id: 3,
+                sidePic: "{{URL::asset('images/festival/cookFestival/sample/2332.jpg')}}",
+                mainPic: "{{URL::asset('images/festival/cookFestival/sample/2332.jpg')}}",
                 userPic: "{{getUserPic(0)}}",
                 userName: "Koochita",
                 showInfo: false,

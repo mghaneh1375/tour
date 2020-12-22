@@ -280,46 +280,24 @@
     var showFullReview = null;
     var showFullReviewKind = null;
 
-    function getSingleFullReview(_id){
-
+    function getSingleFullDataReview(_id, _callBack){
         $.ajax({
-            type: 'post',
-            url: '{{route("getSingleReview")}}',
-            data: {
-                _token: '{{csrf_token()}}',
-                reviewId: _id
-            },
+            type: 'GET',
+            url: '{{route("getSingleReview")}}?id='+_id,
+            complete: () => closeLoading(),
             success: function(response){
-                response = JSON.parse(response);
-                if(response.status == 'ok') {
-                    showFullReviews({
-                        review: response.result,
-                        kind: 'modal'
-                    });
-                }
+                if(response.status == 'ok' && typeof _callBack === 'function')
+                    _callBack(response.result);
             }
         })
     }
 
-    function updateFullReview(_id){
+    function getSingleFullReview(_id){
+        getSingleFullDataReview(_id, _review => showFullReviews({ review: _review, kind: 'modal' }));
+    }
 
-        $.ajax({
-            type: 'post',
-            url: '{{route("getSingleReview")}}',
-            data: {
-                _token: '{{csrf_token()}}',
-                reviewId: _id
-            },
-            success: function(response){
-                closeLoading();
-                response = JSON.parse(response);
-                if(response.status == 'ok')
-                    setFullReviewContent(response.result);
-            },
-            error: e => {
-                closeLoading();
-            }
-        })
+    function updateFullReview(_id){
+        getSingleFullDataReview(_id, _review => setFullReviewContent(_review));
     }
 
     function showFullReviews(_input){
