@@ -285,7 +285,7 @@
             }
 
         }
-        
+
         @media (max-width: 767px) {
             .step1{
                 flex-direction: column;
@@ -405,13 +405,13 @@
                 <div class="step1ListContent hideOnScreen">
                     <div class="videoCardList">
                         <div class="videoCard">
-                            <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(0)">
                         </div>
                         <div class="videoCard">
-                            <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(1)">
                         </div>
                         <div class="videoCard">
-                            <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
+                            <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(2)">
                         </div>
                     </div>
                 </div>
@@ -423,13 +423,13 @@
             <div class="step1ListContent hideOnPhone">
                 <div class="videoCardList">
                     <div class="videoCard">
-                        <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
-                    </div>
-                    <div class="videoCard" style="margin-right: auto;">
-                        <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(0)">
                     </div>
                     <div class="videoCard">
-                        <img src="{{URL::asset('images/mainPics/damavand.jpg')}}" class="resizeImgClass" onclick="fitThisImg(this)">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(1)">
+                    </div>
+                    <div class="videoCard">
+                        <img src="{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)" onclick="showCookAlum(2)">
                     </div>
                 </div>
             </div>
@@ -510,9 +510,36 @@
     <script>
         var nowStep = 'step1';
         var url = window.location;
+        var alb = [
+            {
+                id: 0,
+                sidePic: "{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}",
+                video: "{{URL::asset('images/festival/cookFestival/sample/bor1.mp4')}}",
+                userPic: "{{getUserPic(0)}}",
+                userName: "Koochita",
+                showInfo: false,
+            },
+            {
+                id: 1,
+                sidePic: "{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}",
+                mainPic: "{{URL::asset('images/festival/cookFestival/sample/1234.jpg')}}",
+                userPic: "{{getUserPic(0)}}",
+                userName: "Koochita",
+                showInfo: false,
+            },
+            {
+                id: 2,
+                sidePic: "{{URL::asset('images/festival/cookFestival/sample/vid1.jpg')}}",
+                video: "{{URL::asset('images/festival/cookFestival/sample/vid1.mp4')}}",
+                userPic: "{{getUserPic(0)}}",
+                userName: "Koochita",
+                showInfo: false,
+            },
+        ];
+
         function goToNextStep(_nextStep) {
             window.history.replaceState(null, null, '?page='+_nextStep);
-            
+
             $(`.${nowStep}`).addClass('hidden');
             $(`.step${_nextStep}`).removeClass('hidden');
             nowStep = `step${_nextStep}`;
@@ -523,6 +550,10 @@
             if(showStep == 3)
                 showStep = 2;
             goToNextStep(showStep);
+        }
+
+        function showCookAlum(_number){
+            createPhotoModal('مسابقه آشپزی', alb, _number);
         }
     </script>
 
