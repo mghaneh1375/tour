@@ -31,7 +31,7 @@
 <link rel='stylesheet' type='text/css' href='{{URL::asset('packages/fontAwesom/css/all.min.css')}}' />
 <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css')}}">
 
-<link rel="manifest" href="{{URL::asset('manifest.json')}}">
+{{--<link rel="manifest" href="{{URL::asset('manifest.json')}}">--}}
 
 <script async src="{{URL::asset('packages/fontAwesom/js/all.min.js')}}"></script>
 

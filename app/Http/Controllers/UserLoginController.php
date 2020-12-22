@@ -258,7 +258,7 @@ class UserLoginController extends Controller
                 return response()->json(['status' => "err1"]);
         }
         else
-            return response("nok");
+            return response()->json(['status' => "nok"]);
     }
 
     public function resendActivationCode()

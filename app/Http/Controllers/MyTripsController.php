@@ -494,7 +494,7 @@ class MyTripsController extends Controller {
                                 ->where('editPlace', 1)
                                 ->first();
             if(!($trip->uId == $user->id || $uInT != null))
-                return response('notAccess');
+                return response()->json(['status' => 'notAccess']);
 
 
             $condition = ['tripId' => $tripId, 'placeId' => $placeId, 'kindPlaceId' => $kindPlaceId];
@@ -510,10 +510,10 @@ class MyTripsController extends Controller {
                 $trip->lastSeen = time();
                 $trip->save();
 
-                return response('ok');
+                return response()->json(['status' => 'ok']);
             }
             else
-                return response('nok');
+                return response()->json(['status' => 'nok']);
         }
     }
 

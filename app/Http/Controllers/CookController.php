@@ -238,12 +238,12 @@ class CookController extends Controller
             else if($foodInput->name != '')
                 $foodName = $foodInput->name;
             else
-                return response('error2');
+                return response()->json('error2');
         }
         else if($foodInput->name != '')
             $foodName = $foodInput->name;
         else
-            return response('error2');
+            return response()->json('error2');
 
 
         foreach ($fileNames as $name){
@@ -286,6 +286,6 @@ class CookController extends Controller
             $cookPic->save();
         }
 
-        return response('ok');
+        return response()->json('ok');
     }
 }

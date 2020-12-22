@@ -128,5 +128,4 @@ class ActivityController extends Controller {
 
         echo json_encode($activities);
     }
-
 }

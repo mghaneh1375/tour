@@ -1038,16 +1038,16 @@
                     placeId: sug.placeId,
                 },
                 success: response => {
-                    if(response.trim() == 'ok') {
+                    if(response.status == 'ok') {
                         showSuccessNotifi('{{__('محل مورد نظر به لیست سفر اضافه شد')}}', 'left', 'var(--koochita-blue)');
                         location.reload();
                     }
                     else{
                         var errorText = '';
                         closeLoading();
-                        if(response.trim() == 'notAccess')
+                        if(response.status == 'notAccess')
                             errorText = "{{__('شما دسترسی به تغییر محل های سفر ندارید.')}}";
-                        else if(response.trim() == 'nok')
+                        else if(response.status == 'nok')
                             errorText = 'این محل در لیست سفر موجود می باشد';
                         else
                             errorText = '{{__('مشکلی در ثبت به وجود امده لطفا دوباره تلاش نمایید')}}';

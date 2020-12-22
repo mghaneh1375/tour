@@ -76,7 +76,7 @@
                 <div id="share_pic" class="btn sharePageMainDiv" onclick="toggleShareIcon(this)">
                     <div class="emptyShareIcon listShareIconPc"></div>
                     <div class="sharePageLabel">
-                        {{__('اشتراک&zwnj;گذاری صفحه')}}
+                        {{__('اشتراک گذاری صفحه')}}
                     </div>
                     @include('layouts.shareBox')
                 </div>

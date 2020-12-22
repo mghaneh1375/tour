@@ -117,8 +117,8 @@ class ReportController extends Controller {
                         $log->descText = $tmp->text;
                     }
 
-                    if($log->activityName == "نظر")
-                        $log->redirect = route('showReview', ['logId' => $tmp->id]);
+//                    if($log->activityName == "نظر")
+//                        $log->redirect = route('showReview', ['logId' => $tmp->id]);
 
                     $log->kindPlaceId = Place::whereId($log->kindPlaceId)->name;
                 }

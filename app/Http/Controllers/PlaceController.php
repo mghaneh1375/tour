@@ -563,14 +563,15 @@ class PlaceController extends Controller {
                 $bookmark->referenceId = $placeId;
                 $bookmark->bookMarkReferenceId = $bookmarkKind->id;
                 $bookmark->save();
-                echo 'ok-add';
+                return response()->json('ok-add');
             }
             else{
                 $bookmark->delete();
-                echo 'ok-del';
+                return response()->json('ok-del');
             }
         }
-        return;
+
+        return response()->json('error1');
     }
 
     function getCommentsCount()
@@ -1585,147 +1586,6 @@ class PlaceController extends Controller {
 
         }
 
-    }
-
-    public function showReview($logId)
-    {
-
-        $log = LogModel::whereId($logId);
-
-        if ($log == null || $log->confirm != 1)
-            return Redirect::to('profile');
-
-        $address = "";
-        $phone = "";
-        $site = "";
-        $hasLogin = true;
-        $placePhotosCount = 0;
-
-        if (Auth::check())
-            $hasLogin = false;
-
-        $comment = Comment::whereLogId($logId)->first();
-
-        switch ($log->kindPlaceId) {
-            case 1:
-            default:
-                $place = Amaken::whereId($log->placeId);
-                $address = $place->address;
-                if (file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/amaken/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
-                $placeMode = "amaken";
-                $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
-                break;
-            case 3:
-                $place = Restaurant::whereId($log->placeId);
-                $address = $place->address;
-                if (file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/restaurant/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
-                $placeMode = "restaurant";
-                $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
-                break;
-            case 4:
-                $place = Hotel::whereId($log->placeId);
-                $address = $place->address;
-                if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/hotels/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
-                $placeMode = "hotel";
-                $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
-                break;
-            case 6:
-                $place = Majara::whereId($log->placeId);
-                $address = $place->address;
-                if (file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/majara/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
-                $placeMode = "majara";
-                $state = State::whereId($place->cityId)->name;
-                break;
-            case 8:
-                $place = Adab::whereId($log->placeId);
-                if ($place->category == 3) {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
-                } else {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/soghat/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
-                }
-                $placeMode = "adab";
-                $state = State::whereId($place->stateId)->name;
-                break;
-        }
-
-        if ($place->pic_1 != "")
-            $placePhotosCount++;
-        if ($place->pic_2 != "")
-            $placePhotosCount++;
-        if ($place->pic_3 != "")
-            $placePhotosCount++;
-        if ($place->pic_4 != "")
-            $placePhotosCount++;
-        if ($place->pic_5 != "")
-            $placePhotosCount++;
-
-        $condition = ['placeId' => $log->placeId, 'kindPlaceId' => $log->kindPlaceId, 'confirm' => 1,
-            'activityId' => Activity::whereName('عکس')->first()->id];
-        $userPhotosCount = LogModel::where($condition)->count();
-
-        $condition = ['placeId' => $log->placeId, 'kindPlaceId' => $log->kindPlaceId,
-            'activityId' => Activity::whereName('امتیاز')->first()->id,
-            'visitorId' => $log->visitorId];
-        $logId = LogModel::where($condition)->first()->id;
-        $log->rate = ceil(DB::select('select avg(rate) as avgRate from userOpinions where logId = ' . $logId)[0]->avgRate);
-
-        $condition = ['activityId' => Activity::whereName('نظر')->first()->id,
-            'visitorId' => $log->visitorId, 'confirm' => 1];
-        $log->commentsCount = LogModel::where($condition)->count();
-
-        $user = User::whereId($log->visitorId);
-        $log->visitorId = $user->username;
-        $city = Cities::whereId($user->cityId);
-
-        if (!empty($log->pic) && file_exists(__DIR__ . '/../../../../assets/userPhoto/comments/' . $log->kindPlaceId . '/' . $log->pic)) {
-            $log->userPic = URL::asset('userPhoto/comments/' . $log->kindPlaceId . '/' . $log->pic);
-        }
-
-        $log->city = $city->name;
-        $log->date = convertDate($log->date);
-        $log->state = State::whereId($city->stateId)->name;
-
-        $log->visitorPic = $user->picture;
-        if (count(explode('.', $log->visitorPic)) == 1) {
-            if (!empty(DefaultPic::whereId($log->visitorPic)))
-                $log->visitorPic = URL::asset('defaultPic/' . DefaultPic::whereId($log->visitorPic)->name);
-            else
-                $log->visitorPic = URL::asset('defaultPic/' . DefaultPic::first()->name);
-        } else {
-            $log->visitorPic = URL::asset('userPhoto/' . $log->visitorPic);
-        }
-
-        $condition = ['logId' => $log->id, 'like_' => 1];
-        $likes = OpOnActivity::where($condition)->count();
-
-        $condition = ['logId' => $log->id, 'dislike' => 1];
-        $dislikes = OpOnActivity::where($condition)->count();
-
-        $activityId = Activity::whereName('نظر')->first()->id;
-        $tags = DB::select('SELECT DISTINCT(subject), id FROM log WHERE confirm = 1 and activityId = ' . $activityId . ' and placeId = ' . $log->placeId . ' and kindPlaceId = ' . $log->kindPlaceId . ' ORDER BY date DESC LIMIT 0, 10');
-
-        return view('showReview', array('log' => $log, 'comment' => $comment, 'hasLogin' => $hasLogin, 'state' => $state,
-            'placeName' => $place->name, 'placePic' => $placePic, 'address' => $address, 'phone' => $phone,
-            'site' => $site, 'userPhotosCount' => $userPhotosCount, 'sitePhotosCount' => $placePhotosCount,
-            'likes' => $likes, 'dislikes' => $dislikes, 'rate' => 0, 'tags' => $tags, 'placeMode' => $placeMode));
     }
 
     public function getPhotos()
