@@ -383,6 +383,11 @@
                 max-width: 1000px;
                 padding: 10px;
             }
+            .step1ListContent .title{
+                font-size: 18px;
+                margin: 0;
+                margin-bottom: 10px;
+            }
             .step1ListContent .videoCardList .videoCard{
                 margin: 0px 20px !important;
                 width: 100px;
@@ -425,6 +430,7 @@
                     <img src="{{URL::asset('images/festival/cookFestival/takePhotoVideo.svg')}}" alt="takePhoto">
                 </div>
                 <div class="step1ListContent hideOnScreen">
+                    <div class="title"> آثار ارسالی شما</div>
                     <div class="videoCardList">
                         <div class="videoCard playIcon" onclick="showCookAlum(0)">
                             <img src="{{URL::asset('images/festival/cookFestival/sample/bor1.jpg')}}" class="resizeImgClass" onload="fitThisImg(this)">
