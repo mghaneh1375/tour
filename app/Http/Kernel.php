@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'adminAccess' => \App\Http\Middleware\AdminAccess::class,
         'nothing' => \App\Http\Middleware\Nothing::class,
         'SafarnamehShareData' => \App\Http\Middleware\SafarnamehShareData::class,
         'shareData' => \App\Http\Middleware\ShareData::class,
