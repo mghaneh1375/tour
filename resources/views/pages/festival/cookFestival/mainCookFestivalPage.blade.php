@@ -379,7 +379,7 @@
                 display: flex;
                 justify-content: center;
                 min-width: 100%;
-                width: 450px;
+                width: 600px;
                 max-width: 1000px;
                 padding: 10px;
             }
