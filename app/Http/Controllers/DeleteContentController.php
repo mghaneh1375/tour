@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\models\Alert;
-use App\models\Amaken;
-use App\models\Boomgardy;
-use App\models\Hotel;
+use App\models\places\places\Amaken;
+use App\models\places\Boomgardy;
+use App\models\places\Hotel;
 use App\models\LogFeedBack;
 use App\models\LogModel;
-use App\models\MahaliFood;
-use App\models\Majara;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
 use App\models\PhotographersLog;
 use App\models\PhotographersPic;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\QuestionUserAns;
 use App\models\Report;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\ReviewPic;
 use App\models\ReviewUserAssigned;
-use App\models\SogatSanaie;
+use App\models\places\SogatSanaie;
 use Illuminate\Http\Request;
 
 class DeleteContentController extends Controller

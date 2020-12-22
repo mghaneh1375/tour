@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
-use App\models\Amaken;
+use App\models\places\places\Amaken;
 use App\models\Cities;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\LogModel;
-use App\models\Majara;
+use App\models\places\Majara;
 use App\models\Message;
-use App\models\Place;
-use App\models\Restaurant;
+use App\models\places\Place;
+use App\models\places\Restaurant;
 use App\models\State;
 use App\models\Trip;
 use App\models\TripComments;
@@ -709,7 +709,7 @@ class MyTripsController extends Controller {
                     $trip->select = "1";
                 else
                     $trip->select = "0";
-                
+
                 $trip->placeCount = TripPlace::whereTripId($trip->id)->count();
                 $limit = ($trip->placeCount > 4) ? 4 : $trip->placeCount;
                 $tripPlaces = TripPlace::whereTripId($trip->id)->take($limit)->get();
@@ -979,7 +979,7 @@ class MyTripsController extends Controller {
 
         if($tripMember == null)
             return Redirect::to(route('msgsErr', ['err' => 'لینک دعوت از بین رفته است']));
-        
+
         return $this->myTripsInner($tripId);
     }
 
@@ -1006,7 +1006,7 @@ class MyTripsController extends Controller {
         }
         return Redirect::to(route('msgsErr', ['err' => 'لینک دعوت از بین رفته است']));
     }
-    
+
     public function rejectInvitation($tripId) {
 
         $uId = Auth::user()->id;
@@ -1077,7 +1077,7 @@ class MyTripsController extends Controller {
         if(isset($_POST["username"]) && isset($_POST["tripId"])) {
 
             $uId = User::whereUserName(makeValidInput($_POST["username"]))->first()->id;
-            
+
             $condition = ['uId' => $uId, 'tripId' => makeValidInput($_POST["tripId"])];
             $tripLevel = TripMembersLevelController::where($condition)->first();
             if($tripLevel->addPlace == 1)

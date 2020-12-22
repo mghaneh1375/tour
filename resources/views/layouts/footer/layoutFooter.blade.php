@@ -1,5 +1,4 @@
 <footer>
-
     @include('layouts.footer.PcFooter')
 
     @include('layouts.footer.MobileFooter')

@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\models\Safarnameh;
-use App\models\SafarnamehCategories;
-use App\models\SafarnamehCategoryRelations;
+use App\models\safarnameh\Safarnameh;
+use App\models\safarnameh\SafarnamehCategories;
+use App\models\safarnameh\SafarnamehCategoryRelations;
 use Closure;
 use Illuminate\Support\Facades\View;
 

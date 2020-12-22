@@ -831,12 +831,12 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                     password: password
                 },
                 success: function (response) {
-                    if (response == "ok") {
+                    if (response.status == "ok") {
                         $('#form_userName').val(username);
                         $('#form_pass').val(password);
                         $('#redirectUrl').val(selectedUrl);
                         $('#second_login').submit();
-                    } else if (response == "nok2") {
+                    } else if (response.status == "nok2") {
                         closeLoading();
                         $(".loginErr").empty().append('{{__('حساب کاربری شما غیر فعال شده است')}}');
                     } else {
@@ -846,7 +846,6 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                 },
                 error: function (xhr, status, error) {
                     closeLoading();
-                    console.log(xhr.responseText);
                     if (xhr.responseText == "Too Many Attempts.")
                         $(".loginErr").empty().append('{{__('تعداد درخواست های شما بیش از حد مجاز است. لطفا تا 5 دقیقه دیگر تلاش نفرمایید')}}');
                 }

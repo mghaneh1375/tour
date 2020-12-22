@@ -6,7 +6,7 @@ use App\models\ActivationCode;
 use App\models\DefaultPic;
 use App\models\festival\FestivalCookImage;
 use App\models\FestivalLimboContent;
-use App\models\MahaliFood;
+use App\models\places\MahaliFood;
 use App\User;
 use Illuminate\Http\Request;
 

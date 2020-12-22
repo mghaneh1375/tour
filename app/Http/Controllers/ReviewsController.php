@@ -5,28 +5,28 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
-use App\models\Amaken;
+use App\models\places\Amaken;
 use App\models\BookMark;
 use App\models\BookMarkReference;
-use App\models\Boomgardy;
+use App\models\places\Boomgardy;
 use App\models\Cities;
 use App\models\ConfigModel;
 use App\models\DefaultPic;
 use App\models\GoyeshCity;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\LogModel;
-use App\models\MahaliFood;
-use App\models\Majara;
-use App\models\Place;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
+use App\models\places\Place;
 use App\models\QuestionAns;
 use App\models\QuestionUserAns;
 use App\models\Report;
 use App\models\ReportsType;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\LogFeedBack;
 use App\models\ReviewPic;
 use App\models\ReviewUserAssigned;
-use App\models\SogatSanaie;
+use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\UserOpinion;
 use App\User;
@@ -550,4 +550,3 @@ class ReviewsController extends Controller
     }
 }
 
-  

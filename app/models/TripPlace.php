@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $date
  * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace whereTripId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace wherePlaceId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace where('kindPlaceId',$value)
  */
 
 class TripPlace extends Model {

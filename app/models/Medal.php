@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $pic_1
  * @property string $pic_2
  * @property integer $kindPlaceId
- * @method static \Illuminate\Database\Query\Builder|\App\models\Medal whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Medal where('kindPlaceId',$value)
  */
 
 class Medal extends Model {

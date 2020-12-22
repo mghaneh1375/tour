@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $name
  * @property integer $kindPlaceId
- * @method static \Illuminate\Database\Query\Builder|\App\models\Opinion whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Opinion where('kindPlaceId',$value)
  */
 
 class Opinion extends Model {

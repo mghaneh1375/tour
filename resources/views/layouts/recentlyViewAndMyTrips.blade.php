@@ -1,10 +1,10 @@
 <?php
 
 use App\models\Adab;
-use App\models\Amaken;
-use App\models\Hotel;
-use App\models\Majara;
-use App\models\Restaurant;
+use App\models\places\Amaken;
+use App\models\places\Hotel;
+use App\models\places\Majara;
+use App\models\places\Restaurant;
 use App\models\Trip;
 use App\models\TripMember;
 use App\models\TripPlace;

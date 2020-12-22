@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
-use App\models\Amaken;
-use App\models\Hotel;
+use App\models\places\Amaken;
+use App\models\places\Hotel;
 use App\models\LogModel;
-use App\models\Majara;
+use App\models\places\Majara;
 use App\models\Message;
 use App\models\PicItem;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\Report;
 use App\models\ReportsType;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -147,7 +147,7 @@ class ReportController extends Controller {
 
         $kindPlaceId = Place::whereName('پیام')->first()->id;
 
-        echo json_encode(ReportsType::whereKindPlaceId($kindPlaceId)->get());
+        echo json_encode(ReportsType::where('kindPlaceId',$kindPlaceId)->get());
 
     }
 
@@ -157,7 +157,7 @@ class ReportController extends Controller {
 
             $logId = makeValidInput($_POST["logId"]);
             $log = LogModel::whereId($logId);
-            $reports = ReportsType::whereKindPlaceId($log->kindPlaceId)->get();
+            $reports = ReportsType::where('kindPlaceId',$log->kindPlaceId)->get();
 
             $uId = Auth::user()->id;
 

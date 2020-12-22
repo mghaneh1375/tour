@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $name
  * @property integer $kindPlaceId
- * @method static \Illuminate\Database\Query\Builder|\App\models\PicItem whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\PicItem where('kindPlaceId',$value)
  */
 
 class PicItem extends Model {

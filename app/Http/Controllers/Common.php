@@ -3,27 +3,27 @@
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
-use App\models\Amaken;
+use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\CityPic;
 use App\models\DefaultPic;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\Level;
 use App\models\LogFeedBack;
 use App\models\LogModel;
-use App\models\MahaliFood;
-use App\models\Majara;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
 use App\models\Medal;
 use App\models\Message;
-use App\models\Place;
-use App\models\PlacePic;
+use App\models\places\Place;
+use App\models\places\PlacePic;
 use App\models\places\PlaceRates;
 use App\models\QuestionAns;
 use App\models\BookMarkReference;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\ReviewPic;
 use App\models\ReviewUserAssigned;
-use App\models\SogatSanaie;
+use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\User;
 use Carbon\Carbon;
@@ -1072,7 +1072,7 @@ function createUrl($kindPlaceId, $placeId, $stateId, $cityId, $articleId = 0){
         return route('placeDetails', ['kindPlaceId' => $kindPlaceId, 'placeId' => $placeId]);
     }
     else if($articleId != 0){
-        $post = \App\models\Safarnameh::find($articleId);
+        $post = \App\models\safarnameh\Safarnameh::find($articleId);
         if($post != null)
             return url('/safarnameh/show/'. $post->id);
         else
@@ -1083,7 +1083,7 @@ function createUrl($kindPlaceId, $placeId, $stateId, $cityId, $articleId = 0){
 function createPicUrl($articleId){
 
     if($articleId != 0){
-        $post = \App\models\Safarnameh::find($articleId);
+        $post = \App\models\safarnameh\Safarnameh::find($articleId);
         if($post != null)
             return URL::asset('_images/userPhoto/' . $post->userId . '/' . $post->pic);
     }

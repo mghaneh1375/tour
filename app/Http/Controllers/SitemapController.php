@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\models\Amaken;
+use App\models\places\Amaken;
 use App\models\Cities;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\Post;
-use App\models\Safarnameh;
+use App\models\safarnameh\Safarnameh;
 use App\models\State;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

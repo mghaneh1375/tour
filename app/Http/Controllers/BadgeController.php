@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\LogModel;
 use App\models\Medal;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -16,11 +16,11 @@ class BadgeController extends Controller {
     public function showBadges() {
 
         $badges = Medal::all();
-        
+
         $uId = Auth::user()->id;
 
         foreach ($badges as $badge) {
-            
+
             if(checkBadge($uId, $badge))
                 $badge->status = 1;
             else

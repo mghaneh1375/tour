@@ -7,7 +7,7 @@ use App\models\Alert;
 use App\models\Block;
 use App\models\LogModel;
 use App\models\Message;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\Report;
 use App\models\ReportsType;
 use App\models\User;

@@ -8,7 +8,7 @@ use App\models\Festival;
 use App\models\festival\FestivalSurvey;
 use App\models\FestivalContent;
 use App\models\FestivalLimboContent;
-use App\models\Place;
+use App\models\places\Place;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

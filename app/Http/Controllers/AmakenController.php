@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
-use App\models\Amaken;
+use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\ConfigModel;
 use App\models\DefaultPic;
 use App\models\LogModel;
-use App\models\Place;
-use App\models\PlaceFeatureRelation;
-use App\models\PlaceFeatures;
-use App\models\PlacePic;
-use App\models\PlaceStyle;
+use App\models\places\Place;
+use App\models\places\PlaceFeatureRelation;
+use App\models\places\PlaceFeatures;
+use App\models\places\PlacePic;
+use App\models\places\PlaceStyle;
 use App\models\SectionPage;
 use App\models\State;
 use App\models\Tag;

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
-use App\models\Amaken;
+use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\CountryCode;
-use App\models\Hotel;
-use App\models\HotelApi;
-use App\models\HotelPassengerInfo;
+use App\models\places\Hotel;
+use App\models\places\HotelApi;
+use App\models\places\HotelPassengerInfo;
 use App\models\LogModel;
 use App\models\NoticesHotel;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\saveApiInfo;
 use App\models\State;
 use App\models\User;

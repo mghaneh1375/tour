@@ -7,24 +7,24 @@ use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Age;
-use App\models\Amaken;
+use App\models\places\Amaken;
 use App\models\Cities;
 use App\models\Comment;
 use App\models\DefaultPic;
 use App\models\GoyeshCity;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\InvitationCode;
 use App\models\Level;
 use App\models\LogModel;
-use App\models\Majara;
+use App\models\places\Majara;
 use App\models\Medal;
 use App\models\Message;
 use App\models\Oauth_access_tokens;
 use App\models\OpOnActivity;
-use App\models\Place;
-use App\models\PlaceStyle;
+use App\models\places\Place;
+use App\models\places\PlaceStyle;
 use App\models\Question;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\State;
 use App\models\Tag;
 use App\models\User;
@@ -166,10 +166,10 @@ class APIController extends Controller {
             }
 
             if(!empty($key2))
-                $tmp = DB::select("SELECT cities.name as targetName, state.name as stateName from cities, state WHERE (replace(cities.name, ' ', '') LIKE '%$key%' or replace(cities.name, ' ', '') LIKE '%$key2%') and 
+                $tmp = DB::select("SELECT cities.name as targetName, state.name as stateName from cities, state WHERE (replace(cities.name, ' ', '') LIKE '%$key%' or replace(cities.name, ' ', '') LIKE '%$key2%') and
 					stateId = state.id");
             else
-                $tmp = DB::select("SELECT cities.name as targetName, state.name as stateName from cities, state WHERE replace(cities.name, ' ', '') LIKE '%$key%' and 
+                $tmp = DB::select("SELECT cities.name as targetName, state.name as stateName from cities, state WHERE replace(cities.name, ' ', '') LIKE '%$key%' and
 					stateId = state.id");
 
             foreach ($tmp as $itr) {
@@ -466,7 +466,7 @@ class APIController extends Controller {
             return response()->json($this->content, $status);
         }
     }
-    
+
     public function showProfile() {
 
         $user = Auth::user();
@@ -545,7 +545,7 @@ class APIController extends Controller {
 
         echo \GuzzleHttp\json_encode(['data' => $this->content]);
     }
-    
+
     public function badgesAPI() {
 
         $this->content['badges'] = [];
@@ -574,7 +574,7 @@ class APIController extends Controller {
         }
 
         return response()->json($this->content, 401);
-        
+
     }
 
     public function inMsgCountAPI() {
@@ -1025,7 +1025,7 @@ class APIController extends Controller {
         $this->content['mode'] = $mode;
         $this->content['brands'] = $brands;
         $this->content['thumbnail'] = $thumbnail;
-        $this->content['tags'] = Tag::whereKindPlaceId($kindPlaceId)->get();
+        $this->content['tags'] = Tag::where('kindPlaceId',$kindPlaceId)->get();
         $this->content['state'] = $state;
         $this->content['avgRate'] = $rates[1];
         $this->content['kindPlaceId'] = $kindPlaceId;
@@ -1038,7 +1038,7 @@ class APIController extends Controller {
         $this->content['bookMark'] = $bookMark;
         $this->content['srcCities'] = $srcCities;
         $this->content['err'] = $err;
-        $this->content['placeStyles'] = PlaceStyle::whereKindPlaceId($kindPlaceId)->get();
+        $this->content['placeStyles'] = PlaceStyle::where('kindPlaceId',$kindPlaceId)->get();
         $this->content['placeMode'] = $placeMode;
 
         return response()->json($this->content);
@@ -1271,16 +1271,16 @@ class APIController extends Controller {
                 $comment = Comment::whereLogId($log->id)->first();
                 return view('review', array('placePic' => $placePic, 'city' => $city->name,
                     'state' => State::whereId($city->stateId)->name, 'placeId' => $placeId, 'placeName' => $place->name,
-                    'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::whereKindPlaceId($kindPlaceId)->get(),
-                    'questions' => Question::whereKindPlaceId($kindPlaceId)->get(), 'err' => $err, 'log' => $log, 'comment' => $comment,
-                    'placeStyles' => PlaceStyle::whereKindPlaceId($kindPlaceId)->get(), 'placeMode' => $placeMode));
+                    'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::where('kindPlaceId',$kindPlaceId)->get(),
+                    'questions' => Question::where('kindPlaceId',$kindPlaceId)->get(), 'err' => $err, 'log' => $log, 'comment' => $comment,
+                    'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'placeMode' => $placeMode));
             }
 
             return view('review', array('placePic' => $placePic, 'city' => $city->name,
                 'state' => State::whereId($city->stateId)->name, 'placeId' => $placeId, 'placeName' => $place->name,
-                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::whereKindPlaceId($kindPlaceId)->get(),
-                'questions' => Question::whereKindPlaceId($kindPlaceId)->get(), 'err' => $err,
-                'placeStyles' => PlaceStyle::whereKindPlaceId($kindPlaceId)->get(), 'placeMode' => $placeMode));
+                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::where('kindPlaceId',$kindPlaceId)->get(),
+                'questions' => Question::where('kindPlaceId',$kindPlaceId)->get(), 'err' => $err,
+                'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'placeMode' => $placeMode));
         }
         $city = State::whereId($place->stateId);
 
@@ -1290,16 +1290,16 @@ class APIController extends Controller {
             $comment = Comment::whereLogId($log->id)->first();
             return view('review', array('placePic' => $placePic, 'city' => $city->name,
                 'placeId' => $placeId, 'placeName' => $place->name, 'state' => $state,
-                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::whereKindPlaceId($kindPlaceId)->get(),
-                'questions' => Question::whereKindPlaceId($kindPlaceId)->get(), 'err' => $err, 'log' => $log, 'comment' => $comment,
-                'placeStyles' => PlaceStyle::whereKindPlaceId($kindPlaceId)->get(), 'placeMode' => $placeMode));
+                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::where('kindPlaceId',$kindPlaceId)->get(),
+                'questions' => Question::where('kindPlaceId',$kindPlaceId)->get(), 'err' => $err, 'log' => $log, 'comment' => $comment,
+                'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'placeMode' => $placeMode));
         }
         else {
             return view('review', array('placePic' => $placePic, 'city' => $city->name,
                 'placeId' => $placeId, 'placeName' => $place->name, 'state' => $state,
-                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::whereKindPlaceId($kindPlaceId)->get(),
-                'questions' => Question::whereKindPlaceId($kindPlaceId)->get(), 'err' => $err,
-                'placeStyles' => PlaceStyle::whereKindPlaceId($kindPlaceId)->get(), 'placeMode' => $placeMode));
+                'kindPlaceId' => $kindPlaceId, 'opinions' => Opinion::where('kindPlaceId',$kindPlaceId)->get(),
+                'questions' => Question::where('kindPlaceId',$kindPlaceId)->get(), 'err' => $err,
+                'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'placeMode' => $placeMode));
         }
     }
 
@@ -1326,10 +1326,10 @@ class APIController extends Controller {
         $z .= ')';
 
         if (!$first)
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
                       hotels WHERE id not in ' . $z . 'limit 0, ' . $reminder));
         else
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
                       hotels limit 0, ' . $reminder));
 
         foreach ($place1 as $itr) {
@@ -1376,7 +1376,7 @@ class APIController extends Controller {
 
         echo json_encode(["places" => $place1]);
     }
-    
+
     public function getAmakensMainAPI() {
 
         $activityId = Activity::whereName('نظر')->first()->id;
@@ -1399,10 +1399,10 @@ class APIController extends Controller {
         $z .= ')';
 
         if(!$first)
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
               amaken WHERE id not in ' . $z . 'limit 0, ' . $reminder));
         else
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
               amaken limit 0, ' . $reminder));
 
         foreach ($place1 as $itr) {
@@ -1473,10 +1473,10 @@ class APIController extends Controller {
         $z .= ')';
 
         if(!$first)
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
               restaurant WHERE id not in ' . $z . 'limit 0, ' . $reminder));
         else
-            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from 
+            $place1 = array_merge($place1, DB::select('select id, name, cityId, file, pic_1, 0 as matches from
               restaurant limit 0, ' . $reminder));
 
         foreach ($place1 as $itr) {
@@ -2062,7 +2062,7 @@ class APIController extends Controller {
             $out = LogModel::where($condition)->skip($page)->limit(5)->get();
 
             if($out != null && count($out) > 0) {
-                
+
                 foreach($out as $itr) {
                     if($itr->pic == 0)
                         $itr->pic = "";
@@ -2151,8 +2151,8 @@ class APIController extends Controller {
             }
             else
                 $out = [];
-            
-            
+
+
             echo \GuzzleHttp\json_encode(['data' => $out]);
 
         }
@@ -2210,7 +2210,7 @@ class APIController extends Controller {
     }
 
     public function showBadgesAPI() {
-        
+
         $badges = Medal::all();
 
         $uId = Auth::user()->id;
@@ -2328,5 +2328,5 @@ class APIController extends Controller {
         }
 
     }
-    
+
 }

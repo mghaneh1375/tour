@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Business;
 
 use App\models\localShops\LocalShops;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

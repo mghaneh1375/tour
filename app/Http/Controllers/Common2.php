@@ -2,12 +2,12 @@
 
 
 use App\models\logs\UserSeenLog;
-use App\models\SafarnamehCategoryRelations;
-use App\models\SafarnamehComments;
-use App\models\SafarnamehLike;
+use App\models\safarnameh\SafarnamehCategoryRelations;
+use App\models\safarnameh\SafarnamehComments;
+use App\models\safarnameh\SafarnamehLike;
 use App\models\User;
 use App\models\Activity;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\Cities;
 use App\models\State;
 use App\models\LogModel;

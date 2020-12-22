@@ -663,7 +663,7 @@
                 <div class="fullyCenterContent mobileFooterCategoryBottom">
                     <div class="headerSearchBar cityButtonsSec">
                         @if(isset($locationName['stateNameUrl']))
-                            <a href="{{route('cityPage', ['kine' => 'state', 'city' => $locationName['stateNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton" style="margin-bottom: 6px;">
+                            <a href="{{route('cityPage', ['kind' => 'state', 'city' => $locationName['stateNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton" style="margin-bottom: 6px;">
                                 <div class="icc fullyCenterContent" style="word-spacing: -4px;  color: black;">
                                     <img src="{{URL::asset('images/icons/iranIcon.svg')}}" style="width: 20px">
                                     استان {{$locationName['stateNameUrl']}}
@@ -671,7 +671,7 @@
                             </a>
                         @endif
                         @if(isset($locationName['cityNameUrl']) && $locationName['kindState'] == 'city')
-                            <a href="{{route('cityPage', ['kine' => 'city', 'city' => $locationName['cityNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton">
+                            <a href="{{route('cityPage', ['kind' => 'city', 'city' => $locationName['cityNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton">
                                 <div class="icc locationIcon" style="word-spacing: -4px;  color: black;">شهر {{$locationName['cityNameUrl']}}</div>
                             </a>
                         @endif

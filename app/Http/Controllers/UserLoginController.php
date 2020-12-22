@@ -45,16 +45,16 @@ class UserLoginController extends Controller
                     if(!Auth::check())
                         Auth::login($user);
 
-                    return response("ok");
+                    return response()->json(['status' => 'ok']);
                 }
                 else {
                     auth()->logout();
-                    return response("nok2");
+                    return response()->json(['status' => 'nok2']);
                 }
             }
         }
         else
-            return response("nok");
+            return response()->json(['status' => 'nok']);
     }
 
     public function checkLogin() {

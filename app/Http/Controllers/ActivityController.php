@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\models\Activity;
 use App\models\Adab;
-use App\models\Amaken;
+use App\models\places\places\Amaken;
 use App\models\BookMark;
 use App\models\BookMarkReference;
 use App\models\Cities;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\LogModel;
-use App\models\MahaliFood;
-use App\models\Majara;
-use App\models\Place;
-use App\models\Restaurant;
-use App\models\SogatSanaie;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
+use App\models\places\Place;
+use App\models\places\Restaurant;
+use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\User;
 use Carbon\Carbon;
@@ -41,7 +41,7 @@ class ActivityController extends Controller {
             $condition = ["visitorId" => $uId, "activityId" => $activityId, "kindPlaceId" => $kindPlaceId, 'confirm' => 1];
         else
             $condition = ["visitorId" => $uId, "activityId" => $activityId, 'confirm' => 1];
-        
+
         $out = LogModel::where($condition)->skip($page)->limit(5)->get();
 
         if($out == null || count($out) == 0) {
@@ -80,7 +80,7 @@ class ActivityController extends Controller {
 
             echo json_encode($out);
         }
-        
+
     }
 
     function getNumsActivities() {

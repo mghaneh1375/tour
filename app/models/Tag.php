@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $name
  * @property integer $kindPlaceId
- * @method static \Illuminate\Database\Query\Builder|\App\models\Tag whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Tag where('kindPlaceId',$value)
  */
 
 class Tag extends Model {

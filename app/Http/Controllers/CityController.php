@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
-use App\models\Amaken;
-use App\models\Boomgardy;
+use App\models\places\places\Amaken;
+use App\models\places\Boomgardy;
 use App\models\Cities;
 use App\models\CityPic;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\LogModel;
-use App\models\MahaliFood;
-use App\models\Majara;
-use App\models\Place;
-use App\models\PlacePic;
+use App\models\places\MahaliFood;
+use App\models\places\Majara;
+use App\models\places\Place;
+use App\models\places\PlacePic;
 use App\models\Question;
-use App\models\Restaurant;
-use App\models\Safarnameh;
-use App\models\SafarnamehCityRelations;
-use App\models\SogatSanaie;
+use App\models\places\Restaurant;
+use App\models\safarnameh\Safarnameh;
+use App\models\safarnameh\SafarnamehCityRelations;
+use App\models\places\SogatSanaie;
 use App\models\State;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -124,7 +124,7 @@ class CityController extends Controller
                 $smallPic = URL::asset("_images/amaken/$item->file/l-$item->picNumber");
             else
                 $smallPic = $mainPic;
-            
+
             if($mainPic != null)
                 array_push($pics, [
                     'mainPic' => $mainPic,

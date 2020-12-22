@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string room_facility
  * @property string policy
  * @property integer $cityName
- * @method static \Illuminate\Database\Query\Builder|\App\models\HotelApi whereCityName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\places\HotelApi whereCityName($value)
  */
 
 class HotelApi extends Model

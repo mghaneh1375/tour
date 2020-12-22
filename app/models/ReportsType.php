@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property integer $kindPlaceId
  * @property string $description
- * @method static \Illuminate\Database\Query\Builder|\App\models\ReportsType whereKindPlaceId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\ReportsType where('kindPlaceId',$value)
  */
 
 class ReportsType extends Model {

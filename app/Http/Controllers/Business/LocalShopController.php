@@ -8,7 +8,7 @@ use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
 use App\models\localShops\LocalShopsPictures;
 use App\models\LogModel;
-use App\models\Place;
+use App\models\places\Place;
 use App\models\ReviewPic;
 use App\models\ReviewUserAssigned;
 use App\User;

@@ -5,43 +5,43 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
-use App\models\Amaken;
+use App\models\places\Amaken;
 use App\models\BannerPics;
 use App\models\BookMark;
 use App\models\BookMarkReference;
-use App\models\Boomgardy;
+use App\models\places\Boomgardy;
 use App\models\Cities;
 use App\models\Comment;
 use App\models\ConfigModel;
 use App\models\DefaultPic;
 use App\models\FoodMaterial;
-use App\models\Hotel;
+use App\models\places\Hotel;
 use App\models\LogFeedBack;
 use App\models\LogModel;
-use App\models\MahaliFood;
+use App\models\places\MahaliFood;
 use App\models\MainSliderPic;
-use App\models\Majara;
+use App\models\places\Majara;
 use App\models\Opinion;
 use App\models\OpOnActivity;
 use App\models\PhotographersLog;
 use App\models\PhotographersPic;
 use App\models\PicItem;
-use App\models\Place;
-use App\models\PlaceFeatureRelation;
-use App\models\PlaceFeatures;
+use App\models\places\Place;
+use App\models\places\PlaceFeatureRelation;
+use App\models\places\PlaceFeatures;
 use App\models\places\PlaceRates;
-use App\models\PlaceStyle;
-use App\models\PlaceTag;
+use App\models\places\PlaceStyle;
+use App\models\places\PlaceTag;
 use App\models\Question;
 use App\models\QuestionUserAns;
 use App\models\Report;
-use App\models\Restaurant;
+use App\models\places\Restaurant;
 use App\models\ReviewPic;
 use App\models\ReviewUserAssigned;
-use App\models\Safarnameh;
-use App\models\SafarnamehCityRelations;
+use App\models\safarnameh\Safarnameh;
+use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SectionPage;
-use App\models\SogatSanaie;
+use App\models\places\SogatSanaie;
 use App\models\SpecialAdvice;
 use App\models\State;
 use App\models\Survey;
@@ -246,7 +246,7 @@ class PlaceController extends Controller {
             'sitePics' => $sitePics, 'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
             'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo,
             'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'err' => '',
-            'placeStyles' => PlaceStyle::whereKindPlaceId($kindPlaceId)->get(), 'kindPlace' => $kindPlace,
+            'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'kindPlace' => $kindPlace,
             'placeMode' => $kindPlace->tableName, 'video' => $video,
             'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()));
     }
@@ -1305,7 +1305,7 @@ class PlaceController extends Controller {
     public function getPlaceStyles()
     {
         if (isset($_POST["kindPlaceId"]))
-            echo \GuzzleHttp\json_encode(PlaceStyle::whereKindPlaceId(makeValidInput($_POST["kindPlaceId"]))->get());
+            echo \GuzzleHttp\json_encode(PlaceStyle::where('kindPlaceId',makeValidInput($_POST["kindPlaceId"]))->get());
     }
 
     public function getSrcCities()

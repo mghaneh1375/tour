@@ -3,6 +3,28 @@
 use App\models\ConfigModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
+Route::any('android', function (Illuminate\Http\Request $request) {
+
+    $key = $request["key"];
+    if(strlen($key) < 3) {
+        return response()->json([
+            "status" => "0",
+            "result" => [$key]
+        ]);
+
+    }
+    $cities = \Illuminate\Support\Facades\DB::select("select concat(name, ' در ', (select name from state where id = stateId)) as name from cities where isVillage = 0 and name like '%" . $key . "%'");
+    $out = [];
+    $counter = 0;
+
+    foreach ($cities as $city) {
+        $out[$counter++] = $city->name;
+    }
+    return response()->json([
+        "status" => "0",
+        "result" => $out
+    ]);
+});
 
 Route::get('language/{lang}', function($lang){
     Session::put('lang', $lang);
@@ -624,7 +646,7 @@ Route::group(array('middleware' => 'auth'), function () {
     Route::get('/tour/details', function (){
         $placeMode = 'tour';
         $state = 'تهران';
-        $place = \App\models\Hotel::find(1);
+        $place = \App\models\places\Hotel::find(1);
         $kindPlaceId = 1;
 //        dd($place);
         return view('tour.tour-details', compact(['placeMode', 'state', 'place', 'kindPlaceId']));
