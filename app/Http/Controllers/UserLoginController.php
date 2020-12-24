@@ -226,8 +226,8 @@ class UserLoginController extends Controller
 
     public function checkReCaptcha()
     {
-        echo 'ok';
-        return;
+//        echo 'ok';
+//        return;
 
         if (isset($_POST["captcha"])) {
             $response = $_POST["captcha"];

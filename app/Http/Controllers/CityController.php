@@ -27,14 +27,14 @@ use Illuminate\Support\Facades\URL;
 class CityController extends Controller
 {
     public function cityPage($kind, $city, Request $request) {
-
+        $todayFunc = getToday();
         $city = str_replace('+', ' ', $city);
-        $today = getToday()["date"];
-        $nowTime = getToday()["time"];
+        $today = $todayFunc["date"];
+        $nowTime = $todayFunc["time"];
         if($kind == 'state')
-            $place = State::whereName($city)->first();
+            $place = State::where('name', $city)->first();
         else
-            $place = Cities::whereName($city)->first();
+            $place = Cities::where('name', $city)->first();
 
         if($place == null)
             return redirect(\url('/'));
@@ -77,34 +77,12 @@ class CityController extends Controller
             $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('stateId', $place->id)->count();
         }
+        $mainLocation = __DIR__ . '/../../../../assets/_images';
 
-        if($place->image == null){
-            $place->image = URL::asset('_images/nopic/blank.jpg');
-
-//            $mostSeen = [];
-//            $seenActivity = Activity::whereName('مشاهده')->first();
-//            if($allAmakenId != null)
-//                $mostSeen = DB::select('SELECT placeId, COUNT(id) as seen FROM log WHERE activityId = ' .$seenActivity->id. ' AND kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmakenId) . ') GROUP BY placeId ORDER BY seen DESC');
-//            else
-//                $place->image = URL::asset('_images/nopic/blank.jpg');
-//
-//            if(count($mostSeen) != 0){
-//                foreach ($mostSeen as $item){
-//                    $p = Amaken::find($item->placeId);
-//                    $location = __DIR__ . '/../../../../assets/_images/amaken/' . $p->file . '/s-' . $p->picNumber;
-//                    if(file_exists($location)) {
-//                        $place->image = URL::asset('_images/amaken/' . $p->file . '/s-' . $p->picNumber);
-//                        break;
-//                    }
-//                }
-//                if($place->image == null || $place->image == '')
-//                    $place->image = URL::asset('_images/nopic/blank.jpg');
-//            }
-//            else
-//                $place->image = URL::asset('_images/nopic/blank.jpg');
-        }
+        if($place->image != null && is_file($mainLocation."/city/$place->id/$place->image"))
+            $place->image = URL::asset("_images/city$place->id/$place->image");
         else
-            $place->image = URL::asset("_images/city/$place->id/$place->image");
+            $place->image = URL::asset('_images/nopic/blank.jpg');
 
         $pics = [];
         $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')
@@ -113,7 +91,7 @@ class CityController extends Controller
                         ->select(['amaken.id', 'amaken.picNumber AS mainPic', 'amaken.keyword', 'amaken.name', 'amaken.file', 'placePics.alt', 'placePics.picNumber'])
                         ->get();
 
-        $location = __DIR__ . '/../../../../assets/_images/amaken/';
+        $location = $mainLocation.'/amaken/';
         foreach ($DBpic as $item){
             $mainPic = null;
             $smallPic = null;
