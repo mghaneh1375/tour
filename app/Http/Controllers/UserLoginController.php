@@ -99,9 +99,9 @@ class UserLoginController extends Controller
     {
         if (isset($_POST["email"]) && $_POST['email'] != '') {
             if(\auth()->check())
-                echo (User::whereEmail(makeValidInput($_POST["email"]))->where('id', '!=', \auth()->user()->id)->count() > 0) ? 'nok' : 'ok';
+                echo (User::where('email',makeValidInput($_POST["email"]))->where('id', '!=', \auth()->user()->id)->count() > 0) ? 'nok' : 'ok';
             else
-                echo (User::whereEmail(makeValidInput($_POST["email"]))->count() > 0) ? 'nok' : 'ok';
+                echo (User::where('email',makeValidInput($_POST["email"]))->count() > 0) ? 'nok' : 'ok';
             return;
         }
         echo "nok1";
@@ -142,11 +142,11 @@ class UserLoginController extends Controller
     public function checkUserName()
     {
         if (isset($_POST["username"])) {
-
+            $username = makeValidInput($_POST['username']);
             $invitationCode = "";
 
             if(\auth()->check()){
-                if(User::whereUserName(makeValidInput($_POST['username']))->where('id', '!=', \auth()->user()->id)->count() > 0)
+                if(User::where('username',$username)->where('id', '!=', \auth()->user()->id)->count() > 0)
                     echo 'nok1';
                 else
                     echo 'ok';
@@ -155,9 +155,9 @@ class UserLoginController extends Controller
                 if (isset($_POST["invitationCode"]))
                     $invitationCode = makeValidInput($_POST["invitationCode"]);
 
-                if (User::whereUserName(makeValidInput($_POST["username"]))->count() > 0)
+                if (User::where('username',$username)->count() > 0)
                     echo "nok1";
-                else if (!empty($invitationCode) && User::whereInvitationCode($invitationCode)->count() == 0)
+                else if (!empty($invitationCode) && User::where('invitationCode',$invitationCode)->count() == 0)
                     echo 'nok';
                 else
                     echo 'ok';
@@ -176,16 +176,16 @@ class UserLoginController extends Controller
             $phoneNum = convertNumber('en', $phoneNum);
 
             if(\auth()->check()){
-                if (User::wherePhone($phoneNum)->where('id', '!=', \auth()->user()->id)->count() > 0)
+                if (User::where('phone', $phoneNum)->where('id', '!=', \auth()->user()->id)->count() > 0)
                     echo 'nok';
                 else
                     echo 'ok';
             }
             else {
-                if (User::wherePhone($phoneNum)->count() > 0)
+                if (User::where('phone', $phoneNum)->count() > 0)
                     echo json_encode(['status' => 'nok']);
                 else {
-                    $activation = ActivationCode::wherePhoneNum($phoneNum)->first();
+                    $activation = ActivationCode::where('phoneNum', $phoneNum)->first();
                     if ($activation != null) {
                         if((90 - time() + $activation->sendTime) < 0)
                             $this->resendActivationCode();
@@ -196,7 +196,7 @@ class UserLoginController extends Controller
                     }
 
                     $code = createCode();
-                    while (ActivationCode::whereCode($code)->count() > 0)
+                    while (ActivationCode::where('code', $code)->count() > 0)
                         $code = createCode();
 
                     if ($activation == null) {
@@ -226,8 +226,8 @@ class UserLoginController extends Controller
 
     public function checkReCaptcha()
     {
-//        echo 'ok';
-//        return;
+        echo 'ok';
+        return;
 
         if (isset($_POST["captcha"])) {
             $response = $_POST["captcha"];
@@ -266,7 +266,7 @@ class UserLoginController extends Controller
         if (isset($_POST["phoneNum"])) {
 
             $phoneNum = makeValidInput($_POST["phoneNum"]);
-            $activation = ActivationCode::wherePhoneNum($phoneNum)->first();
+            $activation = ActivationCode::where('phoneNum', $phoneNum)->first();
 
             if ($activation != null) {
 
@@ -277,7 +277,7 @@ class UserLoginController extends Controller
                 } else {
 
                     $code = createCode();
-                    while (ActivationCode::whereCode($code)->count() > 0)
+                    while (ActivationCode::where('code', $code)->count() > 0)
                         $code = createCode();
 
                     $msgId = sendSMS($phoneNum, $code, 'sms');
@@ -308,7 +308,7 @@ class UserLoginController extends Controller
             $phoneNum = $_POST["phoneNum"];
             $phoneNum = convertNumber('en', $phoneNum);
 
-            $user = User::wherePhone(makeValidInput($phoneNum))->first();
+            $user = User::where('phone', makeValidInput($phoneNum))->first();
 
             if ($user != null) {
 
@@ -349,7 +349,7 @@ class UserLoginController extends Controller
     {
         if (isset($_POST["email"])) {
             $email = makeValidInput($_POST["email"]);
-            $user = User::whereEmail($email)->first();
+            $user = User::where('email',$email)->first();
 
             if ($user != null) {
 
@@ -436,7 +436,7 @@ class UserLoginController extends Controller
     {
         if (isset($_POST["phone"])) {
             $phoneNum = convertNumber('en', $_POST["phone"]);
-            $user = User::wherePhone(makeValidInput($phoneNum))->first();
+            $user = User::where('phone', makeValidInput($phoneNum))->first();
             if ($user != null) {
                 $activeCode = ActivationCode::where('userId', $user->id)
                                             ->where('phoneNum', $phoneNum)
@@ -478,7 +478,7 @@ class UserLoginController extends Controller
             (isset($_POST["email"]) || isset($_POST["phone"]))) {
 
             $uInvitationCode = createCode();
-            while (User::whereInvitationCode($uInvitationCode)->count() > 0)
+            while (User::where('invitationCode',$uInvitationCode)->count() > 0)
                 $uInvitationCode = createCode();
 
             $checkUserName = User::where('username', $request->username)->count();
@@ -515,7 +515,7 @@ class UserLoginController extends Controller
             if (isset($request->invitationCode) && $request->invitationCode != '') {
                 $invitationCode = makeValidInput($request->invitationCode);
                 if (!empty($invitationCode)) {
-                    $dest = User::whereInvitationCode($invitationCode)->first();
+                    $dest = User::where('invitationCode',$invitationCode)->first();
                     if ($dest == null) {
                         echo 'nok3';
                         return;
@@ -556,7 +556,7 @@ class UserLoginController extends Controller
                 $log->visitorId = $user->id;
                 $log->date = date('Y-m-d');
                 $log->time = getToday()["time"];
-                $log->activityId = Activity::whereName('دعوت')->first()->id;
+                $log->activityId = Activity::where('name','دعوت')->first()->id;
                 $log->kindPlaceId = -1;
                 $log->confirm = 1;
                 $log->placeId = -1;
@@ -568,7 +568,7 @@ class UserLoginController extends Controller
                 $log->visitorId = $dest->id;
                 $log->date = date('Y-m-d');
                 $log->time = getToday()["time"];
-                $log->activityId = Activity::whereName('دعوت')->first()->id;
+                $log->activityId = Activity::where('name','دعوت')->first()->id;
                 $log->kindPlaceId = -1;
                 $log->confirm = 1;
                 $log->placeId = -1;
