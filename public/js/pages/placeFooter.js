@@ -120,9 +120,7 @@ function closeMobileFooterPopUps(_id){
 }
 
 function createTripFromMobileFooter(){
-    if(!checkLogin())
-        return;
-    createNewTrip();
+    createNewTrip(() => getMyTripsPromiseFunc().then(response => createTripCardFooter(response)));
 }
 
 function goToAddPlacePageInFooter(){

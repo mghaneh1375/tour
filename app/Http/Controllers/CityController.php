@@ -80,7 +80,7 @@ class CityController extends Controller
         $mainLocation = __DIR__ . '/../../../../assets/_images';
 
         if($place->image != null && is_file($mainLocation."/city/$place->id/$place->image"))
-            $place->image = URL::asset("_images/city$place->id/$place->image");
+            $place->image = URL::asset("_images/city/$place->id/$place->image");
         else
             $place->image = URL::asset('_images/nopic/blank.jpg');
 

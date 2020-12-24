@@ -31,7 +31,7 @@
     }
 </style>
 
-<div id="addPlaceToTripPrompt" class="modalBlackBack hideOnPhone">
+<div id="addPlaceToTripPrompt" class="modalBlackBack">
     <span class="modalBody" style="width: 700px;">
         <div class="body_text">
             <div>
@@ -65,7 +65,7 @@
                         <div>
                             <label class="label">نام سفر</label>
                             <div class="control trip-title-control">
-                                <input class="tripNameInput" id="tripName" onkeyup="checkEmpty()" type="text" maxlength="50" placeholder="حداکثر 50 کاراکتر" value="">
+                                <input class="tripNameInput" id="tripName" onkeyup="checkEmptyTripInputs()" type="text" maxlength="50" placeholder="حداکثر 50 کاراکتر" value="">
                             </div>
                         </div>
                     </div>
@@ -120,6 +120,7 @@
 <script>
     var getPlaceTrips = '{{route('placeTrips')}}';
     var myTrips = '{{route('myTrips')}}';
+
 
     var tripName;
     var selectedPlaceId;
@@ -207,7 +208,6 @@
     function refreshThisAddTrip(){
         closeNewTrip();
         openMyModal('addPlaceToTripPrompt');
-        getMyTripsPromiseFunc().then(response => createTripCardFooter(response));
         saveToTripPopUp(selectedPlaceId, selectedKindPlaceId);
     }
 
@@ -252,15 +252,18 @@
     }
 
     function createNewTrip(_callBack = '') {
+        if(!checkLogin())
+            return;
+
         callBackCreateTrip = null;
-        checkEmpty();
+        checkEmptyTripInputs();
         $("#my-trips-not").hide();
         openMyModal('newTripModal');
         if(typeof _callBack === 'function')
             callBackCreateTrip = _callBack;
     }
 
-    function checkEmpty() {
+    function checkEmptyTripInputs() {
         if($("#tripName").val() == "")
             $("#saves-create-trip-button").addClass("disabled");
         else
@@ -309,7 +312,7 @@
             success: function (response) {
                 $("#error").hide();
                 if(response == "ok") {
-                    if(callBackCreateTrip != null){
+                    if(callBackCreateTrip != null && typeof callBackCreateTrip === 'function'){
                         closeNewTrip();
                         callBackCreateTrip();
                         callBackCreateTrip = null;
