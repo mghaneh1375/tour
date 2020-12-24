@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $tripPlaceId
  * @property integer $uId
  * @property string $description
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripComments whereUId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\TripComments whereTripPlaceId($value)
  */
 

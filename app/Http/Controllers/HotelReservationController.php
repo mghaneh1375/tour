@@ -1329,7 +1329,7 @@ class HotelReservationController extends Controller {
     }
 
     public function getHotelPassengerInfo(){
-        $passengers = HotelPassengerInfo::whereUID(Auth::user()->id)->get();
+        $passengers = HotelPassengerInfo::where('uId',Auth::user()->id)->get();
         foreach ($passengers as $passenger) {
             if($passenger->countryCodeId != 0)
                 $passenger->countryCodeId = CountryCode::whereId($passenger->countryCodeId)->code;

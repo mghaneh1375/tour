@@ -5114,8 +5114,6 @@
             }
         </script>
 
-        @include('layouts.pop-up-create-trip_in_hotel_details')
-
         <script>
             var total;
             var filters = [];

@@ -60,8 +60,6 @@
 
 <body class="ltr domn_en_US lang_en long_prices globalNav2011_reset rebrand_2017 css_commerce_buttons flat_buttons sitewide xo_pin_user_review_to_top track_back">
 
-@include('layouts.pop-up-create-trip')
-
 <div id="fb-root"></div>
 
 <div id="iframediv"></div>

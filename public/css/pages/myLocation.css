@@ -346,8 +346,8 @@
     .bodySec .mobileListSection{
         display: block;
         background: white;
-        position: absolute;
-        bottom: 50px;
+        position: fixed;
+        bottom: 60px;
         right: 0px;
         width: 100%;
         height: 70px;
@@ -357,6 +357,7 @@
     }
     .bodySec .mobileListSection.fullMobileList{
         border-radius: 0px;
+        height: calc(100vh - 160px) !important;
     }
     .bodySec .mobileListSection .topSecMobileList{
         margin: 0px 10px;

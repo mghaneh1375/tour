@@ -42,7 +42,7 @@ class MyTripsController extends Controller {
             $user = Auth::user();
             $uId = $user->id;
 
-            $trips = Trip::whereUId($uId)->get();
+            $trips = Trip::where('uId',$uId)->get();
 
             $condition = ['uId' => $uId, 'status' => 1];
             $invitedTrips = TripMember::where($condition)->select('tripId')->get();
@@ -53,9 +53,9 @@ class MyTripsController extends Controller {
             if($trips != null && count($trips) != 0) {
                 foreach ($trips as $trip) {
                     $trip->url = route('tripPlaces', ['tripId' => $trip->id]);
-                    $trip->placeCount = TripPlace::whereTripId($trip->id)->count();
+                    $trip->placeCount = TripPlace::where('tripId',$trip->id)->count();
                     $limit = ($trip->placeCount > 4) ? 4 : $trip->placeCount;
-                    $tripPlaces = TripPlace::whereTripId($trip->id)->take($limit)->get();
+                    $tripPlaces = TripPlace::where('tripId',$trip->id)->take($limit)->get();
                     $tripPics = [];
                     foreach ($tripPlaces as $item){
                         $kindPlaceId = $item->kindPlaceId;
@@ -125,7 +125,7 @@ class MyTripsController extends Controller {
         if($trip->to_ != "")
             $trip->to_ = formatDate($trip->to_);
 
-        $tripPlaces = TripPlace::whereTripId($tripId)->orderBy('date', $sortMode)->get();
+        $tripPlaces = TripPlace::where('tripId',$tripId)->orderBy('date', $sortMode)->get();
         foreach ($tripPlaces as $tripPlace) {
 
             $kindPlace = Place::find($tripPlace->kindPlaceId);
@@ -148,7 +148,7 @@ class MyTripsController extends Controller {
                 $tripPlace->placeInfo->address = $plc->dastresi;
 
             $tripPlace->placeInfo->phone = isset($plc->phone) && $plc->phone != null ? $plc->phone : "";
-            $tripComments = TripComments::whereTripPlaceId($tripPlace->id)->orderByDesc('id')->get();
+            $tripComments = TripComments::where('tripPlaceId', $tripPlace->id)->orderByDesc('id')->get();
             foreach ($tripComments as $tripComment) {
                 $uInC = User::find($tripComment->uId);
                 $tripComment->username = $uInC->username;
@@ -446,7 +446,7 @@ class MyTripsController extends Controller {
         }
         $trip->owner = User::find($trip->uId);
 
-        $tripPlaces = TripPlace::whereTripId($tripId)->orderBy('date', 'DESC')->get();
+        $tripPlaces = TripPlace::where('tripId',$tripId)->orderBy('date', 'DESC')->get();
         foreach ($tripPlaces as $tripPlace) {
             $kindPlaceId = $tripPlace->kindPlaceId;
             $kindPlace = Place::find($kindPlaceId);
@@ -471,7 +471,7 @@ class MyTripsController extends Controller {
             $tripPlace->city = $city->name;
             $tripPlace->state = State::whereId($city->stateId)->name;
 
-            $tripPlace->comments = TripComments::whereTripPlaceId($tripPlace->id)->get();
+            $tripPlace->comments = TripComments::where('tripPlaceId', $tripPlace->id)->get();
             foreach ($tripPlace->comments as $itr) {
                 $itr->uId = User::whereId($itr->uId)->username;
             }
@@ -601,7 +601,7 @@ class MyTripsController extends Controller {
                 $trip->lastSeen = time();
                 $trip->save();
 
-                TripPlace::whereTripId($tripId)->update(array('date' => ''));
+                TripPlace::where('tripId',$tripId)->update(array('date' => ''));
 
                 echo "ok";
             }
@@ -696,7 +696,7 @@ class MyTripsController extends Controller {
 
             $uId = Auth::user()->id;
 
-            $trips = Trip::whereUId($uId)->get();
+            $trips = Trip::where('uId',$uId)->get();
             $condition = ['uId' => $uId, 'status' => 1];
             $tripIds = TripMember::where($condition)->select('tripId')->get();
 
@@ -710,9 +710,9 @@ class MyTripsController extends Controller {
                 else
                     $trip->select = "0";
 
-                $trip->placeCount = TripPlace::whereTripId($trip->id)->count();
+                $trip->placeCount = TripPlace::where('tripId',$trip->id)->count();
                 $limit = ($trip->placeCount > 4) ? 4 : $trip->placeCount;
-                $tripPlaces = TripPlace::whereTripId($trip->id)->take($limit)->get();
+                $tripPlaces = TripPlace::where('tripId', $trip->id)->take($limit)->get();
 
                 if($trip->placeCount > 0) {
                     $kindPlaceId = $tripPlaces[0]->kindPlaceId;
@@ -860,7 +860,7 @@ class MyTripsController extends Controller {
 
             $tripPlaceId = makeValidInput($_POST["tripPlaceId"]);
             if($tripPlaceId != -1) {
-                $tripComments = TripComments::whereTripPlaceId($tripPlaceId)->get();
+                $tripComments = TripComments::where('tripPlaceId', $tripPlaceId)->get();
                 foreach ($tripComments as $tripComment)
                     $tripComment->uId = User::whereId($tripComment->uId)->username;
                 $out["comments"] = $tripComments;

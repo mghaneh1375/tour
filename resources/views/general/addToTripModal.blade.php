@@ -31,7 +31,7 @@
     }
 </style>
 
-<div id="addPlaceToTripPrompt" class="modalBlackBack">
+<div id="addPlaceToTripPrompt" class="modalBlackBack hideOnPhone">
     <span class="modalBody" style="width: 700px;">
         <div class="body_text">
             <div>
@@ -76,43 +76,43 @@
             </div>
         </div>
         <div id="selectNewTripDate" class="tripModalBase" style="display: none;">
-        <div style="width: 100%">
-            <div class="iconClose tripCloseIcon" onclick="closeNewTrip()"></div>
-            <div class="modal-card-head">
-                <div class="tripHeader">افزودن تاریخ به سفر</div>
-            </div>
-            <div class="modal-card-body rtl">
-                <div class="control add-dates-cta-text">
-                    <p></p>
+            <div style="width: 100%">
+                <div class="iconClose tripCloseIcon" onclick="closeNewTrip()"></div>
+                <div class="modal-card-head">
+                    <div class="tripHeader">افزودن تاریخ به سفر</div>
                 </div>
-                <div class="tripDates">
-                    <div>
-                        <div id="date_btn_start_edit">تاریخ شروع</div>
-                        <label class="tripCalenderSection">
-                            <span class="calendarIcon"></span>
-                            <input id="date_input_start" class="tripDateInput" placeholder="13xx/xx/xx" required readonly type="text">
-                        </label>
+                <div class="modal-card-body rtl">
+                    <div class="control add-dates-cta-text">
+                        <p></p>
                     </div>
-                    <div>
-                        <div id="date_btn_end_edit">تاریخ اتمام</div>
-                        <label class="tripCalenderSection">
-                            <span class="calendarIcon"></span>
-                            <input id="date_input_end" class="tripDateInput" placeholder="13xx/xx/xx" required readonly type="text">
-                        </label>
+                    <div class="tripDates">
+                        <div>
+                            <div id="date_btn_start_edit">تاریخ شروع</div>
+                            <label class="tripCalenderSection">
+                                <span class="calendarIcon"></span>
+                                <input id="date_input_start" class="tripDateInput" placeholder="13xx/xx/xx" required readonly type="text">
+                            </label>
+                        </div>
+                        <div>
+                            <div id="date_btn_end_edit">تاریخ اتمام</div>
+                            <label class="tripCalenderSection">
+                                <span class="calendarIcon"></span>
+                                <input id="date_input_end" class="tripDateInput" placeholder="13xx/xx/xx" required readonly type="text">
+                            </label>
+                        </div>
+                        <div class="clear-both"></div>
                     </div>
-                    <div class="clear-both"></div>
                 </div>
-            </div>
-            <div class="tripDateFooter">
-                <button id="add-dates-cta-cancel" onclick="backToNewTripName()" class="btn btn-success saves-create-trip-button" style="background: #d6d6d6; border: none; margin-left: 15px">بازگشت </button>
-                <button id="add-dates-cta-save" onclick="saveTrip()" class="btn saves-create-trip-button" style="background: var(--koochita-blue); color: white">ذخیره</button>
-            </div>
+                <div class="tripDateFooter">
+                    <button id="add-dates-cta-cancel" onclick="backToNewTripName()" class="btn btn-success saves-create-trip-button" style="background: #d6d6d6; border: none; margin-left: 15px">بازگشت </button>
+                    <button id="add-dates-cta-save" onclick="saveTrip()" class="btn saves-create-trip-button" style="background: var(--koochita-blue); color: white">ذخیره</button>
+                </div>
 
-            <div >
-                <h5 id="error" style="display: none;"></h5>
+                <div >
+                    <h5 id="error" style="display: none;"></h5>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 
@@ -207,11 +207,11 @@
     function refreshThisAddTrip(){
         closeNewTrip();
         openMyModal('addPlaceToTripPrompt');
+        getMyTripsPromiseFunc().then(response => createTripCardFooter(response));
         saveToTripPopUp(selectedPlaceId, selectedKindPlaceId);
     }
 
     function assignPlaceToTrip() {
-
         if (selectedPlaceId != -1) {
             var checkedValuesTrips = selectedTrips;
             if (checkedValuesTrips == null || checkedValuesTrips.length == 0)
@@ -318,10 +318,8 @@
                         refreshThisAddTrip();
                     showSuccessNotifi('لیست سفر شما با موفقیت ایجاد شد', 'left', 'var(--koochita-blue)');
                 }
-                else {
-                    $("#error").show();
-                    $("#error").empty().append("تاریخ پایان از تاریخ شروع باید بزرگ تر باشد");
-                }
+                else
+                    $("#error").show().empty().append("تاریخ پایان از تاریخ شروع باید بزرگ تر باشد");
             }
         });
     }

@@ -43,8 +43,6 @@
 
 @include('general.forAllPages')
 
-@include('layouts.pop-up-create-trip')
-
 <div id="fb-root"></div>
 
 <div id="PAGE" class="profilePage non_hotels_like desktop scopedSearch position-relative">

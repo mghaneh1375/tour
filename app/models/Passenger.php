@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $NIDType
  * @property boolean $self
  * @method static \Illuminate\Database\Query\Builder|\App\models\Passenger whereNID($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\Passenger whereUID($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Passenger where('uId',$value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\Passenger whereSelf($value)
  */
 

@@ -187,8 +187,9 @@
         function toggleMobileListNearPlace(_kind){
             var windowHeight = $(window).height();
             var maxHeight = windowHeight-150;
-            var middleHeight = windowHeight/2-100;
-            var minHeight = 75;
+            // var middleHeight = windowHeight/2-100;
+            var middleHeight = 300;
+            var minHeight = 60;
             var resultHeight;
 
             if(_kind == "full")

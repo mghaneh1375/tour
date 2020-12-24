@@ -703,7 +703,7 @@ class APIController extends Controller {
 
         $user = Auth::user();
 
-        $aboutMe = AboutMe::whereUId($user->id)->select(['first_name', 'last_name', 'username', 'email', 'phone'])->first();
+        $aboutMe = AboutMe::where('uId',$user->id)->select(['first_name', 'last_name', 'username', 'email', 'phone'])->first();
 
         $tmp = Cities::whereId($user->cityId);
         if($tmp != null)
@@ -811,8 +811,8 @@ class APIController extends Controller {
 
         if(isset($_POST["introduction"]) && isset($_POST["sex"]) && isset($_POST["ageId"])) {
 
-            if(AboutMe::whereUId($uId)->count() > 0)
-                $aboutMe = AboutMe::whereUId($uId)->first();
+            if(AboutMe::where('uId',$uId)->count() > 0)
+                $aboutMe = AboutMe::where('uId',$uId)->first();
             else {
                 $aboutMe = new AboutMe();
                 $aboutMe->uId = $uId;
@@ -2182,7 +2182,7 @@ class APIController extends Controller {
             }
 
             $user = Auth::user();
-            $last = InvitationCode::whereUId($user->id)->orderBy('sendTime', 'DESC')->first();
+            $last = InvitationCode::where('uId',$user->id)->orderBy('sendTime', 'DESC')->first();
 
             if($last != null) {
 

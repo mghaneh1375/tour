@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $tripId
  * @property integer $uId
  * @property boolean $status
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripMember whereTripId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripMember whereUId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\TripMember where('tripId',$value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\TripMember where('uId',$value)
  */
 
 class TripMember extends Model {

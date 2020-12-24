@@ -55,8 +55,6 @@
 
 @section('main')
 
-    @include('layouts.pop-up-create-trip')
-
     <link rel="stylesheet" href="{{URL::asset('css/theme2/specific designs/profile.css?v=1')}}">
 
     <center class="row">
@@ -284,14 +282,14 @@
 
 
     <script>
-        
+
         function changeSection(val) {
             if($("#section_" + val).prop('checked'))
                 $("#part_" + val).empty().append('<input type="number" min="1" max="10" value="1" name="parts[]">');
             else
                 $("#part_" + val).empty();
         }
-        
+
         function editDateTrip() {
 
             $("#date_input_start_edit_2").datepicker({

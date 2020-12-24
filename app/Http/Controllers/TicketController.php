@@ -214,7 +214,7 @@ class TicketController extends Controller {
     }
 
     public function sendJavaRequest() {
-        
+
         if(isset($_POST["sDate"]) && isset($_POST["eDate"]) && isset($_POST["src"]) && isset($_POST["dest"])) {
 
             $from = makeValidInput($_POST["sDate"]);
@@ -365,9 +365,9 @@ class TicketController extends Controller {
         }
 
     }
-    
+
     public function getMinPrice() {
-        
+
         if(isset($_POST["minDay"]) && isset($_POST["maxDay"]) && isset($_POST["src"]) && isset($_POST["dest"])) {
 
             $sda = explode('/', makeValidInput($_POST["minDay"]));
@@ -640,10 +640,10 @@ class TicketController extends Controller {
                 echo json_encode(['status' => 'nok']);
         }
     }
-    
+
     public function getMyPassengers() {
 
-        $passengers = Passenger::whereUID(Auth::user()->id)->whereSelf(false)->get();
+        $passengers = Passenger::where('uId',Auth::user()->id)->whereSelf(false)->get();
         foreach ($passengers as $passenger)
             $passenger->countryCodeId = CountryCode::whereId($passenger->countryCodeId)->code;
 
@@ -652,7 +652,7 @@ class TicketController extends Controller {
 
     public function getMyTicketInfo() {
 
-        $passenger = Passenger::whereUID(Auth::user()->id)->whereSelf(true)->first();
+        $passenger = Passenger::where('uId',Auth::user()->id)->whereSelf(true)->first();
         if($passenger != null) {
             $passenger->countryCodeId = CountryCode::whereId($passenger->countryCodeId)->code;
             echo json_encode($passenger);

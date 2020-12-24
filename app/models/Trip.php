@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $from_
  * @property string $to_
  * @property string $lastSeen
- * @method static \Illuminate\Database\Query\Builder|\App\models\Trip whereUId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Trip where('uId',$value)
  */
 
 class Trip extends Model {

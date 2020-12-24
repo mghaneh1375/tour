@@ -182,7 +182,7 @@ class MainController extends Controller
 //        if(Auth::check()) {
 //
 //            $uId = Auth::user()->id;
-//            $trips = Trip::whereUId($uId)->get();
+//            $trips = Trip::where('uId',$uId)->get();
 //
 //            $condition = ['uId' => $uId, 'status' => 1];
 //            $invitedTrips = TripMember::where($condition)->select('tripId')->get();
@@ -193,9 +193,9 @@ class MainController extends Controller
 //
 //            if($trips != null && count($trips) != 0) {
 //                foreach ($trips as $trip) {
-//                    $trip->placeCount = TripPlace::whereTripId($trip->id)->count();
+//                    $trip->placeCount = TripPlace::where('tripId',$trip->id)->count();
 //                    $limit = ($trip->placeCount > 4) ? 4 : $trip->placeCount;
-//                    $tripPlaces = TripPlace::whereTripId($trip->id)->take($limit)->get();
+//                    $tripPlaces = TripPlace::where('tripId',$trip->id)->take($limit)->get();
 //                    if($trip->placeCount > 0) {
 //                        $kindPlaceId = $tripPlaces[0]->kindPlaceId;
 //                        switch ($kindPlaceId) {

@@ -793,7 +793,7 @@ class ProfileController extends Controller {
 
             $user = Auth::user();
 
-            $last = InvitationCode::whereUId($user->id)->orderBy('sendTime', 'DESC')->first();
+            $last = InvitationCode::where('uId',$user->id)->orderBy('sendTime', 'DESC')->first();
 
             if($last != null) {
                 if(time() - $last->sendTime < 90) {

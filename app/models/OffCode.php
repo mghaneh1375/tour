@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $uId
  * @property boolean $kind
  * @property string $expire
- * @method static \Illuminate\Database\Query\Builder|\App\models\OffCode whereUId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\OffCode where('uId',$value)
  */
 
 class OffCode extends Model {

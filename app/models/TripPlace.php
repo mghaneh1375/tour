@@ -13,9 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $placeId
  * @property integer $kindPlaceId
  * @property string $date
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace whereTripId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace wherePlaceId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\TripPlace where('kindPlaceId',$value)
  */
 
 class TripPlace extends Model {

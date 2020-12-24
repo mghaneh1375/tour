@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $id
  * @property string $sendTime
  * @property integer $uId
- * @method static \Illuminate\Database\Query\Builder|\App\models\RetrievePas whereUId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\RetrievePas where('uId',$value)
  */
 
 class RetrievePas extends Model {

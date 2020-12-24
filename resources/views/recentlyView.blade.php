@@ -69,8 +69,6 @@
 
 @section('main')
 
-    @include('layouts.pop-up-create-trip')
-
     <div id="MAIN" class="Saves prodp13n_jfy_overflow_visible" style="position: relative;">
         <div id="BODYCON" class="col easyClear poolB adjust_padding new_meta_chevron_v2" ng-app="mainApp" style="position: relative;">
             <div class="wrpHeader"></div>

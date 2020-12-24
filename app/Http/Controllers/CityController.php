@@ -61,9 +61,9 @@ class CityController extends Controller
             $place->listName = $place->name;
             $place->name = 'استان ' . $place->name;
             $articleUrl = route('safarnameh.list', ['type' => 'state', 'search' => $place->listName]);
-            $locationName = ["name" => $place->name, 'cityName' => $place->name, 'cityNameUrl' => $place->listName,
+            $locationName = ["name" => $place->name, "cityName" => $place->name, "cityNameUrl" => $place->listName,
                             "state" => $place->name, "stateNameUrl" => $place->listName,
-                            'articleUrl' => $articleUrl, 'kindState' => 'state'];
+                            "articleUrl" => $articleUrl, "kindState" => 'state'];
 
             $allCities = Cities::where('stateId', $place->id)->where('isVillage',0)->pluck('id')->toArray();
 
