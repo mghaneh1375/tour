@@ -1,4 +1,3 @@
-
 async function getMyTripsPromiseFunc(){
     var getMyTripsPromise = new Promise((myResolve, myReject) => {
         $.ajax({
@@ -33,5 +32,26 @@ async function getMyBookMarkPromiseFunc(){
     });
 
     return await getMyPromise;
+}
+
+var searchInUserAjax;
+async function searchForUserCommon(_value){
+    var findUserPromise = new Promise((myResolve, myReject) => {
+        if(searchInUserAjax != null)
+            searchInUserAjax.abort();
+
+        searchInUserAjax = $.ajax({
+            type: 'GET',
+            url: window.searchInUserUrl+'?username='+_value.trim(),
+            success: response => {
+                if(response.status == 'ok')
+                    myResolve(response.result);
+                else
+                    myReject(response.status);
+            },
+        })
+    });
+
+    return await findUserPromise;
 }
 

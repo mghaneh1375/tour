@@ -95,6 +95,9 @@ class MyTripsController extends Controller {
 
         $trip = Trip::whereId($tripId);
 
+        if($trip == null)
+            return \redirect(route('myTrips'));
+
         $trip->owner = 0;
         $trip->editTrip = 0;
         $trip->editPlace = 0;
@@ -291,17 +294,14 @@ class MyTripsController extends Controller {
             $friend = User::find($friendId);
             $trip = Trip::find($tripId);
 
-            if($friend == null){
-                echo json_encode(['status' => 'notFindFriend']);
-                return;
-            }
+            if($friend == null)
+                return response()->json(['status' => 'notFindFriend']);
 
             $checkAccess = TripMember::where('tripId', $tripId)->where('uId', $uId)->where('editMember', 1)->first();
             if($checkAccess != null || $trip->uId == $uId){
-                if($friendId == $uId) {
-                    echo json_encode(['status' => 'nok1']);
-                    return;
-                }
+                if($friendId == $uId)
+                    return response()->json(['status' => 'nok1']);
+
 
                 if($trip != null){
                     $checkReg = TripMember::where('tripId', $tripId)->where('uId', $friendId)->first();
@@ -349,21 +349,19 @@ class MyTripsController extends Controller {
                                 $item->delete();
                         }
 
-                        echo json_encode(['status' => 'ok', 'result' => $members]);
+                        return response()->json(['status' => 'ok', 'result' => $members]);
                     }
                     else
-                        echo json_encode(['status' => 'beforeRegistered']);
+                        return response()->json(['status' => 'beforeRegistered']);
                 }
                 else
-                    echo json_encode(['status' => 'nullTrip']);
+                    return response()->json(['status' => 'nullTrip']);
             }
             else
-                echo json_encode(['status' => 'notAccess']);
+                return response()->json(['status' => 'notAccess']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
     public function inviteResult(Request $request)

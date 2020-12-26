@@ -526,44 +526,32 @@ class AjaxController extends Controller {
         }
     }
 
-    public function findUser(Request $request)
+    public function findUser()
     {
-        if(Auth::check()) {
-            if (isset($request->value)) {
-                $userEmail = [];
-                $iUserId = \auth()->user()->id;
-                $value = $request->value;
-                $userName = User::where('username', 'LIKE', '%' . $value . '%')
-                                    ->select(['id', 'username'])
-                                    ->get();
-                foreach ($userName as $user){
-                    $user->userId = $user->id;
-                    $user->url = route('profile', ['username' => $user->username]);
-                    $user->pic = getUserPic($user->id);
-                    $user->followed = Followers::where('userId', $iUserId)
-                                                ->where('followedId', $user->id)
-                                                ->count();
-                    $user->notMe = 1;
-                    if($user->id == $iUserId)
-                        $user->notMe = 0;
-                }
-//                $userEmail = User::where('email', 'LIKE', '%' . $value . '%')
-//                                    ->whereNotIn('id', $userName->pluck('id')->toArray())
-//                                    ->select(['id', 'username', 'email', 'first_name', 'last_name'])
-//                                    ->get();
+        $value = $_GET['username'];
 
-                if($userName == null && $userEmail == null)
-                    echo 'nok3';
-                else
-                    echo json_encode(['email' => $userEmail, 'userName' => $userName]);
+        if(Auth::check()) {
+            $userEmail = [];
+            $iUserId = \auth()->user()->id;
+            $userName = User::where('username', 'LIKE', '%' . $value . '%')->select(['id', 'username'])->get();
+            foreach ($userName as $user){
+                $user->userId = $user->id;
+                $user->url = route('profile', ['username' => $user->username]);
+                $user->pic = getUserPic($user->id);
+                $user->followed = Followers::where('userId', $iUserId)
+                    ->where('followedId', $user->id)
+                    ->count();
+                $user->notMe = 1;
+                if($user->id == $iUserId)
+                    $user->notMe = 0;
             }
+            if($userName == null && $userEmail == null)
+                return response()->json(['status' => 'nok3']);
             else
-                echo 'nok2';
+                return response()->json(['status' => 'ok', 'result' => ['email' => $userEmail, 'userName' => $userName]]);
         }
         else
-            echo 'nok1';
-
-        return;
+            return response()->json(['status' => 'nok1']);
     }
 
     public function likeLog(Request $request)

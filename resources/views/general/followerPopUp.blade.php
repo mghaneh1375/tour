@@ -35,7 +35,7 @@
                            id="followerModalSearchInput"
                            onfocus="openFollowerSearch(this.value)"
                            onfocusout="closeFollowerSearch(this.value)"
-                           onkeydown="searchForFollowerUser(this.value)"
+                           onkeyup="searchForFollowerUser(this.value)"
                            placeholder="دوستان خود را پیدا کنید...">
                     <div id="followerModalSearchButton" onclick="closeFollowerSearch(0)">
                         <span class="searchIcon"></span>
@@ -172,20 +172,9 @@
         $("#searchResultFollower").html('');
         if(_value.trim().length > 1) {
             $("#searchResultFollower").html(followerPlaceHolder+followerPlaceHolder);
-
-            ajaxForSearchFollowerUserModal = $.ajax({
-                type: 'post',
-                url: '{{route("findUser")}}',
-                data: {
-                    _token: '{{csrf_token()}}',
-                    value: _value.trim()
-                },
-                success: function (response) {
-                    response = JSON.parse(response);
-                    createFollower('searchResultFollower', response.userName);
-                },
-                error: err => console.log(err),
-            })
+            searchForUserCommon(_value)
+                .then(response => createFollower('searchResultFollower', response.userName))
+                .catch(err => console.error(err));
         }
         else
             $("#searchResultFollower").html('');

@@ -630,6 +630,7 @@ textarea, input, select, button, a {
     align-items: center;
     padding: 0px 6px;
 }
+
 .tripCalenderSection .calendarIcon{
     color: #30b4a6 !important;
     font-size: 20px;
@@ -1864,6 +1865,13 @@ a:hover {
 
     .alertBtn {
         width: 100px;
+    }
+
+    .chooseDateForPlaceMyTrip .find_location_modal{
+        min-height: 50vh;
+    }
+    .ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all.ui-datepicker-rtl{
+        top: 50vh !important;
     }
 }
 

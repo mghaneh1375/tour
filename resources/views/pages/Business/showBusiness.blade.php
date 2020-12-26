@@ -31,7 +31,7 @@
 @endsection
 
 @section('body')
-    
+
     @include('component.smallShowReview')
 
     <div id="topInfos" class="topInfoFixed">
@@ -359,7 +359,6 @@
     <script>
         var localShop = {!! $localShop !!};
         var mainMap;
-        var searchUserAjax = null;
         var newReview = {
             code: "{{$codeForReview}}",
             userAssigned: [],
@@ -766,44 +765,23 @@
 
             $('html, body').animate({ scrollTop: topScroll }, 1000);
         }
-        
+
         function searchUserFriend(_element){
             var value = $(_element).val();
             $('.searchResultUserFriend').empty().removeClass('open');
 
             if(value.trim().length > 1){
-                if(searchUserAjax != null)
-                    searchUserAjax.abort();
-
-                searchUserAjax = $.ajax({
-                    type: 'post',
-                    url: '{{route("findUser")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        value
-                    },
-                    success: function (response) {
-                        if (response == 'nok3') {
+                searchForUserCommon(value)
+                    .then(response => {
+                        var text = '';
+                        var userName = response.userName;
+                        userName.map(item => text += `<div class="UserIcon result" onclick="addToSelectedUser(this)">${item.username}</div>`);
                             $('.searchResultUserFriend').empty();
-
-                            // if(_value.includes('@') && _value.includes('.')){
-                            //     text = '<ul style="list-style: none;">';
-                            //     text += '<li onclick="assignedUserToReview(\'' + _value + '\', 0)"  style="cursor: pointer; color: blue;"> دعوت کردن دوست خود : ' + _value + '</li>';
-                            //     text += '</ul>';
-                            //
-                            //     document.getElementById('assignedResultReview').innerHTML = text;
-                            // }
-                        }
-                        else if (response != 'nok1' && response != 'nok2') {
-                            var user = JSON.parse(response);
-                            var userName = user['userName'];
-                            var text = '';
-
-                            userName.map(item => text += `<div class="UserIcon result" onclick="addToSelectedUser(this)">${item.username}</div>`);
-                            $('.searchResultUserFriend').html(text).addClass('open');
-                        }
-                    }
-                })
+                    })
+                    .catch(err => {
+                        $('.searchResultUserFriend').html(text).addClass('open');
+                        console.error(err);
+                    });
             }
             else
                 $('.searchResultUserFriend').empty().removeClass('open');

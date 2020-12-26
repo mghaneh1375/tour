@@ -4,16 +4,31 @@
 
 @section('header')
     @parent
+    <title>کوچیتا | سفرهای من | {{$trip->name}}</title>
+
     <link rel="stylesheet" href="{{URL::asset('css/theme2/saves-rest-client.css?v='.$fileVersions)}}">
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/myTripsInner.css?v='.$fileVersions)}}'/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/abbreviations.css?v='.$fileVersions)}}'/>
+    <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">
+
+    <script defer src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
 
     <style>
         .modalBody{
             border-radius: 10px;
         }
+        .hoverChangeBack:hover{
+            background: var(--koochita-light-green);
+            border-radius: 30px;
+        }
+        .hoverChangeBack:hover .name{
+            color: white !important;
+        }
         .backToMyTrip{
 
+        }
+        .textRight{
+            text-align: right !important;
         }
         @media (max-width: 767px) {
             .backToMyTrip{
@@ -234,12 +249,12 @@
                                                                     </div>
                                                                     <div class="date">
                                                                         @if($tripPlace->date != "")
-                                                                            <p onclick="assignDateToPlace('{{$tripPlace->id}}', '{{$trip->from_}}', '{{$trip->to_}}')">{{$tripPlace->date}}</p>
+                                                                            <p onclick="assignDateToPlace('{{$tripPlace->id}}')">{{$tripPlace->date}}</p>
                                                                             @if($trip->editPlace)
                                                                                 @if($i == 0)
                                                                                     <div id="targetHelp_15" class="targets">
                                                                                             <button data-toggle="tooltip" title="افزودن تاریخ به سفر" onclick="assignDateToPlace('{{$tripPlace->id}}')" class="pd-3-13 ui_button secondary trip-add-dates">
-                                                                                                <span class="color-green ui_icon calendar"></span>
+                                                                                                <span class="color-green ui_icon calendar textRight"></span>
                                                                                             </button>
                                                                                             <div id="helpSpan_15" class="helpSpans hidden row">
                                                                                                 <span class="introjs-arrow"></span>
@@ -251,12 +266,12 @@
                                                                                         </div>
                                                                                 @else
                                                                                     <button data-toggle="tooltip" title="افزودن تاریخ به سفر" onclick="assignDateToPlace('{{$tripPlace->id}}')" class="pd-3-13 ui_button secondary trip-add-dates">
-                                                                                        <span class="color-green ui_icon calendar"></span>
+                                                                                        <span class="color-green ui_icon calendar textRight"></span>
                                                                                     </button>
                                                                                 @endif
                                                                             @endif
                                                                         @elseif($trip->editPlace)
-                                                                            <button class="chooseDate" onclick="assignDateToPlace('{{$tripPlace->id}}', '{{$trip->from_}}', '{{$trip->to_}}')">انتخاب تاریخ</button>
+                                                                            <button class="chooseDate" onclick="assignDateToPlace('{{$tripPlace->id}}')">انتخاب تاریخ</button>
                                                                         @endif
                                                                         <div id="tripCommentNumber{{$tripPlace->id}}" class="tripCommentCount" style="display: {{count($tripPlace->comments) > 0 ? 'block' : 'none'}}">
                                                                             {{count($tripPlace->comments)}} یادداشت
@@ -353,48 +368,30 @@
     </div>
 
     @if($trip->editMember)
-        <div id="inviteMember" class="modalBlackBack" style="z-index: 9999;">
-            <div class="modalBody" style="width: 400px;">
-                <div onclick="closeMyModal('inviteMember')" class="iconClose closeModal"></div>
-                <div class="find_location_modal">
-                    <div class="header_text invitePaneTitle">دعوت از دوستان</div>
-                    <div class="ui_typeahead direction-rtl" style="position: relative">
-                        <p style="margin: 0px">از کی دعوت می کنید</p>
-                        <input type="text" id="friendName" placeholder="نام کاربری یا ایمیل" style="width: 100%;" onkeyup="memberSearch(this.value)">
-                        <div id="inviteResult" class="inviteFriendSearchResult hidden"></div>
-                    </div>
-                    <div class="choosenResult hidden">
-                        <div class="choosenUserName"></div>
-                        <input type="hidden" id="inviteId">
-                        <div class="input">
-                            <div class='ui_input_checkbox'>
-                                <input id="newCanEditTrip" type="checkbox">
-                                <label for="newCanEditTrip" class="labelForCheckBox">
-                                    <span style="margin-left: 5px !important;"></span>
-                                    ویرایش سفر
-                                </label>
-                            </div>
-                            <div class='ui_input_checkbox'>
-                                <input id="newCanEditMember" type="checkbox">
-                                <label for="newCanEditMember" class="labelForCheckBox">
-                                    <span style="margin-left: 5px !important;"></span>
-                                    ویرایش اعضا
-                                </label>
-                            </div>
-                            <div class='ui_input_checkbox'>
-                                <input id="newCanEditPlace" type="checkbox">
-                                <label for="newCanEditPlace" class="labelForCheckBox">
-                                    <span style="margin-left: 5px !important;"></span>
-                                    ویرایش اماکن
-                                </label>
+        <div id="inviteMember" class="modalBlackBack fullCenter followerModal" style="z-index: 9999;">
+            <div class="modalBody" style="width: 400px; border-radius: 10px;">
+                <div>
+                    <div onclick="closeMyModal('inviteMember')" class="iconClose closeModal"></div>
+                    <div style="color: var(--koochita-light-green); font-size: 25px; font-weight: bold;">از دوستان خود دعوت کنید</div>
+                </div>
+                @if(auth()->check())
+                    <div class="searchSec">
+                        <div class="inputSec">
+                            <input type="text"
+                                   id="myTripUserSearchInput"
+                                   onfocus="openUserMyTripSearch(this.value)"
+                                   onfocusout="closeUserMyTripSearch(this.value)"
+                                   onkeyup="searchForUserMyTrip(this.value)"
+                                   placeholder="دوستان خود را پیدا کنید...">
+                            <div id="inviteMemberModalSearchButton" onclick="closeUserMyTripSearch(0)">
+                                <span class="searchIcon"></span>
+                                <span class="iconClose hidden" style="cursor: pointer"></span>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="submitOptions direction-rtl mg-tp-20">
-                    <button id="submitInvite" class="btn successBtn" onclick="inviteFriend()" disabled>ارسال</button>
-                    <button class="btn btn-default" onclick="closeMyModal('inviteMember')">بازگشت</button>
-                    <p id="errorInvite"></p>
+                @endif
+                <div id="inviteMemberModalBody" class="body">
+                    <div id="searchResultInviteMember" class="searchResult"></div>
                 </div>
             </div>
         </div>
@@ -510,7 +507,7 @@
             </div>
         </div>
 
-        <div id="addDateToPlaceModal" class="modalBlackBack fullCenter" style="z-index: 9999;">
+        <div id="addDateToPlaceModal" class="modalBlackBack fullCenter chooseDateForPlaceMyTrip" style="z-index: 9999;">
             <div class="modalBody" style="width: 600px;">
                 <div onclick="closeMyModal('addDateToPlaceModal')" class="iconClose closeModal"></div>
                 <div class="find_location_modal">
@@ -519,6 +516,7 @@
                         <span class="calendarIcon"></span>
                         <input id="date_input" class="tripDateInput" placeholder="13xx/xx/xx" readonly type="text">
                     </label>
+                    <div id="date_input_div" class="tripDateInput"></div>
                 </div>
                 <div class="submitOptions direction-rtl mg-tp-20">
                     <button id="submitInvite" class="btn successBtn" onclick="doAssignDateToPlace()">ثبت</button>
@@ -563,14 +561,14 @@
                         <div class="ui_column">
                             <div id="date_btn_start_edit">تاریخ شروع</div>
                             <label id="date_btn_start_label">
-                                <span class="ui_icon calendar" id="date_btn_start"></span>
+                                <span class="ui_icon calendar textRight" id="date_btn_start"></span>
                                 <input type="text" id="date_input_start_edit" placeholder="روز/ماه/سال" value="{{$trip->from_}}" readonly>
                             </label>
                         </div>
                         <div class="ui_column">
                             <div id="date_btn_end_edit">تاریخ اتمام</div>
                             <label id="date_btn_end_label">
-                                <span class="ui_icon calendar" id="date_btn_start"></span>
+                                <span class="ui_icon calendar textRight" id="date_btn_start"></span>
                                 <input type="text" id="date_input_end_edit" placeholder="روز/ماه/سال" value="{{$trip->to_}}" readonly>
                             </label>
                         </div>
@@ -607,9 +605,6 @@
         </div>
     @endif
 
-    <script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
-
-    <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">
     <script>
         var tripId = '{{$trip->id}}';
         var tripPlaces = '{{route('tripPlaces', ['tripId' => $trip->id])}}';
@@ -715,271 +710,6 @@
                     showSuccessNotifi('{{__('در ثبت یادداشت مشکلی پیش امده لطفا دوباره تلاش نمایید')}}', 'left', 'red');
                 }
             });
-        }
-
-        function showMembers() {
-            openMyModal('memberModal');
-            if(tripMember.length == 0)
-                $('#members').html('<button class="ui_icon add-friend-fill inviteFBut" onclick="closeMyModal(\'memberModal\'); openMyModal(\'inviteMember\')">دعوت از دوستان</button>');
-            else{
-                $('#members').empty();
-                tripMember.map(item => {
-                    var text = memberSample;
-                    let obj = Object.keys(item);
-
-                    for (var x of obj) {
-                        var t = '##' + x + '##';
-                        var re = new RegExp(t, "g");
-                        text = text.replace(re, item[x]);
-                    }
-                    $('#members').append(text);
-
-                    if(item.status == 1)
-                        $('#member_' + item.id).find('.loading').remove();
-
-                    if(item.editTrip == 1)
-                        $('#canEditTrip_' + item.id).prop('checked', 'true');
-                    if(item.editPlace == 1)
-                        $('#canEditPlace_' + item.id).prop('checked', 'true');
-                    if(item.editMember == 1)
-                        $('#canEditMember_' + item.id).prop('checked', 'true');
-
-                    if(item.owner == true){
-                        $('#member_' + item.id).find('.accessBut').remove();
-                        $('#member_' + item.id).find('.deleteBut').remove();
-                    }
-
-                })
-            }
-        }
-
-        function showThisUserAccess(_element){
-            let hasRot = $('.rotate180');
-            let card = $(_element).parent().parent();
-            card.addClass('rotate180');
-            setTimeout(function(){
-                card.addClass('accessType');
-            }, 200);
-
-            hasRot.removeClass('rotate180');
-            setTimeout(function(){
-                hasRot.removeClass('accessType');
-            }, 200);
-        }
-
-        function submitMemberAccess(_element, _id){
-            openLoading();
-
-            let canEditPlace = $('#canEditPlace_' + _id).prop('checked');
-            let canEditMember = $('#canEditMember_' + _id).prop('checked');
-            let canEditTrip = $('#canEditTrip_' + _id).prop('checked');
-
-            $.ajax({
-                type: 'post',
-                url: '{{route("trip.editUserAccess")}}',
-                data: {
-                    _token: '{{csrf_token()}}',
-                    uId: _id,
-                    tripId: {{$trip->id}},
-                    editMember: canEditMember,
-                    editTrip: canEditTrip,
-                    editPlace: canEditPlace
-                },
-                success: function(response){
-                    closeLoading();
-                    response = JSON.parse(response);
-                    if(response.status == 'ok'){
-                        let hasRot = $('.rotate180');
-                        hasRot.removeClass('rotate180');
-                        setTimeout(function(){
-                            hasRot.removeClass('accessType');
-                        }, 200);
-
-                        tripMember.map(item => {
-                            if(item.id == _id){
-                                item.editMember = response.result.editMember;
-                                item.editTrip = response.result.editTrip;
-                                item.editPlace = response.result.editPlace;
-                            }
-                        });
-                        showSuccessNotifi('{{__('تغییر دسترسی با موفقیت اعمال شد')}}', 'left', 'var(--koochita-blue)');
-                    }
-                    else{
-                        showSuccessNotifi('{{__('تغییر دسترسی با مشکل مواجه شد')}}', 'left', 'red');
-                    }
-                },
-                error: function(err){
-                    closeLoading();
-                    showSuccessNotifi('{{__('تغییر دسترسی با مشکل مواجه شد')}}', 'left', 'red');
-                }
-            });
-
-        }
-
-        function deleteMember(_id, _username) {
-            deletedUserId = _id;
-            openWarning('آیا می خواهید ' + _username + ' را از سفر خود حذف کنید؟', doDeleteMember, 'بله حذف شود');
-        }
-
-        function doDeleteMember() {
-            openLoading();
-            $.ajax({
-                type: 'post',
-                url: '{{route('deleteMember')}}',
-                data: {
-                    'uId': deletedUserId,
-                    'tripId': tripId
-                },
-                success: function (response) {
-                    if(response == "ok") {
-                        showSuccessNotifi('{{__('کاربر مورد نظر حذف شد')}}', 'left', 'var(--koochita-blue)');
-                        document.location.reload();
-                    }
-                    else {
-                        closeLoading();
-                        showSuccessNotifi('{{__('در حذف کاربر مشکلی پیش امده')}}', 'left', 'red');
-                    }
-                },
-                error: function(err){
-                    closeLoading();
-                    showSuccessNotifi('{{__('در حذف کاربر مشکلی پیش امده')}}', 'left', 'red');
-                }
-
-            });
-        }
-
-        function memberSearch(_value){
-
-            if(_value.trim().length > 2){
-                $("#inviteResult").addClass('hidden');
-                $.ajax({
-                    type: 'post',
-                    url: '{{route("findUser")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        value: _value
-                    },
-                    success: function(response){
-                        if(response == 'nok3'){
-                            $("#inviteResult").removeClass('hidden');
-                            $("#inviteResult").html('<div class="notFind">موردی یافت نشد</div>');
-                        }
-                        else if(response == 'nok2' || response == 'nok1') {}
-                        else{
-                            $("#inviteResult").removeClass('hidden');
-                            let text = '';
-                            let result = JSON.parse(response);
-                            if(result.email.length == 0 && result.userName.length == 0)
-                                text = '<div class="notFind">موردی یافت نشد</div>';
-                            else {
-                                result.email.map(item => text += `<div class="result" onclick="chooseMember(this)" dataName="${item.email}" dataId="${item.id}">${item.email}</div>`);
-                                result.userName.map(item => text += `<div class="result" onclick="chooseMember(this)" dataName="${item.username}" dataId="${item.id}">${item.username}</div>`);
-                            }
-                            $("#inviteResult").html(text);
-                        }
-                    },
-                    error: function(err){
-                        $("#inviteResult").empty();
-                        $("#inviteResult").addClass('hidden');
-                    }
-                })
-            }
-            else{
-                $("#inviteResult").empty();
-                $("#inviteResult").addClass('hidden');
-            }
-        }
-
-        function chooseMember(_element){
-            let username = $(_element).attr('dataName');
-            let userId = $(_element).attr('dataId');
-
-            $("#inviteResult").empty();
-            $("#inviteResult").addClass('hidden');
-
-            $('.choosenUserName').text(username);
-            $('#inviteId').val(userId);
-
-            $('.choosenResult').removeClass('hidden');
-
-            $('#submitInvite').prop('disabled', false);
-        }
-
-        function inviteFriend() {
-            let friendId = $("#inviteId").val();
-            let editTrip = $('#newCanEditTrip').prop('checked');
-            let editPlace = $('#newCanEditPlace').prop('checked');
-            let editMember = $('#newCanEditMember').prop('checked');
-
-            openLoading();
-            $.ajax({
-                type: 'post',
-                url: '{{route('inviteFriend')}}',
-                data: {
-                    'friendId' : friendId,
-                    'tripId' : tripId,
-                    'editTrip' : editTrip,
-                    'editPlace' : editPlace,
-                    'editMember' : editMember
-                },
-                success: function(response) {
-                    closeLoading();
-                    response = JSON.parse(response);
-                    if(response.status == "ok") {
-                        $('.choosenResult').addClass('hidden');
-                        $('#inviteId').val(0);
-                        $('#friendName').val('');
-                        $('#submitInvite').prop('disabled', false);
-                        $('#newCanEditTrip').prop('checked', false);
-                        $('#newCanEditPlace').prop('checked', false);
-                        $('#newCanEditMember').prop('checked', false);
-                        tripMember = response.result;
-                        showSuccessNotifi('{{__('دوست شما با موفقیت به سفر اضافه شد')}}', 'left', 'var(--koochita-blue)');
-                        closeMyModal('inviteMember');
-                    }
-                    else if(response.status == "nok" || response.status == "nullTrip")
-                        showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
-                    else if(response.status == "notFindFriend")
-                        showSuccessNotifi('{{__('کاربر مورد نظر یافت نشد')}}', 'left', 'red');
-                    else if(response.status == "notAccess")
-                        showSuccessNotifi('{{__('شما دسترسی به دعوت دیگران ندارید')}}', 'left', 'red');
-                    else if(response.status == "nok1")
-                        showSuccessNotifi('{{__('شما نمی توانید خود را دعوت کنید.')}}', 'left', 'red');
-                    else if(response.status == "beforeRegistered")
-                        showSuccessNotifi('{{__('کاربر مورد نظر عضو سفر می باشد')}}', 'left', 'red');
-                    else
-                        showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
-                },
-                error: function(err){
-                    showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
-                    closeLoading();
-                }
-            });
-        }
-
-        function resultInvite(_kind){
-            openLoading();
-            $.ajax({
-                type: 'post',
-                url: '{{route("trip.invite.result")}}',
-                data: {
-                    _token: '{{csrf_token()}}',
-                    kind: _kind,
-                    tripId: tripId
-                },
-                success: function(response){
-                    if(response == 'ok')
-                        location.reload();
-                    else {
-                        closeLoading();
-                        showSuccessNotifi('{{__('در ثبت درخواست مشکلی پیش امده')}}', 'left', 'red');
-                    }
-                },
-                error: function(err){
-                    closeLoading();
-                    showSuccessNotifi('{{__('در ثبت درخواست مشکلی پیش امده')}}', 'left', 'red');
-                }
-            })
         }
 
         function searchForPlacesInMyTripInner(_text){
@@ -1093,14 +823,19 @@
 
         function assignDateToPlace(tripPlaceId) {
             selectedPlaceId = tripPlaceId;
-            $("#date_input").datepicker({
+            var calendarOption = {
                 numberOfMonths: 1,
                 showButtonPanel: true,
-                minDate: tripInfo.from_,
-                maxDate: tripInfo.to_,
                 dateFormat: "yy/mm/dd"
-            });
+            }
 
+            if(tripInfo.from_.length != 0)
+                calendarOption.minDate = tripInfo.from_;
+            if(tripInfo.to_.length != 0)
+                calendarOption.maxDate = tripInfo.to_;
+
+            $('#date_input').datepicker(calendarOption);
+            // $('#date_input_div').datepicker(calendarOption);
             openMyModal('addDateToPlaceModal');
         }
 
@@ -1139,13 +874,11 @@
             $("#date_input_start_edit").datepicker({
                 numberOfMonths: 1,
                 showButtonPanel: true,
-                minDate: 0,
                 dateFormat: "yy/mm/dd"
             });
             $("#date_input_end_edit").datepicker({
                 numberOfMonths: 1,
                 showButtonPanel: true,
-                minDate: 0,
                 dateFormat: "yy/mm/dd"
             });
 
@@ -1440,6 +1173,268 @@
                 $('.placeDetailsToggleBar').find('.leftSec').addClass('show');
         }
 
+    </script>
+
+    <script>
+        function showMembers() {
+            openMyModal('memberModal');
+            if(tripMember.length == 0)
+                $('#members').html('<button class="ui_icon add-friend-fill inviteFBut" onclick="closeMyModal(\'memberModal\'); openMyModal(\'inviteMember\')">دعوت از دوستان</button>');
+            else{
+                $('#members').empty();
+                tripMember.map(item => {
+                    var text = memberSample;
+                    let obj = Object.keys(item);
+
+                    for (var x of obj) {
+                        var t = '##' + x + '##';
+                        var re = new RegExp(t, "g");
+                        text = text.replace(re, item[x]);
+                    }
+                    $('#members').append(text);
+
+                    if(item.status == 1)
+                        $('#member_' + item.id).find('.loading').remove();
+
+                    if(item.editTrip == 1)
+                        $('#canEditTrip_' + item.id).prop('checked', 'true');
+                    if(item.editPlace == 1)
+                        $('#canEditPlace_' + item.id).prop('checked', 'true');
+                    if(item.editMember == 1)
+                        $('#canEditMember_' + item.id).prop('checked', 'true');
+
+                    if(item.owner == true){
+                        $('#member_' + item.id).find('.accessBut').remove();
+                        $('#member_' + item.id).find('.deleteBut').remove();
+                    }
+
+                })
+            }
+        }
+        function showThisUserAccess(_element){
+            let hasRot = $('.rotate180');
+            let card = $(_element).parent().parent();
+            card.addClass('rotate180');
+            setTimeout(function(){
+                card.addClass('accessType');
+            }, 200);
+
+            hasRot.removeClass('rotate180');
+            setTimeout(function(){
+                hasRot.removeClass('accessType');
+            }, 200);
+        }
+        function submitMemberAccess(_element, _id){
+            openLoading();
+
+            let canEditPlace = $('#canEditPlace_' + _id).prop('checked');
+            let canEditMember = $('#canEditMember_' + _id).prop('checked');
+            let canEditTrip = $('#canEditTrip_' + _id).prop('checked');
+
+            $.ajax({
+                type: 'post',
+                url: '{{route("trip.editUserAccess")}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    uId: _id,
+                    tripId: {{$trip->id}},
+                    editMember: canEditMember,
+                    editTrip: canEditTrip,
+                    editPlace: canEditPlace
+                },
+                success: function(response){
+                    closeLoading();
+                    response = JSON.parse(response);
+                    if(response.status == 'ok'){
+                        let hasRot = $('.rotate180');
+                        hasRot.removeClass('rotate180');
+                        setTimeout(function(){
+                            hasRot.removeClass('accessType');
+                        }, 200);
+
+                        tripMember.map(item => {
+                            if(item.id == _id){
+                                item.editMember = response.result.editMember;
+                                item.editTrip = response.result.editTrip;
+                                item.editPlace = response.result.editPlace;
+                            }
+                        });
+                        showSuccessNotifi('{{__('تغییر دسترسی با موفقیت اعمال شد')}}', 'left', 'var(--koochita-blue)');
+                    }
+                    else{
+                        showSuccessNotifi('{{__('تغییر دسترسی با مشکل مواجه شد')}}', 'left', 'red');
+                    }
+                },
+                error: function(err){
+                    closeLoading();
+                    showSuccessNotifi('{{__('تغییر دسترسی با مشکل مواجه شد')}}', 'left', 'red');
+                }
+            });
+
+        }
+        function deleteMember(_id, _username) {
+            deletedUserId = _id;
+            openWarning('آیا می خواهید ' + _username + ' را از سفر خود حذف کنید؟', doDeleteMember, 'بله حذف شود');
+        }
+        function doDeleteMember() {
+            openLoading();
+            $.ajax({
+                type: 'post',
+                url: '{{route('deleteMember')}}',
+                data: {
+                    'uId': deletedUserId,
+                    'tripId': tripId
+                },
+                success: function (response) {
+                    if(response == "ok") {
+                        showSuccessNotifi('{{__('کاربر مورد نظر حذف شد')}}', 'left', 'var(--koochita-blue)');
+                        document.location.reload();
+                    }
+                    else {
+                        closeLoading();
+                        showSuccessNotifi('{{__('در حذف کاربر مشکلی پیش امده')}}', 'left', 'red');
+                    }
+                },
+                error: function(err){
+                    closeLoading();
+                    showSuccessNotifi('{{__('در حذف کاربر مشکلی پیش امده')}}', 'left', 'red');
+                }
+
+            });
+        }
+        function resultInvite(_kind){
+            openLoading();
+            $.ajax({
+                type: 'post',
+                url: '{{route("trip.invite.result")}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    kind: _kind,
+                    tripId: tripId
+                },
+                success: function(response){
+                    if(response == 'ok')
+                        location.reload();
+                    else {
+                        closeLoading();
+                        showSuccessNotifi('{{__('در ثبت درخواست مشکلی پیش امده')}}', 'left', 'red');
+                    }
+                },
+                error: function(err){
+                    closeLoading();
+                    showSuccessNotifi('{{__('در ثبت درخواست مشکلی پیش امده')}}', 'left', 'red');
+                }
+            })
+        }
+
+        function openUserMyTripSearch(_value){
+            var inviteBody = $('#inviteMemberModalBody');
+            inviteBody.addClass('openSearch');
+            inviteBody.children().addClass('hidden');
+            inviteBody.find('searchResult').removeClass('hidden');
+
+            $('#inviteMemberModalSearchButton').children().addClass('hidden');
+            $('#inviteMemberModalSearchButton').find('.iconClose').removeClass('hidden');
+        }
+
+        function closeUserMyTripSearch(_value){
+            if(_value == 0)
+                $('#myTripUserSearchInput').val('');
+
+            if(_value == 0 || _value.length == 0) {
+                $('#inviteMemberModalBody').removeClass('openSearch');
+                $('#inviteMemberModalSearchButton').children().addClass('hidden');
+                $('#inviteMemberModalSearchButton').find('.searchIcon').removeClass('hidden');
+                $('#searchResultInviteMember').addClass('hidden');
+            }
+        }
+
+        function searchForUserMyTrip(_value){
+            $("#searchResultInviteMember").empty();
+            if(_value.trim().length > 1) {
+                var userSearchPlaceHolder = `<div class="peopleRow placeHolder">
+                                                   <div class="pic placeHolderAnime"></div>
+                                                   <div class="name placeHolderAnime resultLineAnim"></div>
+                                                   <div class="buttonP placeHolderAnime resultLineAnim"></div>
+                                                </div>`;
+
+                $("#searchResultInviteMember").html(userSearchPlaceHolder+userSearchPlaceHolder).removeClass('hidden');
+
+                searchForUserCommon(_value)
+                    .then(response => createInviteMemberSearchResult(response.userName))
+                    .catch(err => console.error(err));
+            }
+        }
+
+        function createInviteMemberSearchResult(_result){
+            let text = '';
+            if(_result.length == 0) {
+                text =  `<div class="emptyPeople">
+                               <img alt="noData" src="{{URL::asset('images/mainPics/noData.png')}}" >
+                               <span class="text">هیچ کاربری ثبت نشده است</span>
+                            </div>`;
+            }
+            else {
+                _result.map(item => {
+                    text += `<div class="peopleRow hoverChangeBack" onclick="chooseMemberForTrip(${item.id})" style="cursor: pointer;">
+                                    <div class="pic">
+                                        <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="${item.pic}" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                                    </div>
+                                    <div class="name">${item.username}</div>
+                                 </div>`;
+                });
+            }
+            $(`#searchResultInviteMember`).html(text);
+        }
+
+        function chooseMemberForTrip(_userId){
+
+            openLoading();
+            $.ajax({
+                type: 'POST',
+                url: '{{route('trip.inviteFriend')}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    friendId : _userId,
+                    tripId : tripId,
+                    editTrip : 0,
+                    editPlace : 0,
+                    editMember : 0
+                },
+                success: response => {
+                    closeLoading();
+                    if(response.status == "ok") {
+                        $('.choosenResult').addClass('hidden');
+                        $('#inviteId').val(0);
+                        $('#friendName').val('');
+                        $('#submitInvite').prop('disabled', false);
+                        $('#newCanEditTrip').prop('checked', false);
+                        $('#newCanEditPlace').prop('checked', false);
+                        $('#newCanEditMember').prop('checked', false);
+                        tripMember = response.result;
+                        showSuccessNotifi('{{__('دوست شما با موفقیت به سفر اضافه شد')}}', 'left', 'var(--koochita-blue)');
+                        closeUserMyTripSearch(0);
+                        closeMyModal('inviteMember');
+                    }
+                    else if(response.status == "nok" || response.status == "nullTrip")
+                        showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
+                    else if(response.status == "notFindFriend")
+                        showSuccessNotifi('{{__('کاربر مورد نظر یافت نشد')}}', 'left', 'red');
+                    else if(response.status == "notAccess")
+                        showSuccessNotifi('{{__('شما دسترسی به دعوت دیگران ندارید')}}', 'left', 'red');
+                    else if(response.status == "nok1")
+                        showSuccessNotifi('{{__('شما نمی توانید خود را دعوت کنید.')}}', 'left', 'red');
+                    else if(response.status == "beforeRegistered")
+                        showSuccessNotifi('{{__('کاربر مورد نظر عضو سفر می باشد')}}', 'left', 'red');
+                    else
+                        showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
+                },
+                error: function(err){
+                    showSuccessNotifi('{{__('در ثبت کاربر مشکلی پیش امده')}}', 'left', 'red');
+                    closeLoading();
+                }
+            });
+        }
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpeBLW4SWeWuDKKAT0uF7bATx8T2rEiXE&callback=initMap"></script>

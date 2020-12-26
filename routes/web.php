@@ -247,7 +247,7 @@ Route::group(array('middleware' => 'nothing'), function () {
 
     Route::post('log/like', 'AjaxController@likeLog')->name('likeLog');
 
-    Route::post('findUser', 'AjaxController@findUser')->name('findUser');
+    Route::get('findUser', 'AjaxController@findUser')->name('findUser');
 
     Route::get('getMainPageSuggestion', 'AjaxController@getMainPageSuggestion')->name('getMainPageSuggestion');
 });
@@ -550,7 +550,7 @@ Route::group(array('middleware' => ['auth']), function(){
 
     Route::post('trip/add', 'MyTripsController@addTrip')->name('addTrip');
 
-    Route::post('trip/invite', 'MyTripsController@inviteFriend')->name('inviteFriend');
+    Route::post('trip/invite', 'MyTripsController@inviteFriend')->name('trip.inviteFriend');
 
     Route::post('trip/invite/result', 'MyTripsController@inviteResult')->name('trip.invite.result');
 

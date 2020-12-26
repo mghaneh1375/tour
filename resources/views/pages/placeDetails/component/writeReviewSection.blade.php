@@ -395,15 +395,18 @@
     }
 
     function searchUser(_value){
-        if(_value != '' && _value != ' ') {
-            $.ajax({
-                type: 'post',
-                url: findUser,
-                data: {
-                    'value': _value
-                },
-                success: function (response) {
-                    if (response == 'nok3') {
+        if(_value.trim().length > 1) {
+
+            searchForUserCommon(_value)
+                .then(response => {
+                    var text = '<ul>';
+                    response.userName.map(item => text += `<li onclick="assignedUserToReview('${item.username}')" style="cursor: pointer">${item.username}</li>`);
+                    response.email.map(item => text += `<li onclick="assignedUserToReview('${item.email}')" style="cursor: pointer">${item.email}</li>`);
+                    text += '</ul>';
+                    document.getElementById('assignedResultReview').innerHTML = text;
+                })
+                .catch(err =>{
+                    if (err == 'nok3') {
                         document.getElementById('assignedResultReview').innerHTML = '';
 
                         if(_value.includes('@') && _value.includes('.')){
@@ -414,22 +417,9 @@
                             document.getElementById('assignedResultReview').innerHTML = text;
                         }
                     }
-                    else if (response != 'nok1' && response != 'nok2') {
-                        var user = JSON.parse(response);
-                        var userEmail = user['email'];
-                        var userName = user['userName'];
+                    console.error(err);
+                });
 
-                        text = '<ul>';
-                        for(i = 0; i < userName.length; i++)
-                            text += '<li onclick="assignedUserToReview(\'' + userName[i]['username'] + '\')" style="cursor: pointer">' + userName[i]['username'] + '</li>';
-                        for(i = 0; i < userEmail.length; i++)
-                            text += '<li onclick="assignedUserToReview(\'' + userEmail[i]['email'] + '\')" style="cursor: pointer">' + userEmail[i]['email'] + '</li>';
-                        text += '</ul>';
-                        document.getElementById('assignedResultReview').innerHTML = text;
-
-                    }
-                }
-            })
         }
         else
             document.getElementById('assignedResultReview').innerHTML = '';

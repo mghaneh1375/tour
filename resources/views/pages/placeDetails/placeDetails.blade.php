@@ -72,7 +72,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var filterComments = '{{route('filterComments')}}';
         var getPhotoFilter = '{{route('getPhotoFilter')}}';
         var getPhotosDir = '{{route('getPhotos')}}';
-        var findUser = '{{route('findUser')}}';
         var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
         var deleteReviewPicUrl = '{{route('deleteReviewPic')}}';
     </script>
@@ -1292,7 +1291,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 $(`.rateLine${key}`).css('width', percent);
             });
         }
-        
+
         function changeTabBarColor(_elemnt, _section){
             if($(window).width() < 767){
                 $('html, body').animate({

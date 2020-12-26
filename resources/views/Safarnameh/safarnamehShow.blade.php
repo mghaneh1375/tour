@@ -50,6 +50,7 @@
         }
         .safarnamehDescription figure{
             margin: 20px auto;
+            display: flex;
         }
         .safarnamehDescription h1 span, .safarnamehDescription h1{
             font-size: 28px !important;
@@ -68,6 +69,7 @@
             font-weight: bold !important;
         }
         .safarnamehDescription img{
+            margin: 0px auto;
             max-width: 100% !important;
         }
         .content-2col, .content-column, .content-featured{

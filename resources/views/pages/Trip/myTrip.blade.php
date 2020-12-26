@@ -146,22 +146,36 @@
                 <div id="saves-root-view"  class="position-relative">
                     <div id="saves-all-trips"  class="position-relative">
                         <div class="saves-title title position-relative">
-                            <span>
-                                سفرهای من
-                            </span>
+                            <span>سفرهای من</span>
                             <div onclick="createNewTrip(getMyTripsInPage)" class="header-create-trip ui_button primary" style="margin: 0px auto;">+ ایجاد سفر </div>
                         </div>
 
-                        <div id="emptyTrip" class="emptyTripDiv">
+                        <div id="emptyTrip" class="emptyTripDiv hidden">
                             <div class="emptyTripPic">
                                 <div class="text">برنامه سفرت چیه ؟</div>
                                 <img src="{{URL::asset('images/icons/mytrip0.svg')}}" alt="سفر ندارید">
                                 <div class="text">بیا برای یه سفر خوب برنامه ریزی کنیم.</div>
                             </div>
                         </div>
-                        <div id="hasTrip" class="trips-container ui_container hidden">
+                        <div id="hasTrip" class="trips-container ui_container">
                             <div class="container">
-                                <div id="tripCardSection" class="row"></div>
+                                <div id="tripCardSection" class="row">
+                                    @for($i = 0; $i < 4; $i++)
+                                        <div class="trip-tile-container ui_column col-lg-3 col-md-4 col-sm-6">
+                                            <div class="trip-tile ui_card is-fullwidth">
+                                                <div class="trip-header">
+                                                    <div class="trip-name placeHolderAnime resultLineAnim"></div>
+                                                    <div class="tripDate placeHolderAnime resultLineAnim"></div>
+                                                </div>
+                                                <div class="row picSec placeHolderAnime" style="height: 200px"></div>
+                                                <div class="trip-details ui_columns is-mobile is-fullwidth cardFooter" style="margin-top: 20px">
+                                                    <div class="trip-itemcount ui_column placeHolderAnime resultLineAnim"></div>
+                                                    <div class="trip-last-modified ui_column placeHolderAnime resultLineAnim"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -250,8 +264,11 @@
                              </div>`;
                 });
 
-                $('#emptyTrip').addClass('hidden');
                 $('#hasTrip').removeClass('hidden');
+            }
+            else{
+                $('#hasTrip').addClass('hidden');
+                $('#emptyTrip').removeClass('hidden');
             }
 
             $('#tripCardSection').html(cards);

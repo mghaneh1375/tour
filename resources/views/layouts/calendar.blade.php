@@ -1,6 +1,6 @@
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/theme2/calendar.css?v=1')}}'/>
 <script src= {{URL::asset("js/calendar.js") }}></script>
-<script src= {{URL::asset("js/jalali.js") }}></script>
+{{--<script src= {{URL::asset("js/jalali.js") }}></script>--}}
 <script src= {{URL::asset("js/component/myCalendar.js") }}></script>
 
 <div id="myCalendarHtml">

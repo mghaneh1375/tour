@@ -504,6 +504,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     height: 70px;
     overflow: hidden;
     border-radius: 50%;
+    margin: 0px auto;
 }
 .memberCard .name{
     font-weight: normal;
