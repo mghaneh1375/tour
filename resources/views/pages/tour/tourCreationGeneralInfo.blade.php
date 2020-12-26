@@ -29,15 +29,17 @@ $state = 'تهران';
             color: white !important;
         }
         @for($i = 0; $i < count($tourKind); $i++)
-            #tourKind{{$tourKind[$i]->id}}:before{
-                content: '\{{$tourKind[$i]->icon}}';
-                font-family: shazdemosafer-tour;
-            }
+        #tourKind{{$tourKind[$i]->id}}:before{
+            content: '\{{$tourKind[$i]->icon}}';
+            /*font-family: shazdemosafer-tour;*/
+            font-family: 'Shazde_Regular2' !important;
+        }
         @endfor
 
         .tourLevelIcons::before{
-            WIDTH: 100%;
+            width: 100%;
             display: flex;
+            font-weight: normal;
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -56,7 +58,7 @@ $state = 'تهران';
         @for($i = 0; $i < count($tourDifficult); $i++)
             #tourDifficult{{$i}}:before{
                 content: '\{{$tourDifficult[$i]->icon}}';
-                font-family: shazdemosafer-tour;
+            font-family: 'Shazde_Regular2' !important;
             }
         @endfor
     </style>
@@ -100,11 +102,11 @@ $state = 'تهران';
     </div>
 
     <div id="tourDetailsMainForm1stStepMainDiv" class="Hotel_Review prodp13n_jfy_overflow_visible lightGreyBox">
-        <form method="post" action="{{route('tour.create.stage.one')}}" autocomplete="off">
+        <form method="post" action="{{route('tour.create.stage.one.store')}}" autocomplete="off">
             {!! csrf_field() !!}
             <input type="hidden" name="kind" id="kind">
             <div class="ui_container">
-                <div class="menu ui_container whiteBox" id="">
+                <div class="menu ui_container whiteBox">
                     <div id="tourNameInputBoxMainDiv">
                         <div class="inputBoxGeneralInfo inputBox" id="tourNameInputBox">
                             <div class="inputBoxTextGeneralInfo inputBoxText">
@@ -113,7 +115,7 @@ $state = 'تهران';
                                     <span>*</span>
                                 </div>
                             </div>
-                            <input class="inputBoxInput" type="text" name="name" placeholder="فارسی" required>
+                            <input class="inputBoxInput" type="text" name="name" placeholder="فارسی" value="{{isset($tour->name) ? $tour->name : ''}}" required>
                         </div>
                     </div>
                     <span class="inboxHelpSubtitle">
@@ -127,8 +129,8 @@ $state = 'تهران';
                                     <span>*</span>
                                 </div>
                             </div>
-                            <input class="inputBoxInput" id="srcCity" type="text" placeholder="فارسی" readonly onclick="chooseSrcCityModal()">
-                            <input id="srcCityId" type="hidden" name="src">
+                            <input class="inputBoxInput" id="srcCity" type="text" placeholder="فارسی" readonly onclick="chooseSrcCityModal()" value="{{isset($tour->srcId) ? $tour->srcId : ''}}">
+                            <input id="srcCityId" type="hidden" name="src" value="{{isset($tour->srcId) ? $tour->srcId : ''}}">
                         </div>
                     </div>
                     <div id="destDiv" class="InlineTourInputBoxesMainDiv">
@@ -139,12 +141,10 @@ $state = 'تهران';
                                     <span>*</span>
                                 </div>
                             </div>
-                            <input class="inputBoxInput" id="destInput" type="text" placeholder="فارسی" onkeyup="searchDest(this.value)" onfocusout="hideSearchDest()"  autocomplete="none">
-                            <input id="destCityId" type="hidden" name="dest">
+                            <input class="inputBoxInput" id="destInput" type="text" placeholder="فارسی" onkeyup="searchDest(this.value)" onfocusout="hideSearchDest()"  autocomplete="none" value="{{isset($tour->destId) ? $tour->destId : ''}}">
+                            <input id="destCityId" type="hidden" name="dest" value="{{isset($tour->destId) ? $tour->destId : ''}}">
                             <div id="destinationListTourCreation" class="hidden-div">
-                                <div id="addNewDestinationTourCreation">
-                                    اضافه کردن فارسی
-                                </div>
+                                <div id="addNewDestinationTourCreation">اضافه کردن فارسی</div>
                                 <div id="destCitySearch"></div>
                             </div>
                         </div>
@@ -167,17 +167,19 @@ $state = 'تهران';
                         <span>نوع تور خود را مشخص کنید.</span>
                         <span onclick="$('#tourKindDescriptionModal').toggle()" style="cursor: pointer;">آیا نیازمند راهنمایی هستید؟</span>
                     </div>
-                    <center class="tourKindIconsTourCreation">
-
+                    <div class="tourKindIconsTourCreation">
                         @for($i = 0; $i < count($tourKind); $i++)
                             <input ng-model="sort" type="checkbox" id="c1{{$tourKind[$i]->id}}" value="{{$tourKind[$i]->id}}" onclick="chooseTourKind({{$tourKind[$i]->id}})"/>
-                            <label id="{{$tourKind[$i]->name == 'محلی' ? 'mahali' : ($tourKind[$i]->name == 'شهرگردی' ? 'shahr' : '')}}" for="c1{{$tourKind[$i]->id}}" onmouseover="changeKindColorToHover({{$tourKind[$i]->id}})" onmouseleave="changeColorToLeave({{$tourKind[$i]->id}})" style="display: {{$tourKind[$i]->name == 'محلی' ? 'none': 'inline-block'}}; cursor: pointer;">
-                                <p id="tourKind{{$tourKind[$i]->id}}" class="tourKindIcons"></p>
-                                <p id="cityKindTourName" class="tourKindNames">{{$tourKind[$i]->name}}</p>
+                            <label id="{{$tourKind[$i]->name == 'محلی' ? 'mahali' : ($tourKind[$i]->name == 'شهرگردی' ? 'shahr' : '')}}"
+                                   for="c1{{$tourKind[$i]->id}}"
+                                   onmouseover="changeKindColorToHover({{$tourKind[$i]->id}})"
+                                   onmouseleave="changeColorToLeave({{$tourKind[$i]->id}})"
+                                   style="display: {{$tourKind[$i]->name == 'محلی' ? 'none': 'inline-block'}}; cursor: pointer;">
+                                <div id="tourKind{{$tourKind[$i]->id}}" class="tourKindIcons"></div>
+                                <div id="cityKindTourName" class="tourKindNames">{{$tourKind[$i]->name}}</div>
                             </label>
                         @endfor
-
-                    </center>
+                    </div>
                     <div class="inboxHelpSubtitle">انتخاب بیش از یک گزینه مجاز می‌باشد</div>
                 </div>
             </div>
@@ -187,12 +189,12 @@ $state = 'تهران';
                         <span>درجه سختی تور خود را مشخص کنید.</span>
                         <span onclick="$('#tourDifficultDescriptionModal').toggle()" style="cursor: pointer;">آیا نیازمند راهنمایی هستید؟</span>
                     </div>
-                    <center class="tourLevelIconsTourCreation">
+                    <div class="tourLevelIconsTourCreation">
                         @for($i = 0; $i < count($tourDifficult); $i++)
                             <input ng-model="sort" type="{{$tourDifficult[$i]->alone == 0 ? 'checkbox' : 'radio'}}" name="difficult[]" id="c3{{$i}}" value="{{$tourDifficult[$i]->id}}" onclick="chooseDifficult({{$i}}, this.value, {{$tourDifficult[$i]->alone}})"/>
                             <label for="c3{{$i}}">
-                                <p id="tourDifficult{{$i}}" class="tourLevelIcons"></p>
-                                <sub>{{$tourDifficult[$i]->name}}</sub>
+                                <div id="tourDifficult{{$i}}" class="tourLevelIcons"></div>
+                                <div>{{$tourDifficult[$i]->name}}</div>
                             </label>
                         @endfor
 
@@ -208,7 +210,7 @@ $state = 'تهران';
                                 });
                             });
                         </script>
-                    </center>
+                    </div>
                     <div class="inboxHelpSubtitle">انتخاب گزینه‌های
                         @foreach($tourDifficult as $item)
                             @if($item->alone == 0)

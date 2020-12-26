@@ -616,25 +616,28 @@ Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), func
 });
 
 //tour
-Route::group(array('middleware' => 'auth'), function () {
+Route::middleware(['auth'])->group(function () {
+    Route::middleware(['shareData'])->group(function(){
+        Route::get('/tour/create/afterStart', 'TourController@afterStart')->name('afterStart');
 
-    Route::get('/tour/create/afterStart', 'TourController@afterStart')->name('afterStart');
+        Route::get('/tour/create/stageOne/{id?}', 'TourController@stageOneTour')->name('tour.create.stage.one');
 
-    Route::any('/tour/create/stageOne', 'TourController@stageOneTour')->name('tour.create.stage.one');
+        Route::get('/tour/create/stageTwo/{id}', 'TourController@stageTwoTour')->name('tour.create.stage.two');
 
-    Route::get('/tour/create/stageTwo/{id}', 'TourController@stageTwoTour')->name('tour.create.stage.two');
+        Route::get('/tour/create/stageThree/{id}', 'TourController@stageThreeTour')->name('tour.create.stage.three');
+
+        Route::get('/tour/create/stageFour/{id}', 'TourController@stageFourTour')->name('tour.create.stage.four');
+
+        Route::get('/tour/create/stageFive/{id}', 'TourController@stageFiveTour')->name('tour.create.stage.five');
+    });
+
+    Route::post('/tour/create/stageOne/store', 'TourController@storeStageOneTour')->name('tour.create.stage.one.store');
 
     Route::post('/tour/create/stageTwoTourStore', 'TourController@stageTwoTourStore')->name('tour.create.stage.two.store');
 
-    Route::get('/tour/create/stageThree/{id}', 'TourController@stageThreeTour')->name('tour.create.stage.three');
-
     Route::post('/tour/create/stageThreeTourStore', 'TourController@stageThreeTourStore')->name('tour.create.stage.three.store');
 
-    Route::get('/tour/create/stageFour/{id}', 'TourController@stageFourTour')->name('tour.create.stage.four');
-
     Route::post('/tour/create/stageFourTourStore', 'TourController@stageFourTourStore')->name('tour.create.stage.four.store');
-
-    Route::get('/tour/create/stageFive/{id}', 'TourController@stageFiveTour')->name('tour.create.stage.five');
 
     Route::post('/tour/create/stageFiveTourStore', 'TourController@stageFiveTourStore')->name('tour.create.stage.five.store');
 

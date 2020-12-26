@@ -2906,6 +2906,8 @@ class PlaceController extends Controller {
             $mode = strtolower($mode);
 
             $kindPlaceId = $kindPlace->id;
+            $notItemToShow = false;
+            $showOther = false;
 
             if($mode == 'country'){
                 $state = '';
@@ -2956,12 +2958,23 @@ class PlaceController extends Controller {
                 $contentCount = \DB::table($kindPlace->tableName)->where('cityId', $city->id)->count();
             }
 
+
+            if($contentCount == 0){
+                $notItemToShow = true;
+                $showOther = true;
+                if($kindPlaceId == 10 || $kindPlaceId == 11 || $kindPlaceId == 6 && $mode == 'city'){
+                    $mode = 'state';
+                    $city = $state;
+                    $cityIds = Cities::where('stateId', $city->id)->pluck('id')->toArray();
+                    $contentCount = \DB::table($kindPlace->tableName)->whereIn('cityId', $cityIds)->count();
+                }
+            }
+
             switch ($kindPlaceId){
                 case 1:
                     $topPic = 'amaken.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'جاذبه ای برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ جاذبه های ' . $locationName['cityName'] . ' را در <span onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'amaken';
@@ -2975,7 +2988,6 @@ class PlaceController extends Controller {
                     $topPic = 'restaurant.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'رستورانی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ رستوران های ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'restaurant';
@@ -2991,7 +3003,6 @@ class PlaceController extends Controller {
                     $topPic = 'hotel.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'هتلی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ هتل های ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'hotel';
@@ -3005,7 +3016,7 @@ class PlaceController extends Controller {
                     $topPic = 'majara.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'طبیعت گردی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
+                    $errorTxt[1] =  $showOther ? 'برای شما اطلاعات ' . $state->name . ' را نمایش داده ایم.' : '';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ طبیعت گردی های ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'majara';
@@ -3018,7 +3029,7 @@ class PlaceController extends Controller {
                     $topPic = 'soghat.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'سوغات و صنایع دستی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
+                    $errorTxt[1] =  $showOther ? 'برای شما اطلاعات ' . $state->name . ' را نمایش داده ایم.' : '';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ سوغات و صنایع دستی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'sogatSanaies';
@@ -3054,7 +3065,7 @@ class PlaceController extends Controller {
 
                     $errorTxt = [];
                     $errorTxt[0] = 'غذای محلی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
+                    $errorTxt[1] =  $showOther ? 'برای شما اطلاعات ' . $state->name . ' را نمایش داده ایم.' : '';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ غذای محلی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'mahaliFood';
@@ -3085,7 +3096,7 @@ class PlaceController extends Controller {
                 $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->where('type', 'YN')->get();
             $kind = $mode;
 
-            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace', 'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state', 'contentCount', 'topPic']));
+            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace', 'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state', 'contentCount', 'notItemToShow', 'topPic']));
         }
         else
             return \redirect(\url('/'));

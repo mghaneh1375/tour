@@ -35,72 +35,75 @@ class TourController extends Controller
 {
     public function afterStart()
     {
-        return view('tour.tourCreationFirstPage');
+        return view('pages.tour.tourCreationFirstPage');
     }
 
-    public function stageOneTour(Request $request)
+    public function stageOneTour($id = 0)
     {
-        if($request->method() == 'POST'){
+        $tour = Tour::find($id);
 
-            $newTour = new Tour();
-            $newTour->userId = 1;
-            $newTour->name = $request->name;
-            $newTour->srcId = $request->src;
-            $newTour->destId = $request->dest;
-            if($request->src == $request->dest)
-                $newTour->kindDest = 0;
-            else
-                $newTour->kindDest = -1;
-            $newTour->private = $request->private;
+        $tourDifficult = TourDifficult::all();
+        $tourStyle = TourStyle::all();
+        $tourFocus = TourFocus::all();
+        $tourKind = TourKind::all();
 
-            $bestSesson = '';
-            for($i = 0; $i < count($request->season); $i++){
-                if($i != 0)
-                    $bestSesson .= '-';
+        $states = State::all();
+        return view('pages.tour.tourCreationGeneralInfo', compact(['tourDifficult', 'tourStyle', 'tourFocus', 'tourKind', 'states', 'tour']));
 
-                $bestSesson .= $request->season[$i] ;
-            }
+    }
 
-            $newTour->bestSeason = $bestSesson;
-            $newTour->save();
+    public function storeStageOneTour(Request $request)
+    {
+        dd($request->all());
 
-            foreach (json_decode($request->kind) as $item){
-                $newKind = new TourKind_Tour();
-                $newKind->kindId = $item;
-                $newKind->tourId = $newTour->id;
-                $newKind->save();
-            }
-            foreach ($request->difficult as $item){
-                $newdifficult = new TourDifficult_Tour();
-                $newdifficult->difficultId = $item;
-                $newdifficult->tourId = $newTour->id;
-                $newdifficult->save();
-            }
-            foreach ($request->focus as $item){
-                $newFocus = new TourFocus_Tour();
-                $newFocus->focusId = $item;
-                $newFocus->tourId = $newTour->id;
-                $newFocus->save();
-            }
-            foreach ($request->style as $item){
-                $newStyle = new TourStyle_Tour();
-                $newStyle->styleId = $item;
-                $newStyle->tourId = $newTour->id;
-                $newStyle->save();
-            }
+        $newTour = new Tour();
+        $newTour->userId = auth()->user()->id;
+        $newTour->name = $request->name;
+        $newTour->srcId = $request->src;
+        $newTour->destId = $request->dest;
+        if($request->src == $request->dest)
+            $newTour->kindDest = 0;
+        else
+            $newTour->kindDest = -1;
+        $newTour->private = $request->private;
 
-            return redirect(url('/tour/create/stageTwo/' . $newTour->id));
+        $bestSesson = '';
+        for($i = 0; $i < count($request->season); $i++){
+            if($i != 0)
+                $bestSesson .= '-';
 
+            $bestSesson .= $request->season[$i] ;
         }
-        else{
-            $tourDifficult = TourDifficult::all();
-            $tourStyle = TourStyle::all();
-            $tourFocus = TourFocus::all();
-            $tourKind = TourKind::all();
 
-            $states = State::all();
-            return view('tour.tourCreationGeneralInfo', compact(['tourDifficult', 'tourStyle', 'tourFocus', 'tourKind', 'states']));
+        $newTour->bestSeason = $bestSesson;
+        $newTour->save();
+
+        foreach (json_decode($request->kind) as $item){
+            $newKind = new TourKind_Tour();
+            $newKind->kindId = $item;
+            $newKind->tourId = $newTour->id;
+            $newKind->save();
         }
+        foreach ($request->difficult as $item){
+            $newdifficult = new TourDifficult_Tour();
+            $newdifficult->difficultId = $item;
+            $newdifficult->tourId = $newTour->id;
+            $newdifficult->save();
+        }
+        foreach ($request->focus as $item){
+            $newFocus = new TourFocus_Tour();
+            $newFocus->focusId = $item;
+            $newFocus->tourId = $newTour->id;
+            $newFocus->save();
+        }
+        foreach ($request->style as $item){
+            $newStyle = new TourStyle_Tour();
+            $newStyle->styleId = $item;
+            $newStyle->tourId = $newTour->id;
+            $newStyle->save();
+        }
+
+        return redirect(url('/tour/create/stageTwo/' . $newTour->id));
     }
 
     public function stageTwoTour($id)
@@ -110,7 +113,7 @@ class TourController extends Controller
 
         if(auth()->user()->id == $tour->userId) {
             if($tour == null)
-                return redirect(route('tour.create.stage.one'));
+                return redirect(route('pages.tour.create.stage.one'));
             else{
                 $tour->lastUpdate = convertDate($tour->updated_at);
                 $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
@@ -133,7 +136,7 @@ class TourController extends Controller
                 else
                     $tour->local = true;
 
-                return view('tour.tourCreationSpecificInfo', compact(['tour', 'transport', 'ostan']));
+                return view('pages.tour.tourCreationSpecificInfo', compact(['tour', 'transport', 'ostan']));
             }
         }
         else
@@ -255,7 +258,7 @@ class TourController extends Controller
 
                     $ostan = State::all();
 
-                    return view('tour.tourCreationFinancialInfo', compact(['tour', 'ostan']));
+                    return view('pages.tour.tourCreationFinancialInfo', compact(['tour', 'ostan']));
                 }
             }
     }
@@ -392,7 +395,7 @@ class TourController extends Controller
             $tour->lastUpdate = convertDate($tour->updated_at);
             $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
-            return view('tour.tourCreationLanguage&Schedule', compact(['tour']));
+            return view('pages.tour.tourCreationLanguage&Schedule', compact(['tour']));
         }
 
     }
@@ -529,7 +532,7 @@ class TourController extends Controller
             foreach ($mainEquipment as $item){
                 $item->side = SubEquipment::where('equipmentId', $item->id)->get();
             }
-            return view('tour.tourCreationExplanatoryInfo', compact(['tour', 'mainEquipment']));
+            return view('pages.tour.tourCreationExplanatoryInfo', compact(['tour', 'mainEquipment']));
         }
         else{
             return redirect()->back();
@@ -604,7 +607,7 @@ class TourController extends Controller
             $tour->lastUpdate = convertDate($tour->updated_at);
             $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
-            return view('tour.tourCreationFinalStep', compact(['tour']));
+            return view('pages.tour.tourCreationFinalStep', compact(['tour']));
         }
         else
             return redirect()->back();

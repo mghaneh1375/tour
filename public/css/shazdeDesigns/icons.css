@@ -3,6 +3,11 @@
 }
 
 /*....................*/
+
+.studentIcon:before{
+    content: '\E0F9';
+    font-family: 'Shazde_Regular2' !important;
+}
 .playIcon:before{
     content: '\E0C0';
     font-family: 'Shazde_Regular2' !important;

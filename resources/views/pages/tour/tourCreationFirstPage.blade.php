@@ -78,8 +78,8 @@ $kindPlaceId = 10; ?>
             </div>
         </div>
     </div>
-
 @include('layouts.footer.layoutFooter')
+</div>
 
 </body>
 </html>

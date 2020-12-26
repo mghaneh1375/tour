@@ -427,7 +427,7 @@
 
 @if(auth()->check())
     @include('layouts.urlAuthed')
-    <script src="{{URL::asset('js/pages/ifLogin.js')}}"></script>
+    <script src="{{URL::asset('js/pages/ifLogin.js?v='.$fileVersions)}}"></script>
 @endif
 
 <script type="text/javascript">

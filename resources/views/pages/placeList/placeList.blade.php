@@ -44,16 +44,7 @@
         </div>
         <div class="listTitle">
             <div>{{$kindPlace->title}}</div>
-            <div>
-                @if($mode != 'country')
-                    @if($mode == 'state')
-                        {{__('استان')}}
-                    @endif
-                    {{$city->name}}
-                @else
-                    {{__('ایران من')}}
-                @endif
-            </div>
+            <div>{{$locationName['name']}}</div>
         </div>
         <div class="botGradient"></div>
     </div>
@@ -63,14 +54,7 @@
         <div class="placeListHeader hideOnPhone">
             <div class="placeListTitle">
                 {{$kindPlace->title}}
-                @if($mode != 'country')
-                    @if($mode == 'state')
-                        {{__('استان')}}
-                    @endif
-                    {{$city->name}}
-                @else
-                    {{__('ایران من')}}
-                @endif
+                {{$locationName['name']}}
             </div>
             <div class="shareSection">
                 <div id="share_pic" class="btn sharePageMainDiv" onclick="toggleShareIcon(this)">
@@ -120,26 +104,18 @@
                     </div>
                     <div class="option">
                         <div class="row">
-                            @if($contentCount == 0)
+                            @if($notItemToShow)
                                 <div id="notingToShowInPlace" class="notingToShowDiv">
                                     <div class="notingToShowImgDiv">
                                         <img src="{{URL::asset('images/mainPics/notElemList.png')}}" style="width: 100%;">
                                     </div>
                                     <div class="notingToShowTextDiv">
-                                        <span style="font-weight: bold; font-size: 1.5em;">
-                                            {{$errorTxt[0]}}
-                                        </span>
-                                        <span>
-                                            {{$errorTxt[1]}}
-                                        </span>
-                                        <span>
-                                            {!! $errorTxt[2] !!}
-                                        </span>
+                                        <span style="font-weight: bold; font-size: 1.5em;"> {{$errorTxt[0]}} </span>
+                                        <span> {{$errorTxt[1]}} </span>
+                                        <span> {!! $errorTxt[2] !!} </span>
                                     </div>
-                                    {{--                                <div class="notingToShowClose iconClose"></div>--}}
                                 </div>
                             @else
-                                <div id="listBodyToShowCards"></div>
                                 <div id="notingToShowFilter" class="notingToShowDiv hidden">
                                     <div class="notingToShowImgDiv">
                                         <img src="{{URL::asset('images/mainPics/notElemList.png')}}" style="width: 100%;">
@@ -159,6 +135,7 @@
                                 </div>
                             @endif
 
+                            <div id="listBodyToShowCards"></div>
                         </div>
                     </div>
                 </div>

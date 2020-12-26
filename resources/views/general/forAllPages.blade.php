@@ -92,7 +92,7 @@
     function getLoginPages(_callBack){
         openLoading(false, () => {
             $.ajax({
-                type: 'get',
+                type: 'GET',
                 url: '{{route("getPage.login")}}',
                 success: response => {
                     closeLoading();
