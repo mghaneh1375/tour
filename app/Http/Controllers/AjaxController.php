@@ -212,7 +212,7 @@ class AjaxController extends Controller {
 
         $stateId = makeValidInput($_POST["stateId"]);
 
-        echo json_encode(Cities::whereStateId($stateId)->get());
+        echo json_encode(Cities::where('stateId',$stateId)->get());
     }
 
     public function searchPlace() {

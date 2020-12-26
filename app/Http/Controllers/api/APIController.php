@@ -418,7 +418,7 @@ class APIController extends Controller {
             }
 
             if($stateId != -1)
-                echo json_encode(['cities' => Cities::whereStateId($stateId)->get()]);
+                echo json_encode(['cities' => Cities::where('stateId',$stateId)->get()]);
         }
     }
 

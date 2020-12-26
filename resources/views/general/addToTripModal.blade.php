@@ -256,8 +256,9 @@
             return;
 
         callBackCreateTrip = null;
-        checkEmptyTripInputs();
         $("#my-trips-not").hide();
+
+        checkEmptyTripInputs();
         openMyModal('newTripModal');
         if(typeof _callBack === 'function')
             callBackCreateTrip = _callBack;

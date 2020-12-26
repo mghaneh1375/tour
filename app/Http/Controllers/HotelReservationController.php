@@ -158,7 +158,7 @@ class HotelReservationController extends Controller {
             }
             else{
                 $state = State::whereName($city)->first();
-                $citiesId = Cities::whereStateId($state->id)->pluck('id')->toArray();
+                $citiesId = Cities::where('stateId',$state->id)->pluck('id')->toArray();
                 if ($state == null)
                     return "نتیجه ای یافت نشد";
 
