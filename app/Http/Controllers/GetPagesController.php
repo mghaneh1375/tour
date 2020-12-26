@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 class GetPagesController extends Controller
 {
     public function getLoginPage(){
-        return view('general.nLoginPopUp');
+        $view = view('general.nLoginPopUp')->render();
+        return response()->json($view);
     }
 }
