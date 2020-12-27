@@ -23,6 +23,7 @@ use App\models\Tag;
 use App\models\TripMembersLevelController;
 use App\models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class NotUseController extends Controller
 {

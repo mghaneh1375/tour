@@ -386,8 +386,8 @@ class PlaceController extends Controller {
         $latDeg = $radius/110.574;
         $lngDeg = $radius/(111.320*cos(deg2rad($C)));
 
-        $latBetween = [$C + $latDeg, $C - $latDeg];
-        $lngBetween = [$D + $lngDeg, $D - $lngDeg];
+//        $latBetween = [$C + $latDeg, $C - $latDeg];
+//        $lngBetween = [$D + $lngDeg, $D - $lngDeg];
 
         $D = (float)$D * 3.14 / 180;
         $C = (float)$C * 3.14 / 180;

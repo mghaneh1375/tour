@@ -474,7 +474,7 @@
             </div>
 
             <div class="col-xs-12 articleDiv">
-                <div class="row topPlacesDivInCity">
+                <div class="row topPlacesDivInCity" style="background: white">
                     <article class="im-article content-2col col-md-6 col-sm-12">
                         <div class="im-entry-thumb">
                             <a class="im-entry-thumb-link" href="{{$safarnameh[0]->url}}" title="{{$safarnameh[0]->slug}}" style="height: 275px;">

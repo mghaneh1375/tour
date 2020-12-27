@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="notingToShowTextDiv">
                                         <span style="font-weight: bold; font-size: 1.5em;"> {{$errorTxt[0]}} </span>
-                                        <span> {{$errorTxt[1]}} </span>
+                                        @if(isset($errorTxt[1]))<span> {{$errorTxt[1]}} </span>@endif
                                         <span> {!! $errorTxt[2] !!} </span>
                                     </div>
                                 </div>
