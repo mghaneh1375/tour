@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\localShops\LocalShops;
+use App\models\localShops\LocalShopsCategory;
+use App\models\localShops\LocalShopsPictures;
 use App\models\places\Amaken;
 use App\models\BannerPics;
 use App\models\BookMark;
@@ -65,13 +68,17 @@ class PlaceController extends Controller {
     public function setPlaceDetailsURL($kindPlaceId, $placeId)
     {
         $kindPlace = Place::find($kindPlaceId);
-        if($kindPlaceId == null)
+        if($kindPlace == null)
             return \redirect(\url('/'));
         else
             $place = DB::table($kindPlace->tableName)->select(['id', 'name', 'slug'])->find($placeId);
 
         if($place == null)
             return \redirect(\url('/'));
+
+        if($kindPlace->id == 13)
+            return \redirect(route('business.show', ['id' => $place->id]), 301);
+
 
         if($place->slug != null)
             return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->slug), 301);
@@ -2898,22 +2905,23 @@ class PlaceController extends Controller {
     public function showPlaceList($kindPlaceId, $mode, $city = '')
     {
         $kindPlace = Place::find($kindPlaceId);
-        if($kindPlace->id == 13)
-            return \redirect(\url('/'));
 
         if($kindPlace != null){
             $meta = [];
             $mode = strtolower($mode);
 
             $kindPlaceId = $kindPlace->id;
-            $notItemToShow = false;
             $showOther = false;
+            $notItemToShow = false;
+            $cityRel = 0;
 
             if($mode == 'country'){
                 $state = '';
                 $city = '';
                 $articleUrl = \route('safarnameh.index');
-                $n = 'لیست ' . $kindPlace->title . ' ایران';
+                $n = ' لیست ';
+                $n .= $kindPlace->title;
+                $n .= ' ایران ';
                 $locationName = ["name" => $n, 'state' => '',  'cityName' => 'ایران من', 'cityNameUrl' => 'ایران من', 'articleUrl' => $articleUrl, 'kindState' => 'country', 'kindPage' => 'list'];
                 $contentCount = \DB::table($kindPlace->tableName)->count();
                 $inHeaderName = 'ایران ';
@@ -2958,17 +2966,21 @@ class PlaceController extends Controller {
                 $contentCount = \DB::table($kindPlace->tableName)->where('cityId', $city->id)->count();
             }
 
-
             if($contentCount == 0){
                 $notItemToShow = true;
                 $showOther = true;
-                if($kindPlaceId == 10 || $kindPlaceId == 11 || $kindPlaceId == 6 && $mode == 'city'){
-                    $mode = 'state';
-                    $city = $state;
-                    $cityIds = Cities::where('stateId', $city->id)->pluck('id')->toArray();
-                    $contentCount = \DB::table($kindPlace->tableName)->whereIn('cityId', $cityIds)->count();
-                }
             }
+
+            if(($kindPlaceId == 10 || $kindPlaceId == 11 || $kindPlaceId == 6) && $mode == 'city'){
+                $cityRel = $city;
+                $city = $state;
+                $cityIds = Cities::where('stateId', $city->id)->pluck('id')->toArray();
+                $contentCount = \DB::table($kindPlace->tableName)->whereIn('cityId', $cityIds)->count();
+
+                if($contentCount > 1)
+                    $notItemToShow = false;
+            }
+
 
             switch ($kindPlaceId){
                 case 1:
@@ -3089,6 +3101,20 @@ class PlaceController extends Controller {
 //                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
                     $meta['description'] = 'معرفی بوم گردی های '.$inHeaderName.' با کوچیتا. تلفن بوم گردی '.$inHeaderName.' با بررسی عکس ها، قیمت، نظرات میهمانان، مقایسه بوم گردی در '.$inHeaderName.' و موقعیت نقشه بوم گردی های '.$inHeaderName.'';
                     break;
+                case 13:
+                    $topPic = 'boom.webp';
+                    $errorTxt = [];
+                    $errorTxt[0] = 'کسب و کاری برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
+//                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
+                    $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ بوم گردی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
+
+                    $placeMode = 'localShop';
+                    $kindPlace->title = 'کسب و کار های ';
+                    $meta['title'] = 'کسب و کار های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
+                    $meta['keyword'] = 'کسب و کار های '.$inHeaderName;
+//                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
+                    $meta['description'] = 'معرفی کسب و کار های '.$inHeaderName.' با کوچیتا. تلفن کسب و کار '.$inHeaderName;
+                    break;
             }
 
             $features = PlaceFeatures::where('kindPlaceId', $kindPlaceId)->where('parent', 0)->get();
@@ -3096,7 +3122,15 @@ class PlaceController extends Controller {
                 $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->where('type', 'YN')->get();
             $kind = $mode;
 
-            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace', 'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state', 'contentCount', 'notItemToShow', 'topPic']));
+            if($kindPlace->id == 13){
+                $features = LocalShopsCategory::where('parentId', 0)->get();
+                foreach ($features as $feature)
+                    $feature->subFeat = LocalShopsCategory::where('parentId', $feature->id)->get();
+            }
+
+            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
+                                                                    'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
+                                                                    'contentCount', 'notItemToShow', 'topPic', 'cityRel']));
         }
         else
             return \redirect(\url('/'));
@@ -3104,6 +3138,7 @@ class PlaceController extends Controller {
 
     public function getPlaceListElems(Request $request)
     {
+
         $startTime = microtime(true);
 
         $page = (int)$request->pageNum;
@@ -3203,11 +3238,19 @@ class PlaceController extends Controller {
             }
 
             if(count($featureFilters) != 0) {
-                $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
-                $placeIds = array();
-                foreach ($pIds as $p){
-                    if($p->count == count($featureFilters))
-                        array_push($placeIds, $p->placeId);
+                $placeIds = [];
+
+                if($kindPlace->id == 13){
+                    $pIds = LocalShops::whereIn('categoryId', $featureFilters)->pluck('id')->toArray();
+                    foreach ($pIds as $item)
+                        array_push($placeIds, $item);
+                }
+                else{
+                    $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
+                    foreach ($pIds as $p){
+                        if($p->count == count($featureFilters))
+                            array_push($placeIds, $p->placeId);
+                    }
                 }
             }
         }
@@ -3237,6 +3280,10 @@ class PlaceController extends Controller {
         }
         if(count($placeIds) == 0)
             return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
+
+        if($kindPlace->id == 13)
+            $placeIds = LocalShops::whereIn('id', $placeIds)->where('confirm', 1)->pluck('id')->toArray();
+
 
         $placeCount = count($placeIds);
 
@@ -3277,9 +3324,17 @@ class PlaceController extends Controller {
         foreach ($places as $place) {
             $place->pic = $nonePicUrl;
             if($place->file != 'none' && $place->file != null){
-                $location = __DIR__ . "/../../../../assets/_images/$kindPlace->fileName/$place->file/f-$place->picNumber";
+                if($kindPlace->id == 13) {
+                    $picNm = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
+                    if($picNm != null)
+                        $picNm = $picNm->picture;
+                }
+                else
+                    $picNm = $place->picNumber;
+
+                $location = __DIR__ . "/../../../../assets/_images/$kindPlace->fileName/$place->file/l-$picNm";
                 if (is_file($location))
-                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/f-$place->picNumber");
+                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/l-$picNmr");
             }
             $place->reviews = $place->reviewCount;
 

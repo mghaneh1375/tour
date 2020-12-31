@@ -761,7 +761,10 @@ div.prw_rup.prw_common_centered_thumbnail .sizing_wrapper{
     padding: 5px;
     cursor: pointer;
 }
-
+.filterHeaderWithClose{
+    display: flex;
+    justify-content: space-between;
+}
 @media (min-width: 992px) and (max-width: 1189px) {
     .lhr .filterGroupTitle {
         font-size: 18px !important;

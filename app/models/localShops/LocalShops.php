@@ -35,15 +35,20 @@ class LocalShops extends Model
         $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')
                         ->where('isMain', 1)
                         ->first();
-        $pictures->pic = [
-            'main' => \URL::asset('_images/localShops/'.$this->id.'/'.$pictures->pic),
-            's' => \URL::asset('_images/localShops/'.$this->id.'/s-'.$pictures->pic),
-            'f' => \URL::asset('_images/localShops/'.$this->id.'/f-'.$pictures->pic),
-            'l' => \URL::asset('_images/localShops/'.$this->id.'/l-'.$pictures->pic),
-            't' => \URL::asset('_images/localShops/'.$this->id.'/t-'.$pictures->pic),
-        ];
 
-        return $pictures;
+        if($pictures == null)
+            return false;
+        else {
+            $pictures->pic = [
+                'main' => \URL::asset('_images/localShops/' . $this->id . '/' . $pictures->pic),
+                's' => \URL::asset('_images/localShops/' . $this->id . '/s-' . $pictures->pic),
+                'f' => \URL::asset('_images/localShops/' . $this->id . '/f-' . $pictures->pic),
+                'l' => \URL::asset('_images/localShops/' . $this->id . '/l-' . $pictures->pic),
+                't' => \URL::asset('_images/localShops/' . $this->id . '/t-' . $pictures->pic),
+            ];
+
+            return $pictures;
+        }
     }
 
     public function getReviews(){

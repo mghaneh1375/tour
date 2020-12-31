@@ -35,118 +35,123 @@ class TourController extends Controller
 {
     public function afterStart()
     {
-        return view('pages.tour.tourCreationFirstPage');
+        return view('pages.tour.create.tourCreationFirstPage');
     }
 
     public function stageOneTour($id = 0)
     {
         $tour = Tour::find($id);
-
         $tourDifficult = TourDifficult::all();
         $tourStyle = TourStyle::all();
         $tourFocus = TourFocus::all();
         $tourKind = TourKind::all();
-
         $states = State::all();
-        return view('pages.tour.tourCreationGeneralInfo', compact(['tourDifficult', 'tourStyle', 'tourFocus', 'tourKind', 'states', 'tour']));
 
+        return view('pages.tour.create.createTour_GeneralInfo', compact(['tour', 'states']));
+//        return view('pages.tour.create.tourCreationGeneralInfo', compact(['tourDifficult', 'tourStyle', 'tourFocus', 'tourKind', 'states', 'tour']));
     }
 
     public function storeStageOneTour(Request $request)
     {
-        dd($request->all());
+        $isNewTour = true;
+        if(isset($request->id) && $request->id != 0){
+            $newTour = Tour::find($request->id);
+            if($newTour != null)
+                $isNewTour = false;
+        }
 
-        $newTour = new Tour();
-        $newTour->userId = auth()->user()->id;
+        if($isNewTour) {
+            $newTour = new Tour();
+            $newTour->userId = auth()->user()->id;
+        }
+
         $newTour->name = $request->name;
         $newTour->srcId = $request->src;
-        $newTour->destId = $request->dest;
-        if($request->src == $request->dest)
-            $newTour->kindDest = 0;
-        else
-            $newTour->kindDest = -1;
+        $newTour->destId = $request->destId;
+        $newTour->kindDest = $request->destKind;
+        $newTour->day = $request->tourDay;
+        $newTour->night = $request->tourNight;
+        $newTour->maxCapacity = $request->maxCapacity;
+        $newTour->minCapacity = $request->minCapacity;
+        $newTour->anyCapacity = $request->anyCapacity;
         $newTour->private = $request->private;
-
-        $bestSesson = '';
-        for($i = 0; $i < count($request->season); $i++){
-            if($i != 0)
-                $bestSesson .= '-';
-
-            $bestSesson .= $request->season[$i] ;
-        }
-
-        $newTour->bestSeason = $bestSesson;
         $newTour->save();
 
-        foreach (json_decode($request->kind) as $item){
-            $newKind = new TourKind_Tour();
-            $newKind->kindId = $item;
-            $newKind->tourId = $newTour->id;
-            $newKind->save();
+
+        if($request->tourTimeKind == 'notSameTime'){
+            TourPeriod::where('tourId', $newTour->id)->delete();
+            $newTour->period = 2;
+            $first = true;
+            for($i = 0; $i < count($request->sDateNotSame) && $i < count($request->eDateNotSame); $i++){
+                if($request->sDateNotSame[$i] != null && $request->sDateNotSame[$i] != '' && $request->eDateNotSame[$i] != null && $request->eDateNotSame[$i] != ''){
+                    if($first){
+                        $newTour->sDate = convertDateToString(convertNumber('en', $request->sDateNotSame[$i]), '/');
+                        $newTour->eDate = convertDateToString(convertNumber('en', $request->eDateNotSame[$i]), '/');
+                        $first = false;
+                    }
+                    else{
+                        $newPeriod = new TourPeriod();
+                        $newPeriod->tourId = $newTour->id;
+                        $newPeriod->sDate = convertDateToString(convertNumber('en', $request->sDateNotSame[$i]), '/');
+                        $newPeriod->eDate = convertDateToString(convertNumber('en', $request->eDateNotSame[$i]), '/');
+                        $newPeriod->save();
+                    }
+                }
+            }
         }
-        foreach ($request->difficult as $item){
-            $newdifficult = new TourDifficult_Tour();
-            $newdifficult->difficultId = $item;
-            $newdifficult->tourId = $newTour->id;
-            $newdifficult->save();
-        }
-        foreach ($request->focus as $item){
-            $newFocus = new TourFocus_Tour();
-            $newFocus->focusId = $item;
-            $newFocus->tourId = $newTour->id;
-            $newFocus->save();
-        }
-        foreach ($request->style as $item){
-            $newStyle = new TourStyle_Tour();
-            $newStyle->styleId = $item;
-            $newStyle->tourId = $newTour->id;
-            $newStyle->save();
+        else{
+            if($request->tourTimeKind == 'sameTime'){
+                TourPeriod::where('tourId', $newTour->id)->delete();
+
+                $newTour->period = 1;
+                $newPeriod = new TourPeriod();
+                $newPeriod->tourId = $newTour->id;
+                $newPeriod->priodTime = $request->priod;
+                $newPeriod->save();
+            }
+            else
+                $newTour->period = 0;
+
+            $newTour->sDate = convertDateToString(convertNumber('en', $request->sDate), '/');
+            $newTour->eDate = convertDateToString(convertNumber('en', $request->eDate), '/');
         }
 
-        return redirect(url('/tour/create/stageTwo/' . $newTour->id));
+        $newTour->save();
+
+//        TourKind_Tour::where('tourId', $newTour->id)->delete();
+//        $tourKinds = json_decode($request->kind);
+//        foreach ($tourKinds as $item)
+//            TourKind_Tour::firstOrCreate(['kindId' => $item, 'tourId' => $newTour->id]);
+//
+//        TourDifficult_Tour::where('tourId', $newTour->id)->delete();
+//        foreach ($request->difficult as $item)
+//            TourDifficult_Tour::firstOrCreate(['difficultId' => $item, 'tourId' => $newTour->id]);
+//
+//        TourFocus_Tour::where('tourId', $newTour->id)->delete();
+//        foreach ($request->focus as $item)
+//            TourFocus_Tour::firstOrCreate(['focusId' => $item, 'tourId' => $newTour->id]);
+//
+//        TourStyle_Tour::where('tourId', $newTour->id)->delete();
+//        foreach ($request->style as $item)
+//            TourStyle_Tour::firstOrCreate(['styleId' => $item, 'tourId' => $newTour->id]);
+
+        return redirect(route('tour.create.stage.two', ['id' => $newTour->id]));
     }
 
     public function stageTwoTour($id)
     {
-
         $tour = Tour::find($id);
+        $tour->lastUpdate = convertDate($tour->updated_at);
+        $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
-        if(auth()->user()->id == $tour->userId) {
-            if($tour == null)
-                return redirect(route('pages.tour.create.stage.one'));
-            else{
-                $tour->lastUpdate = convertDate($tour->updated_at);
-                $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
-
-                $transport = TransportKind::all();
-                $src = Cities::find($tour->srcId);
-                $dest = Cities::find($tour->destId);
-                $tour->srcLatLng = [$src->x, $src->y];
-                $tour->destLatLng = [$dest->x, $dest->y];
-
-                $ostan = State::all();
-
-                $tourLocalId = TourKind::where('name', 'محلی')->first();
-                if($tourLocalId != null)
-                    $tourLocalId = $tourLocalId->id;
-
-                $local = TourKind_Tour::where(['tourId' => $tour->id, 'kindId' => $tourLocalId])->first();
-                if($local == null)
-                    $tour->local = false;
-                else
-                    $tour->local = true;
-
-                return view('pages.tour.tourCreationSpecificInfo', compact(['tour', 'transport', 'ostan']));
-            }
-        }
-        else
-            return redirect(url('/'));
+        return view('pages.tour.create.createTour_datePlan', compact(['tour']));
     }
 
     public function stageTwoTourStore(Request $request)
     {
+        dd(json_decode($request->planDate));
+        dd($request->all());
         $tour = Tour::find($request->tourId);
-
         if(auth()->user()->id == $tour->userId) {
             if($tour != null){
                 if($request->isTransportTour == 1){
@@ -179,27 +184,15 @@ class TourController extends Controller
                 }
                 $tour->inTransport = $inTransport;
 
-                if($request->isMeal == 1)
-                    $tour->isMeal = true;
-                else
-                    $tour->isMeal = false;
-
-                if($request->isMealsAllDay == 1)
-                    $tour->isMealAllDay = true;
-                else
-                    $tour->isMealAllDay = false;
-
-                if($request->isMealCost == 1)
-                    $tour->isMealMoney = true;
-                else
-                    $tour->isMealMoney = false;
+                $tour->isMeal = $request->isMeal == 1;
+                $tour->isMealAllDay = $request->isMealsAllDay == 1;
+                $tour->isMealMoney = $request->isMealCost == 1;
 
                 $meals = $request->meals;
                 $mealText = '';
                 for($i = 0; $i < count($meals); $i++){
                     if($i != 0)
                         $mealText .= '-';
-
                     $mealText .= $meals[$i];
                 }
                 $tour->meals = $mealText;
@@ -239,8 +232,7 @@ class TourController extends Controller
                     $newPlace->kindPlaceId = 0;
                     $newPlace->save();
                 }
-
-                return redirect(url('/tour/create/stageThree/' . $tour->id));
+                return redirect(route('tour.create.stage.three', ['id' => $tour->id]));
             }
         }
         else
@@ -251,16 +243,13 @@ class TourController extends Controller
     {
         $tour = Tour::find($id);
         if(auth()->user()->id == $tour->userId){
-                if($tour != null){
-
-                    $tour->lastUpdate = convertDate($tour->updated_at);
-                    $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
-
-                    $ostan = State::all();
-
-                    return view('pages.tour.tourCreationFinancialInfo', compact(['tour', 'ostan']));
-                }
+            if($tour != null){
+                $tour->lastUpdate = convertDate($tour->updated_at);
+                $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
+                $ostan = State::all();
+                return view('pages.tour.create.tourCreationFinancialInfo', compact(['tour', 'ostan']));
             }
+        }
     }
 
     public function stageThreeTourStore(Request $request)
@@ -270,57 +259,36 @@ class TourController extends Controller
         if($tour->userId == auth()->user()->id){
             $tour->minCost = $request->minCost;
             $tour->isInsurance = $request->isInsurance;
-            if($request->ticketKind == 'fast')
-                $tour->ticketKind = 0;
-            else
-                $tour->ticketKind = 1;
+            $tour->ticketKind = $request->ticketKind == 'fast' ? 0 : 1;
             $tour->maxCapacity = $request->maxCapacity;
             $tour->minCapacity = $request->minCapacity;
-
-            if($tour->private)
-                $tour->maxGroup = $request->maxGroupCapacity;
-            else
-                $tour->anyCapacity = $request->anyCapacity;
-
+            $tour->maxGroup = $tour->private ? $request->maxGroupCapacity : $request->anyCapacity;
             $tour->save();
 
             if($request->isHotel){
                 $hotelList = json_decode($request->hotelList);
-                $roomCosts = json_decode($request->roomCosts);
-                $roomKinds = json_decode($request->roomKinds);
-                $roomPacks = json_decode($request->roomPacks);
-
-                for($i = 0; $i < count($hotelList); $i++){
-                    if(isset($hotelList[$i]) && isset($roomCosts[$i]) && isset($roomKinds[$i]) && isset($roomPacks[$i])){
-                        $newHotel = new TourHotel();
-                        $newHotel->tourId = $tour->id;
-                        $newHotel->hotelId = $hotelList[$i];
-                        $newHotel->roomKind = $roomKinds[$i];
-                        $newHotel->cost = $roomCosts[$i];
-                        $newHotel->sameGroup = $roomPacks[$i];
-                        $newHotel->save();
-                    }
+                foreach ($hotelList as $hotel){
+                    $newHotel = new TourHotel();
+                    $newHotel->tourId = $tour->id;
+                    $newHotel->hotelId = $hotel->id;
+                    $newHotel->roomKind = $hotel->kind;
+                    $newHotel->cost = $hotel->cost;
+                    $newHotel->sameGroup = $hotel->pack;
+                    $newHotel->save();
                 }
             }
 
             if (isset($request->featureName)){
-                $featuresName = $request->featureName;
-                $featuresDesc = $request->featureDesc;
-                $featuresGroup = $request->featureGroup;
-                $featuresCost = $request->featureCost;
-
-                for($i = 0; $i < count($featuresName); $i++){
-                    if(isset($featuresCost[$i]) && isset($featuresDesc[$i]) && isset($featuresGroup[$i])){
-                        $newFeature = new TourFeature();
-                        $newFeature->tourId = $tour->id;
-                        $newFeature->name = $featuresName[$i];
-                        $newFeature->description = $featuresDesc[$i];
-                        $newFeature->cost = $featuresCost[$i];
-                        $newFeature->group = $featuresGroup[$i];
-                        $newFeature->save();
-                    }
+                $featuresList = json_decode($request->featureList);
+                foreach ($featuresList as $item){
+                    $newFeature = new TourFeature();
+                    $newFeature->tourId = $tour->id;
+                    $newFeature->name = $item->name;
+                    $newFeature->description = $item->description;
+                    $newFeature->cost = $item->cost;
+                    $newFeature->group = $item->group;
+                    $newFeature->save();
                 }
-
             }
 
             if(isset($request->disCountFrom)){
@@ -358,17 +326,14 @@ class TourController extends Controller
             }
 
             if(isset($request->babyDisCount) && $request->babyDisCount != '' && $request->babyDisCount != null && (int)$request->babyDisCount != 0){
-
                 $newDiscount->tourId = $tour->id;
                 $newDiscount->discount = (int)$request->babyDisCount;
                 $newDiscount->isChildren = 1;
                 $newDiscount->isReason = 0;
                 $newDiscount->save();
-
             }
 
             if(isset($request->disCountReason) && $request->disCountReason != '' && $request->disCountReason != null && (int)$request->disCountReason != 0){
-
                 $newDiscount->tourId = $tour->id;
                 $newDiscount->discount = (int)$request->disCountReason;
                 $newDiscount->isChildren = 0;
@@ -376,15 +341,12 @@ class TourController extends Controller
                 $newDiscount->eReasonDate = convertDateToString($request->eDate);
                 $newDiscount->sReasonDate = convertDateToString($request->sDate);
                 $newDiscount->save();
-
             }
 
-            return redirect(url('/tour/create/stageFour/' . $tour->id));
-
+            return redirect(route('tour.create.stage.four', ['id' => $tour->id]));
         }
         else
             dd('nok');
-//            return redirect()->back();
     }
 
     public function stageFourTour($id)
@@ -395,7 +357,7 @@ class TourController extends Controller
             $tour->lastUpdate = convertDate($tour->updated_at);
             $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
-            return view('pages.tour.tourCreationLanguage&Schedule', compact(['tour']));
+            return view('pages.tour.create.tourCreationLanguage&Schedule', compact(['tour']));
         }
 
     }

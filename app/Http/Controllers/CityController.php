@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
+use App\models\localShops\LocalShops;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\Cities;
@@ -55,6 +56,7 @@ class CityController extends Controller
             $allMahaliFood = MahaliFood::where('cityId', $place->id)->count();
             $allSogatSanaie = SogatSanaie::where('cityId', $place->id)->count();
             $allBoomgardy = Boomgardy::where('cityId', $place->id)->count();
+            $allLocalShops = LocalShops::where('cityId', $place->id)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('cityId', $place->id)->count();
         }
         else {
@@ -75,6 +77,7 @@ class CityController extends Controller
             $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->count();
             $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->count();
             $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->count();
+            $allLocalShops = LocalShops::whereIn('cityId', $allCities)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('stateId', $place->id)->count();
         }
         $mainLocation = __DIR__ . '/../../../../assets/_images';
@@ -124,6 +127,7 @@ class CityController extends Controller
             'sogatSanaie' => $allSogatSanaie,
             'boomgardy' => $allBoomgardy,
             'safarnameh' => $allSafarnamehCount,
+            'localShops' => $allLocalShops,
         ];
 
         $safarnameh = [];

@@ -280,17 +280,13 @@
         $("#selectNewTripName").css("display", 'none');
         $("#selectNewTripDate").css("display", "flex");
 
-        $("#date_input_start").datepicker({
+        var datePickerOptions = {
             numberOfMonths: 1,
             showButtonPanel: true,
             dateFormat: "yy/mm/dd"
-        });
-
-        $("#date_input_end").datepicker({
-            numberOfMonths: 1,
-            showButtonPanel: true,
-            dateFormat: "yy/mm/dd"
-        });
+        };
+        $("#date_input_start").datepicker(datePickerOptions);
+        $("#date_input_end").datepicker(datePickerOptions);
     }
 
     function saveTrip() {

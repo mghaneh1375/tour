@@ -18,7 +18,8 @@ class MainBusinessController extends Controller
             dd('not found');
 
         $localShop->user = User::select(['id', 'username'])->find($localShop->userId);
-        $localShop->user->userPic = getUserPic($localShop->user->id);
+        $localShop->ownerPic = getUserPic($localShop->user != null ? $localShop->user->id : 0);
+        $localShop->ownerUsername = $localShop->user != null ? $localShop->user->username : '';
 
         $localShop->review = $localShop->getReviews();
         $localShop->pics = $localShop->getPictures();

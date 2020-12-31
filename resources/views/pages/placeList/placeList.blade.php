@@ -53,8 +53,12 @@
 
         <div class="placeListHeader hideOnPhone">
             <div class="placeListTitle">
-                {{$kindPlace->title}}
-                {{$locationName['name']}}
+                @if($locationName['kindState'] == 'country')
+                    لیست {{$kindPlace->title}} ایران
+                @else
+                    {{$kindPlace->title}}
+                    {{$locationName['name']}}
+                @endif
             </div>
             <div class="shareSection">
                 <div id="share_pic" class="btn sharePageMainDiv" onclick="toggleShareIcon(this)">
@@ -135,6 +139,7 @@
                                 </div>
                             @endif
 
+                            <div id="forCityContent"></div>
                             <div id="listBodyToShowCards"></div>
                         </div>
                     </div>
@@ -783,8 +788,29 @@
     var isFinish = false;
     var inTake = false;
     var take = 24;
+    var mode = '{{$mode}}';
+    var mustBeTaken = false;
+
+    var cityRel = {!! $cityRel !!};
 
     function getPlaceListItems(){
+        if(cityRel != 0 && mode == 'city' && (kindPlaceId == 10 || kindPlaceId == 11 || kindPlaceId == 6)){
+            if(isFinish){
+                mode = 'state';
+                cityId = cityRel.stateId;
+                cityRel = 0;
+                isFinish = false;
+                inTake = false;
+                mustBeTaken = false;
+                $('#listBodyToShowCards').append('<hr style="width: 100%;">');
+            }
+            else{
+                mustBeTaken = true;
+                mode = 'city';
+                cityId = cityRel.id;
+            }
+        }
+
         if(!isFinish && !inTake){
             inTake = true;
             openLoading();
@@ -804,13 +830,13 @@
                     nearPlaceIdFilter: nearPlaceIdFilter,
                     nearKindPlaceIdFilter: nearKindPlaceIdFilter,
                     city: cityId,
-                    mode: '{{$mode}}',
+                    mode: mode,
                     kindPlaceId: '{{$kindPlace->id}}'
                 },
                 complete: e =>{
-                    inTake = false;
                     getingListItemAjax = null;
                     closeLoading();
+                    inTake = false;
                 },
                 success: response => createListItemCard(response),
                 error: err => console.error(err)
@@ -853,6 +879,9 @@
 
         $('#listBodyToShowCards').append(ADElements[lastShowAd]);
         lastShowAd++;
+
+        if(places.length != take && mustBeTaken)
+            getPlaceListItems();
     }
 
     function newSearch(){
@@ -895,7 +924,7 @@
         var bottomOfList = document.getElementById('bottomMainList').getBoundingClientRect().top;
         var windowHeight = $(window).height();
 
-        if(bottomOfList-windowHeight < 0 && !inTake && !isFinish)
+        if(bottomOfList-windowHeight < 0 && !inTake && (!isFinish || mustBeTaken))
             getPlaceListItems();
     });
 

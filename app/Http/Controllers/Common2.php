@@ -1,6 +1,7 @@
 <?php
 
 
+use App\models\localShops\LocalShops;
 use App\models\logs\UserSeenLog;
 use App\models\safarnameh\SafarnamehCategoryRelations;
 use App\models\safarnameh\SafarnamehComments;
@@ -84,23 +85,22 @@ function createSuggestionPack($_kindPlaceId, $_placeId){
     $activityId = Activity::whereName('نظر')->first()->id;
 
     $kindPlace = Place::find($_kindPlaceId);
-    $place = \DB::table($kindPlace->tableName)->select(['name', 'id', 'file', 'picNumber', 'alt', 'cityId', 'fullRate', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
+    if($kindPlace->id == 13)
+        $place = LocalShops::select(['name', 'id', 'file', 'cityId', 'fullRate', 'reviewCount', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
+    else
+        $place = \DB::table($kindPlace->tableName)->select(['name', 'id', 'file', 'picNumber', 'alt', 'reviewCount', 'cityId', 'fullRate', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
+
     if($place != null) {
         $city = Cities::whereId($place->cityId);
 
         $place->pic = getPlacePic($place->id, $kindPlace->id);
         $place->url = createUrl($kindPlace->id, $place->id, 0, 0);
-        if($city != null) {
-            $place->city = $city->name;
-            $place->state = State::whereId($city->stateId)->name;
-        }
-        else{
-            $place->city = '';
-            $place->state = '';
-        }
+        $place->city = $city != null ? $city->name : '';
+        $place->state = $city != null ? $city->getState->name : '';
+
         $place->rate = $place->fullRate;
         $condition = ['placeId' => $place->id, 'kindPlaceId' => $_kindPlaceId, 'activityId' => $activityId, 'confirm' => 1];
-        $place->review = LogModel::where($condition)->count();
+        $place->review = $place->reviewCount;
         return $place;
     }
     return null;

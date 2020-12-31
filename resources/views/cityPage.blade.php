@@ -256,10 +256,12 @@
                             <div class="textCityPageIcon">{{__('صنایع‌دستی')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                         </a>
-                        <div class="col-xs-4 cpLittleMenu">
-                            <div class="cityPageIcon lebas"></div>
-                            <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
-                        </div>
+                        <a class="col-xs-4 cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">
+                            <div class="cityPageIcon fullWalletIcon"></div>
+                            <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
+                            {{--<img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
+                        </a>
                     </div>
                     <div class="col-xs-12 zpr">
                         <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/12/' . $kind . '/' . $place->listName)}}">
@@ -284,14 +286,12 @@
                             {{--<img class="cpLittleMenuImg" src="{{URL::asset('images/icons/gym.png')}}" alt="{{__('ورزشی')}}">--}}
                             {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
+                        <div class="col-xs-4 cpLittleMenu">
+                            <div class="cityPageIcon lebas"></div>
+                            <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
+                        </div>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fullWalletIcon"></div>
-                            <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
-                        </a>
-                        <a class="col-xs-4 cpLittleMenu" href="#">
-                            {{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hospital(1).png')}}" alt="{{__('پزشکی')}}">--}}
+{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hospital(1).png')}}" alt="{{__('پزشکی')}}">--}}
                             <div class="cityPageIcon fas fa-syringe"></div>
                             <div class="textCityPageIcon">{{__('پزشکی')}}</div>
                             {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
@@ -382,20 +382,12 @@
                         <div class="textCityPageIcon">{{__('صنایع‌دستی')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                     </a>
-                    <div class="cpLittleMenu">
-                        <div class="cityPageIcon lebas"></div>
-                        <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
-                    </div>
-
-                    <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon ticket"></div>
-                        <div class="textCityPageIcon">{{__('بلیط')}}</div>
+                    <a class="cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">
+                        <div class="cityPageIcon fullWalletIcon"></div>
+                        <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
+                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
+                        {{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
                     </a>
-
-{{--                    <div class="cpLittleMenu">--}}
-{{--                        <div class="cityPageIcon estelah"></div>--}}
-{{--                        <div class="textCityPageIcon">{{__('اصطلاحات محلی')}}</div>--}}
-{{--                    </div>--}}
                     <a href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}" class="cpLittleMenu">
 {{--                        <div class="cityPageIcon safarnameIcon"></div>--}}
                         <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/magazine.svg')}}" alt="{{__('سفر نامه')}}" style="width: 34px; margin-bottom: 9px; margin-top: 10px;">
@@ -403,15 +395,17 @@
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['safarnameh']}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
+                        <div class="cityPageIcon ticket"></div>
+                        <div class="textCityPageIcon">{{__('بلیط')}}</div>
+                    </a>
+                    <div class="cpLittleMenu">
+                        <div class="cityPageIcon lebas"></div>
+                        <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
+                    </div>
+                    <a class="cpLittleMenu" href="#">
                         {{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/gym.png')}}" alt="{{__('ورزشی')}}">--}}
                         <div class="cityPageIcon manSportIcon"></div>
                         <div class="textCityPageIcon">{{__('ورزشی')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
-                    </a>
-                    <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fullWalletIcon"></div>
-                        <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
                         {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">

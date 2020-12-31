@@ -133,6 +133,10 @@
             icon: 'safarnameIcon',
             nameFa: 'سفرنامه'
         },
+        localShops: {
+            icon: 'fullWalletIcon',
+            nameFa: 'فروشگاه'
+        },
         state: {
             icon: 'location',
             nameFa: 'استان'

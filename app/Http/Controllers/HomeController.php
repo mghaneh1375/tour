@@ -708,13 +708,14 @@ class HomeController extends Controller
                     else
                         $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and replace(tableName.name, ' ', '') LIKE '%$key%'");
                     foreach ($tmp as $itr) {
-                        $condition = ['activityId' => $acitivityId->id, 'placeId' => $itr->id, 'kindPlaceId' => $kplace->id];
-                        $itr->see = LogModel::where($condition)->count();
+//                        $condition = ['activityId' => $acitivityId->id, 'placeId' => $itr->id, 'kindPlaceId' => $kplace->id];
+//                        $itr->see = LogModel::where($condition)->count();
+                        $itr->see = 0;
                         $itr->mode = $kplace->tableName;
                         $itr->kindPlaceId = $kplace->id;
                         $itr->url = createUrl($kplace->id, $itr->id, 0, 0, 0);
                     }
-                    $tmp = $this->sortSearchBySee($tmp);
+//                    $tmp = $this->sortSearchBySee($tmp);
                     $result = array_merge($result, $tmp);
                 }
             }

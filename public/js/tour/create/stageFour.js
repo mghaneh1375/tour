@@ -193,19 +193,8 @@ function newCalendar(){
 
     $('#notSameTimeCalendarDiv').append(text);
 
-    $('#eDate_' + calendarIndex).persianDatepicker({
-        minDate: new Date().getTime(),
-        format: 'YYYY/MM/DD',
-        autoClose: true,
-    });
-    $('#sDate_' + calendarIndex).persianDatepicker({
-        minDate: new Date().getTime(),
-        format: 'YYYY/MM/DD',
-        autoClose: true,
-    });
-    $('#sDate_' + calendarIndex).val('');
-    $('#eDate_' + calendarIndex).val('');
-
+    $(`#eDate_${calendarIndex}`).datepicker(datePickerOptions);
+    $(`#sDate_${calendarIndex}`).datepicker(datePickerOptions);
     calendarIndex++;
 }
 

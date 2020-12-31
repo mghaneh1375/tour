@@ -182,6 +182,14 @@
                 name: 'بوم گردی',
                 nameTitle: 'بوم گردی های نزدیک',
             },
+            13: {
+                id: 13,
+                enName: 'localShopFilter',
+                icon: 'fullWalletIcon',
+                mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
+                name: 'فروشگاه',
+                nameTitle: 'فروشگاه های نزدیک',
+            },
         };
 
         function toggleMobileListNearPlace(_kind){

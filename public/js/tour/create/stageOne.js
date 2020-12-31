@@ -87,22 +87,14 @@ function chooseSrcCityModal(){
 }
 
 function findCity(_value){
-
     $.ajax({
-        type: 'post',
-        url: findCityWithState,
-        data:{
-            '_token': _token,
-            'stateId' : _value
-        },
-        success: function(response){
-            if(response != 'nok'){
-                response = JSON.parse(response);
-                city = response;
-            }
+        type: 'GET',
+        url: findCityWithState+'?stateId='+_value,
+        success: response => {
+            if(response.status == 'ok')
+                city = response.result;
         }
     });
-
 }
 
 function chooseCity(_value, _div, _src){
@@ -212,7 +204,6 @@ function findAllCity(_value){
                     '</div>';
             }
             document.getElementById('destCitySearch').innerHTML = text;
-            console.log(response)
         }
     })
 }

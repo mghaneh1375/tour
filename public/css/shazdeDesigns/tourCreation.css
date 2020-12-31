@@ -114,6 +114,7 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::b
     margin-bottom: 10px;
     direction: rtl;
     padding: 25px 20px;
+    padding-top: 10px;
 }
 
 /*tour creation 1st page styles*/
@@ -307,7 +308,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 49%;
 }
 
-#tourDestinationInputBox {
+.tourDestinationInputBox {
     position: relative;
 }
 
@@ -340,7 +341,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     color: var(--koochita-light-green);
 }
 
-#addNewDestinationBoxTourCreation , .popUpsSpecificInfoTourCreation {
+.addNewDestinationBoxTourCreation , .popUpsSpecificInfoTourCreation {
     background-color: white;
     z-index: 1;
     direction: rtl;
@@ -360,31 +361,31 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     font-weight: 700;
 }
 
-#addNewDestinationBoxTourCreation > div {
+.addNewDestinationBoxTourCreation > div {
     display: inline-block;
 }
 
-#addNewDestinationBoxTourCreation input {
+.addNewDestinationBoxTourCreation input {
     width: auto;
 }
 
-#tourOriginStateInputBox , #tourNewOriginInputBox {
+#tourOriginStateInputBox , .tourOriginStateInputBox {
     width: auto;
 }
 
-#tourOriginStateInputBox > div , #tourNewOriginInputBox > div {
+#tourOriginStateInputBox > div , .tourOriginStateInputBox > div {
     width: auto;
 }
 
-#tourNewOriginInputBox > input {
+.tourOriginStateInputBox > input {
     width: 70px;
 }
 
-#addNewDestinationBoxTourCreation .btn-group-toggle {
+.addNewDestinationBoxTourCreation .btn-group-toggle {
     margin: 0 8px;
 }
 
-#verifyNewDestinationTourCreation {
+.verifyNewDestinationTourCreation {
     background-color: var(--koochita-light-green);
     /*background-image: url("../../images/tourCreation/approve.png");*/
     padding: 2px;
@@ -394,12 +395,12 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     border-radius: 4px;
 }
 
-#verifyNewDestinationTourCreation > img {
+.verifyNewDestinationTourCreation > img {
     width: 20px;
     margin-top: 4px;
 }
 
-#closeNewDestinationTourCreation {
+.closeNewDestinationTourCreation {
     background-color: darkred;
     /*background-image: url("../../images/tourCreation/close.png");*/
     padding: 2px;
@@ -409,7 +410,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     border-radius: 4px;
 }
 
-#closeNewDestinationTourCreation > img {
+.closeNewDestinationTourCreation > img {
       width: 18px;
       margin-top: 3px;
 }
@@ -743,7 +744,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     transform: rotate(90deg);
     border-radius: 4px;
     font-weight: 700;
-    top: 35px;
+    top: calc(50% - 25px);
     text-align: center;
 }
 
@@ -803,38 +804,43 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 .boxTitlesTourCreation {
     width: 100%;
-    font-size: 18px;
     font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 25px;
 }
 
 #mainClassificationOfTransportationLabel {
     width: 130px;
 }
 
-#mainClassificationOfTransportationInputDiv select , #mainClassificationOfPlaceInputDiv select , #mainClassificationOfPlaceInputDiv select {
+#mainClassificationOfTransportationInputDiv select , .mainClassificationOfPlaceInputDiv select , .mainClassificationOfPlaceInputDiv select {
     width: 85%;
 }
 
 .transportationKindChosenOnes {
-    background-color: #f6f6f6;
-    border-radius: 4px;
-    line-height: 2;
+    background-color: #ffffff;
+    border-radius: 30px;
     margin: 0 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .transportationKindChosenOnes > span {
     float: left;
     color: red;
-    margin-top: 6px;
 }
 
 .transportationKindChosenMainDiv {
-    position: absolute;
+    position: relative;
     width: 84%;
-    top: 5px;
-    left: 30px;
     height: 100%;
     cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 30px;
+    align-items: center;
 }
 
 .tourFoodOfferQuestions {
@@ -910,6 +916,10 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     border: 2px solid #d5d3d3;
     float: right;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .addTourPlacesBtnCreation > img {
@@ -946,11 +956,11 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     }
 }
 
-#placeNameAddingPlaceInputDiv > div.inputBoxText , #mainClassificationOfPlaceInputDiv > div.inputBoxText{
+.placeNameAddingPlaceInputDiv > div.inputBoxText , .mainClassificationOfPlaceInputDiv > div.inputBoxText{
     width: 15%;
 }
 
-#placeNameAddingPlaceInputDiv > input.inputBoxInput {
+.placeNameAddingPlaceInputDiv > input.inputBoxInput {
     width: 84%;
 }
 
@@ -978,7 +988,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     float: right;
     padding-right: 0;
 }
-.tourBasicPriceTourCreation .inputBox {
+.tourBasicPriceTourCreation .inputBoxTour {
     float: right;
 }
 
@@ -987,7 +997,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 20%;
 }
 
-.tourTicketKindTourCreation .inputBox , .tourTicketKindTourCreation .inboxHelpSubtitleBlue{
+.tourTicketKindTourCreation .inputBoxTour , .tourTicketKindTourCreation .inboxHelpSubtitleBlue{
     float: left;
 }
 
@@ -1025,18 +1035,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     color: var(--koochita-light-green);
 }
 
-.tourOccupationDetailsBtn {
-    position: absolute;
-    left: 20px;
-    border: 0;
-    border-radius: 8px;
-    padding: 3px 17px;
-    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
-}
-
 .copyBtnTourCreation {
     background-color: rgb(251 , 193 , 86);
-    top: 20px;
 }
 
 .copyBtnTourCreation > img {
@@ -1045,7 +1045,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 .deleteBtnTourCreation {
     background-color: rgb(148 , 52 , 30);
-    top: 60px;
 }
 
 .deleteBtnTourCreation > img {
@@ -1134,18 +1133,18 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 .tourBasicKindsCheckbox {
     float: right;
-    /*text-align: right;*/
     padding: 31px 30px;
     box-shadow: 0 4px 16px 0
     rgba(0, 0, 0, 0.2);
     margin: 15px 0 0 20px;
     border-radius: 5px;
-    display: inline-block;
     width: 30%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-
-.tourBasicKindsCheckbox > p {
+.tourBasicKindsCheckbox > div{
     width: 80%;
     display: inline-block;
     color: black;
@@ -1184,12 +1183,15 @@ input[type="checkbox"]:checked + label.tourBasicKindsCheckbox , input[type="radi
     background-color: rgb(251 , 193 , 86);
     color: white;
     padding: 2px 15px;
-    display: inline-block;
     float: right;
     border-radius: 5px;
     margin: 10px;
     font-weight: 700;
     font-size: 22px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 textarea {
@@ -1558,7 +1560,7 @@ textarea {
     background: white;
     position: absolute;
     width: 84%;
-    top: 40px;
+    top: 100%;
     left: 30px;
     border: solid;
     z-index: 9;
@@ -1573,21 +1575,30 @@ textarea {
     background: red;
 }
 .searchResult{
-    width: 85.1%;
+    width: 85%;
     padding-right: 9px;
     float: left;
     border-right: 1px solid #d8d8d8;
-    max-height: 350px;
-    overflow-y: auto;
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    background: white;
+    box-shadow: 1px 3px 3px 0px black;
+    border-radius: 0px 0px 10px 10px;
+    max-height: 400px;
+    overflow: auto;
 }
+
 .searchHover{
-    /*padding-right: 5px;*/
     cursor: pointer;
 }
 .searchHover:hover{
     background-color: white;
     padding-right: 10px;
     border-radius: 5px;
+}
+.searchHover.blue:hover{
+    background: var(--koochita-light-green);
 }
 .errorDiv{
     position: fixed;
@@ -1620,4 +1631,345 @@ textarea {
 .draghere:hover{
     background-color: var(--koochita-light-green) !important;
     color: white;
+}
+
+.inputBoxTour{
+    padding: 2px 7px;
+    font-size: 0.8em;
+    display: flex !important;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    line-height: 30px;
+    margin: 10px 0;
+}
+.inputBoxTour .inputBoxInput{
+   width: 100%;
+    text-align: right;
+    padding-right: 10px;
+}
+.inputBoxTour .inputBoxInput.center{
+    text-align: center;
+    padding: 0px;
+}
+.inputBoxTour .inputBoxText{
+    border-left: 1px solid #d8d8d8;
+    min-width: 100px;
+    padding-left: 10px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hotelCardButtons{
+    position: absolute;
+    left: 10px;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    top: 0px;
+}
+.hotelCardButtons > button{
+    border: 0;
+    border-radius: 8px;
+    padding: 3px 17px;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+    margin: 5px 0px;
+}
+
+
+.dateRow{
+    border: solid 1px #afafaf;
+    padding: 10px 5px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 3px #0000001f;
+}
+.dateRow .headerSec{
+    margin-bottom: 5px;
+    display: flex;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+.dateRow .headerSec .title{
+    font-size: 24px;
+    padding-right: 20px;
+}
+.dateRow .headerSec .sumInfos{
+
+}
+.dateRow .headerSec .downArrowIcon{
+    margin-right: auto;
+    margin-left: 10px;
+    color: gray;
+}
+
+.dateRow .bodySec{
+    max-height: 0px;
+    width: 100%;
+    overflow: hidden;
+    transition: .3s;
+}
+.dateRow .bodySec.open{
+    max-height: 30000px;
+    padding: 20px;
+    padding-top: 5px;
+    border-top: solid 1px #80808066;
+    background: white;
+    border-radius: 10px;
+}
+.dateRow .title{
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0px 0px;
+    padding: 5px 0px;
+    margin-top: 5px;
+}
+.dateRow .hotelSec{
+
+}
+.dateRow .hotelSec .hotelInfo{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.dateRow .hotelSec .hotelInfo .hotelPic{
+    height: 70px;
+    width: 70px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin: 10px;
+}
+.dateRow .hotelSec .hotelInfo .name{
+    font-weight: bold;
+}
+.dateRow .hotelSec .hotelInfo .normText{
+    font-size: .7em;
+}
+.dateRow .hotelSec .addNewHotel{
+    font-size: 11px;
+    border-radius: 11px;
+    border: solid 1px gray;
+    background: var(--koochita-blue);
+    color: white;
+    cursor: pointer;
+    font-weight: normal;
+}
+.dateRow .planSec{
+    border-top: solid 1px #8080802e;
+}
+.dateRow .planSec .bod{
+    position: relative;
+    width: 100%;
+}
+.dateRow .planSec .bod .mainRule{
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background:  var(--koochita-light-green);
+    top: 50%;
+}
+.dateRow .planSec .bod .sections{
+    width: 100%;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dateRow .planSec .bod .sections .sec{
+    width: calc(100% / 24);
+    height: 20px;
+}
+.dateRow .planSec .bod .sections .lineSec{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    margin-top: 12px;
+    width: 1px;
+}
+.dateRow .planSec .bod .sections .planDetSec{
+    position: absolute;
+    width: 100%;
+    top: calc(50% - 10px);
+}
+.dateRow .planSec .bod .sections .planDetSec .detail{
+    position: absolute;
+    height: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+    transition: .3s;
+    overflow: hidden;
+}
+.dateRow .planSec .bod .sections .planDetSec .detail:hover{
+    opacity: .8;
+}
+.dateRow .planSec .bod .sections .line{
+    height: 40px;
+    width: 1px;
+    background: var(--koochita-light-green);
+}
+.dateRow .planSec .plus{
+    font-size: 30px;
+    border: none;
+    background: no-repeat;
+    color: green;
+    cursor: pointer;
+    margin-right: auto;
+}
+.dateRow .summerySec{
+    border-top: solid 1px #8080802e;
+}
+
+.clockpicker-popover{
+    z-index: 99999;
+}
+
+
+.eventModal{
+
+}
+.eventModal .title{
+    font-weight: bold;
+}
+.eventModal .timeSec{
+    margin-top: 20px;
+    /*border-top: solid 1px lightgray;*/
+    /*padding-top: 20px;*/
+    padding-top: 5px;
+}
+.eventModal .timeSec .inp{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+.eventModal .timeSec .inp .clockTitle{
+    width: 40%;
+}
+.eventModal .timeSec .inp .clockTitle .clockP{
+
+}
+.eventModal .timeSec .inp .clockTitle .name{
+    font-size: 10px;
+}
+.eventModal .options{
+    margin-top: 15px;
+    border-top: solid 1px lightgray;
+    padding-top: 10px;
+}
+.eventModal .options .bod{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.eventModal .options .bod .eventItem{
+    padding: 10px;
+    margin: 5px;
+    border: solid 1px gray;
+    border-radius: 25px;
+    font-size: 11px;
+    cursor: pointer;
+}
+.eventModal .options .bod .eventItem:hover{
+    background: var(--koochita-yellow);
+}
+.eventModal .options .bod .eventItem.select{
+    background: var(--koochita-yellow);
+}
+.eventModal .options .bod .eventItem .text{
+
+}
+.eventModal .options .bod .eventItem .icon{
+
+}
+.eventModal .optBody{
+    margin-top: 15px;
+}
+.eventModal .optBody .choosedPlace{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: relative;
+}
+.eventModal .optBody .choosedPlace .placeCar{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    position: relative;
+}
+.eventModal .optBody .choosedPlace .placeCar .imgSec{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+.eventModal .optBody .choosedPlace .placeCar .name{
+    font-weight: bold;
+    font-size: 13px;
+}
+.eventModal .optBody .choosedPlace .placeCar .text{
+    font-weight: normal;
+    font-size: 11px;
+}
+.eventModal .optBody .choosedPlace .placeCar .cancelPlace{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    cursor: pointer;
+    font-size: 50px;
+    background: #0000004d;
+    border-radius: 50px;
+}
+.eventModal .optBody .choosedPlace .placeCar:hover .cancelPlace{
+    display: flex;
+}
+
+.eventModal .optBody .searchBox{
+    position: relative;
+}
+.eventModal .optBody .searchBox .searchResult{
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+    z-index: 1;
+}
+.eventModal .optBody .searchBox .searchResult .res{
+    padding: 10px;
+    cursor: pointer;
+    font-size: 13px;
+}
+.eventModal .optBody .searchBox .searchResult .res:hover{
+    background: var(--koochita-light-green);
+}
+
+.errorList{
+    list-style-type: none;
+}
+.errorList li{
+    margin: 10px 0px;
 }

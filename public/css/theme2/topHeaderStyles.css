@@ -203,6 +203,8 @@ input[type="checkbox"] + label, input[type="radio"] + label{
     display: none;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    transition: .4s;
 }
 
 .modalBlackBack .closeModal{
@@ -215,6 +217,7 @@ input[type="checkbox"] + label, input[type="radio"] + label{
 }
 .modalBlackBack.showModal{
     display: flex;
+    opacity: 1;
 }
 #darkModal {
     position: absolute;

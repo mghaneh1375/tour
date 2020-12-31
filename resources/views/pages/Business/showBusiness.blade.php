@@ -2,6 +2,9 @@
 
 
 @section('head')
+
+    <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
+
     <style>
         .plPc-0{
             padding-left: 0px;
@@ -11,6 +14,9 @@
         }
         div[class^="col-"]{
             float: right;
+        }
+        .showBody{
+            padding-bottom: 0px;
         }
         @media (max-width: 991px) {
             div[class^="col-md"]{
@@ -25,9 +31,6 @@
         }
     </style>
 
-    <style>
-
-    </style>
 @endsection
 
 @section('body')
@@ -41,7 +44,7 @@
                 <div class="address"> {{$localShop->address}} </div>
             </div>
             <div class="fullyCenterContent pic" onclick="openAlbum('mainPics')" style="cursor: pointer">
-                <img src="{{$localShop->mainPic->pic['f']}}" class="resizeImgClass" onload="fitThisImg(this)">
+                <img src="{{isset($localShop->mainPic->pic['f']) ? $localShop->mainPic->pic['f'] : $localShop->mainPic}}" class="resizeImgClass" onload="fitThisImg(this)">
             </div>
         </div>
         <div class="tabRow fastAccess">
@@ -217,11 +220,11 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="fullyCenterContent bodySec adver fullRow">تبلیغ</div>
-                </div>
-            </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-md-12">--}}
+{{--                    <div class="fullyCenterContent bodySec adver fullRow">تبلیغ</div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             <div id="stickyIndicator" class="row">
                 <div class="col-md-12">
@@ -256,17 +259,20 @@
             @endif
 
             <div class="row">
-                <div class="col-md-3">
-                    <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>
-                    <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>
-                </div>
-                <div class="col-md-9 prPc-0">
+{{--                <div class="col-md-3">--}}
+{{--                    <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>--}}
+{{--                    <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-9 prPc-0">--}}
+{{--                    <div id="mapDiv" class="bodySec map"></div>--}}
+{{--                </div>--}}
+                <div class="col-md-12">
                     <div id="mapDiv" class="bodySec map"></div>
                 </div>
             </div>
 
             <div class="row">
-                <div id="inputReviewSec" class="col-md-8">
+                <div id="inputReviewSec" class="col-md-12">
                     <div class="inputReviewBodies">
                         <div class="bodySec">
                             <h2 class="yourReviewHeader EmptyCommentIcon">
@@ -316,7 +322,7 @@
                         <div id="showReviewsMain2"></div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 hidden">
                     <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>
                     <div class="fullyCenterContent bodySec adver sideMap">تبلیغ</div>
                 </div>
@@ -354,11 +360,15 @@
 @endsection
 
 @section('script')
-    <script async src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCdVEd4L2687AfirfAnUY1yXkx-7IsCER0"></script>
-
+{{--    <script async src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCdVEd4L2687AfirfAnUY1yXkx-7IsCER0"></script>--}}
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
     <script>
         var localShop = {!! $localShop !!};
         var mainMap;
+        var cancelThisReviewFile = false;
+        var reviewFileInUpload = false;
+        var uploadReviewFileAjax = null;
         var newReview = {
             code: "{{$codeForReview}}",
             userAssigned: [],
@@ -389,11 +399,6 @@
             });
         });
 
-    </script>
-    <script>
-        var cancelThisReviewFile = false;
-        var reviewFileInUpload = false;
-        var uploadReviewFileAjax = null;
 
         function uploadFileForReview(_input, _kind){
             openWriteReview();
@@ -709,8 +714,8 @@
                         id: `main_${item.id}`,
                         sidePic: item.pic.l,
                         mainPic: item.pic.main,
-                        userPic: localShop.user.userPic,
-                        userName: localShop.user.username,
+                        userPic: localShop.ownerPic,
+                        userName: localShop.ownerUsername,
                         showInfo: false,
                     })
                 });
@@ -719,17 +724,51 @@
         }
 
         function initMap(){
-            var mapOptions = {
-                center: new google.maps.LatLng(localShop.lat, localShop.lng),
-                zoom: 15,
-                styles: window.googleMapStyle
-            };
-            var mapElementSmall = document.getElementById('mapDiv');
-            mainMap = new google.maps.Map(mapElementSmall, mapOptions);
 
-            new google.maps.Marker({
-                position: new google.maps.LatLng(localShop.lat, localShop.lng)
-            }).setMap(mainMap);
+            mainMapInBlade = L.map("mapDiv", {
+                minZoom: 1,
+                maxZoom: 20,
+                crs: L.CRS.EPSG3857,
+                center: [localShop.lat, localShop.lng],
+                zoom: 15
+            });
+            L.TileLayer.wmsHeader(
+                "https://map.ir/shiveh",
+                {
+                    layers: "Shiveh:Shiveh",
+                    format: "image/png",
+                    minZoom: 1,
+                    maxZoom: 20
+                },
+                [
+                    {
+                        header: "x-api-key",
+                        value: window.mappIrToken
+                    }
+                ]
+            ).addTo(mainMapInBlade);
+
+            var marker = L.marker([localShop.lat, localShop.lng], {
+                title: localShop.name,
+                // icon: L.icon({
+                //     iconUrl: mapIcon[x],
+                //     iconSize: [30, 35],
+                // })
+            }).bindPopup(localShop.name);
+            marker.addTo(mainMapInBlade);
+
+
+            // var mapOptions = {
+            //     center: new google.maps.LatLng(localShop.lat, localShop.lng),
+            //     zoom: 15,
+            //     styles: window.googleMapStyle
+            // };
+            // var mapElementSmall = document.getElementById('mapDiv');
+            // mainMap = new google.maps.Map(mapElementSmall, mapOptions);
+            //
+            // new google.maps.Marker({
+            //     position: new google.maps.LatLng(localShop.lat, localShop.lng)
+            // }).setMap(mainMap);
         }
 
         function openWriteReview(){

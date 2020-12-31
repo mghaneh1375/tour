@@ -3,6 +3,7 @@
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
+use App\models\localShops\LocalShopsPictures;
 use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\CityPic;
@@ -1027,12 +1028,23 @@ function getUserPic($id = 0){
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
     if($placeId != 0) {
         $kindPlace = Place::find($kindPlaceId);
-        $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'cityId','name', 'file', 'picNumber', 'keyword'])->first();
-        if($place != null && $place->file != 'none' && $place->file != null){
-            $location = __DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $place->picNumber;
-            if (is_file($location))
-                return URL::asset('_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $place->picNumber);
+        if($kindPlace->id == 13){
+            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file'])->first();
+            $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
+            if($pic != null)
+                $pic = $pic->pic;
         }
+        else {
+            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber'])->first();
+            $pic = $place->picNumber;
+        }
+
+        if($place != null && $place->file != 'none' && $place->file != null){
+            $location = __DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic;
+            if (is_file($location))
+                return URL::asset('_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic);
+        }
+
     }
 
     return URL::asset('images/mainPics/nopicv01.jpg');
@@ -1415,7 +1427,7 @@ function getCurrentYear() {
     return $subStr[0];
 }
 
-function convertDateToString($date) {
+function convertDateToString($date, $implodeCharacter = '') {
     $subStrD = explode('/', $date);
     if(count($subStrD) == 1)
         $subStrD = explode(',', $date);
@@ -1426,7 +1438,7 @@ function convertDateToString($date) {
     if(strlen($subStrD[2]) == 1)
         $subStrD[2] = "0" . $subStrD[2];
 
-    return $subStrD[0] . $subStrD[1] . $subStrD[2];
+    return implode($implodeCharacter, $subStrD);
 }
 
 function convertTimeToString($time) {

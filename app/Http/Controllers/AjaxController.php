@@ -425,92 +425,67 @@ class AjaxController extends Controller {
         return;
     }
 
-    public function findCityWithState(Request $request)
+    public function findCityWithState()
     {
-        if(isset($request->stateId)){
-
-            $city = Cities::where('stateId', $request->stateId)->get();
-
+        if(isset($_GET['stateId']) && isset($_GET["value"])){
+            $city = Cities::where('stateId', $_GET['stateId'])->where('name', 'LIKE', '%'.$_GET["value"].'%')->get();
             foreach ($city as $item){
-                if($item->image == null)
-                    $item->pic = URL::asset('_images/nopic/blank.jpg');
-                else
+                $item->state = $item->getState;
+                if(is_file(__DIR__.'/../../../../assets/_images/city/'.$item->image))
                     $item->pic = URL::asset('_images/city/'.$item->image);
-            }
-
-            echo json_encode($city);
-            return;
-
-        }
-        echo 'nok';
-        return;
-    }
-
-    public function findRestaurantWithCity(Request $request)
-    {
-        $placeId = Place::where('name', 'رستوران')->first()->id;
-        if(isset($request->cityId)){
-            $resturant = Restaurant::where('cityId', $request->cityId)->select(['name', 'address', 'fullRate', 'C', 'D', 'food_irani', 'food_mahali', 'food_farangi', 'cityId', 'id', 'file'])->get();
-            foreach ($resturant as $item){
-                $item->rate = $item->fullRate;
-                if(file_exists(__DIR__ . '/../../../../assets/_images/restaurant/' . $item->file . '/l-1.jpg'))
-                    $item->pic = URL::asset('_images/restaurant/' . $item->file . '/l-1.jpg');
                 else
                     $item->pic = URL::asset('_images/nopic/blank.jpg');
-
             }
-            echo json_encode($resturant);
-            return;
+            return response()->json(['status' => 'ok', 'result' => $city]);
         }
-        echo 'nok';
-        return;
+        return response()->json(['status' => 'nok']);
     }
 
-    public function findAmakenWithCity(Request $request)
+    public function searchSpecificKindPlace()
     {
-        $placeId = Place::where('name', 'اماکن')->first()->id;
-        if(isset($request->cityId)){
-            $amaken = Amaken::where('cityId', $request->cityId)->select(['name', 'fullRate', 'address', 'C', 'D', 'cityId', 'id', 'file', 'pic_1'])->get();
-
-            if(count($amaken) != 0){
-                foreach ($amaken as $item){
-                    $item->rate = $item->fullRate;
-
-                    if(file_exists(__DIR__ . '/../../../../assets/_images/amaken/' . $item->file . '/l-1.jpg'))
-                        $item->pic = URL::asset('_images/amaken/' . $item->file . '/l-1.jpg');
-                    else
-                        $item->pic = URL::asset('_images/nopic/blank.jpg');
+        $place = [];
+        if($_GET['kindPlaceId'] == 0){
+            $kindPlaceses = Place::whereNotNull('tableName')->where('mainSearch', 1)->get();
+            foreach ($kindPlaceses as $kindPlace){
+                if($kindPlace->id == 10 || $kindPlace->id == 11)
+                    $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
+                else
+                    $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];
+                $pl = \DB::table($kindPlace->tableName)->where('name', 'LIKE', '%' . $_GET["value"] . '%')->select($select)->get();
+                foreach ($pl as $item) {
+                    $item->kindPlaceId = $kindPlace->id;
+                    $item->fileName = $kindPlace->fileName;
+                    array_push($place, $item);
                 }
             }
-
-            echo json_encode($amaken);
-            return;
         }
-        echo 'nok';
-        return;
-    }
+        else {
+            $kindPlace = Place::find($_GET['kindPlaceId']);
+            if($kindPlace->id == 10 || $kindPlace->id == 11)
+                $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
+            else
+                $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];
 
-    public function findHotelWithCity(Request $request)
-    {
-        $placeId = Place::where('name', 'هتل')->first()->id;
-        if(isset($request->cityId)){
-            $hotel = Hotel::where('cityId', $request->cityId)->select(['name', 'address', 'C', 'D', 'cityId', 'id', 'file', 'pic_1', 'rate'])->get();
-
-            if(count($hotel) != 0){
-                foreach ($hotel as $item){
-                    if(file_exists(__DIR__ . '/../../../../assets/_images/hotels/' . $item->file . '/l-1.jpg'))
-                        $item->pic = URL::asset('_images/hotels/' . $item->file . '/l-1.jpg');
-                    else
-                        $item->pic = URL::asset('_images/nopic/blank.jpg');
-                }
+            $place = \DB::table($kindPlace->tableName)->where('name', 'LIKE', '%' . $_GET["value"] . '%')->select($select)->get();
+            foreach ($place as $item) {
+                $item->kindPlaceId = $kindPlace->id;
+                $item->fileName = $kindPlace->fileName;
             }
-
-            echo json_encode($hotel);
-            return;
         }
-        echo 'nok';
-        return;
+
+        foreach ($place as $item){
+            $item->city = Cities::find($item->cityId);
+            if($item->city != null)
+                $item->state = $item->city->getState;
+
+            if(file_exists(__DIR__ . '/../../../../assets/_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber))
+                $item->pic = URL::asset('_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber);
+            else
+                $item->pic = URL::asset('_images/nopic/blank.jpg');
+        }
+        return response()->json(['status' => 'ok', 'result' => $place]);
     }
+
 
     public function findKoochitaAccount(Request $request)
     {

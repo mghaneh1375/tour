@@ -49,18 +49,26 @@ class MainController extends Controller
 
         $latBetween = [$lat+$latDeg, $lat-$latDeg];
         $lngBetween = [$lng+$lngDeg, $lng-$lngDeg];
-        $kindPlaceIds = [1, 3, 4, 6, 12];
+        $kindPlaceIds = [1, 3, 4, 6, 12, 13];
 
         foreach ($kindPlaceIds as $kId){
             $kindPlace = Place::find($kId);
             if($kindPlace != null) {
-                $DBPlace = DB::select("SELECT id, `name`, reviewCount, fullRate, slug, cityId, `C`, `D` FROM $kindPlace->tableName WHERE `C` > $latBetween[1] AND `C` < $latBetween[0] AND `D` > $lngBetween[1] AND `D` < $lngBetween[0]" );
+                if($kindPlace->id == 13)
+                    $DBPlace = DB::select("SELECT `id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `lat`, `lng` FROM ".$kindPlace->tableName." WHERE `lat` > ".$latBetween[1]." AND `lat` < ".$latBetween[0]." AND `lng` > ".$lngBetween[1]." AND `lng` < ".$lngBetween[0]);
+                else
+                    $DBPlace = DB::select("SELECT `id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `C`, `D` FROM ".$kindPlace->tableName." WHERE `C` > ".$latBetween[1]." AND `C` < ".$latBetween[0]." AND `D` > ".$lngBetween[1]." AND `D` < ".$lngBetween[0] );
+
                 foreach ($DBPlace as $place) {
                     $place->kindPlaceId = $kindPlace->id;
                     $place->pic = getPlacePic($place->id, $kindPlace->id);
                     $place->review = $place->reviewCount;
                     $place->rate = floor($place->fullRate);
                     $place->url =  createUrl($kindPlace->id, $place->id, 0, 0, 0);
+                    if($kindPlace->id == 13) {
+                        $place->C = $place->lat;
+                        $place->D = $place->lng;
+                    }
                     $place->distance = distanceBetweenCoordination($lat, $lng, $place->C, $place->D);
 
                     if($kindPlace->id == 6)

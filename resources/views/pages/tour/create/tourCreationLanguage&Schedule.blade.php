@@ -15,67 +15,35 @@ $state = 'تهران';
 
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/theme2/long_lived_global_legacy_2.css?v=2')}}"/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/theme2/masthead-saves.css?v=2')}}'/>
-    <link rel='stylesheet' type='text/css' media='screen, print'
-          href='{{URL::asset('css/theme2/hr_north_star.css?v=2')}}'/>
+    <link rel='stylesheet' type='text/css' media='screen, print' href='{{URL::asset('css/theme2/hr_north_star.css?v=2')}}'/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/icons.css?v=1')}}'/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/passStyle.css?v=1')}}'/>
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v=1')}}"/>
 
     {{--<script src= {{URL::asset("js/jalali.js") }}></script>--}}
 
-    <link rel="stylesheet" href="{{URL::asset('css/calendar2/persian-datepicker.css?v=1')}}"/>
-    <script src="{{URL::asset('js/calendar2/persian-date.min.js')}}"></script>
-    <script src="{{URL::asset('js/calendar2/persian-datepicker.min.js')}}"></script>
+{{--    <link rel="stylesheet" href="{{URL::asset('css/calendar2/persian-datepicker.css?v=1')}}"/>--}}
+{{--    <script src="{{URL::asset('js/calendar2/persian-date.min.js')}}"></script>--}}
+{{--    <script src="{{URL::asset('js/calendar2/persian-datepicker.min.js')}}"></script>--}}
 
     <script src="{{URL::asset('js/tour/create/stageFour.js')}}"></script>
 
+
+    <style>
+        .inputBoxTour .inputBoxText{
+            min-width: 100px;
+            width: auto;
+        }
+    </style>
 </head>
 
-<body id="BODY_BLOCK_JQUERY_REFLOW"
-      class=" r_map_position_ul_fake ltr domn_en_US lang_en long_prices globalNav2011_reset rebrand_2017 css_commerce_buttons flat_buttons sitewide xo_pin_user_review_to_top track_back">
+<body>
 
-<div id="PAGE" class="filterSearch redesign_2015 non_hotels_like desktop scopedSearch">
+<div>
+    @include('general.forAllPages')
     @include('layouts.placeHeader')
-    <div class="ppr_rup ppr_priv_hr_atf_north_star_nostalgic">
 
-        <div class="atf_header_wrapper">
-            <div class="atf_header ui_container is-mobile full_width">
-
-                <div class="ppr_rup ppr_priv_location_detail_header relative-position">
-                    <h1 id="HEADING" property="name">
-                        <b class="tourCreationMainTitle">شما در حال ایجاد یک تور جدید هستید</b>
-                    </h1>
-                    <div class="tourAgencyLogo circleBase type2"></div>
-                    <b class="tourAgencyName">آژانس ستاره طلایی</b>
-                </div>
-            </div>
-        </div>
-
-        <div class="atf_meta_and_photos_wrapper">
-            <div class="atf_meta_and_photos ui_container is-mobile easyClear">
-                <div class="prw_rup darkGreyBox tourDetailsMainFormHeading">
-                    <b class="formName">اطلاعات زمانی و زبانی</b>
-                    <div class="tourCreationStepInfo">
-                        <span>
-                            گام
-                            <span>4</span>
-                            از
-                            <span>6</span>
-                        </span>
-                        <span>
-                            آخرین ویرایش
-                            <span>
-                                {{$tour->lastUpdate}}
-                            </span>
-                            <span>
-                                {{$tour->lastUpdateTime}}
-                            </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('pages.tour.create.tourCreateHeader', ['createTourStep' => 4, 'createTourHeader' => 'اطلاعات زمانی و زبانی'])
 
     <div id="tourDetailsMainForm3rdtStepMainDiv" class="Hotel_Review prodp13n_jfy_overflow_visible lightGreyBox">
         <form id="form" method="post" action="{{route('tour.create.stage.four.store')}}" autocomplete="off">
@@ -85,12 +53,8 @@ $state = 'تهران';
 
             <div class="ui_container">
                 <div class="menu ui_container whiteBox">
-                    <div class="boxTitlesTourCreation">
-                        نوع برگزاری
-                    </div>
-                    <div class="inboxHelpSubtitle">
-                        کدام یک از موارد زیر در مورد تور شما صادق است؟
-                    </div>
+                    <div class="boxTitlesTourCreation">نوع برگزاری</div>
+                    <div class="inboxHelpSubtitle">کدام یک از موارد زیر در مورد تور شما صادق است؟</div>
 
                     <input ng-model="sort" type="radio" id="c53" name="tourKind" value="notSameTime" onchange="changeTime(this.value)"/>
                     <label for="c53" class="tourBasicKindsCheckbox">
@@ -141,7 +105,7 @@ $state = 'تهران';
                     <div class="inboxHelpSubtitle">
                         تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.
                     </div>
-                    <div class="inputBox col-xs-3 mg-rt-10 relative-position float-right">
+                    <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right">
                         <div class="inputBoxText">
                             <div>
                                 تاریخ پایان
@@ -154,7 +118,7 @@ $state = 'تهران';
                         <input name="eDate" id="eDate" class="observer-example inputBoxInput" readonly/>
                     </div>
 
-                    <div class="inputBox col-xs-3 relative-position float-right">
+                    <div class="inputBoxTour col-xs-3 relative-position float-right">
                         <div class="inputBoxText">
                             <div>
                                 تاریخ شروع
@@ -180,7 +144,7 @@ $state = 'تهران';
                         تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.
                     </div>
 
-                    <div class="inputBox col-xs-3 mg-rt-10 relative-position float-right">
+                    <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right">
                         <div class="inputBoxText">
                             <div>
                                 تاریخ پایان
@@ -193,7 +157,7 @@ $state = 'تهران';
                         <input name="eDateSame" id="eDateSame" class="observer-example inputBoxInput" onchange="changeInputClass('eDateSame')"/>
                     </div>
 
-                    <div class="inputBox col-xs-3 relative-position float-right">
+                    <div class="inputBoxTour col-xs-3 relative-position float-right">
                         <div class="inputBoxText">
                             <div>
                                 تاریخ شروع
@@ -209,7 +173,7 @@ $state = 'تهران';
                     <div class="inboxHelpSubtitle">
                         روز شروع تور در هفته و مدت آن ثابت فرض می‌گردد و شما تنها می‌بایست دوره‌ی تکرار را برای تور مشخص کنید.
                     </div>
-                    <div class="inputBox float-right col-xs-3">
+                    <div class="inputBoxTour float-right col-xs-3">
                         <div class="inputBoxText">
                             <div>
                                 دوره‌ی تکرار
@@ -241,11 +205,10 @@ $state = 'تهران';
                     </div>
 
                     <div id="notSameTimeCalendarDiv" style="display: flex; flex-direction: column">
-
                         <div id="calendar_1">
                             <div class="tourNthOccurrence">1</div>
 
-                            <div class="inputBox col-xs-3 relative-position float-right">
+                            <div class="inputBoxTour col-xs-3 relative-position float-right">
                                 <div class="inputBoxText">
                                     <div>
                                         تاریخ شروع
@@ -257,7 +220,7 @@ $state = 'تهران';
                                 </div>
                                 <input name="sDateNotSame[]" id="sDate_1" class="observer-example inputBoxInput" type="text">
                             </div>
-                            <div class="inputBox col-xs-3 mg-rt-10 relative-position float-right">
+                            <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right">
                                 <div class="inputBoxText">
                                     <div>
                                         تاریخ پایان
@@ -279,7 +242,6 @@ $state = 'تهران';
                                 </button>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
@@ -293,7 +255,7 @@ $state = 'تهران';
                     <div class="inboxHelpSubtitle">
                         آیا تور شما به غیر از زبان فارسی، از زبان دیگری پشتیبانی می‌کند.
                     </div>
-                    <div class="inputBox col-xs-12 relative-position">
+                    <div class="inputBoxTour col-xs-12 relative-position">
                         <div class="inputBoxText width-130">
                             <div>
                                 زبان‌های دیگر
@@ -387,7 +349,7 @@ $state = 'تهران';
                                 <div class="inboxHelpSubtitle mg-tp-5">
                                     به راهنمای تور خدا توصیه کنید تا حساب خود را در کوچیتا ایجاد نماید و از مزایای آن بهره‌مند شود. برای ما راهنمایان تور دارای حساب کاربری از اهمیت بیشتری برخوردار هستند. پس از باز کردن حساب کاربری راهنمای تور شما می‌تواند با وارد کردن کد تور و پس از تأیید شما نام خود را به صفحه‌ی کاربریش اتصال دهد.
                                 </div>
-                                <div class="inputBox float-right col-xs-2 mg-rt-50">
+                                <div class="inputBoxTour float-right col-xs-2 mg-rt-50">
                                     <div class="inputBoxText width-45per">
                                         <div>
                                             جنسیت
@@ -402,7 +364,7 @@ $state = 'تهران';
                                         <option value="0">زن</option>
                                     </select>
                                 </div>
-                                <div class="inputBox float-right col-xs-4 mg-rt-50">
+                                <div class="inputBoxTour float-right col-xs-4 mg-rt-50">
                                     <div class="inputBoxText">
                                         <div>
                                             نام
@@ -411,7 +373,7 @@ $state = 'تهران';
                                     </div>
                                     <input class="inputBoxInput" name="tourGuidFirstName" id="tourGuidFirstName" type="text" placeholder="فارسی">
                                 </div>
-                                <div class="inputBox float-right col-xs-3">
+                                <div class="inputBoxTour float-right col-xs-3">
                                     <div class="inputBoxText">
                                         <div>
                                             نام خانوادگی
@@ -426,7 +388,7 @@ $state = 'تهران';
                                 <div class="inboxHelpSubtitle mg-tp-5">
                                     درخواست شما برای کاربر مورد نظر ارسال می‌شود و پس از تأیید او نام او به عنوان راهنمای تور معرفی می‌گردد.
                                 </div>
-                                <div class="inputBox float-right col-xs-3">
+                                <div class="inputBoxTour float-right col-xs-3">
                                     <div class="inputBoxText">
                                         <div>
                                             ایمیل
@@ -465,7 +427,7 @@ $state = 'تهران';
                         </div>
                     </div>
                     <div id="backUpPhoneDiv">
-                        <div class="inputBox float-right col-xs-3">
+                        <div class="inputBoxTour float-right col-xs-3">
                             <div class="inputBoxText">
                                 <div>
                                     تلفن
@@ -494,20 +456,16 @@ $state = 'تهران';
 </div>
 
 <script>
-
     var checkKoochitaAccountRoute = '{{route("findKoochitaAccount")}}';
     var _token = '{!! csrf_token() !!}';
     var approvePic = "{{URL::asset('images/tourCreation/approve.png')}}";
     var deletePic = "{{URL::asset('images/tourCreation/delete.png')}}";
-
-    $('.observer-example').persianDatepicker({
-        minDate: new Date().getTime(),
-        format: 'YYYY/MM/DD',
-        autoClose: true,
-    });
-
-    $('.observer-example').val('');
-
+    var datePickerOptions = {
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        dateFormat: "yy/mm/dd"
+    };
+    $('.observer-example').datepicker(datePickerOptions);
 </script>
 
 

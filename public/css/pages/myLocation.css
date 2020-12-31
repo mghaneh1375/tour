@@ -103,6 +103,9 @@
 .filtersSec .filKind.boomgardyFilter .icon {
     background: #00aeef;
 }
+.filtersSec .filKind.localShopFilter .icon {
+    background: #00ef1d;
+}
 
 .filtersSec .filKind.offFilter .icon{
     background: white;

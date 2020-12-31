@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourPeriod extends Model
 {
-    protected $table = 'tourperiods';
+    protected $table = 'tourPeriods';
     public $timestamps = false;
 }
