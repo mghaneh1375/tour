@@ -3324,17 +3324,18 @@ class PlaceController extends Controller {
         foreach ($places as $place) {
             $place->pic = $nonePicUrl;
             if($place->file != 'none' && $place->file != null){
+
                 if($kindPlace->id == 13) {
                     $picNm = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
                     if($picNm != null)
-                        $picNm = $picNm->picture;
+                        $picNm = $picNm->pic;
                 }
                 else
                     $picNm = $place->picNumber;
-
+;
                 $location = __DIR__ . "/../../../../assets/_images/$kindPlace->fileName/$place->file/l-$picNm";
                 if (is_file($location))
-                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/l-$picNmr");
+                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/l-$picNm");
             }
             $place->reviews = $place->reviewCount;
 
