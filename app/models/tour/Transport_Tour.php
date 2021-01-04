@@ -1,11 +1,11 @@
 <?php
 
-namespace App\models;
+namespace App\models\tour;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Transport_Tour extends Model
 {
-    protected $table = 'transporttours';
+    protected $table = 'transportTours';
     public $timestamps = false;
 }

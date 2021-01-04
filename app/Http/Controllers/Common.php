@@ -456,7 +456,7 @@ function getRate($placeId, $kindPlaceId) {
         $kindPlace = Place::find($kindPlaceId);
         $place = \DB::table($kindPlace->tableName)->find($placeId);
 
-        $avgRate = $place->fullRate;
+        $avgRate = floor($place->fullRate);
         $numOfRate = ['1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0];
 
         $numOfRateDB = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->select(['id', 'rate'])->get()->groupBy('rate');

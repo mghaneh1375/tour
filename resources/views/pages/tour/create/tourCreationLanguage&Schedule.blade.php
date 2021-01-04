@@ -249,12 +249,8 @@ $state = 'تهران';
 
             <div class="ui_container">
                 <div class="menu ui_container whiteBox">
-                    <div class="boxTitlesTourCreation">
-                        زبان تور
-                    </div>
-                    <div class="inboxHelpSubtitle">
-                        آیا تور شما به غیر از زبان فارسی، از زبان دیگری پشتیبانی می‌کند.
-                    </div>
+                    <div class="boxTitlesTourCreation">زبان تور</div>
+                    <div class="inboxHelpSubtitle">آیا تور شما به غیر از زبان فارسی، از زبان دیگری پشتیبانی می‌کند.</div>
                     <div class="inputBoxTour col-xs-12 relative-position">
                         <div class="inputBoxText width-130">
                             <div>
@@ -276,12 +272,8 @@ $state = 'تهران';
 
             <div class="ui_container">
                 <div class="menu ui_container whiteBox">
-                    <div class="boxTitlesTourCreation">
-                        <span>راهنمای تور</span>
-                    </div>
-                    <div class="inboxHelpSubtitle">
-                        نام راهنمای تور خود را وارد نمایید. این امر نقش مؤثری در اطمینان خاطر کاربران خواهد داشت.
-                    </div>
+                    <div class="boxTitlesTourCreation">راهنمای تور</div>
+                    <div class="inboxHelpSubtitle"> نام راهنمای تور خود را وارد نمایید. این امر نقش مؤثری در اطمینان خاطر کاربران خواهد داشت.</div>
                     <div class="tourGuiderQuestions mg-tp-15">
                         <span>آیا تور شما راهنما دارد؟</span>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -412,9 +404,7 @@ $state = 'تهران';
 
             <div class="ui_container">
                 <div class="menu ui_container whiteBox">
-                    <div class="boxTitlesTourCreation">
-                        <span>تلفن پشتیبانی</span>
-                    </div>
+                    <div class="boxTitlesTourCreation">تلفن پشتیبانی</div>
                     <div class="tourGuiderQuestions mg-tp-15">
                         <span>آیا از شماره‌ی موجود در پروفایل خود استفاده می‌کنید؟</span>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">

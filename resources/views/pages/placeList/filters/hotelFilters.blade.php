@@ -75,22 +75,22 @@
 </div>
 
 <script>
-//this function for change ids of specialFilters in phone type
-function changePhoneIds(){
- var getIds = [];
+    //this function for change ids of specialFilters in phone type
+    function changePhoneIds(){
+     var getIds = [];
 
- var elems = $('.specialFiltersSection').children();
- for(i = 0; i < elems.length; i++){
-     var childs = $(elems[i]).children();
-     var inputId = $(childs[0]).attr('id');
+     var elems = $('.specialFiltersSection').children();
+     for(i = 0; i < elems.length; i++){
+         var childs = $(elems[i]).children();
+         var inputId = $(childs[0]).attr('id');
 
-     if(getIds.indexOf(inputId) > -1){
-         $(childs[0]).attr('id', 'phone_' + inputId);
-         $(childs[1]).attr('for', 'phone_' + inputId);
+         if(getIds.indexOf(inputId) > -1){
+             $(childs[0]).attr('id', 'phone_' + inputId);
+             $(childs[1]).attr('for', 'phone_' + inputId);
+         }
+         else
+             getIds[getIds.length] = inputId;
      }
-     else
-         getIds[getIds.length] = inputId;
- }
-}
-changePhoneIds();
+    }
+    changePhoneIds();
 </script>

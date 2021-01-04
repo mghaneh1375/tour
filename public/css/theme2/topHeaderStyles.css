@@ -264,6 +264,10 @@ input[type="checkbox"] + label, input[type="radio"] + label{
     user-select: none;
 }
 
+.oneRowText{
+
+}
+
 .inConfirmLabel{
     margin-right: 12px;
     font-size: 9px;

@@ -611,45 +611,6 @@ Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), func
     Route::post('findPlace', array('as' => 'findPlace', 'uses' => 'HomeController@findPlace'));
 });
 
-//tour
-Route::middleware(['auth'])->group(function () {
-    Route::middleware(['shareData'])->group(function(){
-        Route::get('/tour/create/afterStart', 'TourController@afterStart')->name('afterStart');
-        Route::get('/tour/create/stageOne/{id?}', 'TourController@stageOneTour')->name('tour.create.stage.one');
-        Route::get('/tour/create/stageTwo/{id}', 'TourController@stageTwoTour')->name('tour.create.stage.two');
-        Route::get('/tour/create/stageThree/{id}', 'TourController@stageThreeTour')->name('tour.create.stage.three');
-        Route::get('/tour/create/stageFour/{id}', 'TourController@stageFourTour')->name('tour.create.stage.four');
-        Route::get('/tour/create/stageFive/{id}', 'TourController@stageFiveTour')->name('tour.create.stage.five');
-    });
-
-    Route::post('/tour/create/stageOne/store', 'TourController@storeStageOneTour')->name('tour.create.stage.one.store');
-    Route::post('/tour/create/stageTwo/store', 'TourController@stageTwoTourStore')->name('tour.create.stage.two.store');
-    Route::post('/tour/create/stageThreeTourStore', 'TourController@stageThreeTourStore')->name('tour.create.stage.three.store');
-    Route::post('/tour/create/stageFourTourStore', 'TourController@stageFourTourStore')->name('tour.create.stage.four.store');
-    Route::post('/tour/create/stageFiveTourStore', 'TourController@stageFiveTourStore')->name('tour.create.stage.five.store');
-
-    Route::get('/tour/create/complete/{id}', 'TourController@completeCreationTour')->name('tour.create.complete');
-
-    Route::get('/tour/index', function (){
-        $placeMode = 'tour';
-        $state = 'تهران';
-        return view('tour.tour', compact(['placeMode', 'state']));
-    });
-    Route::get('/tour/details', function (){
-        $placeMode = 'tour';
-        $state = 'تهران';
-        $place = \App\models\places\Hotel::find(1);
-        $kindPlaceId = 1;
-//        dd($place);
-        return view('tour.tour-details', compact(['placeMode', 'state', 'place', 'kindPlaceId']));
-    });
-    Route::get('/tour/lists', function (){
-        $placeMode = 'tour';
-        $state = 'تهران';
-        return view('tour.tour-lists', compact(['placeMode', 'state']));
-    });
-});
-
 //hotel reservation
 Route::group(array('middleware' => ['throttle:30']), function () {
 

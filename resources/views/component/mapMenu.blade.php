@@ -139,44 +139,49 @@
             ]
         ).addTo(mainMapInBlade);
 
-        
+        if(mapCenter.hasMarker)
+            L.marker([parseFloat(mapCenter.x), parseFloat(mapCenter.y)]).addTo(mainMapInBlade);
+
         let fk = Object.keys(mapData);
         for (let x of fk) {
             mapData[x].forEach(item => {
-                var marker = L.marker([parseFloat(item['C']), parseFloat(item['D'])], {
-                    title: item['name'],
-                    icon: L.icon({
-                        iconUrl: mapIcon[x],
-                        iconSize: [30, 35],
-                    })
-                }).bindPopup(item['name']).on('click', () => openMapMarkerDescriptionInBlade(x, item['id']));
-                var mapMarkerInMap= marker.addTo(mainMapInBlade);
+                if(item['C'] != mapCenter.x && item['D'] != mapCenter.y) {
 
-                mapMarker[x].push({
-                    markerInfo: marker,
-                    mapMarkerInMap: mapMarkerInMap,
-                });
-                
-                // if(mapIcon[x])
-                //     iconMap = {
-                //         url: mapIcon[x],
-                //         scaledSize: new google.maps.Size(30, 35), // scaled size
-                //     };
-                // var marker = new google.maps.Marker({
-                //     position: new google.maps.LatLng(item['C'], item['D']),
-                //     icon: iconMap,
-                //     map: mainMapInBlade,
-                //     title: item['name'],
-                //     url: item['url'],
-                //     id: item['id']
-                // }).addListener('click', function (){ openMapMarkerDescriptionInBlade(x, this.id) });
-                // mapMarker[x].push(marker);
-                // loc = new google.maps.LatLng(item['C'], item['D']);
-                // bounds.extend(loc);
-                
+                    var marker = L.marker([parseFloat(item['C']), parseFloat(item['D'])], {
+                        title: item['name'],
+                        icon: L.icon({
+                            iconUrl: mapIcon[x],
+                            iconSize: [30, 35],
+                        })
+                    }).bindPopup(item['name']).on('click', () => openMapMarkerDescriptionInBlade(x, item['id']));
+                    var mapMarkerInMap = marker.addTo(mainMapInBlade);
+
+                    mapMarker[x].push({
+                        markerInfo: marker,
+                        mapMarkerInMap: mapMarkerInMap,
+                    });
+
+                    // if(mapIcon[x])
+                    //     iconMap = {
+                    //         url: mapIcon[x],
+                    //         scaledSize: new google.maps.Size(30, 35), // scaled size
+                    //     };
+                    // var marker = new google.maps.Marker({
+                    //     position: new google.maps.LatLng(item['C'], item['D']),
+                    //     icon: iconMap,
+                    //     map: mainMapInBlade,
+                    //     title: item['name'],
+                    //     url: item['url'],
+                    //     id: item['id']
+                    // }).addListener('click', function (){ openMapMarkerDescriptionInBlade(x, this.id) });
+                    // mapMarker[x].push(marker);
+                    // loc = new google.maps.LatLng(item['C'], item['D']);
+                    // bounds.extend(loc);
+                }
+
             });
         }
-        
+
         if(!forceCenter) {
             mainMapInBlade.fitBounds(bounds);
             mainMapInBlade.panToBounds(bounds);
@@ -219,7 +224,7 @@
             else
                 mainMapInBlade.removeLayer(mar.mapMarkerInMap);
         });
-        
+
         // if (isSet == 1) {
         //     for (var i = 0; i < marker.length; i++)
         //         marker[i]['j'].setMap(mainMap)

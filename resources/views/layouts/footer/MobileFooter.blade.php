@@ -534,7 +534,7 @@
                             <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 23px; top: 18px; right: 14px;">
                             <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/landing.webp')}}" class="resizeImgClass" style="width: 100%;">
                         </div>
-                        <div class="specialFooterRow" onclick="writeNewSafaranmeh()">
+                        <div class="specialFooterRow" onclick="goToCookFestival()">
                             <img alt="koochitaCook" src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" class="resizeImgClass">
                         </div>
                         <div class="specialFooterRow" onclick="writeNewSafaranmeh()">
@@ -874,6 +874,11 @@
 
         $('.specTabsFot').removeClass('lp_selectedMenu');
         $(_element).addClass('lp_selectedMenu');
+    }
+
+    function goToCookFestival(){
+        openLoading();
+        location.href = '{{route("festival.cook")}}';
     }
 
     $(window).ready(() => {

@@ -1050,6 +1050,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                     },
                     success: function(response){
                         let center = {
+                            hasMarker: true,
                             x: '{{$place->C}}',
                             y: '{{$place->D}}'
                         };

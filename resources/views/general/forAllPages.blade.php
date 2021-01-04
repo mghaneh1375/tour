@@ -55,6 +55,8 @@
 
 @include('general.followerPopUp')
 
+@include('general.modals.userKoochitaSearch')
+
 @if(!Auth::check())
 {{--    @include('general.nLoginPopUp')--}}
 @else

@@ -413,11 +413,11 @@ $state = 'تهران';
                         <div class="tourFoodOfferQuestions">
                             <span>آیا در طول مدت تور وعده‌ی غذایی ارائه می‌شود؟</span>
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-secondary">
-                                    <input type="radio" name="isMeal" id="option1" value="0" onchange="isMealsChange(this.value)">خیر
-                                </label>
                                 <label class="btn btn-secondary active">
-                                    <input type="radio" name="isMeal" id="option2" value="1" onchange="isMealsChange(this.value)" checked>بلی
+                                    <input type="radio" name="isMeal" id="option1" value="0" onchange="isMealsChange(this.value)" checked>خیر
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="isMeal" id="option2" value="1" onchange="isMealsChange(this.value)">بلی
                                 </label>
                             </div>
                         </div>

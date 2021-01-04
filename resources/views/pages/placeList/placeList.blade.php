@@ -355,10 +355,6 @@
 
     `;
 
-
-</script>
-
-<script>
     function goToCampain(){
         if(checkLogin('{{route('addPlaceByUser.index')}}'))
             location.href = '{{route('addPlaceByUser.index')}}';
@@ -384,11 +380,14 @@
     var nearKindPlaceIdFilter = 0;
     var kindPlaceId = '{{$kindPlace->id}}';
 
-    @if(isset($city->id))
-        var cityId = '{{$city->id}}';
-    @else
-        var cityId = 0;
-    @endif
+{{--    @if(isset($city->id))--}}
+{{--        var cityId = '{{$city->id}}';--}}
+{{--    @else--}}
+{{--        var cityId = 0;--}}
+{{--    @endif--}}
+
+    var cityId = '{{ isset($city->id) ? $city->id : 0}}';
+
 
     @if($kindPlaceId == 4 || $kindPlaceId == 1 || $kindPlaceId == 12 || $kindPlaceId == 3)
         var sort = "seen";
@@ -417,10 +416,14 @@
     }
 
     if(placeMode == 'hotel'){
-        specialFilters = [{
-            'kind' : 'kind_id',
-            'value' : 1
-        }];
+        // specialFilters = [{
+        //     'kind' : 'kind_id',
+        //     'value' : 1
+        // }];
+
+        $(window).ready(() => {
+            doKindFilter('kind_id', 1);
+        })
     }
 
     function selectingOrder(elem, type) {

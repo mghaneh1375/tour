@@ -62,9 +62,9 @@ function upload_fileLargeFile(start, _fileName) {
             },
             success: function (response) {
                 if(cancelLargeFileUploadedInJsFile == 1 && response.status == 'canceled'){
+                    inProcessLargeFileUploadedInJsFile = false;
                     callBackFunctionLargeFileUploadedInJsFile('cancelUpload');
                     cancelLargeFileUploadedInJsFile = 0;
-                    inProcessLargeFileUploadedInJsFile = false;
                 }
                 else if (response.status == 'ok') {
                     errorCountInLargeFileUploadedInJsFile = 5;

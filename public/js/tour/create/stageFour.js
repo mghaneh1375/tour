@@ -127,7 +127,6 @@ function isBackUpPhoneFunc(_value){
         document.getElementById('backUpPhoneDiv').style.display = 'block';
     else
         document.getElementById('backUpPhoneDiv').style.display = 'none';
-
 }
 
 function changeTime(_value){
