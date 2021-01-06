@@ -1,4 +1,4 @@
-@extends('pages.tour.create.createTourLayout')
+@extends('pages.tour.create.layout.createTour_Layout')
 
 @section('head')
     <style>
@@ -19,6 +19,7 @@
 
 
 @section('body')
+    @include('pages.tour.create.layout.createTour_Header', ['createTourStep' => 3])
 
     <div class="ui_container">
         <div class="menu whiteBox">
@@ -28,11 +29,11 @@
                 <span>آیا حمل و نقل اصلی برعهده‌ی تور است؟</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary">
-                        <input type="radio" name="isTransportTour" value="0" onchange="showSection('tourMainTransports', this.value)">
+                        <input type="radio" name="isTransportTour" value="0" onchange="showSection('tourMainTransports', this)">
                         خیر
                     </label>
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="isTransportTour" value="1" onchange="showSection('tourMainTransports', this.value)" checked>
+                        <input type="radio" name="isTransportTour" value="1" onchange="showSection('tourMainTransports', this)" checked>
                         بلی
                     </label>
 
@@ -40,7 +41,7 @@
             </div>
 
             <div id="tourMainTransports">
-                @if(true)
+                @if($tour->isLocal)
                     <div id="sDiv" class="transportationDetailsMainBoxes">
                         <input type="hidden" name="eTransport" id="eTransport" value="-1">
                         <div class="transportationTitleBoxesLocal" id="toTheDestinationTitleBox">
@@ -275,10 +276,10 @@
                 <span>آیا حمل و نقل فرعی تور شامل هزینه اضافه است؟</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="isCostForMainTransport" value="0" onchange="showSection('mainTransportCostDiv', this.value)" checked>خیر
+                        <input type="radio" name="isCostForMainTransport" value="0" onchange="showSection('mainTransportCostDiv', this)" checked>خیر
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="isCostForMainTransport" value="1" onchange="showSection('mainTransportCostDiv', this.value)">بلی
+                        <input type="radio" name="isCostForMainTransport" value="1" onchange="showSection('mainTransportCostDiv', this)">بلی
                     </label>
                 </div>
             </div>
@@ -302,10 +303,10 @@
                 <span>آیا در طول مدت تور وعده‌ی غذایی ارائه می‌شود؟</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="isMeal" value="0" onchange="showSection('mealsDiv', this.value)" checked>خیر
+                        <input type="radio" name="isMeal" value="0" onchange="showSection('mealsDiv', this)" checked>خیر
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="isMeal" value="1" onchange="showSection('mealsDiv', this.value)">بلی
+                        <input type="radio" name="isMeal" value="1" onchange="showSection('mealsDiv', this)">بلی
                     </label>
                 </div>
             </div>
@@ -405,10 +406,10 @@
                     <span>آیا وعده‌های غذایی نیازمند هزینه‌ی اضافی است؟</span>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
-                            <input type="radio" name="isMealCost" value="0" onchange="showSection('mealCostDiv', this.value)" checked>خیر
+                            <input type="radio" name="isMealCost" value="0" onchange="showSection('mealCostDiv', this)" checked>خیر
                         </label>
                         <label class="btn btn-secondary">
-                            <input type="radio" name="isMealCost" value="1" onchange="showSection('mealCostDiv', this.value)">بلی
+                            <input type="radio" name="isMealCost" value="1" onchange="showSection('mealCostDiv', this)">بلی
                         </label>
                     </div>
 
@@ -451,10 +452,10 @@
                 <span>آیا تور شما راهنما دارد؟</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary">
-                        <input type="radio" name="isTourGuide" value="0" onchange="showSection('isTourGuidDiv', this.value)" >خیر
+                        <input type="radio" name="isTourGuide" value="0" onchange="showSection('isTourGuidDiv', this)" >خیر
                     </label>
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="isTourGuide" value="1" onchange="showSection('isTourGuidDiv', this.value)"  checked>بلی
+                        <input type="radio" name="isTourGuide" value="1" onchange="showSection('isTourGuidDiv', this)"  checked>بلی
                     </label>
                 </div>
             </div>
@@ -486,10 +487,10 @@
                     <span>آیا راهنمای تور شما هم اکنون مشخص است؟</span>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary">
-                            <input type="radio" name="isTourGuidDefined" value="0" onchange="showSection('isTourGuidDefinedDiv', this.value)">خیر
+                            <input type="radio" name="isTourGuidDefined" value="0" onchange="showSection('isTourGuidDefinedDiv', this)">خیر
                         </label>
                         <label class="btn btn-secondary active">
-                            <input type="radio" name="isTourGuidDefined" value="1" onchange="showSection('isTourGuidDefinedDiv', this.value)" checked>بلی
+                            <input type="radio" name="isTourGuidDefined" value="1" onchange="showSection('isTourGuidDefinedDiv', this)" checked>بلی
                         </label>
                     </div>
                 </div>
@@ -560,10 +561,10 @@
                 <span>آیا از شماره‌ی موجود در پروفایل خود استفاده می‌کنید؟</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="isBackUpPhone" value="1" onchange="showSection('backUpPhoneDiv', this.value)" checked>خیر
+                        <input type="radio" name="isBackUpPhone" value="1" onchange="showSection('backUpPhoneDiv', this)" checked>خیر
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="isBackUpPhone" value="0" onchange="showSection('backUpPhoneDiv', this.value)">بلی
+                        <input type="radio" name="isBackUpPhone" value="0" onchange="showSection('backUpPhoneDiv', this)">بلی
                     </label>
                 </div>
             </div>
@@ -633,24 +634,135 @@
             autoclose: true,
         };
 
-        var showSection = (_id, _value) => $(`#${_id}`).css('display', _value == 1 ? 'block' : 'none');
+        console.log(tour);
+        console.log(tour.hasTransport);
+        console.log(tour.transports);
+
+        var storeData = {
+            isTransportTour : tour.isTransport,
+            sTransportKind : tour.hasTransport ? tour.transports.sTransportId : 0,
+            eTransportKind : tour.hasTransport ? tour.transports.eTransportId : 0,
+            sTime : tour.hasTransport ? tour.transports.sTime : '',
+            eTime : tour.hasTransport ? tour.transports.eTime : '',
+            sAddress : tour.hasTransport ? tour.transports.sAddress : '',
+            eAddress : tour.hasTransport ? tour.transports.eAddress : '',
+            sLat :  tour.hasTransport ? tour.transports.sLatLng[0] : 0,
+            eLat : tour.hasTransport ? tour.transports.eLatLng[0] : 0,
+            sLng : tour.hasTransport ? tour.transports.sLatLng[1] : 0,
+            eLng : tour.hasTransport ? tour.transports.eLatLng[1] : 0,
+            sDescription : tour.hasTransport ? tour.transports.sDescription : '',
+            eDescription : tour.hasTransport ? tour.transports.eDescription : '',
+
+            sideTransport: tour.sideTransport != null ? tour.sideTransport : [] ,
+            isSideTransportCost: tour.sideTransportCost == null ? 0 : 1,
+            sideTransportCost: tour.sideTransportCost != null ? tour.sideTransportCost : '',
+
+            isMeal: tour.isMeal,
+            isMealsAllDay: tour.isMealAllDay,
+            isMealCost: tour.isMealCost,
+            mealMoreCost: tour.mealMoreCost,
+            allDayMeals: tour.isMealAllDay ? tour.meals : [],
+            sepecificDayMeals: tour.isMealAllDay ? [] : tour.meals,
+
+            otherLanguage: tour.language,
+
+            hasTourGuid: tour.isTourGuide,
+            isLocalTourGuide: tour.isLocalTourGuide,
+            isSpecialTourGuid: tour.isSpecialTourGuid,
+            isTourGuidDefined: tour.isTourGuidDefined,
+            isTourGuidInKoochita: tour.isTourGuideInKoochita,
+            koochitaUserId: tour.tourGuidKoochitaId,
+            tourGuidName: tour.tourGuidName,
+            tourGuidSex: tour.tourGuidSex,
+
+            isBackUpPhone: tour.backupPhone == null ? 0 : 1,
+            backUpPhone: tour.backupPhone,
+        };
+
+        var showSection = (_id = '', _element) => {
+            _element = $(_element);
+            var _value = _element.val();
+            var name = _element.attr('name');
+
+            _element.prop('checked', true);
+            $(`input[name="${name}"]`).parent().removeClass('active');
+            $(`input[name="${name}"]:checked`).parent().addClass('active');
+
+            if(_id != '')
+                $(`#${_id}`).css('display', _value == 1 ? 'block' : 'none');
+        };
+
+        function fillInputs(){
+            showSection('tourMainTransports', $(`input[name="isTransportTour"][value="${storeData.isTransportTour}"]`));
+
+            $('#sTransport').val(storeData.sTransportKind);
+            $('#sTime').val(storeData.sTime);
+            $('#sAddress').val(storeData.sAddress);
+            $('#sDescription').val(storeData.sDescription);
+            $('#sLat').val(storeData.sLat);
+            $('#sLng').val(storeData.sLng);
+
+            $('#eTransport').val(storeData.eTransportKind);
+            $('#eTime').val(storeData.eTime);
+            $('#eAddress').val(storeData.eAddress);
+            $('#eDescription').val(storeData.eDescription);
+            $('#eLat').val(storeData.eLat);
+            $('#eLng').val(storeData.eLng);
+
+            storeData.sideTransport.map(item => chooseMultiSelectSideTransport(item));
+            $('#sideTransportCost').val(numberWithCommas(storeData.sideTransportCost));
+            showSection('mainTransportCostDiv', $(`input[name="isCostForMainTransport"][value="${storeData.isSideTransportCost}"]`));
+
+            showSection('mealsDiv', $(`input[name="isMeal"][value="${storeData.isMeal}"]`));
+
+            $('#mealCost').val(numberWithCommas(storeData.mealMoreCost));
+            showSection('mealCostDiv', $(`input[name="isMealCost"][value="${storeData.isMealCost}"]`));
 
 
-        function initLanguage(){
-            var text = '';
-            language.map((item, index) => text += `<div class="optionMultiSelect" id="multiSelectLanguage_${index}" onclick="chooseLanguageMultiSelect(${index})">${item}</div>`);
-            $("#multiSelectLanguage").html(text);
+            showSection('', $(`input[name="isMealsAllDay"][value="${storeData.isMealsAllDay}"]`));
+            changeKindOfMeal(storeData.isMealsAllDay);
+            if(storeData.isMealsAllDay == 1)
+                storeData.allDayMeals.map(item => $(`input[name="meals[]"][value="${item}"]`).prop('checked', true));
+            else{
+                for(var day = 1; day <= tour.day; day++)
+                    storeData.sepecificDayMeals[day-1].map(item => $(`input[name="meals_day_${day}"][value="${item}"]`).prop('checked', true));
+            }
+
+            storeData.otherLanguage.map(item => chooseLanguageMultiSelect(language.indexOf(item)));
+
+            showSection('isTourGuidDiv', $(`input[name="isTourGuide"][value="${storeData.hasTourGuid}"]`));
+            showSection('', $(`input[name="isLocalTourGuide"][value="${storeData.isLocalTourGuide}"]`));
+            showSection('', $(`input[name="isSpecialTourGuid"][value="${storeData.isSpecialTourGuid}"]`));
+            showSection('isTourGuidDefinedDiv', $(`input[name="isTourGuidDefined"][value="${storeData.isTourGuidDefined}"]`));
+            showSection('', $(`input[name="isTourGuidInKoochita"][value="${storeData.isTourGuidInKoochita}"]`));
+
+            hasKoochitaAccount(storeData.isTourGuidInKoochita);
+            $('#tourGuidName').val(storeData.tourGuidName);
+            $('#tourGuidSex').val(storeData.tourGuidSex);
+            $('#tourGuidUserId').val(storeData.koochitaUserId);
+            $('#tourGuidKoochitaUsername').val(storeData.koochitaUserUsername);
+
+            showSection('backUpPhoneDiv', $(`input[name="isBackUpPhone"][value="${storeData.isBackUpPhone}"]`));
+            $('#backUpPhone').val(storeData.backUpPhone);
         }
+
 
         $(window).ready(() => {
             $('.clock').clockpicker(clockOptions);
             initLanguage();
+            fillInputs();
         });
         $(window).on('click', e => {
             var target = $(e.target);
             if( multiIsOpen  && !target.is('.optionMultiSelect') && !target.is('.multiSelected'))
                 $('.multiselect').hide();
         });
+
+        function initLanguage(){
+            var text = '';
+            language.map((item, index) => text += `<div class="optionMultiSelect" id="multiSelectLanguage_${index}" onclick="chooseLanguageMultiSelect(${index})">${item}</div>`);
+            $("#multiSelectLanguage").html(text);
+        }
 
         function openMultiSelect(_element){
             if(multiIsOpen){
@@ -738,10 +850,10 @@
             })
         }
 
-        function checkInput(){
+        function checkInput(_isMainStore = true){
             var errorText = '';
 
-            var data = {
+            storeData = {
                 isTransportTour : $('input[name="isTransportTour"]:checked').val(),
                 sTransportKind : $('#sTransport').val(),
                 eTransportKind : $('#eTransport').val(),
@@ -775,6 +887,7 @@
                 isTourGuidDefined: $('input[name="isTourGuidDefined"]:checked').val(),
                 isTourGuidInKoochita: $('input[name="isTourGuidInKoochita"]:checked').val(),
                 koochitaUserId: $('#tourGuidUserId').val(),
+                koochitaUserUsername: $('#tourGuidKoochitaUsername').val(),
                 tourGuidName: $('#tourGuidName').val(),
                 tourGuidSex: $('#tourGuidSex').val(),
 
@@ -782,85 +895,100 @@
                 backUpPhone: $('#backUpPhone').val(),
             };
 
-            if(data.isTransportTour == 1){
-                if(data.sTransportKind.trim().length == 0)
+            if(storeData.isTransportTour == 1){
+                if(storeData.sTransportKind.trim().length == 0)
                     errorText += '<li>نوع وسیله رفت را مشخص کنید</li>';
 
-                if(data.sTime.trim().length == 0)
+                if(storeData.sTime.trim().length == 0)
                     errorText += '<li>ساعت رفت را مشخص کنید</li>';
 
-                if(data.sAddress.trim().length == 0)
+                if(storeData.sAddress.trim().length == 0)
                     errorText += '<li>محل رفت را مشخص کنید</li>';
 
-                if(data.sLat == 0 || data.sLng == 0)
+                if(storeData.sLat == 0 || storeData.sLng == 0)
                     errorText += '<li>محل رفت را روی نقشه مشخص کنید</li>';
 
 
-                if(data.eTransportKind.trim().length == 0)
+                if(storeData.eTransportKind.trim().length == 0)
                     errorText += '<li>نوع وسیله برگشت را مشخص کنید</li>';
 
-                if(data.eTime.trim().length == 0)
+                if(storeData.eTime.trim().length == 0)
                     errorText += '<li>ساعت برگشت را مشخص کنید</li>';
 
-                if(data.eAddress.trim().length == 0)
+                if(storeData.eAddress.trim().length == 0)
                     errorText += '<li>محل برگشت را مشخص کنید</li>';
 
-                if(data.eLat == 0 || data.eLng == 0)
+                if(storeData.eLat == 0 || storeData.eLng == 0)
                     errorText += '<li>محل برگشت را روی نقشه مشخص کنید</li>';
             }
 
-            if(data.isSideTransportCost == 1 && data.sideTransportCost.trim().length == 0)
+            if(storeData.isSideTransportCost == 1 && storeData.sideTransportCost.trim().length == 0)
                 errorText += '<li>هزینه ی اضافی حمل و نقل فرعی را مشخص کنید</li>';
 
-            if(data.isMeal == 1){
-                if(data.isMealsAllDay == 1){
+            if(storeData.isMeal == 1){
+                if(storeData.isMealsAllDay == 1){
                     var meals = $('input[name="meals[]"]:checked');
                     for(var i = 0; i < meals.length; i++)
-                        data.allDayMeals.push($(meals[i]).val());
+                        storeData.allDayMeals.push($(meals[i]).val());
                 }
                 else{
                     for(var day = 1; day <= tour.day; day++){
-                        data.sepecificDayMeals[day-1] = [];
+                        storeData.sepecificDayMeals[day-1] = [];
                         var dayMeals = $(`input[name="meals_day_${day}"]:checked`);
                         for(var i = 0; i < dayMeals.length; i++)
-                            data.sepecificDayMeals[day-1].push($(dayMeals[i]).val());
+                            storeData.sepecificDayMeals[day-1].push($(dayMeals[i]).val());
                     }
                 }
-
-
-                if(data.isMealCost == 1 && data.mealMoreCost.trim().length == 0)
+                if(storeData.isMealCost == 1 && storeData.mealMoreCost.trim().length == 0)
                     errorText += '<li>هزینه ی اضافی غذا را مشخص کنید</li>';
 
             }
 
-            if(data.hasTourGuid == 1){
-                if(data.isTourGuidDefined == 1){
-                    if(data.isTourGuidInKoochita == 1 && data.koochitaUserId == 0)
+            if(storeData.hasTourGuid == 1){
+                if(storeData.isTourGuidDefined == 1){
+                    if(storeData.isTourGuidInKoochita == 1 && storeData.koochitaUserId == 0)
                         errorText += '<li>نام کاربری راهنمای تور را مشخص کنید</li>';
-                    else if(data.isTourGuidInKoochita == 0 && data.tourGuidName.trim().length == 0)
+                    else if(storeData.isTourGuidInKoochita == 0 && storeData.tourGuidName.trim().length == 0)
                         errorText += '<li>نام راهنمای تور را وارد کنید</li>';
                 }
             }
 
-            if(errorText.trim().length == 0){
-                openLoading();
-                $.ajax({
-                    type: 'POST',
-                    url: '{{route("tour.create.stage.three.store")}}',
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        tourId: tour.id,
-                        data: JSON.stringify(data)
-                    },
-                    success: response => {
-                        if(response.status == 'ok')
-                            location.href = '{{route("tour.create.stage.four", ['id' => $tour->id])}}'
-                    }
-                })
+
+            if(_isMainStore) {
+                if (errorText.trim().length == 0) {
+                    openLoading();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{route("tour.create.stage.three.store")}}',
+                        data: {
+                            _token: '{{csrf_token()}}',
+                            tourId: tour.id,
+                            data: JSON.stringify(storeData)
+                        },
+                        success: response => {
+                            if (response.status == 'ok') {
+                                localStorage.removeItem('stageThreeTourCreation_{{$tour->id}}');
+                                location.href = '{{route("tour.create.stage.four", ['id' => $tour->id])}}';
+                            }
+                        }
+                    })
+                }
+                else
+                    openErrorAlert(errorText);
             }
             else
-                openErrorAlert(errorText);
+                localStorage.setItem('stageThreeTourCreation_{{$tour->id}}', JSON.stringify(storeData));
         }
+
+        function doLastUpdate(){
+            storeData = JSON.parse(lastData);
+            fillInputs();
+        }
+
+        var lastData = localStorage.getItem('stageThreeTourCreation_{{$tour->id}}');
+        if(!(lastData == false || lastData == null))
+            openWarning('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+        setInterval(() => checkInput(false), 5000);
     </script>
 
     <script>

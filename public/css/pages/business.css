@@ -43,7 +43,7 @@ body{
 .mainHeaderButts > div:hover .text{
     border-bottom: solid 1px;
 }
-.mainHeaderButts .BookMarkIconEmptyAfter{
+.mainHeaderButts .localShopPageBookMark{
     margin: 0px 10px;
     padding: 0px 10px;
     border-left: solid 1px lightgray;
@@ -55,12 +55,12 @@ body{
 .mainHeaderButts .emptyShareIconAfter:after{
     font-size: 2.7em;
     position: relative;
-    right: 1em;
+    right: 0em;
     width: 1em;
     margin-right: 5px;
     line-height: initial;
 }
-.mainHeaderButts .BookMarkIconEmptyAfter:after, .emptyCameraIconAfter:after{
+.mainHeaderButts .localShopPageBookMark:after, .emptyCameraIconAfter:after{
     font-size: 2em;
     margin-right: 5px;
 }

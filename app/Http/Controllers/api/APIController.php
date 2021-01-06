@@ -55,7 +55,6 @@ class APIController extends Controller {
         $nowTime = Carbon::now()->getTimestamp();
         $ck = env("KOOCHITATV_NOUNC_CODE").'_'.$_GET['time'];
         $checkHash = Hash::check($ck, $_GET['code']);
-
         if(($nowTime - $_GET['time']) > 1000)
             return response('outTime');
 

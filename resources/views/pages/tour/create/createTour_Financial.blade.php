@@ -1,4 +1,4 @@
-@extends('pages.tour.create.createTourLayout')
+@extends('pages.tour.create.layout.createTour_Layout')
 
 @section('head')
 
@@ -12,6 +12,8 @@
 @endsection
 
 @section('body')
+    @include('pages.tour.create.layout.createTour_Header', ['createTourStep' => 5])
+
     <div class="ui_container">
         <div class="whiteBox">
             <div class="boxTitlesTourCreation">قیمت پایه</div>
@@ -89,7 +91,7 @@
                             <span>*</span>
                         </div>
                     </div>
-                    <input id="babyDisCount" class="inputBoxInput" type="number" placeholder="درصد تخفیف">
+                    <input id="childDisCount" class="inputBoxInput" type="number" placeholder="درصد تخفیف">
                 </div>
             </div>
 
@@ -202,7 +204,7 @@
     </div>
 
     <script>
-
+        var tour = {!! $tour !!};
         var featuresCount = 0;
         var disCountNumber = 0;
         var featureRowCard = $('#featureRowSample').html();
@@ -220,23 +222,63 @@
         var discountError = false;
 
         var storeData = {
-            cost: 0,
-            ticketKind: '',
-            isInsurance: 0,
-            features: [],
-            discounts: [],
-            childDisCount: 0,
-            disCountReason: 0,
-            sDiscountDate: 0,
-            eDiscountDate: 0,
+            cost: tour.minCost,
+            ticketKind: tour.ticketKind,
+            isInsurance: tour.isInsurance,
+            features: tour.features,
+            discounts: tour.groupDiscount == [] ? 0 : tour.groupDiscount,
+            childDisCount: tour.childDiscount == null ? 0 : tour.childDiscount.discount,
+            disCountReason:  tour.reasonDiscount == null ? 0 : tour.reasonDiscount.discount,
+            sDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.sReasonDate,
+            eDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.eReasonDate,
         };
 
         $(window).ready(() => {
+            $(".datePic").datepicker(datePickerOptions);
             createFeatureRow();
             createDisCountCard();
 
-            $(".datePic").datepicker(datePickerOptions);
+            fillInputs();
         });
+
+        function fillInputs(){
+            $('#tourCost').val(numberWithCommas(storeData.cost));
+            $('#ticketKind').val(storeData.ticketKind);
+            $('#childDisCount').val(storeData.childDisCount);
+            $('#disCountReason').val(storeData.disCountReason);
+            $('#sDiscountDate').val(storeData.sDiscountDate);
+            $('#eDiscountDate').val(storeData.eDiscountDate);
+
+            $('input[name="isInsurance"]').parent().removeClass('active');
+            $(`input[name="isInsurance"][value="${storeData.isInsurance}"]`).prop('checked', true).parent().addClass('active');
+
+            storeData.features.map((features, index) => {
+                if(index != 0)
+                    createFeatureRow();
+
+                setTimeout(() => {
+                    $('#featureName_'+index).val(features.name);
+                    $('#featureDesc_'+index).val(features.description);
+                    $('#featureCost_'+index).val(numberWithCommas(features.cost));
+                }, 100);
+            });
+
+            storeData.discounts.map((discount, index) => {
+                if(index != 0)
+                    createDisCountCard();
+
+                setTimeout(() => {
+                    disCounts[index].from = discount.min;
+                    disCounts[index].to = discount.max;
+
+                    $("#disCountFrom_"+index).val(discount.min);
+                    $("#disCountTo_"+index).val(discount.max);
+                    $("#disCountCap_"+index).val(parseInt(discount.discount));
+                }, 50);
+            });
+
+            setTimeout(checkAllDiscount, 1000);
+        }
 
         function createFeatureRow(){
             var text = featureRowCard;
@@ -337,7 +379,7 @@
             }
         }
 
-        function checkInput(){
+        function checkInput(_mainStore = true){
             var errorText = '';
 
             storeData = {
@@ -346,7 +388,7 @@
                 isInsurance: $('input[name="isInsurance"]:checked').val(),
                 features: [],
                 discounts: [],
-                childDisCount: $('#babyDisCount').val(),
+                childDisCount: $('#childDisCount').val(),
                 disCountReason: $('#disCountReason').val(),
                 sDiscountDate: $('#sDiscountDate').val(),
                 eDiscountDate: $('#eDiscountDate').val(),
@@ -355,15 +397,14 @@
             if(storeData.cost.trim().length == 0)
                 errorText = '<li>قیمت پایه تور خود را مشخص کنید</li>';
 
-
-            if(errorText == '') {
-
+            if (errorText == '' || _mainStore == false) {
                 var warning = '';
+                var index;
 
                 var features = $('.featuresRow');
                 var featureWarning = false;
                 for (var i = 0; i < features.length; i++) {
-                    var index = $(features[i]).attr('data-index');
+                    index = $(features[i]).attr('data-index');
 
                     var name = $(`#featureName_${index}`).val();
                     var description = $(`#featureDesc_${index}`).val();
@@ -375,17 +416,16 @@
                             description: description,
                             cost: cost.replace(new RegExp(',', 'g'), '')
                         });
-                    }
-                    else
+                    } else
                         featureWarning = true;
                 }
-                if(featureWarning)
+                if (featureWarning)
                     warning += '<li>بعضی از امکانات شما یا اسم ندارند یا قیمت . در این صورت ثبت نمی شوند.</li>';
 
                 var discounts = $('.discountrow');
                 var discountWarning = false;
-                for (var i = 0; i < discounts.length; i++) {
-                    var index = $(discounts[i]).attr('data-index');
+                for (i = 0; i < discounts.length; i++) {
+                    index = $(discounts[i]).attr('data-index');
 
                     var disCountFrom = $(`#disCountFrom_${index}`).val();
                     var disCountTo = $(`#disCountTo_${index}`).val();
@@ -397,32 +437,29 @@
                             max: disCountTo,
                             discount: discount
                         });
-                    }
-                    else
+                    } else
                         discountWarning = true;
                 }
 
-                if(discountWarning)
+                if (discountWarning)
                     warning += '<li>بعضی از تخفیف های گروهی بازه و درصد تخفیف ندارند . در این صورت ثبت نمی شوند.</li>';
 
-                if(!(storeData.sDiscountDate.trim().length == 0 && storeData.eDiscountDate.trim().length == 0 && storeData.disCountReason > 0)) {
+                if (!(storeData.sDiscountDate.trim().length != 0 && storeData.eDiscountDate.trim().length != 0 && parseInt(storeData.disCountReason) > 0)) {
                     warning += '<li>اطالاعات تخفیف مناسبتی شما ناقص است و ذخیره نمی شود.</li>';
                     storeData.sDiscountDate = '';
                     storeData.eDiscountDate = '';
                     storeData.disCountReason = '';
                 }
 
-
-                if(warning == '')
+                if (warning == '' && _mainStore)
                     doSaveInfos();
+                else if(_mainStore == false)
+                    localStorage.setItem('stageFourTourCreation_{{$tour->id}}', JSON.stringify(storeData));
                 else
                     openWarning(`<ul>${warning}</ul>`, doSaveInfos, 'مشکلی نیست');
-
             }
             else
                 openErrorAlert(`<ul>${errorText}</ul>`);
-
-            console.log(storeData);
 
         }
 
@@ -439,10 +476,22 @@
                 },
                 complete: closeLoading,
                 success: response => {
-                    if(response.status == 'ok')
-                        location.href = '{{route("tour.create.stage.five")}}';
+                    if(response.status == 'ok'){
+                        localStorage.removeItem('stageFourTourCreation_{{$tour->id}}');
+                        location.href = '{{route("tour.create.stage.five", ['id' => $tour->id])}}';
+                    }
                 }
             })
         }
+
+        function doLastUpdate(){
+            storeData = JSON.parse(lastData);
+            fillInputs();
+        }
+
+        var lastData = localStorage.getItem('stageFourTourCreation_{{$tour->id}}');
+        if(!(lastData == false || lastData == null))
+            openWarning('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+        setInterval(() => checkInput(false), 5000);
     </script>
 @endsection

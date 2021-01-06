@@ -57,8 +57,6 @@
 
     @include('layouts.placeHeader')
 
-    @include('pages.tour.create.tourCreateHeader', ['createTourStep' => 3, 'createTourHeader' => 'اطلاعات تور'])
-
     @yield('body')
 
     @include('layouts.footer.layoutFooter')

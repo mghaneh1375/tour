@@ -1,4 +1,4 @@
-@extends('pages.tour.create.createTourLayout')
+@extends('pages.tour.create.layout.createTour_Layout')
 
 @section('head')
     <style>
@@ -18,6 +18,9 @@
 @endsection
 
 @section('body')
+
+    @include('pages.tour.create.layout.createTour_Header', ['createTourStep' => 1])
+
     <form id="form" method="post" action="{{route('tour.create.stage.one.store')}}" autocomplete="off">
         {!! csrf_field() !!}
 
@@ -34,9 +37,9 @@
                         <input id="tourName" class="inputBoxInput" type="text" name="name" placeholder="فارسی" value="{{isset($tour->name) ? $tour->name : ''}}" required>
                     </div>
                 </div>
-                <span class="inboxHelpSubtitle">
-                            با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.
-                        </span>
+                <div class="inboxHelpSubtitle" style="width: 100%;">
+                    با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.
+                </div>
                 <div class="InlineTourInputBoxesMainDiv">
                     <div class="inputBoxGeneralInfo inputBoxTour InlineTourInputBoxes" id="tourOriginInputBox">
                         <div class="inputBoxTextGeneralInfo inputBoxText">
@@ -63,18 +66,16 @@
                     </div>
                 </div>
                 <div>
-                    <input type="checkbox" id="sameSrcDestIput" onchange="srcDest()"/>
-                    <label for="sameSrcDestIput">
+                    <input type="checkbox" id="sameSrcDestInput" name="sameSrcDestInput" onchange="srcDest()" value="1"/>
+                    <label for="sameSrcDestInput">
                         <span></span>
+                        تور من شهرگردی است و مبدأ و مقصد آن یکی است.
                     </label>
-                    <span id="cityTourCheckBoxLabel">تور من شهرگردی است و مبدأ و مقصد آن یکی است.</span>
                 </div>
             </div>
 
             <div class="menu ui_container whiteBox">
-                <div class="boxTitlesTourCreation">
-                    <span>روزهای تور</span>
-                </div>
+                <div class="boxTitlesTourCreation">روزهای تور</div>
                 <div class="inboxHelpSubtitle">تعداد روز و شب های تور خود را مشخص کنید.</div>
                 <div class="row" style="display: flex; width: 100%">
                     <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right" style="margin-left: 10px; margin-right: 15px;">
@@ -84,7 +85,7 @@
                                 <span>*</span>
                             </div>
                         </div>
-                        <input name="tourDay" id="tourDay" class="inputBoxInput" type="number" min="0"/>
+                        <input name="tourDay" id="tourDay" class="inputBoxInput" type="text"/>
                     </div>
                     <div class="inputBoxTour col-xs-3 relative-position float-right">
                         <div class="inputBoxText" style="width: 220px;">
@@ -93,14 +94,14 @@
                                 <span>*</span>
                             </div>
                         </div>
-                        <input name="tourNight" id="tourNight" class="inputBoxInput" type="number" min="0" />
+                        <input name="tourNight" id="tourNight" class="inputBoxInput" type="text"/>
                     </div>
                 </div>
             </div>
 
             <div class="menu ui_container whiteBox">
                 <div class="boxTitlesTourCreation">نوع برگزاری</div>
-                <div class="inboxHelpSubtitle">کدام یک از موارد زیر در مورد تور شما صادق است؟</div>
+                <div class="inboxHelpSubtitle" style="width: 100%">کدام یک از موارد زیر در مورد تور شما صادق است؟</div>
 
                 <input id="c53" type="radio" name="tourTimeKind" value="notSameTime" onchange="changeTime(this.value)"/>
                 <label for="c53" class="tourBasicKindsCheckbox">
@@ -178,10 +179,7 @@
 
                 {{--not same time--}}
                 <div id="notSameTime" style="display: none;">
-                    <div class="inboxHelpSubtitle">
-                        تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.
-                    </div>
-
+                    <div class="inboxHelpSubtitle">تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.</div>
                     <div id="notSameTimeCalendarDiv" style="display: flex; flex-direction: column">
 
                         <div id="calendar_1">
@@ -228,7 +226,6 @@
 
             <div class="menu ui_container whiteBox">
                 <div class="boxTitlesTourCreation">ظرفیت</div>
-
                 <div>
                     <div class="col-xs-4 float-right">
                         <div class="inputBoxTour">
@@ -238,7 +235,7 @@
                                     <span>*</span>
                                 </div>
                             </div>
-                            <input class="inputBoxInput" type="number" name="minCapacity" id="minCapacity" placeholder="تعداد" min="0">
+                            <input class="inputBoxInput" type="text" name="minCapacity" id="minCapacity" placeholder="تعداد">
                         </div>
                     </div>
                     <div class="col-xs-4 float-right">
@@ -249,7 +246,7 @@
                                     <span>*</span>
                                 </div>
                             </div>
-                            <input class="inputBoxInput" type="number" name="maxCapacity" id="maxCapacity" placeholder="تعداد" min="0">
+                            <input class="inputBoxInput" type="text" name="maxCapacity" id="maxCapacity" placeholder="تعداد">
                         </div>
                     </div>
                     <div class="fullwidthDiv">
@@ -269,7 +266,7 @@
                             <input type="radio" name="private" value="1" id="option2" autocomplete="off" onchange="changeTourKind('private')">بلی
                         </label>
                     </div>
-                    <div class="inboxHelpSubtitle" style="margin-bottom: 20px;">تورهای خصوصی برای گروه محدودی از مخاطبان برگزار می‌شوند و مخاطبا نمی‌توانند تجربه‌ای خصوصی داشته باشند.</div>
+                    <div class="inboxHelpSubtitle" style="margin-bottom: 20px; width: 100%">تورهای خصوصی برای گروه محدودی از مخاطبان برگزار می‌شوند و مخاطبا نمی‌توانند تجربه‌ای خصوصی داشته باشند.</div>
                 </div>
             </div>
 
@@ -537,6 +534,9 @@
             $('#srcCityId').val(_id);
             $('#addCityModal').modal('hide');
             $(_element).parent().empty();
+
+            if(document.getElementById('sameSrcDestInput').checked)
+                $('#destPlaceId').val(_id);
         }
 
         function chooseDestModal(){
@@ -577,7 +577,7 @@
         }
 
         function srcDest(){
-            var value = document.getElementById('sameSrcDestIput').checked;
+            var value = document.getElementById('sameSrcDestInput').checked;
             document.getElementById('destDiv').style.display = value ? 'none' : 'inline-block';
             document.getElementById('destPlaceId').value = value ? document.getElementById('srcCityId').value : 0;
             document.getElementById('destKind').value = value ? 'city' : 'tabiatgardy';
@@ -593,10 +593,10 @@
             var tourName = $('#tourName').val();
             var srcCityId = $('#srcCityId').val();
             var destPlaceId = $('#destPlaceId').val();
-            var tourDay = $('#tourDay').val();
-            var tourNight = $('#tourNight').val();
-            var minCapacity = $('#minCapacity').val();
-            var maxCapacity = $('#maxCapacity').val();
+            var tourDay = parseInt($('#tourDay').val());
+            var tourNight = parseInt($('#tourNight').val());
+            var minCapacity = parseInt($('#minCapacity').val());
+            var maxCapacity = parseInt($('#maxCapacity').val());
             var tourTimeKind = $('input[name="tourTimeKind"]:checked').val();
 
             var anyCapacity = $('#anyCapacity').prop('checked');
@@ -604,40 +604,26 @@
             var error = false;
             var errorText = '';
 
-            if(tourName.trim().length < 2){
+            if(tourName.trim().length < 2)
                 errorText += '<li>نام تور خود را مشخص کنید.</li>';
-                error = true;
-            }
 
-            if(!(srcCityId > 1)){
+            if(!(srcCityId >= 1))
                 errorText += '<li>مبدا تور خود را مشخص کنید.</li>';
-                error = true;
-            }
 
-            if(!(destPlaceId > 1)){
+            if(!(destPlaceId >= 1))
                 errorText += '<li>مقصد تور خود را مشخص کنید.</li>';
-                error = true;
-            }
 
-            if(!(tourDay > 0)){
+            if(!( Number.isInteger(tourDay) && tourDay >= 0))
                 errorText += '<li>تعداد روزهای تور خود را مشخص کنید.</li>';
-                error = true;
-            }
 
-            if(!(tourNight > 0)){
-                errorText += '<li>تعداد روزهای تور خود را مشخص کنید.</li>';
-                error = true;
-            }
+            if(!( Number.isInteger(tourNight) && tourNight >= 0))
+                errorText += '<li>تعداد شب های تور خود را مشخص کنید.</li>';
 
             if(!anyCapacity) {
-                if (!(minCapacity > 0)) {
+                if (!( Number.isInteger(minCapacity) && minCapacity >= 0))
                     errorText += '<li>حداقل ظرفیت تور خود را مشخص کنید.</li>';
-                    error = true;
-                }
-                if (!(maxCapacity > 0)) {
+                if (!( Number.isInteger(maxCapacity) && maxCapacity >= 0))
                     errorText += '<li>حداکثر ظرفیت تور خود را مشخص کنید.</li>';
-                    error = true;
-                }
             }
 
             if(tourTimeKind == 'notSameTime'){
@@ -656,12 +642,10 @@
                 eDate = $('#eDate').val();
             }
 
-            if(sDate.trim().length == 0 || eDate.trim().length == 0){
+            if(sDate.trim().length == 0 || eDate.trim().length == 0)
                 errorText += '<li>تاریخ تور را مشخص کنید.</li>';
-                error = true;
-            }
 
-            if(error){
+            if(errorText != ''){
                 errorText = `<ul class="errorList">${errorText}</ul>`;
                 openErrorAlert(errorText);
             }

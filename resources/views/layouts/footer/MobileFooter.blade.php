@@ -219,12 +219,6 @@
                         </div>
                     </div>
                     <div id="EATERY_FILTERS_CONT" class="eatery_filters">
-                        {{--<div class="prw_rup prw_restaurants_restaurant_filters">--}}
-                        {{--<div id="jfy_filter_bar_establishmentTypeFilters" class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">--}}
-                        {{--<div class="filterGroupTitle">{{__('جستجو‌ی نام')}}</div>--}}
-                        {{--<input id="p_nameSearch" class="hl_inputBox" placeholder="{{__('جستجو کنید')}}" onchange="nameFilterFunc(this.value)">--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                         @if($kindPlace->id == 11)
                             <div class="prw_rup prw_restaurants_restaurant_filters">
                                 <div id="jfy_filter_bar_establishmentTypeFilters" class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">
@@ -244,68 +238,6 @@
                             </script>
                         @endif
 
-{{--                        <div class="prw_rup prw_restaurants_restaurant_filters">--}}
-{{--                            <div id="jfy_filter_bar_establishmentTypeFilters"--}}
-{{--                                 class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">--}}
-{{--                                <div class="filterGroupTitle">{{__('امتیاز کاربران')}}</div>--}}
-{{--                                <div class="filterContent ui_label_group inline" style="font-size: 12px;">--}}
-{{--                                    <div class="filterItem lhrFilter filter selected squerRadioInputSec">--}}
-{{--                                        <input onclick="rateFilterFunc(5, this)" type="radio" name="AVGrate" id="p_c5" value="5"/>--}}
-{{--                                        <label for="p_c5" class="inputRadionSquer"></label>--}}
-{{--                                        <div class="rating-widget" style="font-size: 1.2em; display: inline-block">--}}
-{{--                                            <div class="prw_rup prw_common_location_rating_simple">--}}
-{{--                                                <span class="ui_bubble_rating bubble_50"></span>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="filterItem lhrFilter filter selected squerRadioInputSec">--}}
-{{--                                        <input onclick="rateFilterFunc(4, this)" type="radio" name="AVGrate" id="p_c4" value="4"/>--}}
-{{--                                        <label for="p_c4" class="inputRadionSquer"></label>--}}
-{{--                                        <div class="rating-widget"--}}
-{{--                                             style="font-size: 1.2em; display: inline-block">--}}
-{{--                                            <div class="prw_rup prw_common_location_rating_simple">--}}
-{{--                                                <span class="ui_bubble_rating bubble_40"></span>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <span> {{__('به بالا')}}</span>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="filterItem lhrFilter filter selected squerRadioInputSec">--}}
-{{--                                        <input onclick="rateFilterFunc(3, this)" type="radio" name="AVGrate" id="p_c3" value="3"/>--}}
-{{--                                        <label for="p_c3" class="inputRadionSquer"></label>--}}
-{{--                                        <div class="rating-widget"--}}
-{{--                                             style="font-size: 1.2em; display: inline-block">--}}
-{{--                                            <div class="prw_rup prw_common_location_rating_simple">--}}
-{{--                                                <span class="ui_bubble_rating bubble_30"></span>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <span> {{__('به بالا')}}</span>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="filterItem lhrFilter filter selected squerRadioInputSec">--}}
-{{--                                        <input onclick="rateFilterFunc(2, this)" type="radio" name="AVGrate" id="p_c2" value="2"/>--}}
-{{--                                        <label for="p_c2" class="inputRadionSquer"></label>--}}
-{{--                                        <div class="rating-widget"--}}
-{{--                                             style="font-size: 1.2em; display: inline-block">--}}
-{{--                                            <div class="prw_rup prw_common_location_rating_simple">--}}
-{{--                                                <span class="ui_bubble_rating bubble_20"></span>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <span> {{__('به بالا')}}</span>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="filterItem lhrFilter filter selected squerRadioInputSec">--}}
-{{--                                        <input onclick="rateFilterFunc(1, this)" type="radio" name="AVGrate" id="p_c1" value="1"/>--}}
-{{--                                        <label for="p_c1" class="inputRadionSquer"></label>--}}
-{{--                                        <div class="rating-widget"--}}
-{{--                                             style="font-size: 1.2em; display: inline-block">--}}
-{{--                                            <div class="prw_rup prw_common_location_rating_simple">--}}
-{{--                                                <span class="ui_bubble_rating bubble_10"></span>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <span> {{__('به بالا')}}</span>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
                         @if($kindPlace->id == 4)
                             @include('pages.placeList.filters.hotelFilters')
                         @elseif($kindPlace->id == 10)
@@ -319,10 +251,6 @@
                                 <div class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">
                                     <div class="filterHeaderWithClose">
                                         <div class="filterGroupTitle">{{$feature->name}}</div>
-{{--                                        @if(count($feature->subFeat) > 5)--}}
-{{--                                            <span onclick="showMoreItems({{$feature->id}})" class="moreItems{{$feature->id}} moreItems">{{__('نمایش کامل فیلترها')}}</span>--}}
-{{--                                            <span onclick="showLessItems({{$feature->id}})" class="lessItems hidden extraItem{{$feature->id}} moreItems">{{__('پنهان سازی فیلتر‌ها')}}</span>--}}
-{{--                                        @endif--}}
                                     </div>
 
                                     <div class="filterContent ui_label_group inline">
@@ -336,17 +264,6 @@
                                             </div>
                                         @endfor
 
-{{--                                        @if(count($feature->subFeat) > 5)--}}
-{{--                                            @for($i = 5; $i < count($feature->subFeat); $i++)--}}
-{{--                                                <div class="filterItem lhrFilter filter hidden extraItem{{$feature->id}} squerRadioInputSec">--}}
-{{--                                                    <input onclick="doFilterFeature({{$feature->subFeat[$i]->id}})" type="checkbox" id="p_feat{{$feature->subFeat[$i]->id}}" value="{{$feature->subFeat[$i]->name}}"/>--}}
-{{--                                                    <label for="p_feat{{$feature->subFeat[$i]->id}}" class="inputRadionSquer">--}}
-{{--                                                        <span class="labelBox"></span>--}}
-{{--                                                        <span class="name">{{$feature->subFeat[$i]->name}}</span>--}}
-{{--                                                    </label>--}}
-{{--                                                </div>--}}
-{{--                                            @endfor--}}
-{{--                                        @endif--}}
                                     </div>
                                 </div>
                             </div>
@@ -359,222 +276,61 @@
     @endif
 
     <div id="specialMenuMobileFooter" class="modalBlackBack closeWithClick footerModals" style="z-index: 1050;">
-{{--        @if(Request::is('safarnameh/*') || Request::is('safarnameh'))--}}
-{{--            <div class="mainPopUp rightPopUp" style="padding: 7px">--}}
-{{--                <div class="lp_ar_searchTitle">{{__('جستجو خود را محدودتر کنید')}}</div>--}}
-
-{{--                <div class="lp_ar_filters">--}}
-{{--                    @if(Request::is('safarnameh/list/*'))--}}
-{{--                        <div class="lp_ar_eachFilters lp_ar_rightFilters lp_ar_selectedMenu" onclick="lp_selectArticleFilter('lp_ar_rightFilters' ,this)" style="width: 100%; border-left: none">{{__('دسته‌بندی مطالب')}}</div>--}}
-{{--                    @else--}}
-{{--                        <div class="lp_ar_eachFilters lp_ar_rightFilters lp_ar_selectedMenu" onclick="lp_selectArticleFilter('lp_ar_rightFilters' ,this)">{{__('دسته‌بندی مطالب')}}</div>--}}
-{{--                        <div class="lp_ar_eachFilters" onclick="lp_selectArticleFilter('lp_ar_leftFilters' ,this)">{{__('مطالب مشابه')}}</div>--}}
-{{--                    @endif--}}
-{{--                </div>--}}
-
-{{--                <div id="lp_ar_rightFilters" class="lp_ar_contentOfFilters">--}}
-{{--                    <div class="gnContentsCategory footerSafarnmaehCategoryRow">--}}
-{{--                        <div class="mainSafarnamehCategory">--}}
-{{--                            @foreach($category as $cat)--}}
-{{--                                @if(count($cat->subCategory) > 0)--}}
-{{--                                    <div class="safarnamehRow" onclick="showSafarnamehSubCategory({{$cat->id}})">--}}
-{{--                                        <div class="next leftArrowIcon"></div>--}}
-{{--                                        <div class="name">{{$cat->name}}</div>--}}
-{{--                                    </div>--}}
-{{--                                @else--}}
-{{--                                    <a href="{{route('safarnameh.list', ['type' => 'category', 'search' => $cat->name])}}" class="safarnamehRow">--}}
-{{--                                        <div class="name">{{$cat->name}}</div>--}}
-{{--                                    </a>--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
-{{--                        </div>--}}
-{{--                        <div class="subSafarnamehCategory">--}}
-{{--                            @foreach($category as $cat)--}}
-{{--                                <div id="subSafarnamehCategory_{{$cat->id}}" class="subSec">--}}
-{{--                                    <div class="safarnamehRow back" onclick="backToSafarnamehCategoryFooter(this)">--}}
-{{--                                        <div class="name" style="font-weight: bold">بازگشت</div>--}}
-{{--                                        <div class="leftArrowIcon" style="color: white; font-size: 30px; line-height: 10px; width: 20px"></div>--}}
-{{--                                    </div>--}}
-{{--                                    @foreach($cat->subCategory as $item)--}}
-{{--                                        <a href="{{route('safarnameh.list', ['type' => 'category', 'search' => $item->name])}}" class="safarnamehRow">--}}
-{{--                                            <div class="name">{{$item->name}}</div>--}}
-{{--                                        </a>--}}
-{{--                                    @endforeach--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="safarnamehSearchRowFooter">--}}
-{{--                        <div class="header">--}}
-{{--                            <div class="title">جستجو بر اساس</div>--}}
-{{--                            <div class="tab selected" onclick="showSafarnamehFooterSearch(this, 'place')">مکان</div>--}}
-{{--                            <div class="tab" onclick="showSafarnamehFooterSearch(this, 'text')">عبارت</div>--}}
-{{--                        </div>--}}
-{{--                        <div class="inputs">--}}
-{{--                            <input type="text"--}}
-{{--                                   id="safarnamehPlaceSearchFooter"--}}
-{{--                                   class="safarnamehInput searchCityInArticleInput"--}}
-{{--                                   placeholder="نام محل را وارد نمایید"--}}
-{{--                                   readonly> --}}{{--open in safarnamehLayout.blade.php--}}
-{{--                            <div id="safarnamehContentSearchFooter" style="display: none; background-color: #f2f2f2; position: relative; margin-top: 10px;">--}}
-{{--                                <input type="text"--}}
-{{--                                       id="safarnamehContentSF"--}}
-{{--                                       class="safarnamehInput searchInputElemsText"--}}
-{{--                                       placeholder="عبارت مورد نظر را وارد نمایید"--}}
-{{--                                       style="margin: 0;">--}}
-{{--                                <button class="iconFamily searchIcon" onclick="searchInArticle('safarnamehContentSF')// open in safarnamehLayout.blade.php"></button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
-{{--                --}}{{--left menu--}}
-{{--                <div id="lp_ar_leftFilters" class="lp_ar_contentOfFilters hidden">--}}
-{{--                    @if(isset($similarSafarnameh))--}}
-{{--                        @foreach($similarSafarnameh as $item)--}}
-{{--                            <div class="content-2col">--}}
-{{--                                <div class="im-entry-thumb" style="background-image: url('{{$item->pic}}'); background-size: 100% 100%;">--}}
-{{--                                    <div class="im-entry-header">--}}
-{{--                                        <div class="im-entry-category">--}}
-{{--                                            <div class="iranomag-meta clearfix">--}}
-{{--                                                <div class="cat-links im-meta-item">--}}
-{{--                                                    <a class="im-catlink-color-2079" href="{{route('safarnameh.list', ['type' => 'category', 'search' => $item->category])}}">{{$item->category}}</a>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <a href="{{$item->url}}" rel="bookmark">--}}
-{{--                                            <h1 class="im-entry-title" style="color: white;">--}}
-{{--                                                {{$item->title}}--}}
-{{--                                            </h1>--}}
-{{--                                        </a>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="im-entry">--}}
-{{--                                    <div class="im-entry-footer">--}}
-{{--                                        <div class="iranomag-meta clearfix">--}}
-{{--                                            <div class="posted-on im-meta-item">--}}
-{{--                                                <span class="entry-date published updated">{{$item->date}}</span>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="comments-link im-meta-item">--}}
-{{--                                                <i class="fa fa-comment-o"></i>{{$item->msgs}}--}}
-{{--                                            </div>--}}
-{{--                                            <div class="author vcard im-meta-item">--}}
-{{--                                                <i class="fa fa-user"></i>--}}
-{{--                                                {{$item->username}}--}}
-{{--                                            </div>--}}
-{{--                                            <div class="post-views im-meta-item">--}}
-{{--                                                <i class="fa fa-eye"></i>{{$item->seen}}--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        @endforeach--}}
-{{--                    @elseif(isset($mostSeenPost))--}}
-{{--                        <div class="widget widget_impv_display_widget ">--}}
-{{--                            <div class="widget-head"><strong class="widget-title">--}}
-{{--                                    {{__('پربازدیدترین ها')}}--}}
-{{--                                </strong>--}}
-{{--                                <div class="widget-head-bar"></div>--}}
-{{--                                <div class="widget-head-line"></div>--}}
-{{--                            </div>--}}
-{{--                            <div id="impv_display_widget-4-tab2" class="widget_pop_body">--}}
-{{--                                <ul class="popular_by_views_list">--}}
-{{--                                    @foreach($mostSeenPost as $post)--}}
-{{--                                        <li class="im-widget clearfix">--}}
-{{--                                            <figure class="im-widget-thumb im-widget-thumb_rightSide">--}}
-{{--                                                <a  href="{{route('safarnameh.show', ['id' => $post->id])}}" title="{{$post->title}}">--}}
-{{--                                                    <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{$post->pic}}" alt="{{$post->keyword}}"/>--}}
-{{--                                                </a>--}}
-{{--                                            </figure>--}}
-{{--                                            <div class="im-widget-entry im-widget-entry_rightSide">--}}
-{{--                                                <header class="im-widget-entry-header">--}}
-{{--                                                    <h4 class='im-widget-entry-title'>--}}
-{{--                                                        <a  href="{{route('article.show', ['slug' => $post->slug])}}" title="{{$post->title}}">--}}
-{{--                                                            {{$post->title}}--}}
-{{--                                                        </a>--}}
-{{--                                                    </h4>--}}
-{{--                                                </header>--}}
-{{--                                                <p class="im-widget-entry-footer">--}}
-{{--                                                <div class="iranomag-meta clearfix">--}}
-{{--                                                    <div class="posted-on im-meta-item">--}}
-{{--                                                                <span class="entry-date published updated">--}}
-{{--                                                                    {{$post->date}}--}}
-{{--                                                                </span>--}}
-{{--                                                    </div>--}}
-{{--                                                    <div class="post-views im-meta-item">--}}
-{{--                                                        <i class="fa fa-eye"></i>--}}
-{{--                                                        {{$post->seen}}--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                                </p>--}}
-{{--                                            </div>--}}
-{{--                                        </li>--}}
-{{--                                    @endforeach--}}
-{{--                                </ul>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        @else--}}
-            <div class="mainPopUp rightPopUp recentViewLeftBar" style="overflow: hidden; transition: .3s;">
-                <div class="headerSearchBar">
-                    <span class="headerSearchIcon iconFamily footerSearchBar" style="background: var(--koochita-green); margin-left: 6px;" onclick="openMainSearch(0) // in mainSearch.blade.php">
-                        <span class="icc searchIcon" style="word-spacing: -4px;">به کجا می روید؟</span>
-                    </span>
-                    <span class="headerSearchIcon footerSearchBar" style="background: var(--koochita-red);">
-                        <a href="{{route('myLocation')}}" class="icc addressBarIcon" style="word-spacing: -4px;">اطراف من</a>
-                    </span>
-                </div>
-                <div style="height: calc(100% - 170px); overflow-y: auto">
-                    <div id="specRowsPage" class="lp_others_content specPages" style="position: relative;">
-                        <div class="specialFooterRow"  onclick="goToLanding()">
-                            <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 23px; top: 18px; right: 14px;">
-                            <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/landing.webp')}}" class="resizeImgClass" style="width: 100%;">
-                        </div>
-                        <div class="specialFooterRow" onclick="goToCookFestival()">
-                            <img alt="koochitaCook" src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" class="resizeImgClass">
-                        </div>
-                        <div class="specialFooterRow" onclick="writeNewSafaranmeh()">
-                            <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/nSafarnameh.webp')}}" class="resizeImgClass">
-                        </div>
-                        <div class="specialFooterRow" onclick="$('#campingHeader').hide(); openUploadPost()">
-                            <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/nAxasi.webp')}}" class="resizeImgClass">
-                        </div>
+        <div class="mainPopUp rightPopUp recentViewLeftBar" style="overflow: hidden; transition: .3s;">
+            <div class="headerSearchBar">
+                <span class="headerSearchIcon iconFamily footerSearchBar" style="background: var(--koochita-green); margin-left: 6px;" onclick="openMainSearch(0) // in mainSearch.blade.php">
+                    <span class="icc searchIcon" style="word-spacing: -4px;">به کجا می روید؟</span>
+                </span>
+                <span class="headerSearchIcon footerSearchBar" style="background: var(--koochita-red);">
+                    <a href="{{route('myLocation')}}" class="icc addressBarIcon" style="word-spacing: -4px;">اطراف من</a>
+                </span>
+            </div>
+            <div style="height: calc(100% - 170px); overflow-y: auto">
+                <div id="specRowsPage" class="lp_others_content specPages" style="position: relative;">
+                    <div class="specialFooterRow"  onclick="goToLanding()">
+                        <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 23px; top: 18px; right: 14px;">
+                        <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/landing.webp')}}" class="resizeImgClass" style="width: 100%;">
                     </div>
-
-                    <div id="calendarRowPage" class="lp_others_content specPages hidden" style="position: relative;">
-                        <div id="showMyCalTourism"></div>
-                        <div id="showMyCalTourism1"></div>
-                        @include('layouts.calendar')
+                    <div class="specialFooterRow" onclick="goToCookFestival()">
+                        <img alt="koochitaCook" src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" class="resizeImgClass">
                     </div>
-
-                    <div id="translateRowsPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
+                    <div class="specialFooterRow" onclick="writeNewSafaranmeh()">
+                        <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/nSafarnameh.webp')}}" class="resizeImgClass">
+                    </div>
+                    <div class="specialFooterRow" onclick="$('#campingHeader').hide(); openUploadPost()">
+                        <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/nAxasi.webp')}}" class="resizeImgClass">
+                    </div>
                 </div>
 
-                <div class="lp_phoneMenuBar">
-                    <div class="lp_eachMenu specTabsFot" style="flex-direction: column;" onclick="specialMobileFooter('calendarRowPage', this)">
-                        <div class="lp_icons calendarIconA"></div>
-                        <div>{{__('تقویم گردشگری')}}</div>
-                    </div>
-                    <div class="lp_eachMenu specTabsFot lp_selectedMenu" onclick="specialMobileFooter('specRowsPage', this)">
-                        <div class="lp_icons medalsIcon"></div>
-                        <div>{{__('مسابقات')}}</div>
-                    </div>
-                    <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
-                        <div class="lp_icons earthIcon"></div>
-                        <div>{{__('ترجمه')}}</div>
-                        <span class="newMsgMainFooterCount newAlertNumber hidden" style="left: 0; top: 5px;">0</span>
-                    </div>
-                    <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
-                        <div class="lp_icons tvIcon"></div>
-                        <div>{{__('ببینیم')}}</div>
-                    </div>
+                <div id="calendarRowPage" class="lp_others_content specPages hidden" style="position: relative;">
+                    <div id="showMyCalTourism"></div>
+                    <div id="showMyCalTourism1"></div>
+                    @include('layouts.calendar')
+                </div>
+
+                <div id="translateRowsPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
+            </div>
+
+            <div class="lp_phoneMenuBar">
+                <div class="lp_eachMenu specTabsFot" style="flex-direction: column;" onclick="specialMobileFooter('calendarRowPage', this)">
+                    <div class="lp_icons calendarIconA"></div>
+                    <div>{{__('تقویم گردشگری')}}</div>
+                </div>
+                <div class="lp_eachMenu specTabsFot lp_selectedMenu" onclick="specialMobileFooter('specRowsPage', this)">
+                    <div class="lp_icons medalsIcon"></div>
+                    <div>{{__('مسابقات')}}</div>
+                </div>
+                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
+                    <div class="lp_icons earthIcon"></div>
+                    <div>{{__('ترجمه')}}</div>
+                    <span class="newMsgMainFooterCount newAlertNumber hidden" style="left: 0; top: 5px;">0</span>
+                </div>
+                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
+                    <div class="lp_icons tvIcon"></div>
+                    <div>{{__('ببینیم')}}</div>
                 </div>
             </div>
-{{--        @endif--}}
+        </div>
     </div>
 
     <div id="otherPossibilities" class="modalBlackBack closeWithClick footerModals" style="z-index: 1050;">

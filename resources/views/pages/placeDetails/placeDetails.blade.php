@@ -213,18 +213,14 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         </div>
     </div>
 
-    <div class="setScoreForThisPlaceComeUp hidden hideOnScreen" onclick="openRateBoxForPlace()">
-        به  {{$place->name}} امتیاز دهید
-    </div>
+    <div class="setScoreForThisPlaceComeUp hidden hideOnScreen" onclick="openRateBoxForPlace()">به {{$place->name}} امتیاز دهید</div>
 
     <div id="userRateToPlaceModal" class="userRateToPlaceModal modalBlackBack fullCenter">
         <div class="modalBody">
             <div class="topIcon">
                 <img src="{{URL::asset('images/icons/koochitaPlaceRate.svg?v=1')}}" style="width: 88px">
             </div>
-            <div class="header">
-                امتیاز شما به {{$place->name}} چیست؟
-            </div>
+            <div class="header">امتیاز شما به {{$place->name}} چیست؟</div>
             <div class="body">
                 <div class="emptyStarRating ratingStar1" data-star="1" data-selected="0" onclick="ratingToPlace(1)"></div>
                 <div class="emptyStarRating ratingStar2" data-star="2" data-selected="0" onclick="ratingToPlace(2)"></div>
@@ -403,7 +399,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                 <span class="ui_icon camera">&nbsp;</span>
                                                 عکس‌های سایت - {{count($sitePics)}}
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -1311,7 +1306,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 return;
 
             //additionalData must be json format
-            additionalData = {
+            var additionalData = {
                 'placeId': '{{$place->id}}',
                 'kindPlaceId': '{{$kindPlaceId}}'
             };

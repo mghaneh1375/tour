@@ -1,4 +1,4 @@
-@extends('pages.tour.create.createTourLayout')
+@extends('pages.tour.create.layout.createTour_Layout')
 
 @section('head')
     <style>
@@ -35,6 +35,8 @@
 
 @section('body')
 
+    @include('pages.tour.create.layout.createTour_Header', ['createTourStep' => 2])
+
     <div class="ui_container">
         <div class="menu ui_container whiteBox">
             @for($i = 0; $i < $tour->day; $i++)
@@ -54,6 +56,7 @@
                                 <div class="hotelInfo">
                                     <div id="answerForSubmitLastHotel_{{$i}}" class="chooseLastDay hidden">
                                         <input type="hidden" id="lastHotelId_{{$i}}" >
+                                        <input type="hidden" id="lastHotelKindPlaceId_{{$i}}" >
                                         <button type="button" class="confirm" onclick="submitThisHotel({{$i}})">تایید اقامتگاه</button>
                                         <button type="button" class="change" onclick="chooseHotel({{$i}})">تغییر اقامتگاه</button>
                                     </div>
@@ -222,15 +225,26 @@
             <div class="modal-content">
                 <div class="modal-body" style="direction: rtl">
                     <div class="fullwidthDiv">
-                        <div class="addPlaceGeneralInfoTitleTourCreation">هتل مورد نظر خود را اضافه کنید</div>
+                        <div class="addPlaceGeneralInfoTitleTourCreation">هتل و یا بوم گردی مورد نظر خود را اضافه کنید</div>
                         <button type="button" class="closee" data-dismiss="modal" style="border: none; background: none; float: left">&times;</button>
                     </div>
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="placeNameAddingPlaceInputDiv inputBoxTour col-xs-12 relative-position">
-                                <div class="inputBoxText">
-                                    <div> نام هتل</div>
+
+                        </div>
+                        <div class="row">
+                            <div class="inputBoxTour col-xs-3 relative-position mainClassificationOfPlaceInputDiv" style="float: right">
+                                <div class="inputBoxText" style="min-width: 75px;">نوع اقامتگاه</div>
+                                <div class="select-side">
+                                    <i class="glyphicon glyphicon-triangle-bottom"></i>
                                 </div>
+                                <select id="hotelKind" class="inputBoxInput styled-select text-align-right">
+                                    <option value="4">هتل</option>
+                                    <option value="12">بوم گردی</option>
+                                </select>
+                            </div>
+                            <div class="placeNameAddingPlaceInputDiv inputBoxTour col-xs-8 relative-position">
+                                <div class="inputBoxText"> نام اقامتگاه</div>
                                 <input type="hidden" id="dayForHotelModal">
                                 <input id="inputSearchHotel" class="inputBoxInput text-align-right" type="text" placeholder="انتخاب کنید" onkeyup="searchForHotel(this)">
                                 <div class="searchResult"></div>
@@ -281,6 +295,12 @@
         for(var i = 0; i < dateCount; i++)
             planDate[i] = {
                 hotelId: 0,
+                hotelKindPlaceId: 0,
+                hotelInfo: {
+                    name: '',
+                    pic: '',
+                    stateAndCity: ''
+                },
                 description: '',
                 events: []
             };
@@ -438,7 +458,7 @@
             planDate[openedDateEvent].events.push(datas);
 
             searchEventPlaceKind = null;
-            addNewEventToDayCalendar();
+            addNewEventToDayCalendar(openedDateEvent);
             closeMyModal('addNewEventModal');
         }
 
@@ -522,7 +542,7 @@
             event.eTime = endTime;
             planDate[day].events[index] = event;
 
-            addNewEventToDayCalendar();
+            addNewEventToDayCalendar(openedDateEvent);
             closeMyModal('editEventModal');
         }
 
@@ -533,10 +553,10 @@
             planDate[day].events.splice(index, 1);
             closeMyModal('editEventModal');
         }
-        function addNewEventToDayCalendar(){
+        function addNewEventToDayCalendar(_day){
             var allDay = 24 * 60;
             var text = '';
-            planDate[openedDateEvent].events.map((item, index) => {
+            planDate[_day].events.map((item, index) => {
                 var sTime = item.sTime.split(':');
                 var eTime = item.eTime.split(':');
 
@@ -547,9 +567,9 @@
                 var startPos = (sMinutes/allDay) * 100;
                 var event = eventType[item.eventIndex];
 
-                text += `<div id="detailPlan_${openedDateEvent}_${index}" class="detail" style="width: ${width}%; right: ${startPos}%; background: ${event.color}" onclick="editThisDetail(${openedDateEvent}, ${index})">${event.name}</div>`;
+                text += `<div id="detailPlan_${_day}_${index}" class="detail" style="width: ${width}%; right: ${startPos}%; background: ${event.color}" onclick="editThisDetail(${_day}, ${index})">${event.name}</div>`;
             });
-            $('#planRow_'+openedDateEvent).html(text);
+            $('#planRow_'+_day).html(text);
 
             openedDateEvent = 0;
         }
@@ -564,15 +584,17 @@
             if(ajaxProcess != null)
                 ajaxProcess.abort();
 
+            var kindPlaceId = $('#hotelKind').val();
+
             if(value.trim().length > 1){
                 ajaxProcess = $.ajax({
                     type: 'GET',
-                    url: '{{route("search.place.with.name.kindPlaceId")}}?value='+value+'&kindPlaceId=4',
+                    url: '{{route("search.place.with.name.kindPlaceId")}}?value='+value+'&kindPlaceId='+kindPlaceId,
                     success: response => {
                         if(response.status == 'ok') {
                             var text = '';
                             searchResults = response.result;
-                            searchResults.map((item, key) => text += `<div class="searchHover blue" data-index="${key}" onclick="chooseThisHotel(this)" >${item.name} در ${item.state.name} , ${item.city.name}</div>`);
+                            searchResults.map((item, key) => text += `<div class="searchHover blue" data-index="${key}" data-kindPlaceId="${kindPlaceId}" onclick="chooseThisHotel(this)" >${item.name} در ${item.state.name} , ${item.city.name}</div>`);
                             $(_element).next().html(text);
                         }
                     }
@@ -581,54 +603,61 @@
         }
         function chooseThisHotel(_element){
             var index = $(_element).attr('data-index');
+            var kindPlaceId = $(_element).attr('data-kindPlaceId');
             var day = $('#dayForHotelModal').val();
             $(_element).parent().empty();
             $('#inputSearchHotel').val('');
 
             planDate[day].hotelId = searchResults[index].id;
+            planDate[day].hotelKindPlaceId = kindPlaceId;
+            planDate[day].hotelInfo.name = searchResults[index].name;
+            planDate[day].hotelInfo.pic = searchResults[index].pic;
+            planDate[day].hotelInfo.stateAndCity = `استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`;
+            $('#addHotelModal').modal('hide');
 
-            $('#answerForSubmitLastHotel_'+day).addClass('hidden');
-            $('#hotelImgForDay_'+day).attr('src', searchResults[index].pic);
-            $('#hotelNameForDay_'+day).text(searchResults[index].name);
-            $('#hotelCityForDay_'+day).text(`استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`);
-            $('#hotelAddressForDay_'+day).text(searchResults[index].address);
+            showHotelInDay(day);
+        }
+        function showHotelInDay(_day){
+            $('#answerForSubmitLastHotel_'+_day).addClass('hidden');
+            $('#hotelImgForDay_'+_day).attr('src', planDate[_day].hotelInfo.pic);
+            $('#hotelNameForDay_'+_day).text(planDate[_day].hotelInfo.name);
+            $('#hotelCityForDay_'+_day).text(planDate[_day].hotelInfo.stateAndCity);
+            // $('#hotelAddressForDay_'+_day).text(searchResults[index].address);
 
-            for(var i = parseInt(day)+1; i < dateCount; i++){
+            for(var i = parseInt(_day)+1; i < dateCount; i++){
                 if(planDate[i].hotelId == 0) {
-                    $('#hotelImgForDay_'+i).attr('src', searchResults[index].pic);
-                    $('#hotelNameForDay_'+i).text(searchResults[index].name);
-                    $('#hotelCityForDay_'+i).text(`استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`);
-                    $('#hotelAddressForDay_'+i).text(searchResults[index].address);
+                    $('#hotelImgForDay_'+i).attr('src', planDate[_day].hotelInfo.pic);
+                    $('#hotelNameForDay_'+i).text( planDate[_day].hotelInfo.name);
+                    $('#hotelCityForDay_'+i).text( planDate[_day].hotelInfo.stateAndCity);
+                    // $('#hotelAddressForDay_'+i).text(searchResults[index].address);
 
                     $('#answerForSubmitLastHotel_' + i).removeClass('hidden');
-                    $('#lastHotelId_' + i).val(planDate[day].hotelId);
+                    $('#lastHotelId_' + i).val(planDate[_day].hotelId);
+                    $('#lastHotelKindPlaceId' + i).val(planDate[_day].hotelKindPlaceId);
                 }
                 else
                     break;
             }
 
-            $('#addHotelModal').modal('hide');
         }
         function submitThisHotel(_day){
             var hotelId = $('#lastHotelId_'+_day).val();
+            var hotelKindPlaceId = $('#lastHotelKindPlaceId'+_day).val();
             $('#answerForSubmitLastHotel_'+_day).addClass('hidden');
             planDate[_day].hotelId = parseInt(hotelId);
+            planDate[_day].hotelKindPlaceId = parseInt(hotelKindPlaceId);
         }
 
-        function checkInput(){
-            var error = false;
-            var errorText = '';
+        function checkInput(mainStore = true){
 
-            if(error){
+            planDate.map((item, index) => {
+                item.description = $('#dateDescription_'+index).val();
+            });
 
-            }
-            else{
-                planDate.map((item, index) => {
-                    item.description = $('#dateDescription_'+index).val();
-                });
-
+            if(mainStore)
                 submitSchedule();
-            }
+            else
+                localStorage.setItem('planeDate_{{$tour->id}}', JSON.stringify(planDate));
         }
 
         function submitSchedule(){
@@ -643,12 +672,28 @@
                     planDate: JSON.stringify(planDate),
                 },
                 success: response =>{
-                    if(response.status == 'ok')
+                    if(response.status == 'ok') {
+                        localStorage.removeItem('planeDate_{{$tour->id}}');
                         location.href = '{{route("tour.create.stage.three", ['id' => $tour->id])}}';
+                    }
                 }
             })
         }
 
+        function doLastUpdate(){
+            planDate = JSON.parse(planD);
+            planDate.map((day, index) => {
+                showHotelInDay(index);
+                addNewEventToDayCalendar(index);
+                $(`#dateDescription_${index}`).val(day.description);
+            });
+        }
+
+        var planD = localStorage.getItem('planeDate_{{$tour->id}}');
+        if(!(planD == false || planD == null))
+            openWarning('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+
+        setInterval(() => checkInput(false), 5000);
     </script>
 
 @endsection

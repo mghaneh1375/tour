@@ -157,7 +157,7 @@
     padding-top: 9px;
     padding-right: 11px;
     display: flex;
-    /*flex-direction: column;*/
+    padding-bottom: 5px;
     direction: rtl;
 }
 
@@ -253,6 +253,13 @@
     display: block;
     justify-content: center;
     align-items: center;
+}
+
+.photoAlbumTopUserName{
+    display: flex !important;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 0px;
 }
 
 .photoAlbumTopLikeButton{

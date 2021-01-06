@@ -57,7 +57,7 @@
                         <div class="fullyCenterContent userPictureDiv circleBase type2">
                             <img alt="کوچیتا، سامانه جامع گردشگری ایران" class="photoAlbumUserPic resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
                         </div>
-                        <div class="commentWriterExperienceDetails" style="width: calc(100% - 60px)">
+                        <div class="commentWriterExperienceDetails photoAlbumTopUserName" style="width: calc(100% - 60px)">
                             <a href="#" class="userProfileName photoAlbumUserName"></a>
                             <a href="#" target="_blank" class="photoAlbumWhere" ></a>
                             <div>
@@ -131,22 +131,22 @@
         $('#sidePhotoModal').empty();
 
         for(var i = 0; i < sidePics.length; i++){
-                var re;
-                var text = srcSidePic;
-                var fk = Object.keys(sidePics[i]);
-                for (var x of fk) {
-                    re = new RegExp(`##${x}##`, "g");
-                    text = text.replace(re, sidePics[i][x]);
-                }
-
-                re = new RegExp('##picIndex##', "g");
-                text = text.replace(re, 'chooseAlbumMainPhoto(' + i + ')');
-
-                re = new RegExp('##index##', "g");
-                text = text.replace(re, i);
-
-                $('#sidePhotoModal').append(text);
+            var re;
+            var text = srcSidePic;
+            var fk = Object.keys(sidePics[i]);
+            for (var x of fk) {
+                re = new RegExp(`##${x}##`, "g");
+                text = text.replace(re, sidePics[i][x]);
             }
+
+            re = new RegExp('##picIndex##', "g");
+            text = text.replace(re, 'chooseAlbumMainPhoto(' + i + ')');
+
+            re = new RegExp('##index##', "g");
+            text = text.replace(re, i);
+
+            $('#sidePhotoModal').append(text);
+        }
         $('#photoAlbumModal').modal({backdrop: 'static', keyboard: false});
         chooseAlbumMainPhoto(_choosenIndex);
     }

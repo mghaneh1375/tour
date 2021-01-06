@@ -3,7 +3,22 @@
 }
 
 /*....................*/
-
+.sunIcon:before{
+    content: '\E062';
+    font-family: 'Shazde_Regular2' !important;
+}
+.sunIconAfter:after{
+    content: '\E062';
+    font-family: 'Shazde_Regular2' !important;
+}
+.moonIcon:before{
+    content: '\E075';
+    font-family: 'Shazde_Regular2' !important;
+}
+.moonIconAfter:after{
+    content: '\E075';
+    font-family: 'Shazde_Regular2' !important;
+}
 .studentIcon:before{
     content: '\E0F9';
     font-family: 'Shazde_Regular2' !important;
@@ -30,6 +45,10 @@
 }
 .emptySquer:before{
     content: '\E093';
+    font-family: 'Shazde_Regular2' !important;
+}
+.leftArrowWithBody:before{
+    content: '\E07F';
     font-family: 'Shazde_Regular2' !important;
 }
 .emptyRightArrowLine:before{
@@ -420,6 +439,11 @@
 }
 
 .BookMarkIcon:before{
+    content: "\E0DE" !important;
+    font-family: Shazde_Regular2 !important;
+    color: var(--koochita-yellow);
+}
+.BookMarkIconAfter:after{
     content: "\E0DE" !important;
     font-family: Shazde_Regular2 !important;
     color: var(--koochita-yellow);

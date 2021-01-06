@@ -2268,16 +2268,14 @@ class PlaceController extends Controller {
         $kindPlaceId = $request->kindPlaceId;
 
         if( isset($_FILES['pic']) && $_FILES['pic']['error'] == 0 && isset($request->name) && isset($placeId) && isset($kindPlaceId)){
-
-            $valid_ext = array('image/jpeg','image/png');
+            $valid_ext = array('image/jpeg', 'image/png', 'image/jpg', 'image/webp');
             if(in_array($_FILES['pic']['type'], $valid_ext)){
                 $id = $placeId;
 
                 $kindPlace = Place::find($kindPlaceId);
-                if($kindPlace == null){
-                    echo 'nok9';
-                    return;
-                }
+                if($kindPlace == null)
+                    return response()->json(['status' => 'nok9']);
+
                 $kindPlaceName = $kindPlace->fileName;
                 $place = DB::table($kindPlace->tableName)->find($id);
 
@@ -2288,7 +2286,8 @@ class PlaceController extends Controller {
                         mkdir($location);
 
                     if(isset($request->fileName) && $request->fileName == 'null'){
-                        $filename = time() . '_' . str_random(3) . '.jpg';
+                        $fileType = explode('.', $_FILES['pic']['name']);
+                        $filename = time().'_'.generateRandomString(3).'.'.end($fileType);
                         $photographer = new PhotographersPic();
                         $photographer->userId = Auth::user()->id;
                         $photographer->name = $request->name;
@@ -2342,21 +2341,19 @@ class PlaceController extends Controller {
                     $result = resizeImage($image, $size, $filename);
                     if($result) {
                         $url = \URL::asset('userPhoto/' . $kindPlaceName . '/' . $place->file.'/f-'.$request->fileName);
-                        echo json_encode(['ok', $filename, $url]);
+                        return response()->json(['status' => 'ok', 'result' => [$filename, $url]]);
                     }
                     else
-                        echo json_encode(['nok5']);
+                        return response()->json(['status' => 'nok5']);
                 }
                 else
-                    echo json_encode(['nok3']);
+                    return response()->json(['status' => 'nok3']);
             }
             else
-                echo json_encode(['nok2']);
+                return response()->json(['status' => 'nok2']);
         }
         else
-            echo json_encode(['nok1']);
-
-        return;
+            return response()->json(['status' => 'nok1']);
     }
 
     public function addPhotoToComment($placeId, $kindPlaceId)
@@ -3362,9 +3359,9 @@ class PlaceController extends Controller {
             $place->url = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $place->id]);
             if($uId != 0) {
                 $place->bookMark = BookMark::where('userId', $uId)
-                    ->where('bookMarkReferenceId', $bookMarkReferenceId->id)
-                    ->where('referenceId', $place->id)
-                    ->count();
+                                    ->where('bookMarkReferenceId', $bookMarkReferenceId->id)
+                                    ->where('referenceId', $place->id)
+                                    ->count();
             }
             else
                 $place->bookMark = 0;

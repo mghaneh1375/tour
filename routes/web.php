@@ -467,7 +467,7 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('sendAns2', array('as' => 'sendAns2', 'uses' => 'PlaceController@sendAns2'));
 
-        Route::post('addPhotoToPlace', array('as' => 'addPhotoToPlace', 'uses' => 'PlaceController@addPhotoToPlace'));
+        Route::post('addPhotoToPlace', 'PlaceController@addPhotoToPlace')->name('addPhotoToPlace');
 
         Route::post('likePhotographer', 'PlaceController@likePhotographer')->name('likePhotographer');
 

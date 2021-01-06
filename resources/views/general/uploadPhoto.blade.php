@@ -573,9 +573,8 @@
                 return xhr;
             },
             success: function (response) {
-                response = JSON.parse(response);
-                if(response[0] == 'ok'){
-                    mainFileName = response[1];
+                if(response.status == 'ok'){
+                    mainFileName = response.result[0];
                     switch (type){
                         case 'mainFile':
                             submitUpload('squ');
@@ -584,13 +583,13 @@
                             submitUpload('req');
                             break;
                         case 'req':
-                            mainFilesUploaded[mainFilesUploaded.length] = response[2];
+                            mainFilesUploaded[mainFilesUploaded.length] = response.result[1];
                             mainFileName = null;
                             goToPage3();
                             break;
                     }
                 }
-                else if(response[0] == 'nok1'){
+                else if(response.status == 'nok1'){
                     if(repeatTime != 0){
                         closeLoading();
                         $('.mainPicUploadPercentDiv').hide();
@@ -601,12 +600,12 @@
                         resizeImg();
                     }
                 }
-                else if(response[0] == 'nok2'){
+                else if(response.status == 'nok2'){
                     closeLoading();
                     $('.mainPicUploadPercentDiv').hide();
-                    showSuccessNotifi('{{__("فرمت عکس باید jpg و یا png باشد")}}', 'left', 'red');
+                    showSuccessNotifi('{{__("فرمت عکس باید jpg و یا webp و یا jpeg و یا png باشد")}}', 'left', 'red');
                 }
-                else if(response[0] == 'sizeError'){
+                else if(response.status == 'sizeError'){
                     closeLoading();
                     $('.mainPicUploadPercentDiv').hide();
                     showSuccessNotifi('{{__("حجم عکس باید از 2 مگابایت کمتر باشد.")}}', 'left', 'red');

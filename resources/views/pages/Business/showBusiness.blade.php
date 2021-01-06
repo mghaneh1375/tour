@@ -65,10 +65,10 @@
         </div>
 
         <div class="mainHeaderButts">
-            <div class="fullyCenterContent emptyCameraIconAfter">
+            <div class="fullyCenterContent emptyCameraIconAfter" onclick="addPictureToLocalShop()">
                 <div class="text">گذاشتن عکس</div>
             </div>
-            <div class="fullyCenterContent BookMarkIconEmptyAfter">
+            <div class="fullyCenterContent localShopPageBookMark  {{$localShop->bookMark == 1 ? 'BookMarkIconAfter' : 'BookMarkIconEmptyAfter'}}">
                 <div class="text">نشان کردن</div>
             </div>
             <div class="fullyCenterContent emptyShareIconAfter">
@@ -84,10 +84,10 @@
                 <div class="address">{{$localShop->address}}</div>
             </div>
             <div class="mainHeaderButts">
-                <div class="fullyCenterContent emptyCameraIconAfter">
+                <div class="fullyCenterContent emptyCameraIconAfter" onclick="addPictureToLocalShop()">
                     <div class="text">گذاشتن عکس</div>
                 </div>
-                <div class="fullyCenterContent BookMarkIconEmptyAfter">
+                <div class="fullyCenterContent localShopPageBookMark {{$localShop->bookMark == 1 ? 'BookMarkIconAfter' : 'BookMarkIconEmptyAfter'}}">
                     <div class="text">نشان کردن</div>
                 </div>
                 <div class="fullyCenterContent emptyShareIconAfter">
@@ -708,16 +708,34 @@
                 var showPics = [];
                 var selectIndex = 0;
                 localShop.pics.map((item, index) => {
+                    console.log(item);
                     if(item.id == selectId)
                         selectIndex = index;
-                    showPics.push({
-                        id: `main_${item.id}`,
-                        sidePic: item.pic.l,
-                        mainPic: item.pic.main,
-                        userPic: localShop.ownerPic,
-                        userName: localShop.ownerUsername,
-                        showInfo: false,
-                    })
+                    if(item.picCategory == "sitePicture") {
+                        showPics.push({
+                            id: `main_${item.id}`,
+                            sidePic: item.pic.l,
+                            mainPic: item.pic.main,
+                            userPic: item.ownerPic,
+                            userName: item.ownerUsername,
+                            alt: item.alt,
+                            showInfo: false,
+                        });
+                    }
+                    else if(item.picCategory == "photographer"){
+                        showPics.push({
+                            id: `photographer_${item.id}`,
+                            sidePic: item.pic.l,
+                            mainPic: item.pic.main,
+                            alt: item.alt,
+                            description: item.description,
+                            userPic: item.ownerPic,
+                            userName: item.ownerUsername,
+                            showInfo: true,
+                            like: item.like,
+                            dislike: item.dislike,
+                        });
+                    }
                 });
                 createPhotoModal('آلبوم عکس', showPics, selectIndex) ; //in photoAlbumModal.blade.php
             }
@@ -872,6 +890,50 @@
             $('.tabRow.fastAccess').find(`.tab.${tabShow}`).addClass('selected');
 
         });
+
+
+        $('.localShopPageBookMark').on('click', bookMarkThisLocalShop);
+
+        function bookMarkThisLocalShop(){
+            if(!checkLogin())
+                return;
+
+            openLoading();
+            $.ajax({
+                type: 'POST',
+                url: '{{route("setBookMark")}}',
+                data: {
+                    _token: '{{csrf_token()}}',
+                    placeId: '{{$localShop->id}}',
+                    kindPlaceId: 13
+                },
+                complete: closeLoading,
+                success: response =>{
+                    if (response == "ok-del"){
+                        $('.BookMarkIconAfter.localShopPageBookMark').removeClass('BookMarkIconAfter').addClass('BookMarkIconEmptyAfter');
+                        showSuccessNotifi('این صفحه از حالت ذخیره خارج شد', 'left', 'red');
+                    }
+                    else if(response == 'ok-add'){
+                        $('.BookMarkIconEmptyAfter.localShopPageBookMark').removeClass('BookMarkIconEmptyAfter').addClass('BookMarkIconAfter');
+                        showSuccessNotifi('این صفحه ذخیره شد', 'left', 'var(--koochita-blue)');
+                    }
+                }
+            })
+        }
+
+        function addPictureToLocalShop() {
+            if (!checkLogin())
+                return;
+
+            //additionalData must be json format
+            var additionalData = {
+                placeId: '{{$localShop->id}}',
+                kindPlaceId: 13
+            };
+            var _title = '{{$localShop->name}}';
+            additionalData = JSON.stringify(additionalData);
+            openUploadPhotoModal(_title, '{{route('addPhotoToPlace')}}', '{{$localShop->id}}', 13, additionalData);
+        }
 
     </script>
 

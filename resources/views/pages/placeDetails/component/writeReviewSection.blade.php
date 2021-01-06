@@ -280,6 +280,7 @@
     var reviewRateAnsId = [];
     var imgCropNumber;
     var fileUploadNum = 0;
+    var uploadedWriteReviewPicture = [];
 
     $(window).ready(() => {
         $("#postTextArea").emojioneArea();
@@ -721,7 +722,6 @@
         })
     }
 
-    let uploadedWriteReviewPicture = [];
     function openEditReviewPic(_number){
 
         $('#editReviewPictures').removeClass('hidden');

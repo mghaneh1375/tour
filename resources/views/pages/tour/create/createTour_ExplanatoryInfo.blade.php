@@ -1,4 +1,4 @@
-@extends('pages.tour.create.createTourLayout')
+@extends('pages.tour.create.layout.createTour_Layout')
 
 @section('head')
 
@@ -128,6 +128,9 @@
 @endsection
 
 @section('body')
+
+    @include('pages.tour.create.layout.createTour_Header', ['createTourStep' => 6])
+
     <div class="ui_container">
 
         <div class="whiteBox">
@@ -182,8 +185,8 @@
             <div class="concentrationChoseTourCreation">
                 @foreach($tourFocus as $focus)
                     <div class="col-xs-2">
-                        <input id="c4{{$focus->id}}" type="checkbox" name="focus[]" value="{{$focus->id}}"/>
-                        <label for="c4{{$focus->id}}">
+                        <input id="focus_{{$focus->id}}" type="checkbox" name="focus[]" value="{{$focus->id}}"/>
+                        <label for="focus_{{$focus->id}}">
                             <span></span>
                             {{$focus->name}}
                         </label>
@@ -198,8 +201,8 @@
             <div class="tourTypeChoseChoseTourCreation">
                 @foreach($tourStyle as $style)
                     <div class="col-xs-2">
-                        <input id="c5{{$style->id}}" type="checkbox" name="style[]" value="{{$style->id}}"/>
-                        <label for="c5{{$style->id}}">
+                        <input id="tourStyle_{{$style->id}}" type="checkbox" name="style[]" value="{{$style->id}}"/>
+                        <label for="tourStyle_{{$style->id}}">
                             <span></span>
                             {{$style->name}}
                         </label>
@@ -209,7 +212,7 @@
             <div class="inboxHelpSubtitle">تیپ گردشگران خود را با انتخاب یک یا چند گزینه‌ی فوق، انتخاب نمایید.</div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">معرفی کلی</div>
             <div class="inboxHelpSubtitle">در کمتر از 100 کلمه تور خود را به طور کلی توصیف کنید</div>
             <div class="inputBox fullwidthDiv height-150">
@@ -217,24 +220,24 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">نکات کلیدی</div>
             <div class="inboxHelpSubtitle">حداکثر چهار نکته را به عنوان نکات کلیدی و مزیت اصلی تور خود بیان کنید.</div>
             <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <textarea class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" type="text" placeholder="نکته‌ی اول - حداکثر 30 کلمه"></textarea>
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی اول - حداکثر 30 کلمه"/>
             </div>
             <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <textarea class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" type="text" placeholder="نکته‌ی دوم - حداکثر 30 کلمه"></textarea>
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی دوم - حداکثر 30 کلمه"/>
             </div>
             <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <textarea class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" type="text" placeholder="نکته‌ی سوم - حداکثر 30 کلمه"></textarea>
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی سوم - حداکثر 30 کلمه"/>
             </div>
             <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <textarea class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" type="text" placeholder="نکته‌ی چهارم - حداکثر 30 کلمه"></textarea>
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی چهارم - حداکثر 30 کلمه"/>
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">چه انتظاری داشته باشیم</div>
             <div class="inboxHelpSubtitle">به صورت کاملاً شفاف به مشتریان‌تان بگویید از توز شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</div>
             <div class="inputBox fullwidthDiv height-150">
@@ -242,7 +245,7 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">اطلاعات اختصاصی</div>
             <div class="inboxHelpSubtitle">هر نوع اطلاعاتی که مختص تور شماست و دوست دارید مشتریان‌تان آن را بدانند در حداکثر 150 کلمه وارد نمایید</div>
             <div class="inputBox fullwidthDiv height-150">
@@ -250,7 +253,7 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">پیشنهادات شما برای سفر بهتر</div>
             <div class="inboxHelpSubtitle">هرنوع پیشنهاد، پیش‌نیاز، درخواست و یا مطلب اضافه‌ای که در صورت رعایت از سوی مشتران شما می‌تواندتضمین‌کننده‌ی تجربه‌ی بهتری باشد را وارد نمایید</div>
             <div class="inputBox fullwidthDiv height-150">
@@ -258,7 +261,7 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">محدودیت‌های سفر</div>
             <div class="inboxHelpSubtitle"> هر نوع محدودیت که مشتریان شما در طول تور با ان مواجه می‌شوند و مجبور به رعایت آن می‌باشند را وارد نمایید</div>
             <div class="inputBox fullwidthDiv height-150">
@@ -266,7 +269,7 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">چه همراه داشته باشیم</div>
             <div class="inboxHelpSubtitle">به مشتریان‌تان کمک کنید تا بدانند چه چیزی همراه داشته باشند. موارد ضروری مواردی است که حتماً باید همراه باشد و موارد پیشنهادی به تجربه‌‌ی بهتر کمک می‌کند.</div>
             <div class="inboxHelpSubtitle">ما لیست تمام موارد پیش‌بینی شده را در دسته‌بندی‌های مختلف آماده گرده‌ایم و شما تنها می‌بایست گزینه‌ی مورد نظر خود را گرفته و به داخل باکس مورد نظر خود بکشید.</div>
@@ -298,11 +301,10 @@
             </div>
         </div>
 
-        <div class="whiteBox whiteBoxSpecificInfo">
+        <div class="whiteBox ">
             <div class="boxTitlesTourCreation">اگر عکسی دارید، آن را اضافه نمایید</div>
             <div class="inboxHelpSubtitle">اگر از تورهای پیشین خود با همین موضوع عکسی دارید حتماً آن را با مشتریان خود به اشتراک بگذارید</div>
             <div id="uploadImgDiv" class="fullwidthDiv">
-
                 <div id="picDiv0" style="display: inline-block; width: 23%; position: relative">
                     <input class="input-file" id="picsInput_0" name="pics[]" accept="image/*" type="file" onchange="readURL(this, 0);" style="display: none">
                     <div id="picHover_0" class="uploadHover hidden">
@@ -331,7 +333,6 @@
                         </div>
                     </label>
                 </div>
-
             </div>
         </div>
 
@@ -362,15 +363,94 @@
         </div>
     </div>
 
+    <div id="picCardSample" style="display: none;">
+        <div id="picDiv##index##" data-value="##index##" style="display: inline-block; width: 23%; position: relative">
+            <input class="input-file" id="picsInput_##index##" type="file" accept="image/*" onchange="readURL(this, ##index##);" style="display: none">
+            <div id="picHover_##index##" class="uploadHover hidden">
+                <div class="tickIcon hidden"></div>
+                <div class="warningIcon hidden"> اشکال در بارگذاری</div>
+                <div class="process">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <div class="processCounter">0%</div>
+                </div>
+                <div class="hoverInfos">
+                    <div class="cancelButton closeIconWithCircle" onclick="deleteThisPic(##index##)">حذف عکس</div>
+                </div>
+            </div>
+            <label tabindex="##index##" for="picsInput_##index##" class="input-file-trigger" style="position: relative; width: 100%; margin: 0px;">
+                <div class="imgUploadsTourCreation imgAddDivTourCreation uploadImgCenter" style="width: 100%">
+                    <div id="addPic##index##" class="addPicText" style="width: 100%">
+                        <img src="{{URL::asset('images/tourCreation/add.png')}}">
+                        <b>اضافه کنید</b>
+                    </div>
+                    <div id="showPic##index##" class="imgUploadsTourCreation hidden" style="width: 100%;">
+                        <img id="imgPic##index##" class="resizeImgClass" src="" onload="fitThisImg(this)">
+                    </div>
+                </div>
+            </label>
+        </div>
+    </div>
+
     <script defer src="{{URL::asset('js/uploadLargFile.js')}}"></script>
 
     <script>
+        var tour = {!! $tour !!};
         var lastEquipment = '{{$mainEquipment[0]->id}}';
-        var deletePic = "{{URL::asset('images/tourCreation/delete.png')}}";
-        var addPic = "{{URL::asset('images/tourCreation/add.png')}}";
-        var selectedEquipment = {necessary: [],suggest: []};
+        var selectedEquipment = tour.euipment;
         var dragedElementId = 0;
-        var storeData;
+
+        var storeData = {
+            levels: tour.levels,
+            kinds: tour.kinds,
+            focus: tour.focus,
+            style: tour.style,
+            equipment: selectedEquipment,
+            mainDescription: tour.description,
+            textExpectation: tour.textExpectation,
+            specialInformation: tour.specialInformation,
+            opinion: tour.opinion,
+            tourLimit: tour.tourLimit,
+            sideDescription: tour.sideDescription,
+
+            isCancelAbel: tour.cancelAble,
+            cancelDescription: tour.cancelDescription,
+        };
+
+        $(window).ready(() => {
+            autosize($('textarea'));
+
+            fillInputs();
+        });
+
+        function fillInputs(){
+            $('#mainDescription').val(storeData.mainDescription);
+            $('#textExpectation').val(storeData.textExpectation);
+            $('#specialInformation').val(storeData.specialInformation);
+            $('#opinionText').val(storeData.opinion);
+            $('#tourLimit').val(storeData.tourLimit);
+            $('#cancelDescription').val(storeData.cancelDescription);
+
+            var sideDesc = $('input[name="sideDescription[]"]');
+            for(var i = 0; i < sideDesc.length; i++)
+                $(sideDesc[i]).val(storeData.sideDescription[i]);
+
+            storeData.equipment.necessary.map(item => {
+                dragedElementId = item;
+                drop('necessary')
+            });
+            storeData.equipment.suggest.map(item => {
+                dragedElementId = item;
+                drop('suggest')
+            });
+
+
+            storeData.kinds.map(item => $(`#tourKind${item}`).parent().click());
+            storeData.levels.map(item => $(`#tourDifficult${item}`).click());
+            storeData.focus.map(item => $(`#focus_${item}`).prop('checked', true));
+            storeData.style.map(item => $(`#tourStyle_${item}`).prop('checked', true));
+
+            $(`input[name="isCancelAbel"][value="${storeData.isCancelAbel}"]`).click();
+        }
 
         var allowDrop = ev => ev.preventDefault();
         var drag = _element => dragedElementId = $(_element).attr('data-id');
@@ -418,26 +498,27 @@
             $(_element).remove();
         }
 
-        function checkInput(){
+        function checkInput(_mainStore = true){
             storeData = {
                 levels: [],
                 kinds: [],
-                foucs: [],
+                focus: [],
                 style: [],
                 equipment: selectedEquipment,
                 mainDescription: $('#mainDescription').val(),
-                sideDescription: [],
                 textExpectation: $('#textExpectation').val(),
-                specialInformation: $('specialInformation').val(),
-                opinionText: $('#opinionText').val(),
+                specialInformation: $('#specialInformation').val(),
+                opinion: $('#opinionText').val(),
                 tourLimit: $('#tourLimit').val(),
+                sideDescription: [],
 
                 isCancelAbel: $('input[name="isCancelAbel"]:checked').val(),
                 cancelDescription: $('#cancelDescription').val(),
             };
+
             var levelsElements = $('.tourLevelIcons.chooseTourKind');
             var kindsElements = $('.tourKind.chooseTourKind');
-            var foucs = $('input[name="focus[]"]:checked');
+            var focus = $('input[name="focus[]"]:checked');
             var style = $('input[name="style[]"]:checked');
 
             for(var i = 0; i < levelsElements.length; i++)
@@ -446,11 +527,20 @@
             for(i = 0; i < kindsElements.length; i++)
                 storeData.kinds.push($(kindsElements[i]).attr('data-id'));
 
-            for(i = 0; i < foucs.length; i++)
-                storeData.foucs.push($(foucs[i]).val());
+            for(i = 0; i < focus.length; i++)
+                storeData.focus.push($(focus[i]).val());
 
             for(i = 0; i < style.length; i++)
                 storeData.style.push($(style[i]).val());
+
+            var sideDescription = $('input[name="sideDescription[]"]');
+            for(i = 0; i < sideDescription.length; i++)
+                storeData.sideDescription.push($(sideDescription[i]).val());
+
+            if(_mainStore)
+                doStore();
+            else
+                localStorage.setItem('stageFiveTourCreation_{{$tour->id}}', JSON.stringify(storeData));
         }
 
         function doStore(){
@@ -466,53 +556,45 @@
                 },
                 complete: closeLoading,
                 success: response =>{
-                    console.log(response)
-                    // if(response.status == 'ok')
-                        // location.reload()
+                    if(response.status == 'ok') {
+                        localStorage.removeItem('stageFiveTourCreation_{{$tour->id}}');
+                        location.reload();
+                    }
                 }
             })
         }
+
+
+        function doLastUpdate(){
+            storeData = JSON.parse(lastData);
+            fillInputs();
+        }
+
+        var lastData = localStorage.getItem('stageFiveTourCreation_{{$tour->id}}');
+        if(!(lastData == false || lastData == null))
+            openWarning('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+        setInterval(() => checkInput(false), 5000);
     </script>
 
 
     <script>
+        var uploadedPics = {!! json_encode($tour->pics) !!};
         var uploadProcess = false;
-        var uploadProcessIndex = null;
         var uploadProcessId = null;
         var tourPicUrl = '{{route("tour.create.store.pics")}}';
         var picQueue = [];
         var picInput = 1;
+        var picCardSample = $('#picCardSample').html();
+        $('#picCardSample').remove();
+
+
+        console.log(uploadedPics);
 
         function readURL(input, _index) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                var text = `<div id="picDiv${picInput}" data-value="${picInput}" style="display: inline-block; width: 23%; position: relative">
-                                <input class="input-file" id="picsInput_${picInput}" type="file" accept="image/*" onchange="readURL(this, ${picInput});" style="display: none">
-                                <div id="picHover_${picInput}" class="uploadHover hidden">
-                                    <div class="tickIcon hidden"></div>
-                                    <div class="warningIcon hidden"> اشکال در بارگذاری</div>
-                                    <div class="process">
-                                        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                        <div class="processCounter">0%</div>
-                                    </div>
-                                    <div class="hoverInfos">
-                                        <div class="cancelButton closeIconWithCircle" onclick="deleteThisPic(${picInput})">
-                                            حذف عکس
-                                        </div>
-                                    </div>
-                                </div>
-                                <label tabindex="${picInput}" for="picsInput_${picInput}" class="input-file-trigger" style="position: relative; width: 100%; margin: 0px;">
-                                    <div class="imgUploadsTourCreation imgAddDivTourCreation uploadImgCenter" style="width: 100%">
-                                        <div id="addPic${picInput}" class="addPicText" style="width: 100%">
-                                            <img src="${addPic}">
-                                            <b>اضافه کنید</b>
-                                        </div>
-                                        <div id="showPic${picInput}" class="imgUploadsTourCreation hidden" style="width: 100%;">
-                                            <img id="imgPic${picInput}" class="resizeImgClass" src="" onload="fitThisImg(this)">
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>`;
+                var text = picCardSample;
+                text = text.replace(new RegExp('##index##', 'g'), picInput);
 
                 $('#picHover_'+_index).removeClass('hidden');
                 $('#showPic'+_index).removeClass('hidden');
@@ -546,8 +628,7 @@
 
                 if(index != null) {
                     uploadProcess = true;
-                    uploadProcessIndex = index;
-                    uploadProcessId = picQueue[uploadProcessIndex].id;
+                    uploadProcessId = picQueue[index].id;
 
                     var file = document.getElementById(`picsInput_${uploadProcessId}`).files;
                     uploadLargeFile(tourPicUrl, file[0], {tourId: '{{$tour->id}}'}, uploadPicResult);
@@ -556,42 +637,43 @@
         }
 
         function uploadPicResult(_status,  _fileName = ''){
-            console.log(_status);
             var element = $(`#picHover_${uploadProcessId}`);
+            var porcIndex = null;
+            picQueue.map((item, index) => {
+                if(item.id == uploadProcessId && porcIndex == null)
+                    porcIndex = index;
+            });
             if(_status == 'done') {
-                picQueue[uploadProcessIndex].process = 2;
+                picQueue[porcIndex].process = 2;
                 element.find('.process').addClass('hidden');
                 element.find('.tickIcon').removeClass('hidden');
-                picQueue[uploadProcessIndex].uploadedName = _fileName;
+                picQueue[porcIndex].uploadedName = _fileName;
 
                 uploadProcessId = null;
-                uploadProcessIndex = null;
                 uploadProcess = false;
 
                 checkUpload();
             }
             else if(_status == 'error') {
-                picQueue[uploadProcessIndex].process = -1;
+                picQueue[porcIndex].process = -1;
                 element.find('.process').addClass('hidden');
                 element.find('.warningIcon').removeClass('hidden');
                 uploadProcessId = null;
-                uploadProcessIndex = null;
                 uploadProcess = false;
                 setTimeout(checkUpload, 200);
             }
             else if(_status == 'cancelUpload'){
                 element.find('.process').addClass('hidden');
                 $('#picDiv'+uploadProcessId).remove();
-                picQueue.splice(uploadProcessIndex, 1);
+                picQueue.splice(porcIndex, 1);
                 uploadProcessId = null;
-                uploadProcessIndex = null;
                 uploadProcess = false;
                 setTimeout(checkUpload, 200);
             }
             else if(_status == 'queue')
                 setTimeout(checkUpload, 200);
             else{
-                picQueue[uploadProcessIndex].uploadedName = _fileName;
+                picQueue[porcIndex].uploadedName = _fileName;
                 element.find('.processCounter').text(_status + '%');
             }
         }
@@ -628,5 +710,28 @@
                 }
             })
         }
+
+        uploadedPics.map((item, index) => {
+            var text = picCardSample;
+            text = text.replace(new RegExp('##index##', 'g'), picInput);
+            $('#uploadImgDiv').append(text);
+            picInput++;
+
+            picQueue.push({
+                id: index,
+                uploadedName: item.pic,
+                process: 2,
+            });
+
+            $('#showPic'+index).removeClass('hidden');
+            $('#addPic'+index).addClass('hidden');
+            $('#imgPic'+index).attr('src', item.url);
+
+            var element = $('#picHover_'+index);
+            element.removeClass('hidden');
+            element.find('.process').addClass('hidden');
+            element.find('.tickIcon').removeClass('hidden');
+
+        })
     </script>
 @endsection

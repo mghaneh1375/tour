@@ -1050,6 +1050,7 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
     return URL::asset('images/mainPics/nopicv01.jpg');
 }
 
+
 function getStatePic($stateId = 0, $cityId = 0){
     $locationPic = __DIR__ . '/../../../../assets/_images/city';
     if($cityId != 0){
@@ -1062,7 +1063,7 @@ function getStatePic($stateId = 0, $cityId = 0){
             if(is_file($locationPic1))
                 return URL::asset('_images/city/' . $place->id  . '/' . $place->image);
             else
-                return URL::asset('_images/city/' . $place->id  . '/' . $place->pic[0]->pic);
+                return URL::asset('_images/city/' . $place->id  . '/' . $pics[0]->pic);
         }
     }
     else if($stateId != 0)

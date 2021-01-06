@@ -34,10 +34,10 @@
 
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="safarnamehTags">برای سفرنامه خود برچسپ بگذارید</label>
-                    <input type="text" id="safarnamehTag1" class="form-control" placeholder="برچسپ اول" style="margin-bottom: 10px">
-                    <input type="text" id="safarnamehTag2" class="form-control" placeholder="برچسپ دوم" style="margin-bottom: 10px">
-                    <input type="text" id="safarnamehTag3" class="form-control" placeholder="برچسپ سوم">
+                    <label for="safarnamehTags">برای سفرنامه خود برچسب بگذارید</label>
+                    <input type="text" id="safarnamehTag1" class="form-control" placeholder="برچسب اول" style="margin-bottom: 10px">
+                    <input type="text" id="safarnamehTag2" class="form-control" placeholder="برچسب دوم" style="margin-bottom: 10px">
+                    <input type="text" id="safarnamehTag3" class="form-control" placeholder="برچسب سوم">
                 </div>
                 <div class="col-md-6 form-group" style="display: flex; flex-direction: column;">
                     <label>خب یه عکس خوب هم از سفرنامت

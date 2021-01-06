@@ -4,6 +4,8 @@ namespace App\models\localShops;
 
 use App\models\Activity;
 use App\models\LogModel;
+use App\models\PhotographersPic;
+use App\models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class LocalShops extends Model
@@ -16,18 +18,54 @@ class LocalShops extends Model
     }
 
     public function getPictures(){
-        $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')
-                            ->get();
-        foreach ($pictures as $pic)
-            $pic->pic = [
-                'main' => \URL::asset('_images/localShops/'.$this->id.'/'.$pic->pic),
-                's' => \URL::asset('_images/localShops/'.$this->id.'/s-'.$pic->pic),
-                'f' => \URL::asset('_images/localShops/'.$this->id.'/f-'.$pic->pic),
-                'l' => \URL::asset('_images/localShops/'.$this->id.'/l-'.$pic->pic),
-                't' => \URL::asset('_images/localShops/'.$this->id.'/t-'.$pic->pic),
-            ];
 
-        return $pictures;
+        $allPictures = [];
+        $owner = User::select(['id', 'username'])->find($this->userId);
+        $owner->pic = getUserPic($owner->id);
+
+        $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')->get();
+        foreach ($pictures as $pic){
+            $pic->pic = [
+                'main' => \URL::asset('_images/localShops/'.$this->file.'/'.$pic->pic),
+                's' => \URL::asset('_images/localShops/'.$this->file.'/s-'.$pic->pic),
+                'f' => \URL::asset('_images/localShops/'.$this->file.'/f-'.$pic->pic),
+                'l' => \URL::asset('_images/localShops/'.$this->file.'/l-'.$pic->pic),
+                't' => \URL::asset('_images/localShops/'.$this->file.'/t-'.$pic->pic),
+            ];
+            $pic->picCategory = 'sitePicture';
+            $pic->ownerUsername = $owner->username;
+            $pic->ownerPic = $owner->pic;
+
+            array_push($allPictures, $pic);
+        }
+
+        $photographerPics = PhotographersPic::Join('users', 'users.id', 'photographersPics.userId')
+                            ->where('photographersPics.kindPlaceId', 13)
+                            ->where('photographersPics.placeId', $this->id)
+                            ->where(function($query){
+                                if(auth()->check())
+                                    $query->where('photographersPics.userId', auth()->user()->id)->OrWhere('photographersPics.status', 1);
+                                else
+                                    $query->where('photographersPics.status', 1);
+                            })->select(['photographersPics.*', 'users.username'])->get();
+
+        foreach($photographerPics as $item){
+            $item->pic = [
+                'main' => \URL::asset('userPhoto/localShops/'.$this->file.'/s-'.$item->pic),
+                's' => \URL::asset('userPhoto/localShops/'.$this->file.'/s-'.$item->pic),
+                'f' => \URL::asset('userPhoto/localShops/'.$this->file.'/f-'.$item->pic),
+                'l' => \URL::asset('userPhoto/localShops/'.$this->file.'/l-'.$item->pic),
+                't' => \URL::asset('userPhoto/localShops/'.$this->file.'/t-'.$item->pic),
+            ];
+            $item->picCategory = 'photographer';
+
+            $item->ownerUsername = $item->username;
+            $item->ownerPic = getUserPic($item->userId);
+
+            array_push($allPictures, $item);
+        }
+
+        return $allPictures;
     }
 
     public function getMainPicture()
