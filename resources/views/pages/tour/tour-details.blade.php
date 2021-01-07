@@ -15,6 +15,9 @@
 
 
     <style>
+        body{
+            background: white;
+        }
         .changeWidth {
             @if(session('goDate'))
                    width: 14% !important;
@@ -120,6 +123,78 @@
             top: -15px;
             right: 4px;
         }
+
+
+
+        .sidePicMainContent{
+            direction: rtl;
+            margin-bottom: 25px;
+        }
+        .sidePicMainContent .title1{
+            margin: 0;
+            text-align: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .sidePicMainContent .dayCounts{
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .sidePicMainContent .dayCounts .ddccoou{
+            margin-right: auto;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000d1;
+            margin-left: 13px;
+        }
+
+        .sidePicMainContent .srcDescSec{
+            display: flex;
+            align-items: center;
+            margin: 10px 0px;
+            font-size: 15px;
+        }
+        .sidePicMainContent .srcDescSec .src{
+
+        }
+        .sidePicMainContent .srcDescSec .leftArrowWithBody{
+            padding-top: 5px;
+            font-size: 50px;
+            line-height: 10px;
+            margin: 0px 15px;
+            color: var(--koochita-red);
+        }
+        .boldFontMargSide10{
+            font-weight: bold;
+            margin: 0px 10px;
+        }
+
+        .tourDetailsBottomBox > div{
+            padding: 0px;
+        }
+        .tourDetailsBottomBox .tourAgencyExp{
+            display: flex;
+            direction: rtl;
+        }
+
+        .tourStyle{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .tourStyle .styleItem{
+            background: #0076a3c9;
+            color: white;
+            padding: 6px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-right: 0;
+        }
+
     </style>
 @stop
 
@@ -193,139 +268,79 @@
 {{--            </div>--}}
 {{--        </div>--}}
 
-        <div class="secondRowSection">
-            <div class="container" style="position: relative;">
-                <div class="bestPriceRezerved col-xs-6">
-                    <div id="targetHelp_9" class="targets" style="float: left">
-                        <div class="meta_inner" style="min-height: 0px; height: 300px;">
-                            <div class="ppr_rup ppr_priv_hr_atf_north_star_traveler_info_nostalgic">
-                                <div class="metaDatePicker easyClear">
-                                    <style>
-                                        .sidePicMainContent{
-                                            height: 150px;
-                                            border-bottom: 2px solid #e5e5e5;
-                                        }
-                                        .sidePicMainContent .title1{
-                                            margin: 0;
-                                            text-align: right;
-                                            font-size: 23px;
-                                            font-weight: bold;
-                                        }
-                                        .sidePicMainContent .dayCounts{
-                                            display: flex;
-                                            font-size: 22px;
-                                            margin-top: 5px;
-                                        }
-                                        .sidePicMainContent .dayCounts div{
-                                            margin-left: 30px;
-                                            font-size: 26px;
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                        }
-                                        .sidePicMainContent .dayCounts div:before{
-                                            margin-left: 5px;
-                                            font-size: 20px;
-                                        }
-                                        .sidePicMainContent .dayCounts .sunIcon{
-                                            color: var(--koochita-yellow);
-                                        }
-                                        .sidePicMainContent .dayCounts .moonIcon{
-                                            color: var(--koochita-blue);
-                                        }
-                                        .sidePicMainContent .dayCounts .moonIcon:before{
-                                            margin-left: 10px;
-                                        }
+        <div class="container secondRowSection">
+            <div class="bestPriceRezerved col-xs-5">
+                <div class="sidePicMainContent">
+                    <div class="title1">{{$tour->name}}</div>
+                    <div class="srcDescSec">
+                        <div> از </div>
+                        <div class="boldFontMargSide10">{{$tour->src->name}}</div>
+                        <div> به </div>
+                        <div class="boldFontMargSide10">{{$tour->dest->name}}</div>
+                    </div>
+                    <div class="dayCounts">
+                        <div> از </div>
+                        <div class="boldFontMargSide10">{{$tour->sDate}}</div>
+                        <div> تا </div>
+                        <div class="boldFontMargSide10">{{$tour->eDate}}</div>
+                        <div class="ddccoou">{{$tour->day}} روزه</div>
+                    </div>
+                    <div class="isTourPrivSec">
 
-                                        .sidePicMainContent .srcDescSec{
-                                            display: flex;
-                                            align-items: center;
-                                            margin-top: 10px;
-                                            font-size: 18px;
-                                        }
-                                        .sidePicMainContent .srcDescSec .src{
-
-                                        }
-                                        .sidePicMainContent .srcDescSec .leftArrowWithBody{
-                                            padding-top: 5px;
-                                            font-size: 50px;
-                                            line-height: 10px;
-                                            margin: 0px 15px;
-                                            color: var(--koochita-red);
-                                        }
-                                        .sidePicMainContent .srcDescSec .dest{
-
-                                        }
-                                    </style>
-                                    <div class="sidePicMainContent">
-                                        <div class="title1">{{$tour->name}}</div>
-                                        <div class="srcDescSec">
-                                            <div class="src">{{$tour->src->name}}</div>
-                                            <div class="leftArrowWithBody"></div>
-                                            <div class="dest">{{$tour->dest->name}}</div>
-                                        </div>
-                                        <div class="dayCounts">
-                                            <div class="sunIcon">{{$tour->day}}</div>
-                                            <div class="moonIcon">{{$tour->night}}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="offerBox tourDetailsBottomBox">
-                                        <div class="tourDescription col-xs-6">
-                                            <div class="tourAgencyExp inline-block full-width">
-                                                <div class="tourAgencyLogo circleBase type2"></div>
-                                                <div class="tourAgencyName">
-                                                    <div class="full-width">آژانس ستاره طلایی</div>
-                                                    {{--<div class="full-width">ستاره</div>--}}
-                                                    <div class="prw_rup prw_common_bubble_rating overallBubbleRating full-width" style="float: right;">
-                                                        <span class="ui_bubble_rating bubble_50" style="font-size:16px;"
-                                                              property="ratingValue" content="5" alt='5 of 5 bubbles'></span>
-                                                    </div>
-                                                    <div>
-                                                        <div>0 نقد</div>
-                                                        <div>1 امتیاز</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="fullyCenterContent">
-                                                <hr class="tourExpDivider">
-                                            </div>
-                                            <div id="tourExpDiscountAlerts" class="tourExpDiscountAlerts fullyCenterContent discountAlerts"></div>
-                                        </div>
-                                        <div class="tourPriceDescription col-xs-6">
-                                            <div class="fullyCenterContent" style="flex-direction: column;">
-                                                <div class="offerPrice">
-                                                    شروع قیمت از
-                                                    <span class="mainCost"></span>
-{{--                                                    <div class="salePrice">550.000</div>--}}
-                                                </div>
-{{--                                                <div class="offerDiscountExp">ده درصد تخفیف ذخیره</div>--}}
-                                                <button class="btn viewOffersBtn" type="button">خرید</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="tourStyle">
+                        @foreach($tour->style as $item)
+                            <div class="styleItem">{{$item}}</div>
+                        @endforeach
                     </div>
                 </div>
-                <div class="mainSliderSection col-xs-6">
-                    <div class="posRelWH100">
-                        <div {{isset($tour->pics) && count($tour->pics) > 0 ? "onclick=showPhotoAlbum('allPic')" : ''}} style="width: 100%; height: 100%;">
-                            <div id="mainSlider" class="swiper-container">
-                                <div class="swiper-wrapper">
-                                    @foreach($tour->pics as $pic)
-                                        <div class="swiper-slide" style="overflow: hidden">
-                                            <img class="eachPicOfSlider resizeImgClass" src="{{$pic->pic}}" alt="{{$tour->name}}" onload="fitThisImg(this)">
-                                        </div>
-                                    @endforeach
+
+                <div class="offerBox tourDetailsBottomBox row">
+                    <div class="tourPriceDescription col-xs-6">
+                        <div class="fullyCenterContent" style="flex-direction: column;">
+                            <div class="offerPrice">
+                                شروع قیمت از
+                                <span class="mainCost"></span>
+                            </div>
+                            <button class="btn viewOffersBtn" type="button">خرید</button>
+                        </div>
+                    </div>
+                    <div class="tourDescription col-xs-6">
+                        <div class="tourAgencyExp">
+                            <div class="tourAgencyLogo circleBase type2"></div>
+                            <div class="tourAgencyName">
+                                <div class="full-width">آژانس ستاره طلایی</div>
+                                <div class="prw_rup prw_common_bubble_rating overallBubbleRating full-width" style="float: right;">
+                                    <span class="ui_bubble_rating bubble_50" style="font-size:16px;" property="ratingValue" content="5" alt='5 of 5 bubbles'></span>
+                                </div>
+                                <div>
+                                    <div>0 نقد</div>
+                                    <div>1 امتیاز</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="left-nav left-nav-header swiper-button-next mainSliderNavBut"></div>
-                        <div class="right-nav right-nav-header swiper-button-prev mainSliderNavBut"></div>
+{{--                        <div class="fullyCenterContent">--}}
+{{--                            <hr class="tourExpDivider">--}}
+{{--                        </div>--}}
+{{--                        <div id="tourExpDiscountAlerts" class="tourExpDiscountAlerts fullyCenterContent discountAlerts"></div>--}}
                     </div>
+                </div>
+            </div>
+            <div class="mainSliderSection col-xs-7">
+                <div class="posRelWH100">
+                    <div {{isset($tour->pics) && count($tour->pics) > 0 ? "onclick=showPhotoAlbum('allPic')" : ''}} style="width: 100%; height: 100%;">
+                        <div id="mainSlider" class="swiper-container">
+                            <div class="swiper-wrapper">
+                                @foreach($tour->pics as $pic)
+                                    <div class="swiper-slide" style="overflow: hidden">
+                                        <img class="eachPicOfSlider resizeImgClass" src="{{$pic->pic}}" alt="{{$tour->name}}" onload="fitThisImg(this)">
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="left-nav left-nav-header swiper-button-next mainSliderNavBut"></div>
+                    <div class="right-nav right-nav-header swiper-button-prev mainSliderNavBut"></div>
                 </div>
             </div>
         </div>

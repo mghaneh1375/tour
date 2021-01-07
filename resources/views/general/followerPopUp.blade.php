@@ -25,7 +25,7 @@
     }
 </style>
 
-<div id="followerModal" class="modalBlackBack fullCenter followerModal" style="z-index: 9999;">
+<div id="followerModal" class="modalBlackBack fullCenter followerModal notCloseOnClick" style="z-index: 9999;">
     <div class="modalBody" style="width: 400px; border-radius: 10px;">
         <div onclick="closeMyModal('followerModal')" class="iconClose closeModal"></div>
         @if(auth()->check())
@@ -39,7 +39,7 @@
                            placeholder="دوستان خود را پیدا کنید...">
                     <div id="followerModalSearchButton" onclick="closeFollowerSearch(0)">
                         <span class="searchIcon"></span>
-                        <span class="iconClose hidden"></span>
+                        <span class="iconClose hidden" style="cursor: pointer;"></span>
                     </div>
                 </div>
             </div>
@@ -134,11 +134,11 @@
                 if (item.followed == 1)
                     followed = 'followed';
 
-                text += '<div class="peopleRow">\n' +
-                    '   <a href="' + item.url + '" class="pic">\n' +
-                    '       <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="' + item.pic + '" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">\n' +
-                    '   </a>\n' +
-                    '   <a href="' + item.url + '" class="name">' + item.username + '</a>\n';
+                text += `<div class="peopleRow">
+                            <a href="${item.url}" class="pic">
+                                <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="${item.pic}" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                            </a>
+                            <a href="${item.url}" class="name lessShowText">${item.username}</a>`;
 
                 if (item.notMe == 1) {
                     text += '<div style="display: flex; margin-right: auto;">';

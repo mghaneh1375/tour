@@ -622,24 +622,26 @@ p {
     width: 550px !important;
 }
 .secondRowSection{
-    background: #e5e5e5;
     padding: 15px 0px;
+    position: relative;
+    display: flex;
+    align-items: center
 }
 .posRelWH100{
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: 5px;
+    overflow: hidden;
 }
 .bestPriceRezerved {
     position: relative;
-    /*box-shadow: 0px 0px 10px 3px #0000002e;*/
-    height: auto;
-    display: inline-flex;
-    border-radius: 0px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
 }
 .mainSliderSection{
-    height: 300px;
+    height: 400px;
     overflow: hidden;
 }
 .menuTabsSticky{
@@ -680,6 +682,8 @@ p {
     border: 0;
     align-items: center;
     display: flex;
+    border-top: 2px solid #e5e5e5;
+    padding-top: 5px;
 }
 
 .offerBox > b {
@@ -696,7 +700,7 @@ p {
     font-size: 1.4em;
     display: inline-block;
     position: relative;
-    margin-bottom: 15px;
+    margin: 15px 0px;
     font-weight: bold;
 }
 
@@ -789,6 +793,7 @@ p {
     width: 100%;
     padding: 5px;
     flex-direction: column;
+    direction: rtl;
 }
 
 .tourExpDiscountAlerts > span {

@@ -60,6 +60,8 @@ class TourController extends Controller{
         else
             $tour->dest = (object)['name' => ''];
 
+        $tour->style = $tour->Styles()->pluck('name')->toArray();
+
         $tour->pics = TourPic::where($thisTour)->get();
         foreach ($tour->pics as $pic) {
             $pic->pic = \URL::asset('_images/tour/' . $tour->id . '/' . $pic->pic);
@@ -71,11 +73,8 @@ class TourController extends Controller{
 
     public function getFullTourInformation(){
         $code = $_GET['code'];
-//        $selectColumn = ['id', 'name', 'srcId', 'minCost', 'isLocal', 'kindDest', 'destId', 'sDate', 'eDate', 'day', 'night', 'private', 'isInsurance', 'language', 'sideTransport', 'description'];
 
-        $tour = Tour::where('code', $code)
-//                    ->select($selectColumn)
-                    ->first();
+        $tour = Tour::where('code', $code)->first();
 
         $thisTour = ['tourId' => $tour->id];
 

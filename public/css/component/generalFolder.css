@@ -1588,6 +1588,7 @@ a:hover {
 }
 .followerModal .body .peopleRow .name{
     margin-right: 12px;
+    width: 120px;
     color: black;
 }
 .followerModal .body .peopleRow .button{
