@@ -126,7 +126,7 @@ $kindPlaceId = 10; ?>
                         چه انتظاری داشته باشیم
                     </div>
                     <div class="inboxHelpSubtitle">
-                        به صورت کاملاً شفاف به مشتریان‌تان بگویید از توز شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه
+                        به صورت کاملاً شفاف به مشتریان‌تان بگویید از تور شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه
                     </div>
                     <div class="inputBox fullwidthDiv height-150">
                         <textarea class="inputBoxInput fullwidthDiv text-align-right full-height" name="textExpectation" placeholder="متن خود را وارد کنید"></textarea>

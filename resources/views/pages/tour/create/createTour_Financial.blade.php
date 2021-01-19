@@ -8,6 +8,24 @@
             background-color: var(--koochita-light-green);
             bottom: 13px;
         }
+
+        .tourOtherPrice{
+            border-bottom: solid 1px lightgray;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .newPriceButton{
+            background: var(--koochita-light-green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 1px 1px 4px 1px grey;
+        }
+
+        .forceHidden{
+            display: none !important;
+        }
     </style>
 @endsection
 
@@ -16,50 +34,130 @@
 
     <div class="ui_container">
         <div class="whiteBox">
-            <div class="boxTitlesTourCreation">قیمت پایه</div>
-            <div class="inboxHelpSubtitle">قیمت پایه‌ی تور قیمتی است که فارغ از هرگونه امکانات اضافه بدست آمده است و کمترین قیمتی است که کاربران می‌توانند تور را با آن خریداری نمایند. اگر برخی امکانات قیمت تور را تغییر می‌دهد، آن‌ها را در قسمت‌های بعدی وارد نمایید.</div>
-            <div class="tourBasicPriceTourCreation col-xs-6">
-                <div class="inputBoxTour col-xs-10">
-                    <div class="inputBoxText">
-                        <div>
-                            قیمت پایه
-                            <span>*</span>
+            <div class="col-md-12">
+                <div class="boxTitlesTourCreation">قیمت پایه</div>
+                <div class="inboxHelpSubtitle">قیمت پایه‌ی تور قیمتی است که فارغ از هرگونه امکانات اضافه بدست آمده است و کمترین قیمتی است که کاربران می‌توانند تور را با آن خریداری نمایند. اگر برخی امکانات قیمت تور را تغییر می‌دهد، آن‌ها را در قسمت‌های بعدی وارد نمایید.</div>
+                <div class="tourBasicPriceTourCreation col-xs-6">
+                    <div class="inputBoxTour col-xs-10">
+                        <div class="inputBoxText">
+                            <div>
+                                قیمت پایه
+                                <span>*</span>
+                            </div>
                         </div>
+                        <input class="inputBoxInput" id="tourCost" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
                     </div>
-                    <input class="inputBoxInput" id="tourCost" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
-                </div>
-                <div id="tourInsuranceConfirmation" class="col-xs-10 pd-0">
-                    <span>آیا تور شما دارای بیمه می‌باشد؟</span>
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="isInsurance" value="0">خیر
-                        </label>
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="isInsurance" value="1" checked>بلی
-                        </label>
+                    <div id="tourInsuranceConfirmation" class="col-xs-10 pd-0">
+                        <span>آیا تور شما دارای بیمه می‌باشد؟</span>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="isInsurance" value="0">خیر
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="isInsurance" value="1" checked>بلی
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="tourTicketKindTourCreation col-xs-6">
-                <div class="inputBoxTour col-xs-10" >
-                    <div class="inputBoxText">
-                        <div>
-                            نوع بلیط
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <div class="select-side">
-                        <i class="glyphicon glyphicon-triangle-bottom"></i>
-                    </div>
-                    <select id="ticketKind" class="inputBoxInput styled-select">
-                        <option value="fast">بلیط با امکان رزرو سریع</option>
-                        <option value="call">بلیط نیازمند تماس با ارایه دهنده</option>
-                    </select>
+
+            <div class="col-md-12" style="margin-top: 20px;">
+                <div class="inboxHelpSubtitle">اگر تور شما به ازای سن های مختلف قیمت متفاوتی دارد، در زیر می توانید قیمت ها را به ازای سن تعریف کنید.</div>
+                <div id="pricesSection" class="fullyCenterContent" style="display: flex; flex-direction: column;"></div>
+
+                <div class="fullyCenterContent">
+                    <button class="newPriceButton" onclick="createNewPriceRow()">افزودن قیمت جدید</button>
                 </div>
-                <div class="col-xs-10 pd-0">
-                    <span class="inboxHelpSubtitleBlue">نیاز به راهنمایی دارید؟</span>
-                </div>
+
+                <script>
+                    var priceIndex = 0;
+                    function changeFreePrice(_index, _value){
+                        if(_value == 1)
+                            $(`#price_${_index}`).addClass('forceHidden');
+                        else
+                            $(`#price_${_index}`).removeClass('forceHidden');
+                    }
+                    function createNewPriceRow(){
+                        var priceHtml = `<div class="tourBasicPriceTourCreation tourOtherPrice col-xs-12">
+                                            <div class="row" style="display: flex">
+                                                <div id="price_${priceIndex}" class="inputBoxTour col-xs-4" style="margin-left: 10px">
+                                                    <div class="inputBoxText">
+                                                        <div>
+                                                            قیمت
+                                                        </div>
+                                                    </div>
+                                                    <input class="inputBoxInput" id="priceInput_${priceIndex}" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
+                                                </div>
+                                                <div class="col-xs-8 float-right">
+                                                    <div class="inputBox discountLimitationWholesale float-right" style="display: flex">
+                                                        <div class="inputBoxText" style="width: 180px">
+                                                            <div>
+                                                                بازه‌ی سن<span>*</span>
+                                                            </div>
+                                                        </div>
+                                                        <select id="priceAgeFrom_${priceIndex}" class="inputBoxInput">
+                                                            @for($i = 0; $i < 18; $i++)
+                                                                <option value="{{$i}}">{{$i}}</option>
+                                                            @endfor
+                                                        </select>
+                                                        <div class="inputBoxText">الی</div>
+                                                        <select id="priceAgeTo_${priceIndex}" class="inputBoxInput">
+                                                            @for($i = 0; $i < 18; $i++)
+                                                            <option value="{{$i}}">{{$i}}</option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6 pd-0">
+                                                <span>آیا این بازه سنی جز ظرفیت حساب می شود؟</span>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary">
+                                                        <input type="radio" name="inCapacity_${priceIndex}" value="0">خیر
+                                                    </label>
+                                                    <label class="btn btn-secondary active">
+                                                        <input type="radio" name="inCapacity_${priceIndex}" value="1" checked>بلی
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-6 pd-0">
+                                                <span>آیا این بازه سنی رایگان است؟</span>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary active">
+                                                        <input type="radio" name="isFreePrice_${priceIndex}" value="0" checked onchange="changeFreePrice(${priceIndex}, this.value)">خیر
+                                                    </label>
+                                                    <label class="btn btn-secondary">
+                                                        <input type="radio" name="isFreePrice_${priceIndex}" value="1" onchange="changeFreePrice(${priceIndex}, this.value)">بلی
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                        $('#pricesSection').append(priceHtml);
+                        priceIndex++;
+                    }
+                </script>
             </div>
+{{--            <div class="tourTicketKindTourCreation col-xs-6">--}}
+{{--                <div class="inputBoxTour col-xs-10" >--}}
+{{--                    <div class="inputBoxText">--}}
+{{--                        <div>--}}
+{{--                            نوع بلیط--}}
+{{--                            <span>*</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="select-side">--}}
+{{--                        <i class="glyphicon glyphicon-triangle-bottom"></i>--}}
+{{--                    </div>--}}
+{{--                    <select id="ticketKind" class="inputBoxInput styled-select">--}}
+{{--                        <option value="fast">بلیط با امکان رزرو سریع</option>--}}
+{{--                        <option value="call">بلیط نیازمند تماس با ارایه دهنده</option>--}}
+{{--                    </select>--}}
+{{--                </div>--}}
+{{--                <div class="col-xs-10 pd-0">--}}
+{{--                    <span class="inboxHelpSubtitleBlue">نیاز به راهنمایی دارید؟</span>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
 
         <div class="whiteBox">
@@ -81,19 +179,19 @@
                 <div id="groupDiscountDiv"></div>
             </div>
 
-            <div class="fullwidthDiv specialDiscountBoxes seperatorInWhiteSec">
-                <div class="boxTitlesTourCreation">تخفیف ویژه‌ی کودکان</div>
-                <div class="inboxHelpSubtitle" style="width: 100%">تخفیف ویژه برای کودکان و نوجوانان (زیر 12 سال) از این قسمت تعریف می‌گردد.</div>
-                <div class="inputBoxTour col-xs-3 float-right">
-                    <div class="inputBoxText" style="width: 155px">
-                        <div>
-                            درصد تخفیف
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <input id="childDisCount" class="inputBoxInput" type="number" placeholder="درصد تخفیف">
-                </div>
-            </div>
+{{--            <div class="fullwidthDiv specialDiscountBoxes seperatorInWhiteSec">--}}
+{{--                <div class="boxTitlesTourCreation">تخفیف ویژه‌ی کودکان</div>--}}
+{{--                <div class="inboxHelpSubtitle" style="width: 100%">تخفیف ویژه برای کودکان و نوجوانان (زیر 12 سال) از این قسمت تعریف می‌گردد.</div>--}}
+{{--                <div class="inputBoxTour col-xs-3 float-right">--}}
+{{--                    <div class="inputBoxText" style="width: 155px">--}}
+{{--                        <div>--}}
+{{--                            درصد تخفیف--}}
+{{--                            <span>*</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <input id="childDisCount" class="inputBoxInput" type="number" placeholder="درصد تخفیف">--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             <div class="fullwidthDiv specialDiscountBoxes seperatorInWhiteSec" style="position: relative">
                 <div class="boxTitlesTourCreation">تخفیف‌های مناسبتی و کد تخفیف</div>
@@ -142,24 +240,6 @@
             <div class="inputBoxTour float-right col-xs-3 mg-rt-10" >
                 <input id="featureDesc_##index##" class="inputBoxInput moreFacilityInputs" type="text" placeholder="توضیحات" maxlength="250">
             </div>
-{{--            <div class="inputBoxTour float-right col-xs-2 mg-rt-10" >--}}
-{{--                <div class="select-side">--}}
-{{--                    <i class="glyphicon glyphicon-triangle-bottom"></i>--}}
-{{--                </div>--}}
-{{--                <select id="featureGroup_##index##"  class="inputBoxInput moreFacilityInputs styled-select">--}}
-{{--                    <option value="0">هم‌گروهی</option>--}}
-{{--                    <option value="a">a</option>--}}
-{{--                    <option value="b">b</option>--}}
-{{--                    <option value="c">c</option>--}}
-{{--                    <option value="d">d</option>--}}
-{{--                    <option value="e">e</option>--}}
-{{--                    <option value="f">f</option>--}}
-{{--                    <option value="g">g</option>--}}
-{{--                    <option value="h">h</option>--}}
-{{--                    <option value="i">i</option>--}}
-{{--                    <option value="j">j</option>--}}
-{{--                </select>--}}
-{{--            </div>--}}
                 <div class="inputBoxTour float-right col-xs-3 mg-rt-10 relative-position" >
                     <input id="featureCost_##index##" class="inputBoxInput moreFacilityInputs" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
                     <div class="inboxHelpSubtitle" style="position: absolute; top: 100%;">میزان افزایش قیمت را وارد نمایید.</div>
@@ -223,14 +303,14 @@
 
         var storeData = {
             cost: tour.minCost,
-            ticketKind: tour.ticketKind,
             isInsurance: tour.isInsurance,
             features: tour.features,
             discounts: tour.groupDiscount == [] ? 0 : tour.groupDiscount,
-            childDisCount: tour.childDiscount == null ? 0 : tour.childDiscount.discount,
             disCountReason:  tour.reasonDiscount == null ? 0 : tour.reasonDiscount.discount,
             sDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.sReasonDate,
             eDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.eReasonDate,
+            // ticketKind: tour.ticketKind,
+            // childDisCount: tour.childDiscount == null ? 0 : tour.childDiscount.discount,
         };
 
         $(window).ready(() => {
@@ -243,11 +323,11 @@
 
         function fillInputs(){
             $('#tourCost').val(numberWithCommas(storeData.cost));
-            $('#ticketKind').val(storeData.ticketKind);
-            $('#childDisCount').val(storeData.childDisCount);
             $('#disCountReason').val(storeData.disCountReason);
             $('#sDiscountDate').val(storeData.sDiscountDate);
             $('#eDiscountDate').val(storeData.eDiscountDate);
+            // $('#ticketKind').val(storeData.ticketKind);
+            // $('#childDisCount').val(storeData.childDisCount);
 
             $('input[name="isInsurance"]').parent().removeClass('active');
             $(`input[name="isInsurance"][value="${storeData.isInsurance}"]`).prop('checked', true).parent().addClass('active');
@@ -384,14 +464,14 @@
 
             storeData = {
                 cost: $('#tourCost').val().replace(new RegExp(',', 'g'), ''),
-                ticketKind: $('#ticketKind').val(),
                 isInsurance: $('input[name="isInsurance"]:checked').val(),
                 features: [],
                 discounts: [],
-                childDisCount: $('#childDisCount').val(),
                 disCountReason: $('#disCountReason').val(),
                 sDiscountDate: $('#sDiscountDate').val(),
                 eDiscountDate: $('#eDiscountDate').val(),
+                // ticketKind: $('#ticketKind').val(),
+                // childDisCount: $('#childDisCount').val(),
             };
 
             if(storeData.cost.trim().length == 0)
@@ -478,7 +558,8 @@
                 success: response => {
                     if(response.status == 'ok'){
                         localStorage.removeItem('stageFourTourCreation_{{$tour->id}}');
-                        location.href = '{{route("tour.create.stage.five", ['id' => $tour->id])}}';
+                        {{--location.href = '{{route("tour.create.stage.five", ['id' => $tour->id])}}';--}}
+                        location.reload();
                     }
                 }
             })

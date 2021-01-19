@@ -612,14 +612,17 @@ Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), func
 });
 
 //hotel reservation
-Route::group(array('middleware' => ['throttle:30']), function () {
+Route::group(array('middleware' => ['throttle:30', 'shareData']), function () {
 
     Route::get('buyHotel', function(){
-        session()->forget(['orderId', 'reserveRequestId', 'expiryDateTime', 'remain']);
-        if(auth()->check())
-            return redirect(url('hotelPas'));
-        else
-            return view('pishHotel');
+//        session()->forget(['orderId', 'reserveRequestId', 'expiryDateTime', 'remain']);
+//        if(auth()->check())
+//            return redirect(url('hotelPas'));
+//        else
+//            return view('pishHotel');
+        $mode = 2;
+        return view('hotelPas1', compact('mode'));
+
     });
     Route::get('hotelPas/{mode?}', function($mode = ''){
         $now = \Carbon\Carbon::now();

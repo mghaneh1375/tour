@@ -381,6 +381,14 @@
     content: '\E01E' !important;
     font-family: Shazde_Regular2 !important;
 }
+.trainIcon:before{
+    content: '\E0D8' !important;
+    font-family: Shazde_Regular2 !important;
+}
+.walkingMan:before{
+    content: '\E0DF' !important;
+    font-family: Shazde_Regular2 !important;
+}
 .earthIcon:before{
     content: '\E017' !important;
     font-family: Shazde_Regular2 !important;
@@ -548,6 +556,10 @@
     font-family: Shazde_Regular2 !important;
 }
 .leftArrowIcon:before{
+    content: '\E041';
+    font-family: Shazde_Regular2 !important;
+}
+.leftArrowIconAfter:after{
     content: '\E041';
     font-family: Shazde_Regular2 !important;
 }

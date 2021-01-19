@@ -9,6 +9,12 @@ Route::prefix('tour')->group(function (){
         Route::get('/show/{code}', 'TourController@showTour')->name('tour.show');
         Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
 
+        Route::get('getPassengerInfo', 'TourController@getPassengerInfo')->name('tour.getPassengerInfo');
+
+        Route::post('/reserve/firstTime', 'TourReservationController@firstTimeReservationTour')->name('tour.reservation.firstReserve');
+    });
+
+    Route::middleware(['shareData'])->group(function(){
         Route::get('/index', function (){
             $placeMode = 'tour';
             $state = 'تهران';
@@ -17,7 +23,7 @@ Route::prefix('tour')->group(function (){
         Route::get('/lists', function (){
             $placeMode = 'tour';
             $state = 'تهران';
-            return view('tour.tour-lists', compact(['placeMode', 'state']));
+            return view('pages.tour.tour-lists', compact(['placeMode', 'state']));
         });
     });
 

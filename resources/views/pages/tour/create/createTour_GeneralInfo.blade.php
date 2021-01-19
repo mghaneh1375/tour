@@ -24,6 +24,8 @@
     <form id="form" method="post" action="{{route('tour.create.stage.one.store')}}" autocomplete="off">
         {!! csrf_field() !!}
 
+        <input type="hidden" id="tourId" name="id" value="0">
+
         <div class="ui_container">
             <div class="menu ui_container whiteBox">
                 <div id="tourNameInputBoxMainDiv">
@@ -34,12 +36,10 @@
                                 <span>*</span>
                             </div>
                         </div>
-                        <input id="tourName" class="inputBoxInput" type="text" name="name" placeholder="فارسی" value="{{isset($tour->name) ? $tour->name : ''}}" required>
+                        <input id="tourName" class="inputBoxInput" type="text" name="name" placeholder="فارسی" required>
                     </div>
                 </div>
-                <div class="inboxHelpSubtitle" style="width: 100%;">
-                    با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.
-                </div>
+                <div class="inboxHelpSubtitle" style="width: 100%;">با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.</div>
                 <div class="InlineTourInputBoxesMainDiv">
                     <div class="inputBoxGeneralInfo inputBoxTour InlineTourInputBoxes" id="tourOriginInputBox">
                         <div class="inputBoxTextGeneralInfo inputBoxText">
@@ -100,87 +100,60 @@
             </div>
 
             <div class="menu ui_container whiteBox">
-                <div class="boxTitlesTourCreation">نوع برگزاری</div>
-                <div class="inboxHelpSubtitle" style="width: 100%">کدام یک از موارد زیر در مورد تور شما صادق است؟</div>
 
-                <input id="c53" type="radio" name="tourTimeKind" value="notSameTime" onchange="changeTime(this.value)"/>
-                <label for="c53" class="tourBasicKindsCheckbox">
-                    <div>تور ما با برنامه‌ی زمانی نامنظم بیش از یک‌بار برگزار می‌گردد.</div>
-                    <span class="tourBasicKindsCheckboxSpan mg-tp-5imp"></span>
-                </label>
-
-                <input id="c52" type="radio" name="tourTimeKind" value="sameTime" onchange="changeTime(this.value)"/>
-                <label for="c52" class="tourBasicKindsCheckbox">
-                    <div>تور ما با برنامه زمانی یکسان و منظم بیش از یکبار برگزار می‌گردد.</div>
-                    <span class="tourBasicKindsCheckboxSpan mg-tp-5imp"></span>
-                </label>
-
-                <input id="c51" type="radio" name="tourTimeKind" value="oneTime" onchange="changeTime(this.value)" checked/>
-                <label for="c51" class="tourBasicKindsCheckbox pd-40-30">
-                    <div>تور ما فقط برای یکبار برگزار می‌گردد.</div>
-                    <span class="tourBasicKindsCheckboxSpan"></span>
-                </label>
-
-                <div class="inboxHelpSubtitleBlue mg-tp-20">نیاز به راهنمایی دارید؟</div>
-
-
-                <div class="boxTitlesTourCreation" style="margin-top: 20px; border-top: solid 1px lightgray; padding-top: 10px;">زمان برگزاری</div>
-                {{--one time--}}
-                <div id="oneTime">
-                    <div class="inboxHelpSubtitle">تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.</div>
-                    <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right">
-                        <div class="inputBoxText">
-                            <div>
-                                تاریخ پایان
-                                <span>*</span>
-                            </div>
-                        </div>
-                        <div class="select-side calendarIconTourCreation">
-                            <i class="ui_icon calendar calendarIcon"></i>
-                        </div>
-                        <input name="eDate" id="eDate" class="observer-example inputBoxInput" readonly/>
-                    </div>
-                    <div class="inputBoxTour col-xs-3 relative-position float-right">
-                        <div class="inputBoxText">
-                            <div>
-                                تاریخ شروع
-                                <span>*</span>
-                            </div>
-                        </div>
-                        <div class="select-side calendarIconTourCreation">
-                            <i class="ui_icon calendar calendarIcon"></i>
-                        </div>
-                        <input name="sDate" id="sDate" class="observer-example inputBoxInput" type="text">
-                    </div>
-                </div>
-
-                {{--same time--}}
-                <div id="sameTime" style="display: none;">
-                    <div class="inboxHelpSubtitle">روز شروع تور در هفته و مدت آن ثابت فرض می‌گردد و شما تنها می‌بایست دوره‌ی تکرار را برای تور مشخص کنید.</div>
-                    <div class="inputBoxTour float-right col-xs-3">
-                        <div class="inputBoxText">
-                            <div>
-                                دوره‌ی تکرار
-                                <span>*</span>
-                            </div>
-                        </div>
-                        <div class="select-side">
-                            <i class="glyphicon glyphicon-triangle-bottom"></i>
-                        </div>
-                        <select class="inputBoxInput styled-select" name="priod" id="priod">
-                            <option value="0">هفتگی</option>
-                            <option value="1">هر دو هفته</option>
-                            <option value="2">ماهیانه</option>
-                            <option value="3">هر دو ماه یکبار</option>
-                            <option value="4">هر فصل</option>
-                        </select>
-                    </div>
-                </div>
-
-                {{--not same time--}}
-                <div id="notSameTime" style="display: none;">
-                    <div class="inboxHelpSubtitle">تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا با تعریف یکباره‌ی تور بتوانید بارهم از آن کپی گرفته و سریعتر تور خود را تعریف نمایید.</div>
+                <div class="boxTitlesTourCreation" style="margin-top: 20px; padding-top: 10px;">زمان برگزاری</div>
+                <div>
+                    <div class="inboxHelpSubtitle">تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را برای شما فراهم آوردیم تا بتوانید برای تور خود تاریخ های متفاوتی را تعریف کنید.</div>
                     <div id="notSameTimeCalendarDiv" style="display: flex; flex-direction: column">
+                        <div>
+                            <div class="inputBoxTour col-xs-3 relative-position float-right" style="margin-right: 60px;">
+                                <div class="inputBoxText">
+                                    <div>
+                                        تاریخ شروع
+                                        <span>*</span>
+                                    </div>
+                                </div>
+                                <div class="select-side calendarIconTourCreation">
+                                    <i class="ui_icon calendar calendarIcon"></i>
+                                </div>
+                                <input name="sDateNotSame[]" id="sDate_0" class="observer-example inputBoxInput" type="text">
+                            </div>
+
+                            <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right">
+                                <div class="inputBoxText">
+                                    <div>
+                                        تاریخ پایان
+                                        <span>*</span>
+                                    </div>
+                                </div>
+                                <div class="select-side calendarIconTourCreation">
+                                    <i class="ui_icon calendar calendarIcon"></i>
+                                </div>
+                                <input name="eDateNotSame[]" id="eDate_0" class="observer-example inputBoxInput" readonly/>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="inboxHelpSubtitle">اگر تور شما در بازه های مشابه برگزار می شود، شما می توانید از ابزار زیر به راحتی تاریخ ها را انتحاب کنید.</div>
+                            <div style="display: flex; align-items: center; margin: 10px 0px;">
+                                تور من به صورت
+                                <div class="inputBoxGeneralInfo inputBoxTour" style="width: 100px; margin: 0px 10px;">
+                                    <select class="inputBoxInput">
+                                        <option value="weekly">هفتگی</option>
+                                        <option value="twoWeek">دو هفته</option>
+                                        <option value="monthly">ماهانه</option>
+                                        <option value="twoMonth">دو ماه</option>
+                                    </select>
+                                </div>
+                                به تعداد
+                                <div class="inputBoxGeneralInfo inputBoxTour" style="width: 100px; margin: 0px 10px;">
+                                    <input class="inputBoxInput" type="number" placeholder="تعداد">
+                                </div>
+                                برگزار می شود
+                            </div>
+                        </div>
+
+                        <div class="inboxHelpSubtitle">تاریخ های دیگر تور</div>
 
                         <div id="calendar_1">
                             <div class="tourNthOccurrence">1</div>
@@ -438,6 +411,7 @@
     </div>
 
     <script>
+        var tour = {!! json_encode($tour) !!};
         var ajaxVar = null;
         var calendarIndex = 2;
         var timeRowSample = $('#timeRowSample').html();
@@ -455,6 +429,9 @@
 
             $('.tourBasicKindsCheckbox').mouseenter(() => $(this).addClass('green-border'));
             $('.tourBasicKindsCheckbox').mouseleave(() => $(this).removeClass('green-border'));
+
+            if(tour != null)
+                fullDataInFields();
         });
 
         function changeTourKind(_kind){
@@ -466,23 +443,6 @@
             else{
                 $('#privateTour').addClass('hidden');
                 $('#commonTour').removeClass('hidden');
-            }
-        }
-
-        function changeTime(_value){
-            tourKind = _value;
-            if(_value == 'notSameTime'){
-                $('#oneTime').hide();
-                $('#sameTime').hide();
-                $('#notSameTime').show();
-            }
-            else{
-                $('#oneTime').show();
-                $('#notSameTime').hide();
-                if(_value == 'sameTime')
-                    $('#sameTime').show();
-                else
-                    $('#sameTime').hide();
             }
         }
 
@@ -584,7 +544,6 @@
             $('#destInput').val('');
         }
 
-
         function checkInput(){
 
             var sDate = '';
@@ -626,20 +585,14 @@
                     errorText += '<li>حداکثر ظرفیت تور خود را مشخص کنید.</li>';
             }
 
-            if(tourTimeKind == 'notSameTime'){
-                var sRows = $('input[name="sDateNotSame[]"]');
-                var eRows = $('input[name="eDateNotSame[]"]');
+            var sRows = $('input[name="sDateNotSame[]"]');
+            var eRows = $('input[name="eDateNotSame[]"]');
 
-                for(var i = 0; i < sRows.length; i++){
-                    if($(sRows[i]).val().trim().length != 0)
-                        sDate = $(sRows[i]).val().trim();
-                    if($(eRows[i]).val().trim().length != 0)
-                        eDate = $(eRows[i]).val().trim();
+            for(var i = 0; i < sRows.length; i++){
+                if($(sRows[i]).val().trim().length != 0 && $(eRows[i]).val().trim().length != 0){
+                    eDate = $(eRows[i]).val().trim();
+                    sDate = $(sRows[i]).val().trim();
                 }
-            }
-            else{
-                sDate = $('#sDate').val();
-                eDate = $('#eDate').val();
             }
 
             if(sDate.trim().length == 0 || eDate.trim().length == 0)
@@ -651,6 +604,42 @@
             }
             else
                 $('#form').submit();
+        }
+
+        function fullDataInFields(){
+            $('#tourId').val(tour.id);
+            $('#tourName').val(tour.name);
+            $('#srcCity').val(tour.src.name);
+            $('#srcCityId').val(tour.src.id);
+
+            $('#destInput').val(tour.dest.name);
+            $('#destPlaceId').val(tour.dest.id);
+            $('#destKind').val(tour.dest.kind);
+
+            if(tour.isLocal)
+                $('#sameSrcDestInput').click();
+
+            $('#tourDay').val(tour.day);
+            $('#tourNight').val(tour.night);
+
+            $('#minCapacity').val(tour.minCapacity);
+            $('#maxCapacity').val(tour.maxCapacity);
+            if(tour.anyCapacity == 1)
+                $('#anyCapacity').click();
+
+            if(tour.private == 1){
+                $('input[name="private"]').parent().removeClass('active');
+                $('input[name="private"][value="1"]').prop('checked', true).parent().addClass('active');
+            }
+
+            for(var i = 0; i < tour.times.length-1; i++)
+                newCalendar();
+
+            for(i = 0; i < tour.times.length; i++){
+                $(`#sDate_${i}`).val(tour.times[i].sDate);
+                $(`#eDate_${i}`).val(tour.times[i].eDate);
+            }
+
         }
     </script>
 

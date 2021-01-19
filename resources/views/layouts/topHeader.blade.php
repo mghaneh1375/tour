@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="{{URL::asset('css/common/DA.css?v='.$fileVersions)}}">
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/footer.css?v='.$fileVersions)}}' />
 <link rel='stylesheet' type='text/css' href='{{URL::asset('packages/fontAwesom/css/all.min.css')}}' />
+
 {{--<link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css')}}">--}}
 
 {{--<link rel="manifest" href="{{URL::asset('manifest.json')}}">--}}
@@ -434,6 +435,11 @@
     <script src="{{URL::asset('js/pages/ifLogin.js?v='.$fileVersions)}}"></script>
 @endif
 
+<script>
+    $.ajaxSetup({
+        xhrFields: { withCredentials: true },
+    })
+</script>
 <script type="text/javascript">
     (function(){
         var now = new Date();

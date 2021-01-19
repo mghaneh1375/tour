@@ -274,6 +274,7 @@
     </div>
 
     <script>
+        var tour = {!! json_encode($tour) !!};
         var dateCount = {{$tour->day}};
 
         var openedDateEvent = 0;
@@ -292,19 +293,57 @@
             autoclose: true,
         };
 
-        for(var i = 0; i < dateCount; i++)
-            planDate[i] = {
-                hotelId: 0,
-                hotelKindPlaceId: 0,
-                hotelInfo: {
-                    name: '',
-                    pic: '',
-                    stateAndCity: ''
-                },
-                description: '',
-                events: []
-            };
+        if(tour.schedules.length != 0){
+            for (var i = 0; i < dateCount; i++) {
+                console.log(tour.schedules[i]);
 
+                planDate[i] = {
+                    hotelId: tour.schedules[i].hotelId,
+                    hotelKindPlaceId: tour.schedules[i].isBoomgardi == 1 ? 13 : 4,
+                    hotelInfo: {
+                        name: tour.schedules[i].hotel ? tour.schedules[i].hotel.name : '',
+                        pic: tour.schedules[i].hotel ? tour.schedules[i].hotel.pic : '',
+                        stateAndCity: tour.schedules[i].hotel ? tour.schedules[i].hotel.cityAndState : '',
+                    },
+                    description: tour.schedules[i].description,
+                    events: []
+                };
+                tour.schedules[i].events.map(item => {
+                    var eventIndex = null;
+                    eventType.map((ev, ind) => {
+                        if(ev.code == item.code)
+                            eventIndex = ind;
+                    });
+                    var events = {
+                        eventIndex: eventIndex,
+                        eventCode: eventType[eventIndex].code,
+                        sTime: item.sTime,
+                        eTime: item.eTime,
+                        moreData: item.text,
+                        description: item.description,
+                    };
+                    if(item.code == 3 || item.code == 7)
+                        events.moreData = item.places;
+
+                    planDate[i].events.push(events);
+                })
+
+            }
+        }
+        else {
+            for (var i = 0; i < dateCount; i++)
+                planDate[i] = {
+                    hotelId: 0,
+                    hotelKindPlaceId: 0,
+                    hotelInfo: {
+                        name: '',
+                        pic: '',
+                        stateAndCity: ''
+                    },
+                    description: '',
+                    events: []
+                };
+        }
 
         $(window).ready(() => {
             $('.clockP').clockpicker(clockOptions);
@@ -315,6 +354,8 @@
                                             <div class="icon"></div>
                                         </div>`);
             $('#eventTitles').html(text);
+
+            doLastUpdate(false);
         });
 
         function openDatePlanRow(_element){
@@ -680,9 +721,12 @@
             })
         }
 
-        function doLastUpdate(){
-            planDate = JSON.parse(planD);
+        function doLastUpdate(_lastData = true){
+            if(_lastData)
+                planDate = JSON.parse(planD);
+
             planDate.map((day, index) => {
+                console.log(day);
                 showHotelInDay(index);
                 addNewEventToDayCalendar(index);
                 $(`#dateDescription_${index}`).val(day.description);

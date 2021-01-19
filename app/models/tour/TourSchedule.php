@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class TourSchedule extends Model
 {
     protected $table = 'tourSchedules';
+
 }

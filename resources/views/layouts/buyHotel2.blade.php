@@ -5,9 +5,6 @@ $infant = 0;
 $child = session('children');
 $rooms = json_decode(session('reserve_room'));
 $num_room = 0;
-for($i = 0; $i < count($rooms->num_room_code); $i++){
-    $num_room += $rooms->num_room_code[$i];
-}
 ?>
 
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/buyHotel2.css?v=1')}}'/>
@@ -93,9 +90,8 @@ for($i = 0; $i < count($rooms->num_room_code); $i++){
 
     <div class="inlineBorder"></div>
 
-    @for($step = 0, $k = 0; $step < count($rooms->num_room_code); $step++)
-        @for($j = 0; $j < $rooms->num_room_code[$step]; $j++, $k++)
-            <input type="hidden" name="room_code[]" value="{{$rooms->room_code[$step]}}">
+    @for($step = 0, $k = 0; $step < 3; $step++)
+        @for($j = 0; $j < 3; $j++, $k++)
             <div id="passenger_{{$k}}">
                 <div>
                     <div>
@@ -103,7 +99,7 @@ for($i = 0; $i < count($rooms->num_room_code); $i++){
                             @if($k == 0 && Auth::check())
                                 <div class="textTitle">
                                     <span id="passengerInfo_{{$k}}"></span>
-                                    <span>{{$rooms->room_name[$step]}}</span>
+                                    <span>111}</span>
                                 </div>
                                 <div class="mainPassengerDiv">مسافر اصلی</div>
                                 <button onclick="getMyInfo()" class="btn afterBuyBtn bg-color-green" type="button"> من هستم</button>
@@ -112,7 +108,7 @@ for($i = 0; $i < count($rooms->num_room_code); $i++){
                                 </div>
 
                             @else
-                                <div class="textTitle" id="passengerInfo_{{$k}}">{{$rooms->room_name[$step]}}</div>
+                                <div class="textTitle" id="passengerInfo_{{$k}}">222</div>
                             @endif
                         </div>
                         <div class="float-left position-relative">
@@ -422,13 +418,13 @@ for($i = 0; $i < count($rooms->num_room_code); $i++){
     var user_id = 0 ;
 
     var k = 0;
-    @for($step = 0, $k = 0; $step < count($rooms->num_room_code); $step++)
-        @for($j = 0; $j < $rooms->num_room_code[$step]; $j++, $k++)
-            answers[k] = ['false', 'false', 'false', 'false'];
-            request[k] = '';
-            k++;
-        @endfor
-    @endfor
+{{--    @for($step = 0, $k = 0; $step < count($rooms->num_room_code); $step++)--}}
+{{--        @for($j = 0; $j < $rooms->num_room_code[$step]; $j++, $k++)--}}
+{{--            answers[k] = ['false', 'false', 'false', 'false'];--}}
+{{--            request[k] = '';--}}
+{{--            k++;--}}
+{{--        @endfor--}}
+{{--    @endfor--}}
 
     function changeForeignRow(idx) {
         if ($("#foreign_" + idx).prop('checked')) {

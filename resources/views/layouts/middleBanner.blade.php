@@ -52,8 +52,12 @@
                 <a href="https://www.pasargadoil.com" class="dddda" style="margin-top: 5px;">
                     <img src="{{URL::asset('images/esitrevda/pasargardda.gif')}}">
                 </a>
-                <a href="{{route('festival.cook')}}" class="dddda hideOnPhone" style="margin-top: 5px;">
-                    <img src="{{URL::asset('images/esitrevda/COOKmain.webp')}}">
+                <a href="https://www.iranol.ir" class="dddda" style="margin-top: 5px;">
+                    <picture>
+                        <source media="(max-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolSmall.gif')}}">
+                        <source media="(min-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolBig.gif')}}">
+                        <img src="{{URL::asset('images/esitrevda/iranolBig.gif')}}" alt="ایرانول" style="height:auto;">
+                    </picture>
                 </a>
             </div>
 

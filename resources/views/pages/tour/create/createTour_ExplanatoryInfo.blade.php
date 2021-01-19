@@ -150,7 +150,7 @@
                     </div>
                 @endforeach
             </div>
-            <div class="inboxHelpSubtitle">انتخاب بیش از یک گزینه مجاز می‌باشد</div>
+            <div class="inboxHelpSubtitle">انتخاب حداکثر سه گزینه مجاز می‌باشد</div>
         </div>
 
         <div class="whiteBox">
@@ -181,27 +181,43 @@
         </div>
 
         <div class="whiteBox">
-            <div id="concentrationChoseTitleTourCreation">تمرکز خود را مشخص کنید.</div>
-            <div class="concentrationChoseTourCreation">
-                @foreach($tourFocus as $focus)
-                    <div class="col-xs-2">
-                        <input id="focus_{{$focus->id}}" type="checkbox" name="focus[]" value="{{$focus->id}}"/>
-                        <label for="focus_{{$focus->id}}">
+            <div id="concentrationChoseTitleTourCreation">مناسب برای</div>
+            <div class="concentrationChoseTourCreation" style="width: 100%">
+                @foreach($tourFitFor as $fitFor)
+                    <div class="col-xs-3">
+                        <input id="fitFor_{{$fitFor->id}}" type="checkbox" name="fitFor[]" value="{{$fitFor->id}}" onchange="checkTourFitForCount()"/>
+                        <label for="fitFor_{{$fitFor->id}}">
                             <span></span>
-                            {{$focus->name}}
+                            {{$fitFor->name}}
                         </label>
                     </div>
                 @endforeach
             </div>
-            <div class="inboxHelpSubtitle">از بین گزینه‌های فوقمواردی را که بهتر تمرکز تور شما را بیان می‌کند،انتخاب نمایید.</div>
+            <div class="inboxHelpSubtitle">اگر تور شما برای مخاطبان فوق مناسب است، آن را انتخاب کنید.</div>
         </div>
+
+{{--        <div class="whiteBox">--}}
+{{--            <div id="concentrationChoseTitleTourCreation">تمرکز خود را مشخص کنید.</div>--}}
+{{--            <div class="concentrationChoseTourCreation">--}}
+{{--                @foreach($tourFocus as $focus)--}}
+{{--                    <div class="col-xs-2">--}}
+{{--                        <input id="focus_{{$focus->id}}" type="checkbox" name="focus[]" value="{{$focus->id}}"/>--}}
+{{--                        <label for="focus_{{$focus->id}}">--}}
+{{--                            <span></span>--}}
+{{--                            {{$focus->name}}--}}
+{{--                        </label>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
+{{--            <div class="inboxHelpSubtitle">از بین گزینه‌های فوقمواردی را که بهتر تمرکز تور شما را بیان می‌کند،انتخاب نمایید.</div>--}}
+{{--        </div>--}}
 
         <div class="whiteBox">
             <div id="tourTypeChoseTitleTourCreation">تیپ خود را مشخص کنید.</div>
             <div class="tourTypeChoseChoseTourCreation">
                 @foreach($tourStyle as $style)
                     <div class="col-xs-2">
-                        <input id="tourStyle_{{$style->id}}" type="checkbox" name="style[]" value="{{$style->id}}"/>
+                        <input id="tourStyle_{{$style->id}}" type="checkbox" name="style[]" value="{{$style->id}}" onchange="checkTourStyleCount()"/>
                         <label for="tourStyle_{{$style->id}}">
                             <span></span>
                             {{$style->name}}
@@ -209,37 +225,37 @@
                     </div>
                 @endforeach
             </div>
-            <div class="inboxHelpSubtitle">تیپ گردشگران خود را با انتخاب یک یا چند گزینه‌ی فوق، انتخاب نمایید.</div>
+            <div class="inboxHelpSubtitle">تیپ گردشگران خود را با انتخاب حداکثر سه گزینه‌ی فوق، انتخاب نمایید.</div>
         </div>
 
-        <div class="whiteBox ">
-            <div class="boxTitlesTourCreation">معرفی کلی</div>
-            <div class="inboxHelpSubtitle">در کمتر از 100 کلمه تور خود را به طور کلی توصیف کنید</div>
-            <div class="inputBox fullwidthDiv height-150">
-                <textarea id="mainDescription" class="inputBoxInput fullwidthDiv text-align-right full-height" placeholder="متن خود را وارد کنید"></textarea>
-            </div>
-        </div>
+{{--        <div class="whiteBox ">--}}
+{{--            <div class="boxTitlesTourCreation">معرفی کلی</div>--}}
+{{--            <div class="inboxHelpSubtitle">در کمتر از 100 کلمه تور خود را به طور کلی توصیف کنید</div>--}}
+{{--            <div class="inputBox fullwidthDiv height-150">--}}
+                <textarea id="mainDescription" class="inputBoxInput fullwidthDiv text-align-right full-height" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+{{--            </div>--}}
+{{--        </div>--}}
 
-        <div class="whiteBox ">
-            <div class="boxTitlesTourCreation">نکات کلیدی</div>
-            <div class="inboxHelpSubtitle">حداکثر چهار نکته را به عنوان نکات کلیدی و مزیت اصلی تور خود بیان کنید.</div>
-            <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی اول - حداکثر 30 کلمه"/>
-            </div>
-            <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی دوم - حداکثر 30 کلمه"/>
-            </div>
-            <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی سوم - حداکثر 30 کلمه"/>
-            </div>
-            <div class="inputBox fullwidthDiv height-50 mg-5-0">
-                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی چهارم - حداکثر 30 کلمه"/>
-            </div>
-        </div>
+{{--        <div class="whiteBox ">--}}
+{{--            <div class="boxTitlesTourCreation">نکات کلیدی</div>--}}
+{{--            <div class="inboxHelpSubtitle">حداکثر چهار نکته را به عنوان نکات کلیدی و مزیت اصلی تور خود بیان کنید.</div>--}}
+{{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی اول - حداکثر 30 کلمه" style="display: none"/>
+{{--            </div>--}}
+{{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی دوم - حداکثر 30 کلمه" style="display: none"/>
+{{--            </div>--}}
+{{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی سوم - حداکثر 30 کلمه" style="display: none"/>
+{{--            </div>--}}
+{{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
+                <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3" name="sideDescription[]" placeholder="نکته‌ی چهارم - حداکثر 30 کلمه" style="display: none"/>
+{{--            </div>--}}
+{{--        </div>--}}
 
         <div class="whiteBox ">
             <div class="boxTitlesTourCreation">چه انتظاری داشته باشیم</div>
-            <div class="inboxHelpSubtitle">به صورت کاملاً شفاف به مشتریان‌تان بگویید از توز شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</div>
+            <div class="inboxHelpSubtitle">به صورت کاملاً شفاف به مشتریان‌تان بگویید از تور شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</div>
             <div class="inputBox fullwidthDiv height-150">
                 <textarea id="textExpectation" class="inputBoxInput fullwidthDiv text-align-right full-height" placeholder="متن خود را وارد کنید"></textarea>
             </div>
@@ -253,13 +269,13 @@
             </div>
         </div>
 
-        <div class="whiteBox ">
-            <div class="boxTitlesTourCreation">پیشنهادات شما برای سفر بهتر</div>
-            <div class="inboxHelpSubtitle">هرنوع پیشنهاد، پیش‌نیاز، درخواست و یا مطلب اضافه‌ای که در صورت رعایت از سوی مشتران شما می‌تواندتضمین‌کننده‌ی تجربه‌ی بهتری باشد را وارد نمایید</div>
-            <div class="inputBox fullwidthDiv height-150">
-                <textarea id="opinionText" class="inputBoxInput fullwidthDiv text-align-right full-height" placeholder="متن خود را وارد کنید"></textarea>
-            </div>
-        </div>
+{{--        <div class="whiteBox ">--}}
+{{--            <div class="boxTitlesTourCreation">پیشنهادات شما برای سفر بهتر</div>--}}
+{{--            <div class="inboxHelpSubtitle">هرنوع پیشنهاد، پیش‌نیاز، درخواست و یا مطلب اضافه‌ای که در صورت رعایت از سوی مشتران شما می‌تواندتضمین‌کننده‌ی تجربه‌ی بهتری باشد را وارد نمایید</div>--}}
+{{--            <div class="inputBox fullwidthDiv height-150">--}}
+                <textarea id="opinionText" class="inputBoxInput fullwidthDiv text-align-right full-height" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+{{--            </div>--}}
+{{--        </div>--}}
 
         <div class="whiteBox ">
             <div class="boxTitlesTourCreation">محدودیت‌های سفر</div>
@@ -403,6 +419,7 @@
             levels: tour.levels,
             kinds: tour.kinds,
             focus: tour.focus,
+            fitFor: tour.fitFor,
             style: tour.style,
             equipment: selectedEquipment,
             mainDescription: tour.description,
@@ -447,16 +464,41 @@
             storeData.kinds.map(item => $(`#tourKind${item}`).parent().click());
             storeData.levels.map(item => $(`#tourDifficult${item}`).click());
             storeData.focus.map(item => $(`#focus_${item}`).prop('checked', true));
+            storeData.fitFor.map(item => $(`#fitFor_${item}`).prop('checked', true));
             storeData.style.map(item => $(`#tourStyle_${item}`).prop('checked', true));
 
             $(`input[name="isCancelAbel"][value="${storeData.isCancelAbel}"]`).click();
+        }
+
+        function checkTourStyleCount(){
+            var checkStyles = $('input[name="style[]"]:checked');
+            if(checkStyles.length > 3){
+                for(var i = 3; i < checkStyles.length; i++)
+                    $(checkStyles[i]).prop('checked', false);
+            }
+        }
+
+        function checkTourFitForCount(){
+            var checkFitFors = $('input[name="fitFor[]"]:checked');
+            if(checkFitFors.length > 2){
+                for(var i = 2; i < checkFitFors.length; i++)
+                    $(checkFitFors[i]).prop('checked', false);
+            }
         }
 
         var allowDrop = ev => ev.preventDefault();
         var drag = _element => dragedElementId = $(_element).attr('data-id');
 
         var changeCancelAble = _value => $('#cancelDiv').css('display', _value == 1 ? 'block' : 'none');
-        var chooseTourKind = _element => $(_element).toggleClass('chooseTourKind');
+        var chooseTourKind = _element => {
+            var kindsElements = $('.tourKind.chooseTourKind');
+            $(_element).toggleClass('chooseTourKind');
+
+            setTimeout(() => {
+                if(kindsElements.length >= 3)
+                    $(kindsElements[2]).removeClass('chooseTourKind');
+            }, 200);
+        };
 
         function drop(_kind) {
             if(dragedElementId != 0){
@@ -503,6 +545,7 @@
                 levels: [],
                 kinds: [],
                 focus: [],
+                fitFor: [],
                 style: [],
                 equipment: selectedEquipment,
                 mainDescription: $('#mainDescription').val(),
@@ -520,6 +563,7 @@
             var kindsElements = $('.tourKind.chooseTourKind');
             var focus = $('input[name="focus[]"]:checked');
             var style = $('input[name="style[]"]:checked');
+            var fitFor = $('input[name="fitFor[]"]:checked');
 
             for(var i = 0; i < levelsElements.length; i++)
                 storeData.levels.push($(levelsElements[i]).attr('data-id'));
@@ -528,7 +572,10 @@
                 storeData.kinds.push($(kindsElements[i]).attr('data-id'));
 
             for(i = 0; i < focus.length; i++)
-                storeData.focus.push($(focus[i]).val());
+                storeData.focus.push($(focus    [i]).val());
+
+            for(i = 0; i < fitFor.length; i++)
+                storeData.fitFor.push($(fitFor[i]).val());
 
             for(i = 0; i < style.length; i++)
                 storeData.style.push($(style[i]).val());
@@ -586,9 +633,6 @@
         var picInput = 1;
         var picCardSample = $('#picCardSample').html();
         $('#picCardSample').remove();
-
-
-        console.log(uploadedPics);
 
         function readURL(input, _index) {
             if (input.files && input.files[0]) {

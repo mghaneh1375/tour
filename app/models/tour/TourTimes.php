@@ -4,8 +4,8 @@ namespace App\models\tour;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TourPeriod extends Model
+class TourTimes extends Model
 {
-    protected $table = 'tourPeriods';
+    protected $table = 'tourTimes';
     public $timestamps = false;
 }
