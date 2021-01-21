@@ -1207,7 +1207,7 @@ p {
 }
 
 #tourPriceOptions , #fastReserveDiv{
-    border-left: 2px solid #e5e5e5;
+    border-right: 2px solid #e5e5e5;
 }
 #tourPricePerMan .arrowPassengerIcone::before {
     left: 20px;
@@ -2232,4 +2232,389 @@ p {
 .smallRed-10{
     color: red;
     font-size: 10px;
+}
+
+
+.postalInfoSection .detailRowPost .buyBut{
+    border: solid 2px rgba(156,57,36, 1);
+    position: absolute;
+    top: 115%;
+    display: flex;
+    padding: 0px 30px;
+    font-weight: bold;
+    background: rgba(156, 57, 36, 0.75);
+    cursor: pointer;
+    left: 0px;
+    z-index: 1;
+}
+
+.stickyTopEnvelop{
+    padding-bottom: 15px;
+}
+.headerForEnvelop{
+    font-family: Shin !important;
+    height: 70px !important;
+    text-align: center;
+    box-shadow: 0px 3px 3px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px 0px 100px 100px;
+    border: solid 1px black;
+    border-top: none;
+    border-bottom: none;
+    padding: 15px;
+    color: black;
+    color: #b41b17;
+    margin: 0px 5px;
+    font-weight: bold;
+    font-size: 70px;
+}
+
+.mainIntroductionSection{
+    padding: 0px 30px;
+}
+
+.mainInfosSection{
+    direction: rtl;
+    width: 100%;
+    margin: 0;
+    margin-top: 20px;
+}
+
+.lightCraftBackground{
+    box-shadow: 0px 10px 10px 3px #000000a6;
+    border: dashed 4px black;
+}
+
+
+.transportWithBottomDashed{
+    border-bottom: dashed 1px black;
+    margin: 15px 0px;
+}
+
+.transportSection{
+
+}
+.transportSection .title{
+    font-weight: bold;
+    font-size: 15px;
+    /*color: var(--koochita-red);*/
+    color: black;
+}
+.transportSection .transportsSec{
+    border: solid 2px rgba(156,57,36, 1);
+    width: 49%;
+    margin-bottom: 15px;
+    padding: 10px;
+    position: relative;
+    border-color: black;
+}
+
+
+
+.equipmentSection{
+    margin: 25px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+.equipmentSection .checkListPaper{
+    width: 50%;
+    margin: 10px;
+    border: solid 1px #999999;
+    box-shadow: 2px 11px 9px 0px #42424238;
+    padding: 0px 15px;
+    position: relative;
+    border-top: none;
+}
+.equipmentSection .checkListPaper .title{
+    font-size: 23px;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 10px 15px;
+    height: 45px;
+    margin-top: 35px;
+}
+.equipmentSection .checkListPaper .title .text{
+    background: white;
+    z-index: 9;
+    padding: 0px 10px;
+    font-family: Shin !important;
+    font-size: 50px;
+    line-height: 10px;
+}
+.equipmentSection .checkListPaper .title:before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    background: #1314578c;
+}
+.equipmentSection .checkListPaper .body{
+    direction: rtl;
+}
+.equipmentSection .checkListPaper .body .checkRow{
+    direction: rtl;
+    height: 33px;
+    padding-bottom: 6px;
+    display: inline-flex;
+    width: 49%;
+}
+.equipmentSection .checkListPaper .body .checkRow .tichSquer{
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: solid 1px lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+.equipmentSection .checkListPaper .body .checkRow .text{
+    border-bottom: solid 1px #3c3fff33;
+    margin-bottom: 10px;
+    width: 100%;
+    margin-right: 5px;
+    padding-right: 5px;
+}
+
+.moreFeature{
+    direction: rtl;
+    border: 2px solid #ddd;
+}
+.moreFeature th, .moreFeature td{
+    direction: rtl;
+    text-align: center;
+}
+.moreFeature .description{
+    font-size: 13px;
+}
+
+.otherDateChoose{
+    cursor: pointer;
+    transition: .3s;
+}
+.otherDateChoose.selectdd{
+    background: var(--koochita-light-green) !important;
+}
+.otherDateChoose.can:hover{
+    background: var(--koochita-light-green) !important;
+}
+
+.otherDateChoose.cant{
+    opacity: .2;
+    cursor: not-allowed;
+}
+
+
+
+.buyButton .text{
+    width: 84px;
+    height: 84px;
+    text-align: center;
+    font-weight: bold;
+    color: #bb465d;
+    transform: rotate(-16deg);
+    font-size: 28px;
+    line-height: 26px;
+    margin-top: 15px;
+}
+
+.hasInsurance{
+    position: absolute;
+    right: 25px;
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 49px;
+    font-family: 'Shin' !important;
+    line-height: 37px;
+    color: var(--koochita-green);
+    top: 15px;
+}
+
+
+
+.tourGuidAjansSection{
+    direction: rtl;
+    margin: 40px 0px;
+}
+.tourGuidAjansSection .tourGuidSection .picSec{
+    display: flex;
+    width: 200px;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.tourGuidAjansSection .tourGuidSection .infoSec{
+    margin: 0px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.tourGuidAjansSection .tourGuidSection .infoSec .name{
+    font-size: 25px;
+    color: #b41b17;
+    margin-bottom: 13px;
+}
+.tourGuidAjansSection .tourGuidSection .button{
+    transform: rotate(-90deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: -35px;
+    top: 37px;
+    border-bottom: dashed 1px gray;
+    padding: 7px 5px;
+    cursor: pointer;
+}
+.tourGuidAjansSection .tourGuidSection .circleButtons{
+    position: absolute;
+    background: white;
+    width: 20px;
+    height: 20px;
+    left: -10px;
+    border: solid 1px gray;
+    border-radius: 50%;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    transform: rotate(45deg);
+}
+.tourGuidAjansSection .tourGuidSection .circleButtons:before{
+    content: '';
+    width: 21px;
+    height: 10px;
+    position: absolute;
+    background: white;
+    top: -12px;
+    transform: rotate(-45deg);
+    left: 8px;
+}
+.tourGuidAjansSection .tourGuidSection .circleButtons:after{
+    content: '';
+    width: 21px;
+    height: 10px;
+    position: absolute;
+    background: white;
+    left: 0px;
+    transform: rotate(45deg);
+    top: 14px;
+}
+.tourGuidAjansSection .tourGuidSection .circleButtons.top{
+    top: -10px;
+}
+.tourGuidAjansSection .tourGuidSection .circleButtons.bottom{
+    bottom: -10px;
+    transform: rotate(-45deg);
+}
+
+.tourGuidSection .butse{
+    margin-top: 15px;
+    padding: 3px 6px;
+    border: solid 1px;
+    font-size: 20px;
+    text-align: center;
+    color: white;
+}
+
+.closeButtonModal{
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    font-size: 34px;
+    color: var(--koochita-red);
+    cursor: pointer;
+}
+
+.additionalBackDark{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: #000000ad;
+}
+.buyModal{
+    z-index: 999;
+}
+.buyModal .modalBody{
+    max-width: 1000px;
+}
+.buyModal .modalBody .buyFeatureRow{
+    display: flex;
+    border-top: solid 1px lightgray;
+    margin-bottom: 10px;
+    padding: 5px 0px;
+    align-items: center;
+}
+.buyModal .priceSection{
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: solid 1px lightgray;
+}
+.buyModal .passengerInput{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.buyModal .passengerInput .text{
+    font-weight: normal;
+    font-size: 14px;
+    margin-right: 10px;
+    width: 100%;
+}
+.buyModal .passengerInput .popup{
+    position: absolute;
+    background: white;
+    top: 100%;
+    z-index: 9;
+    padding: 13px;
+    width: 100%;
+    border: solid 2px gray;
+    border-radius: 10px;
+}
+.buyModal .passengerInput .popup > div{
+
+}
+.buyModal .passengerInput .popup > div label{
+    font-size: 13px;
+}
+.buyModal .totalFeaturesCost{
+    display: flex;
+    justify-content: space-around;
+    font-weight: bold;
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+
+.buyModal .header{
+    font-size: 24px;
+    border-bottom: solid 1px lightgray;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+.buyModal .priceRow{
+    display: flex;
+    justify-content: space-between;
+}
+.buyModal .priceRow .passCount {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    direction: ltr;
+    margin-left: 15px;
 }

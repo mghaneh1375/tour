@@ -1660,6 +1660,30 @@ a:hover {
     height: 30px;
 }
 
+
+.loaderDiv .processBar{
+    max-width: 400px;
+    width: 95%;
+    height: 20px;
+    background: #d0d0d0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.loaderDiv .processBar .percentBar{
+    z-index: 1;
+}
+.loaderDiv .processBar .bar{
+    right: 0px;
+    height: 100%;
+    background: var(--koochita-yellow);
+    position: absolute;
+    border-radius: 20px;
+}
+
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}

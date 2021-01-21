@@ -1,35 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{app()->getLocale()}}">
 <head>
     @include('layouts.topHeader')
     <title>اطلاعات مسافرین تور</title>
 
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/buyHotel2.css?v=1')}}'/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/hotelPas1.css?v=1')}}'/>
+
+    <style>
+        .timer{
+            margin: 10px;
+            margin-top: 50px;
+        }
+        .timer .timerBar{
+            background: #eaeaea;
+            height: 15px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .timer .timerBar .timerBarColor{
+            height: 100%;
+            background: var(--koochita-yellow);
+            width: 0%;
+            margin-right: auto;
+            border-radius: 20px;
+        }
+        .timer .timerText{
+            text-align: center;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
-
-@include('layouts.header1')
-
 @include('general.forAllPages')
 
-<?php
-$ticket = \App\models\InnerFlightTicket::first();
-$adult = session('adult');
-$infant = 0;
-$child = session('children');
-$rooms = json_decode(session('reserve_room'));
-$num_room = 0;
-?>
-
-
-<div>
+@include('layouts.header1')
     <div class="container" style="direction: rtl; text-align: right;">
         <div class="full-width">
-            <div class="float-right"> شما در حال ثبت اطلاعات مسافرین تور ... می باشید</div>
+            <div class="float-right"> شما در حال ثبت اطلاعات مسافرین تور {{$tour->name}} می باشید</div>
             <div class="text-align-left">
-                <a href="{{session('backURL')}}" class="color-5-12-147Imp"> بازگشت به صفحه اطلاعات تور >> </a>
+                <a href="{{route('tour.reservation.cancel').'?code='.$userReservation->code}}" class="color-5-12-147Imp"> بازگشت به صفحه اطلاعات تور >> </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="timer">
+                    <div class="timerBar">
+                        <div id="timeBar" class="timerBarColor"></div>
+                    </div>
+                    <div class="timerText">
+                        <span style="font-size: 13px;">مدت زمان باقی مانده تا تکمیل خرید :</span>
+                        <span id="timer"></span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -39,7 +67,7 @@ $num_room = 0;
             <div class="full-width mg-bt-3per">
                 <div> اطلاعاتی که در این صفحه وارد می کنید به سایت پذیرنده منتقل می شود تا خرید شما آسان تر از قبل گردد</div>
                 <div class="textTitle"> اطلاعات تماس</div>
-                <div class="font-size-08em"> این اطلاعات به عنوان اطلاعات تماس شما در شازده ثبت می شود</div>
+                <div class="font-size-08em"> این اطلاعات به عنوان اطلاعات تماس شما در کوچیتا ثبت می شود</div>
                 <div class="width-60per height-120">
                     <div id="phone_error_text">پر کردن این بخش اجباری است</div>
                     <div class="inputBox width-30per float-right">
@@ -61,8 +89,15 @@ $num_room = 0;
                                     ایمیل
                                 </div>
                             </div>
-                            <input class="inputBoxInput" id="emailForTicket" type="email" placeholder="example@domain.com" name="email" onchange="clearError(0, 1)"
-                                   @if(auth()->check() && auth()->user()->email != '' && auth()->user()->email != null ) value="{{auth()->user()->email}}" @endif>
+                            <input class="inputBoxInput"
+                                   id="emailForTicket"
+                                   type="email"
+                                   placeholder="example@domain.com"
+                                   name="email"
+                                   onchange="clearError(0, 1)"
+                                    @if(auth()->check() && auth()->user()->email != '' && auth()->user()->email != null )
+                                        value="{{auth()->user()->email}}"
+                                    @endif>
                         </div>
                         <div class="check-box__item mg-tp-5">
                             <label class="labelEdit"> اطلاعات مهم را با این آدرس به من اطلاع دهید </label>
@@ -79,84 +114,39 @@ $num_room = 0;
             <div class="inlineBorder"></div>
 
             <div>
-                <div class="textTitle"> اطلاعات مسافرین</div>
-                <div>
-                    <div class="height-50 mg-bt-25">
-                        <div class="roomBox">
-                            <div id="roomDetail">
-                                <span class="float-right room">{{$num_room}}</span>&nbsp;
-                                <span>اتاق</span>&nbsp;-&nbsp;
-                                <span class="adult">{{session('adult')}}</span>
-                                <span>بزرگسال</span>&nbsp;
-                            </div>
-                            <div class="shTIcon passengerIcon font-size-25 display-inline-block"></div>
-                        </div>
-                        <div class="calenderBox">
-                            <label id="calendar-container-edit-1placeDate" class="dateLabel">
-                                <span class="ui_icon calendar calendarIcon" ></span>
-                                <input type="text" class="inputDateLabel border-none width-80" value="{{session('goDate')}}" readonly="">
-                            </label>
-                            <span class="calendarBoxTillStyles">تا</span>
-                            <label id="calendar-container-edit-2placeDate" class="dateLabel">
-                                <input type="text" class="inputDateLabel border-none width-80" value="{{session('backDate')}}" readonly="">
-                            </label>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="inlineBorder"></div>
-
-                @for($step = 0, $k = 0; $step < 3; $step++)
-                    @for($j = 0; $j < 3; $j++, $k++)
-                        <div id="passenger_{{$k}}">
+                @for($i = 0; $i < $tour->getInfoNumber; $i++)
+                    <div id="passenger_{{$i}}">
+                        <div>
                             <div>
-                                <div>
-                                    <div class="display-inline-block">
-                                        @if($k == 0 && Auth::check())
-                                            <div class="textTitle">
-                                                <span id="passengerInfo_{{$k}}"></span>
-                                                <span>111}</span>
-                                            </div>
-                                            <div class="mainPassengerDiv">مسافر اصلی</div>
+                                <div class="display-inline-block">
+                                    <div class="textTitle">مسافر {{$i+1}} </div>
+                                    @if($i == 0)
+                                        <div class="mainPassengerDiv">مسافر اصلی</div>
+                                        @if(auth()->check())
                                             <button onclick="getMyInfo()" class="btn afterBuyBtn bg-color-green" type="button"> من هستم</button>
-                                            <div class="autoFillInputs">
-                                                اطلاعات موجود از پروفایل شما پر می گردد
-                                            </div>
-
-                                        @else
-                                            <div class="textTitle" id="passengerInfo_{{$k}}">222</div>
+                                            <div class="autoFillInputs"> اطلاعات موجود از پروفایل شما پر می گردد </div>
                                         @endif
-                                    </div>
-                                    <div class="float-left position-relative">
-                                        <button onclick="deletePassenger('{{$k}}')" class="btn afterBuyBtn color-146-50-27" type="button">
-                                            حذف مسافر
-                                        </button>
-
-                                        @if(Auth::check())
-                                            <button onclick="toggleOldPassenger('{{$k}}')" class="btn afterBuyBtn bg-color-green" type="button">
-                                                مسافرین سابق
-                                            </button>
-                                            <div class="class_passengerOldPane item hidden" id="oldPassengerPane_{{$k}}"
-                                                 onmouseleave="addClassHidden('oldPassengerPane_{{$k}}'); passengerNoSelect = false;">
-                                                <div>
-                                                    <p>مسافرین سابق</p>
-                                                    <div class="lastPassengersDivider"></div>
-                                                    <div id="passengerList_{{$k}}"></div>
-                                                </div>
+                                    @endif
+                                </div>
+                                <div class="float-left position-relative">
+{{--                                    <button onclick="deletePassenger('{{$i}}')" class="btn afterBuyBtn color-146-50-27" type="button"> حذف مسافر </button>--}}
+                                    @if(auth()->check())
+                                        <button onclick="toggleOldPassenger('{{$i}}')" class="btn afterBuyBtn bg-color-green" type="button"> مسافرین سابق </button>
+                                        <div class="class_passengerOldPane item hidden" id="oldPassengerPane_{{$i}}"
+                                             onmouseleave="addClassHidden('oldPassengerPane_{{$i}}'); passengerNoSelect = false;">
+                                            <div>
+                                                <p>مسافرین سابق</p>
+                                                <div class="lastPassengersDivider"></div>
+                                                <div id="passengerList_{{$i}}"></div>
                                             </div>
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="check-box__item mg-tp-5">
-                                    <label class="labelEdit"> تبعه خارجی هستم </label>
-                                    <input onclick="changeForeignRow('{{$k}}')" id="foreign_{{$k}}" name="foreign[]" value="خارجی"
-                                           type="checkbox" class="display-inline-blockImp">
-                                </div>
-
-                                <div class="full-width">
+                            </div>
+                            <div class="full-width">
+                                @if(array_search('faName', $tour->userInfoNeed) !== false)
                                     <div>
-                                        <div id="nameFa_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div id="nameFa_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative">
@@ -164,10 +154,10 @@ $num_room = 0;
                                                     نام
                                                 </div>
                                             </div>
-                                            <input class="inputBoxInput" id="nameFa_{{$k}}" name="nameFa[]" type="text"
-                                                   placeholder="فارسی" onchange="clearError(1,{{$k}})">
+                                            <input class="inputBoxInput" id="nameFa_{{$i}}" name="nameFa[]" type="text"
+                                                   placeholder="فارسی" onchange="clearError(1,{{$i}})">
                                         </div>
-                                        <div id="familyFa_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div id="familyFa_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-25per mg-rt-10per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative">
@@ -175,12 +165,13 @@ $num_room = 0;
                                                     نام خانوادگی
                                                 </div>
                                             </div>
-                                            <input class="inputBoxInput" type="text" name="familyFa[]" id="familyFa_{{$k}}"
-                                                   placeholder="فارسی" onchange="clearError(2,{{$k}})">
+                                            <input class="inputBoxInput" type="text" name="familyFa[]" id="familyFa_{{$i}}" placeholder="فارسی" onchange="clearError(2,{{$i}})">
                                         </div>
                                     </div>
+                                @endif
+                                @if(array_search('enName', $tour->userInfoNeed) !== false)
                                     <div>
-                                        <div id="nameEn_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div id="nameEn_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative">
@@ -188,10 +179,10 @@ $num_room = 0;
                                                     نام
                                                 </div>
                                             </div>
-                                            <input class="inputBoxInput" name="nameEn[]" id="nameEn_{{$k}}" type="text"
-                                                   placeholder="لاتین" onchange="clearError(3,{{$k}})">
+                                            <input class="inputBoxInput" name="nameEn[]" id="nameEn_{{$i}}" type="text"
+                                                   placeholder="لاتین" onchange="clearError(3,{{$i}})">
                                         </div>
-                                        <div id="familyEn_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div id="familyEn_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-25per mg-rt-10per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative">
@@ -200,11 +191,13 @@ $num_room = 0;
                                                 </div>
                                             </div>
                                             <input class="inputBoxInput" type="text" placeholder="لاتین" name="familyEn[]"
-                                                   id="familyEn_{{$k}}" onchange="clearError(4,{{$k}})">
+                                                   id="familyEn_{{$i}}" onchange="clearError(4,{{$i}})">
                                         </div>
                                     </div>
-                                    <div>
-                                        <div id="birthDay_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                @endif
+                                <div>
+                                    @if(array_search('birthDay', $tour->userInfoNeed) !== false)
+                                        <div id="birthDay_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative">
@@ -212,13 +205,13 @@ $num_room = 0;
                                                     تاریخ تولد
                                                 </div>
                                             </div>
-                                            <select name="birthDayD[]" id="birthDayD_{{$k}}" class="inputBoxSelect" onchange="clearError(5,{{$k}})" required>
+                                            <select name="birthDayD[]" id="birthDayD_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
                                                 <option value="0"> روز</option>
-                                                @for($i = 1; $i < 32; $i++)
-                                                    <option value="{{$i}}"> {{$i}} </option>
+                                                @for($k = 1; $k < 32; $k++)
+                                                    <option value="{{$k}}"> {{$k}} </option>
                                                 @endfor
                                             </select>
-                                            <select name="birthDayM[]" id="birthDayM_{{$k}}" class="inputBoxSelect" onchange="clearError(5,{{$k}})" required>
+                                            <select name="birthDayM[]" id="birthDayM_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
                                                 <option value="0"> ماه</option>
                                                 <option value="1"> فروردین</option>
                                                 <option value="2"> اردیبهشت</option>
@@ -233,23 +226,26 @@ $num_room = 0;
                                                 <option value="11"> بهمن</option>
                                                 <option value="12"> اسفند</option>
                                             </select>
-                                            <select name="birthDayY[]" id="birthDayY_{{$k}}" class="inputBoxSelect" onchange="clearError(5,{{$k}})" required>
+                                            <select name="birthDayY[]" id="birthDayY_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
                                                 <option value="0"> سال</option>
-                                                @for($i = 1330; $i < 1398; $i++)
-                                                    <option value="{{$i}}"> {{$i}} </option>
+                                                @for($k = 1330; $k < 1398; $k++)
+                                                    <option value="{{$k}}"> {{$k}} </option>
                                                 @endfor
                                             </select>
                                         </div>
-                                        <div id="NID_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                    @endif
+                                    @if(array_search('meliCode', $tour->userInfoNeed) !== false)
+                                        <div id="NID_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-25per mg-rt-10per">
                                             <div class="inputBoxText width-50per">
                                                 <div class="display-inline-block position-relative">
                                                     <div class="afterBuyIcon redStar"></div>
-                                                    <span id="nidOrPassport_{{$k}}">کد ملی</span></div>
+                                                    <span id="nid{{$i}}">کد ملی</span></div>
                                             </div>
-                                            <input onkeypress="return isNumber(event)" name="NID[]" id="NID_{{$k}}" class="inputBoxInput width-50per" type="text"
-                                                   placeholder="000000000" onchange="clearError(6,{{$k}})">
+                                            <input onkeypress="return isNumber(event)" name="NID[]" id="NID_{{$i}}" class="inputBoxInput width-50per" type="text" placeholder="000000000" onchange="clearError(6,{{$i}})">
                                         </div>
+                                    @endif
+                                    @if(array_search('sex', $tour->userInfoNeed) !== false)
                                         <div class="inputBox width-13per mg-rt-10per">
                                             <div class="inputBoxText width-50per">
                                                 <div class="display-inline-block position-relative">
@@ -257,25 +253,42 @@ $num_room = 0;
                                                     جنسیت
                                                 </div>
                                             </div>
-                                            <select name="sex[]" id="sex_{{$k}}" class="inputBoxSelect width-30per mg-0-9" required>
+                                            <select name="sex[]" id="sex_{{$i}}" class="inputBoxSelect width-30per mg-0-9" required>
                                                 <option value="female"> زن</option>
                                                 <option value="male"> مرد</option>
                                             </select>
                                         </div>
+                                    @endif
+                                </div>
+                                @if(array_search('passport', $tour->userInfoNeed) !== false)
+                                    <div class="check-box__item mg-tp-5">
+                                        <label class="labelEdit"> تبعه خارجی هستم </label>
+                                        <input onclick="changeForeignRow('{{$i}}')" id="foreign_{{$i}}" name="foreign[]" value="خارجی" type="checkbox" class="display-inline-blockImp">
                                     </div>
-                                    <div id="foreignRow_{{$k}}" class="hidden">
-                                        <div id="expire_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                    <div id="foreignRow_{{$i}}" class="hidden">
+
+                                        <div id="NID_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div class="inputBox width-25per mg-rt-10per">
+                                            <div class="inputBoxText width-50per">
+                                                <div class="display-inline-block position-relative">
+                                                    <div class="afterBuyIcon redStar"></div>
+                                                    <span id="passport_{{$i}}">شماره پاسپورت</span></div>
+                                            </div>
+                                            <input onkeypress="return isNumber(event)" name="passport[]" id="passport_{{$i}}" class="inputBoxInput width-50per" type="text" placeholder="000000000" onchange="clearError(6,{{$i}})">
+                                        </div>
+
+                                        <div id="expire_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative"> تاریخ انقضا</div>
                                             </div>
-                                            <select name="expireD[]" id="expireD_{{$k}}" class="inputBoxSelect" required>
+                                            <select name="expireD[]" id="expireD_{{$i}}" class="inputBoxSelect" required>
                                                 <option value=""> روز</option>
-                                                @for($i = 1; $i < 32; $i++)
-                                                    <option value="{{$i}}"> {{$i}} </option>
+                                                @for($k = 1; $k < 32; $k++)
+                                                    <option value="{{$k}}"> {{$k}} </option>
                                                 @endfor
                                             </select>
-                                            <select name="expireM[]" id="expireM_{{$k}}" class="inputBoxSelect" required>
+                                            <select name="expireM[]" id="expireM_{{$i}}" class="inputBoxSelect" required>
                                                 <option value=""> ماه</option>
                                                 <option value="1"> فروردین</option>
                                                 <option value="2"> اردیبهشت</option>
@@ -290,104 +303,50 @@ $num_room = 0;
                                                 <option value="11"> بهمن</option>
                                                 <option value="12"> اسفند</option>
                                             </select>
-                                            <select name="expireY[]" id="expireY_{{$k}}" class="inputBoxSelect" required>
+                                            <select name="expireY[]" id="expireY_{{$i}}" class="inputBoxSelect" required>
                                                 <option value=""> سال</option>
-                                                @for($i = 1330; $i < 1398; $i++)
-                                                    <option value="{{$i}}"> {{$i}} </option>
+                                                @for($k = 1330; $k < 1398; $k++)
+                                                    <option value="{{$k}}"> {{$k}} </option>
                                                 @endfor
                                             </select>
                                         </div>
-                                        <div id="countryCode_error_text_{{$k}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
-                                        <div id="searchDivForScroll_{{$k}}" class="inputBox searchDivForScroll width-25per mg-rt-10per">
+                                        <div id="countryCode_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+                                        <div id="searchDivForScroll_{{$i}}" class="inputBox searchDivForScroll width-25per mg-rt-10per">
                                             <div class="inputBoxText">
                                                 <div class="display-inline-block position-relative"> محل صدور</div>
                                             </div>
-                                            <input onkeyup="searchCountryCode(event, '{{$k}}')" name="countryCode[]"
-                                                   id="countryCode_{{$k}}" class="inputBoxInput" type="text" placeholder="Iran">
-                                            <div id="result_{{$k}}" class="data_holder"></div>
+                                            <input onkeyup="searchCountryCode(event, '{{$i}}')" name="countryCode[]"
+                                                   id="countryCode_{{$i}}" class="inputBoxInput" type="text" placeholder="Iran">
+                                            <div id="result_{{$i}}" class="data_holder"></div>
                                         </div>
                                     </div>
-                                    <div class="questions_div">
-                                        <div class="questions">
-                                            <div class="question">
-                                                ایا مسافری با تابعیت خارجی در این تاق اقامت خواهد داشت؟
-                                            </div>
-                                            <div class="answer" onclick="changeAnswer({{$k}}, 1)">
-                                                <div class="common_answer common_answer_right" id="yes_1_{{$k}}">
-                                                    بلی
-                                                </div>
-                                                <div class="common_answer choose_answer common_answer_left" id="no_1_{{$k}}">
-                                                    خیر
-                                                </div>
-                                            </div>
-                                        </div>
+                                @endif
 
-                                        <div class="questions">
-                                            <div class="question">
-                                                ایا شما به مسافرت کاری می روید؟
-                                            </div>
-                                            <div class="answer" onclick="changeAnswer({{$k}}, 2)">
-                                                <div class="common_answer common_answer_right" id="yes_2_{{$k}}">
-                                                    بلی
-                                                </div>
-                                                <div class="common_answer choose_answer common_answer_left" id="no_2_{{$k}}">
-                                                    خیر
-                                                </div>
-                                            </div>
+                                <div class="questions_div">
+                                    <div class="questions helpUsText">
+                                        <div>
+                                            اگر درخواست یا ملاحظه ی دیگری دارید حتما بنویسید تا ما با میزبان شما درمیان بگذاریم
                                         </div>
-
-                                        <div class="questions">
-                                            <div class="question">
-                                                ایا درخواست ترانسفر فرودگاهی دارید؟
-                                            </div>
-                                            <div class="answer" onclick="changeAnswer({{$k}}, 3)">
-                                                <div class="common_answer common_answer_right" id="yes_3_{{$k}}">
-                                                    بلی
-                                                </div>
-                                                <div class="common_answer choose_answer common_answer_left" id="no_3_{{$k}}">
-                                                    خیر
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="questions">
-                                            <div class="question">
-                                                ایا کودکان همراه شما در این اتاق اقامت دارند؟
-                                            </div>
-                                            <div class="answer" onclick="changeAnswer({{$k}}, 4)">
-                                                <div class="common_answer common_answer_right" id="yes_4_{{$k}}">
-                                                    بلی
-                                                </div>
-                                                <div class="common_answer choose_answer common_answer_left" id="no_4_{{$k}}">
-                                                    خیر
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="questions helpUsText">
-                                            <div>
-                                                اگر درخواست یا ملاحظه ی دیگری دارید حتما بنویسید تا ما با میزبان شما درمیان بگذاریم
-                                            </div>
-                                            <div class="mg-tp-5">
-                                                <textarea class="requestArea" id="textArea{{$k}}" onchange="roomRequest({{$k}})" rows="4" placeholder="درخواست خود را وارد کنید"></textarea>
-                                            </div>
+                                        <div class="mg-tp-5">
+                                            <textarea class="requestArea" id="textArea{{$i}}" onchange="roomRequest({{$i}})" rows="4" placeholder="درخواست خود را وارد کنید"></textarea>
                                         </div>
                                     </div>
                                 </div>
-                                @if($mode == 2 || Auth::check())
-                                    <div id="saveInformation_div_{{$k}}" class="check-box__item mg-tp-5">
-                                        <label class="labelEdit"> این اطلاعات در قسمت مسافر ها ذخیره شود. در صورت ذخیره اطلاعات در هنگام
-                                            خرید بلیط دیگر نیاز به وارد کردن اطلاعات این مسافر نمی باشد و تنها با وارد کردن نام می توان
-                                            اطلاعات را به طور کامل وارد نمود </label>
-                                        <input type="checkbox" id="saveInformation_{{$k}}" name="saveInformation[]"
-                                               value="ذخیره اطلاعات" class="display-inline-blockImp">
-                                    </div>
-                                @endif
                             </div>
-                            <div class="inlineBorder"></div>
+                            @if(Auth::check())
+                                <div id="saveInformation_div_{{$i}}" class="check-box__item mg-tp-5">
+                                    <label class="labelEdit"> این اطلاعات در قسمت مسافر ها ذخیره شود. در صورت ذخیره اطلاعات در هنگام
+                                        خرید بلیط دیگر نیاز به وارد کردن اطلاعات این مسافر نمی باشد و تنها با وارد کردن نام می توان
+                                        اطلاعات را به طور کامل وارد نمود </label>
+                                    <input type="checkbox" id="saveInformation_{{$i}}" name="saveInformation[]"
+                                           value="ذخیره اطلاعات" class="display-inline-blockImp">
+                                </div>
+                            @endif
                         </div>
-            @endfor
-            @endfor
+                        <div class="inlineBorder"></div>
+                    </div>
+                @endfor
+            </div>
 
         </form>
 
@@ -398,7 +357,7 @@ $num_room = 0;
             <div class="display-inline-block"> با انتخاب دکمه تأیید و پرداخت شما به صفحه پرداخت فروشنده خدمت متصل می شوید و تنها کافی است مبلغ بلیط را تأیید و پرداخت نمایید </div>
             <div class="color-5-12-147" id="msgErr"></div>
             <div class="text-align-left">
-                <button onclick="doPayment({{$mode}})" class="btn afterBuyBtn bg-color-green" type="button"> تأیید و پرداخت </button>
+                <button onclick="doPayment()" class="btn afterBuyBtn bg-color-green" type="button"> تأیید و پرداخت </button>
             </div>
             <div class="text-align-left">
                 <button class="btn afterBuyBtn color-5-12-147" type="button"> انصراف </button>
@@ -407,62 +366,39 @@ $num_room = 0;
 
     </div>
 
-</div>
 
 @include('layouts.footer.layoutFooter')
 
+
 <script>
-    var passengerNoSelect = false;
-    var passengers = [];
-    var getMyPassengersBool = false;
-    var ageArr = [];
-    var nums = ['اول', 'دوم', 'سوم', 'چهارم', 'پنجم', 'ششم', 'هفتم', 'هشتم', 'نهم'];
-    var currIdx = 0, suggestions = [];
-    var nameFa = [];
-    var familyFa = [];
-    var nameEn = [];
-    var familyEn = [];
-    var NID = [];
-    var birthDay = [];
-    var birthDayD = [];
-    var birthDayM = [];
-    var birthDayY = [];
-    var foreign = [];
-    var expire = [];
-    var expireD = [];
-    var expireM = [];
-    var expireY = [];
-    var countryCode = [];
-    var sex = [];
-    var savedInformation = [];
-    var ageType = [];
-    var allow = [];
-    var phoneNum;
-    var email ;
-    var informMe = [];
-    var newsMe = [];
-    var username = [];
-    var pass = [];
-    var rPass = [];
-    var room_code = [];
-    var hasRegister = false;
-    var order_id = '{{session('orderId')}}';
-    var reserve_request_id = '{{session('reserveRequestId')}}';
-    var answers = [];
-    var request = [];
-    var check_time = true;
-    var check_reserve = 10;
-    var user_id = 0 ;
+    var timerInterval;
+    var remainingTime = '{{$timeRemaining}}';
 
-    var k = 0;
-    {{--    @for($step = 0, $k = 0; $step < count($rooms->num_room_code); $step++)--}}
-    {{--        @for($j = 0; $j < $rooms->num_room_code[$step]; $j++, $k++)--}}
-    {{--            answers[k] = ['false', 'false', 'false', 'false'];--}}
-    {{--            request[k] = '';--}}
-    {{--            k++;--}}
-    {{--        @endfor--}}
-    {{--    @endfor--}}
+    function setTimer(){
+        var percent = (1200 - remainingTime) / 12;
+        $('#timeBar').css('width', percent+'%');
 
+        var min = parseInt(remainingTime/60);
+        var seconds = parseInt(remainingTime%60);
+
+        if(min < 10)
+            min = '0'+min;
+        if(seconds < 10)
+            seconds = '0'+seconds;
+        $('#timer').text(`${min}:${seconds}`);
+        remainingTime--;
+
+        if(remainingTime <= 0){
+            clearInterval(timerInterval);
+            openErrorAlert('زمان شما برای پر کردن اطلاعات تمام شد. لطفا دوباره از صفحه ی تور اقدام کنید.', () => location.reload() );
+        }
+    }
+
+    timerInterval = setInterval(setTimer, 1000);
+</script>
+
+
+<script>
     function changeForeignRow(idx) {
         if ($("#foreign_" + idx).prop('checked')) {
             $("#foreignRow_" + idx).removeClass('hidden');
@@ -973,7 +909,7 @@ $num_room = 0;
             }
             sex[counter++] = tmp;
         });
-        @if(Auth::check() || $mode == 2)
+        @if(Auth::check())
             counter = 0;
         $("input[name='saveInformation[]']").each(function () {
             tmp = $(this).prop('checked');
@@ -983,33 +919,6 @@ $num_room = 0;
                 savedInformation[counter++] = "nok";
         });
         @endif
-        // if (mode == 1) {
-        //     alert('mode 1')
-        //     if (nameFa.length != nameEn.length || nameFa.length != familyFa.length ||
-        //         nameFa.length != familyEn.length || nameFa.length != NID.length ||
-        //         nameFa.length != birthDay.length || nameFa.length != foreign.length ||
-        //         nameFa.length != expire.length || nameFa.length != countryCode.length ||
-        //         nameFa.length != sex.length || nameFa.length != savedInformation.length ||
-        //         nameFa.length != ageType.length
-        //     ) {
-        //         $("#msgErr").empty().append("اشکالی در انجام عملیات مورد نظر رخ داده است");
-        //         allow = false;
-        //         return;
-        //     }
-        // }
-        // else {
-        //     alert('else')
-        //     if (nameFa.length != nameEn.length || nameFa.length != familyFa.length ||
-        //         nameFa.length != familyEn.length || nameFa.length != NID.length ||
-        //         nameFa.length != birthDay.length || nameFa.length != foreign.length ||
-        //         nameFa.length != expire.length || nameFa.length != countryCode.length ||
-        //         nameFa.length != sex.length || nameFa.length != ageType.length
-        //     ) {
-        //         $("#msgErr").empty().append("اشکالی در انجام عملیات مورد نظر رخ داده است");
-        //         allow = false;
-        //         return;
-        //     }
-        // }
 
         informMe = $("#importantInformation").prop("checked");
         if (informMe || informMe == "true")

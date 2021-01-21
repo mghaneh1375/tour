@@ -15,6 +15,7 @@ class CreateTourPricesTable extends Migration
     {
         Schema::create('tourPrices', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('tourId');
             $table->integer('ageFrom');
             $table->integer('ageTo');
             $table->integer('cost')->nullable();

@@ -10,15 +10,6 @@ var propertySample = `<div class="tourProperty" style="color: ##color##">
                             <div class="propBottom">##content##</div>
                         </div>`;
 
-
-var adultCost = 0;
-var childCost = 0;
-var buyAdultCount = 0;
-var buyChildCount = 0;
-var features = [];
-
-var eventDayHtml = ``;
-
 var tourSideFeatureList = {
     tourDifficult: {
         name: 'درجه سختی',
@@ -64,6 +55,7 @@ var tourSideFeatureList = {
     },
 };
 
+var mainCost;
 
 function getInformation(){
     $.ajax({
@@ -76,6 +68,38 @@ function getInformation(){
     })
 }
 
+function openDayDetails(_day){
+    $('#dayEventIdicator').html(dayEvents[(_day-1)].indicatorHtml);
+    $('#detailInfSec').html(dayEvents[(_day-1)].detailHtml);
+    $('#fullDayDetailSection').addClass('showMinDetail');
+    $('#showBigDays').addClass('hidden');
+}
+
+function selectDay(_element){
+
+    $('html, body').animate({ scrollTop: $('#dayInfoSection').offset().top }, 500);
+    $('#fullDayDetailSection').removeClass('showMinDetail');
+    $('#showBigDays').removeClass('hidden');
+
+    var day = $(_element).attr('data-day');
+
+    $(_element).parent().find('.selected').removeClass('selected');
+    $(_element).addClass('selected');
+
+    $('#showBigDays').find('.selected').removeClass('selected');
+    $('#mainDayShow_'+day).addClass('selected');
+
+
+    $('#showBigDays').animate({
+        scrollTop: $('#showBigDays').scrollTop() + $('#mainDayShow_' + day).position().top
+    }, 1000);
+    $('#showBigDays').scrollTop();
+}
+
+function selectBuyButton(){
+    openMyModal('buyModal');
+}
+
 function fillTourShowPage(_response){
     console.log(_response);
 
@@ -84,19 +108,15 @@ function fillTourShowPage(_response){
     var newFeatureForBuy = '';
     var equipments;
 
-    adultCost = _response.minCost;
-    childCost = _response.childCost;
+    tourPrices = _response.prices;
+    mainCost = _response.minCost;
+
 
     $('.tourName').text(_response.name);
     $('.sDateName').text(_response.sDateName);
     $('.eDateName').text(_response.eDateName);
 
     $('.mainCost').text(_response.cost);
-    $('.childCost').text(_response.childCostFormat);
-
-    if(_response.childDisCount != null){
-        $('.discountForChild').text(_response.childDisCount.discount).parent().removeClass('hidden');
-    }
 
     $('.mainDescription').text(_response.description);
     $('.tourExceptionText').text(_response.textExpectation);
@@ -118,14 +138,19 @@ function fillTourShowPage(_response){
 
     var timeHtml = '';
     tourTimes = _response.times;
-    tourTimes.map((item, index) => {
-        timeHtml += `<tr class="otherDateChoose ${tourTimeCode == item.code ? 'selectdd' : ''}" onclick="chooseOtherDates(this, ${index})">
-                        <td>${item.sDateName}</td>
-                        <td>${item.eDateName}</td>
-                    </tr>`;
-    });
+    if(tourTimes.length > 1) {
+        tourTimes.map((item, index) => {
+            timeHtml += `<tr class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'} ${tourTimeCode == item.code ? 'selectdd' : ''}" onclick="chooseOtherDates(this, ${index})">
+                            <td>${item.sDateName}</td>
+                            <td>${item.eDateName}</td>
+                            <td>${ item.hasCapacity ? (item.anyCapacity == 1 ? 'دارد' : item.capacityRemaining + ' نفر') : 'تکمیل' }</td>
+                        </tr>`;
+        });
 
-    $('#tourTimesTable').html(timeHtml);
+        $('#tourTimesTable').html(timeHtml);
+    }
+    else
+        $('.rowChooseDate').hide();
 
     if(_response.isTransport == 1){
         $('.sMainTransportKind').text(_response.mainTransport.sTransportName);
@@ -140,6 +165,13 @@ function fillTourShowPage(_response){
     }
     else
         $('.mainTransportDetails').addClass('hidden');
+
+    $('.tourGuidName').text(_response.tourGuidName);
+    if(_response.tourGuidKoochitaId != 0){
+        $('.tourGuidInKoochita').removeClass('hidden');
+    }
+    else
+        $('.tourGuidInKoochita').addClass('hidden');
 
     features = _response.features;
     features.map((item, index) => {
@@ -280,9 +312,11 @@ function fillTourShowPage(_response){
 
     $('#listOfDays').html(dayListHtml);
     $('#showBigDays').html(dayBigInfoHtml);
+
+    createTourPricesHtml();
 }
 
-async function calculateFeatureCost(){
+function calculateFeatureCost(){
     var totalCost = 0;
     var elements = $('.featuresInputCount');
     for(var i = 0; i < elements.length; i++){
@@ -301,24 +335,78 @@ async function calculateFeatureCost(){
     return totalCost;
 }
 
-function changePassengerCount(_element, _kind){
-    var value = $(_element).val();
-    if(_kind == 'adult'){
-        buyAdultCount = value;
-        $('.adultCount').text(value);
-    }
-    else{
-        buyChildCount = value;
-        $('.childCount').text(value);
-    }
+async function calculateFullCost(){
+    var featureCost = await calculateFeatureCost();
+    var totalValue = parseInt(featureCost);
+    pricesArr.map(item => {
+        if(item.isFree == 0) {
+            totalValue += (item.count * item.prices)
+        }
+    });
+    $('.passengerTotalCost').text(numberWithCommas(totalValue));
+}
+
+function addPassenger(_index, _add){
+    pricesArr[_index].count += _add;
+    if(pricesArr[_index].count < 0)
+        pricesArr[_index].count = 0;
+
+    $('.passengerCount_'+_index).text(pricesArr[_index].count);
 
     calculateFullCost();
 }
 
-async function calculateFullCost(){
-    var featureCost = await calculateFeatureCost();
-    var totalValue = (adultCost * parseInt(buyAdultCount)) + (childCost * parseInt(buyChildCount)) + parseInt(featureCost);
-    $('.passengerTotalCost').text(numberWithCommas(totalValue));
+function chooseOtherDates(_element, _index){
+    if(tourTimes[_index].hasCapacity) {
+        $(_element).parent().find('.selectdd').removeClass('selectdd');
+        $(_element).addClass('selectdd');
+
+        $('.sDateName').text(tourTimes[_index].sDateName);
+        $('.eDateName').text(tourTimes[_index].eDateName);
+
+        tourTimeCode = tourTimes[_index].code;
+    }
+}
+
+function createTourPricesHtml(){
+    var pricesHtml = '';
+
+    pricesArr.push({
+        id: 0,
+        text: 'بزرگسال',
+        prices: mainCost,
+        isFree: 0,
+        inCapacity: 0,
+        count: 0
+    });
+
+    tourPrices.map(item =>{
+        pricesArr.push({
+            id: item.id,
+            text: `کودک از سن ${item.ageFrom} تا ${item.ageTo}`,
+            prices: item.cost,
+            isFree: item.isFree,
+            inCapacity: item.inCapacity,
+            count: 0
+        })
+    });
+
+    pricesArr.map((item, index) => {
+        pricesHtml += `<div class="full-width inline-block priceRow">
+                            <span>${item.text}</span>
+                            <span style="display: flex; align-items: center; direction: ltr">
+                                <span style="margin-right: 10px; width: 80px;">${item.isFree ? 'رایگان' : numberWithCommas(item.prices)}</span>
+                                X
+                                <span class="passCount">
+                                    <span class="addButton" onclick="addPassenger(${index}, -1)">-</span>
+                                    <span class="passengerCount_${index}" style="margin: 0px 10px; width: 15px; text-align: center;">${item.count}</span>
+                                    <span class="addButton" onclick="addPassenger(${index}, 1)">+</span>
+                                </span>
+                            </span>
+                        </div>`;
+    });
+
+    $('#pricesInBuyButton').html(pricesHtml);
 }
 
 getInformation();

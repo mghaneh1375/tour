@@ -439,7 +439,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 #tourKindChoseTitleTourCreation > span:first-child , #tourLevelChoseTitleTourCreation  > span:first-child,
 #concentrationChoseTitleTourCreation , #tourTypeChoseTitleTourCreation > span:first-child ,
-#nonGovernmentalTitleTourCreation > span:first-child {
+.nonGovernmentalTitleTourCreation > span:first-child {
     font-weight: 700;
 }
 

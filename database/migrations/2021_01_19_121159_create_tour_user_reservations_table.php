@@ -17,7 +17,8 @@ class CreateTourUserReservationsTable extends Migration
             $table->id();
             $table->unsignedInteger('tourTimeId');
             $table->string('code');
-            $table->integer('passengerCount');
+            $table->integer('inCapacityCount')->default(0);
+            $table->integer('noneCapacityCount')->default(0);
             $table->text('features');
             $table->timestamps();
         });

@@ -15,7 +15,7 @@
 
     <link rel='stylesheet' id='google-font-css' href='//fonts.googleapis.com/css?family=Dosis%3A200' type='text/css' media='all'/>
 
-    <link rel="profile" href="http://gmpg.org/xfn/11">
+{{--    <link rel="profile" href="http://gmpg.org/xfn/11">--}}
 
     @yield('head')
 
@@ -169,7 +169,7 @@
         <div class="mobileFiltersButtonTabs hideOnScreen">
             <div class="tabs">
                 <div class="tab filterIcon" onclick="openMyModal('safarnamehMobileCategory')">دسته بندی</div>
-                <div class="tab searchIcon" onclick="">جستجو</div>
+                <div class="tab searchIcon" onclick="openMyModal('safarnamehSearchMobile')">جستجو</div>
             </div>
         </div>
 
@@ -181,11 +181,24 @@
                         <div class="closeThisModal iconClose" onclick="closeMyModal('safarnamehMobileCategory')"></div>
                     </div>
                 </div>
+                <style>
+                    .safarnamehMainCategoryListMobile .newFull{
+                        width: 100%;
+                        padding: 5px;
+                        margin: 0px 10px;
+                    }
+                </style>
                 <div class="safarnamehMainCategoryListMobile">
                     <div class="list">
+                        <a href="#" class="categ newFull">
+                            <div class="categIcon" style="margin: 0px">
+                                <img src="{{URL::asset('_images/safarnamehIcon/news.svg')}}" alt="اخبار" style="height: 30px;">
+                            </div>
+                            <div class="title">اخبار</div>
+                        </a>
                         @foreach($category as $cat)
                             <a href="{{route('safarnameh.list', ['type' => 'category', 'search' => $cat->name])}}" class="categ">
-                                <div class="categIcon">
+                                <div class="categIcon" style="{{$cat->icon == 'sogatsanaie.svg' ? 'margin: 0px;' : ''}}">
                                     <img src="{{URL::asset('_images/safarnamehIcon/'.$cat->icon)}}" alt="{{$cat->name}}">
                                 </div>
                                 <div class="title">{{$cat->name}}</div>
@@ -196,15 +209,27 @@
             </div>
         </div>
 
-        <div id="safarnamehSearchMobile" class="modalBlackBack hideOnScreen">
-            <div class="modalBody">
-
+        <div id="safarnamehSearchMobile" class="modalBlackBack fullCenter hideOnScreen">
+            <div class="gombadi">
+                <div class="mobileFooterFilterPic" style="max-height: 400px">
+                    <img src="{{URL::asset('images/mainPics/naser.jpg')}}" style="width: 100%">
+                    <div class="gradientWhite">
+                        <div class="closeThisModal iconClose" onclick="closeMyModal('safarnamehSearchMobile')"></div>
+                    </div>
+                </div>
+                <div class="safarnamehMainCategoryListMobile searchInMobileSafarnamehBody" style="height: 100%">
+                    <div class="title">جستجو در سفرنامه ها</div>
+                    <div class="fullyCenterContent">
+                        <input type="text" id="safarnamehSearchInputInMobile" class="searchInput" placeholder="عبارت خود را وارد کنید...">
+                    </div>
+                    <div class="fullyCenterContent" style="margin-top: 20px">
+                        <button class="searchButton" onclick="searchInArticle('safarnamehSearchInputInMobile')">جستجو</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-
         @include('layouts.footer.layoutFooter')
-
     </div>
 
     <script>

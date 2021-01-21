@@ -31,6 +31,7 @@ use App\models\tour\TourNotice;
 use App\models\tour\TourPeriod;
 use App\models\tour\TourPic;
 use App\models\tour\TourPlaceRelation;
+use App\models\tour\TourPrices;
 use App\models\tour\TourSchedule;
 use App\models\tour\TourScheduleDetail;
 use App\models\tour\TourScheduleDetailKind;
@@ -39,6 +40,7 @@ use App\models\tour\TourStyle_Tour;
 use App\models\tour\TourTimes;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
+use App\models\users\UserInfoNeeded;
 use App\User;
 use Carbon\Carbon;
 use ClassesWithParents\CInterface;
@@ -73,6 +75,7 @@ class TourCreationController extends Controller{
                 $tour->dest->kind = 'tabiatgardy';
             }
 
+            $tour->userInfoNeed = json_decode($tour->userInfoNeed);
             $tour->times = TourTimes::where('tourId', $tour->id)->orderBy('sDate')->get();
         }
 
@@ -165,13 +168,15 @@ class TourCreationController extends Controller{
                 $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
                 $tour->features = $tour->GetFeatures;
-                $tour->childDiscount = TourDiscount::where('tourId', $tour->id)->where('isChildren', 1)->first();
-                $tour->reasonDiscount = TourDiscount::where('tourId', $tour->id)->where('isReason', 1)->first();
-                $tour->groupDiscount = TourDiscount::where('tourId', $tour->id)->where('isReason', 0)->where('isChildren', 0)->get();
+                $tour->groupDiscount = TourDiscount::where('tourId', $tour->id)->whereNull('remainingDay')->get();
                 foreach ($tour->groupDiscount as $item){
                     $item->min = $item->minCount;
                     $item->max = $item->maxCount;
                 }
+
+                $tour->lastDays = TourDiscount::whereNotNull('remainingDay')->orderBy('remainingDay')->get();
+
+                $tour->prices = TourPrices::where('tourId', $tour->id)->orderBy('ageFrom')->get();
 
                 return view('pages.tour.create.createTour_Financial', compact(['tour']));
             }
@@ -262,6 +267,8 @@ class TourCreationController extends Controller{
         $newTour->anyCapacity = $request->anyCapacity;
         $newTour->private = $request->private;
         $newTour->isLocal = $request->sameSrcDestInput ?? 0;
+        $newTour->userInfoNeed = json_encode($request->userInfoNeed);
+        $newTour->allUserInfoNeed = (int)$request->isAllUserInfo;
         $newTour->save();
 
 
@@ -269,23 +276,26 @@ class TourCreationController extends Controller{
 
         for($i = 0; $i < count($request->sDateNotSame) && $i < count($request->eDateNotSame); $i++){
             if($request->sDateNotSame[$i] != null && $request->sDateNotSame[$i] != '' && $request->eDateNotSame[$i] != null && $request->eDateNotSame[$i] != ''){
+                $sDate = convertDateToString(convertNumber('en', $request->sDateNotSame[$i]), '/');
+                $eDate = convertDateToString(convertNumber('en', $request->eDateNotSame[$i]), '/');
 
-                $code = rand(10000, 99999);
-                while(TourTimes::where('code', $code)->count() > 0)
+                $check = \DB::select("SELECT * FROM `tourtimes` WHERE `tourId` = {$newTour->id} AND (`sDate` LIKE '{$sDate}' OR `eDate` LIKE '{$eDate}')");
+                if(count($check) == 0) {
                     $code = rand(10000, 99999);
+                    while (TourTimes::where('code', $code)->count() > 0)
+                        $code = rand(10000, 99999);
 
-                $tourTime = new TourTimes();
-                $tourTime->tourId = $newTour->id;
-                $tourTime->code = $code;
-                $tourTime->sDate = convertDateToString(convertNumber('en', $request->sDateNotSame[$i]), '/');
-                $tourTime->eDate = convertDateToString(convertNumber('en', $request->eDateNotSame[$i]), '/');
-                $tourTime->save();
+                    $tourTime = new TourTimes();
+                    $tourTime->tourId = $newTour->id;
+                    $tourTime->code = $code;
+                    $tourTime->sDate = $sDate;
+                    $tourTime->eDate = $eDate;
+                    $tourTime->save();
+                }
             }
         }
 
-
-        return redirect()->back();
-//        return redirect(route('tour.create.stage.two', ['id' => $newTour->id]));
+        return redirect(route('tour.create.stage.two', ['id' => $newTour->id]));
     }
     public function stageTwoTourStore(Request $request){
 
@@ -372,10 +382,10 @@ class TourCreationController extends Controller{
                 Transport_Tour::where('tourId', $tour->id)->delete();
             }
 
-            $tour->sideTransportCost = $data->isSideTransportCost;
-            if($data->isSideTransportCost == 1)
-                $tour->sideTransportCost = (int)$data->sideTransportCost;
-            else
+//            $tour->sideTransportCost = $data->isSideTransportCost;
+//            if($data->isSideTransportCost == 1)
+//                $tour->sideTransportCost = (int)$data->sideTransportCost;
+//            else
                 $tour->sideTransportCost = null;
 
             $tour->sideTransport = json_encode($data->sideTransport);
@@ -383,10 +393,10 @@ class TourCreationController extends Controller{
             if($data->isMeal == 1){
                 $tour->isMeal = 1;
                 $tour->isMealAllDay = $data->isMealsAllDay;
-                $tour->isMealCost = $data->isMealCost;
+//                $tour->isMealCost = $data->isMealCost;
 
-                if($data->isMealCost == 1)
-                    $tour->mealMoreCost = (int)$data->mealMoreCost;
+//                if($data->isMealCost == 1)
+//                    $tour->mealMoreCost = (int)$data->mealMoreCost;
 
                 if($data->isMealsAllDay == 1)
                     $tour->meals = json_encode($data->allDayMeals);
@@ -442,6 +452,48 @@ class TourCreationController extends Controller{
             $tour->isInsurance = (int)$data->isInsurance;
             $tour->save();
 
+            $counter = 0;
+            $prices = TourPrices::where('tourId', $tour->id)->get();
+            if(count($prices) > count($data->prices)){
+                for(; $counter < count($data->prices); $counter++){
+                    $pri = $data->prices[$counter];
+
+                    $prices[$counter]->ageFrom = $pri->ageFrom;
+                    $prices[$counter]->ageTo = $pri->ageTo;
+                    $prices[$counter]->inCapacity = (int)$pri->inCapacity;
+                    $prices[$counter]->isFree = (int)$pri->isFree;
+                    $prices[$counter]->cost = (int)$pri->isFree == 1 ? null : $pri->cost;
+                    $prices[$counter]->save();
+                }
+
+                for(; $counter < count($prices); $counter++)
+                    $prices[$counter]->delete();
+            }
+            else if(count($prices) <= count($data->prices)){
+                for(; $counter < (count($data->prices) - count($prices)); $counter++){
+                    $pri = $data->prices[$counter];
+
+                    $nPrice = new TourPrices();
+                    $nPrice->tourId = $tour->id;
+                    $nPrice->ageFrom = $pri->ageFrom;
+                    $nPrice->ageTo = $pri->ageTo;
+                    $nPrice->inCapacity = (int)$pri->inCapacity;
+                    $nPrice->isFree = (int)$pri->isFree;
+                    $nPrice->cost = (int)$pri->isFree == 1 ? null : $pri->cost;
+                    $nPrice->save();
+                }
+                for($i = 0; $i < count($prices); $i++){
+                    $pri = $data->prices[$counter + $i];
+
+                    $prices[$i]->ageFrom = $pri->ageFrom;
+                    $prices[$i]->ageTo = $pri->ageTo;
+                    $prices[$i]->inCapacity = (int)$pri->inCapacity;
+                    $prices[$i]->isFree = (int)$pri->isFree;
+                    $prices[$i]->cost = (int)$pri->isFree == 1 ? null : $pri->cost;
+                    $prices[$i]->save();
+                }
+            }
+
             TourFeature::where('tourId', $tour->id)->delete();
             foreach ($data->features as $feat){
                 $newFeat = new TourFeature();
@@ -452,46 +504,23 @@ class TourCreationController extends Controller{
                 $newFeat->save();
             }
 
-            TourDiscount::where('tourId', $tour->id)->where('isChildren', 0)->where('isReason', 0)->delete();
+            TourDiscount::where('tourId', $tour->id)->delete();
             foreach ($data->discounts as $discount){
                 $newDiscount = new TourDiscount();
                 $newDiscount->tourId = $tour->id;
                 $newDiscount->discount = $discount->discount;
                 $newDiscount->minCount = $discount->min;
                 $newDiscount->maxCount = $discount->max;
-                $newDiscount->isChildren = 0;
-                $newDiscount->isReason = 0;
                 $newDiscount->save();
             }
 
-//            if($data->childDisCount > 0){
-//                $childDisCount = TourDiscount::where('tourId', $tour->id)->where('isChildren', 1)->first();
-//                if($childDisCount == null)
-//                    $childDisCount = new TourDiscount();
-//
-//                $childDisCount->tourId = $tour->id;
-//                $childDisCount->discount = $data->childDisCount;
-//                $childDisCount->isChildren = 1;
-//                $childDisCount->isReason = 0;
-//                $childDisCount->save();
-//            }
-//            else
-//                TourDiscount::where('tourId', $tour->id)->where('isChildren', 1)->delete();
-
-            if($data->disCountReason > 0 && $data->sDiscountDate > 0 && $data->eDiscountDate > 0){
-                $reasonDiscount = TourDiscount::where('tourId', $tour->id)->where('isReason', 1)->first();
-                if($reasonDiscount == null)
-                    $reasonDiscount = new TourDiscount();
-                $reasonDiscount->tourId = $tour->id;
-                $reasonDiscount->discount = $data->disCountReason;
-                $reasonDiscount->isChildren = 0;
-                $reasonDiscount->isReason = 1;
-                $reasonDiscount->sReasonDate = $data->sDiscountDate;
-                $reasonDiscount->eReasonDate = $data->eDiscountDate;
-                $reasonDiscount->save();
+            foreach($data->lastDays as $dayDiscount){
+                $newDiscount = new TourDiscount();
+                $newDiscount->tourId = $tour->id;
+                $newDiscount->discount = $dayDiscount->discount;
+                $newDiscount->remainingDay = $dayDiscount->remainingDay;
+                $newDiscount->save();
             }
-            else
-                TourDiscount::where('tourId', $tour->id)->where('isReason', 1)->delete();
 
             return response()->json(['status' => 'ok']);
         }

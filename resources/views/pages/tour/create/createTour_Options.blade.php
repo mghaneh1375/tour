@@ -272,29 +272,29 @@
             </div>
             <div class="inboxHelpSubtitle">در صورت وجود بیشتر از یک وسیله همه‌ی آن‌ها را انتخاب نمایید.</div>
 
-            <div class="tourFoodOfferQuestions">
-                <span>آیا حمل و نقل فرعی تور شامل هزینه اضافه است؟</span>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="isCostForMainTransport" value="0" onchange="showSection('mainTransportCostDiv', this)" checked>خیر
-                    </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="isCostForMainTransport" value="1" onchange="showSection('mainTransportCostDiv', this)">بلی
-                    </label>
-                </div>
-            </div>
+{{--            <div class="tourFoodOfferQuestions">--}}
+{{--                <span>آیا حمل و نقل فرعی تور شامل هزینه اضافه است؟</span>--}}
+{{--                <div class="btn-group btn-group-toggle" data-toggle="buttons">--}}
+{{--                    <label class="btn btn-secondary active">--}}
+{{--                        <input type="radio" name="isCostForMainTransport" value="0" onchange="showSection('mainTransportCostDiv', this)" checked>خیر--}}
+{{--                    </label>--}}
+{{--                    <label class="btn btn-secondary">--}}
+{{--                        <input type="radio" name="isCostForMainTransport" value="1" onchange="showSection('mainTransportCostDiv', this)">بلی--}}
+{{--                    </label>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
-            <div id="mainTransportCostDiv" style="display: none;">
-                <div class="inputBoxTour float-right col-xs-5">
-                    <div class="inputBoxText">
-                        <div>
-                            هزینه اضافی
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <input id="sideTransportCost" class="inputBoxInput" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
-                </div>
-            </div>
+{{--            <div id="mainTransportCostDiv" style="display: none;">--}}
+{{--                <div class="inputBoxTour float-right col-xs-5">--}}
+{{--                    <div class="inputBoxText">--}}
+{{--                        <div>--}}
+{{--                            هزینه اضافی--}}
+{{--                            <span>*</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <input id="sideTransportCost" class="inputBoxInput" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
 
         <div class="whiteBox">
@@ -402,29 +402,29 @@
                 </div>
 
 
-                <div class="seperatorInWhiteSec">
-                    <span>آیا وعده‌های غذایی نیازمند هزینه‌ی اضافی است؟</span>
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="isMealCost" value="0" onchange="showSection('mealCostDiv', this)" checked>خیر
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="isMealCost" value="1" onchange="showSection('mealCostDiv', this)">بلی
-                        </label>
-                    </div>
+{{--                <div class="seperatorInWhiteSec">--}}
+{{--                    <span>آیا وعده‌های غذایی نیازمند هزینه‌ی اضافی است؟</span>--}}
+{{--                    <div class="btn-group btn-group-toggle" data-toggle="buttons">--}}
+{{--                        <label class="btn btn-secondary active">--}}
+{{--                            <input type="radio" name="isMealCost" value="0" onchange="showSection('mealCostDiv', this)" checked>خیر--}}
+{{--                        </label>--}}
+{{--                        <label class="btn btn-secondary">--}}
+{{--                            <input type="radio" name="isMealCost" value="1" onchange="showSection('mealCostDiv', this)">بلی--}}
+{{--                        </label>--}}
+{{--                    </div>--}}
 
-                    <div id="mealCostDiv" style="display: none;">
-                        <div class="inputBoxTour float-right col-xs-3">
-                            <div class="inputBoxText">
-                                <div>
-                                    هزینه اضافی
-                                    <span>*</span>
-                                </div>
-                            </div>
-                            <input id="mealCost" class="inputBoxInput" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
-                        </div>
-                    </div>
-                </div>
+{{--                    <div id="mealCostDiv" style="display: none;">--}}
+{{--                        <div class="inputBoxTour float-right col-xs-3">--}}
+{{--                            <div class="inputBoxText">--}}
+{{--                                <div>--}}
+{{--                                    هزینه اضافی--}}
+{{--                                    <span>*</span>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <input id="mealCost" class="inputBoxInput" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
             </div>
         </div>
@@ -654,13 +654,13 @@
             eDescription : tour.hasTransport ? tour.transports.eDescription : '',
 
             sideTransport: tour.sideTransport != null ? tour.sideTransport : [] ,
-            isSideTransportCost: tour.sideTransportCost == null ? 0 : 1,
-            sideTransportCost: tour.sideTransportCost != null ? tour.sideTransportCost : '',
+            // isSideTransportCost: tour.sideTransportCost == null ? 0 : 1,
+            // sideTransportCost: tour.sideTransportCost != null ? tour.sideTransportCost : '',
 
             isMeal: tour.isMeal,
             isMealsAllDay: tour.isMealAllDay,
-            isMealCost: tour.isMealCost,
-            mealMoreCost: tour.mealMoreCost,
+            // isMealCost: tour.isMealCost,
+            // mealMoreCost: tour.mealMoreCost,
             allDayMeals: tour.isMealAllDay ? tour.meals : [],
             sepecificDayMeals: tour.isMealAllDay ? [] : tour.meals,
 
@@ -710,14 +710,13 @@
             $('#eLng').val(storeData.eLng);
 
             storeData.sideTransport.map(item => chooseMultiSelectSideTransport(item));
-            $('#sideTransportCost').val(numberWithCommas(storeData.sideTransportCost));
-            showSection('mainTransportCostDiv', $(`input[name="isCostForMainTransport"][value="${storeData.isSideTransportCost}"]`));
+            // $('#sideTransportCost').val(numberWithCommas(storeData.sideTransportCost));
+            // showSection('mainTransportCostDiv', $(`input[name="isCostForMainTransport"][value="${storeData.isSideTransportCost}"]`));
 
             showSection('mealsDiv', $(`input[name="isMeal"][value="${storeData.isMeal}"]`));
 
-            $('#mealCost').val(numberWithCommas(storeData.mealMoreCost));
-            showSection('mealCostDiv', $(`input[name="isMealCost"][value="${storeData.isMealCost}"]`));
-
+            // $('#mealCost').val(numberWithCommas(storeData.mealMoreCost));
+            // showSection('mealCostDiv', $(`input[name="isMealCost"][value="${storeData.isMealCost}"]`));
 
             showSection('', $(`input[name="isMealsAllDay"][value="${storeData.isMealsAllDay}"]`));
             changeKindOfMeal(storeData.isMealsAllDay);
@@ -869,13 +868,13 @@
                 eDescription : $('#eDescription').val(),
 
                 sideTransport: chooseSideTransport,
-                isSideTransportCost: $('input[name="isCostForMainTransport"]:checked').val(),
-                sideTransportCost: $('#sideTransportCost').val().replace(new RegExp(',', 'g'), ''),
+                // isSideTransportCost: $('input[name="isCostForMainTransport"]:checked').val(),
+                // sideTransportCost: $('#sideTransportCost').val().replace(new RegExp(',', 'g'), ''),
 
                 isMeal: $('input[name="isMeal"]:checked').val(),
                 isMealsAllDay: $('input[name="isMealsAllDay"]:checked').val(),
-                isMealCost: $('input[name="isMealCost"]:checked').val(),
-                mealMoreCost: $('#mealCost').val().replace(new RegExp(',', 'g'), ''),
+                // isMealCost: $('input[name="isMealCost"]:checked').val(),
+                // mealMoreCost: $('#mealCost').val().replace(new RegExp(',', 'g'), ''),
                 allDayMeals: [],
                 sepecificDayMeals: [],
 
@@ -939,8 +938,8 @@
                             storeData.sepecificDayMeals[day-1].push($(dayMeals[i]).val());
                     }
                 }
-                if(storeData.isMealCost == 1 && storeData.mealMoreCost.trim().length == 0)
-                    errorText += '<li>هزینه ی اضافی غذا را مشخص کنید</li>';
+                // if(storeData.isMealCost == 1 && storeData.mealMoreCost.trim().length == 0)
+                //     errorText += '<li>هزینه ی اضافی غذا را مشخص کنید</li>';
 
             }
 

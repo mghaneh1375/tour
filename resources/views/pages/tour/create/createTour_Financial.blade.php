@@ -11,20 +11,55 @@
 
         .tourOtherPrice{
             border-bottom: solid 1px lightgray;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            padding: 20px 0px;
+            margin-bottom: 0;
+            position: relative;
+        }
+        .tourOtherPrice .deleteButton{
+            position: absolute;
+            left: 15px;
+            background: var(--koochita-red);
+            padding: 4px 15px;
+            border-radius: 10px;
+            top: 20%;
+            cursor: pointer;
         }
         .newPriceButton{
-            background: var(--koochita-light-green);
+            background: var(--koochita-blue);
             color: white;
             border: none;
             border-radius: 10px;
             padding: 10px;
+            margin-top: 20px;
             box-shadow: 1px 1px 4px 1px grey;
         }
 
         .forceHidden{
             display: none !important;
+        }
+
+        select option:disabled{
+            background: lightgrey;
+        }
+
+
+        .dayToDiscountRow{
+            display: flex;
+            align-items: center;
+        }
+        .dayToDiscountRow .textSec{
+            align-items: center;
+            display: flex;
+            margin: 0px 10px;
+        }
+        .dayToDiscountRow .dayInput{
+            width: 100px;
+            background: #ebebeb;
+            padding: 3px 0px;
+            margin: 0px 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            text-align: center;
         }
     </style>
 @endsection
@@ -68,75 +103,6 @@
                 <div class="fullyCenterContent">
                     <button class="newPriceButton" onclick="createNewPriceRow()">افزودن قیمت جدید</button>
                 </div>
-
-                <script>
-                    var priceIndex = 0;
-                    function changeFreePrice(_index, _value){
-                        if(_value == 1)
-                            $(`#price_${_index}`).addClass('forceHidden');
-                        else
-                            $(`#price_${_index}`).removeClass('forceHidden');
-                    }
-                    function createNewPriceRow(){
-                        var priceHtml = `<div class="tourBasicPriceTourCreation tourOtherPrice col-xs-12">
-                                            <div class="row" style="display: flex">
-                                                <div id="price_${priceIndex}" class="inputBoxTour col-xs-4" style="margin-left: 10px">
-                                                    <div class="inputBoxText">
-                                                        <div>
-                                                            قیمت
-                                                        </div>
-                                                    </div>
-                                                    <input class="inputBoxInput" id="priceInput_${priceIndex}" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
-                                                </div>
-                                                <div class="col-xs-8 float-right">
-                                                    <div class="inputBox discountLimitationWholesale float-right" style="display: flex">
-                                                        <div class="inputBoxText" style="width: 180px">
-                                                            <div>
-                                                                بازه‌ی سن<span>*</span>
-                                                            </div>
-                                                        </div>
-                                                        <select id="priceAgeFrom_${priceIndex}" class="inputBoxInput">
-                                                            @for($i = 0; $i < 18; $i++)
-                                                                <option value="{{$i}}">{{$i}}</option>
-                                                            @endfor
-                                                        </select>
-                                                        <div class="inputBoxText">الی</div>
-                                                        <select id="priceAgeTo_${priceIndex}" class="inputBoxInput">
-                                                            @for($i = 0; $i < 18; $i++)
-                                                            <option value="{{$i}}">{{$i}}</option>
-                                                            @endfor
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6 pd-0">
-                                                <span>آیا این بازه سنی جز ظرفیت حساب می شود؟</span>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary">
-                                                        <input type="radio" name="inCapacity_${priceIndex}" value="0">خیر
-                                                    </label>
-                                                    <label class="btn btn-secondary active">
-                                                        <input type="radio" name="inCapacity_${priceIndex}" value="1" checked>بلی
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-6 pd-0">
-                                                <span>آیا این بازه سنی رایگان است؟</span>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary active">
-                                                        <input type="radio" name="isFreePrice_${priceIndex}" value="0" checked onchange="changeFreePrice(${priceIndex}, this.value)">خیر
-                                                    </label>
-                                                    <label class="btn btn-secondary">
-                                                        <input type="radio" name="isFreePrice_${priceIndex}" value="1" onchange="changeFreePrice(${priceIndex}, this.value)">بلی
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>`;
-                        $('#pricesSection').append(priceHtml);
-                        priceIndex++;
-                    }
-                </script>
             </div>
 {{--            <div class="tourTicketKindTourCreation col-xs-6">--}}
 {{--                <div class="inputBoxTour col-xs-10" >--}}
@@ -169,7 +135,6 @@
                     <img src="{{URL::asset("images/tourCreation/approve.png")}}">
                 </button>
             </div>
-{{--            <div class="inboxHelpSubtitle">امکاناتی را که امکان انتخاب همزمان آن‌ها موجود نمی‌باشد، در هم‌گروهی‌های یکسان قرار دهید.</div>--}}
         </div>
 
         <div class="whiteBox">
@@ -178,54 +143,18 @@
                 <div class="inboxHelpSubtitle">تخفیف‌های گروهی به خریداران ظرفیت‌های بالا اعمال می‌شود. شما می‌توانید با تعیین بازه‌های متفاوت تخفیف‌های متفاوتی اعمال نمایید.</div>
                 <div id="groupDiscountDiv"></div>
             </div>
+        </div>
 
-{{--            <div class="fullwidthDiv specialDiscountBoxes seperatorInWhiteSec">--}}
-{{--                <div class="boxTitlesTourCreation">تخفیف ویژه‌ی کودکان</div>--}}
-{{--                <div class="inboxHelpSubtitle" style="width: 100%">تخفیف ویژه برای کودکان و نوجوانان (زیر 12 سال) از این قسمت تعریف می‌گردد.</div>--}}
-{{--                <div class="inputBoxTour col-xs-3 float-right">--}}
-{{--                    <div class="inputBoxText" style="width: 155px">--}}
-{{--                        <div>--}}
-{{--                            درصد تخفیف--}}
-{{--                            <span>*</span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <input id="childDisCount" class="inputBoxInput" type="number" placeholder="درصد تخفیف">--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-            <div class="fullwidthDiv specialDiscountBoxes seperatorInWhiteSec" style="position: relative">
-                <div class="boxTitlesTourCreation">تخفیف‌های مناسبتی و کد تخفیف</div>
-                <div class="inboxHelpSubtitle" style="width: 100%">در صورت تعریف سیستم تخفیف زیر ، ما از زمان اعلامی شما به صورت خودکار تخفیف خرید در روزهای پایانی را اعمال می‌نماییم.</div>
-                <div class="inputBoxTour col-xs-3 mg-rt-10 float-right">
-                    <div class="inputBoxText" style="width: 140px">
-                        <div>
-                            درصد تخفیف
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <input id="disCountReason" class="inputBoxInput" type="number" placeholder="درصد تخفیف">
-                </div>
-                <div class="inputBoxTour col-xs-3 mg-rt-10 float-right">
-                    <div class="inputBoxText">
-                        <div>
-                            زمان پایان
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <input id="eDiscountDate" type="text" class="inputBoxInput datePic" readonly>
-                </div>
-                <div class="inputBoxTour col-xs-3 mg-rt-10 float-right">
-                    <div class="inputBoxText">
-                        <div>
-                            زمان شروع
-                            <span>*</span>
-                        </div>
-                    </div>
-                    <input id="sDiscountDate" type="text" class="inputBoxInput datePic" readonly>
+        <div class="whiteBox">
+            <div class="fullwidthDiv">
+                <div class="boxTitlesTourCreation">تخفیف های لحظه اخری</div>
+                <div id="lastDayesDiscounts" style="display: flex; flex-direction: column;"></div>
+                <div class="fullyCenterContent">
+                    <button class="newPriceButton" onclick="addLastDayDiscount()">افزودن تخفیف لحظه آخری</button>
                 </div>
             </div>
-
         </div>
+
 
         <div class="row" style="padding: 15px;">
             <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
@@ -285,6 +214,8 @@
 
     <script>
         var tour = {!! $tour !!};
+        var priceIndex = 0;
+        var lastDayDiscoutnIndex = 0;
         var featuresCount = 0;
         var disCountNumber = 0;
         var featureRowCard = $('#featureRowSample').html();
@@ -306,9 +237,11 @@
             isInsurance: tour.isInsurance,
             features: tour.features,
             discounts: tour.groupDiscount == [] ? 0 : tour.groupDiscount,
-            disCountReason:  tour.reasonDiscount == null ? 0 : tour.reasonDiscount.discount,
-            sDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.sReasonDate,
-            eDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.eReasonDate,
+            prices: tour.prices,
+            lastDays: tour.lastDays
+            // disCountReason:  tour.reasonDiscount == null ? 0 : tour.reasonDiscount.discount,
+            // sDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.sReasonDate,
+            // eDiscountDate: tour.reasonDiscount == null ? 0 : tour.reasonDiscount.eReasonDate,
             // ticketKind: tour.ticketKind,
             // childDisCount: tour.childDiscount == null ? 0 : tour.childDiscount.discount,
         };
@@ -323,9 +256,9 @@
 
         function fillInputs(){
             $('#tourCost').val(numberWithCommas(storeData.cost));
-            $('#disCountReason').val(storeData.disCountReason);
-            $('#sDiscountDate').val(storeData.sDiscountDate);
-            $('#eDiscountDate').val(storeData.eDiscountDate);
+            // $('#disCountReason').val(storeData.disCountReason);
+            // $('#sDiscountDate').val(storeData.sDiscountDate);
+            // $('#eDiscountDate').val(storeData.eDiscountDate);
             // $('#ticketKind').val(storeData.ticketKind);
             // $('#childDisCount').val(storeData.childDisCount);
 
@@ -357,7 +290,31 @@
                 }, 50);
             });
 
-            setTimeout(checkAllDiscount, 1000);
+            storeData.prices.forEach(() => createNewPriceRow());
+            storeData.prices.map((item, index) => {
+                $(`#priceInput_${index}`).val(item.cost);
+                $(`#priceAgeFrom_${index}`).val(item.ageFrom);
+                $(`#priceAgeTo_${index}`).val(item.ageTo);
+
+                $(`input[name="isFreePrice_${index}"]`).parent().removeClass('active');
+                $(`input[name="isFreePrice_${index}"][value="${item.isFree}"]`).prop('checked', true).parent().addClass('active');
+                changeFreePrice(index, item.isFree);
+
+
+                $(`input[name="inCapacity_${index}"]`).parent().removeClass('active');
+                $(`input[name="inCapacity_${index}"][value="${item.inCapacity}"]`).prop('checked', true).parent().addClass('active');
+            });
+
+            storeData.lastDays.forEach(() => addLastDayDiscount());
+            storeData.lastDays.map((item, index) => {
+                $('#dayDiscountInput_'+index).val(item.discount);
+                $('#dayDiscountDay_'+index).val(item.remainingDay);
+            });
+
+            setTimeout(() => {
+                disableAllSelectAges();
+                checkAllDiscount()
+            }, 1000);
         }
 
         function createFeatureRow(){
@@ -366,6 +323,7 @@
             $('#featuresDiv').append(text);
             featuresCount++;
         }
+
         function deleteFeatureRow(_index){
             if($('.featuresRow').length > 1)
                 $('#features_'+_index).remove();
@@ -385,6 +343,7 @@
             if(disCountNumber > 1)
                 checkAllDiscount();
         }
+
         function deleteDisCountCard(_index){
             disCounts[_index] = {to: -1, from: -1};
 
@@ -417,6 +376,7 @@
             else
                 $(`#${showId}`).removeClass('errorClass');
         }
+
         function checkAllDiscount(){
             discountError = false;
             for(var i = disCounts.length-1; i >= 0 ; i--){
@@ -465,11 +425,13 @@
             storeData = {
                 cost: $('#tourCost').val().replace(new RegExp(',', 'g'), ''),
                 isInsurance: $('input[name="isInsurance"]:checked').val(),
+                lastDays: [],
+                prices: [],
                 features: [],
                 discounts: [],
-                disCountReason: $('#disCountReason').val(),
-                sDiscountDate: $('#sDiscountDate').val(),
-                eDiscountDate: $('#eDiscountDate').val(),
+                // disCountReason: $('#disCountReason').val(),
+                // sDiscountDate: $('#sDiscountDate').val(),
+                // eDiscountDate: $('#eDiscountDate').val(),
                 // ticketKind: $('#ticketKind').val(),
                 // childDisCount: $('#childDisCount').val(),
             };
@@ -524,12 +486,41 @@
                 if (discountWarning)
                     warning += '<li>بعضی از تخفیف های گروهی بازه و درصد تخفیف ندارند . در این صورت ثبت نمی شوند.</li>';
 
-                if (!(storeData.sDiscountDate.trim().length != 0 && storeData.eDiscountDate.trim().length != 0 && parseInt(storeData.disCountReason) > 0)) {
-                    warning += '<li>اطالاعات تخفیف مناسبتی شما ناقص است و ذخیره نمی شود.</li>';
-                    storeData.sDiscountDate = '';
-                    storeData.eDiscountDate = '';
-                    storeData.disCountReason = '';
+                var lastDaysDiscounts = $('.dayToDiscountRow');
+                for(i = 0; i < lastDaysDiscounts.length; i++){
+                    var dIndex = $(lastDaysDiscounts[i]).attr('data-index');
+                    var discount = $('#dayDiscountInput_'+dIndex).val();
+                    var days = $('#dayDiscountDay_'+dIndex).val();
+
+                    if(discount > 0 && days > 0){
+                        storeData.lastDays.push({
+                            discount: discount,
+                            remainingDay: days
+                        })
+                    }
                 }
+
+
+                var priceSelects = $('.selectAges');
+                for(i = 0; i < priceSelects.length; i++){
+                    var pIndex = $(priceSelects[i]).attr('data-index');
+                    var cost = $(`#priceInput_${pIndex}`).val().replace(new RegExp(',', 'g'), '');
+                    var ageFrom = $(`#priceAgeFrom_${pIndex}`).val();
+                    var ageTo = $(`#priceAgeTo_${pIndex}`).val();
+                    var inCapacity = $(`input[name="inCapacity_${pIndex}"]:checked`).val();
+                    var isFree = $(`input[name="isFreePrice_${pIndex}"]:checked`).val();
+
+                    if((cost.trim().length != 0 || isFree == 1) && ageFrom >= 0 && ageTo >= 0){
+                        storeData.prices.push({
+                            cost,
+                            ageFrom,
+                            ageTo,
+                            inCapacity,
+                            isFree
+                        });
+                    }
+                }
+
 
                 if (warning == '' && _mainStore)
                     doSaveInfos();
@@ -558,11 +549,167 @@
                 success: response => {
                     if(response.status == 'ok'){
                         localStorage.removeItem('stageFourTourCreation_{{$tour->id}}');
-                        {{--location.href = '{{route("tour.create.stage.five", ['id' => $tour->id])}}';--}}
-                        location.reload();
+                        location.href = '{{route("tour.create.stage.five", ['id' => $tour->id])}}';
+                        // location.reload();
                     }
                 }
             })
+        }
+
+        function changeFreePrice(_index, _value){
+            if(_value == 1)
+                $(`#price_${_index}`).addClass('forceHidden');
+            else
+                $(`#price_${_index}`).removeClass('forceHidden');
+        }
+
+        function createNewPriceRow(){
+            var options = '';
+            for(var i = 0; i < 18; i++)
+                options += `<option value="${i}">${i}</option>`;
+
+            var priceHtml = `<div class="tourBasicPriceTourCreation tourOtherPrice col-xs-12">
+                                <div class="row" style="display: flex">
+                                    <div id="price_${priceIndex}" class="inputBoxTour col-xs-4" style="margin-left: 10px">
+                                        <div class="inputBoxText">
+                                            <div>
+                                                قیمت
+                                            </div>
+                                        </div>
+                                        <input class="inputBoxInput" id="priceInput_${priceIndex}" type="text" placeholder="ریال" onkeyup="$(this).val(numberWithCommas(this.value))">
+                                    </div>
+                                    <div class="col-xs-8 float-right">
+                                        <div class="inputBox discountLimitationWholesale float-right" style="display: flex">
+                                            <div class="inputBoxText" style="width: 180px">
+                                                <div>
+                                                    بازه‌ی سن<span>*</span>
+                                                </div>
+                                            </div>
+                                            <select id="priceAgeFrom_${priceIndex}" data-index="${priceIndex}" class="selectAges inputBoxInput" onchange="disableAllSelectAges()">
+                                                ${options}
+                                            </select>
+                                            <div class="inputBoxText">الی</div>
+                                            <select id="priceAgeTo_${priceIndex}" data-index="${priceIndex}" class="inputBoxInput" onchange="disableAllSelectAges()">
+                                                ${options}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 pd-0">
+                                    <span>آیا این بازه سنی جز ظرفیت حساب می شود؟</span>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary">
+                                            <input type="radio" name="inCapacity_${priceIndex}" value="0">خیر
+                                    </label>
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="inCapacity_${priceIndex}" value="1" checked>بلی
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6 pd-0">
+                                <span>آیا این بازه سنی رایگان است؟</span>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="isFreePrice_${priceIndex}" value="0" checked onchange="changeFreePrice(${priceIndex}, this.value)">خیر
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="isFreePrice_${priceIndex}" value="1" onchange="changeFreePrice(${priceIndex}, this.value)">بلی
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="deleteButton" onclick="deleteThisPrice(this)"><img src={{URL::asset('images/tourCreation/delete.png')}}></div>
+                    </div>`;
+            $('#pricesSection').append(priceHtml);
+            priceIndex++;
+
+            disableAllSelectAges();
+        }
+
+        function deleteThisPrice(_element){
+            $(_element).parent().remove();
+            disableAllSelectAges();
+        }
+
+        function disableThisSelectAges(_index){
+            var value = $(`#priceAgeFrom_${_index}`).val();
+            for(var i = 0; i <= 17; i++)
+                document.getElementById('priceAgeTo_' + _index).options[i].disabled = (i <= value);
+
+            value = $(`#priceAgeTo_${_index}`).val();
+            if(value > 0) {
+                for (i = 0; i <= 17; i++)
+                    document.getElementById('priceAgeFrom_' + _index).options[i].disabled = (i >= value);
+            }
+        }
+
+        function disableAllSelectAges(){
+            var index;
+            var index2;
+            var period = [0, 0];
+            var selects = $('.selectAges');
+
+            for(var i = 0; i < selects.length; i++){
+                index = $(selects[i]).attr('data-index');
+                disableThisSelectAges(index);
+            }
+
+            for(i = 0; i < selects.length; i++){
+                index = $(selects[i]).attr('data-index');
+
+                period[0] = parseInt($('#priceAgeFrom_'+index).val());
+                period[1] = parseInt($('#priceAgeTo_'+index).val());
+
+                if(period[0] != null && period[1] != null) {
+                    for (var j = 0; j < selects.length; j++) {
+                        if (j != i) {
+                            index2 = $(selects[j]).attr('data-index');
+                            for (var k = 0; k <= 17; k++) {
+                                if (k >= period[0] && k <= period[1]){
+                                    document.getElementById('priceAgeTo_' + index2).options[k].disabled = true;
+                                    document.getElementById('priceAgeFrom_' + index2).options[k].disabled = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function addLastDayDiscount(){
+            var options = '';
+            for(var i = 0; i < 16; i++)
+                options += `<option value="${i}">${i}</option>`;
+
+            var html = `<div id="dayDiscount_${lastDayDiscoutnIndex}" data-index="${lastDayDiscoutnIndex}" class="col-xs-12 pd-0 dayToDiscountRow">
+                                <div class="inputBox discountLimitationWholesale float-right">
+                                    <div class="inputBoxText">
+                                        <div>
+                                            درصد تخفیف<span>*</span>
+                                        </div>
+                                    </div>
+                                    <input id="dayDiscountInput_${lastDayDiscoutnIndex}" class="inputBoxInput no-border-imp" type="number" placeholder="درصد تخفیف">
+                                </div>
+                                <div class="textSec">
+                                    <span>این تخفیف از</span>
+                                    <select id="dayDiscountDay_${lastDayDiscoutnIndex}" class="inputBoxInput dayInput">${options}</select>
+                                    <span>روز مانده به برگزاری تور اعمال شود</span>
+                                </div>
+                                <div class="inline-block mg-rt-10">
+                                    <button type="button" class="wholesaleDiscountLimitationBtn deleteBtnTourCreation deleteDisCountButton" onclick="deleteDisCountDay(${lastDayDiscoutnIndex})">
+                                        <img src="{{URL::asset('images/tourCreation/delete.png')}}">
+                                    </button>
+                                </div>
+                            </div>`;
+
+            lastDayDiscoutnIndex++;
+
+            $('#lastDayesDiscounts').append(html);
+        }
+
+        function deleteDisCountDay(_index){
+            $('#dayDiscount_'+_index).remove();
         }
 
         function doLastUpdate(){

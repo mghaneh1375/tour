@@ -4,36 +4,12 @@ namespace App\Http\Controllers\Tour;
 
 use App\Http\Controllers\Controller;
 use App\models\Cities;
-use App\models\FestivalLimboContent;
-use App\models\MainEquipment;
-use App\models\places\Amaken;
-use App\models\places\Boomgardy;
-use App\models\places\Hotel;
-use App\models\places\Place;
-use App\models\State;
-use App\models\SubEquipment;
 use App\models\tour\Tour;
-use App\models\tour\TourDifficult;
-use App\models\tour\TourDifficult_Tour;
-use App\models\tour\TourDiscount;
 use App\models\tour\TourEquipment;
-use App\models\tour\TourFeature;
-use App\models\tour\TourFocus;
-use App\models\tour\TourFocus_Tour;
-use App\models\tour\TourGuid;
-use App\models\tour\TourHotel;
-use App\models\tour\TourKind;
-use App\models\tour\TourKind_Tour;
-use App\models\tour\TourNotice;
-use App\models\tour\TourPeriod;
 use App\models\tour\TourPic;
-use App\models\tour\TourPlace;
-use App\models\tour\TourSchedule;
-use App\models\tour\TourScheduleDetail;
-use App\models\tour\TourScheduleDetailKind;
-use App\models\tour\TourStyle;
-use App\models\tour\TourStyle_Tour;
+use App\models\tour\TourPrices;
 use App\models\tour\TourTimes;
+use App\models\tour\TourUserReservation;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
 use App\User;
@@ -56,6 +32,17 @@ class TourController extends Controller{
     ];
 
     public function showTour($code){
+        $tourReserve = TourUserReservation::where('created_at', '<', Carbon::now()->subMinute(25))->get();
+        foreach ($tourReserve as $item){
+            $tourTime = TourTimes::find($item->tourTimeId);
+            if($tourTime != null){
+                $tourTime->registered -= $item->inCapacityCount;
+                $tourTime->save();
+            }
+
+            $item->delete();
+        }
+
         $timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : 0;
 
         $tour = Tour::where('code', $code)->first();
@@ -119,19 +106,7 @@ class TourController extends Controller{
         else
             $tour->dest = (object)['name' => ''];
 
-        $tour->importantNotes = TourNotice::where($thisTour)->pluck('text')->toArray();
-
         $tour->cost = number_format($tour->minCost);
-        $tour->childCost = $tour->minCost;
-        $tour->childCostFormat = $tour->cost;
-
-        $tour->reason = TourDiscount::where($thisTour)->where('isReason', 1)->first();
-        $tour->childDisCount = TourDiscount::where($thisTour)->where('isChildren', 1)->first();
-
-        if($tour->childDisCount != null){
-            $tour->childCost = $tour->minCost * ((100 - $tour->childDisCount->discount)/100);
-            $tour->childCostFormat = number_format($tour->childCost);
-        }
 
         $sideTransportId = json_decode($tour->sideTransport);
         $tour->sideTransport = TransportKind::whereIn('id', $sideTransportId)->pluck('name')->toArray();
@@ -172,7 +147,7 @@ class TourController extends Controller{
 
         $tour->schedule = $tour->getFullySchedule();
 
-        $times = TourTimes::where('tourId', $tour->id)->orderBy('sDate')->get();
+        $times = TourTimes::where('tourId', $tour->id)->where('isPublished', 1)->orderBy('sDate')->get();
         foreach($times as $item){
             $stt = explode('/', $item->sDate);
             $sDateInWeek = $this->DateOfWeeks[Verta::createJalali($stt[0], $stt[1], $stt[2])->dayOfWeek];
@@ -181,19 +156,29 @@ class TourController extends Controller{
             $ett = explode('/', $item->eDate);
             $eDateInWeek = $this->DateOfWeeks[Verta::createJalali($ett[0], $ett[1], $ett[2])->dayOfWeek];
             $item->eDateName = $eDateInWeek .' ' . $item->eDate;
+
+            if($tour->anyCapacity == 1) {
+                $item->anyCapacity = 1;
+                $item->hasCapacity = true;
+            }
+            else{
+                $item->anyCapacity = 0;
+                $item->capacityRemaining = $tour->maxCapacity - $item->registered;
+                $item->hasCapacity = ($item->capacityRemaining > 0);
+            }
+
         }
         $tour->times = $times;
+
+        $tour->prices = TourPrices::where('tourId', $tour->id)->get();
+
+        if($tour->tourGuidKoochitaId != 0){
+            $guid = User::select(['first_name', 'last_name'])->find($tour->tourGuidKoochitaId);
+            $tour->tourGuidName = $guid->first_name . ' ' . $guid->last_name;
+        }
 
         return response()->json(['status' => 'ok', 'result' => $tour]);
     }
 
-
-    public function getPassengerInfo()
-    {
-        $mode = 2;
-//        return view('hotelPas1', compact('mode'));
-        return view('pages.tour.buy.tourBuyPage', compact('mode'));
-
-    }
 
 }

@@ -6,13 +6,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('tour')->group(function (){
     Route::middleware(['shareData'])->group(function(){
+        Route::get('main', function(){ dd('tour main page'); })->name('tour.main');
+
         Route::get('/show/{code}', 'TourController@showTour')->name('tour.show');
-        Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
 
-        Route::get('getPassengerInfo', 'TourController@getPassengerInfo')->name('tour.getPassengerInfo');
+        Route::prefix('reserve')->group(function(){
+            Route::get('/getPassengerInfo', 'TourReservationController@getPassengerInfo')->name('tour.reservation.getPassengerInfo');
 
-        Route::post('/reserve/firstTime', 'TourReservationController@firstTimeReservationTour')->name('tour.reservation.firstReserve');
+            Route::get('/cancelReservation', 'TourReservationController@cancelReservation')->name('tour.reservation.cancel');
+
+            Route::post('/checkCapacity', 'TourReservationController@checkReservationCapacity')->name('tour.reservation.checkCapacity');
+        });
     });
+
+    Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
+
+
+
 
     Route::middleware(['shareData'])->group(function(){
         Route::get('/index', function (){

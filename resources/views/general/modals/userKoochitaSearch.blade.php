@@ -1,5 +1,3 @@
-
-
 <div id="koochitaUserSearchModal" class="modalBlackBack fullCenter followerModal" style="z-index: 9999;">
     <div class="modalBody" style="width: 400px; border-radius: 10px;">
         <div>

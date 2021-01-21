@@ -2,6 +2,12 @@
 
 @section('head')
     <style>
+        .personInfosLabel{
+            display: inline-flex;
+            align-items: center;
+            margin: 7px 20px;
+            font-size: 14px;
+        }
         .transportInfoSec{
             display: flex !important;
             align-items: center;
@@ -14,7 +20,19 @@
             display: flex;
             align-items: center;
         }
+
+        .dayActionButton{
+            margin: 0px 10px;
+            padding: 4px 10px;
+            background: var(--koochita-blue);
+            color: white;
+            border-radius: 7px;
+            cursor: pointer;
+            box-shadow: 1px 1px 4px 2px #bbbbbb;
+        }
     </style>
+
+    <script src="{{URL::asset('js/jalali.js')}}"></script>
 @endsection
 
 @section('body')
@@ -27,7 +45,7 @@
         <input type="hidden" id="tourId" name="id" value="0">
 
         <div class="ui_container">
-            <div class="menu ui_container whiteBox">
+            <div class="whiteBox">
                 <div id="tourNameInputBoxMainDiv">
                     <div class="inputBoxGeneralInfo inputBoxTour" id="tourNameInputBox">
                         <div class="inputBoxTextGeneralInfo inputBoxText">
@@ -74,7 +92,7 @@
                 </div>
             </div>
 
-            <div class="menu ui_container whiteBox">
+            <div class="whiteBox">
                 <div class="boxTitlesTourCreation">روزهای تور</div>
                 <div class="inboxHelpSubtitle">تعداد روز و شب های تور خود را مشخص کنید.</div>
                 <div class="row" style="display: flex; width: 100%">
@@ -99,7 +117,7 @@
                 </div>
             </div>
 
-            <div class="menu ui_container whiteBox">
+            <div class="whiteBox">
 
                 <div class="boxTitlesTourCreation" style="margin-top: 20px; padding-top: 10px;">زمان برگزاری</div>
                 <div>
@@ -134,11 +152,11 @@
                         </div>
 
                         <div>
-                            <div class="inboxHelpSubtitle">اگر تور شما در بازه های مشابه برگزار می شود، شما می توانید از ابزار زیر به راحتی تاریخ ها را انتحاب کنید.</div>
+                            <div class="inboxHelpSubtitle">اگر تور شما در بازه های مشابه برگزار می شود، شما می توانید از ابزار زیر به راحتی تاریخ ها را انتخاب کنید.</div>
                             <div style="display: flex; align-items: center; margin: 10px 0px;">
                                 تور من به صورت
                                 <div class="inputBoxGeneralInfo inputBoxTour" style="width: 100px; margin: 0px 10px;">
-                                    <select class="inputBoxInput">
+                                    <select id="calendarType" class="inputBoxInput">
                                         <option value="weekly">هفتگی</option>
                                         <option value="twoWeek">دو هفته</option>
                                         <option value="monthly">ماهانه</option>
@@ -147,17 +165,16 @@
                                 </div>
                                 به تعداد
                                 <div class="inputBoxGeneralInfo inputBoxTour" style="width: 100px; margin: 0px 10px;">
-                                    <input class="inputBoxInput" type="number" placeholder="تعداد">
+                                    <input class="inputBoxInput" id="calendarCount" type="number" placeholder="تعداد">
                                 </div>
                                 برگزار می شود
+                                <div class="dayActionButton" onclick="calculateDate()">اعمال</div>
                             </div>
                         </div>
 
                         <div class="inboxHelpSubtitle">تاریخ های دیگر تور</div>
 
-                        <div id="calendar_1">
-                            <div class="tourNthOccurrence">1</div>
-
+                        <div id="calendar_1" class="calendarRow">
                             <div class="inputBoxTour col-xs-3 relative-position float-right">
                                 <div class="inputBoxText">
                                     <div>
@@ -197,7 +214,7 @@
                 </div>
             </div>
 
-            <div class="menu ui_container whiteBox">
+            <div class="whiteBox">
                 <div class="boxTitlesTourCreation">ظرفیت</div>
                 <div>
                     <div class="col-xs-4 float-right">
@@ -229,19 +246,84 @@
                     </div>
                 </div>
 
-                <div id="nonGovernmentalTitleTourCreation">
+                <div class="nonGovernmentalTitleTourCreation">
                     <span>آیا تور شما به صورت خصوصی برگزار می‌شود؟</span>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
-                            <input type="radio" name="private" value="0" id="option1" autocomplete="off" onchange="changeTourKind('common')" checked>خیر
+                            <input type="radio" name="private" value="0" id="option1" autocomplete="off" checked>خیر
                         </label>
                         <label class="btn btn-secondary">
-                            <input type="radio" name="private" value="1" id="option2" autocomplete="off" onchange="changeTourKind('private')">بلی
+                            <input type="radio" name="private" value="1" id="option2" autocomplete="off">بلی
                         </label>
                     </div>
                     <div class="inboxHelpSubtitle" style="margin-bottom: 20px; width: 100%">تورهای خصوصی برای گروه محدودی از مخاطبان برگزار می‌شوند و مخاطبا نمی‌توانند تجربه‌ای خصوصی داشته باشند.</div>
                 </div>
             </div>
+
+            <div class="whiteBox">
+                <div class="boxTitlesTourCreation">اطلاعات مورد نیاز از مسافر</div>
+                <div class="inboxHelpSubtitle">در این بخش شما می توانید تایین کنید از مسافران خود چه اطلاعاتی را نیاز دارید</div>
+                <div>
+                    <div style="font-weight: bold; margin-top: 10px;">برای صدور بلیت تور به چه اطلاعاتی از مسافران نیاز دارید؟</div>
+                    <div>
+                        <input type="checkbox" id="userInfoNeed_faName" name="userInfoNeed[]" value="faName" checked/>
+                        <label for="userInfoNeed_faName" class="personInfosLabel">
+                            <span></span>
+                            <div>نام و نام خانوادگی فارسی</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_enName" name="userInfoNeed[]" value="enName" checked/>
+                        <label for="userInfoNeed_enName" class="personInfosLabel">
+                            <span></span>
+                            <div>نام و نام خانوادگی انگلیسی</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_meliCode" name="userInfoNeed[]" value="meliCode" checked/>
+                        <label for="userInfoNeed_meliCode" class="personInfosLabel">
+                            <span></span>
+                            <div>کد ملی</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_sex" name="userInfoNeed[]" value="sex" checked/>
+                        <label for="userInfoNeed_sex" class="personInfosLabel">
+                            <span></span>
+                            <div>جنسیت</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_birthDay" name="userInfoNeed[]" value="birthDay" checked/>
+                        <label for="userInfoNeed_birthDay" class="personInfosLabel">
+                            <span></span>
+                            <div>تاریخ تولد</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_country" name="userInfoNeed[]" value="country" checked/>
+                        <label for="userInfoNeed_country" class="personInfosLabel">
+                            <span></span>
+                            <div>ملیت</div>
+                        </label>
+
+                        <input type="checkbox" id="userInfoNeed_passport" name="userInfoNeed[]" value="passport" checked/>
+                        <label for="userInfoNeed_passport" class="personInfosLabel">
+                            <span></span>
+                            <div>اطلاعات پاسپورت</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="nonGovernmentalTitleTourCreation" style="margin-top: 20px;">
+                    <span>آیا اطلاعات تک تک مسافرین مورد نیاز است؟</span>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary ">
+                            <input type="radio" name="isAllUserInfo" value="0"  autocomplete="off" >خیر
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="isAllUserInfo" value="1" autocomplete="off" checked>بلی
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
 
             <div class="row" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
@@ -252,7 +334,7 @@
     </form>
 
     <div id="timeRowSample" class="hidden">
-        <div id="calendar_##number##"><div class="tourNthOccurrence">##number##</div>
+        <div id="calendar_##number##" class="calendarRow">
             <div class="inputBoxTour col-xs-3 relative-position float-right">
                 <div class="inputBoxText">
                     <div>
@@ -434,23 +516,13 @@
                 fullDataInFields();
         });
 
-        function changeTourKind(_kind){
-
-            if(_kind == 'private'){
-                $('#privateTour').removeClass('hidden');
-                $('#commonTour').addClass('hidden');
-            }
-            else{
-                $('#privateTour').addClass('hidden');
-                $('#commonTour').removeClass('hidden');
-            }
-        }
-
         function newCalendar(){
             var text = timeRowSample.replace(new RegExp('##number##', 'g'), calendarIndex);
 
-            document.getElementById('deleteCalendar_' + (calendarIndex-1)).style.display = 'block';
-            document.getElementById('newCalendar_' + (calendarIndex-1)).style.display = 'none';
+            if((calendarIndex-1) > 0){
+                document.getElementById('deleteCalendar_' + (calendarIndex-1)).style.display = 'block';
+                document.getElementById('newCalendar_' + (calendarIndex-1)).style.display = 'none';
+            }
 
             $('#notSameTimeCalendarDiv').append(text);
 
@@ -556,11 +628,15 @@
             var tourNight = parseInt($('#tourNight').val());
             var minCapacity = parseInt($('#minCapacity').val());
             var maxCapacity = parseInt($('#maxCapacity').val());
-            var tourTimeKind = $('input[name="tourTimeKind"]:checked').val();
+            var isAllUserInfoNeed = $('input[name="isAllUserInfo"]:checked').val();
+
+            var userInfoNeed = [];
+            var userInfoNeedHtml = $('input[name="userInfoNeed[]"]:checked');
+            for(var i = 0; i < userInfoNeedHtml.length; i++)
+                userInfoNeed.push($(userInfoNeedHtml[i]).val());
 
             var anyCapacity = $('#anyCapacity').prop('checked');
 
-            var error = false;
             var errorText = '';
 
             if(tourName.trim().length < 2)
@@ -597,6 +673,11 @@
 
             if(sDate.trim().length == 0 || eDate.trim().length == 0)
                 errorText += '<li>تاریخ تور را مشخص کنید.</li>';
+
+
+            if(userInfoNeed.length == 0)
+                errorText += '<li>نمی توانید از مسافرین اطلاعاتی دریافت نکنید.</li>';
+
 
             if(errorText != ''){
                 errorText = `<ul class="errorList">${errorText}</ul>`;
@@ -638,6 +719,92 @@
             for(i = 0; i < tour.times.length; i++){
                 $(`#sDate_${i}`).val(tour.times[i].sDate);
                 $(`#eDate_${i}`).val(tour.times[i].eDate);
+            }
+
+            $('input[name="isAllUserInfo"]').parent().removeClass('active');
+            $(`input[name="isAllUserInfo"][value="${tour.allUserInfoNeed}"]`).prop('checked', true).parent().addClass('active');
+
+            $('input[name="userInfoNeed[]"]').prop('checked', false);
+            tour.userInfoNeed.map(item => $(`#userInfoNeed_${item}`).prop('checked', true));
+        }
+
+        function calculateDate(){
+            var type = $('#calendarType').val();
+            var count = $('#calendarCount').val();
+
+            if(count > 0){
+                $('#calendarCount').val('');
+                calendarIndex = 1;
+                var sDate = $('#sDate_0').val().split('/');
+                var eDate = $('#eDate_0').val().split('/');
+
+                var sGregorian = jalaliToGregorian(sDate[0], sDate[1], sDate[2]).join('/');
+                var eGregorian = jalaliToGregorian(eDate[0], eDate[1], eDate[2]).join('/');
+
+                var sFirstDay = new Date(sGregorian);
+                var eFirstDay = new Date(eGregorian);
+
+                $('.calendarRow').remove();
+
+                for(var i = 1; i <= count; i++){
+                    newCalendar();
+                    var skip;
+                    var sJalali = [];
+                    var eJalali = [];
+
+                    if(type == 'weekly' || type == 'twoWeek'){
+                        skip = type == 'weekly' ? 1 : 2;
+
+                        var sNext = new Date(sFirstDay.getTime() + 7 * 24 * 60 * 60 * 1000 * i * skip);
+                        var eNext = new Date(eFirstDay.getTime() + 7 * 24 * 60 * 60 * 1000 * i * skip);
+
+                        var sYear = sNext.getFullYear();
+                        var eYear = eNext.getFullYear();
+
+                        var sMonth = sNext.getMonth();
+                        var eMonth = eNext.getMonth();
+
+                        var sDay = sNext.getDate();
+                        var eDay = eNext.getDate();
+
+                        if(sMonth > 11){
+                            sMonth = 0;
+                            sYear++;
+                        }
+                        if(eMonth > 11){
+                            eMonth = 0;
+                            eYear++;
+                        }
+
+                        sJalali = gregorianToJalali(sYear, sMonth+1, sDay);
+                        eJalali = gregorianToJalali(eYear, eMonth+1, eDay);
+                    }
+                    else{
+                        skip = (type == 'monthly') ? 1 : 2;
+                        sJalali = sDate;
+                        eJalali = eDate;
+
+                        sJalali[1] = parseInt(sJalali[1]) + (skip);
+                        eJalali[1] = parseInt(eJalali[1]) + (skip);
+
+                        if(sJalali[1] > 12){
+                            sJalali[1] -= 12;
+                            sJalali[0]++;
+                        }
+                        if(eJalali[1] > 12){
+                            eJalali[1] -= 12;
+                            eJalali[0]++;
+                        }
+
+                        if(parseInt(sJalali[1]) < 10)
+                            sJalali[1] = '0'+parseInt(sJalali[1]);
+                        if(parseInt(eJalali[1]) < 10)
+                            eJalali[1] = '0'+parseInt(eJalali[1]);
+                    }
+
+                    $('#sDate_'+i).val(sJalali.join('/'));
+                    $('#eDate_'+i).val(eJalali.join('/'));
+                }
             }
 
         }
