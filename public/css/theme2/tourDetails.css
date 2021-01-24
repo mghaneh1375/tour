@@ -2552,6 +2552,9 @@ p {
 .buyModal .modalBody{
     max-width: 1000px;
 }
+.buyModal .modalBody .additionalFeaturesForBuy{
+    background: #f5f5f5;
+}
 .buyModal .modalBody .buyFeatureRow{
     display: flex;
     border-top: solid 1px lightgray;
@@ -2598,7 +2601,35 @@ p {
     font-size: 22px;
     margin-top: 20px;
 }
+.buyModal .featuresInputCount{
+    margin-right: auto;
+    margin-left: 10px;
+    width: 100px;
+}
 
+
+.bottomTourHeaderCard{
+    display: flex;
+    height: 145px;
+    position: relative;
+}
+.addButton{
+    font-size: 31px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px var(--koochita-blue);
+    cursor: pointer;
+    line-height: 15px;
+    margin: 5px;
+    padding-top: 5px;
+}
+.backupPhones{
+    display: flex;
+    flex-direction: column;
+}
 
 .buyModal .header{
     font-size: 24px;
@@ -2610,6 +2641,8 @@ p {
 .buyModal .priceRow{
     display: flex;
     justify-content: space-between;
+    border-bottom: solid 1px #f1f1f1;
+    align-items: center;
 }
 .buyModal .priceRow .passCount {
     display: inline-flex;
@@ -2617,4 +2650,225 @@ p {
     align-items: center;
     direction: ltr;
     margin-left: 15px;
+}
+
+
+.errorField{
+    background: #ff00004f !important;
+}
+.timer{
+    margin: 10px;
+    margin-top: 50px;
+}
+.timer .timerBar{
+    background: #eaeaea;
+    height: 15px;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.timer .timerBar .timerBarColor{
+    height: 100%;
+    background: var(--koochita-yellow);
+    width: 0%;
+    margin-right: auto;
+    border-radius: 20px;
+}
+.timer .timerText{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.inputBoxText > div{
+    position: relative;
+    display: inline-block;
+    font-family: "IRANSansWeb" !important;
+}
+
+.data_holder{
+    position: absolute;
+    width: calc(100% - 75px);
+    max-height: 200px;
+    overflow: auto;
+    background: #ebebeb;
+    border: 1px solid #cccccc;
+    left: 0;
+    top: 100%;
+    border-radius: 0px 0px 10px 10px;
+}
+.data_holder .result{
+    cursor: pointer;
+    padding: 0px 5px;
+    margin: 0px 5px;
+}
+.data_holder .result:hover{
+    background: var(--koochita-yellow);
+    color: white;
+    border-radius: 10px;
+}
+
+.stickyOnTop{
+    border: solid 1px gray;
+    box-shadow: 0px 3px 5px 0px #a0a0a0;
+    background: white;
+    padding: 0px;
+    z-index: 9;
+}
+.stickyOnTop > div, .stickyHeight{
+    height: 100px;
+}
+.stickyHeight{
+    display: none;
+}
+.fixed .stickyHeight{
+    display: block;
+}
+.fixed .stickyOnTop{
+    position: fixed;
+    top: 0px;
+}
+.stickyOnTop .timeRemaining{
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 0px;
+    border-right: solid 1px gray;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.stickyOnTop .timer{
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.stickyOnTop .summeryCostSec{
+    position: relative;
+    font-size: 17px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.stickyOnTop .summeryCostSec .summery{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+    text-align: center;
+}
+.stickyOnTop .summeryCostSec .seeDetailBut{
+    cursor: pointer;
+    text-align: center;
+    color: var(--koochita-blue);
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.stickyOnTop .mainCost{
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+
+
+.stickyOnTop .summeryCostSec .detailsCostSec{
+    overflow: auto;
+    max-height: 0px;
+    padding: 0px;
+    transition: .3s;
+    width: 100%;
+    background: white;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 9;
+    padding: 0px 15px;
+    border: solid 1px gray;
+    box-shadow: 0px 3px 5px 0px #a0a0a0;
+}
+.stickyOnTop .summeryCostSec .detailsCostSec.open{
+    max-height: 80vh;
+}
+
+.detailsCostSec .header{
+    text-align: center;
+    font-size: 18px;
+    color: #4a4a4a;
+    border-bottom: solid 1px dimgrey;
+    padding: 10px 0px;
+}
+.detailsCostSec .title{
+    font-weight: bold;
+    margin-top: 10px;
+}
+.detailsCostSec .bodyT{
+
+}
+.detailsCostSec .bodyT{
+
+}
+.detailsCostSec .bodyT .bodyR{
+    display: flex;
+    justify-content: space-between;
+    border-top: solid 1px lightgrey;
+    background: whitesmoke;
+    padding: 5px;
+    font-size: 13px;
+}
+.detailsCostSec .bodyT .bodyR.feat > div{
+    width: 30%;
+    text-align: center;
+}
+
+.detailsCostSec .bodyT .bodyR.discountRow{
+    color: red;
+    font-weight: bold;
+}
+.detailsCostSec .bodyT .bodyR.discountRow > div{
+    text-align: center;
+    width: 25%;
+}
+.detailsCostSec .bodyT .bodyR:nth-of-type(even){
+    background: none;
+}
+.detailsCostSec .featTotCost{
+    font-size: 20px;
+}
+.detailsCostSec .cost:after{
+    content: 'ریال';
+    font-size: .6em;
+}
+.detailsCostSec .totalRow{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    border-top: solid 2px lightgray;
+    margin-bottom: 20px;
+    padding-top: 5px;
+}
+.detailsCostSec .boldF{
+    font-weight: bold;
+}
+.detailsCostSec .mainCost{
+    font-weight: normal;
+    font-size: 14px;
+    width: 25%;
+    text-align: center;
+}
+.detailsCostSec .mainCost.bold{
+    font-weight: bold;
+}
+
+
+.detailsCostSec .editButton{
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    cursor: pointer;
+    background: var(--koochita-blue);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 1px #0076a357;
 }

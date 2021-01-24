@@ -48,6 +48,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapTourWebRoutes();
 
+        $this->mapNewsRoutes();
+
         $this->mapWebRoutes();
 
         //
@@ -81,6 +83,14 @@ class RouteServiceProvider extends ServiceProvider
 //             ->domain('tour.'.env('ROUTURL'))
             ->namespace($this->namespace.'\Tour')
             ->group(base_path('routes/tourRoutes.php'));
+    }
+
+    protected function mapNewsRoutes()
+    {
+        Route::middleware('web')
+//             ->domain('news.'.env('ROUTURL'))
+            ->namespace($this->namespace.'\News')
+            ->group(base_path('routes/newsRoutes.php'));
     }
 
     /**

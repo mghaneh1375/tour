@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\CountryCode;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\Cities;
@@ -45,6 +46,13 @@ use Illuminate\Http\Request;
 
 
 class AjaxController extends Controller {
+
+    public function searchInCounty()
+    {
+        $value = $_GET['value'];
+        $countries = CountryCode::where('name', 'LIKE', '%'.$value.'%')->get();
+        return response(['status' => 'ok', 'result' => $countries]);
+    }
 
     public function getVideosFromKoochitaTv()
     {

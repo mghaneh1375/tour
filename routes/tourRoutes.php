@@ -16,6 +16,8 @@ Route::prefix('tour')->group(function (){
             Route::get('/cancelReservation', 'TourReservationController@cancelReservation')->name('tour.reservation.cancel');
 
             Route::post('/checkCapacity', 'TourReservationController@checkReservationCapacity')->name('tour.reservation.checkCapacity');
+
+            Route::post('/submitReservation', 'TourReservationController@submitReservation')->name('tour.reservation.submitReservation');
         });
     });
 

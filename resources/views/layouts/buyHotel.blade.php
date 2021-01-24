@@ -426,7 +426,7 @@
                     val2 += val[i];
                 $.ajax({
                     type: "post",
-                    url: '{{route('searchCountryCode')}}',
+                    url: '{{route('ajax.searchInCounty')}}',
                     data: {
                         key: val,
                         key2: val2
@@ -454,7 +454,7 @@
             }
             else $.ajax({
                 type: "post",
-                url: '{{route('searchCountryCode')}}',
+                url: '{{route('ajax.searchInCounty')}}',
                 data: {
                     key: val
                 },

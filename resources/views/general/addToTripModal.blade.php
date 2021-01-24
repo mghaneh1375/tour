@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">
-<script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
+{{--<link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">--}}
+{{--<script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>--}}
 
 <style>
 

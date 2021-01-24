@@ -4,32 +4,20 @@
     @include('layouts.topHeader')
     <title>اطلاعات مسافرین تور</title>
 
+    <link rel="stylesheet" href="{{URL::asset('css/theme2/tourDetails.css?v=1')}}">
+
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/buyHotel2.css?v=1')}}'/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/hotelPas1.css?v=1')}}'/>
 
+
+    <link rel="stylesheet" href="{{URL::asset('packages/persianDatePicker/css/persian-datepicker.css')}}">
+    <script src="{{URL::asset('packages/persianDatePicker/js/persian-date.min.js')}}"></script>
+    <script src="{{URL::asset('packages/persianDatePicker/js/persian-datepicker.min.js')}}"></script>
+
     <style>
-        .timer{
-            margin: 10px;
-            margin-top: 50px;
-        }
-        .timer .timerBar{
-            background: #eaeaea;
-            height: 15px;
-            width: 100%;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        .timer .timerBar .timerBarColor{
-            height: 100%;
-            background: var(--koochita-yellow);
-            width: 0%;
-            margin-right: auto;
-            border-radius: 20px;
-        }
-        .timer .timerText{
-            text-align: center;
-            font-size: 20px;
-            margin-top: 10px;
+        .buyModal .header{
+            border-bottom: none;
+            padding-bottom: 0px;
         }
     </style>
 
@@ -40,6 +28,76 @@
 
 @include('layouts.header1')
     <div class="container" style="direction: rtl; text-align: right;">
+        <div id="stickyHeader">
+            <div class="container stickyOnTop">
+                <div class="col-xs-3 timeRemaining">
+                    <div>زمان باقی مانده</div>
+                    <div id="timer" class="timer">12:34</div>
+                </div>
+                <div class="col-xs-9 summeryCostSec">
+                    <div class="summery">
+                        <div>خرید تور {{$tour->name}}</div>
+                        <div>
+                            <div>مجموع قابل پرداخت</div>
+                            <div>
+                                <span class="cost mainCost">{{$userReservation->fullyTotalCost->costShow}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seeDetailBut downArrowIconAfter" onclick="$(this).next().toggleClass('open')"> مشاهده جزئیات</div>
+                    <div class="detailsCostSec">
+                        <div class="editButton" onclick="openEditPassengerCounts()">ویرایش</div>
+                        <div class="header">جزئیات قیمتی تور</div>
+                        <div>
+                            <div class="title">امکانات اضافی</div>
+                            <div class="bodyT">
+                                @foreach($userReservation->featuers as $item)
+                                    <div class="bodyR feat">
+                                        <div>{{$item->name}}</div>
+                                        <div>{{$item->count}} عدد</div>
+                                        <div class="cost boldF">{{$item->showCost}}</div>
+                                        <div class="cost boldF">{{$item->totalCostShow}}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="totalRow">
+                                <div class="boldF">هزینه امکانات اضافی</div>
+                                <div class="cost featTotCost">{{$userReservation->featuersTotalCost['showCost']}}</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="bodyT">
+                                @foreach($userReservation->passengerInfos as $item)
+                                    <div class="bodyR">
+                                        <div class="mainCost">{{$item->text}}</div>
+                                        <div class="mainCost">{{$item->count}} نفر</div>
+                                        <div class="cost mainCost bold">{{$item->costShow}}</div>
+                                        <div class="cost mainCost bold">{{$item->totalCostShow}}</div>
+                                    </div>
+                                @endforeach
+
+{{--                                <div class="bodyR discountRow">--}}
+{{--                                    <div>تخفیف خرید گروهی</div>--}}
+{{--                                    <div>25%</div>--}}
+{{--                                    <div></div>--}}
+{{--                                    <div class="cost">21.000</div>--}}
+{{--                                </div>--}}
+
+                            </div>
+                            <div class="totalRow">
+                                <div class="boldF">مجموع قابل پرداخت</div>
+                                <div class="cost featTotCost">{{$userReservation->fullyTotalCost->costShow}}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="stickyHeight"></div>
+        </div>
+
         <div class="full-width">
             <div class="float-right"> شما در حال ثبت اطلاعات مسافرین تور {{$tour->name}} می باشید</div>
             <div class="text-align-left">
@@ -47,57 +105,31 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="timer">
-                    <div class="timerBar">
-                        <div id="timeBar" class="timerBarColor"></div>
-                    </div>
-                    <div class="timerText">
-                        <span style="font-size: 13px;">مدت زمان باقی مانده تا تکمیل خرید :</span>
-                        <span id="timer"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="inlineBorder"></div>
-        <form id="reserve_form" method="post" action="#">
+        <form id="reserve_form" method="post" action="{{route('tour.reservation.submitReservation')}}">
             {{csrf_field()}}
+            <input type="hidden" name="tourTimeCode" value="{{$tour->timeCode}}">
             <div class="full-width mg-bt-3per">
                 <div> اطلاعاتی که در این صفحه وارد می کنید به سایت پذیرنده منتقل می شود تا خرید شما آسان تر از قبل گردد</div>
                 <div class="textTitle"> اطلاعات تماس</div>
                 <div class="font-size-08em"> این اطلاعات به عنوان اطلاعات تماس شما در کوچیتا ثبت می شود</div>
                 <div class="width-60per height-120">
-                    <div id="phone_error_text">پر کردن این بخش اجباری است</div>
                     <div class="inputBox width-30per float-right">
                         <div class="inputBoxText">
-                            <div class="display-inline-block position-relative">
-                                <div class="afterBuyIcon redStar"></div>
-                                تلفن همراه
-                            </div>
+                            <div class="redStar">تلفن همراه</div>
                         </div>
-                        <input class="inputBoxInput" id="phoneNumForTicket" type="tel" onkeypress="return isNumber(event)" placeholder="0912xxxxxxx" name="phone" onchange="clearError(0, 0)"
-                               @if(auth()->check() && auth()->user()->phone != '' && auth()->user()->phone != null ) value="{{auth()->user()->phone}}" @endif>
+                        <input class="inputBoxInput mustBeFull" id="phoneNumForTicket" type="text" placeholder="0912xxxxxxx" name="phone">
                     </div>
                     <div class="width-40per float-left">
-                        <div id="email_error_text">پر کردن این بخش اجباری است</div>
                         <div class="inputBox width-85per">
                             <div class="inputBoxText">
-                                <div class="display-inline-block position-relative">
-                                    <div class="afterBuyIcon redStar"></div>
-                                    ایمیل
-                                </div>
+                                <div class="redStar">ایمیل</div>
                             </div>
-                            <input class="inputBoxInput"
+                            <input class="inputBoxInput mustBeFull"
                                    id="emailForTicket"
                                    type="email"
                                    placeholder="example@domain.com"
-                                   name="email"
-                                   onchange="clearError(0, 1)"
-                                    @if(auth()->check() && auth()->user()->email != '' && auth()->user()->email != null )
-                                        value="{{auth()->user()->email}}"
-                                    @endif>
+                                   name="email">
                         </div>
                         <div class="check-box__item mg-tp-5">
                             <label class="labelEdit"> اطلاعات مهم را با این آدرس به من اطلاع دهید </label>
@@ -115,7 +147,7 @@
 
             <div>
                 @for($i = 0; $i < $tour->getInfoNumber; $i++)
-                    <div id="passenger_{{$i}}">
+                    <div id="passenger_{{$i}}" class="passengerRowsInputs">
                         <div>
                             <div>
                                 <div class="display-inline-block">
@@ -129,11 +161,9 @@
                                     @endif
                                 </div>
                                 <div class="float-left position-relative">
-{{--                                    <button onclick="deletePassenger('{{$i}}')" class="btn afterBuyBtn color-146-50-27" type="button"> حذف مسافر </button>--}}
                                     @if(auth()->check())
                                         <button onclick="toggleOldPassenger('{{$i}}')" class="btn afterBuyBtn bg-color-green" type="button"> مسافرین سابق </button>
-                                        <div class="class_passengerOldPane item hidden" id="oldPassengerPane_{{$i}}"
-                                             onmouseleave="addClassHidden('oldPassengerPane_{{$i}}'); passengerNoSelect = false;">
+                                        <div class="class_passengerOldPane item hidden" id="oldPassengerPane_{{$i}}" onmouseleave="addClassHidden('oldPassengerPane_{{$i}}'); passengerNoSelect = false;">
                                             <div>
                                                 <p>مسافرین سابق</p>
                                                 <div class="lastPassengersDivider"></div>
@@ -146,179 +176,104 @@
                             <div class="full-width">
                                 @if(array_search('faName', $tour->userInfoNeed) !== false)
                                     <div>
-                                        <div id="nameFa_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    نام
-                                                </div>
+                                                <div class="redStar"> نام </div>
                                             </div>
-                                            <input class="inputBoxInput" id="nameFa_{{$i}}" name="nameFa[]" type="text"
-                                                   placeholder="فارسی" onchange="clearError(1,{{$i}})">
+                                            <input class="inputBoxInput mustBeFull" id="nameFa_{{$i}}" name="nameFa[]" type="text" placeholder="فارسی">
                                         </div>
-                                        <div id="familyFa_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-25per mg-rt-10per">
                                             <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    نام خانوادگی
-                                                </div>
+                                                <div class="redStar">نام خانوادگی</div>
                                             </div>
-                                            <input class="inputBoxInput" type="text" name="familyFa[]" id="familyFa_{{$i}}" placeholder="فارسی" onchange="clearError(2,{{$i}})">
+                                            <input class="inputBoxInput mustBeFull" type="text" name="familyFa[]" id="familyFa_{{$i}}" placeholder="فارسی">
                                         </div>
                                     </div>
                                 @endif
                                 @if(array_search('enName', $tour->userInfoNeed) !== false)
                                     <div>
-                                        <div id="nameEn_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    نام
-                                                </div>
+                                                <div class="redStar">نام</div>
                                             </div>
-                                            <input class="inputBoxInput" name="nameEn[]" id="nameEn_{{$i}}" type="text"
-                                                   placeholder="لاتین" onchange="clearError(3,{{$i}})">
+                                            <input class="inputBoxInput mustBeFull" name="nameEn[]" id="nameEn_{{$i}}" type="text" placeholder="لاتین">
                                         </div>
-                                        <div id="familyEn_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
+
                                         <div class="inputBox width-25per mg-rt-10per">
                                             <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    نام خانوادگی
-                                                </div>
+                                                <div class="redStar">نام خانوادگی</div>
                                             </div>
-                                            <input class="inputBoxInput" type="text" placeholder="لاتین" name="familyEn[]"
-                                                   id="familyEn_{{$i}}" onchange="clearError(4,{{$i}})">
+                                            <input class="inputBoxInput mustBeFull" type="text" placeholder="لاتین" name="familyEn[]" id="familyEn_{{$i}}">
                                         </div>
                                     </div>
                                 @endif
                                 <div>
                                     @if(array_search('birthDay', $tour->userInfoNeed) !== false)
-                                        <div id="birthDay_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
                                         <div class="inputBox width-21per">
                                             <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    تاریخ تولد
-                                                </div>
+                                                <div class="redStar">تاریخ تولد</div>
                                             </div>
-                                            <select name="birthDayD[]" id="birthDayD_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
-                                                <option value="0"> روز</option>
-                                                @for($k = 1; $k < 32; $k++)
-                                                    <option value="{{$k}}"> {{$k}} </option>
-                                                @endfor
-                                            </select>
-                                            <select name="birthDayM[]" id="birthDayM_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
-                                                <option value="0"> ماه</option>
-                                                <option value="1"> فروردین</option>
-                                                <option value="2"> اردیبهشت</option>
-                                                <option value="3"> خرداد</option>
-                                                <option value="4"> تیر</option>
-                                                <option value="5"> مرداد</option>
-                                                <option value="6"> شهریور</option>
-                                                <option value="7"> مهر</option>
-                                                <option value="8"> آبان</option>
-                                                <option value="9"> آذر</option>
-                                                <option value="10"> دی</option>
-                                                <option value="11"> بهمن</option>
-                                                <option value="12"> اسفند</option>
-                                            </select>
-                                            <select name="birthDayY[]" id="birthDayY_{{$i}}" class="inputBoxSelect" onchange="clearError(5,{{$i}})" required>
-                                                <option value="0"> سال</option>
-                                                @for($k = 1330; $k < 1398; $k++)
-                                                    <option value="{{$k}}"> {{$k}} </option>
-                                                @endfor
-                                            </select>
+                                            <input class="inputBoxInput mustBeFull datePickerBox" type="text" placeholder="13**/**/**" name="birthDay[]" id="birthDay{{$i}}" readonly>
                                         </div>
                                     @endif
                                     @if(array_search('meliCode', $tour->userInfoNeed) !== false)
-                                        <div id="NID_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
-                                        <div class="inputBox width-25per mg-rt-10per">
-                                            <div class="inputBoxText width-50per">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    <span id="nid{{$i}}">کد ملی</span></div>
+                                        <div id="meliCodeSec_{{$i}}" class="display-inline">
+                                            <div class="inputBox width-25per mg-rt-10per">
+                                                <div class="inputBoxText">
+                                                    <div class="redStar">کد ملی</div>
+                                                </div>
+                                                <input name="NID[]" id="NID_{{$i}}" class="inputBoxInput mustBeFull width-50per" type="text" placeholder="000000000">
                                             </div>
-                                            <input onkeypress="return isNumber(event)" name="NID[]" id="NID_{{$i}}" class="inputBoxInput width-50per" type="text" placeholder="000000000" onchange="clearError(6,{{$i}})">
                                         </div>
                                     @endif
                                     @if(array_search('sex', $tour->userInfoNeed) !== false)
                                         <div class="inputBox width-13per mg-rt-10per">
                                             <div class="inputBoxText width-50per">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    جنسیت
-                                                </div>
+                                                <div class="redStar">جنسیت</div>
                                             </div>
                                             <select name="sex[]" id="sex_{{$i}}" class="inputBoxSelect width-30per mg-0-9" required>
-                                                <option value="female"> زن</option>
-                                                <option value="male"> مرد</option>
+                                                <option value="male">مرد</option>
+                                                <option value="female">زن</option>
                                             </select>
                                         </div>
                                     @endif
                                 </div>
                                 @if(array_search('passport', $tour->userInfoNeed) !== false)
                                     <div class="check-box__item mg-tp-5">
-                                        <label class="labelEdit"> تبعه خارجی هستم </label>
+                                        <label for="foreign_{{$i}}" class="labelEdit"> تبعه خارجی هستم </label>
                                         <input onclick="changeForeignRow('{{$i}}')" id="foreign_{{$i}}" name="foreign[]" value="خارجی" type="checkbox" class="display-inline-blockImp">
                                     </div>
-                                    <div id="foreignRow_{{$i}}" class="hidden">
+                                    <div id="foreignRow_{{$i}}" class="row hidden">
+                                        <div class="col-xs-4">
+                                            <div id="searchDivForScroll_{{$i}}" class="inputBox searchDivForScroll">
+                                                <div class="inputBoxText">
+                                                    <div class="redStar">محل صدور</div>
+                                                </div>
+                                                <input name="countryCode[]" id="countryCode_{{$i}}" class="inputBoxInput mustBeFull" type="text" placeholder="Iran" onkeyup="searchCountryCode({{$i}})">
+                                                <input name="countryCodeId[]" id="countryCodeId_{{$i}}" class="inputBoxInput mustBeFull" type="hidden">
 
-                                        <div id="NID_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
-                                        <div class="inputBox width-25per mg-rt-10per">
-                                            <div class="inputBoxText width-50per">
-                                                <div class="display-inline-block position-relative">
-                                                    <div class="afterBuyIcon redStar"></div>
-                                                    <span id="passport_{{$i}}">شماره پاسپورت</span></div>
+                                                <div id="resultCountry_{{$i}}" class="data_holder"></div>
                                             </div>
-                                            <input onkeypress="return isNumber(event)" name="passport[]" id="passport_{{$i}}" class="inputBoxInput width-50per" type="text" placeholder="000000000" onchange="clearError(6,{{$i}})">
                                         </div>
 
-                                        <div id="expire_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
-                                        <div class="inputBox width-21per">
-                                            <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative"> تاریخ انقضا</div>
+                                        <div class="col-xs-4">
+                                            <div class="inputBox">
+                                                <div class="inputBoxText">
+                                                    <div class="redStar"> تاریخ انقضا</div>
+                                                </div>
+                                                <input class="inputBoxInput mustBeFull datePickerEnBox" type="text" placeholder="13**/**/**" name="passportExpire[]" id="passportExpire{{$i}}" readonly>
                                             </div>
-                                            <select name="expireD[]" id="expireD_{{$i}}" class="inputBoxSelect" required>
-                                                <option value=""> روز</option>
-                                                @for($k = 1; $k < 32; $k++)
-                                                    <option value="{{$k}}"> {{$k}} </option>
-                                                @endfor
-                                            </select>
-                                            <select name="expireM[]" id="expireM_{{$i}}" class="inputBoxSelect" required>
-                                                <option value=""> ماه</option>
-                                                <option value="1"> فروردین</option>
-                                                <option value="2"> اردیبهشت</option>
-                                                <option value="3"> خرداد</option>
-                                                <option value="4"> تیر</option>
-                                                <option value="5"> مرداد</option>
-                                                <option value="6"> شهریور</option>
-                                                <option value="7"> مهر</option>
-                                                <option value="8"> آبان</option>
-                                                <option value="9"> آذر</option>
-                                                <option value="10"> دی</option>
-                                                <option value="11"> بهمن</option>
-                                                <option value="12"> اسفند</option>
-                                            </select>
-                                            <select name="expireY[]" id="expireY_{{$i}}" class="inputBoxSelect" required>
-                                                <option value=""> سال</option>
-                                                @for($k = 1330; $k < 1398; $k++)
-                                                    <option value="{{$k}}"> {{$k}} </option>
-                                                @endfor
-                                            </select>
                                         </div>
-                                        <div id="countryCode_error_text_{{$i}}" class="essentialInfos">پر کردن این بخش اجباری است</div>
-                                        <div id="searchDivForScroll_{{$i}}" class="inputBox searchDivForScroll width-25per mg-rt-10per">
-                                            <div class="inputBoxText">
-                                                <div class="display-inline-block position-relative"> محل صدور</div>
+
+                                        <div class="col-xs-4">
+                                            <div class="inputBox">
+                                                <div class="inputBoxText">
+                                                    <div class="redStar">شماره پاسپورت</div>
+                                                </div>
+                                                <input name="passport[]" id="passport_{{$i}}" class="inputBoxInput mustBeFull width-50per" type="text" placeholder="000000000">
                                             </div>
-                                            <input onkeyup="searchCountryCode(event, '{{$i}}')" name="countryCode[]"
-                                                   id="countryCode_{{$i}}" class="inputBoxInput" type="text" placeholder="Iran">
-                                            <div id="result_{{$i}}" class="data_holder"></div>
                                         </div>
+
                                     </div>
                                 @endif
 
@@ -357,7 +312,7 @@
             <div class="display-inline-block"> با انتخاب دکمه تأیید و پرداخت شما به صفحه پرداخت فروشنده خدمت متصل می شوید و تنها کافی است مبلغ بلیط را تأیید و پرداخت نمایید </div>
             <div class="color-5-12-147" id="msgErr"></div>
             <div class="text-align-left">
-                <button onclick="doPayment()" class="btn afterBuyBtn bg-color-green" type="button"> تأیید و پرداخت </button>
+                <button onclick="checkInputs()" class="btn afterBuyBtn bg-color-green" type="button"> تأیید و پرداخت </button>
             </div>
             <div class="text-align-left">
                 <button class="btn afterBuyBtn color-5-12-147" type="button"> انصراف </button>
@@ -366,6 +321,135 @@
 
     </div>
 
+<div id="editPassengerCountModal" class="modalBlackBack fullCenter buyModal">
+    <div class="modalBody">
+        <div class="closeButtonModal iconClose" onclick="closeMyModal('editPassengerCountModal')"></div>
+        <div class="header"> ویرایش مسافران </div>
+        <div class="row priceSection">
+            <div id="tourPriceOptions" class="col-xs-5">
+                <div class="full-width inline-block">
+                    <span class="inline-block" style="font-weight: bold;">امکانات اضافه</span>
+                    <span class="inline-block"></span>
+                    <div class="full-width inline-block additionalFeaturesForBuy">
+                        @foreach($userReservation->featuers as $index => $item)
+                            <div class="full-width inline-block buyFeatureRow">
+                                <span>{{$item->name}}</span>
+                                <span class="cost" style="margin-right: 10px">{{number_format($item->cost)}}</span>
+                                <input type="number" class="form-control featuresInputCount" placeholder="تعداد" value="{{$item->count}}">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div id="tourPricePerMan" class="col-xs-7">
+                <div id="pricesInBuyButton">
+                    @foreach($userReservation->passengerInfos as $index => $item)
+                        <div class="full-width inline-block priceRow">
+                            <span>{{$item->text}}</span>
+                            <span style="display: flex; align-items: center; direction: ltr">
+                                <span style="margin-right: 10px; width: 80px;">{{$item->costShow}}</span>
+                                X
+                                <span class="passCount">
+                                    <span class="addButton" onclick="addPassenger({{$index}}, -1)">-</span>
+                                    <span class="passengerCount_{{$index}}" style="margin: 0px 10px; width: 15px; text-align: center;">{{$item->count}}</span>
+                                    <span class="addButton" onclick="addPassenger({{$index}}, 1)">+</span>
+                                </span>
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="col-md-12 fullyCenterContent">
+                <button class="tourListPurchaseBtn" onclick="doEditPassengerCount()">ویرایش</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .registerModalInTourRegister .header{
+        text-align: center;
+        font-size: 23px;
+        font-weight: bold;
+        border-bottom: solid lightgray 1px;
+        padding-bottom: 5px;
+        margin: 20px 0px;
+    }
+    .registerModalInTourRegister .topLogo{
+        position: absolute;
+        bottom: 90%;
+        width: 100%;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .registerModalInTourRegister .modalBody{
+        max-width: 400px;
+        width: 100%;
+        border-radius: 10px;
+    }
+    .registerModalInTourRegister .closeButtonModal{
+        position: absolute;
+        left: 5px;
+        font-size: 35px;
+        color: var(--koochita-red);
+        top: 0px;
+        cursor: pointer;
+    }
+    .registerModalInTourRegister .titles{
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+    .registerModalInTourRegister .loginSec{
+        margin-bottom: 18px;
+        border-bottom: solid 1px lightgray;
+    }
+    .registerModalInTourRegister .regSec{
+
+    }
+    .registerModalInTourRegister .sendRegisterPhoneCode{
+        background: var(--koochita-blue);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 1px 1px 1px 1px #0000009e;
+    }
+</style>
+
+<div id="registerModal" class="registerModalInTourRegister modalBlackBack fullCenter notCloseOnClick">
+    <div class="modalBody">
+        <div class="topLogo">
+            <img src="{{URL::asset('images/icons/mainLogo.png')}}" alt="koochitaLogo" style="width: 300px">
+        </div>
+        <div class="closeButtonModal iconClose" onclick="closeMyModal('registerModal')"></div>
+        <div class="header"> ورود / ثبت نام </div>
+        <div class="row loginSec">
+            <div class="titles">اگر عضو سایت کوچیتا هستید وارد شوید.</div>
+            <div>
+                <div class="form-group">
+                    <input type="text" id="tourRegisterUserName" class="form-control" placeholder="نام کاربری یا شماره تماس یا ایمیل">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="tourRegisterPassword" class="form-control" placeholder="رمز عبور">
+                </div>
+            </div>
+        </div>
+
+        <div class="row regSec">
+            <div class="titles">تایید شماره تماس</div>
+            <div class="fullyCenterContent">
+                <button class="sendRegisterPhoneCode">ارسال رمز یک بار مصرف به شماره تماس</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @include('layouts.footer.layoutFooter')
 
@@ -373,10 +457,44 @@
 <script>
     var timerInterval;
     var remainingTime = '{{$timeRemaining}}';
+    var datePickerOptions = {
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        language: 'fa',
+        dateFormat: "yy/mm/dd"
+    };
+
+    $(window).ready(() => {
+        $(".datePickerBox").pDatepicker({
+            format: 'YYYY/MM/DD',
+            initialValue: false
+        });
+        $(".datePickerEnBox").pDatepicker({
+            calendarType: 'gregorian',
+            format: 'YYYY/MM/DD',
+            initialValue: false
+        });
+
+        timerInterval = setInterval(setTimer, 1000);
+    });
+
+
+    $(window).on('scroll', () => {
+        if($(window).scrollTop() > 65)
+            $('#stickyHeader').addClass('fixed');
+        else
+            $('#stickyHeader').removeClass('fixed');
+    });
+
+    $('.mustBeFull').on('keyup', function(){
+        if(this.value.trim().length == 0)
+            $(this).parent().addClass('errorField');
+        else
+            $(this).parent().removeClass('errorField');
+    });
 
     function setTimer(){
         var percent = (1200 - remainingTime) / 12;
-        $('#timeBar').css('width', percent+'%');
 
         var min = parseInt(remainingTime/60);
         var seconds = parseInt(remainingTime%60);
@@ -394,115 +512,101 @@
         }
     }
 
-    timerInterval = setInterval(setTimer, 1000);
-</script>
+    function searchCountryCode(_index) {
+        var val = $("#countryCode_" + _index).val();
+        $('#resultCountry_'+_index).empty();
 
-
-<script>
-    function changeForeignRow(idx) {
-        if ($("#foreign_" + idx).prop('checked')) {
-            $("#foreignRow_" + idx).removeClass('hidden');
-            $("#nidOrPassport_" + idx).empty().append('شماره پاسپورت');
-        }
-        else {
-            $("#nidOrPassport_" + idx).empty().append('کد ملی');
-            $("#foreignRow_" + idx).addClass('hidden');
-        }
-    }
-    function searchCountryCode(e, idx) {
-        val = $("#countryCode_" + idx).val();
-        $(".suggest").css("background-color", "transparent").css("padding", "0").css("border-radius", "0");
-        if (null == val || "" == val || val.length < 2)
-            $("#result_" + idx).empty();
-        else {
-            var scrollVal = $("#searchDivForScroll").scrollTop();
-            if (13 == e.keyCode && -1 != currIdx) {
-                $("#countryCode_" + idx).val(suggestions[currIdx].code);
-                $("#result_" + idx).empty();
-                return;
-            }
-            if (13 == e.keyCode && -1 == currIdx && suggestions.length > 0) {
-                $("#countryCode_" + idx).val(suggestions[0].code);
-                $("#result_" + idx).empty();
-                return;
-            }
-            if (40 == e.keyCode) {
-                if (currIdx + 1 < suggestions.length) {
-                    currIdx++;
-                    $("#searchDivForScroll").scrollTop(scrollVal + 25);
-                }
-                else {
-                    currIdx = 0;
-                    $("#searchDivForScroll").scrollTop(0);
-                }
-                if (currIdx >= 0 && currIdx < suggestions.length) {
-                    $("#suggest_" + currIdx).css("background-color", "#dcdcdc").css("padding", "10px").css("border-radius", "5px");
-                }
-                return;
-            }
-            if (38 == e.keyCode) {
-                if (currIdx - 1 >= 0) {
-                    currIdx--;
-                    $("#searchDivForScroll").scrollTop(scrollVal - 25);
-                }
-                else {
-                    currIdx = suggestions.length - 1;
-                    $("#searchDivForScroll").scrollTop(25 * suggestions.length);
-                }
-                if (currIdx >= 0 && currIdx < suggestions.length)
-                    $("#suggest_" + currIdx).css("background-color", "#dcdcdc").css("padding", "10px").css("border-radius", "5px");
-                return;
-            }
-            if ("ا" == val[0]) {
-                val2 = "آ";
-                for (i = 1; i < val.length; i++)
-                    val2 += val[i];
-                $.ajax({
-                    type: "post",
-                    url: '{{route('searchCountryCode')}}',
-                    data: {
-                        key: val,
-                        key2: val2
-                    },
-                    success: function (response) {
-                        newElement = "";
-                        if (response.length == 0) {
-                            newElement = "موردی یافت نشد";
-                            $("#countryCode_" + idx).val("");
-                            return;
-                        }
-                        response = JSON.parse(response);
-                        currIdx = -1;
-                        suggestions = response;
-                        for (i = 0; i < response.length; i++)
-                            newElement += "<p class='suggest cursor-pointer' id='suggest_" + i + "' onclick='setInput(\"" + response[i].code + "\", \"" + idx + "\")'>" + response[i].name + " - " + response[i].nameEn + "</p>";
-                        $("#result_" + idx).empty().append(newElement)
+        if(val.trim().length > 1) {
+            $.ajax({
+                type: 'GET',
+                url: '{{route('ajax.searchInCounty')}}?value=' + val,
+                success: response => {
+                    if(response.status == 'ok'){
+                        var html = '';
+                        response.result.map(item => html += `<div class="result" data-id="${item.id}" data-index="${_index}" onclick="chooseThisCounty(this)">${item.name}</div>`);
+                        $('#resultCountry_'+_index).html(html);
                     }
-                })
-            }
-            else $.ajax({
-                type: "post",
-                url: '{{route('searchCountryCode')}}',
-                data: {
-                    key: val
-                },
-                success: function (response) {
-                    newElement = "";
-                    if (response.length == 0) {
-                        newElement = "موردی یافت نشد";
-                        $("#countryCode_" + idx).val("");
-                        return;
-                    }
-                    response = JSON.parse(response);
-                    currIdx = -1;
-                    suggestions = response;
-                    for (i = 0; i < response.length; i++)
-                        newElement += "<p class='suggest cursor-pointer' id='suggest_" + i + "' onclick='setInput(\"" + response[i].code + "\", \"" + idx + "\")'>" + response[i].name + " - " + response[i].nameEn + "</p>";
-                    $("#result_" + idx).empty().append(newElement)
                 }
             })
         }
     }
+
+    function chooseThisCounty(_element){
+        var index = $(_element).attr('data-index');
+
+        $('#resultCountry_'+index).empty();
+        $('#countryCode_'+index).val($(_element).text());
+        $('#countryCodeId_'+index).val($(_element).attr('data-id'));
+    }
+
+    function changeForeignRow(_index) {
+        if ($("#foreign_" + _index).prop('checked')) {
+            $("#foreignRow_" + _index).removeClass('hidden');
+            $("#meliCodeSec_" + _index).addClass('hidden');
+        }
+        else {
+            $("#meliCodeSec_" + _index).removeClass('hidden');
+            $("#foreignRow_" + _index).addClass('hidden');
+        }
+    }
+
+    function checkInputs(){
+        var mustBeFulls = $('.mustBeFull');
+
+        var erroredField = 0;
+        var errorText = '';
+
+        for(var i = 0; i < mustBeFulls.length; i++){
+            var element = $(mustBeFulls[i]);
+            if(element.is(':visible')) {
+                var value = element.val();
+                if (value.length == 0){
+                    element.parent().addClass('errorField');
+                    erroredField++;
+                }
+                else
+                    element.parent().removeClass('errorField');
+            }
+        }
+
+        var phone = $('#phoneNumForTicket').val();
+        var email = $('#emailForTicket').val();
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+
+        if(phone.trim().length != 11 || phone[0] != 0 || phone[1] != 9) {
+            errorText += '<div>شماره تماس خود را به درستی وارد کنید</div>';
+            $('#phoneNumForTicket').parent().addClass('errorField');
+        }
+
+        if (!email.match(validRegex)){
+            errorText += '<div>ایمیل خود را به درستی وارد کنید</div>';
+            $('#emailForTicket').parent().addClass('errorField');
+        }
+
+        if(erroredField != 0)
+            errorText += '<div>پرکردن اطلاعات تمامی مسافرین اجباری است</div>';
+
+        if(errorText != '')
+            openErrorAlert(errorText);
+        else{
+            openLoading();
+            $('#reserve_form').submit();
+        }
+    }
+
+    function openEditPassengerCounts(){
+        openMyModal('editPassengerCountModal');
+    }
+
+    function doEditPassengerCount(){
+
+    }
+</script>
+
+
+<script>
+
     function setInput(e, idx) {
         $("#countryCode_" + idx).val(e);
         $("#result_" + idx).empty();
@@ -992,14 +1096,6 @@
         document.getElementById('nidOrPassport_'+idx).value = null;
         document.getElementById('NID_'+idx).value = null;
 
-    }
-
-    function doPayment(mode) {
-        if (mode == 2 && !hasRegister) {
-            return register();
-        }
-        else if(validation(mode))
-            sendInfo(mode);
     }
 
     function sendInfo(mode){

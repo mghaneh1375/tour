@@ -184,7 +184,7 @@ function fillTourShowPage(_response){
         newFeatureForBuy += `<div class="full-width inline-block buyFeatureRow">
                                 <span>${item.name}</span>
                                 <span>${item.cost}</span>
-                                <input type="number" class="form-control featuresInputCount" data-index="${index}" placeholder="تعداد" style="margin-right: auto; margin-left: 10px; width: 100px;" onchange="calculateFullCost()">
+                                <input type="number" class="form-control featuresInputCount" data-index="${index}" placeholder="تعداد" onchange="calculateFullCost()">
                             </div>`;
     });
 

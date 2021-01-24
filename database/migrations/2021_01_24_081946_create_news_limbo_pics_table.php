@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTourUserReservationsTable extends Migration
+class CreateNewsLimboPicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateTourUserReservationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tourUserReservations', function (Blueprint $table) {
+        Schema::create('newsLimboPics', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('tourTimeId');
+            $table->unsignedBigInteger('userId');
             $table->string('code');
-            $table->integer('inCapacityCount')->default(0);
-            $table->integer('noneCapacityCount')->default(0);
-            $table->text('passengerCountInfos');
-            $table->text('features');
+            $table->string('pic');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class CreateTourUserReservationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tourUserReservations');
+        Schema::dropIfExists('news_limbo_pics');
     }
 }

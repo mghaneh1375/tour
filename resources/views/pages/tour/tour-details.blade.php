@@ -94,28 +94,6 @@
             z-index: 20;
         }
 
-        .bottomTourHeaderCard{
-            display: flex;
-            height: 145px;
-            position: relative;
-        }
-        .addButton{
-            font-size: 31px;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: solid 2px var(--koochita-blue);
-            cursor: pointer;
-            line-height: 15px;
-            margin: 5px;
-            padding-top: 5px;
-        }
-        .backupPhones{
-            display: flex;
-            flex-direction: column;
-        }
     </style>
 @stop
 

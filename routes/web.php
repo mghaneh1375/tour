@@ -246,6 +246,8 @@ Route::group(array('middleware' => 'nothing'), function () {
     Route::get('findUser', 'AjaxController@findUser')->name('findUser');
 
     Route::get('getMainPageSuggestion', 'AjaxController@getMainPageSuggestion')->name('getMainPageSuggestion');
+
+    Route::get('searchInCounty', 'AjaxController@searchInCounty')->name('ajax.searchInCounty');
 });
 
 //review section
@@ -726,8 +728,6 @@ Route::group(array('middleware' => ['throttle:30']), function () {
     Route::post('getMyPassengers', ['as' => 'getMyPassengers', 'uses' => 'TicketController@getMyPassengers']);
 
     Route::post('getMyTicketInfo', ['as' => 'getMyTicketInfo', 'uses' => 'TicketController@getMyTicketInfo']);
-
-    Route::post('searchCountryCode', ['as' => 'searchCountryCode', 'uses' => 'TicketController@searchCountryCode']);
 
     Route::post('sendPassengersInfo/{ticketId}', ['as' => 'sendPassengersInfo', 'uses' => 'TicketController@sendPassengersInfo']);
 

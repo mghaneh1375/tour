@@ -49,15 +49,8 @@
             </div>
 
             <div class="topDAMainPage marginBetweenMainPageMobileElements">
-                <a href="https://www.pasargadoil.com" class="dddda" style="margin-top: 5px;">
-                    <img src="{{URL::asset('images/esitrevda/pasargardda.gif')}}">
-                </a>
-                <a href="https://www.iranol.ir" class="dddda" style="margin-top: 5px;">
-                    <picture>
-                        <source media="(max-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolSmall.gif')}}">
-                        <source media="(min-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolBig.gif')}}">
-                        <img src="{{URL::asset('images/esitrevda/iranolBig.gif')}}" alt="ایرانول" style="height:auto;">
-                    </picture>
+                <a href="https://www.tourismbank.ir/" class="dddda" style="margin-top: 5px; width: 100%">
+                    <img src="{{URL::asset('images/esitrevda/gardeshgary.jpg')}}">
                 </a>
             </div>
 
@@ -324,6 +317,19 @@
                         <div class="swiper-button-prev"></div>
                     </div>
                 </div>
+            </div>
+
+            <div class="topDAMainPage marginBetweenMainPageMobileElements">
+                <a href="https://www.pasargadoil.com" class="dddda" style="margin-top: 5px;">
+                    <img src="{{URL::asset('images/esitrevda/pasargardda.gif')}}">
+                </a>
+                <a href="https://www.iranol.ir" class="dddda" style="margin-top: 5px;">
+                    <picture>
+                        <source media="(max-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolSmall.gif')}}">
+                        <source media="(min-width:767px)" srcset="{{URL::asset('images/esitrevda/iranolBig.gif')}}">
+                        <img src="{{URL::asset('images/esitrevda/iranolBig.gif')}}" alt="ایرانول" style="height:auto;">
+                    </picture>
+                </a>
             </div>
 
             <div class="mapBoxMainPage marginBetweenMainPageMobileElements">

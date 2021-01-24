@@ -33,15 +33,8 @@ class TourController extends Controller{
 
     public function showTour($code){
         $tourReserve = TourUserReservation::where('created_at', '<', Carbon::now()->subMinute(25))->get();
-        foreach ($tourReserve as $item){
-            $tourTime = TourTimes::find($item->tourTimeId);
-            if($tourTime != null){
-                $tourTime->registered -= $item->inCapacityCount;
-                $tourTime->save();
-            }
-
-            $item->delete();
-        }
+        foreach ($tourReserve as $item)
+            $item->deleteAndReturnCapacity();
 
         $timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : 0;
 
