@@ -59,7 +59,7 @@ class ActivityController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $tmp->file . "/f-1.jpg")))
                     $itr->placePic = URL::asset("_images/" . $kindPlace->fileName . "/" . $tmp->file . "/f-1.jpg");
                 else
-                    $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                    $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                 $itr->placeRedirect = route('show.place.details', ['kindPlaceName' => $kindPlace->fileName, 'slug' => $tmp->slug]);
                 if($itr->pic != "")
@@ -112,7 +112,7 @@ class ActivityController extends Controller {
             if(file_exists((__DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $tmp->file . "/f-1.jpg")))
                 $itr->placePic = URL::asset("_images/" . $kindPlace->fileName . "/" . $tmp->file . "/f-1.jpg");
             else
-                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
             $itr->placeRedirect = createUrl($kindPlace->id, $tmp->id, 0, 0);
 
             $city = Cities::whereId($tmp->cityId);

@@ -376,7 +376,7 @@ class APIController extends Controller {
             if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $hotel->file . '/f-1.jpg')))
                 $hotel->pic = URL::asset('_images/hotels/' . $hotel->file . '/f-1.jpg');
             else
-                $hotel->pic = URL::asset('_images/nopic/blank.jpg');
+                $hotel->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
             $condition = ['placeId' => $hotel->id, 'kindPlaceId' => $kindPlaceId,
                 'activityId' => $activityId];
@@ -927,8 +927,8 @@ class APIController extends Controller {
                     $photos[count($photos)] = URL::asset('_images/adab/ghazamahali/' . $place->file . '/s-1.jpg');
                     $thumbnail = URL::asset('_images/adab/ghazamahali/' . $place->file . '/f-1.jpg');
                 } else {
-                    $photos[count($photos)] = URL::asset('_images/nopic/blank.jpg');
-                    $thumbnail = URL::asset('_images/nopic/blank.jpg');
+                    $photos[count($photos)] = URL::asset('images/mainPics/noPicSite.jpg');
+                    $thumbnail = URL::asset('images/mainPics/noPicSite.jpg');
                 }
             }
             else {
@@ -936,14 +936,14 @@ class APIController extends Controller {
                     $photos[count($photos)] = URL::asset('_images/adab/soghat/' . $place->file . '/s-1.jpg');
                     $thumbnail = URL::asset('_images/adab/soghat/' . $place->file . '/f-1.jpg');
                 } else {
-                    $photos[count($photos)] = URL::asset('_images/nopic/blank.jpg');
-                    $thumbnail = URL::asset('_images/nopic/blank.jpg');
+                    $photos[count($photos)] = URL::asset('images/mainPics/noPicSite.jpg');
+                    $thumbnail = URL::asset('images/mainPics/noPicSite.jpg');
                 }
             }
         }
         else {
-            $photos[count($photos)] = URL::asset('_images/nopic/blank.jpg');
-            $thumbnail = URL::asset('_images/nopic/blank.jpg');
+            $photos[count($photos)] = URL::asset('images/mainPics/noPicSite.jpg');
+            $thumbnail = URL::asset('images/mainPics/noPicSite.jpg');
         }
 
         if(!empty($place->pic_2)) {
@@ -1070,7 +1070,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/amaken/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "amaken";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1080,7 +1080,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/restaurant/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "restaurant";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1090,7 +1090,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/hotels/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "hotel";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1100,7 +1100,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/majara/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "majara";
                 $state = State::whereId($place->cityId)->name;
                 break;
@@ -1110,13 +1110,13 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1)))
                         $placePic = URL::asset('_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1);
                     else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
+                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 else {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place->file . '/' . $place->pic_1)))
                         $placePic = URL::asset('_images/adab/soghat/' . $place->file . '/' . $place->pic_1);
                     else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
+                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 $placeMode = "adab";
                 $state = State::whereId($place->stateId)->name;
@@ -1208,7 +1208,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/amaken/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "amaken";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1217,7 +1217,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/restaurant/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "restaurant";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1226,7 +1226,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/hotels/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $placeMode = "hotel";
                 $state = State::whereId(Cities::whereId($place->cityId)->stateId)->name;
                 break;
@@ -1235,7 +1235,7 @@ class APIController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place->file . '/' . $place->pic_1)))
                     $placePic = URL::asset('_images/majara/' . $place->file . '/' . $place->pic_1);
                 else
-                    $placePic = URL::asset('_images/nopic/blank.jpg');
+                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 $state = State::whereId($place->cityId)->name;
                 $placeMode = "majara";
                 break;
@@ -1245,13 +1245,13 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1)))
                         $placePic = URL::asset('_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1);
                     else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
+                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 else {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place->file . '/' . $place->pic_1)))
                         $placePic = URL::asset('_images/adab/soghat/' . $place->file . '/' . $place->pic_1);
                     else
-                        $placePic = URL::asset('_images/nopic/blank.jpg');
+                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 $placeMode = "adab";
                 $state = State::whereId($place->stateId)->name;
@@ -1335,7 +1335,7 @@ class APIController extends Controller {
             if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $itr->file . '/f-1.jpg')))
                 $itr->pic = URL::asset('_images/hotels/' . $itr->file . '/f-1.jpg');
             else
-                $itr->pic = URL::asset('_images/nopic/blank.jpg');
+                $itr->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
             $itr->reviews = $itr->matches;
             $itr->rate = getRate($itr->id, $kindPlaceId)[1];
@@ -1409,7 +1409,7 @@ class APIController extends Controller {
             if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $itr->file . '/f-1.jpg')))
                 $itr->pic = URL::asset('_images/amaken/' . $itr->file . '/f-1.jpg');
             else
-                $itr->pic = URL::asset('_images/nopic/blank.jpg');
+                $itr->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
             $itr->reviews = $itr->matches;
             $itr->rate = getRate($itr->id, $kindPlaceId)[1];
@@ -1483,7 +1483,7 @@ class APIController extends Controller {
             if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $itr->file . '/f-1.jpg')))
                 $itr->pic = URL::asset('_images/restaurant/' . $itr->file . '/f-1.jpg');
             else
-                $itr->pic = URL::asset('_images/nopic/blank.jpg');
+                $itr->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
             $itr->reviews = $itr->matches;
             $itr->rate = getRate($itr->id, $kindPlaceId)[1];
@@ -1532,7 +1532,7 @@ class APIController extends Controller {
             if(file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $itr->file . '/f-1.jpg')))
                 $itr->pic = URL::asset('_images/adab/ghazamahali/' . $itr->file . '/f-1.jpg');
             else
-                $itr->pic = URL::asset('_images/nopic/blank.jpg');
+                $itr->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
             $itr->reviews = 0;
             $itr->rate = getRate($itr->id, $kindPlaceId)[1];
@@ -1599,7 +1599,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place2[$i]->file . '/f-1.jpg')))
                         $place2[$i]->pic = URL::asset('_images/amaken/' . $place2[$i]->file . '/f-1.jpg');
                     else
-                        $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                        $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                     $place2[$i]->url = route('amakenDetails', ['placeId' => $place2[$i]->id, 'placeName' => $place2[$i]->name]);
                     break;
@@ -1613,7 +1613,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place2[$i]->file . '/f-1.jpg')))
                         $place2[$i]->pic = URL::asset('_images/restaurant/' . $place2[$i]->file . '/f-1.jpg');
                     else
-                        $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                        $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                     $place2[$i]->url = route('restaurantDetails', ['placeId' => $place2[$i]->id, 'placeName' => $place2[$i]->name]);
                     break;
@@ -1627,7 +1627,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place2[$i]->file . '/f-1.jpg')))
                         $place2[$i]->pic = URL::asset('_images/hotels/' . $place2[$i]->file . '/f-1.jpg');
                     else
-                        $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                        $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                     $place2[$i]->url = route('hotelDetails', ['placeId' => $place2[$i]->id, 'placeName' => $place2[$i]->name]);
                     break;
@@ -1641,7 +1641,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place2[$i]->file . '/f-1.jpg')))
                         $place2[$i]->pic = URL::asset('_images/majara/' . $place2[$i]->file . '/f-1.jpg');
                     else
-                        $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                        $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                     $place2[$i]->url = route('majaraDetails', ['placeId' => $place2[$i]->id, 'placeName' => $place2[$i]->name]);
                     break;
@@ -1656,13 +1656,13 @@ class APIController extends Controller {
                         if(file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place2[$i]->file . '/f-1.jpg')))
                             $place2[$i]->pic = URL::asset('_images/adab/ghazamahali/' . $place2[$i]->file . '/f-1.jpg');
                         else
-                            $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                            $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
                     }
                     else {
                         if(file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place2[$i]->file . '/f-1.jpg')))
                             $place2[$i]->pic = URL::asset('_images/adab/soghat/' . $place2[$i]->file . '/f-1.jpg');
                         else
-                            $place2[$i]->pic = URL::asset('_images/nopic/blank.jpg');
+                            $place2[$i]->pic = URL::asset('images/mainPics/noPicSite.jpg');
                     }
                     $place2[$i]->url = route('majaraDetails', ['placeId' => $place2[$i]->id, 'placeName' => $place2[$i]->name]);
                     break;
@@ -1738,7 +1738,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $tmp->file . "/f-1.jpg")))
                         $itr->placePic = URL::asset("_images/amaken/" . $tmp->file . "/f-1.jpg");
                     else
-                        $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                        $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                     $itr->placeRedirect = route('amakenDetails', ['placeId' => $tmp->id]);
                     break;
@@ -1756,7 +1756,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $tmp->file . "/f-1.jpg")))
                         $itr->placePic = URL::asset("_images/hotels/" . $tmp->file . "/f-1.jpg");
                     else
-                        $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                        $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                     $itr->placeRedirect = route('hotelDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                     break;
@@ -1766,7 +1766,7 @@ class APIController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $tmp->file . "/f-1.jpg")))
                         $itr->placePic = URL::asset("_images/majara/" . $tmp->file . "/f-1.jpg");
                     else
-                        $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                        $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                     $itr->placeRedirect = route('majaraDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                     break;
@@ -1777,13 +1777,13 @@ class APIController extends Controller {
                         if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $tmp->file . "/f-1.jpg")))
                             $itr->placePic = URL::asset("_images/adab/ghazamahali/" . $tmp->file . "/f-1.jpg");
                         else
-                            $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                            $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                     }
                     else {
                         if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $tmp->file . "/f-1.jpg")))
                             $itr->placePic = URL::asset("_images/adab/soghat/" . $tmp->file . "/f-1.jpg");
                         else
-                            $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                            $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                     }
 
                     $itr->placeRedirect = route('adabDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
@@ -1928,7 +1928,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/amaken/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('amakenDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -1940,7 +1940,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset('_images/restaurant/' . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset('_images/nopic/blank.jpg');
+                                $itr->placePic = URL::asset('images/mainPics/noPicSite.jpg');
 
                             $itr->placeRedirect = route('restaurantDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -1951,7 +1951,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/hotels/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('hotelDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -1963,7 +1963,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/majara/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('majaraDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -1976,13 +1976,13 @@ class APIController extends Controller {
                                 if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $tmp->file . "/f-1.jpg")))
                                     $itr->placePic = URL::asset("_images/adab/ghazamahali/" . $tmp->file . "/f-1.jpg");
                                 else
-                                    $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                    $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                             }
                             else {
                                 if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $tmp->file . "/f-1.jpg")))
                                     $itr->placePic = URL::asset("_images/adab/soghat/" . $tmp->file . "/f-1.jpg");
                                 else
-                                    $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                    $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                             }
 
                             $itr->placeRedirect = route('adabDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
@@ -2073,7 +2073,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/amaken/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('amakenDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -2085,7 +2085,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset('_images/restaurant/' . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset('_images/nopic/blank.jpg');
+                                $itr->placePic = URL::asset('images/mainPics/noPicSite.jpg');
 
                             $itr->placeRedirect = route('restaurantDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -2096,7 +2096,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/hotels/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('hotelDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -2108,7 +2108,7 @@ class APIController extends Controller {
                             if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $tmp->file . "/f-1.jpg")))
                                 $itr->placePic = URL::asset("_images/majara/" . $tmp->file . "/f-1.jpg");
                             else
-                                $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
 
                             $itr->placeRedirect = route('majaraDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);
                             if($itr->pic != "")
@@ -2121,13 +2121,13 @@ class APIController extends Controller {
                                 if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $tmp->file . "/f-1.jpg")))
                                     $itr->placePic = URL::asset("_images/adab/ghazamahali/" . $tmp->file . "/f-1.jpg");
                                 else
-                                    $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                    $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                             }
                             else {
                                 if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $tmp->file . "/f-1.jpg")))
                                     $itr->placePic = URL::asset("_images/adab/soghat/" . $tmp->file . "/f-1.jpg");
                                 else
-                                    $itr->placePic = URL::asset("_images/nopic/blank.jpg");
+                                    $itr->placePic = URL::asset("images/mainPics/noPicSite.jpg");
                             }
 
                             $itr->placeRedirect = route('adabDetails', ['placeId' => $tmp->id, 'placeName' => $tmp->name]);

@@ -1004,7 +1004,7 @@ function getUserPic($id = 0){
 
     $user = User::find($id);
     if($id == 0 || $user == null)
-        $uPic = URL::asset('_images/nopic/blank.jpg');
+        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
     else{
         if(strpos($user->picture, 'http') !== false)
             return $user->picture;
@@ -1015,7 +1015,7 @@ function getUserPic($id = 0){
                 if($deffPic != null)
                     $uPic = URL::asset('defaultPic/' . $deffPic->name);
                 else
-                    $uPic = URL::asset('_images/nopic/blank.jpg');
+                    $uPic = URL::asset('images/mainPics/noPicSite.jpg');
             }
             else
                 $uPic = URL::asset('userProfile/' . $user->picture);
@@ -1057,7 +1057,7 @@ function getStatePic($stateId = 0, $cityId = 0){
         $place = Cities::find($cityId);
         $pics = CityPic::where('cityId', $cityId)->get();
         if(count($pics) == 0)
-            return URL::asset('_images/nopic/blank.jpg');
+            return URL::asset('images/mainPics/noPicSite.jpg');
         else{
             $locationPic1 = $locationPic .'/' . $place->id . '/' . $place->image;
             if(is_file($locationPic1))
@@ -1171,10 +1171,10 @@ function getCityPic($cityId){
                         }
                     }
 //                    if ($resultPic == null || $resultPic == '')
-//                        $resultPic = URL::asset('_images/nopic/blank.jpg');
+//                        $resultPic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
 //                else
-//                    $resultPic = URL::asset('_images/nopic/blank.jpg');
+//                    $resultPic = URL::asset('images/mainPics/noPicSite.jpg');
             }
         }
         else

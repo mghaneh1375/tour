@@ -44,52 +44,77 @@
         </div>
     </div>
 
-    <div class="row inOneRows">
-        <div class="title">اخرین ویدیوها</div>
-        <div class="body">
-            <div class="cardDownTitle">
-                <a href="#" class="picSec fullyCenterContent playIcon">
-                    <img src="https://www.irna.ir/sd/6b9bed202803f49cbcad1aec923c11bb5b14367bb822a44a2bfc591bbd772f476b34440488c6a66467a15e6bcb5dc8d3.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">
-                </a>
-                <a href="#" class="content">
-                    تروریسم داخلی؛ معضلی که گریبان آمریکا را گرفت
-                </a>
-            </div>
-            <div class="cardDownTitle">
-                <a href="#" class="picSec fullyCenterContent playIcon">
-                    <img src="https://img9.irna.ir/d/r2/2021/01/11/2/157816837.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">
-                </a>
-                <a href="#" class="content">
-                    نشریه فرانسوی: پایان حیات سیاسی ترامپ نزدیک است
-                </a>
-            </div>
-            <div class="cardDownTitle">
-                <a href="#" class="picSec fullyCenterContent playIcon">
-                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157845643.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">
-                </a>
-                <a href="#" class="content">
-                    ارزیابی رسانه‌های غربی از گزینه احتمالی دولت بایدن در امور ایران
-                </a>
-            </div>
-            <div class="cardDownTitle">
-                <a href="#" class="picSec fullyCenterContent playIcon">
-                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157844513.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">
-                </a>
-                <a href="#" class="content">
-                    بایدن ۷۸ساله و آمریکایی که دیگر ابرقدرت نیست
-                </a>
+
+    @if(count($topNews) > 1)
+        <div class="row inOneRows">
+            <div class="title">اخبار برگزیده</div>
+            <div class="body">
+                <div id="horizSlider" class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach($topNews as $item)
+                            <div class="swiper-slide cardDownTitle">
+                                <a href="{{$item->url}}" class="picSec fullyCenterContent">
+                                    <img src="{{$item->pic}}" alt="{{$item->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
+                                </a>
+                                <a href="{{$item->url}}" class="content">{{$item->title}}</a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
         </div>
-    </div>
+
+    @endif
+
+{{--    <div class="row inOneRows">--}}
+{{--        <div class="title">آخرین ویدیوها</div>--}}
+{{--        <div class="body">--}}
+{{--            <div class="cardDownTitle">--}}
+{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
+{{--                    <img src="https://www.irna.ir/sd/6b9bed202803f49cbcad1aec923c11bb5b14367bb822a44a2bfc591bbd772f476b34440488c6a66467a15e6bcb5dc8d3.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
+{{--                </a>--}}
+{{--                <a href="#" class="content">--}}
+{{--                    تروریسم داخلی؛ معضلی که گریبان آمریکا را گرفت--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--            <div class="cardDownTitle">--}}
+{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
+{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/11/2/157816837.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
+{{--                </a>--}}
+{{--                <a href="#" class="content">--}}
+{{--                    نشریه فرانسوی: پایان حیات سیاسی ترامپ نزدیک است--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--            <div class="cardDownTitle">--}}
+{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
+{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157845643.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
+{{--                </a>--}}
+{{--                <a href="#" class="content">--}}
+{{--                    ارزیابی رسانه‌های غربی از گزینه احتمالی دولت بایدن در امور ایران--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--            <div class="cardDownTitle">--}}
+{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
+{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157844513.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
+{{--                </a>--}}
+{{--                <a href="#" class="content">--}}
+{{--                    بایدن ۷۸ساله و آمریکایی که دیگر ابرقدرت نیست--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
     <?php
-        $colors = ['green', 'yellow', 'lightGreen', 'red', 'blue']
+        $colors = ['green', 'yellow', 'lightGreen', 'red', 'blue'];
+        $takenColor = 0;
     ?>
 
-    @foreach($allCategories as $index => $category)
+    @foreach($allCategories as $category)
         @if(count($category->news) > 0)
-            <div class="row oneBig4SmallRows {{$colors[($index%count($colors))]}}">
-                <div class="col-md-12 title"> {{$category->name}} </div>
+            <div data-index="{{$takenColor}}" class="row oneBig4SmallRows {{$colors[($takenColor%count($colors))]}}">
+                <a href="{{route('news.list', ['kind' => 'category', 'content' => $category->name])}}" class="col-md-12 title"> {{$category->name}} </a>
 
                 <div class="col-md-4 oneBigSec" style="float: right">
                     <a href="{{$category->news[0]->url}}" class="colCard">
@@ -114,22 +139,14 @@
                 </div>
             </div>
 
-            @if($index%2 == 0)
-                <div class="edBetween onED">
-                    <a href="#" class="fullyCenterContent">
-                        <img src="{{URL::asset('images/esitrevda/sistoda.jpeg')}}" alt="dfas" class="resizeImgClass" onload="fitThisImg(this)">
-                    </a>
-                </div>
+            @if($takenColor%2 == 0)
+                <div data-kind="hor_1" class="edSections edBetween onED"></div>
             @else
-                <div class="edBetween twoED">
-                    <a href="#" class="fullyCenterContent">
-                        <img src="{{URL::asset('images/esitrevda/sistoda.jpeg')}}" alt="dfas" class="resizeImgClass" onload="fitThisImg(this)">
-                    </a>
-                    <a href="#" class="fullyCenterContent">
-                        <img src="{{URL::asset('images/esitrevda/sistoda.jpeg')}}" alt="dfas" class="resizeImgClass" onload="fitThisImg(this)">
-                    </a>
-                </div>
+                <div data-kind="hor_2" class="edSections edBetween twoED"></div>
             @endif
+            <?php
+                $takenColor++;
+            ?>
         @endif
     @endforeach
 
@@ -156,6 +173,22 @@
                 prevEl: '.swiper-button-next',
             },
         });
+
+        var horizontalSwiper =  new Swiper('#horizSlider', {
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 50000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-prev',
+                prevEl: '.swiper-button-next',
+            },
+        })
+
 
     </script>
 

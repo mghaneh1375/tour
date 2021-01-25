@@ -173,7 +173,7 @@ class AjaxController extends Controller {
             }
 
             if(!file_exists((__DIR__ . '/../../../../assets/_images/' . $target)))
-                echo URL::asset('_images/nopic/blank.jpg');
+                echo URL::asset('images/mainPics/noPicSite.jpg');
             else
                 echo URL::asset('_images/' . $target);
         }
@@ -442,7 +442,7 @@ class AjaxController extends Controller {
                 if(is_file(__DIR__.'/../../../../assets/_images/city/'.$item->image))
                     $item->pic = URL::asset('_images/city/'.$item->image);
                 else
-                    $item->pic = URL::asset('_images/nopic/blank.jpg');
+                    $item->pic = URL::asset('images/mainPics/noPicSite.jpg');
             }
             return response()->json(['status' => 'ok', 'result' => $city]);
         }
@@ -489,7 +489,7 @@ class AjaxController extends Controller {
             if(file_exists(__DIR__ . '/../../../../assets/_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber))
                 $item->pic = URL::asset('_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber);
             else
-                $item->pic = URL::asset('_images/nopic/blank.jpg');
+                $item->pic = URL::asset('images/mainPics/noPicSite.jpg');
         }
         return response()->json(['status' => 'ok', 'result' => $place]);
     }

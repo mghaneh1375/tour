@@ -33,7 +33,7 @@
 @section('body')
 
     <div class="row" style="margin-top: 20px">
-        <div class="col-md-2">
+        <div class="col-md-2 hideOnPhone">
             <div class="row sideSec">
                 <div class="title">اخبار مشابه</div>
                 <div class="otherNewsInShowSec">
@@ -57,21 +57,22 @@
                 </div>
             </div>
 
-            @foreach($sideAdv as $adv)
-                <div class="row sideEdInShow">
-                    <a href="#" class="edvPic">
-                        <img src="{{$adv}}" alt="sisoo" >
-                    </a>
-                </div>
-            @endforeach
+            <div data-kind="ver_b" class="edSections edBetween onED"></div>
+            <div data-kind="ver_s" class="edSections edBetween onED"></div>
+            <div data-kind="ver_s" class="edSections edBetween onED"></div>
+
         </div>
 
         <div class="col-md-8">
+
+            <div class="title hideOnScreen">
+                <h1 style="font-weight: bold">{{$news->title}}</h1>
+            </div>
             <div class="mainPic">
                 <img src="{{$news->pic}}" alt="{{$news->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
             </div>
-            <div class="title">
-                <h1>{{$news->title}}</h1>
+            <div class="title hideOnPhone">
+                <h1 style="font-weight: bold">{{$news->title}}</h1>
             </div>
 
             <div class="body">
@@ -132,6 +133,33 @@
 {{--                    </div>--}}
                 </div>
             </div>
+        </div>
+
+        <div class="col-md-2 hideOnScreen">
+            <div class="row sideSec">
+                <div class="title">اخبار مشابه</div>
+                <div class="otherNewsInShowSec">
+                    <div id="otherNewsSlider" class="swiper-container otherNewsInShow">
+                        <div class="swiper-wrapper">
+                            @foreach($otherNews as $item)
+                                <div class="swiper-slide">
+                                    <div class="picSec">
+                                        <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
+                                    </div>
+                                    <a href="{{$item->url}}" class="content">
+                                        <h3 class="title">{{$item->title}}</h3>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+            <div data-kind="ver_s" class="edSections edBetween onED"></div>
+            <div data-kind="ver_s" class="edSections edBetween onED"></div>
         </div>
     </div>
 @endsection

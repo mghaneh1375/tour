@@ -67,7 +67,7 @@ class MyTripsController extends Controller {
                         if(file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' .  $place->file . '/f-' . $place->picNumber)))
                             $pic = URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
                         else
-                            $pic = URL::asset('_images/nopic/blank.jpg');
+                            $pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                         array_push($tripPics, $pic);
                     }
@@ -724,7 +724,7 @@ class MyTripsController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' .  $place->file . '/f-' . $place->picNumber)))
                         $trip->pic1 = URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
                     else
-                        $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                        $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 if($trip->placeCount > 1) {
                     $kindPlaceId = $tripPlaces[1]->kindPlaceId;
@@ -736,7 +736,7 @@ class MyTripsController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' .  $place->file . '/f-' . $place->picNumber)))
                         $trip->pic2 = URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
                     else
-                        $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                        $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 if($trip->placeCount > 2) {
                     $kindPlaceId = $tripPlaces[2]->kindPlaceId;
@@ -748,7 +748,7 @@ class MyTripsController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' .  $place->file . '/f-' . $place->picNumber)))
                         $trip->pic3 = URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
                     else
-                        $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                        $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 if($trip->placeCount > 3) {
                     $kindPlaceId = $tripPlaces[3]->kindPlaceId;
@@ -759,7 +759,7 @@ class MyTripsController extends Controller {
                     if(file_exists((__DIR__ . '/../../../../assets/_images/' . $file . '/' .  $place->file . '/f-' . $place->picNumber)))
                         $trip->pic4 = URL::asset('_images/' . $file . '/' . $place->file . '/f-' . $place->picNumber);
                     else
-                        $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                        $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                 }
             }
 
@@ -908,7 +908,7 @@ class MyTripsController extends Controller {
                 if(file_exists((__DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $target->file . '/f-1.jpg')))
                     $amaken->placePic = URL::asset('_images/' . $kindPlace->fileName . '/' . $target->file . '/f-1.jpg');
                 else
-                    $amaken->placePic = URL::asset('_images/nopic/blank.jpg');
+                    $amaken->placePic = URL::asset('images/mainPics/noPicSite.jpg');
 
                 $amaken->x = $target->C;
                 $amaken->y = $target->D;

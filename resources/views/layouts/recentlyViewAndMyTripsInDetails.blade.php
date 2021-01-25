@@ -42,7 +42,7 @@ if(Auth::check()) {
                                 $trip->pic1 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 3:
@@ -52,7 +52,7 @@ if(Auth::check()) {
                                 $trip->pic1 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 4:
@@ -62,7 +62,7 @@ if(Auth::check()) {
                                 $trip->pic1 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 6:
@@ -72,7 +72,7 @@ if(Auth::check()) {
                                 $trip->pic1 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 8:
@@ -83,7 +83,7 @@ if(Auth::check()) {
                                     $trip->pic1 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         else {
@@ -92,7 +92,7 @@ if(Auth::check()) {
                                     $trip->pic1 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         break;
@@ -108,7 +108,7 @@ if(Auth::check()) {
                                 $trip->pic2 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 3:
@@ -118,7 +118,7 @@ if(Auth::check()) {
                                 $trip->pic2 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 4:
@@ -128,7 +128,7 @@ if(Auth::check()) {
                                 $trip->pic2 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 6:
@@ -138,7 +138,7 @@ if(Auth::check()) {
                                 $trip->pic2 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 8:
@@ -149,7 +149,7 @@ if(Auth::check()) {
                                     $trip->pic2 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         else {
@@ -158,7 +158,7 @@ if(Auth::check()) {
                                     $trip->pic2 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         break;
@@ -174,7 +174,7 @@ if(Auth::check()) {
                                 $trip->pic3 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 3:
@@ -184,7 +184,7 @@ if(Auth::check()) {
                                 $trip->pic3 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 4:
@@ -194,7 +194,7 @@ if(Auth::check()) {
                                 $trip->pic3 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 6:
@@ -204,7 +204,7 @@ if(Auth::check()) {
                                 $trip->pic3 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 8:
@@ -215,7 +215,7 @@ if(Auth::check()) {
                                     $trip->pic3 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         else {
@@ -224,7 +224,7 @@ if(Auth::check()) {
                                     $trip->pic3 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         break;
@@ -240,7 +240,7 @@ if(Auth::check()) {
                                 $trip->pic4 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 3:
@@ -250,7 +250,7 @@ if(Auth::check()) {
                                 $trip->pic4 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
                         }
                         catch (Exception $x) {
-                            $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 4:
@@ -260,7 +260,7 @@ if(Auth::check()) {
                                 $trip->pic4 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 6:
@@ -270,7 +270,7 @@ if(Auth::check()) {
                                 $trip->pic4 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
                         }
                         catch (Exception $x) {
-                            $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                            $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                         }
                         break;
                     case 8:
@@ -281,7 +281,7 @@ if(Auth::check()) {
                                     $trip->pic4 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         else {
@@ -290,7 +290,7 @@ if(Auth::check()) {
                                     $trip->pic4 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
                             }
                             catch (Exception $x) {
-                                $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+                                $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
                             }
                         }
                         break;

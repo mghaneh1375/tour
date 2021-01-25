@@ -53,6 +53,10 @@ Route::group(array(), function(){
 
 });
 
+Route::post('log/storeSeen', 'LogController@storeUserSeenLog')->name('log.storeSeen');
+Route::get('edver/get', 'AdvertisementController@getAdvertisement')->name('advertisement.get');
+
+
 Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
     Route::get('/', 'MainController@showMainPage')->name('home')->middleware('shareData');
@@ -131,7 +135,6 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
     Route::post('getRecentlyActivities', array('as' => 'recentlyViewed', 'uses' => 'ActivityController@getRecentlyActivities'));
 });
 
-
 //authenticated controller
 Route::group(array('middleware' => ['throttle:30', 'shareData']), function(){
 //    Route::get('login', 'UserLoginController@login');
@@ -200,8 +203,6 @@ Route::group(array('middleware' => ['throttle:60']), function (){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
 });
-
-Route::post('log/storeSeen', 'LogController@storeUserSeenLog')->name('log.storeSeen');
 
 //ajaxController
 Route::group(array('middleware' => 'nothing'), function () {

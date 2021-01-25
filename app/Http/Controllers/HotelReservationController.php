@@ -207,7 +207,7 @@ class HotelReservationController extends Controller {
                 if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $hotel->file . '/f-1.jpg')))
                     $hotel->pic = URL::asset('_images/hotels/' . $hotel->file . '/f-1.jpg');
                 else
-                    $hotel->pic = URL::asset('_images/nopic/blank.jpg');
+                    $hotel->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                 $condition = ['placeId' => $hotel->id, 'kindPlaceId' => $kindPlaceId,
                     'activityId' => $activityId];
@@ -424,7 +424,7 @@ class HotelReservationController extends Controller {
                 if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $hotel->file . '/f-1.jpg')))
                     $hotel->pic = URL::asset('_images/hotels/' . $hotel->file . '/f-1.jpg');
                 else
-                    $hotel->pic = URL::asset('_images/nopic/blank.jpg');
+                    $hotel->pic = URL::asset('images/mainPics/noPicSite.jpg');
 
                 $condition = ['placeId' => $hotel->id, 'kindPlaceId' => $kindPlaceId,
                     'activityId' => $activityId];

@@ -10,11 +10,11 @@
     <meta name='description' content='{{$meta['description']}}' />
     <meta name='og:description' content='{{$meta['description']}}' />
     <meta name='keywords' content='{{$meta['keyword']}}' />
-    <meta property="og:image" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
-    <meta property="og:image:secure_url" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
+    <meta property="og:image" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
+    <meta property="og:image:secure_url" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
     <meta property="og:image:width" content="550"/>
     <meta property="og:image:height" content="367"/>
-    <meta name="twitter:image" content="{{URL::asset('_images/nopic/blank.jpg')}}"/>
+    <meta name="twitter:image" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
 
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/theme2/hotelLists.css?v='.$fileVersions)}}"/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/mainPageStyles.css?v='.$fileVersions)}}'/>

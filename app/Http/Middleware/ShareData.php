@@ -52,7 +52,7 @@ class ShareData
             ]);
         }
         else {
-//            $buPic = \URL::asset('_images/nopic/blank.jpg');
+//            $buPic = \URL::asset('images/mainPics/noPicSite.jpg');
             View::share(['config' => $config, 'fileVersions' => $fileVersions]);
         }
 

@@ -66,7 +66,7 @@ class RestaurantController extends Controller {
             if (file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $out[$i]->file . '/f-1.jpg')))
                 $out[$i]->pic = URL::asset("_images/restaurant/" . $out[$i]->file . '/f-1.jpg');
             else
-                $out[$i]->pic = URL::asset("_images/nopic/blank.jpg");
+                $out[$i]->pic = URL::asset("images/mainPics/noPicSite.jpg");
 
             $condition = ['placeId' => $out[$i]->id, 'kindPlaceId' => $kindPlaceId, 'confirm' => 1,
                 'activityId' => Activity::whereName('نظر')->first()->id];

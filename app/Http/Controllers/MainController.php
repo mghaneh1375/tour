@@ -214,7 +214,7 @@ class MainController extends Controller
 //                                        $trip->pic1 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 3:
@@ -224,7 +224,7 @@ class MainController extends Controller
 //                                        $trip->pic1 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 4:
@@ -234,7 +234,7 @@ class MainController extends Controller
 //                                        $trip->pic1 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 6:
@@ -244,7 +244,7 @@ class MainController extends Controller
 //                                        $trip->pic1 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 8:
@@ -255,7 +255,7 @@ class MainController extends Controller
 //                                            $trip->pic1 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                else {
@@ -264,7 +264,7 @@ class MainController extends Controller
 //                                            $trip->pic1 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic1 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic1 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                break;
@@ -280,7 +280,7 @@ class MainController extends Controller
 //                                        $trip->pic2 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 3:
@@ -290,7 +290,7 @@ class MainController extends Controller
 //                                        $trip->pic2 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 4:
@@ -300,7 +300,7 @@ class MainController extends Controller
 //                                        $trip->pic2 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 6:
@@ -310,7 +310,7 @@ class MainController extends Controller
 //                                        $trip->pic2 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 8:
@@ -321,7 +321,7 @@ class MainController extends Controller
 //                                            $trip->pic2 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                else {
@@ -330,7 +330,7 @@ class MainController extends Controller
 //                                            $trip->pic2 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic2 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic2 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                break;
@@ -346,7 +346,7 @@ class MainController extends Controller
 //                                        $trip->pic3 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 3:
@@ -356,7 +356,7 @@ class MainController extends Controller
 //                                        $trip->pic3 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 4:
@@ -366,7 +366,7 @@ class MainController extends Controller
 //                                        $trip->pic3 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 6:
@@ -376,7 +376,7 @@ class MainController extends Controller
 //                                        $trip->pic3 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 8:
@@ -387,7 +387,7 @@ class MainController extends Controller
 //                                            $trip->pic3 = URL::asset('_images/adab/ghazamahali/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                else {
@@ -396,7 +396,7 @@ class MainController extends Controller
 //                                            $trip->pic3 = URL::asset('_images/adab/soghat/' . $adab->file . '/' . $adab->pic_1);
 //                                    }
 //                                    catch (Exception $x) {
-//                                        $trip->pic3 = URL::asset('_images/nopic/blank.jpg');
+//                                        $trip->pic3 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                    }
 //                                }
 //                                break;
@@ -412,7 +412,7 @@ class MainController extends Controller
 //                                        $trip->pic4 = URL::asset('_images/amaken/' . $amaken->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 3:
@@ -422,7 +422,7 @@ class MainController extends Controller
 //                                        $trip->pic4 = URL::asset('_images/restaurant/' . $restaurant->file . '/t-1.jpg');
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 4:
@@ -432,7 +432,7 @@ class MainController extends Controller
 //                                        $trip->pic4 = URL::asset('_images/hotels/' . $hotel->file . '/' . $hotel->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                            case 6:
@@ -442,7 +442,7 @@ class MainController extends Controller
 //                                        $trip->pic4 = URL::asset('_images/hotels/' . $majara->file . '/' . $majara->pic_1);
 //                                }
 //                                catch (Exception $x) {
-//                                    $trip->pic4 = URL::asset('_images/nopic/blank.jpg');
+//                                    $trip->pic4 = URL::asset('images/mainPics/noPicSite.jpg');
 //                                }
 //                                break;
 //                        }

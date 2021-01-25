@@ -85,7 +85,7 @@ class CityController extends Controller
         if($place->image != null && is_file($mainLocation."/city/$place->id/$place->image"))
             $place->image = URL::asset("_images/city/$place->id/$place->image");
         else
-            $place->image = URL::asset('_images/nopic/blank.jpg');
+            $place->image = URL::asset('images/mainPics/noPicSite.jpg');
 
         $pics = [];
         $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')

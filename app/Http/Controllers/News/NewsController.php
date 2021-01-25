@@ -19,9 +19,9 @@ class NewsController extends Controller
 
         $allNewsCount = News::all()->count();
 
-        $sliderNews = News::youCanSee()->select($selectCol)->orderBy('time')->orderBy('date')->take(5)->get();
+        $sliderNews = News::youCanSee()->orderBy('date')->select($selectCol)->orderBy('time')->take(5)->get();
 
-        $sideSliderNews = News::youCanSee()->select($selectCol)->orderBy('time')->orderBy('date')->skip(5)->take(4)->get();
+        $sideSliderNews = News::youCanSee()->orderBy('date')->orderBy('time')->select($selectCol)->skip(5)->take(4)->get();
         if(count($sideSliderNews) < 4){
             $remaining = 4 - count($sideSliderNews);
             $skip = 5 - $remaining;
@@ -41,14 +41,18 @@ class NewsController extends Controller
                                     ->where('newsCategoryRelations.categoryId', $category->id)
                                     ->where('newsCategoryRelations.isMain', 1)
                                     ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic'])
-                                    ->orderBy('news.time')->orderBy('news.date')
+                                    ->orderBy('news.date')->orderBy('news.time')
                                     ->take(7)->get();
 
             foreach ($category->news as $item)
                 $item = getNewsMinimal($item);
         }
 
-        return view('pages.News.newsMainPage', compact(['sliderNews', 'sideSliderNews', 'allCategories']));
+        $topNews = News::youCanSee()->where('topNews', 1)->orderBy('date')->orderBy('time')->select($selectCol)->get();
+        foreach ($topNews as $item)
+            $item = getNewsMinimal($item);
+
+        return view('pages.News.newsMainPage', compact(['sliderNews', 'sideSliderNews', 'allCategories', 'topNews']));
     }
 
     public function newsShow($slug)
@@ -58,7 +62,6 @@ class NewsController extends Controller
             return redirect(route('news.main'));
 
         $news->tags = $news->getTags->pluck('tag')->toArray();
-        $news->time = implode(':', str_split($news->time, 2));
 
         $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}");
         $news->category = NewsCategory::join('newsCategoryRelations', 'newsCategoryRelations.categoryId', 'newsCategories.id')
@@ -66,13 +69,6 @@ class NewsController extends Controller
                                     ->where('newsCategoryRelations.newsId', $news->id)
                                     ->select(['newsCategories.id', 'newsCategories.name'])
                                     ->first();
-
-        $sideAdv = [];
-        $sideAdvLocation = __DIR__.'/../../../../public/images/esitrevda';
-        foreach(scandir($sideAdvLocation) as $files){
-            if(is_file($sideAdvLocation.'/'.$files))
-                array_push($sideAdv, URL::asset("images/esitrevda/{$files}"));
-        }
 
         $otherNews = NewsCategoryRelations::join('news', 'news.id', 'newsCategoryRelations.newsId')
                             ->where('newsCategoryRelations.categoryId', $news->category->id)
@@ -85,10 +81,55 @@ class NewsController extends Controller
 
         $date = explode('/', $news->date);
         $times = explode(':', $news->time);
-        $news->showTime = Verta::createJalali($date[0], $date[1], $date[2], $times[0], $times[1], 0)->format('%d %B %Y  H:i');
 
+        $news->showTime = Verta::createJalali($date[0], $date[1], $date[2], $times[0], $times[1], 0)->format('%d %B %Y  H:i');
         $news->author = User::find($news->userId)->username;
 
-        return view('pages.News.newsShow', compact(['news', 'sideAdv', 'otherNews']));
+        return view('pages.News.newsShow', compact(['news', 'otherNews']));
+    }
+
+    public function newsListPage($kind, $content = ''){
+
+        $header = '';
+        if($kind == 'all'){
+            $header = 'آخرین اخبار';
+        }
+        else if($kind == 'category'){
+            $header = 'اخبار ' . $content;
+        }
+        else if($kind == 'category'){
+            $header = 'محتوای: ' . $content;
+        }
+
+        return view('pages.News.newsList', compact(['kind', 'content', 'header']));
+    }
+
+    public function newsListElements()
+    {
+        $selectCol = ['id', 'title', 'meta', 'slug', 'time', 'date', 'keyword', 'pic'];
+        $joinSelectCol = ['news.id', 'news.title', 'news.meta', 'news.slug', 'news.time', 'news.date', 'news.keyword', 'news.pic'];
+
+        $kind = $_GET['kind'];
+        $content = $_GET['content'];
+        $take = $_GET['take'];
+        $page = $_GET['page'];
+
+        if($kind == 'all'){
+            $news = News::youCanSee()->orderBy('date')->orderBy('time')->select($selectCol)->skip($page*$take)->take($take)->get();
+        }
+        else if($kind == 'category'){
+            $category = NewsCategory::where('name', $content)->first();
+            $news = News::youCanSee()->join('newsCategoryRelations', 'newsCategoryRelations.newsId', 'news.id')
+                        ->where('newsCategoryRelations.categoryId', $category->id)
+                        ->orderBy('news.date')->orderBy('news.time')
+                        ->select($joinSelectCol)
+                        ->skip($page*$take)->take($take)
+                        ->get();
+        }
+
+        foreach($news as $item)
+            $item = getNewsMinimal($item);
+
+        return response()->json(['status' => 'ok', 'result' => $news]);
     }
 }
