@@ -15,4 +15,7 @@
     <sitemap>
         <loc>{{url('/sitemap.xml/village')}}</loc>
     </sitemap>
+    <sitemap>
+        <loc>{{url('/sitemap.xml/news')}}</loc>
+    </sitemap>
 </sitemapindex>

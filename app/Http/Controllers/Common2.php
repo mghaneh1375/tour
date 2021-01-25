@@ -361,3 +361,10 @@ function getAnsToComments($logId){
 
     return [$ansToReview, $countAns];
 }
+
+function getNewsMinimal($news){
+    $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}");
+    $news->url = route('news.show', ['slug' => $news->slug]);
+
+    return $news;
+}

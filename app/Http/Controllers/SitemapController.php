@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\news\News;
 use App\models\places\Amaken;
 use App\models\Cities;
 use App\models\places\Place;
@@ -89,6 +90,21 @@ class SitemapController extends Controller
             if($item->slug != null && $item->slug != '') {
                 $l = url('/safarnameh/show/'.$item->id);
 //                array_push($lists, [$l, $item->created_at]);
+                array_push($lists, $l);
+            }
+        }
+
+        return response()->view('sitemap.siteMapUrls', ['lists' => $lists])->header('Content-Type', 'application/xml');
+    }
+
+    public function news()
+    {
+        $news = News::youCanSee()->select(['id', 'title', 'slug', 'created_at'])->get();
+
+        $lists = array();
+        foreach ($news as $item) {
+            if($item->slug != null && $item->slug != '') {
+                $l = url("/news/show/{$item->slug}");
                 array_push($lists, $l);
             }
         }

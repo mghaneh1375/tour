@@ -49,8 +49,11 @@
             </div>
 
             <div class="topDAMainPage marginBetweenMainPageMobileElements">
-                <a href="https://www.tourismbank.ir/" class="dddda" style="margin-top: 5px; width: 100%">
+                <a href="https://www.tourismbank.ir/" class="dddda" style="margin-top: 5px; height: 150px;">
                     <img src="{{URL::asset('images/esitrevda/gardeshgary.jpg')}}">
+                </a>
+                <a href="http://sisootech.com/" class="dddda hideOnPhone" style="margin-top: 5px; height: 150px;">
+                    <img src="{{URL::asset('images/esitrevda/sistoda.jpeg')}}">
                 </a>
             </div>
 

@@ -49,6 +49,8 @@ Route::group(array(), function(){
 
     Route::get('/sitemap.xml/village', 'SitemapController@village');
 
+    Route::get('/sitemap.xml/news', 'SitemapController@news');
+
 });
 
 Route::group(array('middleware' => ['throttle:60', 'web']), function () {
