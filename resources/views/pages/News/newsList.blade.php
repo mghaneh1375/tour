@@ -10,7 +10,7 @@
 
 
 @section('body')
-    <div class="row">
+    <div class="row listHeaderRow">
         <h2 style="font-weight: bold;">لیست {{$header}}</h2>
     </div>
 
@@ -82,7 +82,7 @@
                             <div class="content">
                                 <a href="${item.url}" class="title">${item.title}</a>
                                 <div class="summery">${item.meta}</div>
-                                <div class="time">${item.timeToShow}</div>
+                                <div class="time">${item.dateAndTime}</div>
                             </div>
                         </div>`;
             });
@@ -98,10 +98,8 @@
 
             if(bottomOfList-windowHeight < 0 && !inTake && (!isFinish || mustBeTaken))
                 getListElemes();
-        })
+        });
 
-        $(window).ready(() => {
-            getListElemes();
-        })
+        $(window).ready(getListElemes);
     </script>
 @endsection

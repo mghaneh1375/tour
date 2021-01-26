@@ -13,13 +13,12 @@ class News extends Model
     protected $table = 'news';
 
     public function scopeYouCanSee($query){
-        $func = getToday();
-        $today = $func["date"];
-        $nowTime = $func["time"];
+        date_default_timezone_set('Asia/Tehran');
 
-        return $query->whereRaw('(date <= ' . $today . ' OR (date = ' . $today . ' AND (time <= ' . $nowTime . ' || time IS NULL)))')
-                        ->where('release', '!=', 'draft')
-                        ->where('confirm', 1);
+        $time = verta()->format('Y/m/d H:i');
+        return $query->where('dateAndTime', '<=', $time)
+                     ->where('release', '!=', 'draft')
+                     ->where('confirm', 1);
     }
 
     public function getTags(){

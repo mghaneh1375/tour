@@ -27,49 +27,67 @@
     @endforeach
 
     <title>{{isset($news->seoTitle) ? $news->seoTitle : $news->title}} </title>
+
+    <style>
+        .eddsSec{
+
+        }
+        .eddsSec.fixedL{
+            position: fixed;
+            bottom: 0px;
+        }
+        .newsVideo{
+
+        }
+    </style>
 @endsection
 
 
 @section('body')
 
     <div class="row" style="margin-top: 20px">
-        <div class="col-md-2 hideOnPhone">
-            <div class="row sideSec">
-                <div class="title">اخبار مشابه</div>
-                <div class="otherNewsInShowSec">
-                    <div id="otherNewsSlider" class="swiper-container otherNewsInShow">
-                        <div class="swiper-wrapper">
-                            @foreach($otherNews as $item)
-                                <div class="swiper-slide">
-                                    <div class="picSec">
-                                        <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
+        <div id="pcSideAdSection" class="col-md-2 hideOnPhone">
+            <div id="dsfjk" class="eddsSec">
+                <div class="row sideSec">
+                    <div class="title">اخبار مشابه</div>
+                    <div class="otherNewsInShowSec">
+                        <div id="otherNewsSlider" class="swiper-container otherNewsInShow">
+                            <div class="swiper-wrapper">
+                                @foreach($otherNews as $item)
+                                    <div class="swiper-slide">
+                                        <div class="picSec">
+                                            <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
+                                        </div>
+                                        <a href="{{$item->url}}" class="content">
+                                            <h3 class="title">{{$item->title}}</h3>
+                                        </a>
                                     </div>
-                                    <a href="{{$item->url}}" class="content">
-                                        <h3 class="title">{{$item->title}}</h3>
-                                    </a>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                            <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
                         </div>
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
                     </div>
                 </div>
+
+                <div data-kind="ver_b" class="edSections edBetween onED"></div>
+                <div data-kind="ver_s" class="edSections edBetween onED"></div>
+                <div data-kind="ver_s" class="edSections edBetween onED"></div>
             </div>
-
-            <div data-kind="ver_b" class="edSections edBetween onED"></div>
-            <div data-kind="ver_s" class="edSections edBetween onED"></div>
-            <div data-kind="ver_s" class="edSections edBetween onED"></div>
-
         </div>
 
         <div class="col-md-8">
 
-            <div class="title hideOnScreen">
+            <div class="newsTitleShow hideOnScreen">
                 <h1 style="font-weight: bold">{{$news->title}}</h1>
             </div>
             <div class="mainPic">
-                <img src="{{$news->pic}}" alt="{{$news->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
+                @if($news->video == null)
+                    <img src="{{$news->pic}}" alt="{{$news->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
+                @else
+                    <video src="{{$news->video}}" poster="{{$news->pic}}" class="newsVideo" controls style="width: 100%;"></video>
+                @endif
             </div>
             <div class="title hideOnPhone">
                 <h1 style="font-weight: bold">{{$news->title}}</h1>
@@ -79,6 +97,7 @@
                 <div class="descriptionText">
                     {!! $news->text !!}
                 </div>
+                <div id="bottomOfText"></div>
             </div>
         </div>
 
@@ -191,6 +210,72 @@
             let textShareBox = 'whatsapp://send?text=';
             textShareBox += 'در کوچیتا ببینید:' + ' %0a ' + encodeurlShareBox;
             $('.whatsappLink').attr('href', textShareBox);
+            fitSideSizes()
+        });
+
+        var startFixing = false;
+        var sideIsFixed = false;
+        var lastScrollPosition = 0;
+        var fixingId = 'dsfjk';
+
+        function fitSideSizes(){
+            var width = $(`#${fixingId}`).width();
+            var leftOfAd = document.getElementById('dsfjk').getBoundingClientRect().left;
+
+            if(!sideIsFixed) {
+                $(`#${fixingId}`).css('left', leftOfAd);
+                $(`#${fixingId}`).css('width', width);
+            }
+
+            startFixing = true;
+        }
+        $(window).on('resize', fitSideSizes);
+
+        $(window).on('scroll', function() {
+
+            if(!startFixing)
+                 return;
+
+            var scrollPosition = $(window).scrollTop();
+            var positionOfFooter = document.getElementById('bottomOfText').getBoundingClientRect().top - $(window).height();
+            var bottomOfAd = document.getElementById('dsfjk').getBoundingClientRect().top + $(`#${fixingId}`).height() - $(window).height();
+            var scrollMovement = scrollPosition - lastScrollPosition > 0 ? 'down' : 'up';
+
+            if(bottomOfAd <= 0 && !sideIsFixed){
+                sideIsFixed = true;
+                $(`#${fixingId}`).addClass('fixedL');
+                $(`#${fixingId}`).css('bottom', 0)
+            }
+
+            if(sideIsFixed) {
+
+                if (positionOfFooter <= 0)
+                    $(`#${fixingId}`).css('bottom', Math.abs(positionOfFooter));
+                else {
+                    var absoluteTop = document.getElementById('dsfjk').getBoundingClientRect().top;
+
+                    if (scrollMovement == 'up') {
+                        if(absoluteTop < 10){
+                            var bot = parseInt($(`#${fixingId}`).css('bottom'));
+                            $(`#${fixingId}`).css('bottom', bot - Math.abs(scrollPosition - lastScrollPosition))
+                        }
+
+                        var topOfAdSection = document.getElementById('pcSideAdSection').getBoundingClientRect().top;
+                        if (topOfAdSection >= 0) {
+                            sideIsFixed = false;
+                            $(`#${fixingId}`).removeClass('fixedL');
+                        }
+                    }
+                    else {
+                        if(bottomOfAd > 0){
+                            var bot = parseInt($(`#${fixingId}`).css('bottom'));
+                            $(`#${fixingId}`).css('bottom', bot + Math.abs(scrollPosition - lastScrollPosition))
+                        }
+                    }
+                }
+            }
+
+            lastScrollPosition = scrollPosition;
         });
     </script>
 

@@ -13,15 +13,18 @@ use Illuminate\Support\Facades\URL;
 
 class NewsController extends Controller
 {
+    public function __construct()
+    {
+        date_default_timezone_set('Asia/Tehran');
+    }
+
     public function newsMainPage()
     {
-        $selectCol = ['id', 'title', 'meta', 'slug', 'keyword', 'pic'];
+        $selectCol = ['id', 'title', 'meta', 'slug', 'keyword', 'pic', 'video'];
 
-        $allNewsCount = News::all()->count();
+        $sliderNews = News::youCanSee()->orderByDesc('dateAndTime')->select($selectCol)->take(5)->get();
 
-        $sliderNews = News::youCanSee()->orderBy('date')->select($selectCol)->orderBy('time')->take(5)->get();
-
-        $sideSliderNews = News::youCanSee()->orderBy('date')->orderBy('time')->select($selectCol)->skip(5)->take(4)->get();
+        $sideSliderNews = News::youCanSee()->orderByDesc('dateAndTime')->select($selectCol)->skip(5)->take(4)->get();
         if(count($sideSliderNews) < 4){
             $remaining = 4 - count($sideSliderNews);
             $skip = 5 - $remaining;
@@ -40,19 +43,23 @@ class NewsController extends Controller
             $category->news = News::youCanSee()->join('newsCategoryRelations', 'newsCategoryRelations.newsId', 'news.id')
                                     ->where('newsCategoryRelations.categoryId', $category->id)
                                     ->where('newsCategoryRelations.isMain', 1)
-                                    ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic'])
-                                    ->orderBy('news.date')->orderBy('news.time')
+                                    ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic', 'news.video'])
+                                    ->orderByDesc('news.dateAndTime')
                                     ->take(7)->get();
 
             foreach ($category->news as $item)
                 $item = getNewsMinimal($item);
         }
 
-        $topNews = News::youCanSee()->where('topNews', 1)->orderBy('date')->orderBy('time')->select($selectCol)->get();
+        $topNews = News::youCanSee()->where('topNews', 1)->orderByDesc('dateAndTime')->select($selectCol)->get();
         foreach ($topNews as $item)
             $item = getNewsMinimal($item);
 
-        return view('pages.News.newsMainPage', compact(['sliderNews', 'sideSliderNews', 'allCategories', 'topNews']));
+        $lastVideos = News::youCanSee()->where('video', '!=', null)->orderByDesc('dateAndTime')->select($selectCol)->take(5)->get();
+        foreach ($lastVideos as $item)
+            $item = getNewsMinimal($item);
+
+        return view('pages.News.newsMainPage', compact(['sliderNews', 'sideSliderNews', 'allCategories', 'topNews', 'lastVideos']));
     }
 
     public function newsShow($slug)
@@ -79,11 +86,15 @@ class NewsController extends Controller
         foreach ($otherNews as $item)
             $item = getNewsMinimal($item);
 
-        $date = explode('/', $news->date);
-        $times = explode(':', $news->time);
+        $dateAndTime = explode(' ', $news->dateAndTime);
+        $date = explode('/', $dateAndTime[0]);
+        $times = explode(':', $dateAndTime[1]);
 
         $news->showTime = Verta::createJalali($date[0], $date[1], $date[2], $times[0], $times[1], 0)->format('%d %B %Y  H:i');
         $news->author = User::find($news->userId)->username;
+
+        if($news->video != null)
+            $news->video = URL::asset("_images/news/{$news->id}/{$news->video}");
 
         return view('pages.News.newsShow', compact(['news', 'otherNews']));
     }
@@ -106,8 +117,8 @@ class NewsController extends Controller
 
     public function newsListElements()
     {
-        $selectCol = ['id', 'title', 'meta', 'slug', 'time', 'date', 'keyword', 'pic'];
-        $joinSelectCol = ['news.id', 'news.title', 'news.meta', 'news.slug', 'news.time', 'news.date', 'news.keyword', 'news.pic'];
+        $selectCol = ['id', 'title', 'meta', 'slug', 'dateAndTime', 'keyword', 'pic', 'video'];
+        $joinSelectCol = ['news.id', 'news.title', 'news.meta', 'news.slug', 'news.dateAndTime', 'news.keyword', 'news.pic', 'news.video'];
 
         $kind = $_GET['kind'];
         $content = $_GET['content'];
@@ -115,13 +126,13 @@ class NewsController extends Controller
         $page = $_GET['page'];
 
         if($kind == 'all'){
-            $news = News::youCanSee()->orderBy('date')->orderBy('time')->select($selectCol)->skip($page*$take)->take($take)->get();
+            $news = News::youCanSee()->orderByDesc('dateAndTime')->select($selectCol)->skip($page*$take)->take($take)->get();
         }
         else if($kind == 'category'){
             $category = NewsCategory::where('name', $content)->first();
             $news = News::youCanSee()->join('newsCategoryRelations', 'newsCategoryRelations.newsId', 'news.id')
                         ->where('newsCategoryRelations.categoryId', $category->id)
-                        ->orderBy('news.date')->orderBy('news.time')
+                        ->orderByDesc('news.dateAndTime')
                         ->select($joinSelectCol)
                         ->skip($page*$take)->take($take)
                         ->get();

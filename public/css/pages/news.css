@@ -202,7 +202,10 @@
     width: 100%;
     position: relative;
 }
-.inOneRows .cardDownTitle .picSec.playIcon:before{
+.picSec.playIcon{
+    position: relative;
+}
+.picSec.playIcon:before{
     position: absolute;
     top: 0px;
     left: 0px;
@@ -237,7 +240,8 @@
 .oneBig4SmallRows .title{
     font-size: 24px;
     margin-bottom: 10px;
-    color: white;
+    color: black;
+    font-weight: bold;
 }
 
 .colCard{
@@ -257,7 +261,8 @@
     color: white;
 }
 .colCard .content .title{
-    font-weight: bold;
+    color: white;
+    font-weight: normal;
 }
 .colCard .content .summery{
     line-height: 20px;
@@ -493,6 +498,19 @@
     left: 0;
 }
 
+.listHeaderRow{
+    border-bottom: solid 1px var(--koochita-blue);
+}
+.listHeaderRow h2{
+    font-weight: bold;
+    font-size: 25px !important;
+    margin-right: 11px;
+    border-right: solid 5px;
+    padding-right: 10px;
+    color: var(--koochita-blue);
+}
+
+
 @media (max-width: 889px) {
     .secHeadTabs{
         margin-right: 13px;
@@ -542,5 +560,25 @@
         padding-bottom: 10px;
         border-bottom: solid 1px;
         margin-bottom: 10px;
+    }
+
+    .listBody .newsRow .content .summery{
+        display: none;
+    }
+    .listBody .newsRow .picSec{
+        width: 150px;
+    }
+    .listBody .newsRow .content{
+        width: calc(100% - 150px);
+    }
+
+
+    .newsTitleShow h1{
+        font-weight: bold;
+        margin-top: 0;
+        line-height: 32px;
+        color: #292929;
+        font-size: 23px !important;
+        margin-bottom: 14px;
     }
 }

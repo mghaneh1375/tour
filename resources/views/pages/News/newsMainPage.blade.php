@@ -35,7 +35,7 @@
         <div class="col-md-5 sideCardSec">
             @foreach($sideSliderNews as $item)
                 <div class="sideNewsCard">
-                    <a href="{{$item->url}}" class="picSec fullyCenterContent">
+                    <a href="{{$item->url}}" class="picSec fullyCenterContent {{$item->video != null ? 'playIcon' : ''}}">
                         <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
                         <h3 class="title">{{$item->title}}</h3>
                     </a>
@@ -53,7 +53,7 @@
                     <div class="swiper-wrapper">
                         @foreach($topNews as $item)
                             <div class="swiper-slide cardDownTitle">
-                                <a href="{{$item->url}}" class="picSec fullyCenterContent">
+                                <a href="{{$item->url}}" class="picSec fullyCenterContent {{$item->video != null ? 'playIcon' : ''}}">
                                     <img src="{{$item->pic}}" alt="{{$item->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
                                 </a>
                                 <a href="{{$item->url}}" class="content">{{$item->title}}</a>
@@ -68,43 +68,21 @@
 
     @endif
 
-{{--    <div class="row inOneRows">--}}
-{{--        <div class="title">آخرین ویدیوها</div>--}}
-{{--        <div class="body">--}}
-{{--            <div class="cardDownTitle">--}}
-{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
-{{--                    <img src="https://www.irna.ir/sd/6b9bed202803f49cbcad1aec923c11bb5b14367bb822a44a2bfc591bbd772f476b34440488c6a66467a15e6bcb5dc8d3.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
-{{--                </a>--}}
-{{--                <a href="#" class="content">--}}
-{{--                    تروریسم داخلی؛ معضلی که گریبان آمریکا را گرفت--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--            <div class="cardDownTitle">--}}
-{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
-{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/11/2/157816837.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
-{{--                </a>--}}
-{{--                <a href="#" class="content">--}}
-{{--                    نشریه فرانسوی: پایان حیات سیاسی ترامپ نزدیک است--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--            <div class="cardDownTitle">--}}
-{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
-{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157845643.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
-{{--                </a>--}}
-{{--                <a href="#" class="content">--}}
-{{--                    ارزیابی رسانه‌های غربی از گزینه احتمالی دولت بایدن در امور ایران--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--            <div class="cardDownTitle">--}}
-{{--                <a href="#" class="picSec fullyCenterContent playIcon">--}}
-{{--                    <img src="https://img9.irna.ir/d/r2/2021/01/24/2/157844513.jpg" alt="sdkj" class="resizeImgClass" onload="fitThisImg(this)">--}}
-{{--                </a>--}}
-{{--                <a href="#" class="content">--}}
-{{--                    بایدن ۷۸ساله و آمریکایی که دیگر ابرقدرت نیست--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    @if(count($lastVideos) > 0)
+        <div class="row inOneRows">
+            <div class="title">آخرین ویدیوها</div>
+            <div class="body">
+                @foreach($lastVideos as $item)
+                    <div class="cardDownTitle">
+                        <a href="{{$item->url}}" class="picSec fullyCenterContent playIcon">
+                            <img src="{{$item->pic}}" alt="{{$item->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
+                        </a>
+                        <a href="{{$item->url}}" class="content">{{$item->title}}</a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <?php
         $colors = ['green', 'yellow', 'lightGreen', 'red', 'blue'];
@@ -118,7 +96,7 @@
 
                 <div class="col-md-4 oneBigSec" style="float: right">
                     <a href="{{$category->news[0]->url}}" class="colCard">
-                        <div class="picSec fullyCenterContent">
+                        <div class="picSec fullyCenterContent {{$category->news[0]->video != null ? 'playIcon' : ''}}">
                             <img src="{{$category->news[0]->pic}}" alt="{{$category->news[0]->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
                         </div>
                         <div class="content">
@@ -130,7 +108,7 @@
                 <div class="col-md-8 sideDown">
                     @for($i = 1; $i < 7 && $i < count($category->news); $i++)
                         <a href="{{$category->news[$i]->url}}" class="rowCard">
-                            <div class="picSec fullyCenterContent">
+                            <div class="picSec fullyCenterContent {{$category->news[$i]->video != null ? 'playIcon' : ''}}">
                                 <img src="{{$category->news[$i]->pic}}" alt="{{$category->news[$i]->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
                             </div>
                             <h4 class="content">{{$category->news[$i]->title}}</h4>
