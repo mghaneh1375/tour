@@ -12,12 +12,13 @@ Route::prefix('tour')->group(function (){
 
         Route::prefix('reserve')->group(function(){
             Route::get('/getPassengerInfo', 'TourReservationController@getPassengerInfo')->name('tour.reservation.getPassengerInfo');
-
             Route::get('/cancelReservation', 'TourReservationController@cancelReservation')->name('tour.reservation.cancel');
+            Route::get('/paymentPage', 'TourReservationController@goToPaymentPage')->name('tour.reservation.paymentPage');
 
             Route::post('/checkCapacity', 'TourReservationController@checkReservationCapacity')->name('tour.reservation.checkCapacity');
-
+            Route::post('/editPassengerCounts', 'TourReservationController@editPassengerCounts')->name('tour.reservation.editPassengerCounts');
             Route::post('/submitReservation', 'TourReservationController@submitReservation')->name('tour.reservation.submitReservation');
+            Route::post('/checkDiscountCode', 'TourReservationController@checkDiscountCode')->name('tour.reservation.checkDiscountCode');
         });
     });
 

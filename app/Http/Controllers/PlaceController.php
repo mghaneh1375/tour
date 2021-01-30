@@ -77,13 +77,13 @@ class PlaceController extends Controller {
             return \redirect(\url('/'));
 
         if($kindPlace->id == 13)
-            return \redirect(route('business.show', ['id' => $place->id]), 301);
+            return \redirect(route('business.show', ['id' => $place->id]));
 
 
         if($place->slug != null)
-            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->slug), 301);
+            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->slug));
         else
-            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->id), 301);
+            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->id));
     }
 
     public function showPlaceDetails($kindPlaceName, $slug, Request $request){
@@ -3235,7 +3235,7 @@ class PlaceController extends Controller {
             }
 
             if(count($featureFilters) != 0) {
-                $placeIds = [];
+                $placeIds = [0];
 
                 if($kindPlace->id == 13){
                     $pIds = LocalShops::whereIn('categoryId', $featureFilters)->pluck('id')->toArray();

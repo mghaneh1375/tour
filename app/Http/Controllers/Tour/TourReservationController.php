@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Tour;
 
 use App\Http\Controllers\Controller;
+use App\models\PassengerInfos;
 use App\models\tour\Tour;
+use App\models\tour\TourDiscount;
 use App\models\tour\TourFeature;
 use App\models\tour\TourPrices;
+use App\models\tour\TourPurchased;
+use App\models\tour\TourPurchasedFeatures;
+use App\models\tour\TourPurchasedPassengerInfo;
 use App\models\tour\TourTimes;
 use App\models\tour\TourUserReservation;
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class TourReservationController extends Controller
@@ -18,7 +25,7 @@ class TourReservationController extends Controller
         if($tour == null)
             return response()->json(['status' => 'notFound']);
 
-        $tourTime = TourTimes::where('code', $request->tourTimeCode)->where('tourId', $tour->id)->where('isPublished', 1)->first();
+        $tourTime = TourTimes::youCanSee()->where('code', $request->tourTimeCode)->where('tourId', $tour->id)->first();
         if($tourTime == null)
             return response()->json(['status' => 'notFoundTime']);
 
@@ -71,14 +78,14 @@ class TourReservationController extends Controller
 
     }
 
-    public function getPassengerInfo()
-    {
+    public function getPassengerInfo(){
         if(isset($_GET['code'])){
             $userReservation = TourUserReservation::where('code', $_GET['code'])->first();
             if($userReservation != null) {
                 $tour = Tour::join('tourTimes', 'tourTimes.tourId', 'tour.id')
                                 ->where('tourTimes.id', $userReservation->tourTimeId)
-                                ->select(['tour.id', 'tour.name', 'tour.minCost', 'tour.allUserInfoNeed', 'tour.userInfoNeed', 'tour.code AS tourCode', 'tourTimes.code AS timeCode', 'tourTimes.sDate', 'tourTimes.eDate'])
+                                ->select(['tour.id', 'tour.name', 'tour.minCost', 'tour.allUserInfoNeed', 'tour.userInfoNeed',
+                                          'tour.code AS tourCode', 'tourTimes.code AS timeCode', 'tourTimes.sDate', 'tourTimes.eDate'])
                                 ->first();
 
                 $tour->url = route('tour.show', ['code' => $tour->tourCode]);
@@ -87,81 +94,70 @@ class TourReservationController extends Controller
                 $timeRemaining = 1200 - $diffInSeconds;
                 if($timeRemaining < 0) {
                     $userReservation->deleteAndReturnCapacity();
-//                    return redirect($tour->url);
+                    return redirect($tour->url);
                 }
-
-                $timeRemaining = 900;
 
                 $tour->getInfoNumber = $tour->allUserInfoNeed == 0 ? 1 : $userReservation->inCapacityCount + $userReservation->noneCapacityCount;
 
                 $tour->userInfoNeed = json_decode($tour->userInfoNeed);
 
-                $features = json_decode($userReservation->features);
-                $featuresArray = [];
-                $featIdIn = [];
-                $featureTotalCost = 0;
-                foreach ($features as $item){
+                $features = [];
+                $featuresArray = json_decode($userReservation->features);
+                foreach ($featuresArray as $item){
                     $feat = TourFeature::find($item->id);
                     if($feat != null){
                         $feat->count = $item->count == null ? 0 : $item->count ;
                         $feat->showCost = number_format($feat->cost);
-                        $feat->totalCostShow = number_format($feat->cost * $feat->count);
-                        $featureTotalCost += ($feat->cost * $item->count);
-                        array_push($featuresArray, $feat);
-                        array_push($featIdIn, $feat->id);
+                        $feat->totalCostShow = number_format($feat->cost * $item->count);
+                        array_push($features, $feat);
                     }
                 }
 
-                $userReservation->featuers = $featuresArray;
-                $userReservation->featuersTotalCost = ['cost' => $featureTotalCost, 'showCost' => number_format($featureTotalCost)];
+                $dailyDiscount = TourTimes::find($userReservation->tourTimeId)->getDailyDiscount()['discount'];
 
-
+                $passengerInfos = [];
                 $userCountInfos = json_decode($userReservation->passengerCountInfos);
-                $passengerInfosArr = [];
-                $passengerTotalCost = 0;
                 foreach($userCountInfos as $item){
                     $id = null;
                     if($item->id == 0){
-                        $passengerTotalCost += ($tour->minCost*$item->count);
-                        array_push($passengerInfosArr, (object)[
+                        array_push($passengerInfos, (object)[
                             'id' => 0,
+                            'inCapacity' => 1,
                             'count' => $item->count,
-                            'cost' => $tour->minCost,
-                            'totalCost' => ($tour->minCost*$item->count),
-                            'costShow' => number_format($tour->minCost),
-                            'totalCostShow' => number_format($tour->minCost*$item->count),
+                            'mainCost' => $tour->minCost,
+                            'mainCostShow' => number_format($tour->minCost),
+                            'payAbleCost' => $tour->minCost * (100 - $dailyDiscount) / 100,
+                            'payAbleCostShow' => number_format($tour->minCost * (100 - $dailyDiscount) / 100),
+                            'ageFrom' => null,
+                            'ageTo' => null,
                             'text' => 'بزرگسال',
                         ]);
                     }
                     else {
                         $passInfo = TourPrices::find($item->id);
                         if($passInfo != null){
-                            $passengerTotalCost += ($passInfo->cost*$item->count);
-                            array_push($passengerInfosArr, (object)[
+                            array_push($passengerInfos, (object)[
                                 'id' => $passInfo->id,
+                                'inCapacity' => $passInfo->inCapacity,
                                 'count' => $item->count,
-                                'cost' => $passInfo->cost,
-                                'totalCost' => ($passInfo->cost*$item->count),
-                                'costShow' => $passInfo->isFree == 1 ? ' رایگان ' : number_format($passInfo->cost),
-                                'totalCostShow' => number_format($passInfo->cost*$item->count),
+                                'mainCost' => $passInfo->cost,
+                                'mainCostShow' => $passInfo->isFree == 1 ? ' رایگان ' : number_format($passInfo->cost),
+                                'payAbleCost' => $passInfo->cost * (100 - $dailyDiscount) / 100,
+                                'payAbleCostShow' => number_format($passInfo->cost * (100 - $dailyDiscount) / 100),
+                                'ageFrom' => $passInfo->ageFrom,
+                                'ageTo' => $passInfo->ageTo,
                                 'text' => 'از سن '.$passInfo->ageFrom.' تا '.$passInfo->ageTo,
                             ]);
                         }
                     }
                 }
-                $userReservation->passengerInfos = $passengerInfosArr;
-                $userReservation->passengerTotalCost = (object)['cost' => $passengerTotalCost, 'costShow' => number_format($passengerTotalCost)];
+                $groupDiscount = TourDiscount::where('tourId', $tour->id)->where('minCount', '>=', 0)->select(['discount', 'minCount', 'maxCount'])->get();
 
-                $fullyTotalCost = $passengerTotalCost+$featureTotalCost;
-                $userReservation->fullyTotalCost = (object)['cost' => $fullyTotalCost, 'costShow' => number_format($fullyTotalCost)];
-
-
-                return view('pages.tour.buy.tourBuyPage', compact(['mode', 'timeRemaining', 'userReservation', 'tour']));
+                return view('pages.tour.buy.tourBuyPage', compact(['timeRemaining', 'userReservation', 'passengerInfos', 'groupDiscount', 'dailyDiscount', 'features', 'tour']));
             }
         }
 
         return redirect(route('tour.main'));
-
     }
 
     public function cancelReservation(){
@@ -178,8 +174,343 @@ class TourReservationController extends Controller
         return redirect(route('tour.main'));
     }
 
+    public function editPassengerCounts(Request $request)
+    {
+        $reserveCode = $request->reservationCode;
+
+        $userReservation = TourUserReservation::where('code', $reserveCode)->first();
+        if($userReservation == null)
+            return response()->json(['status' => 'error1']);
+
+        $tourTime = TourTimes::find($userReservation->tourTimeId);
+        if($tourTime == null)
+            return response()->json(['status' => 'error2']);
+
+        $inCapacity = 0;
+        $noneCapacity = 0;
+        $tourPrices = TourPrices::where('tourId', $tourTime->tourId)->get();
+        foreach ($request->passengers as $pass){
+            if($pass['id'] == 0)
+                $inCapacity += $pass['count'];
+            else{
+                foreach ($tourPrices as $pp){
+                    if($pp->id == $pass['id']){
+                        if($pp->inCapacity == 1)
+                            $inCapacity += $pass['count'];
+                        else
+                            $noneCapacity += $pass['count'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $addedCount = $inCapacity - $userReservation->inCapacityCount;
+        if($addedCount > 0){
+            $tour = Tour::select(['id', 'anyCapacity', 'maxCapacity'])->find($tourTime->tourId);
+            if($tour->anyCapacity != 1 && ($tourTime->registered + $addedCount > $tour->maxCapacity))
+                return response()->json(['status' => 'maxCap']);
+        }
+
+        $tourTime->registered += $addedCount;
+        $tourTime->save();
+
+        $userReservation->inCapacityCount = $inCapacity;
+        $userReservation->noneCapacityCount = $noneCapacity;
+        $userReservation->passengerCountInfos = json_encode($request->passengers);
+        $userReservation->features = json_encode($request->features);
+        $userReservation->save();
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function checkDiscountCode(Request $request){
+        $userReservation = TourUserReservation::where('code', $request->userCode)->first();
+        if($userReservation == null)
+            return \response()->json(['status' => 'error1']);
+        $tourTime = TourTimes::find($userReservation->tourTimeId);
+        $tourDiscount = TourDiscount::where('tourId', $tourTime->tourId)->where('code', $request->code)->first();
+        if($tourDiscount != null)
+            return \response()->json(['status' => 'ok', 'result' => $tourDiscount->discount]);
+        else
+            return \response()->json(['status' => 'wrong']);
+    }
+
+    public function checkPassengerAges(Request $request)
+    {
+        $reservationCode = $request->reservationCode;
+        $passengers = $request->passengers;
+
+        $userReservation = TourUserReservation::join('tourTimes', 'tourTimes.id', 'tourUserReservations.tourTimeId')
+            ->join('tour', 'tour.id', 'tourTimes.tourId')
+            ->where('tourUserReservations.code', $reservationCode)
+            ->select(['tourTimes.id AS tourTimeId', 'tourTimes.code AS tourTimeCode',
+                'tourTimes.tourId AS tourId', 'tourTimes.sDate AS sDate',
+                'tourUserReservations.features', 'tour.minCost'])->first();
+
+        $tourPricesDB = TourPrices::where('tourId', $userReservation->tourId)->get();
+        $tourPrices = [[
+            'id' => 0,
+            'inCapacity' => 1,
+            'ageFrom' => 'all',
+            'ageTo' => 'all',
+            'count' => 0
+        ]];
+        foreach ($tourPricesDB as $item){
+            array_push($tourPrices, [
+                'id' => $item->id,
+                'inCapacity' => $item->inCapacity,
+                'ageFrom' => $item->ageFrom,
+                'ageTo' => $item->ageTo,
+                'count' => 0
+            ]);
+        }
+
+        $inCapacityCount = 0;
+        $noneCapacityCount = 0;
+        foreach ($passengers as $pass){
+            $find = 0;
+            $stt = explode('/', $pass->birthDay);
+            $age = Verta::createJalali($stt[0], $stt[1], $stt[2])->diffYears(\verta());
+
+            for($j = 1; $j < count($tourPrices); $j++){
+                if($age <= $tourPrices[$j]['ageTo'] && $age >= $tourPrices[$j]['ageFrom']){
+                    $tourPrices[$j]['inCapacity'] == 1 ? $inCapacityCount++ : $noneCapacityCount++;
+                    $tourPrices[$j]['count']++;
+                    $find = $tourPrices[$j]['id'];
+                    break;
+                }
+            }
+
+            if($find == 0) {
+                $tourPrices[0]['count']++;
+                $inCapacityCount++;
+            }
+        }
+
+        dd($tourPrices);
+    }
+
     public function submitReservation(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
+
+        $reservationCode = $request->reservationCode;
+        $passengers = $request->passengers;
+
+        \DB::beginTransaction();
+
+        $userReservation = TourUserReservation::join('tourTimes', 'tourTimes.id', 'tourUserReservations.tourTimeId')
+                                                ->join('tour', 'tour.id', 'tourTimes.tourId')
+                                                ->where('tourUserReservations.code', $reservationCode)
+                                                ->select(['tourTimes.id AS tourTimeId', 'tourTimes.code AS tourTimeCode',
+                                                          'tourTimes.tourId AS tourId', 'tourTimes.sDate AS sDate',
+                                                          'tourUserReservations.features', 'tour.minCost'])->first();
+
+        try{
+            $codeDiscountId = null;
+            $koochitaScoreDiscount = null;
+            if($request->discountType == 'code')
+                $codeDiscountId = TourDiscount::where('tourId', $userReservation->tourId)->where('code', $request->discount)->first();
+            else if($request->discountType == 'koochitaScore'){
+                // check koochita score
+                $koochitaScoreDiscount = $request->discount;
+            }
+
+            $trackingCode = generateRandomString(20);
+            while(TourPurchased::where('koochitaTrackingCode', $trackingCode)->first() != null)
+                $trackingCode = generateRandomString(20);
+
+            $dailyDiscount = TourTimes::find($userReservation->tourTimeId)->getDailyDiscount();
+
+            $tourBuy = new TourPurchased();
+            $tourBuy->userId = auth()->user()->id;
+            $tourBuy->koochitaTrackingCode = $trackingCode;
+            $tourBuy->phone = $request->phone;
+            $tourBuy->email = $request->email;
+            $tourBuy->tourTimeId = $userReservation->tourTimeId;
+            $tourBuy->description = $request->description;
+            $tourBuy->importantInformation = $request->importantInformation;
+            $tourBuy->otherOffer = $request->otherOffer;
+            $tourBuy->dailyDiscountId = $dailyDiscount['id'];
+
+            $tourBuy->mainInfoId = 0;
+            $tourBuy->inCapacityCount = 0;
+            $tourBuy->noneCapacityCount = 0;
+            $tourBuy->fullyPrice = 0;
+            $tourBuy->payable = 0;
+            $tourBuy->groupDiscountId = 0;
+            $tourBuy->codeDiscountId = $codeDiscountId == null ? 0 : $codeDiscountId->id;
+            $tourBuy->koochitaScoreDiscount = $koochitaScoreDiscount;
+            $tourBuy->save();
+
+        }
+        catch (\Exception $exception){
+            \DB::rollback();
+            return \response()->json(['status' => 'error1']);
+        }
+
+        $totalCost = 0;
+        $payAbleTotalCost = 0;
+        $inCapacityCount = 0;
+        $noneCapacityCount = 0;
+
+        try {
+            $tourPricesDB = TourPrices::where('tourId', $userReservation->tourId)->get();
+            $tourPrices = [[
+                'id' => 0,
+                'inCapacity' => 1,
+                'ageFrom' => 'all',
+                'ageTo' => 'all',
+                'cost' => $userReservation->minCost,
+                'payable' => $userReservation->minCost * (100 - $dailyDiscount['discount'])/100,
+                'count' => 0
+            ]];
+            foreach ($tourPricesDB as $item){
+                array_push($tourPrices, [
+                    'id' => $item->id,
+                    'inCapacity' => $item->inCapacity,
+                    'ageFrom' => $item->ageFrom,
+                    'ageTo' => $item->ageTo,
+                    'cost' => $item->cost == null ? 0 : $item->cost,
+                    'payable' => $item->cost * (100 - $dailyDiscount['discount'])/100,
+                    'count' => 0
+                ]);
+            }
+
+            $mainUserInfoId = 0;
+            foreach ($passengers as $pass){
+                $saveInfo = 0;
+                $newPassenger = null;
+                if($pass['saveInformation'] == 1){
+                    $saveInfo = 1;
+                    $findPassLastInfoId = \DB::table('passengerInfos')
+                        ->where('userId', auth()->user()->id)
+                        ->whereRaw("meliCode = '{$pass['codeMeli']}' OR (passportNum IS NOT NULL AND passportNum = '{$pass['passport']}')")
+                        ->select('id')
+                        ->first();
+                    if($findPassLastInfoId != null && $findPassLastInfoId->id != 0)
+                        $newPassenger = PassengerInfos::find($findPassLastInfoId->id);
+                }
+
+                if($newPassenger == null)
+                    $newPassenger = new PassengerInfos();
+
+                if($pass['firstNameFa'] != null) $newPassenger->firstNameFa = $pass['firstNameFa'];
+                if($pass['lastNameFa'] != null) $newPassenger->lastNameFa = $pass['lastNameFa'];
+                if($pass['firstNameEn'] != null) $newPassenger->firstNameEn = $pass['firstNameEn'];
+                if($pass['lastNameEn'] != null) $newPassenger->lastNameEn = $pass['lastNameEn'];
+                if($pass['birthDay'] != null) $newPassenger->birthDay = convertDateToString(convertNumber('en', $pass['birthDay']), '/');
+                if($pass['codeMeli'] != null) $newPassenger->meliCode = $pass['codeMeli'];
+                if($pass['sex'] != null) $newPassenger->sex = $pass['sex'];
+                if($pass['isForeign'] != null) $newPassenger->iForeign = $pass['isForeign'];
+                if($pass['passport'] != null) $newPassenger->passportNum = $pass['passport'];
+                if($pass['passportExpire'] != null) $newPassenger->passportExp = convertDateToString(convertNumber('en', $pass['passportExpire']), '/');
+                if($pass['countryCodeId'] != null) $newPassenger->countryId = $pass['countryCodeId'];
+                if($saveInfo == 1) $newPassenger->userId = auth()->user()->id;
+                $newPassenger->save();
+
+                if($pass['isMain'] == 1 && $mainUserInfoId == 0)
+                    $mainUserInfoId = $newPassenger->id;
+
+
+                $find = 0;
+                $stt = explode('/', $newPassenger->birthDay);
+                $age = Verta::createJalali($stt[0], $stt[1], $stt[2])->diffYears(\verta());
+
+                for($j = 1; $j < count($tourPrices); $j++){
+                    if($age <= $tourPrices[$j]['ageTo'] && $age >= $tourPrices[$j]['ageFrom']){
+                        $tourPrices[$j]['inCapacity'] == 1 ? $inCapacityCount++ : $noneCapacityCount++;
+                        $tourPrices[$j]['count']++;
+                        $find = $tourPrices[$j]['id'];
+
+                        $totalCost += $tourPrices[$j]['cost'];
+                        $payAbleTotalCost += $tourPrices[$j]['payable'];
+                        break;
+                    }
+                }
+
+                if($find == 0) {
+                    $tourPrices[0]['count']++;
+                    $inCapacityCount++;
+
+                    $totalCost += $tourPrices[0]['cost'];
+                    $payAbleTotalCost += $tourPrices[0]['payable'];
+                }
+
+
+                $passInTour = new TourPurchasedPassengerInfo();
+                $passInTour->tourPurchasedId = $tourBuy->id;
+                $passInTour->tourPriceId = $find;
+                $passInTour->passengerInfoId = $newPassenger->id;
+                $passInTour->save();
+            }
+        }
+        catch (\Exception $exception){
+            \DB::rollback();
+            return \response()->json(['status' => 'error2']);
+        }
+
+        try{
+            $groupDiscount = TourDiscount::where('tourId', $userReservation->tourId)
+                ->where('minCount', '<=', $inCapacityCount)
+                ->where('maxCount', '>=', $inCapacityCount)
+                ->first();
+
+            $featCost = 0;
+            $featuresDecode = json_decode($userReservation->features);
+            foreach ($featuresDecode as $item){
+                if($item->count > 0){
+                    $tourFeat = TourFeature::find($item->id);
+                    if($tourFeat != null) {
+                        $featPurchesed = new TourPurchasedFeatures();
+                        $featPurchesed->featureId = $tourFeat->id;
+                        $featPurchesed->count = $item->count;
+                        $featPurchesed->tourPurchasedId = $tourBuy->id;
+                        $featPurchesed->save();
+
+                        $featCost += (int)$tourFeat->cost * $item->count;
+                    }
+                }
+            }
+
+            $totalCost += $featCost;
+            $payAbleTotalCost += $featCost;
+
+            if($codeDiscountId != null)
+                $payAbleTotalCost = $payAbleTotalCost * (100 - $codeDiscountId->discount) / 100;
+        }
+        catch (\Exception $exception){
+            \DB::rollback();
+            return \response()->json(['status' => 'error3']);
+        }
+
+        try {
+            $tourBuy->mainInfoId = $mainUserInfoId;
+            $tourBuy->fullyPrice = $totalCost;
+            $tourBuy->payable = $payAbleTotalCost;
+            $tourBuy->inCapacityCount = $inCapacityCount;
+            $tourBuy->noneCapacityCount = $noneCapacityCount;
+            $tourBuy->dailyDiscountId = $dailyDiscount['id'];
+            $tourBuy->groupDiscountId = $groupDiscount == null ? 0 : $groupDiscount->id;
+            $tourBuy->save();
+
+            TourUserReservation::where('code', $reservationCode)->first()->deleteAndReturnCapacity();
+            $tourTime = TourTimes::find($userReservation->tourTimeId);
+            $tourTime->registered += $inCapacityCount;
+            $tourTime->save();
+        }
+        catch (\Exception $exception){
+            \DB::rollback();
+            return \response()->json(['status' => 'error4']);
+        }
+
+        \DB::commit();
+        $nextUrl = route('tour.reservation.paymentPage')."?code={$tourBuy->koochitaTrackingCode}";
+        return \response()->json(['status' => 'ok', 'result' => $nextUrl]);
+    }
+
+    public function goToPaymentPage(){
+        dd('انتقال به صفحه ی پرداخت', $_GET);
     }
 }

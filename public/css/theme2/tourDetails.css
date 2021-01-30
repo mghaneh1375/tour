@@ -499,6 +499,7 @@ p {
 }
 
 .labelEdit {
+    cursor: pointer;
     position: absolute;
     left: 19px;
     top: 7px;
@@ -2696,6 +2697,7 @@ p {
     left: 0;
     top: 100%;
     border-radius: 0px 0px 10px 10px;
+    z-index: 9;
 }
 .data_holder .result{
     cursor: pointer;
@@ -2764,6 +2766,9 @@ p {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 5px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
 .stickyOnTop .mainCost{
     font-size: 1.4em;
@@ -2859,8 +2864,6 @@ p {
 .detailsCostSec .mainCost.bold{
     font-weight: bold;
 }
-
-
 .detailsCostSec .editButton{
     position: absolute;
     left: 15px;
@@ -2871,4 +2874,240 @@ p {
     padding: 5px 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 2px 1px #0076a357;
+}
+
+.mapModal .modalBody{
+    width: 90%;
+    height: 90vh;
+}
+.secondRowSection{
+    background-position: center;
+    background-size: cover;
+    padding: 20px;
+}
+.buyButton{
+    height: 140px;
+    cursor: pointer;
+    width: 300px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 16px;
+    left: 76px;
+}
+.hasInsurance:before{
+    content: '';
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotate(90deg);
+    width: 100px;
+    height: 200px;
+    position: absolute;
+}
+.transportSection .transportsSec .mapButTransportMain{
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    background-size: cover;
+    height: 40px;
+    position: absolute;
+    left: 5px;
+    top: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.checkListPaper .topPaper{
+    height: 39px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    z-index: 20;
+}
+.tourGuidAjansSection .tourGuidSection{
+    display: flex;
+    border: solid 1px gray;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+}
+
+
+.showCostSection{
+    display: inline-flex;
+}
+.showCostSection:after{
+    content: 'ریال';
+    font-size: 14px;
+    margin-top: auto;
+    margin-bottom: 5px;
+    margin-right: 4px;
+}
+.showCostSection .mainCostShow{
+    position: relative;
+}
+.showCostSection .costWithDiscount{
+    margin-right: 25px;
+    color: red;
+    display: none;
+}
+.showCostSection.hasDiscount{
+
+}
+.showCostSection.hasDiscount .mainCostShow:before{
+    content: '';
+    width: 100%;
+    position: absolute;
+    top: 48%;
+    background: red;
+    height: 2px;
+    border-radius: 20px;
+    transform: rotateZ(-6deg);
+}
+.showCostSection.hasDiscount .costWithDiscount{
+    display: block;
+}
+
+.discountSelectSec{
+    padding-bottom: 10px;
+    border-bottom: solid 1px lightgray;
+    margin-bottom: 10px;
+}
+.discountSelectSec .header{
+    font-weight: bold;
+    font-size: 26px;
+    color: var(--koochita-red);
+}
+.discountSelectSec .description{
+    font-size: 15px;
+}
+.butG{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.butG > div:nth-of-type(1){
+    border-radius: 0px 10px 10px 0px;
+}
+.butG > div:nth-of-type(2){
+    border-radius: 10px 0px 0px 10px;
+    border-right: none;
+}
+.butG .butO{
+    cursor: pointer;
+    padding: 5px 20px;
+    border: solid 1px lightgray;
+    transition: .3s;
+}
+.butG .butO.selected{
+    background: var(--koochita-blue);
+    color: white;
+}
+
+
+.buyModal .header{
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+.buyModal .modalBody{
+    min-width: 1000px;
+}
+.buyModal .modalBody .buyFeatureRow{
+    display: flex;
+    border-top: solid 1px lightgray;
+    align-items: center;
+    padding: 5px 10px;
+    margin: 0px;
+    font-size: 14px;
+}
+.editButtonRow{
+    border-top: solid 1px lightgrey;
+    margin-top: 15px;
+    padding-top: 10px;
+}
+
+.labelEditCreate{
+    width: 100%;
+    direction: rtl;
+    text-align: revert;
+    display: flex;
+    font-size: 12px;
+}
+.labelEditCreate input{
+    margin-right: 8px;
+}
+.labelEditCreate label{
+    cursor: pointer;
+}
+
+.class_passengerOldPane{
+    z-index: 999;
+}
+.class_passengerOldPane p{
+    margin-bottom: 5px;
+    border-bottom: solid 1px #adadad;
+}
+.class_passengerOldPane .result{
+    max-height: 200px;
+    overflow: auto;
+}
+.class_passengerOldPane .item{
+    margin: 5px 10px;
+    padding: 5px 0px;
+    cursor: pointer;
+}
+.class_passengerOldPane .item:hover{
+    background: var(--koochita-light-green);
+    border-radius: 5px;
+    color: white;
+}
+
+.discountSec{
+    position: relative;
+}
+.discountSec.submited:after{
+    content: "\E02B" !important;
+    font-family: Shazde_Regular2 !important;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    background: #ffffff7a;
+    font-size: 75px;
+    color: var(--koochita-green);
+}
+.topPayAbleCost .discounted{
+    display: none;
+}
+.topPayAbleCost.withDiscount .discounted{
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: red;
+}
+.topPayAbleCost.withDiscount .mainCost{
+    font-size: 1.1em;
+    font-weight: normal;
+    position: relative;
+}
+.topPayAbleCost.withDiscount .mainCost:before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: red;
+    position: absolute;
+    top: 50%;
+    transform: rotate(8deg);
 }

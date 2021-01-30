@@ -381,10 +381,10 @@
                                class="pSC_cityDetails adventureIcon">
                                 طبیعت گردی ‌های {{$locationName['cityNameUrl']}}
                             </a>
-                            <a href="{{route('safarnameh.list', ['type' => $locationName['kindState'], 'search' => $locationName['cityNameUrl'] ])}}"
-                               class="pSC_cityDetails safarnameIcon">
+                            <a href="{{route('safarnameh.list', ['type' => $locationName['kindState'], 'search' => $locationName['cityNameUrl'] ])}}" class="pSC_cityDetails safarnameIcon">
                                 سفرنامه های {{$locationName['cityNameUrl']}}
                             </a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
                         </div>
                     @else
                         <div class="pSC_boxOfCityDetails" style="display: flex; flex-wrap: wrap;">
@@ -409,9 +409,8 @@
                             <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">
                                 طبیعت گردی های ایران
                             </a>
-                            <a href="{{route('safarnameh.index')}}" class="pSC_cityDetails safarnameIcon">
-                                سفرنامه
-                            </a>
+                            <a href="{{route('safarnameh.index')}}" class="pSC_cityDetails safarnameIcon">سفرنامه</a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
                         </div>
                     @endif
                 </div>

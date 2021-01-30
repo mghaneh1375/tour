@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\models\news\News;
 use App\models\news\NewsCategory;
 use App\models\news\NewsCategoryRelations;
+use App\models\news\NewsTags;
 use App\User;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Http\Request;
@@ -13,11 +14,6 @@ use Illuminate\Support\Facades\URL;
 
 class NewsController extends Controller
 {
-    public function __construct()
-    {
-        date_default_timezone_set('Asia/Tehran');
-    }
-
     public function newsMainPage()
     {
         $selectCol = ['id', 'title', 'meta', 'slug', 'keyword', 'pic', 'video'];
@@ -108,8 +104,8 @@ class NewsController extends Controller
         else if($kind == 'category'){
             $header = 'اخبار ' . $content;
         }
-        else if($kind == 'category'){
-            $header = 'محتوای: ' . $content;
+        else if($kind == 'tag'){
+            $header = 'اخبار مرتبط با  ' . $content;
         }
 
         return view('pages.News.newsList', compact(['kind', 'content', 'header']));
@@ -132,6 +128,15 @@ class NewsController extends Controller
             $category = NewsCategory::where('name', $content)->first();
             $news = News::youCanSee()->join('newsCategoryRelations', 'newsCategoryRelations.newsId', 'news.id')
                         ->where('newsCategoryRelations.categoryId', $category->id)
+                        ->orderByDesc('news.dateAndTime')
+                        ->select($joinSelectCol)
+                        ->skip($page*$take)->take($take)
+                        ->get();
+        }
+        else if($kind == 'tag'){
+            $category = NewsTags::where('tag', $content)->first();
+            $news = News::youCanSee()->join('newsTagsRelations', 'newsTagsRelations.newsId', 'news.id')
+                        ->where('newsTagsRelations.tagId', $category->id)
                         ->orderByDesc('news.dateAndTime')
                         ->select($joinSelectCol)
                         ->skip($page*$take)->take($take)

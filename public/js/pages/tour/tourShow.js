@@ -55,7 +55,9 @@ var tourSideFeatureList = {
     },
 };
 
-var mainCost;
+var mainMap = null;
+var tourTimeAndPrices;
+var mainTransportLocations = { start: [], end: []};
 
 function getInformation(){
     $.ajax({
@@ -108,15 +110,11 @@ function fillTourShowPage(_response){
     var newFeatureForBuy = '';
     var equipments;
 
-    tourPrices = _response.prices;
-    mainCost = _response.minCost;
-
+    tourTimeAndPrices = _response.timeAndPrices;
 
     $('.tourName').text(_response.name);
     $('.sDateName').text(_response.sDateName);
     $('.eDateName').text(_response.eDateName);
-
-    $('.mainCost').text(_response.cost);
 
     $('.mainDescription').text(_response.description);
     $('.tourExceptionText').text(_response.textExpectation);
@@ -136,21 +134,6 @@ function fillTourShowPage(_response){
 
     $('.tourIsPrivate').text(_response.private == 1 ? 'خصوصی' : 'عمومی');
 
-    var timeHtml = '';
-    tourTimes = _response.times;
-    if(tourTimes.length > 1) {
-        tourTimes.map((item, index) => {
-            timeHtml += `<tr class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'} ${tourTimeCode == item.code ? 'selectdd' : ''}" onclick="chooseOtherDates(this, ${index})">
-                            <td>${item.sDateName}</td>
-                            <td>${item.eDateName}</td>
-                            <td>${ item.hasCapacity ? (item.anyCapacity == 1 ? 'دارد' : item.capacityRemaining + ' نفر') : 'تکمیل' }</td>
-                        </tr>`;
-        });
-
-        $('#tourTimesTable').html(timeHtml);
-    }
-    else
-        $('.rowChooseDate').hide();
 
     if(_response.isTransport == 1){
         $('.sMainTransportKind').text(_response.mainTransport.sTransportName);
@@ -241,11 +224,127 @@ function fillTourShowPage(_response){
     }
     $('.propertySection').append(propertySection);
 
+    createScheduleHtml(_response.schedule);
+
+    createTourPricesAndTimeHtml();
+
+    initMarkers(_response.mainTransport.sLatLng, _response.mainTransport.eLatLng);
+}
+
+function createTourPricesAndTimeHtml(){
+    console.log(tourTimeAndPrices, tourTimeCode);
+    var timeHtml = '';
+    tourTimeAndPrices.map((item, index) => {
+        timeHtml += `<tr id="tourTime_${item.code}" class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'}" onclick="chooseOtherDates(${index})">
+                            <td>${item.sDateName}</td>
+                            <td>${item.eDateName}</td>
+                            <td>${ item.hasCapacity ? (item.anyCapacity == 1 ? 'دارد' : item.capacityRemaining + ' نفر') : 'تکمیل' }</td>
+                        </tr>`;
+    });
+    $('#tourTimesTable').html(timeHtml);
+    $(`#tourTime_${tourTimeCode}`).click();
+}
+
+function chooseOtherDates(_index){
+    var selectedTime = tourTimeAndPrices[_index];
+    if(selectedTime.hasCapacity) {
+        var element = $(`#tourTime_${selectedTime.code}`);
+        element.parent().find('.selectdd').removeClass('selectdd');
+        element.addClass('selectdd');
+
+        $('.sDateName').text(selectedTime.sDateName);
+        $('.eDateName').text(selectedTime.eDateName);
+
+        tourTimeCode = selectedTime.code;
+
+
+        if(selectedTime.addedDiscount == 0){
+            $('.showCostSection').removeClass('hasDiscount');
+            $('#discountButton').addClass('hidden');
+        }
+        else{
+            $('.showCostSection').addClass('hasDiscount');
+            $('#discountButton').removeClass('hidden').find('.text').text(`${selectedTime.addedDiscount}% تخفیف`);
+        }
+
+        var pricesHtml = '';
+        passengerCount = [];
+        selectedTime.prices.map((item, index) => {
+            if(item.id == 0){
+                $('.mainCostShow').text(item.mainCostShow);
+                $('.costWithDiscount').text(item.payAbleShow);
+            }
+
+            pricesHtml += `<div class="full-width inline-block priceRow">
+                            <span>${item.text}</span>
+                            <span style="display: flex; align-items: center; direction: ltr">
+                                <span style="margin-right: 10px; width: 80px;">${item.isFree == 1 ? 'رایگان' : item.payAbleShow}</span>
+                                X
+                                <span class="passCount">
+                                    <span class="addButton" onclick="addPassenger(${index}, -1)">-</span>
+                                    <span class="passengerCount_${index}" style="margin: 0px 10px; width: 15px; text-align: center;">0</span>
+                                    <span class="addButton" onclick="addPassenger(${index}, 1)">+</span>
+                                </span>
+                            </span>
+                        </div>`;
+
+            passengerCount.push({
+                id: item.id,
+                cost: item.isFree == 0 ? item.payAbleCost : 0,
+                count: 0,
+            });
+
+        });
+        $('#pricesInBuyButton').html(pricesHtml);
+    }
+
+    calculateFullCost();
+}
+
+function addPassenger(_index, _add){
+    passengerCount[_index].count += _add;
+    if(passengerCount[_index].count < 0)
+        passengerCount[_index].count = 0;
+
+    $('.passengerCount_'+_index).text(passengerCount[_index].count);
+
+    calculateFullCost();
+}
+
+async function calculateFullCost(){
+    var featureCost = await calculateFeatureCost();
+    var totalValue = parseInt(featureCost);
+    passengerCount.map(item => totalValue += item.count * item.cost);
+    $('.passengerTotalCost').text(numberWithCommas(totalValue));
+}
+
+function calculateFeatureCost(){
+    var totalCost = 0;
+    var elements = $('.featuresInputCount');
+    for(var i = 0; i < elements.length; i++){
+        index = $(elements[i]).attr('data-index');
+        count = $(elements[i]).val();
+
+        if(count != '') {
+            cost = features[index].cost;
+            cost = cost.toString().replace(new RegExp(',', 'g'), '');
+            totalCost += (parseInt(count) * parseFloat(cost));
+        }
+    }
+
+    $('.featureTotalCost').text(numberWithCommas(totalCost));
+
+    return totalCost;
+}
+
+
+
+function createScheduleHtml(_schedule) {
     var dayListHtml = '';
     var dayBigInfoHtml = '';
     var allDay = 24 * 60;
 
-    _response.schedule.map((item, index) => {
+    _schedule.map((item, index) => {
         dayListHtml += `<div class="dayRow ${index+1 == 1 ? 'selected' : ''}" data-day="${index+1}" onclick="selectDay(this)">
                             <div class="dayCircle"></div>
                             <div class="dayName">روز ${index+1} :</div>
@@ -258,8 +357,7 @@ function fillTourShowPage(_response){
                                     <div class="name">برنامه روز ${index+1}</div>
                                 </div>
                                 <div class="text">${item.description}</div>
-                                ${
-                                    item.hotel == null ? '' :
+                                ${ item.hotel == null ? '' :
                                         `<div class="sideInfos">
                                             <div class="title">
                                                 <div class="iconSec hotelIcon"></div>
@@ -312,101 +410,106 @@ function fillTourShowPage(_response){
 
     $('#listOfDays').html(dayListHtml);
     $('#showBigDays').html(dayBigInfoHtml);
-
-    createTourPricesHtml();
 }
 
-function calculateFeatureCost(){
-    var totalCost = 0;
+function showTransportInMap(_kind){
+    openMyModal('mapModal');
+    if(mainMap == null)
+        initMap();
+
+    setTimeout(() => mainMap.setView(mainTransportLocations[_kind], 14), 300);
+}
+
+function initMap(){
+    mainMap = L.map("mapSection", {
+        minZoom: 1,
+        maxZoom: 20,
+        crs: L.CRS.EPSG3857,
+        center: [32.42056639964595, 54.00537109375],
+        zoom: 6
+    });
+    L.TileLayer.wmsHeader(
+        "https://map.ir/shiveh",
+        {
+            layers: "Shiveh:Shiveh",
+            format: "image/png",
+            minZoom: 1,
+            maxZoom: 20
+        },
+        [
+            {
+                header: "x-api-key",
+                value: window.mappIrToken
+            }
+        ]
+    ).addTo(mainMap);
+
+    L.marker(mainTransportLocations.start).addTo(mainMap);
+    L.marker(mainTransportLocations.end).addTo(mainMap);
+}
+
+function initMarkers(_sLoc, _eLoc){
+    _sLoc = JSON.parse(_sLoc);
+    _eLoc = JSON.parse(_eLoc);
+
+    _sLoc = [parseFloat(_sLoc[0]), parseFloat(_sLoc[1])];
+    _eLoc = [parseFloat(_eLoc[0]), parseFloat(_eLoc[1])];
+
+    mainTransportLocations = {start: _sLoc, end: _eLoc};
+}
+
+function reserveTour(){
+
+    if(!checkLogin(window.InUrl, reserveTour))
+        return;
+
+    openLoading();
+
+    var featureCount = [];
     var elements = $('.featuresInputCount');
     for(var i = 0; i < elements.length; i++){
-        index = $(elements[i]).attr('data-index');
-        count = $(elements[i]).val();
-
-        if(count != '') {
-            cost = features[index].cost;
-            cost = cost.toString().replace(new RegExp(',', 'g'), '');
-            totalCost += (parseInt(count) * parseFloat(cost));
-        }
+        var index = $(elements[i]).attr('data-index');
+        var count = $(elements[i]).val();
+        featureCount.push({
+            id: features[index].id,
+            count: count
+        });
     }
 
-    $('.featureTotalCost').text(numberWithCommas(totalCost));
-
-    return totalCost;
-}
-
-async function calculateFullCost(){
-    var featureCost = await calculateFeatureCost();
-    var totalValue = parseInt(featureCost);
-    pricesArr.map(item => {
-        if(item.isFree == 0) {
-            totalValue += (item.count * item.prices)
+    $.ajax({
+        type: 'POST',
+        url: checkCapacityUrl,
+        data: {
+            _token: csrfTokenGlobal,
+            tourCode: tourCode,
+            userCount: passengerCount,
+            tourTimeCode: tourTimeCode,
+            featureCount: featureCount
+        },
+        success: response => {
+            if(response.status == 'ok') {
+                localStorage.setItem('lastTourReservation', JSON.stringify({
+                    tourCode,
+                    tourTimeCode,
+                    reserveCode: response.result,
+                }));
+                showSuccessNotifi('در حال انتقال به صفحه ی ثبت اطلاعات', 'left', 'var(--koochita-blue)');
+                location.href = `${getPassengerInfoUrl}?code=${response.result}`;
+            }
+            else{
+                closeLoading();
+                if(response.status == 'fullCapacity')
+                    showSuccessNotifi(`${response.remaining}تعداد مسافرین شما از ظرفیت تور بیشتر است. ظرفیت باقی مانده: `, 'left', 'red');
+                else
+                    showSuccessNotifi('خطا', 'left', 'red');
+            }
+        },
+        error: err =>{
+            showSuccessNotifi('خطا', 'left', 'red');
+            closeLoading();
         }
     });
-    $('.passengerTotalCost').text(numberWithCommas(totalValue));
 }
 
-function addPassenger(_index, _add){
-    pricesArr[_index].count += _add;
-    if(pricesArr[_index].count < 0)
-        pricesArr[_index].count = 0;
-
-    $('.passengerCount_'+_index).text(pricesArr[_index].count);
-
-    calculateFullCost();
-}
-
-function chooseOtherDates(_element, _index){
-    if(tourTimes[_index].hasCapacity) {
-        $(_element).parent().find('.selectdd').removeClass('selectdd');
-        $(_element).addClass('selectdd');
-
-        $('.sDateName').text(tourTimes[_index].sDateName);
-        $('.eDateName').text(tourTimes[_index].eDateName);
-
-        tourTimeCode = tourTimes[_index].code;
-    }
-}
-
-function createTourPricesHtml(){
-    var pricesHtml = '';
-
-    pricesArr.push({
-        id: 0,
-        text: 'بزرگسال',
-        prices: mainCost,
-        isFree: 0,
-        inCapacity: 0,
-        count: 0
-    });
-
-    tourPrices.map(item =>{
-        pricesArr.push({
-            id: item.id,
-            text: `کودک از سن ${item.ageFrom} تا ${item.ageTo}`,
-            prices: item.cost,
-            isFree: item.isFree,
-            inCapacity: item.inCapacity,
-            count: 0
-        })
-    });
-
-    pricesArr.map((item, index) => {
-        pricesHtml += `<div class="full-width inline-block priceRow">
-                            <span>${item.text}</span>
-                            <span style="display: flex; align-items: center; direction: ltr">
-                                <span style="margin-right: 10px; width: 80px;">${item.isFree ? 'رایگان' : numberWithCommas(item.prices)}</span>
-                                X
-                                <span class="passCount">
-                                    <span class="addButton" onclick="addPassenger(${index}, -1)">-</span>
-                                    <span class="passengerCount_${index}" style="margin: 0px 10px; width: 15px; text-align: center;">${item.count}</span>
-                                    <span class="addButton" onclick="addPassenger(${index}, 1)">+</span>
-                                </span>
-                            </span>
-                        </div>`;
-    });
-
-    $('#pricesInBuyButton').html(pricesHtml);
-}
 
 getInformation();

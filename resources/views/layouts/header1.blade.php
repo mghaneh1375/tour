@@ -191,7 +191,8 @@
                     <span class="headerSecondLi" onclick="openMainSearch(1)  // in mainSearch.blade.php">{{__('جاذبه')}}</span>
                     <span class="headerSecondLi" onclick="openMainSearch(10)  // in mainSearch.blade.php">{{__('سوغات و صنایع‌دستی')}}</span>
                     <span class="headerSecondLi" onclick="openMainSearch(11)  // in mainSearch.blade.php">{{__('غذای محلی')}}</span>
-                    <a href="{{route('safarnameh.index')}}" class="headerSecondLi" data-tracking-label="Flights">{{__('سفرنامه‌ها')}}</a>
+                    <a href="{{route('safarnameh.index')}}" class="headerSecondLi">{{__('سفرنامه‌ها')}}</a>
+                    <a href="{{route('news.main')}}" class="headerSecondLi">{{__('اخبار')}}</a>
                 </div>
             </div>
         </div>

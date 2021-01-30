@@ -11,8 +11,6 @@ class TourUserReservation extends Model
     protected $table = 'tourUserReservations';
 
     public function deleteAndReturnCapacity(){
-        return;
-
         $tourTime = TourTimes::find($this->tourTimeId);
         $tourTime->registered -= $this->inCapacityCount;
         $tourTime->save();

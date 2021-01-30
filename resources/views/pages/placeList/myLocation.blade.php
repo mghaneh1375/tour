@@ -4,11 +4,10 @@
     @include('layouts.topHeader')
     <title>اطراف من</title>
     <link rel="stylesheet" href="{{URL::asset('css/pages/myLocation.css?v='.$fileVersions)}}">
-
-
-{{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/mapp.min.css')}}">--}}
-{{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/fa/style.css')}}">--}}
     <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
+
+    {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/mapp.min.css')}}">--}}
+    {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/fa/style.css')}}">--}}
 
 </head>
 <body>

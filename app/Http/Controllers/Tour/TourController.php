@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tour;
 use App\Http\Controllers\Controller;
 use App\models\Cities;
 use App\models\tour\Tour;
+use App\models\tour\TourDiscount;
 use App\models\tour\TourEquipment;
 use App\models\tour\TourPic;
 use App\models\tour\TourPrices;
@@ -32,20 +33,17 @@ class TourController extends Controller{
     ];
 
     public function showTour($code){
-        $tourReserve = TourUserReservation::where('created_at', '<', Carbon::now()->subMinute(25))->get();
-        foreach ($tourReserve as $item)
-            $item->deleteAndReturnCapacity();
+        $this->defaultActions();
 
-        $timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : 0;
 
         $tour = Tour::where('code', $code)->first();
         if($tour == null)
             abort(404);
 
+        $tour->timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : TourTimes::where('tourId', $tour->id)->orderBy('sDate')->first()->code;
+
         $owner = User::find($tour->userId);
         $ownerPic = getUserPic($owner->id);
-
-        $thisTour = ['tourId' => $tour->id];
 
         $tour->src = Cities::find($tour->srcId);
         if($tour->isLocal == 0){
@@ -56,30 +54,11 @@ class TourController extends Controller{
             $tour->dest = (object)['name' => ''];
 
 
-        $tour->pics = TourPic::where($thisTour)->get();
+        $tour->pics = TourPic::where(['tourId' => $tour->id])->get();
         foreach ($tour->pics as $pic) {
-            $pic->pic = \URL::asset('_images/tour/' . $tour->id . '/' . $pic->pic);
+            $pic->pic = \URL::asset("_images/tour/{$tour->id}/$pic->pic");
             $pic->userPic = $ownerPic;
         }
-
-        $tour->cost = number_format($tour->minCost);
-
-        $timeToSee = null;
-        if($timeCode != 0)
-            $timeToSee = TourTimes::where('tourId', $tour->id)->where('code', $timeCode)->first();
-
-        if($timeToSee == null)
-            $timeToSee = TourTimes::where('tourId', $tour->id)->orderBy('sDate')->first();
-
-        $stt = explode('/', $timeToSee->sDate);
-        $sDateInWeek = $this->DateOfWeeks[Verta::createJalali($stt[0], $stt[1], $stt[2])->dayOfWeek];
-        $tour->sDateName = $sDateInWeek .' ' . $timeToSee->sDate;
-
-        $ett = explode('/', $timeToSee->eDate);
-        $eDateInWeek = $this->DateOfWeeks[Verta::createJalali($ett[0], $ett[1], $ett[2])->dayOfWeek];
-        $tour->eDateName = $eDateInWeek .' ' . $timeToSee->eDate;
-
-        $tour->timeCode = $timeToSee->code;
 
         return view('pages.tour.tour-details', compact(['tour']));
     }
@@ -121,7 +100,6 @@ class TourController extends Controller{
         foreach ($tour->features as $feat)
             $feat->cost = number_format($feat->cost);
 
-
         $mustEquip = [];
         $suggestEquip = [];
         $equipments = TourEquipment::join('subEquipments', 'subEquipments.id', 'tourEquipments.subEquipmentId')
@@ -140,15 +118,38 @@ class TourController extends Controller{
 
         $tour->schedule = $tour->getFullySchedule();
 
-        $times = TourTimes::where('tourId', $tour->id)->where('isPublished', 1)->orderBy('sDate')->get();
+        $prices = TourPrices::where('tourId', $tour->id)->get();
+        $pricesArr = [[
+            'id' => 0,
+            'text' => 'بزرگسال' ,
+            'mainCost' => $tour->minCost,
+            'payAbleCost' => $tour->minCost,
+            'payAbleShow' => number_format($tour->minCost),
+            'mainCostShow' => number_format($tour->minCost),
+            'isFree' => 0,
+        ]];
+
+        foreach ($prices as $price){
+            array_push($pricesArr , [
+                'id' => $price->id,
+                'text' => 'از سن ' . $price->ageFrom . ' تا ' . $price->ageTo,
+                'mainCost' => $price->cost,
+                'payAbleCost' => $price->cost,
+                'payAbleShow' => number_format($price->cost),
+                'mainCostShow' => number_format($price->cost),
+                'isFree' => $price->isFree,
+            ]);
+        }
+
+
+        $tourDayDiscount = TourDiscount::where('tourId', $tour->id)->where('remainingDay', '!=', null)->orderBy('remainingDay')->get();
+        $times = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->get();
         foreach($times as $item){
             $stt = explode('/', $item->sDate);
-            $sDateInWeek = $this->DateOfWeeks[Verta::createJalali($stt[0], $stt[1], $stt[2])->dayOfWeek];
-            $item->sDateName = $sDateInWeek .' ' . $item->sDate;
+            $item->sDateName = Verta::createJalali($stt[0], $stt[1], $stt[2])->format('%A Y/m/d');
 
             $ett = explode('/', $item->eDate);
-            $eDateInWeek = $this->DateOfWeeks[Verta::createJalali($ett[0], $ett[1], $ett[2])->dayOfWeek];
-            $item->eDateName = $eDateInWeek .' ' . $item->eDate;
+            $item->eDateName = Verta::createJalali($ett[0], $ett[1], $ett[2])->format('%A Y/m/d');
 
             if($tour->anyCapacity == 1) {
                 $item->anyCapacity = 1;
@@ -160,10 +161,26 @@ class TourController extends Controller{
                 $item->hasCapacity = ($item->capacityRemaining > 0);
             }
 
-        }
-        $tour->times = $times;
+            $item->addedDiscount = 0;
 
-        $tour->prices = TourPrices::where('tourId', $tour->id)->get();
+            $addPrices = $pricesArr;
+            $item->diffDay = abs(Verta::createJalali($stt[0], $stt[1], $stt[2])->diffDays(\verta()));
+            foreach ($tourDayDiscount as $dis){
+                if($dis->remainingDay >= $item->diffDay){
+                    $item->addedDiscount = $dis->discount;
+                    for($i = 0; $i < count($addPrices); $i++){
+                        if($addPrices[$i]['isFree'] == 0) {
+                            $addPrices[$i]['payAbleCost'] = $addPrices[$i]['mainCost'] * (100 - $dis->discount) / 100;
+                            $addPrices[$i]['payAbleShow'] = number_format($addPrices[$i]['payAbleCost']);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            $item->prices = $addPrices;
+        }
+        $tour->timeAndPrices = $times;
 
         if($tour->tourGuidKoochitaId != 0){
             $guid = User::select(['first_name', 'last_name'])->find($tour->tourGuidKoochitaId);
@@ -173,5 +190,12 @@ class TourController extends Controller{
         return response()->json(['status' => 'ok', 'result' => $tour]);
     }
 
+    private function defaultActions(){
+        $tourReserve = TourUserReservation::where('created_at', '<', Carbon::now()->subMinute(25))->get();
+        foreach ($tourReserve as $item)
+            $item->deleteAndReturnCapacity();
 
+        $nowDate = \verta()->format('Y/m/d');
+        TourTimes::where('sDate', '<=', $nowDate)->where('canRegister', 1)->update(['canRegister' => 0]);
+    }
 }

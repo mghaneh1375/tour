@@ -178,8 +178,8 @@ Route::group(array('middleware' => ['throttle:30', 'shareData']), function(){
 });
 
 //detailsPage
-Route::group(array('middleware' => ['throttle:60']), function (){
-
+Route::get('place-details/{kindPlaceId}/{placeId}', 'PlaceController@setPlaceDetailsURL')->name('placeDetails');
+Route::middleware(['throttle:60'])->group(function (){
     Route::middleware(['shareData'])->group(function (){
         Route::get('myLocation', 'MainController@myLocation')->name('myLocation');
         Route::get('placeList/{kindPlaceId}/{mode}/{city?}', 'PlaceController@showPlaceList')->name('place.list');
@@ -187,25 +187,24 @@ Route::group(array('middleware' => ['throttle:60']), function (){
         Route::get('cityPage/{kind}/{city}', 'CityController@cityPage')->name('cityPage');
     });
 
-    Route::get('place-details/{kindPlaceId}/{placeId}', 'PlaceController@setPlaceDetailsURL')->name('placeDetails');
-
-    Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
-
-    Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
-
-    Route::get('getCityPageReview', 'CityController@getCityPageReview')->name('getCityPageReview');
-
-    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
-
-    Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
-
     Route::middleware(['auth'])->group(function(){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
+
+    Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
+    Route::get('getCityPageReview', 'CityController@getCityPageReview')->name('getCityPageReview');
+    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
+    Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
+    Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
 });
 
 //ajaxController
-Route::group(array('middleware' => 'nothing'), function () {
+Route::middleware(['nothing'])->group(function () {
+
+    Route::get('getMyInfoForPassenger', 'AjaxController@getMyInfoForPassenger')->name('getMyInfoForPassenger');
+
+    Route::get('getLastPassengers', 'AjaxController@getLastPassengers')->name('getLastPassengers');
+
     Route::get('searchPlace', 'AjaxController@searchPlace')->name('search.place');
 
     Route::get('getSingleReview', 'AjaxController@getSingleReview')->name('getSingleReview');
@@ -254,7 +253,7 @@ Route::group(array('middleware' => 'nothing'), function () {
 });
 
 //review section
-Route::middleware('nothing')->group(function () {
+Route::middleware(['nothing'])->group(function () {
 
     Route::get('reviewPage/{id}', 'ReviewsController@showReviewPage')->name('review.page')->middleware('shareData');
 

@@ -12,6 +12,7 @@
 @section('header')
     @parent
     <link rel="stylesheet" href="{{URL::asset('css/theme2/tourDetails.css?v=1')}}">
+    <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
 
     <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
     <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
@@ -31,69 +32,22 @@
         }
         .secondRowSection{
             background-image: url('{{URL::asset('images/mainPics/carftpaper.jpg')}}');
-            background-position: center;
-            background-size: cover;
-            padding: 20px;
         }
-        .tourGuidAjansSection .tourGuidSection{
+        .tourGuidAjansSection .tourGuidSection {
             background-image: url("{{URL::asset('images/mainPics/carftpaper.jpg')}}");
-            display: flex;
-            border: solid 1px gray;
-            padding: 10px;
-            position: relative;
-            width: 100%;
         }
         .buyButton{
             background-image: url("{{URL::asset('images/tourCreation/nutTambrButton.svg')}}");
-            height: 140px;
-            cursor: pointer;
-            width: 300px;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            bottom: 16px;
-            left: 76px;
         }
         .hasInsurance:before{
-            content: '';
             background-image: url("{{URL::asset('images/tourCreation/tambrBorder.svg')}}");
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            transform: rotate(90deg);
-            width: 100px;
-            height: 200px;
-            position: absolute;
         }
         .transportSection .transportsSec .mapButTransportMain{
             background-image: url("{{URL::asset('images/tourCreation/tambrBorder.svg')}}");
-            background-position: center;
-            background-repeat: no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50px;
-            background-size: cover;
-            height: 40px;
-            position: absolute;
-            left: 5px;
-            top: 4px;
-            font-weight: bold;
         }
         .checkListPaper .topPaper{
             background-image: url("{{URL::asset('images/tourCreation/topPaper.svg')}}");
-            height: 39px;
-            position: absolute;
-            top: 0px;
-            right: 0px;
-            width: 100%;
-            z-index: 20;
         }
-
     </style>
 @stop
 
@@ -127,9 +81,14 @@
                         </span>
 
                     </div>
+
                     <div class="detailRowPost">
-                        شروع قیمت از :
-                        <span class="boldPostal">{{$tour->cost}}</span>
+                        قیمت :
+                        <span class="boldPostal showCostSection">
+                            <div class="mainCostShow"></div>
+                            <div class="costWithDiscount"></div>
+                        </span>
+
                         <div class="moreBottomBorder"></div>
                         <div class="buyBut" onclick="selectBuyButton()">خرید</div>
                     </div>
@@ -191,7 +150,7 @@
                     <div class="body" style="display: flex; justify-content: space-between;">
                         <div class="transportsSec">
                             <div class="title">رفت</div>
-                            <div class="mapButTransportMain">نقشه</div>
+                            <div class="mapButTransportMain" onclick="showTransportInMap('start')">نقشه</div>
                             <div class="sMainTransportKind transportWithBottomDashed" style="font-size: 20px"></div>
                             <div class="transportWithBottomDashed">
                                 <span style="font-weight: bold;">ساعت حرکت :</span>
@@ -208,7 +167,7 @@
                         </div>
                         <div class="transportsSec">
                             <div class="title">برگشت</div>
-                            <div class="mapButTransportMain">نقشه</div>
+                            <div class="mapButTransportMain" onclick="showTransportInMap('end')">نقشه</div>
                             <div class="eMainTransportKind transportWithBottomDashed" style="font-size: 20px"></div>
                             <div class="transportWithBottomDashed">
                                 <span style="font-weight: bold;">ساعت برگشت :</span>
@@ -426,9 +385,10 @@
         </div>
     </div>
 
-    <div id="mapModal" class="modalBlackBack fullCenter">
+    <div id="mapModal" class="modalBlackBack fullCenter mapModal">
         <div class="modalBody">
-
+            <div class="closeButtonModal iconClose" onclick="closeMyModal('mapModal')"></div>
+            <div id="mapSection" style="width: 100%; height: 100%"></div>
         </div>
     </div>
 
@@ -478,15 +438,19 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
+
     <script>
         var tourPrices;
-        var pricesArr = [];
+        var passengerCount = [];
         var features = [];
-        var tourTimes = [];
+        var dayEvents = [];
         var tourCode = '{{$tour->code}}';
         var tourTimeCode = '{{$tour->timeCode}}';
         var tourInformationUrl = '{{route("tour.getInformation")}}?code='+tourCode;
-        var dayEvents = [];
+        var checkCapacityUrl = '{{route("tour.reservation.checkCapacity")}}';
+        var getPassengerInfoUrl = '{{route("tour.reservation.getPassengerInfo")}}';
 
         var mainSlideSwiper = new Swiper('#mainSlider', {
             spaceBetween: 0,
@@ -501,58 +465,8 @@
                 nextEl: '.swiper-button-prev',
             },
         });
-
-        function reserveTour(){
-            openLoading();
-
-            var featureCount = [];
-            var elements = $('.featuresInputCount');
-            for(var i = 0; i < elements.length; i++){
-                var index = $(elements[i]).attr('data-index');
-                var count = $(elements[i]).val();
-                featureCount.push({
-                    id: features[index].id,
-                    count: count
-                });
-            }
-
-
-            $.ajax({
-                type: 'POST',
-                url: '{{route("tour.reservation.checkCapacity")}}',
-                data: {
-                    _token: '{{csrf_token()}}',
-                    tourCode: tourCode,
-                    userCount: pricesArr,
-                    tourTimeCode: tourTimeCode,
-                    featureCount: featureCount
-                },
-                success: response => {
-                    if(response.status == 'ok') {
-                        localStorage.setItem('lastTourReservation', JSON.stringify({
-                            tourCode,
-                            tourTimeCode,
-                            reserveCode: response.result,
-                        }));
-                        showSuccessNotifi('در حال انتقال به صفحه ی ثبت اطلاعات', 'left', 'var(--koochita-blue)');
-                        location.href = '{{route("tour.reservation.getPassengerInfo")}}?code=' + response.result;
-                    }
-                    else{
-                        closeLoading();
-                        if(response.status == 'fullCapacity')
-                            showSuccessNotifi(`${response.remaining}تعداد مسافرین شما از ظرفیت تور بیشتر است. ظرفیت باقی مانده: `, 'left', 'red');
-                        else
-                            showSuccessNotifi('خطا', 'left', 'red');
-                    }
-                },
-                error: err =>{
-                    closeLoading();
-                }
-            });
-        }
-
     </script>
 
-    <script defer src="{{URL::asset('js/pages/tourShow.js')}}"></script>
+    <script defer src="{{URL::asset('js/pages/tour/tourShow.js')}}"></script>
 
 @stop

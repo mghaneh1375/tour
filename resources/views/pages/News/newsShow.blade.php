@@ -64,7 +64,6 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="swiper-pagination"></div>
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
                         </div>
@@ -111,7 +110,7 @@
                 <div class="tagSection">
                     @foreach($news->tags as $item)
                         <div class="tag">
-                            <a href="#">{{$item}}</a>
+                            <a href="{{route('news.list', ['kind' => 'tag', 'content' => $item])}}">{{$item}}</a>
                         </div>
                     @endforeach
                 </div>
@@ -171,7 +170,6 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="swiper-pagination"></div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
                     </div>
@@ -187,17 +185,13 @@
 @section('script')
 
     <script>
-        var swiper = new Swiper('#otherNewsSlider', {
+        var swiper = new Swiper('.otherNewsInShow', {
             spaceBetween: 10,
             centeredSlides: true,
             loop: true,
             autoplay: {
                 delay: 50000,
                 disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
             },
             navigation: {
                 nextEl: '.swiper-button-prev',

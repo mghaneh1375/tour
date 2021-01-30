@@ -27,7 +27,7 @@ class CreateTourPurchasedsTable extends Migration
             $table->unsignedBigInteger('dailyDiscountId')->nullable();
             $table->unsignedBigInteger('groupDiscountId')->nullable();
             $table->unsignedBigInteger('codeDiscountId')->nullable();
-            $table->string('koochitaScoreDiscountId')->nullable();
+            $table->unsignedBigInteger('koochitaScoreDiscount')->nullable();
 
             $table->timestamps();
         });

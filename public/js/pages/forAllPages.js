@@ -84,7 +84,6 @@ function closeErrorAlert(){
 
 
 
-
 function getLoginPages(_callBack){
     openLoading(false, () => {
         $.ajax({
@@ -105,12 +104,12 @@ function getLoginPages(_callBack){
     });
 }
 
-function checkLogin(redirect = window.InUrl){
+function checkLogin(redirect = window.InUrl, _callBackAfterLogin = ''){
     if (!hasLogin) {
         if(window.getPages.indexOf('login') == -1)
-            getLoginPages(() => showLoginPrompt(redirect));
+            getLoginPages(() => showLoginPrompt(redirect, _callBackAfterLogin));
         else
-            showLoginPrompt(redirect);
+            showLoginPrompt(redirect, _callBackAfterLogin);
         return false;
     }
     else

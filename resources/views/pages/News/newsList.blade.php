@@ -2,10 +2,7 @@
 
 
 @section('head')
-
-    <style>
-
-    </style>
+    <title>کوچیتا | لیست {{$header}}</title>
 @endsection
 
 

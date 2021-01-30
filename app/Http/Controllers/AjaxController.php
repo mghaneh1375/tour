@@ -6,6 +6,7 @@ use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
 use App\models\CountryCode;
+use App\models\PassengerInfos;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\Cities;
@@ -46,6 +47,34 @@ use Illuminate\Http\Request;
 
 
 class AjaxController extends Controller {
+
+    public function getMyInfoForPassenger(){
+        return response()->json([
+            'status' => 'ok',
+            'result' => User::select(['first_name', 'last_name', 'sex', 'birthday'])->find(\auth()->user()->id)
+            ]);
+    }
+
+    public function getLastPassengers(){
+        if(\auth()->check()){
+            $passengers = PassengerInfos::where('userId', \auth()->user()->id)->get();
+            foreach ($passengers as $item){
+                $item->name = '';
+                if($item->firstNameFa != null)
+                    $item->name .= $item->firstNameFa;
+                else if($item->firstNameEn != null)
+                    $item->name .= $item->firstNameEn;
+
+                if($item->lastNameFa != null)
+                    $item->name .= $item->lastNameFa;
+                else if($item->lastNameEn != null)
+                    $item->name .= $item->lastNameEn;
+            }
+            return response()->json(['status' => 'ok', 'result' => $passengers]);
+        }
+        else
+            return response()->json(['status' => 'error1']);
+    }
 
     public function searchInCounty()
     {
