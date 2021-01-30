@@ -55,9 +55,9 @@
                             <div class="swiper-wrapper">
                                 @foreach($otherNews as $item)
                                     <div class="swiper-slide">
-                                        <div class="picSec">
+                                        <a href="{{$item->url}}" class="picSec">
                                             <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
-                                        </div>
+                                        </a>
                                         <a href="{{$item->url}}" class="content">
                                             <h3 class="title">{{$item->title}}</h3>
                                         </a>
@@ -161,9 +161,9 @@
                         <div class="swiper-wrapper">
                             @foreach($otherNews as $item)
                                 <div class="swiper-slide">
-                                    <div class="picSec">
+                                    <a href="{{$item->url}}" class="picSec">
                                         <img data-src="{{$item->pic}}" alt="{{$item->keyword}}" loading="lazy" class="lazyload resizeImgClass" onload="fitThisImg(this)">
-                                    </div>
+                                    </a>
                                     <a href="{{$item->url}}" class="content">
                                         <h3 class="title">{{$item->title}}</h3>
                                     </a>
