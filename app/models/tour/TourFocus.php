@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class TourFocus extends Model
 {
     public $timestamps = false;
-    protected $table = 'tourfocus';
+    protected $table = 'tourFocus';
 }
