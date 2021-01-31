@@ -99,17 +99,14 @@ class SitemapController extends Controller
 
     public function news()
     {
-        $news = News::youCanSee()->select(['id', 'title', 'slug', 'created_at'])->get();
+        $news = News::youCanSee()->select(['id', 'title', 'slug', 'created_at'])->orderByDesc('created_at')->take(500)->get();
 
-        $lists = array();
         foreach ($news as $item) {
-            if($item->slug != null && $item->slug != '') {
-                $l = url("/news/show/{$item->slug}");
-                array_push($lists, $l);
-            }
+            if($item->slug != null && $item->slug != '')
+                $item->url = url("/news/show/{$item->slug}");
         }
 
-        return response()->view('sitemap.siteMapUrls', ['lists' => $lists])->header('Content-Type', 'application/xml');
+        return response()->view('sitemap.newsSiteMapUrls', ['news' => $news])->header('Content-Type', 'application/xml');
     }
 
     public function city()

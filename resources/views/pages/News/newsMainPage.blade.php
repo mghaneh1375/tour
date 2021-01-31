@@ -2,11 +2,34 @@
 
 
 @section('head')
-    <title>اخبار کوچیتا</title>
+    <?php
+        $title = 'اخبار کوچیتا | آخرین و مهمترین اخبار گردشگری، صنایع دستی و میراث فرهنگی ایران و جهان';
+        $meta = 'آخرین اخبار ، دقیقترین تحلیل و تازه ترین ویدیوها را درباره ی گردشگری و صنایع دستی، میراث فرهنگی، حوادث، اقتصاد و توریسم را در کوچیتا ببینیدو بخوانید';
+        $keyword = 'اخبار , اخبار کوچیتا , اخبار گردشگری, ویدیوهای گردشگری, اخبار صنایع دستی, اخبار میراث فرهنگی';
+    ?>
 
-    <style>
 
-    </style>
+    <title>{{$title}}</title>
+
+    <meta property="og:title" content="{{$title}}"/>
+    <meta property="title" content="{{$title}}"/>
+    <meta name="twitter:title" content="{{$title}}"/>
+    <meta name="twitter:card" content="{{$meta}}"/>
+    <meta name="description" content="{{$meta}}"/>
+    <meta name="twitter:description" content="{{$meta}}"/>
+    <meta property="og:description" content="{{$meta}}"/>
+    <meta name="keywords" content="{{$keyword}}">
+    <meta property="og:url" content="{{Request::url()}}"/>
+
+    <meta property="og:image" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
+    <meta property="og:image:secure_url" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
+    <meta name="twitter:image" content="{{URL::asset('images/mainPics/noPicSite.jpg')}}"/>
+    <meta property="og:image:width" content="550"/>
+    <meta property="og:image:height" content="367"/>
+
+    <meta property="publisher" content="{{$title}}"/>
+{{--    <meta property="dc.publisher" content="{{$title}}"/>--}}
+
 @endsection
 
 
