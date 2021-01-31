@@ -605,7 +605,7 @@
                 success: response =>{
                     if(response.status == 'ok') {
                         localStorage.removeItem('stageFiveTourCreation_{{$tour->id}}');
-                        location.reload();
+                        location.href = '{{route("tour.create.complete", ['id' => $tour->id])}}'
                     }
                 }
             })

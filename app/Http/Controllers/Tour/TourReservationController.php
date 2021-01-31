@@ -103,13 +103,15 @@ class TourReservationController extends Controller
 
                 $features = [];
                 $featuresArray = json_decode($userReservation->features);
-                foreach ($featuresArray as $item){
-                    $feat = TourFeature::find($item->id);
-                    if($feat != null){
-                        $feat->count = $item->count == null ? 0 : $item->count ;
-                        $feat->showCost = number_format($feat->cost);
-                        $feat->totalCostShow = number_format($feat->cost * $item->count);
-                        array_push($features, $feat);
+                if($featuresArray != null) {
+                    foreach ($featuresArray as $item) {
+                        $feat = TourFeature::find($item->id);
+                        if ($feat != null) {
+                            $feat->count = $item->count == null ? 0 : $item->count;
+                            $feat->showCost = number_format($feat->cost);
+                            $feat->totalCostShow = number_format($feat->cost * $item->count);
+                            array_push($features, $feat);
+                        }
                     }
                 }
 
@@ -459,17 +461,19 @@ class TourReservationController extends Controller
 
             $featCost = 0;
             $featuresDecode = json_decode($userReservation->features);
-            foreach ($featuresDecode as $item){
-                if($item->count > 0){
-                    $tourFeat = TourFeature::find($item->id);
-                    if($tourFeat != null) {
-                        $featPurchesed = new TourPurchasedFeatures();
-                        $featPurchesed->featureId = $tourFeat->id;
-                        $featPurchesed->count = $item->count;
-                        $featPurchesed->tourPurchasedId = $tourBuy->id;
-                        $featPurchesed->save();
+            if($featuresDecode != null) {
+                foreach ($featuresDecode as $item) {
+                    if ($item->count > 0) {
+                        $tourFeat = TourFeature::find($item->id);
+                        if ($tourFeat != null) {
+                            $featPurchesed = new TourPurchasedFeatures();
+                            $featPurchesed->featureId = $tourFeat->id;
+                            $featPurchesed->count = $item->count;
+                            $featPurchesed->tourPurchasedId = $tourBuy->id;
+                            $featPurchesed->save();
 
-                        $featCost += (int)$tourFeat->cost * $item->count;
+                            $featCost += (int)$tourFeat->cost * $item->count;
+                        }
                     }
                 }
             }

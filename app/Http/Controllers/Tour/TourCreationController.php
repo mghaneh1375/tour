@@ -53,15 +53,11 @@ class TourCreationController extends Controller{
 
     public function beforeCreateStart()
     {
-        return view('pages.tour.create.createTour_BeforeStart');
+        return view('pages.tour.create.createTour_0_BeforeStart');
     }
     public function stageOneTour($id = 0)
     {
         $tour = Tour::find($id);
-        $tourDifficult = TourDifficult::all();
-        $tourStyle = TourStyle::all();
-        $tourFocus = TourFocus::all();
-        $tourKind = TourKind::all();
         $states = State::all();
 
         if($tour != null){
@@ -79,7 +75,7 @@ class TourCreationController extends Controller{
             $tour->times = TourTimes::where('tourId', $tour->id)->orderBy('sDate')->get();
         }
 
-        return view('pages.tour.create.createTour_GeneralInfo', compact(['tour', 'states']));
+        return view('pages.tour.create.createTour_1_GeneralInfo', compact(['tour', 'states']));
     }
     public function stageTwoTour($id){
         $tour = Tour::select(['id', 'updated_at', 'day'])->find($id);
@@ -136,7 +132,7 @@ class TourCreationController extends Controller{
                 $schedule->hotel->pic = getPlacePic($schedule->hotel->id, $schedule->isBoomgardi == 1 ? 12 : 4);
             }
         }
-        return view('pages.tour.create.createTour_datePlan', compact(['tour', 'tourScheduleKinds']));
+        return view('pages.tour.create.createTour_2_datePlan', compact(['tour', 'tourScheduleKinds']));
     }
     public function stageThreeTour($id){
         $tour = Tour::find($id);
@@ -156,7 +152,7 @@ class TourCreationController extends Controller{
                 $tour->sideTransport = json_decode($tour->sideTransport);
                 $tour->meals = json_decode($tour->meals);
 
-                return view('pages.tour.create.createTour_Options', compact(['tour', 'transport']));
+                return view('pages.tour.create.createTour_3_Options', compact(['tour', 'transport']));
             }
         }
     }
@@ -178,7 +174,7 @@ class TourCreationController extends Controller{
 
                 $tour->prices = TourPrices::where('tourId', $tour->id)->orderBy('ageFrom')->get();
 
-                return view('pages.tour.create.createTour_Financial', compact(['tour']));
+                return view('pages.tour.create.createTour_4_Financial', compact(['tour']));
             }
         }
     }
@@ -217,7 +213,7 @@ class TourCreationController extends Controller{
                 $pic->url = URL::asset('_images/tour/'.$tour->id.'/'.$pic->pic);
             $tour->pics = $pics;
 
-            return view('pages.tour.create.createTour_ExplanatoryInfo', compact(['tour', 'mainEquipment', 'tourKind', 'tourDifficult', 'tourFitFor', 'tourStyle']));
+            return view('pages.tour.create.createTour_5_ExplanatoryInfo', compact(['tour', 'mainEquipment', 'tourKind', 'tourDifficult', 'tourFitFor', 'tourStyle']));
         }
         else
             return redirect()->back();
@@ -230,7 +226,7 @@ class TourCreationController extends Controller{
             $tour->lastUpdate = convertDate($tour->updated_at);
             $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
 
-            return view('pages.tour.create.createTour_Complete', compact(['tour']));
+            return view('pages.tour.create.createTour_6_Complete', compact(['tour']));
         }
         else
             return redirect()->back();

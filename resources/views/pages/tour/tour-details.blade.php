@@ -48,6 +48,12 @@
         .checkListPaper .topPaper{
             background-image: url("{{URL::asset('images/tourCreation/topPaper.svg')}}");
         }
+        .notTransport{
+            font-size: 17px;
+            margin-bottom: 20px;
+            margin-right: 10px;
+            color: red;
+        }
     </style>
 @stop
 
@@ -182,6 +188,9 @@
                                 <span class="eMainTransportDescription"></span>
                             </div>
                         </div>
+
+
+                        <div class="notTransport hidden"> حمل و نقل این تور برعهده خود مسافر می باشد </div>
                     </div>
                 </div>
                 <div class="col-md-8 borderLight top">
@@ -208,7 +217,7 @@
             </div>
         </div>
 
-        <div style="direction: rtl; margin-top: 25px;">
+        <div id="moreFeatureDivSec" style="direction: rtl; margin-top: 25px;">
             <div class="bodiesHeader">امکانات اضافه</div>
             <table class="moreFeature table table-bordered table-striped">
                 <thead>
@@ -223,7 +232,7 @@
         </div>
 
         <div class="equipmentSection">
-            <div class="checkListPaper">
+            <div id="mustEquDivSec" class="checkListPaper">
                 <div class="topPaper"></div>
                 <div class="title">
                     <div class="text" style="color: #b41b17">لوازم ضروری</div>
@@ -231,7 +240,7 @@
                 <div id="mustEquipments" class="body"></div>
             </div>
 
-            <div class="checkListPaper">
+            <div id="suggEquDivSec" class="checkListPaper">
                 <div class="topPaper"></div>
 
                 <div class="title">

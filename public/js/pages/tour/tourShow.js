@@ -103,8 +103,6 @@ function selectBuyButton(){
 }
 
 function fillTourShowPage(_response){
-    console.log(_response);
-
     var propertySection = '';
     var newFeature = '';
     var newFeatureForBuy = '';
@@ -146,8 +144,10 @@ function fillTourShowPage(_response){
         $('.eMainTransportDescription').text(_response.mainTransport.eDescription);
         $('.eMainTransportTime').text(_response.mainTransport.eTime);
     }
-    else
-        $('.mainTransportDetails').addClass('hidden');
+    else {
+        $('.transportsSec').addClass('hidden');
+        $('.notTransport').removeClass('hidden');
+    }
 
     $('.tourGuidName').text(_response.tourGuidName);
     if(_response.tourGuidKoochitaId != 0){
@@ -170,9 +170,11 @@ function fillTourShowPage(_response){
                                 <input type="number" class="form-control featuresInputCount" data-index="${index}" placeholder="تعداد" onchange="calculateFullCost()">
                             </div>`;
     });
-
     $('.additionalFeatures').html(newFeature);
     $('.additionalFeaturesForBuy').html(newFeatureForBuy);
+
+    if(newFeature == '')
+        $('#moreFeatureDivSec').addClass('hidden');
 
     var diffEquip = _response.mustEquip.length - _response.suggestEquip.length;
 
@@ -185,7 +187,10 @@ function fillTourShowPage(_response){
                             <div class="text">${item}</div>
                         </div>`;
     });
-    $('#mustEquipments').html(equipments);
+    if(equipments != '')
+        $('#mustEquipments').html(equipments);
+    else
+        $('#mustEquDivSec').addClass('hidden');
 
     equipments = '';
     _response.suggestEquip.map(item => {
@@ -196,7 +201,10 @@ function fillTourShowPage(_response){
                             <div class="text">${item}</div>
                         </div>`;
     });
-    $('#suggestEquipments').html(equipments);
+    if(equipments != '')
+        $('#suggestEquipments').html(equipments);
+    else
+        $('#suggEquDivSec').addClass('hidden');
 
     equipments = '';
     for(var diff = 0; diff < Math.abs(diffEquip); diff++)
@@ -228,11 +236,11 @@ function fillTourShowPage(_response){
 
     createTourPricesAndTimeHtml();
 
-    initMarkers(_response.mainTransport.sLatLng, _response.mainTransport.eLatLng);
+    if(_response.mainTransport)
+        initMarkers(_response.mainTransport.sLatLng, _response.mainTransport.eLatLng);
 }
 
 function createTourPricesAndTimeHtml(){
-    console.log(tourTimeAndPrices, tourTimeCode);
     var timeHtml = '';
     tourTimeAndPrices.map((item, index) => {
         timeHtml += `<tr id="tourTime_${item.code}" class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'}" onclick="chooseOtherDates(${index})">
