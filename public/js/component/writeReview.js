@@ -312,6 +312,7 @@ function doDeleteNewReviewFile(_index){
 
 function storeNewReview(_element){
     var canUpload = false;
+    var fileUploding = false;
     var text = $('#inputNewReviewText').val();
 
     if(text.trim().length > 0)
@@ -320,6 +321,7 @@ function storeNewReview(_element){
     newReviewDataForUpload.files.map(item =>{
         if(item.uploaded == 0){
             openWarning('یکی از فایل ها درحال آپلود می باشد. منتظر بمانید.');
+            fileUploding = true;
             return;
         }
         if(item.uploaded == 1)
@@ -329,41 +331,42 @@ function storeNewReview(_element){
     $(_element).next().removeClass('hidden');
     $(_element).addClass('hidden');
 
-    $.ajax({
-        type: 'POST',
-        url: storeNewReviewUrl,
-        data: {
-            _token: csrfTokenGlobal,
-            kindPlaceId: 0,
-            placeId: 0,
-            code: newReviewDataForUpload.code,
-            userAssigned: JSON.stringify(newReviewDataForUpload.userAssigned),
-            text: text,
-        },
-        success: response =>{
-            response = JSON.parse(response);
-            $(_element).next().addClass('hidden');
-            $(_element).removeClass('hidden');
+    if(canUpload && !fileUploding) {
+        $.ajax({
+            type: 'POST',
+            url: storeNewReviewUrl,
+            data: {
+                _token: csrfTokenGlobal,
+                kindPlaceId: 0,
+                placeId: 0,
+                code: newReviewDataForUpload.code,
+                userAssigned: JSON.stringify(newReviewDataForUpload.userAssigned),
+                text: text,
+            },
+            success: response => {
+                response = JSON.parse(response);
+                $(_element).next().addClass('hidden');
+                $(_element).removeClass('hidden');
 
-            if(response.status == 'ok'){
-                closeMyModal('newReviewSection');
-                newReviewDataForUpload.code = response.result;
-                newReviewDataForUpload.userAssigned = [];
-                newReviewDataForUpload.files = [];
-                $('#inputReviewText').val('');
-                $('#friendAddedSection').find('.acceptedUserFriend').remove();
-                $('.uploadedFiles').find('.uploadFileCard').remove();
-                showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
-                newReviewDataForUpload.code = false;
-            }
-            else
+                if (response.status == 'ok') {
+                    closeMyModal('newReviewSection');
+                    newReviewDataForUpload.code = response.result;
+                    newReviewDataForUpload.userAssigned = [];
+                    newReviewDataForUpload.files = [];
+                    $('#inputReviewText').val('');
+                    $('#friendAddedSection').find('.acceptedUserFriend').remove();
+                    $('.uploadedFiles').find('.uploadFileCard').remove();
+                    showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
+                    newReviewDataForUpload.code = false;
+                } else
+                    showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
+            },
+            error: err => {
                 showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
-        },
-        error: err => {
-            showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
-            $(_element).next().addClass('hidden');
-            $(_element).removeClass('hidden');
-        }
-    })
+                $(_element).next().addClass('hidden');
+                $(_element).removeClass('hidden');
+            }
+        })
+    }
 
 }
