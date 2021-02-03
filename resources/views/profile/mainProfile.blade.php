@@ -3,8 +3,14 @@
 @section('title')
     <title>صفحه کاربری</title>
 
+    @if(isset($sideInfos['userPicture']))
+        <meta property="og:image" content="{{$sideInfos['userPicture']}}"/>
+        <meta property="og:image:secure_url" content="{{$sideInfos['userPicture']}}"/>
+        <meta name="twitter:image" content="{{$sideInfos['userPicture']}}"/>
+        <meta property="og:image:width" content="550"/>
+        <meta property="og:image:height" content="367"/>
+    @endif
     <style>
-
         .mobileTabs .moreTabMenu{
             position: absolute;
             left: 13px;
@@ -20,6 +26,14 @@
         .mobileTabs .moreTabMenu .tabMenu{
             margin: 10px 0px;
             cursor: pointer;
+        }
+
+        .msgHeaderButton.searchButton.mobile{
+            margin: 10px 1%;
+            width: 98%;
+            border: solid 1px gray;
+            font-weight: bold;
+            background: #d3d3d35c;
         }
     </style>
 @stop
@@ -151,10 +165,14 @@
                 </div>
 
                 <div class="profileMobileSection">
-                    <button class="msgHeaderButton followButton mobile hideOnScreen {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
-{{--                        <span class="addMemberIcon"></span>--}}
-                        <span class="text"></span>
-                    </button>
+                    <div style="display: flex">
+                        @if(!$myPage)
+                            <button class="msgHeaderButton followButton helfInOtherUser mobile hideOnScreen {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
+                                <span class="text"></span>
+                            </button>
+                        @endif
+                        <button class="msgHeaderButton searchButton helfInOtherUser mobile searchIcon hideOnScreen" onclick="searchUserInMainProfile()">جستجوی دوستان</button>
+                    </div>
 
                     <div class="bioSec">
                         <div class="mainDivHeaderText" onclick="showFullUserInfoInMobile(this)">
@@ -168,7 +186,7 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                </div>
                     <div id="stickyProfileHeader" class="profileMobileStickHeader">
                         <div class="mobileTabs">
                             @if(isset($myPage) && $myPage)
@@ -635,6 +653,12 @@
             autosize(document.getElementsByClassName("inputBoxInputAnswer"));
             autosize(document.getElementsByClassName("inputBoxInputComment"));
         });
+
+        searchUserInMainProfile = () => openKoochitaUserSearchModal('جستجوی دوستان', goToUserProfilePage, '');
+        function goToUserProfilePage(_id, _username){
+            openLoading();
+            location.href = '{{url("profile/index")}}/'+_username
+        }
 
         function showFullUserInfoInMobile(_elems) {
             $(_elems).parent().toggleClass('show');

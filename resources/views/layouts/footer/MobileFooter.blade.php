@@ -4,14 +4,35 @@
     }
 
     .addNewReviewButtonMobileFooter{
-        position: absolute;
-        top: calc(-50% + 10px);
-        width: 40px !important;
-        height: 40px !important;
-        background: var(--koochita-yellow);
-        border-radius: 50%;
-        font-size: 30px;
+        position: fixed;
+        background: WHITE;
         color: #333;
+        height: 50px !IMPORTANT;
+        BORDER: solid 1px #333;
+        width: 100px;
+        border-bottom: none;
+        border-radius: 20px 20px 0px 0px;
+        font-size: 14px !important;
+        flex-direction: column;
+        z-index: 1;
+        bottom: 60px;
+        right: calc(50% - 50px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+    .addNewReviewButtonMobileFooter:before{
+        font-size: 22px;
+        line-height: 8px;
+        width: 25px;
+        height: 25px;
+        border: solid 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        font-weight: normal;
     }
 
     @media (max-width: 767px) {
@@ -58,7 +79,6 @@
                 <span class="newMsgMainFooterCount">{{$authUserInfos->newMsg}}</span>
             @endif
         </div>
-        <div class="addNewReviewButtonMobileFooter plus2" onclick="openModalWriteNewReview()"></div>
     @else
         <div class="loginHelperSection footerLoginHelperSection hidden" onclick="closeLoginHelperSection()">
             <div class="login-button">
@@ -71,15 +91,18 @@
                 <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/icons/firstTimeRegisterMsg.svg')}}" style="width: 100%;">
             </div>
         </div>
-
         <div class="login-button">
-                <span class="footerMenuBarLinks" style="display: flex; align-items: center">
-                    {{__('ورود')}}
-                    <span class="iconFamily UserIcon" style="font-size: 20px; margin-left: 2px"></span>
-                </span>
+            <span class="footerMenuBarLinks" style="display: flex; align-items: center">
+                {{__('ورود')}}
+                <span class="iconFamily UserIcon" style="font-size: 20px; margin-left: 2px"></span>
+            </span>
         </div>
     @endif
 </div>
+
+@if(Auth::check())
+    <div class="addNewReviewButtonMobileFooter plus2" onclick="openModalWriteNewReview()">ایجاد پست</div>
+@endif
 
 <div class="container">
 

@@ -46,13 +46,13 @@
                         <div id="msgBodyUserName" style="margin-right: 10px"></div>
                     </a>
                 </div>
-                <div class="userSetting">
-                    <span class="threeDotIconVertical" onclick="$(this).next().toggleClass('open')"></span>
-                    <div class="userSettingMenu">
-                        <div class="nav">پاک کردن گفتگو ها</div>
-                        <div class="nav">حذف کاربر</div>
-                    </div>
-                </div>
+{{--                <div class="userSetting">--}}
+{{--                    <span class="threeDotIconVertical" onclick="$(this).next().toggleClass('open')"></span>--}}
+{{--                    <div class="userSettingMenu">--}}
+{{--                        <div class="nav">پاک کردن گفتگو ها</div>--}}
+{{--                        <div class="nav">حذف کاربر</div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
 
             <div id="bodyMsg" class="msgContent"></div>
@@ -110,12 +110,7 @@
         $('.searchInp').on('click', () => $('#searchInUser').focus());
 
         function searchInUsers(_value){
-            openKoochitaUserSearchModal('جستجو کاربر', startNewConversation, '');
-        }
-
-        function startNewConversation(_id, _username){
-            // openLoading()
-            showThisMsgs(_id);
+            openKoochitaUserSearchModal('جستجو کاربر', showThisMsgs, '');
         }
 
         function clearSearchBox(){
@@ -142,13 +137,19 @@
             $('#sideListUser').removeClass('hideThis');
         }
 
-        function showThisMsgs(_id){
+        function showThisMsgs(_id, _username){
             $('#msgBody').addClass('showThis');
             $('#sideListUser').addClass('hideThis');
 
             $('.userRow').removeClass('active');
-            $('#user_' + _id).addClass('active');
-            getUserMsgs(_id);
+            if($('#user_'+_id).length == 0){
+                openLoading();
+                location.href = '{{route("profile.message.page")}}?user='+_username;
+            }
+            else{
+                $('#user_' + _id).addClass('active');
+                getUserMsgs(_id);
+            }
         }
 
         function getUserMsgs(_id){

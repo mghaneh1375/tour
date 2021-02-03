@@ -207,9 +207,9 @@ function setFullReviewContent(_reviews){
 
     text += `</div>
              <div class="commentWriterDetailsShow">
-                <div class="circleBase commentWriterPicShow">
+                <a href="${yourProfileUrlSmallShowReview}/${_reviews.userName}" class="circleBase commentWriterPicShow">
                     <img src="${_reviews.userPic}" class="resizeImgClass" onload="fitThisImg(this)">
-                </div>
+                </a>
                 <div class="commentWriterExperienceDetails">
                     <a href="${yourProfileUrlSmallShowReview}/${_reviews.userName}" class="userProfileName userProfileNameFullReview" target="_blank" style="font-weight:bold">${_reviews.userName}</a>
                     <div class="fullReviewPlaceAndTime">
@@ -513,15 +513,14 @@ function sendAnsOfReviewsFullReview(_logId, _value){
                 logId : _logId,
                 text  : _value,
             },
-            success: function(response){
+            complete: closeLoading,
+            success: response => {
                 if(response.status == 'ok') {
                     showSuccessNotifi('پاسخ شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
                     updateFullReview(response.reviewId);
                 }
-                else{
-                    closeLoading();
+                else
                     showSuccessNotifi('در ثبت پاسخ مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red');
-                }
             },
             error: e => {
                 closeLoading();
