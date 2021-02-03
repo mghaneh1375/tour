@@ -149,7 +149,7 @@ class ProfileController extends Controller {
         }
         else if($username == '' && \auth()->check()) {
             $user = Auth::user();
-            $myPage = true;
+            return \redirect(route('profile', ['username' => $user->username]));
         }
         else
             return \redirect(route('main'));

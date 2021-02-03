@@ -3,7 +3,7 @@
         <div class="inputReviewBodies">
             <div class="bodySec">
                 <h2 class="yourReviewHeader EmptyCommentIcon">
-                    دیدگاه شما
+                    پست جدید
                     <span class="iconClose" onclick="closeMyModal('newReviewSection')"></span>
                 </h2>
                 <div class="inputReviewSec">

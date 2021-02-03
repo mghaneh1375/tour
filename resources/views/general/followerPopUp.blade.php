@@ -116,7 +116,7 @@
                     createFollower(_kind, response.result)
                 };
             },
-            error: err => console.log(err)
+            // error: err => console.log(err)
         })
     }
 
@@ -212,13 +212,13 @@
                 response = JSON.parse(response);
                 if(response.status == 'store') {
                     $(_elem).addClass('followed');
-                    showSuccessNotifi('شما به لیست دنبال کنندگان افزوده شدید', 'left', 'var(--koochita-blue)');
+                    showSuccessNotifi('شما به لیست Follower ها افزوده شدید', 'left', 'var(--koochita-blue)');
                     $('.followerNumber').text(response.followerNumber);
                     $('.followingNumber').text(response.followingNumber);
                 }
                 else if(response.status == 'delete'){
                     $(_elem).removeClass('followed');
-                    showSuccessNotifi('شما از لیست دنبال کنندگان خارج شدید', 'left', 'red');
+                    showSuccessNotifi('شما از لیست Follower ها خارج شدید', 'left', 'red');
                     $('.followerNumber').text(response.followerNumber);
                     $('.followingNumber').text(response.followingNumber);
                 }

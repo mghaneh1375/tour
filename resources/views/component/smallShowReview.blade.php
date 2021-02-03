@@ -1,6 +1,3 @@
-
-
-
 <style>
     .reviewOptionMenuBar{
         display: none !important;
@@ -31,22 +28,17 @@
     }
 </style>
 
-
 <div id="fullReviewModal" class="fullReviewModal modalBlackBack">
     <div id="fullReview" class="fullReviewBody"></div>
 </div>
 
 <div id="reviewOptionMenuBar" class="modalBlackBack fullCenter reviewOptionMenuBar">
     <div class="modalBody">
-        <div class="reportReviwInOptionModal">گزارش پست</div>
+        <div class="reportReviwInOptionModal">گزارش پست </div>
         <a class="profileNameInReviewOptionModal" href="#"></a>
-        <a href="{{route("policies")}}" target="_blank">
-            صفحه قوانین و مقررات
-        </a>
+        <a href="{{route("policies")}}" target="_blank"> صفحه قوانین و مقررات </a>
         @if(auth()->check())
-            <div id="deleteReviewOptionInModal" style="color: red; border-bottom: none">
-                حذف پست
-            </div>
+            <div id="deleteReviewOptionInModal" style="color: red; border-bottom: none"> حذف پست </div>
         @endif
     </div>
 </div>
@@ -55,9 +47,9 @@
     var reviewSmallSample = `
         <div id="smallReviewHtml_##id##" class="smallReviewMainDivShown float-right position-relative">
         <div class="commentWriterDetailsShow">
-            <div class="circleBase type2 commentWriterPicShow">
+            <a href="##userPageUrl##" class="circleBase type2 commentWriterPicShow">
                 <img src="##userPic##" alt="##userName##" class="resizeImgClass" onload="fitThisImg(this)">
-            </div>
+            </a>
             <div class="commentWriterExperienceDetails" style="width: 100%">
                 <div style="display: flex; align-items: center">
                     <a href="##userPageUrl##" target="_blank" class="userProfileName" style="font-weight: bold">##userName##</a>
@@ -109,32 +101,31 @@
 
             </div>
         </div>
-    </div>
-    `;
+    </div>`;
 
-    var smallReviewPlaceHolder = `    <div class="smallReviewMainDivShown float-right position-relative">
-        <div class="commentWriterDetailsShow" style="display: flex;">
-            <div class="placeHolderAnime" style="width: 55px; height: 55px; float: right; border-radius: 50%"></div>
-            <div class="commentWriterExperienceDetails" style="display: flex; flex-direction: column; padding-right: 10px">
-                <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"></div>
-                <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"> </div>
-                <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"></div>
-            </div>
-        </div>
-        <div class="commentContentsShowPlaceHolder position-relative">
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 60%"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 90%"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 20%"></div>
-            <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
-        </div>
-        <div class="commentPhotosShow" style="border-top: 1px solid #e5e5e5; padding-top: 8px; margin-top: 5px;">
-            <div class=" placeHolderAnime reviewPicPlaceHolder"></div>
-        </div>
-    </div>
-`;
+    var smallReviewPlaceHolder = `<div class="smallReviewMainDivShown float-right position-relative">
+                                    <div class="commentWriterDetailsShow" style="display: flex;">
+                                        <div class="placeHolderAnime" style="width: 55px; height: 55px; float: right; border-radius: 50%"></div>
+                                        <div class="commentWriterExperienceDetails" style="display: flex; flex-direction: column; padding-right: 10px">
+                                            <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"></div>
+                                            <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"> </div>
+                                            <div class="userProfileName placeHolderAnime resultLineAnim" style="width: 100px"></div>
+                                        </div>
+                                    </div>
+                                    <div class="commentContentsShowPlaceHolder position-relative">
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 60%"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 90%"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview" style="width: 20%"></div>
+                                        <div class="userProfileName placeHolderAnime resultLineAnim reviewPlaceHolderTextLineSmallReview"></div>
+                                    </div>
+                                    <div class="commentPhotosShow" style="border-top: 1px solid #e5e5e5; padding-top: 8px; margin-top: 5px;">
+                                        <div class=" placeHolderAnime reviewPicPlaceHolder"></div>
+                                    </div>
+                                </div>`;
+
 </script>
 
 <script>
@@ -149,8 +140,6 @@
     var gearIconUrl = '{{URL::asset("images/icons/mGear.svg")}}';
 
     var isUserLoginCheckInSmall = '{{auth()->check()}}';
-
-    console.log(isUserLoginCheckInSmall);
 </script>
 
 <script async src="{{URL::asset('js/component/showSmallReview.js')}}"></script>

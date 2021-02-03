@@ -69,7 +69,7 @@
             <div class="userSearchSec">
                 <a href="{{route('profile')}}" class="leftBigArrowIcon" title="بازگشت"></a>
                 <div class="searchInp">
-                    <input id="searchInUser" type="text" onkeyup="searchInUsers(this.value)">
+                    <input id="searchInUser" type="text" onclick="searchInUsers(this.value)" readonly>
                     <div class="searchIcon"></div>
                     <div class="iconClose" style="display: none" onclick="clearSearchBox()"></div>
                 </div>
@@ -79,40 +79,43 @@
     </div>
 
     <script>
-        let contacts = {!! json_encode($contacts) !!};
-        let uId = {{auth()->user()->id}};
-        let showMsgUserId = 0;
-        let specUser = null;
-        let lastDate = '';
-        let lastSendMsg = '';
-        let lastId = 0;
-        let updateInterval = null;
-        let loadingMsg ='<div class="loading">\n' +
-                        '<img src="{{URL::asset("images/loading.gif?v=".$fileVersions)}}" style="width: 200px;">\n' +
-                        '</div>';
-
-        autosize($('textarea'));
-        $('.searchInp').on('click', function(){
-            $('#searchInUser').focus();
+        var contacts = {!! json_encode($contacts) !!};
+        var uId = {{auth()->user()->id}};
+        var showMsgUserId = 0;
+        var specUser = null;
+        var lastDate = '';
+        var lastSendMsg = '';
+        var lastId = 0;
+        var updateInterval = null;
+        var lastTopIndex = -1;
+        var koochitaNew = {{$newKoochitaMsg}};
+        var loadingMsg = `<div class="loading">
+                            <img src="{{URL::asset("images/loading.gif?v=".$fileVersions)}}" style="width: 200px;">
+                         </div>`;
+        $('.msgContent').on('scroll', e => {
+            var date = $('.Date');
+            date.map((index, item) => {
+                if(lastTopIndex != index) {
+                    var topIndex = $(item).position().top;
+                    if (topIndex <= 60){
+                        $('.Date.fixed').removeClass('fixed');
+                        lastTopIndex = index;
+                        $(item).addClass('fixed');
+                    }
+                }
+            })
         });
 
-        function searchInUsers(_value){
-            if(_value.trim().length == 0){
-                $('.searchInp').find('.searchIcon').show();
-                $('.searchInp').find('.iconClose').hide();
-                createContacts(contacts);
-            }
-            else{
-                $('.searchInp').find('.searchIcon').hide();
-                $('.searchInp').find('.iconClose').show();
+        autosize($('textarea'));
+        $('.searchInp').on('click', () => $('#searchInUser').focus());
 
-                showContacts = [];
-                contacts.map(item =>{
-                    if(item.username.search(_value) > -1)
-                        showContacts.push(item);
-                });
-                createContacts(showContacts);
-            }
+        function searchInUsers(_value){
+            openKoochitaUserSearchModal('جستجو کاربر', startNewConversation, '');
+        }
+
+        function startNewConversation(_id, _username){
+            // openLoading()
+            showThisMsgs(_id);
         }
 
         function clearSearchBox(){
@@ -123,7 +126,7 @@
         }
 
         function changeHeight(){
-            let height = $('.msgFooter').height();
+            var height = $('.msgFooter').height();
             height += 70;
             if(height < 110)
                 height = 110;
@@ -134,29 +137,10 @@
             $('.msgContent').css('height', 'calc(100% - ' + height + 'px)');
         }
 
-        let lastTopIndex = -1;
-        $('.msgContent').on('scroll', function(e){
-            let date = $('.Date');
-            date.map((index, item) => {
-                if(lastTopIndex != index) {
-                    let topIndex = $(item).position().top;
-                    if (topIndex <= 60){
-                        $('.Date.fixed').removeClass('fixed');
-                        lastTopIndex = index;
-                        $(item).addClass('fixed');
-                    }
-                }
-            })
-        });
-
         function backToList(){
             $('#msgBody').removeClass('showThis');
             $('#sideListUser').removeClass('hideThis');
         }
-
-        let koochitaNew = {{$newKoochitaMsg}};
-{{--        let koochitaNewMsg = {{$lastKoochitaMsg}};--}}
-//         console.log(koochitaNewMsg)
 
         function showThisMsgs(_id){
             $('#msgBody').addClass('showThis');
@@ -204,7 +188,7 @@
                     $("#bodyMsg").empty();
                     response = JSON.parse(response);
                     if(response.length == 0){
-                        let text =  '<div id="notMsg" class="notMsg">\n' +
+                        var text =  '<div id="notMsg" class="notMsg">\n' +
                                     '<div class="content">\n' +
                                     'هنوز هیچ پیامی برای کاربر ارسال نشده است.' +
                                     '</div>\n' +
@@ -225,8 +209,8 @@
         }
 
         function createMsgs(msg){
-            let classType;
-            let corner = '';
+            var classType;
+            var corner = '';
             $('#notMsg').remove();
             if(msg.date != lastDate){
                 $("#bodyMsg").append('<div class="Date">' + msg.date + '</div>');
@@ -249,7 +233,7 @@
                 lastSendMsg = 'other';
             }
 
-            let text =  '<div class="' + classType + ' ' + corner + '">\n' +
+            var text =  '<div class="' + classType + ' ' + corner + '">\n' +
                 '<div style="white-space: pre-wrap;">' + msg.message + '</div>\n' +
                 '<div class="time">' + msg.time + '</div>\n' +
                 '</div>';
@@ -260,7 +244,7 @@
         }
 
         function sendMsg(_element){
-            let text = $('#msgText').val();
+            var text = $('#msgText').val();
             if(text.trim().length > 0){
                 $(_element).hide();
                 $(_element).next().show();
@@ -300,43 +284,39 @@
         function createContacts(_contacts){
             $('#contacts').empty();
 
-            let text = '';
-            text += '<div id="user_0" class="userRow" onclick="showThisMsgs(0)">\n' +
-                    '                        <div class="userPic">\n' +
-                    '                            <img src="{{URL::asset('images/icons/KOFAV0.svg')}}" style="width: 100%">\n' +
-                    '                        </div>\n' +
-                    '                        <div class="userInfo">\n' +
-                    '                            <div class="userName">\n' +
-                    '                                <div>کوچیتا</div>\n' +
-                    '                                <div class="time"></div>\n' +
-                    '                            </div>\n' +
-                    '                            <div class="userLastMsg">\n' +
-                    '                                <div class="lastMsgCotacts">{{$lastKoochitaMsg}}</div>\n';
+            var text = `<div id="user_0" class="userRow" onclick="showThisMsgs(0)">
+                            <div class="userPic">
+                                <img src="{{URL::asset('images/icons/KOFAV0.svg')}}" style="width: 100%">
+                            </div>
+                            <div class="userInfo">
+                                <div class="userName">
+                                    <div>کوچیتا</div>
+                                    <div class="time"></div>
+                                </div>
+                                <div class="userLastMsg">
+                                    <div class="lastMsgCotacts">{{$lastKoochitaMsg}}</div>`;
             if(koochitaNew != 0)
-                text +=  '<div class="newMsg">' + koochitaNew + '</div>\n';
-            text += '                            </div>\n' +
-                    '                        </div>\n' +
-                    '                    </div>';
+                text +=  `<div class="newMsg">${koochitaNew}</div>`;
+
+            text += `</div></div></div>`;
             koochitaNew = 0;
 
             _contacts.map(item => {
-                text +=  '<div id="user_' + item.id + '" class="userRow" onclick="showThisMsgs(' + item.id + ')">\n' +
-                    '                        <div class="userPic">\n' +
-                    '                            <img src="' + item.pic + '" style="height: 100%">\n' +
-                    '                        </div>\n' +
-                    '                        <div class="userInfo">\n' +
-                    '                            <div class="userName">\n' +
-                    '                                <div>' + item.username + '</div>\n' +
-                    '                                <div class="time">' + item.lastTime + '</div>\n' +
-                    '                            </div>\n' +
-                    '                            <div class="userLastMsg">\n' +
-                    '                                <div class="lastMsgCotacts">' + item.lastMsg + '</div>\n';
+                text +=  `<div id="user_${item.id}" class="userRow" onclick="showThisMsgs(${item.id})">
+                            <div class="userPic">
+                                <img src="${item.pic}" style="height: 100%">
+                            </div>
+                            <div class="userInfo">
+                                <div class="userName">
+                                    <div>${item.username}</div>
+                                    <div class="time">${item.lastTime}</div>
+                                </div>
+                                <div class="userLastMsg">
+                                    <div class="lastMsgCotacts">${item.lastMsg}</div>`;
                 if(item.newMsg != 0)
-                    text +=  '                                <div class="newMsg">' + item.newMsg + '</div>\n';
+                    text += `<div class="newMsg">${item.newMsg}</div>`;
 
-                text +=  '                            </div>\n' +
-                    '                        </div>\n' +
-                    '                    </div>';
+                text += `</div></div></div>`;
             });
 
             $('#contacts').append(text);

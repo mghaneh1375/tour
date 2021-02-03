@@ -67,8 +67,13 @@ function openMobileFooterPopUps(_id){
 function mobileFooterProfileButton(_kind){
     let windowUrl = window.location;
     let url = windowUrl.origin + windowUrl.pathname;
-
-    if(url == profileUrl || url == profileUrl+'/'+window.user.username) {
+console.log(_kind, url);
+    if(_kind == 'setting')
+        window.location.href = userSettingPageUrl;
+    else if(_kind == 'follower')
+        openFollowerModal('resultFollowers', window.user.id); // in general.followerPopUp.blade.php
+    else if(url == profileUrl || url == profileUrl+'/'+window.user.username) {
+        closeMyModalClass('footerModals');
         if (_kind == 'review')
             mobileChangeProfileTab($('#reviewProfileMoblieTab'), 'review'); // in mainProfile.blade.php
         else if (_kind == 'photo')
@@ -83,14 +88,9 @@ function mobileFooterProfileButton(_kind){
             chooseFromMobileMenuTab('bookMark', $('#myMenuMoreTabBookMark')); // in mainProfile.blade.php
         else if (_kind == 'festival')
             chooseFromMobileMenuTab('festival', $('#myMenuMoreTabFestivalMark')); // in mainProfile.blade.php
-        closeMyModalClass('footerModals');
     }
-    else if(_kind == 'setting')
-        window.location.href = userSettingPageUrl;
-    else if(_kind == 'follower')
-        openFollowerModal('resultFollowers', window.user.id); // in general.followerPopUp.blade.php
     else
-        window.location.href = profileUrl+'#'+_kind;
+        window.location.href = profileUrl+'/'+window.user.username+'#'+_kind;
 }
 
 function lp_selectMenu(id , element) {

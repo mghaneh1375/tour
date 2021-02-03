@@ -633,7 +633,7 @@ class ReviewsController extends Controller
             $user = \auth()->user();
             $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->orderByDesc('created_at')->get();
         }
-        else if(isset($request->userId)){
+        else if(isset($username)){
             $user = User::where('username', $username)->first();
             $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->where('confirm', 1)->orderByDesc('created_at')->get();
         }

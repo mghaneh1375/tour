@@ -1725,17 +1725,28 @@ body {
     margin-right: 10px;
     direction: rtl;
 }
-.followButton.followed{
+.followButton.mobile{
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    padding: 5px 0px;
+    font-size: 18px;
+    margin: 10px 1%;
     background: var(--koochita-blue);
     color: white;
+}
+.followButton.followed{
+    background: white !important;
+    color: black !important;
+    border: solid 1px;
     display: flex;
     align-items: center;
 }
 .followButton .text:after{
-    content: 'دنبال کردن';
+    content: 'Follow';
 }
 .followButton.followed .text:after{
-    content: 'دنبال شده';
+    content: 'Following';
 }
 .followButton.followed .addMemberIcon{
     display: none;
@@ -1749,11 +1760,11 @@ body {
     z-index: 1;
     background: white;
     direction: rtl;
-    font-size: 14px;
+    font-size: 26px;
     padding: 0px 5px;
     border-radius: 5px 0px 0px 5px;
     right: 125px;
-    bottom: 60px;
+    bottom: 50px;
     width: max-content;
 }
 
@@ -1927,6 +1938,10 @@ body {
 }
 
 @media (max-width: 768px) {
+
+    .msgHeaderButton{
+        width: 100%;
+    }
 
     .userProfilePageCoverImg{
         height: 220px;

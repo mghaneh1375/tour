@@ -260,11 +260,17 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::middleware(['auth'])->group(function (){
         Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
+
         Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');
+
         Route::post('reviewUploadVideo', 'ReviewsController@reviewUploadVideo')->name('reviewUploadVideo');
+
         Route::post('deleteReviewPic', 'ReviewsController@deleteReviewPic')->name('deleteReviewPic');
+
         Route::post('review/store', 'ReviewsController@storeReview')->name('storeReview');
+
         Route::post('review/ans', 'ReviewsController@ansReview')->name('ansReview');
+
         Route::post('review/bookMark', 'ReviewsController@addReviewToBookMark')->name('review.bookMark');
 
         Route::post('review/delete', 'ReviewsController@deleteReview')->name('review.delete');
@@ -489,7 +495,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
     });
 });
-
 
 //festival
 Route::group(['middleware' => ['web', 'shareData']], function(){

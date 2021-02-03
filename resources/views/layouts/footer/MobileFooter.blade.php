@@ -3,6 +3,17 @@
         display: none;
     }
 
+    .addNewReviewButtonMobileFooter{
+        position: absolute;
+        top: calc(-50% + 10px);
+        width: 40px !important;
+        height: 40px !important;
+        background: var(--koochita-yellow);
+        border-radius: 50%;
+        font-size: 30px;
+        color: #333;
+    }
+
     @media (max-width: 767px) {
         .submitFiltersInMobile{
             display: block;
@@ -47,6 +58,7 @@
                 <span class="newMsgMainFooterCount">{{$authUserInfos->newMsg}}</span>
             @endif
         </div>
+        <div class="addNewReviewButtonMobileFooter plus2" onclick="openModalWriteNewReview()"></div>
     @else
         <div class="loginHelperSection footerLoginHelperSection hidden" onclick="closeLoginHelperSection()">
             <div class="login-button">
@@ -145,13 +157,9 @@
                 </div>
             </div>
 
-            <div class="overallMobileFooterModal newMyTripFooterButton plusIconAfter suitCaseIcon hidden" onclick="createTripFromMobileFooter()">
-                ایجاد سفر جدید
-            </div>
+            <div class="overallMobileFooterModal newMyTripFooterButton plusIconAfter suitCaseIcon hidden" onclick="createTripFromMobileFooter()"> ایجاد سفر جدید </div>
             @if(auth()->check())
-                <div class="overallMobileFooterModal seeAllBookMarkFooter BookMarkIconEmpty hidden" onclick="mobileFooterProfileButton('bookMark')">
-                    تمام نشان کرده ها
-                </div>
+                <div class="overallMobileFooterModal seeAllBookMarkFooter BookMarkIconEmpty hidden" onclick="mobileFooterProfileButton('bookMark')"> تمام نشان کرده ها </div>
             @endif
 
             <div class="lp_phoneMenuBar">
@@ -454,9 +462,9 @@
                 <div class="userInfoMobileFooterBody">
                     <div class="row" style="width: 100%; margin: 0px; flex-direction: column;">
                         <div class="firsLine">
-                            <div class="pic">
+                            <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="pic">
                                 <img src="{{isset($authUserInfos->pic) ? $authUserInfos->pic : ''}}" alt="userPic" class="resizeImgClass" onload="fitThisImg(this)"/>
-                            </div>
+                            </a>
                             <div class="infos">
                                 <div class="inf">
                                     <div class="number">1</div>
@@ -472,10 +480,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="secondLine">{{auth()->user()->username}}</div>
+                        <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
                         <div class="buttonsLine">
                             <div class="mBLine bLine">
-                                <div onclick="window.location.href='{{route("profile")}}'">
+                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">
                                     <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>
                                 </div>
                                 <div onclick="window.location.href='{{route("profile.message.page")}}'">

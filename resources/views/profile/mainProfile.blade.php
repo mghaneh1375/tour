@@ -2,6 +2,26 @@
 
 @section('title')
     <title>صفحه کاربری</title>
+
+    <style>
+
+        .mobileTabs .moreTabMenu{
+            position: absolute;
+            left: 13px;
+            top: 55px;
+            z-index: 9;
+            background: #f2f2f2;
+            text-align: center;
+            font-size: 16px;
+            padding: 2px 9px;
+            border: solid 2px #f2f2f2;
+            border-radius: 10px;
+        }
+        .mobileTabs .moreTabMenu .tabMenu{
+            margin: 10px 0px;
+            cursor: pointer;
+        }
+    </style>
 @stop
 
 @section('meta')
@@ -56,7 +76,7 @@
                         </div>
                         <div class="followerHeaderSection hideOnScreen" onclick="openFollowerModal('resultFollowers', {{$user->id}}) // in general.followerPopUp.blade.php">
                             <span class="followerNumber" style="font-weight: bold">{{$followersUserCount}}</span>
-                            <span style="font-size: 9px;">دنبال کننده</span>
+                            <span style="font-size: 9px;">Followers</span>
                         </div>
                         @if(isset($myPage) && $myPage)
                             <div class="addPicForUser" style="top: 10px; right: 15px;" onclick="openEditPhotoModal()">
@@ -80,7 +100,7 @@
                                     @endif
                                 </a>
                             @else
-                                <button class="msgHeaderButton followButton {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
+                                <button class="msgHeaderButton followButton hideOnPhone {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
                                     <span class="addMemberIcon"></span>
                                     <span class="text"></span>
                                 </button>
@@ -113,7 +133,7 @@
                             </a>
                             <a id="followerTab" href="#" class="profileHeaderLinksTab" onclick="openFollowerModal('resultFollowers', {{$user->id}}) // in general.followerPopUp.blade.php">
                                 <span class="icon twoManIcon"></span>
-                                <span class="text">دنبال کنندگان</span>
+                                <span class="text">Followers</span>
                             </a>
                             @if(isset($myPage) && $myPage)
                                 <a id="bookMarkTab" href="#bookMark" class="profileHeaderLinksTab" onclick="changePages('bookMark')" style="margin-left: 20px;">
@@ -131,6 +151,11 @@
                 </div>
 
                 <div class="profileMobileSection">
+                    <button class="msgHeaderButton followButton mobile hideOnScreen {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
+{{--                        <span class="addMemberIcon"></span>--}}
+                        <span class="text"></span>
+                    </button>
+
                     <div class="bioSec">
                         <div class="mainDivHeaderText" onclick="showFullUserInfoInMobile(this)">
                             <h3>{{$user->username}}</h3>
@@ -144,26 +169,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <style>
-                        .mobileTabs .moreTabMenu{
-                            position: absolute;
-                            left: 13px;
-                            top: 55px;
-                            z-index: 9;
-                            background: #f2f2f2;
-                            text-align: center;
-                            font-size: 16px;
-                            padding: 2px 9px;
-                            border: solid 2px #f2f2f2;
-                            border-radius: 10px;
-                        }
-                        .mobileTabs .moreTabMenu .tabMenu{
-                            margin: 10px 0px;
-                            cursor: pointer;
-                        }
-                    </style>
-
                     <div id="stickyProfileHeader" class="profileMobileStickHeader">
                         <div class="mobileTabs">
                             @if(isset($myPage) && $myPage)

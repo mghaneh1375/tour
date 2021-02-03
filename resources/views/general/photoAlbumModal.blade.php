@@ -14,11 +14,11 @@
             </div>
 
             <div class="userInfoPhotoAlbum hideOnScreen">
-                <div class="fullyCenterContent userPictureDiv circleBase type2">
+                <a href="#" class="fullyCenterContent userPictureDiv circleBase type2 userProfileLinks">
                     <img class="photoAlbumUserPic resizeImgClass" alt="کوچیتا، سامانه جامع گردشگری ایران"  style="width: 100%" onload="fitThisImg(this)">
-                </div>
+                </a>
                 <div class="commentWriterExperienceDetails" style="width: calc(100% - 60px)">
-                    <a href="#" class="userProfileName photoAlbumUserName"></a>
+                    <a href="#" class="userProfileName photoAlbumUserName userProfileLinks"></a>
                     <a href="#" target="_blank" class="photoAlbumWhere" ></a>
                     <div>
                         <div class="photoAlbumUploadTime"></div>
@@ -54,11 +54,11 @@
                 </div>
                 <div id="rightColPhotosModalMainDiv" class="col-xs-12 col-sm-3 rightColPhotosModalMainDiv" style="max-height: 85vh; overflow: hidden;">
                     <div class="userInfoPhotoAlbum hideOnPhone">
-                        <div class="fullyCenterContent userPictureDiv circleBase type2">
+                        <a href="#" class="fullyCenterContent userPictureDiv circleBase type2 userProfileLinks">
                             <img alt="کوچیتا، سامانه جامع گردشگری ایران" class="photoAlbumUserPic resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
-                        </div>
+                        </a>
                         <div class="commentWriterExperienceDetails photoAlbumTopUserName" style="width: calc(100% - 60px)">
-                            <a href="#" class="userProfileName photoAlbumUserName"></a>
+                            <a href="#" class="userProfileName photoAlbumUserName userProfileLinks"></a>
                             <a href="#" target="_blank" class="photoAlbumWhere" ></a>
                             <div>
                                 <div class="photoAlbumUploadTime" style="color: #9aa0a6;"></div>
@@ -164,9 +164,8 @@
 
         $('.photoAlbumUploadTime').text(sidePics[_index]['uploadTime']);
         $('.photoAlbumUserName').text(sidePics[_index]['userName']);
-        $('.photoAlbumUserName').attr('href', "{{url('profile/index')}}/" + sidePics[_index]['userName']);
-        $('.photoAlbumWhere').text(sidePics[_index]['where'] ? sidePics[_index]['where'] : '');
-        $('.photoAlbumWhere').attr('href', sidePics[_index]['whereUrl']);
+        $('.userProfileLinks').attr('href', "{{url('profile/index')}}/" + sidePics[_index]['userName']);
+        $('.photoAlbumWhere').text(sidePics[_index]['where'] ? sidePics[_index]['where'] : '').attr('href', sidePics[_index]['whereUrl']);
         $('.photoAlbumUserPic').attr('src', sidePics[_index]['userPic']);
 
         $('#sideAlbumPic' + _index).addClass('chooseSidePhotoAlbum');

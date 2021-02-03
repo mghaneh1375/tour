@@ -38,9 +38,11 @@
         koochitaUserModalSelectUser = _selectUserCallBack;
 
         $('#koochitaUserSearchModalTitle').text(_title);
-        $('#koochitaUserSearchModalInput').val('');
 
         openMyModal('koochitaUserSearchModal');
+
+        $('#koochitaUserSearchModalInput').val('');
+        setTimeout(() => $('#koochitaUserSearchModalInput').focus(), 400);
     }
 
     function openKoochitaUserSearchInput(_value){

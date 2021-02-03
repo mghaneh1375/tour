@@ -1595,12 +1595,17 @@ a:hover {
     margin-right: auto;
     border: solid gray 1px;
     padding: 2px 10px;
-    font-size: 11px;
+    font-size: 16px;
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
+    background: var(--koochita-blue);
+    border: var(--koochita-blue);
+    color: white;
+    width: 100px;
 }
 .followerModal .body .peopleRow .sendMsgButton{
     margin-right: auto;
@@ -1614,24 +1619,31 @@ a:hover {
     color: white;
     margin-left: 5px;
     width: 65px;
+    display: none;
 }
 .followerModal .body .peopleRow .button:before{
-    content: 'دنبال کردن';
+    content: 'Follow';
 }
 .followerModal .body .peopleRow .button.followed:before{
-    content: 'دنبال شده';
+    content: 'Following';
 }
 .followerModal .body .peopleRow .button.followed{
     background: var(--koochita-blue);
-    color: white;
-    padding: 3px 5px;
     border: var(--koochita-blue);
-    width: 68px;
+
+    background: white;
+
+    color: white;
+    color: black;
+
+    border: solid 1px black;
+    padding: 3px 5px;
+    width: 100px;
 }
-.followerModal .body .peopleRow .button.followed:after{
-    content: "\E02B" !important;
-    font-family: Shazde_Regular2 !important;
-}
+/*.followerModal .body .peopleRow .button.followed:after{*/
+/*    content: "\E02B" !important;*/
+/*    font-family: Shazde_Regular2 !important;*/
+/*}*/
 .followerModal .body .emptyPeople{
     display: flex;
     flex-direction: column;
@@ -1730,7 +1742,6 @@ a:hover {
     left: 0px;
     top: 0px;
     font-size: 40px;
-    display: none;
 }
 .writeNewReviewModal .inputReviewSec .firsRow{
     display: flex;
@@ -1887,7 +1898,7 @@ a:hover {
 
 .inputReviewSec .uploadedFiles{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 
