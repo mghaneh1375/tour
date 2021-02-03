@@ -874,11 +874,20 @@ class HomeController extends Controller
             else if($item->referenceTable == 'log'){
                 $reference = LogModel::find($item->referenceId);
                 if($reference != null) {
-                    $kindPlaceId = $reference->kindPlaceId;
-                    $placeId = $reference->placeId;
-                    $kindPlace = Place::find($kindPlaceId);
-                    $place = \DB::table($kindPlace->tableName)->find($placeId);
-                    $placeUrl = createUrl($kindPlaceId, $placeId, 0, 0, 0);
+
+                    $setPlace = false;
+                    $linkInMsg = '';
+                    if($reference->kindPlaceId != 0 && $reference->placeId != 0){
+                        $kindPlaceId = $reference->kindPlaceId;
+                        $placeId = $reference->placeId;
+                        $kindPlace = Place::find($kindPlaceId);
+                        $place = \DB::table($kindPlace->tableName)->find($placeId);
+                        $placeUrl = route('placeDetails', ['kindPlaceId' => $kindPlaceId, 'placeId' => $placeId]);
+
+                        $linkInMsg = ' برای ' . "<a href='{$placeUrl}' class='alertUrl'>{$place->name}</a>";
+                        $setPlace = true;
+                    }
+
 
                     if ($item->subject == 'addReview' || $item->subject == 'addQuestion' || $item->subject == 'addAns'){
                         if($item->subject == 'addReview')
@@ -888,23 +897,23 @@ class HomeController extends Controller
                         else if($item->subject == 'addAns')
                             $refName = 'پاسخ';
 
-                        $alertText = $refName . ' شما با موفقیت برای ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . 'ثبت گردید.';
+                        $alertText = $refName . ' شما با موفقیت ' . $linkInMsg . 'ثبت گردید.';
                         $item->color = $greenColor;
                     }
                     else if ($item->subject == 'deleteReviewPic') {
-                        $alertText = 'عکسی از دیدگاه شما برای ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . 'به دلیل مغایرت با قوانین سایت حذف گردید.';
+                        $alertText = 'عکسی از دیدگاه شما ' . $linkInMsg . 'به دلیل مغایرت با قوانین سایت حذف گردید.';
                         $item->color = $redColor;
                     }
                     else if ($item->subject == 'deleteReviewVideo') {
-                        $alertText = 'ویدیویی از دیدگاه شما برای ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . 'به دلیل مغایرت با قوانین سایت حذف گردید.';
+                        $alertText = 'ویدیویی از دیدگاه شما ' . $linkInMsg . 'به دلیل مغایرت با قوانین سایت حذف گردید.';
                         $item->color = $redColor;
                     }
                     else if ($item->subject == 'addReport') {
-                        $alertText = 'گزارش شما برای پستی در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . ' با موفقیت ثبت شد.';
+                        $alertText = 'گزارش شما برای پستی در ' . $linkInMsg . ' با موفقیت ثبت شد.';
                         $item->color = $greenColor;
                     }
                     else if ($item->subject == 'confirmReport') {
-                        $alertText = 'گزارش شما برای پستی در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . ' در حال بررسی می باشد. با تشکر از همکاری شما.';
+                        $alertText = 'گزارش شما برای پستی در ' . $linkInMsg . ' در حال بررسی می باشد. با تشکر از همکاری شما.';
                         $item->color = $greenColor;
                     }
                     else if($item->subject == 'ansAns'){
@@ -915,9 +924,9 @@ class HomeController extends Controller
                         $releatedLog = LogModel::find($reference->relatedTo);
 
                         if($releatedLog->activityId == $reviewActivity->id)
-                            $alertText = $uRef->username . ' برای دیدگاه شما در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> نظر نوشت.';
+                            $alertText = $uRef->username . ' برای دیدگاه شما در '.$linkInMsg.' نظر نوشت.';
                         if($releatedLog->activityId == $quesActivity->id)
-                            $alertText = $uRef->username . ' برای سوال شما در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> پاسخ نوشت.';
+                            $alertText = $uRef->username . ' برای سوال شما در '.$linkInMsg.' پاسخ نوشت.';
                         else if($releatedLog->activityId == $ansActivity->id){
 
                             $notAns = LogModel::find($releatedLog->relatedTo);
@@ -938,7 +947,10 @@ class HomeController extends Controller
 
                             $refrefUser = User::find($notAns->visitorId);
 
-                            $alertText = $uRef->username . ' برای ' . $refKind . ' شما در ' . $refRefKind . $refrefUser->username . ' در '. '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> .پاسخ نوشت.';
+                            $alertText = $uRef->username . ' برای ' . $refKind . ' شما در ' . $refRefKind . $refrefUser->username;
+                            if($setPlace)
+                                $alertText .= ' در '. '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>';
+                            $alertText .= '.پاسخ نوشت';
                         }
 
                         $item->color = $greenColor;
@@ -946,7 +958,7 @@ class HomeController extends Controller
 
                     if(isset($alertText)) {
                         $item->msg = $alertText;
-                        $item->pic = getPlacePic($placeId, $kindPlaceId, 'l');
+                        $item->pic = $setPlace ? getPlacePic($placeId, $kindPlaceId, 'l') : \URL::asset("images/mainPics/noPicSite.jpg");
 
                         array_push($result, $item);
                     }
@@ -960,20 +972,23 @@ class HomeController extends Controller
                     $referenceLog = LogModel::find($reference->logId);
                     if($referenceLog != null){
 
-                        $kindPlaceId = $referenceLog->kindPlaceId;
-                        $placeId = $referenceLog->placeId;
-                        $kindPlace = Place::find($kindPlaceId);
-                        $place = \DB::table($kindPlace->tableName)->find($placeId);
-                        $placeUrl = createUrl($kindPlaceId, $placeId, 0, 0, 0);
+                        $setPlace = false;
+                        if($referenceLog->kindPlaceId != 0 && $referenceLog->placeId != 0) {
+                            $kindPlaceId = $referenceLog->kindPlaceId;
+                            $placeId = $referenceLog->placeId;
+                            $kindPlace = Place::find($kindPlaceId);
+                            $place = \DB::table($kindPlace->tableName)->find($placeId);
+                            $placeUrl = createUrl($kindPlaceId, $placeId, 0, 0, 0);
+                            $setPlace = true;
+                        }
 
                         if ($item->subject == 'likeReview' || $item->subject == 'dislikeReview') {
                             $uRef = User::find($reference->userId);
-                            $alertText = $uRef->username . ' دیدگاه شما را در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>';
-                            if(strpos($item->subject, 'dislike') !== false)
-                                $alertText .= ' نپسندید.';
-                            else
-                                $alertText .= ' پسندید.';
+                            $alertText = $uRef->username . ' دیدگاه شما را ';
+                            if($setPlace)
+                                $alertText .= ' در ' . "  <a href='{$placeUrl}' class='alertUrl'>{$place->name}</a>";
 
+                            $alertText .= strpos($item->subject, 'dislike') !== false ? ' نپسندید.' : ' پسندید.';
                             $item->color = $greenColor;
                         }
                         else if ($item->subject == 'likeAns' || $item->subject == 'dislikeAns') {
@@ -984,9 +999,9 @@ class HomeController extends Controller
                             $releatedLog = LogModel::find($reference->logId);
 
                             if ($releatedLog->activityId == $reviewActivity->id)
-                                $alertText = $uRef->username . ' دیدگاه شما را در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> ';
+                                $alertText = $uRef->username . ' دیدگاه شما را در ';
                             if ($releatedLog->activityId == $quesActivity->id)
-                                $alertText = $uRef->username . ' سوال شما را در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> ';
+                                $alertText = $uRef->username . ' سوال شما را در ';
                             else if ($releatedLog->activityId == $ansActivity->id) {
                                 $notAns = LogModel::find($releatedLog->relatedTo);
                                 while (true) {
@@ -998,26 +1013,25 @@ class HomeController extends Controller
                                 if ($notAns->activityId == $reviewActivity->id) {
                                     $refRefKind = ' دیدگاه ';
                                     $refKind = 'نظر';
-                                } else if ($notAns->activityId == $quesActivity->id) {
+                                }
+                                else if ($notAns->activityId == $quesActivity->id) {
                                     $refRefKind = ' سوال ';
                                     $refKind = 'پاسخ';
                                 }
-
                                 $refrefUser = User::find($notAns->visitorId);
-
-                                $alertText = $uRef->username  . $refKind . ' شما را در ' . $refRefKind . $refrefUser->username . ' در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a> ';
+                                $alertText = $uRef->username  . $refKind . ' شما را در ' . $refRefKind . $refrefUser->username;
                             }
-                            if (strpos($item->subject, 'dislike') !== false)
-                                $alertText .= ' نپسندید.';
-                            else
-                                $alertText .= ' پسندید.';
+
+                            if($setPlace)
+                                $alertText .= ' در ' . "  <a href='{$placeUrl}' class='alertUrl'>{$place->name}</a>";
+
+                            $alertText .= strpos($item->subject, 'dislike') !== false ? ' نپسندید.' : ' پسندید.';
                             $item->color = $greenColor;
                         }
 
                         if(isset($alertText)) {
                             $item->msg = $alertText;
-                            $item->pic = getPlacePic($placeId, $kindPlaceId, 'l');
-
+                            $item->pic = $setPlace ? getPlacePic($placeId, $kindPlaceId, 'l') : \URL::asset("images/mainPics/noPicSite.jpg");
                             array_push($result, $item);
                         }
                     }

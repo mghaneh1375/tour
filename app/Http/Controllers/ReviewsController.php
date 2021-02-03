@@ -40,6 +40,9 @@ use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {
+
+    public $limboLocation = __DIR__ . '/../../../../assets/limbo';
+
     public function showReviewPage($id)
     {
         $activity = Activity::where('name', 'نظر')->first();
@@ -57,74 +60,115 @@ class ReviewsController extends Controller
 
     public function reviewUploadPic(Request $request)
     {
-        $location = __DIR__ . '/../../../../assets/limbo';
-
+        $location = $this->limboLocation;
         if (!file_exists($location))
             mkdir($location);
 
-        if (isset($_FILES['pic']) && isset($request->code) && $_FILES['pic']['error'] == 0) {
+        if($request->kind == 'thumbnail')
+            return response()->json($this->uploadThumbnailVideo($request));
+        else {
+            if (isset($_FILES['pic']) && isset($request->code) && $_FILES['pic']['error'] == 0) {
+                $valid_ext = array('image/jpeg', 'image/png', 'image/webp', 'image/jpg');
+                $fileType = strtolower($_FILES['pic']['type']);
+                if (in_array($fileType, $valid_ext)) {
+                    $fileType = explode('.', $_FILES['pic']['name']);
 
-            $valid_ext = array('image/jpeg', 'image/png');
-            if (in_array($_FILES['pic']['type'], $valid_ext)) {
-                $filename = time() . '_' . pathinfo($_FILES['pic']['name'], PATHINFO_FILENAME) . '.jpg';
-                $destinationMainPic = $location . '/' . $filename;
-                compressImage($_FILES['pic']['tmp_name'], $destinationMainPic, 60);
+                    $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
+                    $image = $request->file('pic');
+                    $filename = resizeImage($image, $size);
 
-                $newPicReview = new ReviewPic();
-                $newPicReview->pic = $filename;
-                $newPicReview->code = $request->code;
-                $newPicReview->save();
+                    $code = $request->code == 'false' ? \auth()->user()->id . '_' . generateRandomString(4) : $request->code;
 
-                echo json_encode(['ok', $filename]);
-            } else
-                echo 'nok2';
-        } else
-            echo 'nok3';
+                    $newPicReview = new ReviewPic();
+                    $newPicReview->pic = $filename;
+                    $newPicReview->code = $code;
+                    $newPicReview->save();
 
-        return;
+                    return response()->json(['status' => 'ok', 'result' => ['fileName' => $filename, 'code' => $code]]);
+                } else
+                    return response()->json(['status' => 'nok2']);
+            }
+            else
+                return response()->json(['status' => 'nok3']);
+        }
+    }
+
+    private function uploadThumbnailVideo($request){
+        $location = $this->limboLocation;
+        if (!file_exists($location))
+            mkdir($location);
+
+        $thumbnailFileName = time().rand(1000, 9999).'.png';
+        $filePath = "{$location}/{$thumbnailFileName}";
+
+        $success = uploadLargeFile($filePath, $request->file);
+        if($success){
+
+            $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
+            $image = file_get_contents($filePath);
+            $thumbnailFileName = resizeUploadedImage($image, $size, $thumbnailFileName);
+
+            ReviewPic::where('code', $request->code)
+                        ->where('pic', $request->fileName)
+                        ->update(['thumbnail' => $thumbnailFileName]);
+
+            return ['status' => 'ok', 'result' => ['fileName' => $thumbnailFileName, 'code' => $request->code]];
+        }
+        else
+            return ['status' => 'error6'];
     }
 
     public function reviewUploadVideo(Request $request)
     {
-        $location = __DIR__ . '/../../../../assets/limbo';
+        $location = $this->limboLocation;
 
         if (!file_exists($location))
             mkdir($location);
 
-        if (isset($_FILES['video']) && isset($request->code)) {
-            $filename = time() . '_' . $_FILES['video']['name'];
-            $destinationMainPic = $location . '/' . $filename;
-            move_uploaded_file($_FILES['video']['tmp_name'], $destinationMainPic);
+        if (isset($_FILES['video'])) {
+            $isVideo = 0;
+            $is360 = 0;
 
-            $img = $_POST['videoPic'];
-            $img = str_replace('data:image/png;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $videoArray = explode('.', $filename);
-            $videoName = '';
-            for ($k = 0; $k < count($videoArray) - 1; $k++)
-                $videoName .= $videoArray[$k] . '.';
-            $videoName .= 'png';
+            $code = $request->code == 'false' ? \auth()->user()->id.'_'.generateRandomString(4) : $request->code;
+            if (isset($request->isVideo) && $request->isVideo == 1)
+                $isVideo = 1;
 
-            $file = __DIR__ . '/../../../../assets/limbo/' . $videoName;
-            $success = file_put_contents($file, $data);
+            if (isset($request->is360) && $request->is360 == 1){
+                $isVideo = 1;
+                $is360 = 1;
+            }
+
+            $fileType = explode('.', $_FILES['video']['name']);
+            $filename = time().rand(1000, 9999).'.'.end($fileType);
+
+            move_uploaded_file($_FILES['video']['tmp_name'], "{$location}/{$filename}");
+
+            if(isset($_POST['videoPic'])) {
+                $img = $_POST['videoPic'];
+                $img = str_replace('data:image/png;base64,', '', $img);
+                $img = str_replace(' ', '+', $img);
+                $data = base64_decode($img);
+                $videoArray = explode('.', $filename);
+                $videoName = '';
+                for ($k = 0; $k < count($videoArray) - 1; $k++)
+                    $videoName .= $videoArray[$k] . '.';
+                $videoName .= 'png';
+
+                $file = $this->limboLocation.'/'.$videoName;
+                $success = file_put_contents($file, $data);
+            }
 
             $newPicReview = new ReviewPic();
             $newPicReview->pic = $filename;
-            $newPicReview->code = $request->code;
-            if (isset($request->isVideo) && $request->isVideo == 1)
-                $newPicReview->isVideo = 1;
-            if (isset($request->is360) && $request->is360 == 1) {
-                $newPicReview->is360 = 1;
-                $newPicReview->isVideo = 1;
-            }
+            $newPicReview->code = $code;
+            $newPicReview->is360 = $is360;
+            $newPicReview->isVideo = $isVideo;
             $newPicReview->save();
 
-            echo json_encode(['ok', $filename]);
-        } else
-            echo 'nok3';
-
-        return;
+            return response()->json(['status' => 'ok', 'result' => ['fileName' => $filename, 'code' => $code]]);
+        }
+        else
+            return response()->json(['status' => 'nok3']);
     }
 
     public function deleteReviewPic(Request $request)
@@ -136,27 +180,30 @@ class ReviewsController extends Controller
 
         if ($pics != null) {
             if ($pics->isVideo == 1) {
-                $videoArray = explode('.', $pics->pic);
-                $videoName = '';
-                for ($k = 0; $k < count($videoArray) - 1; $k++)
-                    $videoName .= $videoArray[$k] . '.';
-                $videoName .= 'png';
-
-                $location2 = __DIR__ . '/../../../../assets/limbo/' . $videoName;
-
-                if (file_exists($location2)) {
-                    unlink($location2);
+                if($pics->thumbnail != null)
+                    $videoName = $pics->thumbnail;
+                else {
+                    $videoArray = explode('.', $pics->pic);
+                    $videoName = '';
+                    for ($k = 0; $k < count($videoArray) - 1; $k++)
+                        $videoName .= $videoArray[$k] . '.';
+                    $videoName .= 'png';
                 }
-            }
-            $location = __DIR__ . '/../../../../assets/limbo/' . $pics->pic;
-            if (file_exists($location))
-                unlink($location);
-            $pics->delete();
-            echo 'ok';
-        } else
-            echo 'nok';
 
-        return;
+                $thumbnailLocation = $this->limboLocation.'/'.$videoName;
+                if (file_exists($thumbnailLocation))
+                    unlink($thumbnailLocation);
+            }
+
+            $picLocation = "{$this->limboLocation}/{$pics->pic}";
+            if (file_exists($picLocation))
+                unlink($picLocation);
+            $pics->delete();
+
+            return response()->json(['status' => 'ok']);
+        }
+        else
+            return response()->json(['status' => 'nok']);
     }
 
     public function doEditReviewPic(Request $request)
@@ -165,7 +212,7 @@ class ReviewsController extends Controller
             $name = $request->name;
             $code = $request->code;
 
-            $location = __DIR__ . '/../../../../assets/limbo/' . $name;
+            $location = $this->limboLocation.'/'.$name;
             if (file_exists($location))
                 unlink($location);
 
@@ -183,14 +230,21 @@ class ReviewsController extends Controller
     {
         $activity = Activity::where('name', 'نظر')->first();
 
-        if (isset($request->placeId) && isset($request->kindPlaceId) && isset($request->code)) {
+        if (isset($request->code)) {
 
-            $placeId = $request->placeId;
+            $kindPlaceId = 0;
+            $placeId = 0;
+            $kindPlaceName = 'nonePlaces';
+            if(isset($request->placeId) && $request->placeId != 0 && isset($request->kindPlaceId) && $request->kindPlaceId != 0){
+                $kindPlaceId = $request->kindPlaceId;
+                $placeId = $request->placeId;
+
+                $kindPlace = Place::find($kindPlaceId);
+                $place = DB::table($kindPlace->tableName)->find($placeId);
+                $kindPlaceName = $kindPlace->fileName;
+            }
+
             $uId = Auth::user()->id;
-            $kindPlaceId = $request->kindPlaceId;
-            $kindPlace = Place::find($kindPlaceId);
-            $place = DB::table($kindPlace->tableName)->find($placeId);
-            $kindPlaceName = $kindPlace->fileName;
 
             $log = new LogModel();
             $log->placeId = $placeId;
@@ -203,33 +257,38 @@ class ReviewsController extends Controller
             $log->save();
 
             $reviewPic = ReviewPic::where('code', $request->code)->get();
-            ReviewPic::where('code', $request->code)->update(['logId' => $log->id]);
 
             if (count($reviewPic) > 0) {
-                $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlaceName;
-                if (!file_exists($location))
-                    mkdir($location);
-                $location .= '/' . $place->file;
-                if (!file_exists($location))
-                    mkdir($location);
+                ReviewPic::where('code', $request->code)->update(['logId' => $log->id]);
 
-                $limboLocation = __DIR__ . '/../../../../assets/limbo/';
+                $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlaceName}";
+                if (!file_exists($location))
+                    mkdir($location);
+                if($placeId != 0) {
+                    $location .= '/' . $place->file;
+                    if (!file_exists($location))
+                        mkdir($location);
+                }
 
                 foreach ($reviewPic as $item) {
-                    $file = $limboLocation . $item->pic;
-                    $dest = $location . '/' . $item->pic;
+                    $file = "{$this->limboLocation}/{$item->pic}";
+                    $dest = "{$location}/{$item->pic}";
                     if (file_exists($file))
                         rename($file, $dest);
 
                     if ($item->isVideo == 1) {
-                        $videoArray = explode('.', $item->pic);
-                        $videoName = '';
-                        for ($k = 0; $k < count($videoArray) - 1; $k++)
-                            $videoName .= $videoArray[$k] . '.';
-                        $videoName .= 'png';
+                        if($item->thumbnail != null)
+                            $videoName = $item->thumbnail;
+                        else{
+                            $videoArray = explode('.', $item->pic);
+                            $videoName = '';
+                            for ($k = 0; $k < count($videoArray) - 1; $k++)
+                                $videoName .= $videoArray[$k] . '.';
+                            $videoName .= 'png';
+                        }
 
-                        $file = $limboLocation . $videoName;
-                        $dest = $location . '/' . $videoName;
+                        $file = "{$this->limboLocation}/{$videoName}";
+                        $dest = "{$location}/{$videoName}";
                         if (file_exists($file))
                             rename($file, $dest);
                     }
@@ -329,7 +388,8 @@ class ReviewsController extends Controller
             $code = $uId . '_' . rand(10000, 99999);
 
             echo json_encode(['status' => 'ok', 'code' => $code]);
-        } else
+        }
+        else
             echo json_encode(['status' => 'nok']);
 
         return;
@@ -563,5 +623,218 @@ class ReviewsController extends Controller
 
         return;
     }
+
+
+    public function getUserReviews()
+    {
+        $username = $_GET['username'];
+        $reviewAct = Activity::where('name', 'نظر')->first();
+        if(\auth()->check() && ( $username == \auth()->user()->username) ){
+            $user = \auth()->user();
+            $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->orderByDesc('created_at')->get();
+        }
+        else if(isset($request->userId)){
+            $user = User::where('username', $username)->first();
+            $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->where('confirm', 1)->orderByDesc('created_at')->get();
+        }
+        else
+            return response()->json(['status' => 'error1']);
+
+        foreach ($reviews as $item)
+            $item = reviewTrueType($item); // in common.php
+
+        $reviews = $reviews->toArray();
+
+        return response()->json(['status' => 'ok', 'result' => $reviews]);
+    }
+
+    public function getSingleReview()
+    {
+        if(isset($_GET['id'])){
+            $review = LogModel::find($_GET['id']);
+            if($review != null) {
+                $review = reviewTrueType($review);
+                return response()->json(['status' => 'ok', 'result' => $review]);
+            }
+            else
+                return response()->json(['status' => 'nok1']);
+        }
+        else
+            return response()->json(['status' => 'nok']);
+    }
+
+    public function getCityPageReview(Request $request)
+    {
+        $kind = $_GET['kind'];
+        $placeId = $_GET['placeId'];
+        $take = 15;
+        $reviews = $this->getCityReviews($kind, $placeId, $take);
+        if(count($reviews) != $take){
+            $lessReview = [];
+            $notIn = [];
+            foreach ($reviews as $item)
+                array_push($notIn, $item->id);
+
+            if($kind == 'city'){
+                $place = Cities::find($placeId);
+                $less = $take - count($reviews);
+                $lessReview = $this->getCityReviews('state', $place->stateId, $less, $notIn);
+                foreach ($lessReview as $item)
+                    array_push($reviews, $item);
+            }
+
+            $less = $take - count($reviews);
+            if($less != 0){
+                $notIn = [];
+                foreach ($reviews as $item)
+                    array_push($notIn, $item->id);
+
+                $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
+                foreach ($lessReview as $item)
+                    array_push($reviews, $item);
+            }
+        }
+
+        foreach ($reviews as $item)
+            $item = reviewTrueType($item); // in common.php
+
+        return response()->json(['status' => 'ok', 'result' => $reviews]);
+    }
+
+    private function getCityReviews($kind, $id, $take, $notIn = [0]){
+        $reviewActivity = Activity::whereName('نظر')->first();
+
+        if($kind == 'city') {
+            $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
+            $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
+            $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
+            $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
+            $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
+            $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
+            $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
+        }
+        else if($kind == 'state'){
+            $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
+
+            $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
+        }
+        else{
+            if(count($notIn) == 0)
+                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 ORDER BY `date` DESC LIMIT ' . $take);
+            else
+                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
+
+            return $lastReview;
+        }
+
+
+        $sqlQuery = '';
+        if(count($allAmaken) != 0)
+            $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
+        if(count($allRestaurant) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
+        }
+        if(count($allHotels) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
+        }
+        if(count($allMajara) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
+        }
+        if(count($allSogatSanaie) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
+        }
+        if(count($allMahaliFood) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
+        }
+        if(count($allBoomgardy) != 0){
+            if($sqlQuery != '')
+                $sqlQuery .= ' OR ';
+            $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
+        }
+
+        $lastReview = [];
+
+        if($sqlQuery != '') {
+            if (count($notIn) == 0)
+                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') ORDER BY `date` DESC LIMIT ' . $take);
+            else
+                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
+        }
+
+        return $lastReview;
+    }
+
+
+    public function deleteReview(Request $request)
+    {
+        if(\auth()->check()){
+            $user = \auth()->user();
+            if(isset($request->id)){
+                $review = LogModel::find($request->id);
+                if($review != null && $review->visitorId == $user->id){
+                    $kindPlace = Place::find($review->kindPlaceId);
+                    $place = \DB::table($kindPlace->tableName)->find($review->placeId);
+                    $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
+                    $reviewPics = ReviewPic::where('logId', $review->id)->get();
+                    foreach ($reviewPics as $pic){
+                        if(is_file($location.'/'.$pic->pic))
+                            unlink($location.'/'.$pic->pic);
+                        $pic->delete();
+                    }
+
+                    $userAssigned = ReviewUserAssigned::where('logId', $review->id)->get();
+                    foreach ($userAssigned as $item){
+                        Alert::where('referenceId', $item->id)->where('referenceTable', 'reviewUserAssigned')->delete();
+                        $item->delete();
+                    }
+
+                    LogFeedBack::where('logId', $review->id)->delete();
+
+                    $anses = LogModel::where('relatedTo', $review->id)->get();
+                    foreach ($anses as $item)
+                        deleteAnses($item->id);
+
+                    QuestionUserAns::where('logId', $review->id)->delete();
+                    Report::where('logId', $review->id)->delete();
+
+                    $alert = new Alert();
+                    $alert->userId = $user->id;
+                    $alert->subject = 'deleteReviewByUser';
+                    $alert->referenceTable = $kindPlace->tableName;
+                    $alert->referenceId = $place->id;
+                    $alert->save();
+
+                    \DB::table($kindPlace->tableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
+                    $review->delete();
+                    echo 'ok';
+                }
+                else
+                    echo 'nok2';
+            }
+            else
+                echo 'nok1';
+        }
+        else
+            echo 'nok';
+
+        return;
+    }
+
 }
 

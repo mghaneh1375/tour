@@ -1,11 +1,3 @@
-{{--<div class="userProfilePostsFiltrationContainer">--}}
-{{--    <div class="userProfilePostsFiltration">--}}
-{{--        <span class="active" onclick="changeSortPost('new', this)">جدیدترین‌ها</span>--}}
-{{--        <span onclick="changeSortPost('top', this)">بهترین‌ها</span>--}}
-{{--        <span onclick="changeSortPost('hot', this)">داغ‌ترین‌ها</span>--}}
-{{--    </div>--}}
-{{--</div>--}}
-
 <div class="postsMainDivInSpecificMode col-xs-12">
 
     <div id="notData" class="col-xs-12 notData hidden">
@@ -34,7 +26,6 @@
 </div>
 
 <script>
-    let reviewSort = 'new';
     let allReviews = [];
 
     function getReviewsUserReview(){
@@ -44,29 +35,13 @@
         setSmallReviewPlaceHolder('leftPostSection'); // in component.smallShowReview.blade.php
         setSmallReviewPlaceHolder('rightPostSection'); // in component.smallShowReview.blade.php
 
-        let data;
-        if(userPageId == 0)
-            data = {
-                _token: '{{csrf_token()}}',
-                sort: reviewSort
-            };
-        else
-            data = {
-                _token: '{{csrf_token()}}',
-                userId: userPageId, // in mainProfile.blade.php
-                sort: reviewSort
-            };
-
         $('#notData').addClass('hidden');
         $.ajax({
-            type: 'post',
-            url: '{{route("profile.getUserReviews")}}',
-            data: data,
-            success: function(response){
-                response = JSON.parse(response);
+            type: 'GET',
+            url: '{{route("review.getUserReviews")}}?username='+userPageUsername,
+            success: response => {
                 if(response.status == 'ok'){
                     allReviews = response.result;
-
                     $('#leftPostSection').html('');
                     $('#rightPostSection').html('');
                     createReviews();
@@ -95,13 +70,6 @@
 
             odd = !odd;
         });
-    }
-
-    function changeSortPost(_kind, _element){
-        $(_element).parent().find('.active').removeClass('active');
-        $(_element).addClass('active');
-        reviewSort = _kind;
-        getReviewsUserReview()
     }
 
 </script>

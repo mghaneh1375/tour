@@ -16,6 +16,7 @@
         var allUserPics = {!! json_encode($sideInfos['allUserPics']) !!};
         var selectedTrip = [];
         var userPageId = {{$user->id}};
+        var userPageUsername = '{{$user->username}}';
         var openMobileMoreMenu = false;
         var defaultPics = null;
         var choosenPic = 0;

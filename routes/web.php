@@ -31,9 +31,6 @@ Route::get('language/{lang}', function($lang){
     Session::put('lang', $lang);
     return redirect()->back();
 });
-Route::get('seeLanguage', function(){
-   dd(app()->getLocale());
-});
 
 //sitemap
 Route::group(array(), function(){
@@ -192,7 +189,6 @@ Route::middleware(['throttle:60'])->group(function (){
     });
 
     Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
-    Route::get('getCityPageReview', 'CityController@getCityPageReview')->name('getCityPageReview');
     Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
@@ -206,8 +202,6 @@ Route::middleware(['nothing'])->group(function () {
     Route::get('getLastPassengers', 'AjaxController@getLastPassengers')->name('getLastPassengers');
 
     Route::get('searchPlace', 'AjaxController@searchPlace')->name('search.place');
-
-    Route::get('getSingleReview', 'AjaxController@getSingleReview')->name('getSingleReview');
 
     Route::get('searchForFoodMaterial', 'AjaxController@searchForFoodMaterial')->name('search.foodMaterial');
 
@@ -254,24 +248,28 @@ Route::middleware(['nothing'])->group(function () {
 
 //review section
 Route::middleware(['nothing'])->group(function () {
-
     Route::get('reviewPage/{id}', 'ReviewsController@showReviewPage')->name('review.page')->middleware('shareData');
 
-    Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
+    Route::get('review/getUserReviews', 'ReviewsController@getUserReviews')->name('review.getUserReviews');
 
-    Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');
+    Route::get('review/getSingleReview', 'ReviewsController@getSingleReview')->name('review.getSingleReview');
 
-    Route::post('reviewUploadVideo', 'ReviewsController@reviewUploadVideo')->name('reviewUploadVideo');
-
-    Route::post('deleteReviewPic', 'ReviewsController@deleteReviewPic')->name('deleteReviewPic');
-
-    Route::post('review/store', 'ReviewsController@storeReview')->name('storeReview');
-
-    Route::post('review/ans', 'ReviewsController@ansReview')->name('ansReview');
-
-    Route::post('review/bookMark', 'ReviewsController@addReviewToBookMark')->name('review.bookMark');
+    Route::get('review/getCityPageReview', 'ReviewsController@getCityPageReview')->name('review.getCityPageReview');
 
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
+
+    Route::middleware(['auth'])->group(function (){
+        Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
+        Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');
+        Route::post('reviewUploadVideo', 'ReviewsController@reviewUploadVideo')->name('reviewUploadVideo');
+        Route::post('deleteReviewPic', 'ReviewsController@deleteReviewPic')->name('deleteReviewPic');
+        Route::post('review/store', 'ReviewsController@storeReview')->name('storeReview');
+        Route::post('review/ans', 'ReviewsController@ansReview')->name('ansReview');
+        Route::post('review/bookMark', 'ReviewsController@addReviewToBookMark')->name('review.bookMark');
+
+        Route::post('review/delete', 'ReviewsController@deleteReview')->name('review.delete');
+    });
+
 });
 
 //safarnameh
@@ -331,8 +329,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
     Route::get('profile/index/{username?}', 'ProfileController@showProfile')->name('profile')->middleware('shareData');
 
     Route::post('/profile/getFollower', 'FollowerController@getFollower')->name('profile.getFollower');
-
-    Route::post('/profile/getUserReviews', 'ProfileController@getUserReviews')->name('profile.getUserReviews');
 
     Route::post('/profile/getUserMedals', 'ProfileController@getUserMedals')->name('profile.getUserMedals');
 
@@ -774,8 +770,6 @@ Route::get('provider2', function (){
 // delete contents
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::post('review/delete', 'DeleteContentController@deleteReview')->name('review.delete');
-
     Route::post('album/pics/delete', 'DeleteContentController@deleteAlbumPic')->name('album.pic.delete');
 
 });
@@ -786,7 +780,6 @@ Route::get('exportToExcelTT', 'HomeController@exportExcel');
 
 // not use
 Route::group(array('middleware' => ['nothing']), function () {
-//    Route::post('removeReview', array('as' => 'removeReview', 'uses' => 'NotUseController@removeReview'));
     Route::post('changeAddFriend', array('as' => 'changeAddFriend', 'uses' => 'NotUseController@changeAddFriend'));
     Route::any('majaraList/{city}/{mode}', array('as' => 'majaraList', 'uses' => 'NotUseController@showMajaraList'));
     Route::any('restaurantList/{city}/{mode}/{chert?}', array('as' => 'restaurantList', 'uses' => 'NotUseController@showRestaurantList'));

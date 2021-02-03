@@ -69,5 +69,11 @@ class Kernel extends HttpKernel
         'shareData' => \App\Http\Middleware\ShareData::class,
         'BusinessShareData' => \App\Http\Middleware\BusinessShareData::class,
         'shareNews' => \App\Http\Middleware\NewsShareData::class,
+
+
+        'csrfVeri' => \App\Http\Middleware\VerifyCsrfToken::class,
+        'BusinessPanelShareData' => \App\Http\Middleware\BusinessPanel\BusinessPanelShareData::class,
+        'BusinessPanelAuth' => \App\Http\Middleware\BusinessPanel\BusinessPanelAuth::class,
+        'BusinessPanelGuest' => \App\Http\Middleware\BusinessPanel\BusinessPanelGuest::class,
     ];
 }

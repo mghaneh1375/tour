@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 
 <head>
     @include('layouts.topHeader')
     <?php
         $placeTitleName = isset($place->state) ? $place->listName : $place->name;
     ?>
-    <title>
-         کوچیتا |معرفی اقامتگاه ها و جاهای دیدنی {{$placeTitleName}}
-    </title>
+    <title>کوچیتا |معرفی اقامتگاه ها و جاهای دیدنی {{$placeTitleName}} </title>
 
     <meta content="article" property="og:type"/>
     <meta name="title" content="{{$placeTitleName}} | اطلاعات گردشگری {{$placeTitleName}} – جاهای دیدنی {{$placeTitleName}} – هتل های {{$placeTitleName}} – رستوران های {{$placeTitleName}}- صنایع‌دستی و سوغات  {{$placeTitleName}} | کوچیتا" />
@@ -42,12 +40,6 @@
     <link rel="stylesheet" type='text/css' href="{{URL::asset('css/shazdeDesigns/usersActivities.css?v='.$fileVersions)}}">
     <link rel="stylesheet" type='text/css' href="{{URL::asset('css/theme2/article.min.css?v='.$fileVersions)}}"/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/cityPage.css?v='.$fileVersions)}}'/>
-
-
-    <style>
-
-    </style>
-
 </head>
 
 <body>
@@ -719,9 +711,9 @@
     function getReviews(){
         $.ajax({
             type: 'get',
-            url : '{{route("getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}',
-            success: function(response){
-                reviews = JSON.parse(response);
+            url : '{{route("review.getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}',
+            success: response => {
+                reviews = response.result;
                 createReviewSections();
             }
         })

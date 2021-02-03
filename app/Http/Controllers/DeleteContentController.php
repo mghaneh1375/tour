@@ -23,61 +23,6 @@ use Illuminate\Http\Request;
 
 class DeleteContentController extends Controller
 {
-    public function deleteReview(Request $request)
-    {
-        if(\auth()->check()){
-            $user = \auth()->user();
-            if(isset($request->id)){
-                $review = LogModel::find($request->id);
-                if($review != null && $review->visitorId == $user->id){
-                    $kindPlace = Place::find($review->kindPlaceId);
-                    $place = \DB::table($kindPlace->tableName)->find($review->placeId);
-                    $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
-                    $reviewPics = ReviewPic::where('logId', $review->id)->get();
-                    foreach ($reviewPics as $pic){
-                        if(is_file($location.'/'.$pic->pic))
-                            unlink($location.'/'.$pic->pic);
-                        $pic->delete();
-                    }
-
-                    $userAssigned = ReviewUserAssigned::where('logId', $review->id)->get();
-                    foreach ($userAssigned as $item){
-                        Alert::where('referenceId', $item->id)->where('referenceTable', 'reviewUserAssigned')->delete();
-                        $item->delete();
-                    }
-
-                    LogFeedBack::where('logId', $review->id)->delete();
-
-                    $anses = LogModel::where('relatedTo', $review->id)->get();
-                    foreach ($anses as $item)
-                        deleteAnses($item->id);
-
-                    QuestionUserAns::where('logId', $review->id)->delete();
-                    Report::where('logId', $review->id)->delete();
-
-                    $alert = new Alert();
-                    $alert->userId = $user->id;
-                    $alert->subject = 'deleteReviewByUser';
-                    $alert->referenceTable = $kindPlace->tableName;
-                    $alert->referenceId = $place->id;
-                    $alert->save();
-
-                    \DB::table($kindPlace->tableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
-                    $review->delete();
-                    echo 'ok';
-                }
-                else
-                    echo 'nok2';
-            }
-            else
-                echo 'nok1';
-        }
-        else
-            echo 'nok';
-
-        return;
-    }
-
     public function deleteAlbumPic(Request $request)
     {
         if(isset($request->id)){

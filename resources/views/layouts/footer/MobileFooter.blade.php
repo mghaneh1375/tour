@@ -573,9 +573,11 @@
                             <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">
                             <div>{{__('نوشتن سفرنامه')}}</div>
                         </div>
-                        <div class="lp_eachMenu" onclick="openUploadPost()">
+                        <div class="lp_eachMenu"
+{{--                             onclick="openUploadPost()"--}}
+                             onclick="openModalWriteNewReview()">
                             <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">
-                            <div>{{__('افزودن عکس')}}</div>
+                            <div>{{__('پست گذاشتن')}}</div>
                         </div>
                         <div class="lp_eachMenu" onclick="goToAddPlacePageInFooter()">
                             <img src="{{URL::asset('images/icons/koochit.svg')}}" class="profileMobileFooterImg" alt="koochitaSho">

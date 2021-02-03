@@ -96,20 +96,29 @@ class ProfileController extends Controller {
 
         $revAct = Activity::where('name', 'نظر')->first();
         $reviewLog = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->get();
-        $reviewLogId = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->pluck('id')->toArray();
+        $reviewLogId = $reviewLog->pluck('id')->toArray();
+
         $reviewPic = ReviewPic::where('isVideo', 0)->where('is360', 0)->whereIn('logId', $reviewLogId)->get();
         for($i = 0, $j = 0; $i < count($reviewPic) && $j < 3; $i++){
-            foreach ($reviewLog as $log){
-                if($log->id == $reviewPic[$i]->logId){
-                    $kindPlace = Place::find($log->kindPlaceId);
-                    $pl = \DB::table($kindPlace->tableName)->find($log->placeId);
+            foreach ($reviewLog as $item){
+                if($item->id == $reviewPic[$i]->logId){
+                    if($item->kindPlaceId == 0 && $item->placeId == 0){
+                        $kindPlace = null;
+                        $pl = null;
+                        $fileName = "nonePlaces";
+                    }
+                    else {
+                        $kindPlace = Place::find($item->kindPlaceId);
+                        $pl = \DB::table($kindPlace->tableName)->find($item->placeId);
+                        $fileName = "{$kindPlace->fileName}/{$pl->file}";
+                    }
                     break;
                 }
             }
 
-            $location1 = $location .'/'.$kindPlace->fileName.'/'.$pl->file.'/'.$reviewPic[$i]->pic;
+            $location1 = "{$location}/{$fileName}/{$reviewPic[$i]->pic}";
             if(is_file($location1)) {
-                $p = \URL::asset('userPhoto/'.$kindPlace->fileName.'/'.$pl->file.'/'.$reviewPic[$i]->pic);
+                $p = \URL::asset("userPhoto/{$fileName}/{$reviewPic[$i]->pic}");
                 $insert = [
                     'id' => 'review_' . $reviewPic[$i]->id,
                     'mainPic' => $p,
@@ -277,42 +286,6 @@ class ProfileController extends Controller {
         echo json_encode(['status' => 'ok', 'result' => $logs]);
     }
 
-    public function getUserReviews(Request $request)
-    {
-        $reviewAct = Activity::where('name', 'نظر')->first();
-        if(\auth()->check() && ( $request->userId == \auth()->user()->id || !isset($request->userId) ) ){
-            $user = \auth()->user();
-            $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->orderByDesc('date')->get();
-            $status = 'ok';
-        }
-        else if(isset($request->userId)){
-            $user = User::find($request->userId);
-            $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->where('confirm', 1)->orderByDesc('date')->get();
-            $status = 'ok';
-        }
-        else
-            $status = 'nok';
-
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
-
-        $reviews = $reviews->toArray();
-
-        if(isset($request->sort) && $request->sort != 'new') {
-            $sort = false;
-            if($request->sort == 'top')
-                $sort = array_column($reviews, 'like');
-            else if($request->sort == 'hot')
-                $sort = array_column($reviews, 'answersCount');
-
-            if($sort)
-                array_multisort($sort, SORT_DESC, $reviews);
-        }
-
-        echo json_encode(['status' => $status, 'result' => $reviews]);
-        return;
-    }
-
     public function getUserMedals(Request $request)
     {
         if(\auth()->check() && (\auth()->user()->id == $request->userId || $request->userId == 0))
@@ -390,54 +363,69 @@ class ProfileController extends Controller {
 
         $revAct = Activity::where('name', 'نظر')->first();
         $reviewLog = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->get();
-        $reviewLogId = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->pluck('id')->toArray();
+        $reviewLogId = $reviewLog->pluck('id')->toArray();
+
         $reviewPic = ReviewPic::whereIn('logId', $reviewLogId)->get();
         for($i = 0; $i < count($reviewPic); $i++){
             foreach ($reviewLog as $log){
                 if($log->id == $reviewPic[$i]->logId){
-                    $kindPlace = Place::find($log->kindPlaceId);
-                    $pl = \DB::table($kindPlace->tableName)->find($log->placeId);
-                    $city = Cities::find($pl->cityId);
-                    $state = State::find($city->stateId);
-                    break;
+                    if($log->kindPlaceId == 0 && $log->placeId == 0){
+                        $kindPlace = null;
+                        $pl = null;
+                        $fileName = "nonePlaces";
+                        $where = '';
+                        $placeUrl = '';
+                    }
+                    else {
+                        $kindPlace = Place::find($log->kindPlaceId);
+                        $pl = \DB::table($kindPlace->tableName)->find($log->placeId);
+                        $fileName = "{$kindPlace->fileName}/{$pl->file}";
+                        $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
+                            ->where('cities.id', $pl->cityId)
+                            ->select(['state.id AS stateId', 'cities.id AS cityId', 'cities.name AS cityName', 'state.name AS stateName'])
+                            ->first();
+                        $where = 'در ' . $pl->name . ' شهر ' . $cityAndState->cityName . ' استان ' . $cityAndState->stateName ;
+                        $placeUrl = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $pl->id]);
+                    }
                 }
             }
 
             if($reviewPic[$i]->isVideo == 1){
-                $videoArray = explode('.', $reviewPic[$i]->pic);
-                $videoName = '';
-                for($k = 0; $k < count($videoArray)-1; $k++)
-                    $videoName .= $videoArray[$k] . '.';
-                $videoName .= 'png';
+                if($reviewPic[$i]->thumbnail != null)
+                    $thumbnail = $reviewPic[$i]->thumbnail;
+                else{
+                    $videoArray = explode('.', $reviewPic[$i]->pic);
+                    $videoArray[count($videoArray)-1] = '.png';
+                    $thumbnail = implode('', $videoArray);
+                }
 
-                $loca1 = $location .'/'. $kindPlace->fileName . '/' . $pl->file . '/' . $videoName;
-                $loca2 = $location .'/'. $kindPlace->fileName . '/' . $pl->file . '/' . $reviewPic[$i]->pic;
+                $loca1 = "{$location}/{$fileName}/{$thumbnail}";
+                $loca2 = "{$location}/{$fileName}/{$reviewPic[$i]->pic}";
 
                 if(is_file($loca1) && is_file($loca2)) {
-                    $p = URL::asset('userPhoto/' . $kindPlace->fileName . '/' . $pl->file . '/' . $videoName);
-                    $v = URL::asset('userPhoto/' . $kindPlace->fileName . '/' . $pl->file . '/' . $reviewPic[$i]->pic);
+                    $p = URL::asset("userPhoto/{$fileName}/{$thumbnail}");
 
                     $insert = [
                         'id' => 'review_' . $reviewPic[$i]->id,
                         'mainPic' => $p,
                         'sidePic' => $p,
-                        'video' => $v,
+                        'video' => URL::asset("userPhoto/{$fileName}/{$reviewPic[$i]->pic}"),
                         'fileKind' => $reviewPic[$i]->is360 == 1 ? 'video360' : 'video',
                         'userName' => $user->username,
                         'userPic' => $user->picture,
                         'showInfo' => false,
                         'uploadTime' => getDifferenceTimeString($reviewPic[$i]->created_at),
                         'created_at' => $reviewPic[$i]->created_at,
-                        'where' => 'در ' . $pl->name . ' شهر ' . $city->name . ' استان ' . $state->name ,
-                        'whereUrl' => createUrl($kindPlace->id, $pl->id, 0, 0, 0),
+                        'where' => $where,
+                        'whereUrl' => $placeUrl,
                     ];
                     array_push($allUserPics, $insert);
                 }
             }
             else {
-                $location1 = $location . '/' . $kindPlace->fileName . '/' . $pl->file . '/' . $reviewPic[$i]->pic;
+                $location1 = "{$location}/{$fileName}/{$reviewPic[$i]->pic}";
                 if (is_file($location1)) {
-                    $p = \URL::asset('userPhoto/' . $kindPlace->fileName . '/' . $pl->file . '/' . $reviewPic[$i]->pic);
+                    $p =  \URL::asset("userPhoto/{$fileName}/{$reviewPic[$i]->pic}");
                     $insert = [
                         'id' => 'review_' . $reviewPic[$i]->id,
                         'mainPic' => $p,
@@ -448,8 +436,8 @@ class ProfileController extends Controller {
                         'showInfo' => false,
                         'uploadTime' => getDifferenceTimeString($reviewPic[$i]->created_at),
                         'created_at' => $reviewPic[$i]->created_at,
-                        'where' => 'در ' . $pl->name . ' شهر ' . $city->name . ' استان ' . $state->name ,
-                        'whereUrl' => createUrl($kindPlace->id, $pl->id, 0, 0, 0),
+                        'where' => $where,
+                        'whereUrl' => $placeUrl,
                     ];
                     array_push($allUserPics, $insert);
                 }
@@ -459,9 +447,7 @@ class ProfileController extends Controller {
         $sort = array_column($allUserPics, 'created_at');
         array_multisort($sort, SORT_DESC, $allUserPics);
 
-        echo json_encode(['status' => 'ok', 'result' => $allUserPics]);
-
-        return;
+        return response()->json(['status' => 'ok', 'result' => $allUserPics]);
     }
 
     public function getSafarnameh(Request $request)

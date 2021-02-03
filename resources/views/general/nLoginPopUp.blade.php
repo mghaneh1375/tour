@@ -64,11 +64,9 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
             <a href="{{$authUrl}}" id="googleUrlRedirector" class="googleA">
                 <div class="g-signin2">
                     <div style="height:36px;" class="abcRioButton abcRioButtonLightBlue">
-                        <div class="abcRioButtonContentWrapper"
-                             style="display: flex; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); direction: ltr; cursor: pointer">
+                        <div class="abcRioButtonContentWrapper" style="display: flex; box-shadow: 0 2px 4px 0 rgba(0,0,0,.25); direction: ltr; cursor: pointer">
                             <div class="abcRioButtonIcon" style="padding:8px">
-                                <div style="width:18px;height:18px;"
-                                     class="abcRioButtonSvgImageWithFallback abcRioButtonIconImage abcRioButtonIconImage18">
+                                <div style="width:18px;height:18px;" class="abcRioButtonSvgImageWithFallback abcRioButtonIconImage abcRioButtonIconImage18">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px"
                                          height="18px" viewBox="0 0 48 48" class="abcRioButtonSvg">
                                         <g>

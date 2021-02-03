@@ -129,7 +129,6 @@
             url: '{{route("profile.getUserPicsAndVideo")}}',
             data: data,
             success: function(response){
-                response = JSON.parse(response);
                 if(response.status == 'ok'){
                     allPics = response.result;
                     nowShow = allPics;

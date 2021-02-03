@@ -22,7 +22,7 @@
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/icons.css?v1='.$fileVersions)}}' media="all"/>
 <link rel="stylesheet" type='text/css' href="{{URL::asset('css/theme2/swiper.css?v='.$fileVersions)}}" media="all">
 <link rel="stylesheet" href="{{URL::asset('css/component/components.css?v='.$fileVersions)}}" media="all">
-<link rel="stylesheet" href="{{URL::asset('css/pages/commonCss.css?v='.$fileVersions)}}" media="all">
+<link rel="stylesheet" href="{{URL::asset('css/component/generalFolder.css?v='.$fileVersions)}}">
 
 <link rel="stylesheet" href="{{URL::asset('css/common/header.css?v=.'.$fileVersions)}}">
 <link rel="stylesheet" href="{{URL::asset('css/common/header1.css?v='.$fileVersions)}}">

@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{URL::asset('css/component/generalFolder.css?v='.$fileVersions)}}">
 <link rel='stylesheet' type='text/css' media='screen, print' href='{{URL::asset('css/shazdeDesigns/abbreviations.css?v='.$fileVersions)}}'/>
 <link rel='stylesheet' type='text/css' media='screen, print' href='{{URL::asset('css/shazdeDesigns/proSearch.css?v='.$fileVersions)}}'/>
 
@@ -67,6 +66,8 @@
     @include('general.uploadPhoto')
 
     @include('general.addSafarnameh')
+
+    @include('general.writeReview')
 @endif
 
 <script defer src="{{URL::asset('js/component/load-image.all.min.js')}}"></script>

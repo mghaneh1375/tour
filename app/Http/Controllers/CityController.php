@@ -172,45 +172,6 @@ class CityController extends Controller
         return view('cityPage', compact(['place', 'kind', 'localStorageData', 'locationName', 'safarnameh', 'placeCounts']));
     }
 
-    public function getCityPageReview(Request $request)
-    {
-        $kind = $_GET['kind'];
-        $placeId = $_GET['placeId'];
-        $take = 15;
-        $reviews = $this->getCityReviews($kind, $placeId, $take);
-        if(count($reviews) != $take){
-            $lessReview = [];
-            $notIn = [];
-            foreach ($reviews as $item)
-                array_push($notIn, $item->id);
-
-            if($kind == 'city'){
-                $place = Cities::find($placeId);
-                $less = $take - count($reviews);
-                $lessReview = $this->getCityReviews('state', $place->stateId, $less, $notIn);
-                foreach ($lessReview as $item)
-                    array_push($reviews, $item);
-            }
-
-            $less = $take - count($reviews);
-            if($less != 0){
-                $notIn = [];
-                foreach ($reviews as $item)
-                    array_push($notIn, $item->id);
-
-                $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
-                foreach ($lessReview as $item)
-                    array_push($reviews, $item);
-            }
-        }
-
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
-
-        echo json_encode($reviews);
-        return;
-    }
-
     public function getCityPageTopPlace()
     {
         $kind = $_GET['kind'];
@@ -323,85 +284,6 @@ class CityController extends Controller
         $centerPlace = null;
 
         return response()->json(['map' => $map, 'allPlaces' => $allPlaces, 'centerPlace' => $centerPlace]);
-    }
-
-    private function getCityReviews($kind, $id, $take, $notIn = [0]){
-        $reviewActivity = Activity::whereName('نظر')->first();
-
-        if($kind == 'city') {
-            $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
-            $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
-            $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
-        }
-        else if($kind == 'state'){
-            $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
-
-            $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
-        }
-        else{
-            if(count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
-
-            return $lastReview;
-        }
-
-
-        $sqlQuery = '';
-        if(count($allAmaken) != 0)
-            $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
-        if(count($allRestaurant) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
-        }
-        if(count($allHotels) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
-        }
-        if(count($allMajara) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
-        }
-        if(count($allSogatSanaie) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
-        }
-        if(count($allMahaliFood) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
-        }
-        if(count($allBoomgardy) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
-        }
-
-        $lastReview = [];
-
-        if($sqlQuery != '') {
-            if (count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
-        }
-
-        return $lastReview;
     }
 
     private function getTopPlaces($kindPlaceId, $kind, $cityId){

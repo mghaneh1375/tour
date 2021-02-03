@@ -30,6 +30,7 @@ use App\models\User;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 //medals
@@ -387,14 +388,11 @@ function makeValidInput($input) {
 }
 
 function createCode() {
-    $str = "";
     while (true) {
-        for ($i = 0; $i < 6; $i++)
-            $str .= rand(0, 9);
+        $str = rand(100000, 999999);
         if(ActivationCode::whereCode($str)->count() == 0)
             return $str;
     }
-
 }
 
 function sendMail($text, $recipient, $subject) {
@@ -974,37 +972,11 @@ function saveViewPerPage($kindPlaceId, $placeId){
     }
 }
 
-function getReviewPicsURL($review, $placeFile){
-    foreach ($review->pics as $item2) {
-        if($item2->isVideo == 1 || $item2->is360 == 1){
-            if($item2->thumbnail != null){
-                $item2->picUrl = URL::asset('userPhoto/'.$review->mainFile.'/'.$placeFile.'/'.$item2->thumbnail);
-            }
-            else {
-                $videoArray = explode('.', $item2->pic);
-                $videoName = '';
-                for ($k = 0; $k < count($videoArray) - 1; $k++)
-                    $videoName .= $videoArray[$k] . '.';
-                $videoName .= 'png';
-
-                $item2->picUrl = URL::asset('userPhoto/' . $review->mainFile . '/' . $placeFile . '/' . $videoName);
-            }
-            $item2->videoUrl = URL::asset('userPhoto/' . $review->mainFile . '/' . $placeFile . '/' . $item2->pic);
-        }
-        else{
-            $item2->picUrl = URL::asset('userPhoto/' . $review->mainFile . '/' . $placeFile . '/' . $item2->pic);
-        }
-
-        $item2->picKind = 'review';
-    }
-    return $review;
-}
-
 function getUserPic($id = 0){
 
     $user = User::find($id);
     if($id == 0 || $user == null)
-        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+        $uPic = \URL::asset('images/mainPics/noPicSite.jpg');
     else{
         if(strpos($user->picture, 'http') !== false)
             return $user->picture;
@@ -1186,15 +1158,11 @@ function getCityPic($cityId){
 }
 
 //    http://image.intervention.io/
-function resizeImage($pic, $size, $fileName = ''){
+function resizeImage($image, $size, $fileName = ''){
     try {
-        $image = $pic;
         if($fileName == '') {
-            $randNum = random_int(100, 999);
-            if($image->getClientOriginalExtension() == '')
-                $fileName = time() . $randNum . '.jpg';
-            else
-                $fileName = time() . $randNum . '.' . $image->getClientOriginalExtension();
+            $fileType = $image->getClientOriginalExtension() == '' ? '.jpg' : ".{$image->getClientOriginalExtension()}";
+            $fileName = time().rand(100, 999).$fileType;
         }
 
         foreach ($size as $item){
