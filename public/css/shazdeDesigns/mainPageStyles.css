@@ -73,71 +73,12 @@ body {
     align-items: center
 }
 
-/*2nd style Box*/
 
 .phoneBanner {
     background-image: url('../../images/phoneBanner.jpg');
     background-size: 100% 100%;
     height: 90vh;
 }
-
-/*@media screen and (max-width: 600px) {*/
-/*    !*div.ppr_rup.ppr_priv_homepage_hero .placement_wrap .placement_wrap_cell {*!*/
-/*    !*display: grid !important;*!*/
-/*    !*}*!*/
-/*    !*.o-sliderContainer {*!*/
-/*    !*height: 250px;*!*/
-/*    !*}*!*/
-
-/*    .ui_column .thumbnail {*/
-/*        height: 250px !important;*/
-/*    }*/
-
-/*    div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.poi_name {*/
-/*        font-size: 30px;*/
-/*        line-height: 30px;*/
-/*    }*/
-
-/*    div.prw_rup.prw_shelves_shelf_widget .shelf_container.rebrand .shelf_header .ui_icon.travelers-choice-badge {*/
-/*        display: inherit;*/
-/*    }*/
-
-/*    div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.poi_name {*/
-/*        font-size: 32px;*/
-/*        line-height: 40px;*/
-/*    }*/
-
-/*    div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.tags {*/
-/*        padding-top: 4px;*/
-/*        font-size: 24px;*/
-/*        line-height: 32px;*/
-/*    }*/
-
-/*    div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail .item.rating-widget .reviewCount {*/
-/*        font-size: 24px;*/
-/*        line-height: 32px;*/
-/*        margin: 0 10px;*/
-/*    }*/
-
-/*    body {*/
-/*        font-size: x-large;*/
-/*    }*/
-/*}*/
-
-/*!*3rd style Box*!*/
-/*!*{{--calender in phone--}}*!*/
-
-/*@media screen and (max-width: 600px) {*/
-/*    #ui-datepicker-div {*/
-/*        width: 17em !important;*/
-/*    }*/
-
-/*    .ui-datepicker-multi-2 .ui-datepicker-group {*/
-/*        width: 100% !important;*/
-/*    }*/
-/*}*/
-
-/*4th style Box*/
 
 .dateLabel {
     position: relative;
@@ -336,37 +277,6 @@ input[type="text"].searchPaneInput::-webkit-input-placeholder {
     font-weight: 500;
 }
 
-div.prw_rup.prw_search_typeahead .typeahead_align {
-    display: flex;
-    align-items: center;
-}
-
-.spGoWhere {
-    color: var(--koochita-blue);
-    font-size: 20px;
-    font-weight: 500;
-    float: right;
-    margin-left: 5px;
-}
-
-div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
-    float: right;
-    width: 90%;
-    padding: 0;
-    height: 40px;
-}
-
-.spBorderBottom {
-    border-bottom: 2px solid var(--koochita-light-green);
-    margin: 10px 0 0;
-}
-
-.spIcons {
-    float: right;
-    margin: -3px 0 0 3px;
-    padding-top: 3px;
-}
-
 .hotelIcon::before {
     font-family: Shazde_Regular2 !important;
     content: '\e000';
@@ -418,20 +328,11 @@ div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
     border-color: var(--koochita-light-green);
 }
 
-#searchDivForScroll {
-    padding: 3px 4px 3px;
-}
-
 .mainSearchDivPcSize {
     width: 40%;
     padding: 10px 0px;
     background: white;
 }
-
-#searchDivForScroll > div:nth-child(1) {
-    padding: 10px !important;
-}
-
 
 #firstPageSearchBtn {
     background-color: inherit;
@@ -439,54 +340,6 @@ div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
 
 #firstPageSearchBtn > button {
     height: auto;
-}
-
-#result {
-    overflow-y: auto;
-    border: 2px solid var(--koochita-light-green);
-    border-top: 0;
-    width: 45%;
-    padding: 10px 5px 6px;
-    display: inline-block;
-    max-height: 375px;
-}
-
-#result > div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.visitSuggestionDiv {
-    overflow-y: auto;
-    max-height: 390px;
-    border: 2px solid var(--koochita-light-green);
-    border-top: 0;
-    width: 50%;
-    padding: 10px 5px 5px;
-    float: left;
-}
-
-.visitSuggestion4Box {
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-}
-
-.visitSuggestionText {
-    text-align: center;
-    padding: 5px 0 10px;
-    color: gray;
-}
-
-.spBoxOfSuggestion {
-    padding: 1px;
-    width: 25%;
-}
-
-.spImageWrapper {
-    height: 100px;
 }
 
 #searchPane .ui_close_x {
@@ -521,12 +374,6 @@ div.ppr_rup.ppr_priv_homepage_hero .placement_wrap .placement_wrap_cell {
     flex-basis: auto;
 }
 
-div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .middleBannerPhotoBanner > a, .innerStripedBackGround > a, .middleBannerPhotoBanner > a,
 .middleBannerPhotoDiv .smallOne > a, .middleBannerPhotoDiv .middleOne > a, .middleBannerPhotoDiv .largeOne > a {
     height: 100%;
@@ -539,7 +386,6 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
     /*padding: 60px 5px 5px;*/
 }
 
-/*slider styles*/
 
 .mainBannerSlider {
     position: relative;
@@ -736,11 +582,6 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
         height: 100%;
     }
 
-
-    div.prw_rup.prw_search_typeahead .typeahead_align {
-        margin-top: 20px;
-    }
-
     div.ppr_rup.ppr_priv_homepage_shelves .homepage_shelves_widget:last-child {
         margin-bottom: 100px;
     }
@@ -760,9 +601,6 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
         width: 100%;
     }
 
-    .ui_modal.searchPanes {
-        padding: 16px;
-    }
 
     .mainSearchDivPcSize .mainPageMainSearchText{
         text-align: center;
@@ -800,11 +638,6 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
     }
 }
 
-@media (min-width: 630px) and (max-width: 767px) {
-    .spBoxOfSuggestion {
-        width: 33.333333%;
-    }
-}
 
 @media (max-width: 630px) {
 
@@ -829,18 +662,6 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
         right: 2%
     }
 
-    #result {
-        display: block;
-        width: auto;
-        margin: 0 20px;
-    }
-
-    .visitSuggestionDiv {
-        width: auto;
-        border-top: 2px solid var(--koochita-light-green);
-        margin-top: 40px;
-    }
-
     .lp_others_noMessages {
         font-size: 1.1em;
     }
@@ -855,18 +676,7 @@ div.prw_rup.prw_shelves_rebrand_poi_shelf_item_widget .detail {
 }
 
 @media (max-width: 400px) {
-
-    #result {
-        margin: 0;
-    }
-
     .lp_others_noMessages {
         font-size: 0.9em;
-    }
-}
-
-@media (max-width: 400px) {
-    .spBoxOfSuggestion {
-        width: 33.3333333%;
     }
 }

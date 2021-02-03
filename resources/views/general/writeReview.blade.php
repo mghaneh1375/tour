@@ -1,3 +1,4 @@
+
 <div id="newReviewSection" class="modalBlackBack fullCenter writeNewReviewModal" style="z-index: 9999;">
     <div class="modalBody">
         <div class="inputReviewBodies">
@@ -52,6 +53,7 @@
     var uploadNewReviewVideoUrl = '{{route("reviewUploadVideo")}}';
     var deleteNewReviewPicUrl = '{{route("deleteReviewPic")}}';
     var storeNewReviewUrl = '{{route("storeReview")}}';
+    var getNewCodeForUploadNewReviewURl = '{{route("review.getNewCodeForUploadNewReview")}}';
     var newReviewDataForUpload = {
         code: false,
         userAssigned: [],
@@ -61,3 +63,4 @@
 </script>
 
 <script defer src='{{URL::asset('js/component/writeReview.js')}}'></script>
+<script src="{{URL::asset('js/uploadLargFile.js')}}"></script>

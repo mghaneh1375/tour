@@ -101,7 +101,7 @@
 </div>
 
 @if(Auth::check())
-    <div class="addNewReviewButtonMobileFooter plus2" onclick="openModalWriteNewReview()">ایجاد پست</div>
+    <div class="addNewReviewButtonMobileFooter plus2 hideOnScreen" onclick="openModalWriteNewReview()">ایجاد پست</div>
 @endif
 
 <div class="container">

@@ -259,6 +259,8 @@ Route::middleware(['nothing'])->group(function () {
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
 
     Route::middleware(['auth'])->group(function (){
+        Route::post('review/getNewCodeForUploadNewReview', 'ReviewsController@getNewCodeForUploadNewReview')->name('review.getNewCodeForUploadNewReview');
+
         Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
 
         Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');

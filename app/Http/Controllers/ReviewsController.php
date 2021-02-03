@@ -120,55 +120,52 @@ class ReviewsController extends Controller
 
     public function reviewUploadVideo(Request $request)
     {
-        $location = $this->limboLocation;
+        $data = json_decode($request->data);
+        $direction = $this->limboLocation;
+        if(!is_dir($direction))
+            mkdir($direction);
 
-        if (!file_exists($location))
-            mkdir($location);
+        $code = $data->code;
 
-        if (isset($_FILES['video'])) {
-            $isVideo = 0;
-            $is360 = 0;
-
-            $code = $request->code == 'false' ? \auth()->user()->id.'_'.generateRandomString(4) : $request->code;
-            if (isset($request->isVideo) && $request->isVideo == 1)
-                $isVideo = 1;
-
-            if (isset($request->is360) && $request->is360 == 1){
-                $isVideo = 1;
-                $is360 = 1;
-            }
-
-            $fileType = explode('.', $_FILES['video']['name']);
-            $filename = time().rand(1000, 9999).'.'.end($fileType);
-
-            move_uploaded_file($_FILES['video']['tmp_name'], "{$location}/{$filename}");
-
-            if(isset($_POST['videoPic'])) {
-                $img = $_POST['videoPic'];
-                $img = str_replace('data:image/png;base64,', '', $img);
-                $img = str_replace(' ', '+', $img);
-                $data = base64_decode($img);
-                $videoArray = explode('.', $filename);
-                $videoName = '';
-                for ($k = 0; $k < count($videoArray) - 1; $k++)
-                    $videoName .= $videoArray[$k] . '.';
-                $videoName .= 'png';
-
-                $file = $this->limboLocation.'/'.$videoName;
-                $success = file_put_contents($file, $data);
-            }
-
-            $newPicReview = new ReviewPic();
-            $newPicReview->pic = $filename;
-            $newPicReview->code = $code;
-            $newPicReview->is360 = $is360;
-            $newPicReview->isVideo = $isVideo;
-            $newPicReview->save();
-
-            return response()->json(['status' => 'ok', 'result' => ['fileName' => $filename, 'code' => $code]]);
+        if(isset($request->cancelUpload) && $request->cancelUpload == 1){
+            $direction .= '/'.$request->storeFileName;
+            if(is_file($direction))
+                unlink($direction);
+            ReviewPic::where('code', $data->code)->where('pic', $request->storeFileName)->delete();
+            return response()->json(['status' => 'canceled']);
         }
+
+        if(isset($request->storeFileName) && isset($request->file_data) && $request->storeFileName != 0){
+            $fileName = $request->storeFileName;
+            $direction .= '/'.$fileName;
+            $result = uploadLargeFile($direction, $request->file_data);
+        }
+        else{
+            $file_name = $request->file_name;
+            $fileType = explode('.', $file_name);
+            $fileName = time().rand(100,999).'.'.end($fileType);
+
+            $direction .= '/'.$fileName;
+            $result = uploadLargeFile($direction, $request->file_data);
+
+            if($result) {
+                $limbo = new ReviewPic();
+                $limbo->code = $code;
+                $limbo->pic = $fileName;
+                $limbo->isVideo = 1;
+                $limbo->is360 = $data->is360;
+                $limbo->save();
+            }
+        }
+
+        if($result)
+            return response()->json(['status' => 'ok', 'fileName' => $fileName, 'result' => $code]);
         else
-            return response()->json(['status' => 'nok3']);
+            return response()->json(['status' => 'nok']);
+    }
+
+    public function getNewCodeForUploadNewReview(){
+        return response()->json(['code' => \auth()->user()->id.'_'.generateRandomString(4)]);
     }
 
     public function deleteReviewPic(Request $request)

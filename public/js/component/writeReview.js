@@ -8,6 +8,15 @@ $(window).ready(() => {
 
 function openModalWriteNewReview(){
     openMyModal('newReviewSection');
+
+    if(!newReviewDataForUpload.code){
+        $.ajax({
+            type: 'POST',
+            url: getNewCodeForUploadNewReviewURl,
+            data: {_token: csrfTokenGlobal},
+            success: response => newReviewDataForUpload.code = response.code,
+        })
+    }
 }
 
 function uploadFileForNewReview(_input, _kind){
@@ -143,65 +152,90 @@ function reviewFileUploadQueueForNewReview(){
                 sendUrl = uploadNewReviewPicUrl;
                 formData.append('code', newReviewDataForUpload.code);
                 formData.append('pic', uFile.file);
-            }
-            else{
-                sendUrl = uploadNewReviewVideoUrl;
-                formData.append('code', newReviewDataForUpload.code);
-                formData.append('video', uFile.file);
-                if(uFile.kind == 'video')
-                    formData.append('isVideo', 1);
-                else
-                    formData.append('is360', 1);
-            }
 
-            uploadNewReviewFileAjax = $.ajax({
-                type: 'POST',
-                url: sendUrl,
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhr: function () {
-                    var xhr = new XMLHttpRequest();
-                    xhr.upload.onprogress = e => {
-                        if (e.lengthComputable) {
-                            var percent = Math.round((e.loaded / e.total) * 100);
-                            $('#uplaodedImgForNewReview_' + uFile.code).find('.processCounter').text(percent + '%');
-                        }
-                    };
-                    return xhr;
-                },
-                success: response => {
-                    newReviewFileInUpload = false;
-                    if (response.status == 'ok') {
-                        newReviewDataForUpload.code = response.result.code;
-                        if(cancelThisNewReviewFile) {
-                            doDeleteNewReviewFile(uploadFileIndex);
-                            cancelThisNewReviewFile = false;
-                        }
-                        if(uFile.kind == 'image'){
-                            $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
-                            newReviewDataForUpload.files[uploadFileIndex].uploaded = 1;
-                            newReviewDataForUpload.files[uploadFileIndex].savedFile = response.result.fileName;
-                            reviewFileUploadQueueForNewReview();
+                uploadNewReviewFileAjax = $.ajax({
+                    type: 'POST',
+                    url: sendUrl,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    xhr: function () {
+                        var xhr = new XMLHttpRequest();
+                        xhr.upload.onprogress = e => {
+                            if (e.lengthComputable) {
+                                var percent = Math.round((e.loaded / e.total) * 100);
+                                $('#uplaodedImgForNewReview_' + uFile.code).find('.processCounter').text(percent + '%');
+                            }
+                        };
+                        return xhr;
+                    },
+                    success: response => {
+                        newReviewFileInUpload = false;
+                        if (response.status == 'ok') {
+                            newReviewDataForUpload.code = response.result.code;
+                            if(cancelThisNewReviewFile) {
+                                doDeleteNewReviewFile(uploadFileIndex);
+                                cancelThisNewReviewFile = false;
+                            }
+                            if(uFile.kind == 'image'){
+                                $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
+                                newReviewDataForUpload.files[uploadFileIndex].uploaded = 1;
+                                newReviewDataForUpload.files[uploadFileIndex].savedFile = response.result.fileName;
+                                reviewFileUploadQueueForNewReview();
+                            }
+                            else{
+                                newReviewDataForUpload.files[uploadFileIndex].savedFile = response.result.fileName;
+                                uploadReviewVideoThumbnail(uploadFileIndex);
+                            }
                         }
                         else{
-                            newReviewDataForUpload.files[uploadFileIndex].savedFile = response.result.fileName;
-                            uploadReviewVideoThumbnail(uploadFileIndex);
+                            $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
+                            newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
+                            reviewFileUploadQueueForNewReview();
                         }
-                    }
-                    else{
+                    },
+                    error: err => {
+                        newReviewFileInUpload = false;
                         $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
                         newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
                         reviewFileUploadQueueForNewReview();
                     }
-                },
-                error: err => {
-                    newReviewFileInUpload = false;
-                    $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
-                    newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
-                    reviewFileUploadQueueForNewReview();
-                }
-            })
+                })
+
+            }
+            else{
+                is360 = 0;
+                if(uFile.kind != 'video')
+                    is360 = 1;
+
+                uploadLargeFile(uploadNewReviewVideoUrl, uFile.file, {code: newReviewDataForUpload.code, is360}, (_percent, _fileName = '', _result = '') => {
+                    if(_percent == 'done') {
+                        newReviewFileInUpload = false;
+                        newReviewDataForUpload.files[uploadFileIndex].savedFile = _fileName;
+                        if(uFile.kind == 'image'){
+                            $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
+                            newReviewDataForUpload.files[uploadFileIndex].uploaded = 1;
+                            reviewFileUploadQueueForNewReview();
+                        }
+                        else
+                            uploadReviewVideoThumbnail(uploadFileIndex);
+                    }
+                    else if(_percent == 'error') {
+                        newReviewFileInUpload = false;
+                        $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
+                        newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
+                        reviewFileUploadQueueForNewReview();
+                    }
+                    else if(_percent == 'cancelUpload'){
+                        newReviewFileInUpload = false;
+                        doDeleteNewReviewFile(uploadFileIndex);
+                    }
+                    else {
+                        newReviewDataForUpload.code = _result;
+                        $('#uplaodedImgForNewReview_' + uFile.code).find('.processCounter').text(_percent + '%');
+                    }
+                });
+            }
         }
     }
 }
@@ -320,6 +354,7 @@ function storeNewReview(_element){
                 $('#friendAddedSection').find('.acceptedUserFriend').remove();
                 $('.uploadedFiles').find('.uploadFileCard').remove();
                 showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
+                newReviewDataForUpload.code = false;
             }
             else
                 showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');

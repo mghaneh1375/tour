@@ -73,11 +73,11 @@ function upload_fileLargeFile(start, _fileName) {
 
                     if (!isLast) {
                         upload_fileLargeFile(next_slice, response.fileName);
-                        callBackFunctionLargeFileUploadedInJsFile(percent_done);
+                        callBackFunctionLargeFileUploadedInJsFile(percent_done, '', response.result);
                     }
                     else {
                         inProcessLargeFileUploadedInJsFile = false;
-                        callBackFunctionLargeFileUploadedInJsFile('done', response.fileName);
+                        callBackFunctionLargeFileUploadedInJsFile('done', response.fileName, response.result);
                     }
                 }
                 else {
