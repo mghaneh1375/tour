@@ -144,10 +144,11 @@ function closeFullReview(){
 }
 
 function getSingleFullDataReview(_id, _callBack){
+    openLoading();
     $.ajax({
         type: 'GET',
         url: `${getSingleReviewUrl}?id=${_id}`,
-        compvare: () => closeLoading(),
+        complete: () => closeLoading(),
         success: function(response){
             if(response.status == 'ok' && typeof _callBack === 'function')
                 _callBack(response.result);
