@@ -87,6 +87,8 @@
     window.alertSeenUrl = '{{route("alert.seen")}}';
     window.deleteBookMarkUrl = '{{route("profile.bookMark.delete")}}';
     window.storeSeenLogUrl = '{{route('log.storeSeen')}}';
+    window.searchInUserUrl = '{{route("findUser")}}';
+
 
     window.seenRelatedId = sessionStorage.getItem("lastPageLogId") == null ? 0 : sessionStorage.getItem("lastPageLogId");
     window.seenPageLogId = 0;

@@ -1,7 +1,7 @@
 @extends('layouts.bodyPlace')
 
 @section('title')
-    <title>صفحه کاربری</title>
+    <title> صفحه کاربری {{$user->username}}</title>
 
     @if(isset($sideInfos['userPicture']))
         <meta property="og:image" content="{{$sideInfos['userPicture']}}"/>
@@ -44,8 +44,6 @@
 
 @section('header')
     @parent
-    <link rel="stylesheet" href="{{URL::asset('css/pages/profile.css?v1='.$fileVersions)}}">
-
     <script>
         var allUserPics = {!! json_encode($sideInfos['allUserPics']) !!};
         var selectedTrip = [];
@@ -64,6 +62,8 @@
         let uploadedBanner = false;
         let cropKind = null;
     </script>
+
+    <link rel="stylesheet" href="{{URL::asset('css/pages/profile.css?v1='.$fileVersions)}}">
 @stop
 
 @section('main')
@@ -118,7 +118,11 @@
                                     <span class="addMemberIcon"></span>
                                     <span class="text"></span>
                                 </button>
-                                <a href="{{route("profile.message.page")}}?user={{$user->username}}" class="msgHeaderButton">ارسال پیام</a>
+                                @if(auth()->check())
+                                    <a href="{{route("profile.message.page")}}?user={{$user->username}}" class="msgHeaderButton">ارسال پیام</a>
+                                @else
+                                    <div class="msgHeaderButton" onclick="checkLogin('{{route("profile.message.page")}}?user={{$user->username}}')">ارسال پیام</div>
+                                @endif
                             @endif
                         </div>
                     </div>

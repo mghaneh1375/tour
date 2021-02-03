@@ -542,28 +542,26 @@ class AjaxController extends Controller {
     {
         $value = $_GET['username'];
 
-        if(Auth::check()) {
-            $userEmail = [];
+        $userEmail = [];
+        if(\auth()->check())
             $iUserId = \auth()->user()->id;
-            $userName = User::where('username', 'LIKE', '%' . $value . '%')->select(['id', 'username'])->get();
-            foreach ($userName as $user){
-                $user->userId = $user->id;
-                $user->url = route('profile', ['username' => $user->username]);
-                $user->pic = getUserPic($user->id);
-                $user->followed = Followers::where('userId', $iUserId)
-                    ->where('followedId', $user->id)
-                    ->count();
-                $user->notMe = 1;
-                if($user->id == $iUserId)
-                    $user->notMe = 0;
-            }
-            if($userName == null && $userEmail == null)
-                return response()->json(['status' => 'nok3']);
-            else
-                return response()->json(['status' => 'ok', 'result' => ['email' => $userEmail, 'userName' => $userName]]);
-        }
         else
-            return response()->json(['status' => 'nok1']);
+            $iUserId = 0;
+
+        $userName = User::where('username', 'LIKE', '%' . $value . '%')->select(['id', 'username'])->get();
+        foreach ($userName as $user){
+            $user->userId = $user->id;
+            $user->url = route('profile', ['username' => $user->username]);
+            $user->pic = getUserPic($user->id);
+            $user->followed = Followers::where('userId', $iUserId)->where('followedId', $user->id)->count();
+            $user->notMe = 1;
+            if($user->id == $iUserId)
+                $user->notMe = 0;
+        }
+        if($userName == null && $userEmail == null)
+            return response()->json(['status' => 'nok3']);
+        else
+            return response()->json(['status' => 'ok', 'result' => ['email' => $userEmail, 'userName' => $userName]]);
     }
 
     public function likeLog(Request $request)

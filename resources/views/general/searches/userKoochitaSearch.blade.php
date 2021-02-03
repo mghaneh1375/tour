@@ -4,8 +4,7 @@
             <div onclick="closeMyModal('koochitaUserSearchModal')" class="iconClose closeModal"></div>
             <div id="koochitaUserSearchModalTitle" style="color: var(--koochita-light-green); font-size: 25px; font-weight: bold;"></div>
         </div>
-        @if(auth()->check())
-            <div class="searchSec">
+        <div class="searchSec">
                 <div class="inputSec">
                     <input type="text"
                            id="koochitaUserSearchModalInput"
@@ -19,7 +18,6 @@
                     </div>
                 </div>
             </div>
-        @endif
         <div id="koochitaUserSearchModalBody" class="body">
             <div id="searchResultKoochitaUserInput" class="searchResultUserKoochitaModal"></div>
         </div>
