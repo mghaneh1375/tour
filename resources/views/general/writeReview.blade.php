@@ -62,5 +62,5 @@
 
 </script>
 
-<script defer src='{{URL::asset('js/component/writeReview.js')}}'></script>
-<script src="{{URL::asset('js/uploadLargFile.js')}}"></script>
+<script defer src='{{URL::asset('js/component/writeReview.js?v='.$fileVersions)}}'></script>
+<script src="{{URL::asset('js/uploadLargFile.js?v='.$fileVersions)}}"></script>

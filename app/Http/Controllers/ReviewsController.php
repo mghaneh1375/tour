@@ -785,9 +785,19 @@ class ReviewsController extends Controller
             if(isset($request->id)){
                 $review = LogModel::find($request->id);
                 if($review != null && $review->visitorId == $user->id){
-                    $kindPlace = Place::find($review->kindPlaceId);
-                    $place = \DB::table($kindPlace->tableName)->find($review->placeId);
-                    $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
+
+                    $placeId = 0;
+                    $kindPlaceTableName = null;
+                    if($review->kindPlaceId != 0 && $review->placeId != 0) {
+                        $kindPlace = Place::find($review->kindPlaceId);
+                        $kindPlaceTableName = $kindPlace->tableName;
+                        $placeId = $review->placeId;
+                        $place = \DB::table($kindPlaceTableName)->find($review->placeId);
+                        $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
+                    }
+                    else
+                        $location = __DIR__ . '/../../../../assets/userPhoto/nonePlaces';
+
                     $reviewPics = ReviewPic::where('logId', $review->id)->get();
                     foreach ($reviewPics as $pic){
                         if(is_file($location.'/'.$pic->pic))
@@ -813,11 +823,13 @@ class ReviewsController extends Controller
                     $alert = new Alert();
                     $alert->userId = $user->id;
                     $alert->subject = 'deleteReviewByUser';
-                    $alert->referenceTable = $kindPlace->tableName;
-                    $alert->referenceId = $place->id;
+                    $alert->referenceTable = $kindPlaceTableName;
+                    $alert->referenceId = $placeId;
                     $alert->save();
 
-                    \DB::table($kindPlace->tableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
+                    if($kindPlaceTableName)
+                        \DB::table($kindPlaceTableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
+
                     $review->delete();
                     echo 'ok';
                 }

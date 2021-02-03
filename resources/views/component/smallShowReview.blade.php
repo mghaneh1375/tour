@@ -38,7 +38,7 @@
         <a class="profileNameInReviewOptionModal" href="#"></a>
         <a href="{{route("policies")}}" target="_blank"> صفحه قوانین و مقررات </a>
         @if(auth()->check())
-            <div id="deleteReviewOptionInModal" style="color: red; border-bottom: none"> حذف پست </div>
+            <div id="devareReviewOptionInModal" style="color: red; border-bottom: none"> حذف پست </div>
         @endif
     </div>
 </div>

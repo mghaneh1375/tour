@@ -551,7 +551,10 @@ function checkFullSubmitFullReview(_element){
 }
 
 function devareReviewByUserInReviews(_reviewId){
-    devaredReview = _reviewId;
+    if(_reviewId != 0)
+        devaredReview = _reviewId;
+    else
+        devaredReview
     text = 'آیا از حذف نقد خود اطمینان دارید؟ در صورت حذف عکس ها و فیلم ها افزوده شده پاک می شوند و قابل بازیابی نمی باشد.';
     openWarning(text, doDeleteReviewByUserInReviews); // in general.alert.blade.php
 }
