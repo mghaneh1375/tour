@@ -1,4 +1,4 @@
-
+var isUploadFileForReviewInPlaceDetails = false;
 $(window).ready(() => $("#postTextArea").emojioneArea());
 
 for (i = 0; i < rateQuestion.length; i++)
@@ -164,107 +164,42 @@ function removeAssignedUserToReview(element, _email){
     document.getElementById('assignedMemberToReview').value = JSON.stringify(assignedUser);
 }
 
-function uploadReviewPics(input){
 
+var fileToUploadInPlaceDetailReview = [];
+function uploadReviewPics(input){
     if (input.files && input.files[0]) {
         var lastNumber = reviewPicNumber;
-        var text = '<div id="reviewPic_' + reviewPicNumber + '" class="commentPhotosDiv commentPhotosAndVideos">\n' +
-            '<div id="reviewPicLoader_' + reviewPicNumber + '" class="loaderReviewPiUpload">' +
-            '<div id="reviewPicLoaderBackGround_' + reviewPicNumber + '" class="loaderReviewBackGround"></div>' +
-            '<div id="reviewPicLoaderPercent_' + reviewPicNumber + '" class="loaderReviewPercent"></div>' +
-            '</div>\n' +
-            '<img id="showPic' + reviewPicNumber + '"  style="width: 100%; height: 100px;">\n' +
-            '<input type="hidden" id="fileName_' + reviewPicNumber + '" >\n' +
-            '<div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(' + reviewPicNumber + ')"></div>\n' +
-            '<div class="editUploadPhotoComment" onclick="openEditReviewPic(' + reviewPicNumber + ')"></div>\n' +
-            '</div>';
+        fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: 'image', upload: 0});
+
+        var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
+                        <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
+                            <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
+                            <div id="reviewPicLoaderPercent_${reviewPicNumber}" class="loaderReviewPercent"></div>
+                        </div>
+                        <img id="showPic${reviewPicNumber}"  style="width: 100%; height: 100px;">
+                        <input type="hidden" id="fileName_${reviewPicNumber}" >
+                        <div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(${reviewPicNumber})"></div>
+                        <div class="editUploadPhotoComment" onclick="openEditReviewPic(${reviewPicNumber})"></div>
+                    </div>`;
         $('#reviewShowPics').append(text);
 
         var reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = e => {
             var mainPic = e.target.result;
             $('#showPic' + lastNumber).attr('src', mainPic);
             uploadedWriteReviewPicture[lastNumber] = mainPic;
         };
         reader.readAsDataURL(input.files[0]);
 
-        var data = new FormData();
-
-        data.append('pic', input.files[0]);
-        data.append('code', $('#storeReviewCode').val());
-
-        var uploadReviewPicLoader = $('#reviewPicLoaderBackGround_' + reviewPicNumber);
-        var uploadReviewPicLoaderPercent = $('#reviewPicLoaderPercent_' + reviewPicNumber);
-        $.ajax({
-            type: 'post',
-            url: reviewUploadPic,
-            data: data,
-            processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = new XMLHttpRequest();
-                xhr.upload.onprogress = function (e) {
-                    var percent = '0';
-                    var percentage = '0%';
-
-                    if (e.lengthComputable) {
-
-                        percent = Math.round((e.loaded / e.total) * 100);
-                        percentage = percent + '%';
-                        size = 160 - (percent * 1.6);
-                        size += 'px';
-
-                        uploadReviewPicLoaderPercent.text(percentage);
-
-                        leftBottom = (percent * 1.6)/2;
-                        leftBottom += 'px';
-
-                        uploadReviewPicLoader.css('width', size);
-                        uploadReviewPicLoader.css('height', size);
-
-                        uploadReviewPicLoader.css('left', leftBottom);
-                        uploadReviewPicLoader.css('bottom', leftBottom);
-                    }
-                };
-
-                return xhr;
-            },
-            success: function(response){
-                if(response.status == 'nok2') {
-                    showSuccessNotifi("فرمت فایل باید jpeg و یا png باشد", 'left', 'red');
-                    $('#reviewPic_' + lastNumber).remove();
-                }
-                else{
-                    try {
-                        fileName = response.result.fileName;
-                        document.getElementById('fileName_' + lastNumber).value = fileName;
-                        $('#reviewPicLoader_' + lastNumber).remove();
-                        fileUploadNum++;
-                        checkReviewToSend();
-                    } catch (e) {
-                        $('#reviewPic_' + lastNumber).remove();
-                    }
-                }
-                reviewPicNumber++;
-            },
-            error: function(err){
-                $('#reviewPic_' + lastNumber).remove();
-            }
-        });
-
+        uploadFileInPlaceDetailsReview(lastNumber);
+        reviewPicNumber++;
     }
 }
 
 function uploadReviewVideo(input, _is360){
-
-    var data = new FormData();
-    data.append('video', input.files[0]);
-    data.append('code',  $('#storeReviewCode').val());
-    data.append('isVideo', 1);
-    if(_is360 == 1)
-        data.append('is360', 1);
-
     var lastNumber = reviewPicNumber;
+    fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: _is360 == 1 ? '360' : 'video', upload: 0, thumbnail: ''});
+
     var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
                     <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
                         <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
@@ -282,14 +217,14 @@ function uploadReviewVideo(input, _is360){
     var files = input.files;
     var video = document.createElement('video');
     video.preload = 'metadata';
-    video.onloadedmetadata = function() {
+    video.onloadedmetadata = () => {
         window.URL.revokeObjectURL(video.src);
         var duration = video.duration;
         sec = Math.floor(duration);
         min = Math.floor(sec/60);
         sec = sec - (min * 60);
-        document.getElementById('videoDuration_' + lastNumber).innerText = min + ':' + sec;
-    }
+        $(`#videoDuration_${lastNumber}`).text(min + ':' + sec);
+    };
     video.src = URL.createObjectURL(files[0]);
 
     var file = input.files[0];
@@ -304,9 +239,8 @@ function uploadReviewVideo(input, _is360){
             }
         };
         video.addEventListener('loadeddata', function() {
-            if (snapImage()) {
+            if (snapImage())
                 video.removeEventListener('timeupdate', timeupdate);
-            }
         });
 
         var snapImage = function() {
@@ -323,59 +257,9 @@ function uploadReviewVideo(input, _is360){
                 img.src = image;
                 uploadedWriteReviewPicture[lastNumber] = image;
                 URL.revokeObjectURL(url);
-                data.append('videoPic', image);
-
-                var uploadReviewPicLoader = $('#reviewPicLoaderBackGround_' + reviewPicNumber);
-                var uploadReviewPicLoaderPercent = $('#reviewPicLoaderPercent_' + reviewPicNumber);
-                $.ajax({
-                    type: 'post',
-                    url: reviewUploadVideo,
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    xhr: function () {
-                        var xhr = new XMLHttpRequest();
-                        xhr.upload.onprogress = function (e) {
-                            var percent = '0';
-                            var percentage = '0%';
-
-                            if (e.lengthComputable) {
-                                percent = Math.round((e.loaded / e.total) * 100);
-                                percentage = percent + '%';
-                                size = 160 - (percent * 1.6);
-                                size += 'px';
-
-                                uploadReviewPicLoaderPercent.text(percentage);
-                                console.log(percentage);
-
-                                leftBottom = (percent * 1.6)/2;
-                                leftBottom += 'px';
-                                uploadReviewPicLoader.css('width', size);
-                                uploadReviewPicLoader.css('height', size);
-
-                                uploadReviewPicLoader.css('left', leftBottom);
-                                uploadReviewPicLoader.css('bottom', leftBottom);
-                            }
-                        };
-                        return xhr;
-                    },
-                    success: function(response){
-                        try {
-                            if(response.status == 'ok') {
-                                $(`#fileName_${lastNumber}`).val(response.result.fileName);
-                                $(`#reviewPicLoader_${lastNumber}`).remove();
-                                fileUploadNum++;
-                                checkReviewToSend();
-                            }
-                            else
-                                $(`#reviewPic_${lastNumber}`).remove();
-                        } catch (e) {
-                            $(`#reviewPic_${lastNumber}`).remove();
-                        }
-                        reviewPicNumber++;
-                    },
-                    error: () => $(`#reviewPic_${lastNumber}`).remove()
-                });
+                fileToUploadInPlaceDetailReview[lastNumber].thumbnail = image;
+                uploadFileInPlaceDetailsReview(lastNumber);
+                reviewPicNumber++;
             }
             return success;
         };
@@ -387,6 +271,101 @@ function uploadReviewVideo(input, _is360){
         video.play();
     };
     fileReader.readAsArrayBuffer(file);
+}
+
+function uploadFileInPlaceDetailsReview(_picNumber){
+
+    if(_picNumber == -1){
+        fileToUploadInPlaceDetailReview.map((item, index) => {
+            if(item.upload == 0){
+                uploadFileInPlaceDetailsReview(index);
+                return;
+            }
+        })
+    }
+
+    if(!isUploadFileForReviewInPlaceDetails) {
+        var uFile = fileToUploadInPlaceDetailReview[_picNumber];
+
+        var isVideo = uFile.kind == 'image' ? 0 : 1;
+        var is360 = (uFile.kind == '360') ? 1 : 0;
+        var sendData = {
+            code: $('#storeReviewCode').val(),
+            is360,
+            isVideo
+        };
+
+        isUploadFileForReviewInPlaceDetails = true;
+        uploadLargeFile(reviewUploadFileURLInPlaceDetails, uFile.file, sendData, (_percent, _fileName = '', _result = '') => {
+            if (_percent == 'done') {
+                $(`#fileName_${_picNumber}`).val(_fileName);
+                fileToUploadInPlaceDetailReview[_picNumber].saveFile = _fileName;
+                fileUploadNum++;
+                if(uFile.kind == 'image') {
+                    fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+                    $(`#reviewPicLoader_${_picNumber}`).remove();
+                    isUploadFileForReviewInPlaceDetails = false;
+                    uploadFileInPlaceDetailsReview(-1);
+                }
+                else
+                    uploadThumbnailInReviewDetail(_picNumber);
+                checkReviewToSend();
+            }
+            else if (_percent == 'error') {
+                isUploadFileForReviewInPlaceDetails = false;
+                showSuccessNotifi("آپلود فایل با مشگل مواجه شد", 'left', 'red');
+                $('#reviewPic_' + _picNumber).remove();
+                fileToUploadInPlaceDetailReview[_picNumber].upload = -2;
+                uploadFileInPlaceDetailsReview(-1);
+            }
+            else if (_percent == 'cancelUpload') {
+                isUploadFileForReviewInPlaceDetails = false;
+                fileToUploadInPlaceDetailReview[_picNumber].upload = -1;
+                $('#reviewPic_' + _picNumber).remove();
+                uploadFileInPlaceDetailsReview(-1);
+                checkReviewToSend();
+            }
+            else {
+                var size = (160 - (_percent * 1.6)) + 'px';
+                var leftBottom = ((_percent * 1.6)/2) + 'px';
+                $(`#reviewPicLoaderPercent_${_picNumber}`).text(_percent+'%');
+                $(`#reviewPicLoaderBackGround_${_picNumber}`).css({width: size, height: size, left: leftBottom, bottom: leftBottom});
+            }
+        });
+    }
+}
+
+function uploadThumbnailInReviewDetail(_picNumber){
+
+    var uFile = fileToUploadInPlaceDetailReview[_picNumber];
+
+    var videoThumbnail = new FormData();
+    videoThumbnail.append('code', $('#storeReviewCode').val());
+    videoThumbnail.append('kind', 'thumbnail');
+    videoThumbnail.append('file', uFile.thumbnail);
+    videoThumbnail.append('fileName', uFile.saveFile);
+
+    $.ajax({
+        type: 'POST',
+        url: uploadNewReviewPicUrl,
+        data: videoThumbnail,
+        processData: false,
+        contentType: false,
+        success: response => {
+            if(response.status == 'ok'){
+                fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+                $(`#reviewPicLoader_${_picNumber}`).remove();
+                isUploadFileForReviewInPlaceDetails = false;
+                uploadFileInPlaceDetailsReview(-1);
+            }
+        },
+        error: err => {
+            $(`#reviewPicLoader_${_picNumber}`).remove();
+            fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+            isUploadFileForReviewInPlaceDetails = false;
+            uploadFileInPlaceDetailsReview(-1);
+        }
+    })
 }
 
 function radioChange(value, _questionId, _index, _ansId){
@@ -785,9 +764,8 @@ function sendWriteReview(){
 }
 
 function checkReviewToSend(_kind = ''){
-
-    let error = false;
-    let text = $('#postTextArea').val();
+    var error = false;
+    var text = $('#postTextArea').val();
 
     if(text.trim().length > 0)
         error = true;
@@ -801,7 +779,15 @@ function checkReviewToSend(_kind = ''){
     if(reviewMultiAnsId.length > 0)
         error = true;
 
-    if(error) {
+    for(var i = 0; i < fileToUploadInPlaceDetailReview.length; i++){
+        if(fileToUploadInPlaceDetailReview[i].upload == 0){
+            error = true;
+            break;
+        }
+    }
+
+
+    if(error && !isUploadFileForReviewInPlaceDetails) {
         if(_kind == 'send')
             sendWriteReview();
         return true;

@@ -3,51 +3,6 @@
         display: none;
     }
 
-    .addNewReviewButtonMobileFooter{
-        position: fixed;
-        background: WHITE;
-        color: #333;
-        height: 50px !IMPORTANT;
-        BORDER: solid 1px #333;
-        width: 100px;
-        border-bottom: none;
-        border-radius: 20px 20px 0px 0px;
-        font-size: 14px !important;
-        flex-direction: column;
-        z-index: 1;
-        bottom: 60px;
-        right: calc(50% - 50px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-    }
-    .addNewReviewButtonMobileFooter:before{
-        font-size: 22px;
-        line-height: 8px;
-        width: 25px;
-        height: 25px;
-        border: solid 2px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 6px;
-        font-weight: normal;
-    }
-
-    @media (max-width: 767px) {
-        .submitFiltersInMobile{
-            display: block;
-            position: absolute;
-            bottom: 0px;
-            background: var(--koochita-blue);
-            color: white;
-            width: 100%;
-            right: 0px;
-            text-align: center;
-            padding: 5px 0px;
-        }
-    }
 </style>
 <div class="gapForMobileFooter hideOnScreen"></div>
 

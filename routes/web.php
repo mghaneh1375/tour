@@ -261,11 +261,11 @@ Route::middleware(['nothing'])->group(function () {
     Route::middleware(['auth'])->group(function (){
         Route::post('review/getNewCodeForUploadNewReview', 'ReviewsController@getNewCodeForUploadNewReview')->name('review.getNewCodeForUploadNewReview');
 
+        Route::post('reviewUploadFile', 'ReviewsController@reviewUploadFile')->name('review.uploadFile');
+
         Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
 
         Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');
-
-        Route::post('reviewUploadVideo', 'ReviewsController@reviewUploadVideo')->name('reviewUploadVideo');
 
         Route::post('deleteReviewPic', 'ReviewsController@deleteReviewPic')->name('deleteReviewPic');
 

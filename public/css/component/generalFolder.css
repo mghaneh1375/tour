@@ -1770,9 +1770,9 @@ a:hover {
     justify-content: space-around;
 }
 .writeNewReviewModal .reviewButs .but{
-    background: #e5e5e5;
+    background: white;
     margin: 3px 0px;
-    padding: 7px 7px;
+    padding: 4px 7px;
     border-radius: 0px;
     font-weight: bold;
     display: flex;
@@ -1780,7 +1780,8 @@ a:hover {
     cursor: pointer;
     font-size: 12px;
     width: 49%;
-    justify-content: center;
+    justify-content: space-evenly;
+    border: solid 1px;
 }
 .writeNewReviewModal .reviewButs .but:before{
     font-size: 30px;

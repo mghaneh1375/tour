@@ -40,7 +40,6 @@ use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {
-
     public $limboLocation = __DIR__ . '/../../../../assets/limbo';
 
     public function showReviewPage($id)
@@ -118,7 +117,7 @@ class ReviewsController extends Controller
             return ['status' => 'error6'];
     }
 
-    public function reviewUploadVideo(Request $request)
+    public function reviewUploadFile(Request $request)
     {
         $data = json_decode($request->data);
         $direction = $this->limboLocation;
@@ -152,7 +151,7 @@ class ReviewsController extends Controller
                 $limbo = new ReviewPic();
                 $limbo->code = $code;
                 $limbo->pic = $fileName;
-                $limbo->isVideo = 1;
+                $limbo->isVideo = $data->isVideo;
                 $limbo->is360 = $data->is360;
                 $limbo->save();
             }
@@ -256,7 +255,7 @@ class ReviewsController extends Controller
             $reviewPic = ReviewPic::where('code', $request->code)->get();
 
             if (count($reviewPic) > 0) {
-                ReviewPic::where('code', $request->code)->update(['logId' => $log->id]);
+                ReviewPic::where('code', $request->code)->update(['logId' => $log->id, 'code' => null]);
 
                 $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlaceName}";
                 if (!file_exists($location))
@@ -288,6 +287,11 @@ class ReviewsController extends Controller
                         $dest = "{$location}/{$videoName}";
                         if (file_exists($file))
                             rename($file, $dest);
+                    }
+                    else{
+                        $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
+                        $image = file_get_contents($dest);
+                        resizeUploadedImage($image, $size, $item->pic);
                     }
                 }
             }
@@ -800,6 +804,19 @@ class ReviewsController extends Controller
 
                     $reviewPics = ReviewPic::where('logId', $review->id)->get();
                     foreach ($reviewPics as $pic){
+                        if($pic->isVideo == 1){
+                            if($pic->thumbnail != null)
+                                $thumbnail = $pic->thumbnail;
+                            else{
+                                $thumbnail = explode('.', $pic->pic);
+                                $thumbnail[count($thumbnail)-1] = '.png';
+                                $thumbnail = implode('', $thumbnail);
+                            }
+                            if(is_file($location.'/'.$thumbnail))
+                                unlink($location.'/'.$thumbnail);
+                        }
+
+
                         if(is_file($location.'/'.$pic->pic))
                             unlink($location.'/'.$pic->pic);
                         $pic->delete();

@@ -1606,7 +1606,7 @@ footer .profileMobileFooterImg{
 
 footer .overallMobileFooterModal{
     position: absolute;
-    bottom: 70px;
+    bottom: 80px;
     right: 24px;
     background: white;
     padding: 51px 5px;
@@ -2016,6 +2016,54 @@ footer .bookMarkSSec .infoSec .state{
 }
 
 
+.addNewReviewButtonMobileFooter{
+    position: fixed;
+    background: WHITE;
+    color: #333;
+    color: #2c2c2c;
+    height: 50px !IMPORTANT;
+    BORDER: solid 1px;
+    width: 100px;
+    border-bottom: none;
+    border-radius: 20px 20px 0px 0px;
+    font-size: 14px !important;
+    flex-direction: column;
+    z-index: 1;
+    bottom: 60px;
+    right: calc(50% - 50px);
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    /*animation: writePostAnimationInMobile 2s infinite;*/
+}
+.addNewReviewButtonMobileFooter:before{
+    font-size: 22px;
+    line-height: 8px;
+    width: 25px;
+    height: 25px;
+    border: solid 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-weight: normal;
+}
+
+@keyframes writePostAnimationInMobile {
+    0% {
+        background-color: var(--koochita-yellow);
+    }
+    50% {
+        background-color: white;
+    }
+    100% {
+        background-color: var(--koochita-yellow);
+    }
+}
+
+
 @media (max-width: 1300px) {
     .footerRside {
         font-size: 13px !important;
@@ -2300,6 +2348,19 @@ footer .bookMarkSSec .infoSec .state{
         right: -11px;
         font-size: 20px;
         z-index: 99;
+    }
+
+
+    .submitFiltersInMobile{
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        background: var(--koochita-blue);
+        color: white;
+        width: 100%;
+        right: 0px;
+        text-align: center;
+        padding: 5px 0px;
     }
 }
 

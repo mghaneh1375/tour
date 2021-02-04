@@ -49,6 +49,7 @@ body {
     top: -65px;
     padding: 5px 50px 5px 25px;
     cursor: default;
+    text-align: right;
 }
 
 .userProfileInfo > div:first-child {

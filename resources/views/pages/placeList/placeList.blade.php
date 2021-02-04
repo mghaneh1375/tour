@@ -19,6 +19,12 @@
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/theme2/hotelLists.css?v='.$fileVersions)}}"/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/mainPageStyles.css?v='.$fileVersions)}}'/>
 
+    <style>
+        .addNewReviewButtonMobileFooter{
+            /*display: none !important;*/
+        }
+    </style>
+
 </head>
 
 <body id="BODY_BLOCK_JQUERY_REFLOW">

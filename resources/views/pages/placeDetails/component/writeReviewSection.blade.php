@@ -285,5 +285,5 @@
 
     var storeReviewURLM = '{{route("storeReview")}}';
 </script>
-<script defer src="{{URL::asset('js/pages/placeDetialsWriteReview.js')}}"></script>
+<script defer src="{{URL::asset('js/pages/placeDetialsWriteReview.js?v=1')}}"></script>
 

@@ -28,7 +28,6 @@ function upload_fileLargeFile(start, _fileName) {
     let isLast = false;
     let next_slice = start + sliceSizeLargeFileUploadedInJsFile + 1;
     let blob = fileLargeFileUploadedInJsFile.slice(start, next_slice);
-
     if(next_slice >= fileLargeFileUploadedInJsFile.size)
         isLast = true;
 

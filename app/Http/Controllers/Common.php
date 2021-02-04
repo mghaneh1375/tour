@@ -197,7 +197,7 @@ function getNearestMedals($uId) {
 }
 
 function uploadLargeFile($_direction, $_file_data){
-    $file_data = decode_chunk($_file_data);
+        $file_data = decode_chunk($_file_data);
     if ($file_data === false)
         return false;
     else

@@ -11,6 +11,14 @@
         <meta property="og:image:height" content="367"/>
     @endif
     <style>
+        .myPageButtonsTop{
+            display: flex;
+            font-size: 12px;
+        }
+        .myPageButtonsTop a, .myPageButtonsTop button{
+            width: 100px;
+            text-align: center;
+        }
         .mobileTabs .moreTabMenu{
             position: absolute;
             left: 13px;
@@ -44,24 +52,6 @@
 
 @section('header')
     @parent
-    <script>
-        var allUserPics = {!! json_encode($sideInfos['allUserPics']) !!};
-        var selectedTrip = [];
-        var userPageId = {{$user->id}};
-        var userPageUsername = '{{$user->username}}';
-        var openMobileMoreMenu = false;
-        var defaultPics = null;
-        var choosenPic = 0;
-        var uploadedPic = null;
-        var mainUploadedPic = null;
-
-        let bannerPics = null;
-        let bannerPicsHtml = '';
-        let chosenBannerPic = null;
-        let mainUploadedBanner = false;
-        let uploadedBanner = false;
-        let cropKind = null;
-    </script>
 
     <link rel="stylesheet" href="{{URL::asset('css/pages/profile.css?v1='.$fileVersions)}}">
 @stop
@@ -101,8 +91,8 @@
 
                     <div class="userProfileInfo">
                         <div>{{$user->username}}</div>
-                        <div style="display: flex; font-size: 12px;">
-                            @if(isset($myPage) && $myPage)
+                        @if(isset($myPage) && $myPage)
+                            <div class="myPageButtonsTop width50">
                                 <a href="{{route('profile.accountInfo')}}" class="settingHeaderButton">
                                     <span>ویرایش</span>
                                     <span class="settingIcon"></span>
@@ -113,18 +103,20 @@
                                         <span class="newMsgCount">{{$authUserInfos->newMsg}}</span>
                                     @endif
                                 </a>
-                            @else
+                            </div>
+                        @else
+                            <div class="myPageButtonsTop">
                                 <button class="msgHeaderButton followButton hideOnPhone {{$youFollowed != 0 ? 'followed' : ''}}" onclick="followUser(this, {{$user->id}})">
-                                    <span class="addMemberIcon"></span>
-                                    <span class="text"></span>
-                                </button>
+                                        <span class="addMemberIcon"></span>
+                                        <span class="text"></span>
+                                    </button>
                                 @if(auth()->check())
                                     <a href="{{route("profile.message.page")}}?user={{$user->username}}" class="msgHeaderButton">ارسال پیام</a>
                                 @else
                                     <div class="msgHeaderButton" onclick="checkLogin('{{route("profile.message.page")}}?user={{$user->username}}')">ارسال پیام</div>
                                 @endif
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="postsMainFiltrationBar hideOnPhone">
@@ -636,6 +628,26 @@
             </span>
         </div>
     @endif
+
+
+    <script>
+        var allUserPics = {!! json_encode($sideInfos['allUserPics']) !!};
+        var selectedTrip = [];
+        var userPageId = {{$user->id}};
+        var userPageUsername = '{{$user->username}}';
+        var openMobileMoreMenu = false;
+        var defaultPics = null;
+        var choosenPic = 0;
+        var uploadedPic = null;
+        var mainUploadedPic = null;
+
+        let bannerPics = null;
+        let bannerPicsHtml = '';
+        let chosenBannerPic = null;
+        let mainUploadedBanner = false;
+        let uploadedBanner = false;
+        let cropKind = null;
+    </script>
 
     <script>
         $(window).on('scroll', () =>{
