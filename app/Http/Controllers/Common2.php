@@ -148,6 +148,8 @@ function reviewTrueType($_log){
     if(count($_log->pics) > 0){
         $_log->hasPic = true;
         $_log->mainPic = $_log->pics[0]->picUrl;
+        $_log->mainPicIsVideo = $_log->pics[0]->isVideo;
+
         if(count($_log->pics) > 1){
             $_log->morePic = true;
             $_log->picCount = count($_log->pics) - 1;

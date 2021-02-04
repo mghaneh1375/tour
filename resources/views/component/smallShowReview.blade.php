@@ -11,6 +11,18 @@
         margin-bottom: 10px;
         padding-bottom: 10px;
     }
+    .smallReviewMainPic.playIcon:before{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #00000026;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 70px;
+    }
     @media (max-width: 767px){
         .reviewOptionMenuBar{
             display: unset;
@@ -80,7 +92,7 @@
         </div>
         <div class="smallReviewcommentPhotosShow">
             <div class="photosCol col-xs-12" onclick="showSmallReviewPics(##id##)" style="display: ##havePic##; margin-bottom: 10px">
-                <div class="smallReviewMainPic">
+                <div class="smallReviewMainPic ##isVideoClass##">
                     <img src="##mainPic##" class="resizeImgClass" style="position: absolute; width: 100%;" onload="fitThisImg(this)">
                 </div>
                 <div class="numberOfPhotosMainDiv" style="display: ##hasMorePic##">
@@ -126,9 +138,6 @@
                                     </div>
                                 </div>`;
 
-</script>
-
-<script>
     var yourProfileUrlSmallShowReview = '{{url("profile/index")}}';
     var getSingleReviewUrl = '{{route("review.getSingleReview")}}';
     var policiRouteUrl = '{{route("policies")}}';

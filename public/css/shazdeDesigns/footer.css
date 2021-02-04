@@ -2031,7 +2031,6 @@ footer .bookMarkSSec .infoSec .state{
     z-index: 1;
     bottom: 60px;
     right: calc(50% - 50px);
-    right: 5px;
     display: flex;
     justify-content: center;
     align-items: center;

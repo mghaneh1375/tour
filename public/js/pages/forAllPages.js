@@ -534,11 +534,14 @@ function createPhotoModal(_title, _pics, _choosenIndex = 0){
             text = text.replace(re, sidePics[i][x]);
         }
 
-        re = new RegExp('##picIndex##', "g");
-        text = text.replace(re, 'chooseAlbumMainPhoto(' + i + ')');
+        text = text.replace(new RegExp('##picIndex##', "g"), 'chooseAlbumMainPhoto(' + i + ')');
+        text = text.replace(new RegExp('##index##', "g"), i);
 
-        re = new RegExp('##index##', "g");
-        text = text.replace(re, i);
+        if(sidePics[i]['video'] != undefined)
+            text = text.replace(new RegExp('##isVideoClass##', "g"), 'playIcon');
+        else
+            text = text.replace(new RegExp('##isVideoClass##', "g"), '');
+
 
         $('#sidePhotoModal').append(text);
     }

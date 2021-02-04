@@ -102,7 +102,7 @@
     var sidePics;
     var choosenIndex;
     var userInPhoto = '{{auth()->check() ? auth()->user()->username : false}}';
-    var srcSidePic = `<div id="sideAlbumPic##index##" class="rightColPhotosShowingModal" onclick="##picIndex##">
+    var srcSidePic = `<div id="sideAlbumPic##index##" class="rightColPhotosShowingModal ##isVideoClass##" onclick="##picIndex##">
                             <img src="##sidePic##" alt="##alt##" class="mainAlbumPic resizeImgClass" onload="fitThisImg(this)">
                         </div>`;
 

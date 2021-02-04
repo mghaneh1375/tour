@@ -21,7 +21,7 @@
 
     <style>
         .addNewReviewButtonMobileFooter{
-            /*display: none !important;*/
+            display: none !important;
         }
     </style>
 

@@ -14,53 +14,26 @@ function createSmallReviewHtml(item){
     allReviewsCreated.push(item);
     var text = reviewSmallSample;
     var fk = Object.keys(item);
-    for (var x of fk) {
-        var t = '##' + x + '##';
-        var re = new RegExp(t, "g");
-        text = text.replace(re, item[x]);
-    }
+
+    for (var x of fk)
+        text = text.replace(new RegExp(`##${x}##`, "g"), item[x]);
+
+    text = text.replace(new RegExp('##isVideoClass##', "g"), item.mainPicIsVideo == 1 ? "playIcon" : "");
 
     var t;
     var re;
     if(item.summery != null){
-        t = '##haveSummery##';
-        re = new RegExp(t, "g");
-        text = text.replace(re, 'block');
-
-        t = '##notSummery##';
-        re = new RegExp(t, "g");
-        text = text.replace(re, 'none');
+        text = text.replace(new RegExp('##haveSummery##', "g"), 'block');
+        text = text.replace(new RegExp('##notSummery##', "g"), 'none');
     }
     else{
-        t = '##haveSummery##';
-        re = new RegExp(t, "g");
-        text = text.replace(re, 'none');
-
-        t = '##notSummery##';
-        re = new RegExp(t, "g");
-        text = text.replace(re, 'block');
+        text = text.replace(new RegExp('##haveSummery##', "g"), 'none');
+        text = text.replace(new RegExp('##notSummery##', "g"), 'block');
     }
 
-    t = '##havePic##';
-    re = new RegExp(t, "g");
-    if(item.hasPic)
-        text = text.replace(re, 'block');
-    else
-        text = text.replace(re, 'none');
-
-    t = '##hasMorePic##';
-    re = new RegExp(t, "g");
-    if(item.morePic)
-        text = text.replace(re, 'block');
-    else
-        text = text.replace(re, 'none');
-
-    t = '##isConfrim##';
-    re = new RegExp(t, "g");
-    if(item.confirm == 0)
-        text = text.replace(re, 'block');
-    else
-        text = text.replace(re, 'none');
+    text = text.replace( new RegExp('##havePic##', "g"), item.hasPic ? 'block' : 'none');
+    text = text.replace(new RegExp('##hasMorePic##', "g"),item.morePic ? 'block' : 'none');
+    text = text.replace(new RegExp('##isConfrim##', "g"), item.confirm == 0 ? 'block' : 'none');
 
     var likeClass = '';
     var disLikeClass = '';
