@@ -29,26 +29,8 @@ class DeleteContentController extends Controller
             $id = explode( '_', $request->id);
             if(count($id) == 2){
                 if($id[0] == 'review'){
-                    $reviewPic = ReviewPic::find($id[1]);
-                    if($reviewPic != null){
-                        $logModal = LogModel::find($reviewPic->logId);
-                        if(auth()->check() && $logModal->visitorId == auth()->user()->id) {
-                            $kindPlace = Place::find($logModal->kindPlaceId);
-                            $place = \DB::table($kindPlace->tableName)->find($logModal->placeId);
-                            $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file . '/' . $reviewPic->pic;
-                            if (is_file($location)) {
-                                unlink($location);
-                                $reviewPic->delete();
-                                echo json_encode(['status' => 'ok']);
-                            }
-                            else
-                                echo json_encode(['status' => 'fileNotFound']);
-                        }
-                        else
-                            echo json_encode(['status' => 'authError']);
-                    }
-                    else
-                        echo json_encode(['status' => 'notFound']);
+                    $result = ReviewPic::find($id[1])->deleteThisPicture();
+                    return response()->json(['status' => $result]);
                 }
                 else if($id[0] == 'photographer'){
                     $pic = PhotographersPic::find($id[1]);
@@ -65,24 +47,22 @@ class DeleteContentController extends Controller
 
                             PhotographersLog::where('picId', $pic->id)->delete();
                             $pic->delete();
-                            echo json_encode(['status' => 'ok']);
+                            return response()->json(['status' => 'ok']);
                         }
                         else
-                            echo json_encode(['status' => 'authError']);
+                            return response()->json(['status' => 'authError']);
                     }
                     else
-                        echo json_encode(['status' => 'notFound']);
+                        return response()->json(['status' => 'notFound']);
                 }
                 else
-                    echo json_encode(['status' => 'nok2']);
+                    return response()->json(['status' => 'nok2']);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
 }

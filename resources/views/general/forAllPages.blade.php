@@ -31,12 +31,11 @@
         }
     }
 </script>
+{{--@include('general.searches.proSearch')--}}
 
 @include('general.loading')
 
 @include('general.photoAlbumModal')
-
-{{--@include('general.searches.proSearch')--}}
 
 @include('general.searches.mainSearch')
 

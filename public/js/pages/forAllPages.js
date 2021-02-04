@@ -499,6 +499,186 @@ function chooseThisKoochitaUser(_index){
         koochitaUserModalSelectUser(user.id, user.username, user.pic);
 }
 
+
+function createPhotoModal(_title, _pics, _choosenIndex = 0){
+    // _pics = [
+    //     {
+    //         'id' : , must be kind_idNum like => review_124 or photographer_1134
+    //         'sidePic' : ,
+    //         'mainPic' : ,
+    //         'userPic' : ,
+    //         'userName' : ,
+    //         'showInfo' : show like or not (true , false) ,
+    //         'where' : ,   (optional)
+    //         'whereUrl' : ,   (optional)
+    //         'like' : ,   (optional)
+    //         'dislike' : ,    (optional)
+    //         'alt' : ,    (optional)
+    //         'uploadTime' : , (optional)
+    //         'video': if video, (optional)
+    //         'description' : ,    (optional)
+    //         'userLike' : if user like this img?,     (optional)
+    //     }
+    // ]
+
+    sidePics = _pics;
+    $('#photoAlbumTitle').text(_title);
+    $('#sidePhotoModal').empty();
+
+    for(var i = 0; i < sidePics.length; i++){
+        var re;
+        var text = srcSidePic;
+        var fk = Object.keys(sidePics[i]);
+        for (var x of fk) {
+            re = new RegExp(`##${x}##`, "g");
+            text = text.replace(re, sidePics[i][x]);
+        }
+
+        re = new RegExp('##picIndex##', "g");
+        text = text.replace(re, 'chooseAlbumMainPhoto(' + i + ')');
+
+        re = new RegExp('##index##', "g");
+        text = text.replace(re, i);
+
+        $('#sidePhotoModal').append(text);
+    }
+    $('#photoAlbumModal').modal({backdrop: 'static', keyboard: false});
+    chooseAlbumMainPhoto(_choosenIndex);
+}
+
+function chooseAlbumMainPhoto(_index){
+    choosenIndex = _index;
+    $('.chooseSidePhotoAlbum').removeClass('chooseSidePhotoAlbum');
+    $('#photoAlbumDescription').text('');
+    $('#photoAlbumNamePic').text('');
+
+    if(sidePics[_index]['picName'] != undefined)
+        $('#photoAlbumNamePic').text(' - ' + sidePics[_index]['picName']);
+
+    $('.photoAlbumUploadTime').text(sidePics[_index]['uploadTime']);
+    $('.photoAlbumUserName').text(sidePics[_index]['userName']);
+    $('.userProfileLinks').attr('href', "{{url('profile/index')}}/" + sidePics[_index]['userName']);
+    $('.photoAlbumWhere').text(sidePics[_index]['where'] ? sidePics[_index]['where'] : '').attr('href', sidePics[_index]['whereUrl']);
+    $('.photoAlbumUserPic').attr('src', sidePics[_index]['userPic']);
+
+    $('#sideAlbumPic' + _index).addClass('chooseSidePhotoAlbum');
+
+    if(sidePics[_index]['video'] != undefined) {
+        $('#mainPhotoAlbum').css('display', 'none');
+        $('#mainVideoPhotoAlbum').css('display', 'block').attr('src', sidePics[_index]['video']);
+    }
+    else{
+        $('#mainPhotoAlbum').css('display', 'block').attr('src', sidePics[_index]['mainPic']).attr('alt', sidePics[_index]['alt']);
+        $('#mainVideoPhotoAlbum').css('display', 'none').attr('src', '');
+    }
+
+    if(sidePics[_index]['showInfo']) {
+        $('#photoAlbumLikeSection').css('display', 'block');
+        $('.photoAlbumDisLikeCount').text(sidePics[_index]['dislike']);
+        $('.photoAlbumLikeCount').text(sidePics[_index]['like']);
+
+        $('.photoAlbumTopLike').removeClass('fullLikePhotoAlbum').attr('picId', sidePics[_index]['id']);
+        $('.photoAlbumTopDisLike').removeClass('fullDisLikePhotoAlbum').attr('picId', sidePics[_index]['id']);
+
+        if(sidePics[_index]['userLike'] == 1)
+            likePhotoAlbum(1);
+        else if(sidePics[_index]['userLike'] == -1)
+            likePhotoAlbum(-1);
+    }
+    else
+        $('#photoAlbumLikeSection').css('display', 'none');
+
+    $('#photoAlbumDescription').text(sidePics[_index]['description']);
+    if(userInPhoto !== false && userInPhoto == sidePics[_index].userName)
+        $('#deletePicIconsPhotoAlbum').css('display', 'flex').attr('dataValue', sidePics[_index].id);
+    else
+        $('#deletePicIconsPhotoAlbum').css('display', 'none').attr('dataValue', 0);
+
+}
+
+function likePhotoAlbum(_like){
+    $('.photoAlbumTopLike').removeClass('fullLikePhotoAlbum');
+    $('.photoAlbumTopDisLike').removeClass('fullDisLikePhotoAlbum');
+    sidePics[choosenIndex]['userLike'] = _like;
+
+    if(_like == 1)
+        $('.photoAlbumTopLike').addClass('fullLikePhotoAlbum');
+    else if(_like == -1)
+        $('.photoAlbumTopDisLike').addClass('fullDisLikePhotoAlbum');
+}
+
+function setLikeNumberInPhotoAlbum(_count, _kind){
+    if(_kind == 'like') {
+        $('.photoAlbumLikeCount').text(_count);
+        sidePics[choosenIndex]['like'] = _count;
+    }
+    else if(_kind == 'dislike'){
+        $('.photoAlbumDisLikeCount').text(_count);
+        sidePics[choosenIndex]['dislike'] = _count;
+    }
+}
+
+function closePhotoAlbumModal(){
+    $('#mainVideoPhotoAlbum').attr('src', '');
+    $('#photoAlbumModal').modal('hide');
+}
+
+var deletedPhotoInAlbum = false;
+function openDeletePhotoModal(){
+    deletedPhotoInAlbum = $('#deletePicIconsPhotoAlbum').attr('dataValue');
+    var text = 'آیا از حذف عکس خود اطمینان دارید؟ در صورت حذف محتوای مورد نظر قابل بازیابی نمی باشد.';
+    openWarning(text, doPhotoDeleteInAlbum); // in general.alert.blade.php
+}
+
+function doPhotoDeleteInAlbum(){
+    openLoading();
+    $.ajax({
+        type: 'POST',
+        url: deletePicInAlbumUrl,
+        data: {
+            _token: csrfTokenGlobal,
+            id: deletedPhotoInAlbum
+        },
+        success: function(response){
+            if(response.status == 'ok')
+                location.reload();
+            else {
+                closeLoading();
+                showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general.alert.blade.php
+            }
+        },
+        error: () => {
+            closeLoading();
+            showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general.alert.blade.php
+        }
+    })
+}
+
+function likeAlbumPic(_element, _like){
+    if(!checkLogin())
+        return;
+
+    var id = $('.photoAlbumTopLike').attr('picId');
+
+    $.ajax({
+        type: 'POST',
+        url: likePhotographerUrl,
+        data: {
+            _token: csrfTokenGlobal,
+            id : id,
+            like : _like
+        },
+        success: function(response){
+            response = JSON.parse(response);
+            if(response.status == 'ok'){
+                setLikeNumberInPhotoAlbum(response.like, 'like');
+                setLikeNumberInPhotoAlbum(response.disLike, 'dislike');
+                likePhotoAlbum(_like);
+            }
+        }
+    });
+}
+
 // $(window).on('scroll', () => {
 //     var time = seenLogStartTime;
 //     seenLogStartTime = new Date().getTime();
