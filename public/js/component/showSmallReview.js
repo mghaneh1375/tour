@@ -362,34 +362,30 @@ function setFullReviewContent(_reviews){
         disLikeClass = 'coloredFullIcon';
 
     _reviews["bookmark"] = _reviews["bookmark"] ? 'BookMarkIcon' :'BookMarkIconEmpty';
-    text += '<div class="commentFeedbackChoices">\n' +
-        '   <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-start;">\n' +
-        '       <div class="reviewLikeIcon_' + _reviews["id"] + ' cursor-pointer LikeIconEmpty likedislikeAnsReviews ' + likeClass + '" onclick="likeReviewInFullReview(' + _reviews["id"] + ', 1, this);" style="font-size: 15px; direction: rtl; margin-left: 15px;">' +
-        '           <span class="reviewLikeNumber_' + _reviews["id"] + '">' +
-        _reviews["like"] +
-        '           </span>' +
-        '       </div>\n' +
-        '       <div class="reviewDisLikeIcon_' + _reviews["id"] + ' cursor-pointer DisLikeIconEmpty likedislikeAnsReviews ' + disLikeClass + '" onclick="likeReviewInFullReview(' + _reviews["id"] + ', 0, this);" style="font-size: 15px; direction: rtl; margin-left: 15px;">' +
-        '           <span class="reviewDisLikeNumber_' + _reviews["id"] + '">' +
-        _reviews["disLike"] +
-        '           </span>' +
-        '       </div>\n' +
-        '       <div class="postCommentChoice" onclick="showCommentToReviewFullReview(this)" style="margin-left: 15px;">\n' +
-        '           <span>' + _reviews["answersCount"] + '</span>' +
-        '           <span class="showCommentsIconFeedback firstIcon"></span>\n' +
-        '           <span class="showCommentsClickedIconFeedback secondIcon" style="display: none"></span>\n' +
-        '       </div>\n' +
-        '   </div>\n' +
-        '   <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-end;">\n' +
-        '       <div class="postShareChoice display-inline-block" onclick="openReviewShareBox(this)" style="direction: ltr;font-size: 25px; line-height: 0;">\n' +
-        '           <span class="commentsShareIconFeedback ShareIcon firstIcon"></span>\n' +
-        '       </div>\n' +
-        '       <div style="margin-right: 20px; font-size: 20px;">' +
-        '           <span class="' + _reviews["bookmark"] + '" onclick="addReviewToBookMark(this, ' + _reviews["id"] + ')" style="cursor: pointer;"></span>' +
-        '       </div>' +
-        '   </div>\n' +
-        '</div>\n' +
-        '<div id="sectionOfAnsToReview_' + _reviews["id"] + '" class="commentsMainBox hidden">\n';
+    text += `<div class="commentFeedbackChoices">
+                <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-start;">
+                    <div class="reviewLikeIcon_${_reviews.id} cursor-pointer LikeIconEmpty likedislikeAnsReviews ${likeClass}" onclick="likeReviewInFullReview(${_reviews.id}, 1, this);" style="font-size: 15px; direction: rtl; margin-left: 15px;">
+                        <span class="reviewLikeNumber_${_reviews.id}">${_reviews.like}</span>
+                    </div>
+                    <div class="reviewDisLikeIcon_${_reviews.id} cursor-pointer DisLikeIconEmpty likedislikeAnsReviews ${disLikeClass}" onclick="likeReviewInFullReview(${_reviews.id}, -1, this);" style="font-size: 15px; direction: rtl; margin-left: 15px;">
+                        <span class="reviewDisLikeNumber_${_reviews.id}">${_reviews.disLike}</span>
+                    </div>
+                    <div class="postCommentChoice" onclick="showCommentToReviewFullReview(this)" style="margin-left: 15px;">
+                        <span>${_reviews.answersCount}</span>
+                        <span class="showCommentsIconFeedback firstIcon"></span>
+                        <span class="showCommentsClickedIconFeedback secondIcon" style="display: none"></span>
+                    </div>
+                </div>
+                <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-end;">
+                    <div class="postShareChoice display-inline-block" onclick="openReviewShareBox(this)" style="direction: ltr;font-size: 25px; line-height: 0;">
+                        <span class="commentsShareIconFeedback ShareIcon firstIcon"></span>
+                    </div>
+                    <div style="margin-right: 20px; font-size: 20px;">
+                        <span class="${_reviews.bookmark}" onclick="addReviewToBookMark(this, ${_reviews.id})" style="cursor: pointer;"></span>
+                    </div>
+                </div>
+            </div>
+        <div id="sectionOfAnsToReview_${_reviews.id}" class="commentsMainBox hidden">`;
 
     var checkAllReviews = true;
 
@@ -462,7 +458,7 @@ function likeReviewInFullReview(_logId, _like, _element){
         },
         success: function(response){
             response = JSON.parse(response);
-            if(response[0] == 'ok'){
+            if(response[0] == 'ok' || response[0] == 'delete'){
 
                 like = response[1];
                 dislike = response[2];
@@ -477,17 +473,19 @@ function likeReviewInFullReview(_logId, _like, _element){
 
                     $('.reviewLikeIcon_'+_logId).removeClass('coloredFullIcon');
                     $('.reviewDisLikeIcon_'+_logId).removeClass('coloredFullIcon');
-                    if(_like == 1)
-                        $('.reviewLikeIcon_'+_logId).addClass('coloredFullIcon');
-                    else
-                        $('.reviewDisLikeIcon_'+_logId).addClass('coloredFullIcon');
+                    if(response[0] == 'ok') {
+                        if (_like == 1)
+                            $('.reviewLikeIcon_' + _logId).addClass('coloredFullIcon');
+                        else
+                            $('.reviewDisLikeIcon_' + _logId).addClass('coloredFullIcon');
+                    }
                 }
 
                 for(var i = 0; i < allReviewsCreated.length; i++){
                     if(allReviewsCreated[i].id == _logId){
                         if(allReviewsCreated[i]['userLike'] == null)
                             allReviewsCreated[i]['userLike'] = [];
-                        allReviewsCreated[i]['userLike']['like'] = _like;
+                        allReviewsCreated[i]['userLike']['like'] = response[0] == 'ok' ? _like : 0;
                         allReviewsCreated[i]['like'] = like;
                         allReviewsCreated[i]['disLike'] = dislike;
 
@@ -495,7 +493,6 @@ function likeReviewInFullReview(_logId, _like, _element){
                         break;
                     }
                 }
-
             }
         }
     })

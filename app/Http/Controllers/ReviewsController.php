@@ -242,20 +242,20 @@ class ReviewsController extends Controller
 
             $uId = Auth::user()->id;
 
-            $log = new LogModel();
-            $log->placeId = $placeId;
-            $log->kindPlaceId = $kindPlaceId;
-            $log->visitorId = $uId;
-            $log->date = Carbon::now()->format('Y-m-d');
-            $log->time = getToday()['time'];
-            $log->activityId = $activity->id;
-            $log->text = $request->text != null ? $request->text : '';
-            $log->save();
+            $review = new LogModel();
+            $review->placeId = $placeId;
+            $review->kindPlaceId = $kindPlaceId;
+            $review->visitorId = $uId;
+            $review->date = Carbon::now()->format('Y-m-d');
+            $review->time = getToday()['time'];
+            $review->activityId = $activity->id;
+            $review->text = $request->text != null ? $request->text : '';
+            $review->save();
 
             $reviewPic = ReviewPic::where('code', $request->code)->get();
 
             if (count($reviewPic) > 0) {
-                ReviewPic::where('code', $request->code)->update(['logId' => $log->id, 'code' => null]);
+                ReviewPic::where('code', $request->code)->update(['logId' => $review->id, 'code' => null]);
 
                 $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlaceName}";
                 if (!file_exists($location))
@@ -296,21 +296,21 @@ class ReviewsController extends Controller
                 }
             }
             else if ($request->text == null) {
-                $log->subject = 'dontShowThisText';
-                $log->confirm = 1;
-                $log->save();
+                $review->subject = 'dontShowThisText';
+                $review->confirm = 1;
+                $review->save();
             }
 
             $assignedUser = json_decode($request->assignedUser);
             if ($assignedUser != null) {
                 foreach ($assignedUser as $item) {
                     $newAssigned = new ReviewUserAssigned();
-                    $newAssigned->logId = $log->id;
+                    $newAssigned->logId = $review->id;
 
                     $user = User::where('username', $item)->orWhere('email', $item)->first();
                     if ($user != null) {
                         $newAssigned->userId = $user->id;
-                        $findUser = ReviewUserAssigned::where('logId', $log->id)->where('userId', $user->id)->first();
+                        $findUser = ReviewUserAssigned::where('logId', $review->id)->where('userId', $user->id)->first();
                         if($findUser != null)
                             continue;
                     }
@@ -339,7 +339,7 @@ class ReviewsController extends Controller
                 for ($i = 0; $i < count($textAns); $i++) {
                     if ($textAns[$i] != null && $textAns[$i] != '' && $textQuestion[$i] != null) {
                         $newAns = new QuestionUserAns();
-                        $newAns->logId = $log->id;
+                        $newAns->logId = $review->id;
                         $newAns->questionId = $textQuestion[$i];
                         $newAns->ans = $textAns[$i];
                         $newAns->save();
@@ -354,7 +354,7 @@ class ReviewsController extends Controller
                 for ($i = 0; $i < count($multiAns); $i++) {
                     if ($multiAns[$i] != null && $multiAns[$i] != '' && $multiQuestion[$i] != null) {
                         $newAns = new QuestionUserAns();
-                        $newAns->logId = $log->id;
+                        $newAns->logId = $review->id;
                         $newAns->questionId = $multiQuestion[$i];
                         $newAns->ans = $multiAns[$i];
                         $newAns->save();
@@ -369,7 +369,7 @@ class ReviewsController extends Controller
                 for ($i = 0; $i < count($rateAns); $i++) {
                     if ($rateAns[$i] != null && $rateAns[$i] != '' && $rateQuestion[$i] != null) {
                         $newAns = new QuestionUserAns();
-                        $newAns->logId = $log->id;
+                        $newAns->logId = $review->id;
                         $newAns->questionId = $rateQuestion[$i];
                         $newAns->ans = $rateAns[$i];
                         $newAns->save();
@@ -380,13 +380,13 @@ class ReviewsController extends Controller
             $newAlert = new Alert();
             $newAlert->subject = 'addReview';
             $newAlert->referenceTable = 'log';
-            $newAlert->referenceId = $log->id;
+            $newAlert->referenceId = $review->id;
             $newAlert->userId = $uId;
             $newAlert->seen = 0;
             $newAlert->click = 0;
             $newAlert->save();
 
-            $code = $uId . '_' . rand(10000, 99999);
+            $code = $uId.'_'.generateRandomString(4);
 
             echo json_encode(['status' => 'ok', 'code' => $code]);
         }

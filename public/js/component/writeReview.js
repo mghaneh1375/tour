@@ -1,6 +1,4 @@
-var cancelThisNewReviewFile = false;
 var newReviewFileInUpload = false;
-var uploadNewReviewFileAjax = null;
 
 $(window).ready(() => {
     autosize($('#inputNewReviewText'));
@@ -56,9 +54,9 @@ function uploadFileForNewReview(_input, _kind){
 
 function createNewFileUploadCardForNewReview(_index){
     closeLoading();
-
     var file = newReviewDataForUpload.files[_index];
-    var text = `<div id="uplaodedImgForNewReview_${file.code}" class="uploadFileCard">
+    if($(`#uplaodedImgForNewReview_${file.code}`).length == 0){
+        var text = `<div id="uplaodedImgForNewReview_${file.code}" class="uploadFileCard">
                     <div class="img">
                         <img src="${file.image}" class="resizeImgClass" onload="fitThisImg(this)">
                     </div>
@@ -69,12 +67,11 @@ function createNewFileUploadCardForNewReview(_index){
                         <div class="processCounter">0%</div>
                     </div>
                     <div class="hoverInfos">
-                        <div class="cancelButton closeIconWithCircle" onclick="deleteThisUploadedReviewFile(${file.code})">
-                            حذف عکس
-                         </div>
+                        <div onclick="deleteThisUploadedReviewFile(${file.code})" class="cancelButton closeIconWithCircle"> حذف عکس </div>
                     </div>
                 </div>`;
-    $('.uploadedFiles').append(text);
+        $('.uploadedFiles').append(text);
+    }
 }
 
 function convertVideoFileForConvertForNewReview(_index){
@@ -123,6 +120,7 @@ function convertVideoFileForConvertForNewReview(_index){
             video.src = url;
             video.muted = true;
             video.playsInline = true;
+            video.currentTime = 2;
             video.play();
         };
         fileReader.readAsArrayBuffer(uFile.file);
@@ -281,6 +279,11 @@ function storeNewReview(_element){
     $(_element).addClass('hidden');
 
     if(canUpload && !fileUploding) {
+        var assignedUsers = [];
+        var assignedUsersElements = $('.assignedUserForNewReview');
+        for(var i = 0; i < assignedUsersElements.length; i++)
+            assignedUsers.push($(assignedUsersElements[i]).text());
+
         $.ajax({
             type: 'POST',
             url: storeNewReviewUrl,
@@ -289,7 +292,7 @@ function storeNewReview(_element){
                 kindPlaceId: 0,
                 placeId: 0,
                 code: newReviewDataForUpload.code,
-                userAssigned: JSON.stringify(newReviewDataForUpload.userAssigned),
+                assignedUser: JSON.stringify(assignedUsers),
                 text: text,
             },
             success: response => {
@@ -299,14 +302,15 @@ function storeNewReview(_element){
 
                 if (response.status == 'ok') {
                     closeMyModal('newReviewSection');
-                    newReviewDataForUpload.code = response.result;
-                    newReviewDataForUpload.userAssigned = [];
+
+                    newReviewDataForUpload.code = response.code;
                     newReviewDataForUpload.files = [];
+
                     $('#inputReviewText').val('');
-                    $('#friendAddedSection').find('.acceptedUserFriend').remove();
-                    $('.uploadedFiles').find('.uploadFileCard').remove();
+                    $('#friendAddedSection').empty();
+                    $('.uploadedFiles').empty();
+
                     showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
-                    newReviewDataForUpload.code = false;
                 } else
                     showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
             },
@@ -318,4 +322,14 @@ function storeNewReview(_element){
         })
     }
 
+}
+
+function openUserSearchForNewReview(){
+    openKoochitaUserSearchModal('جستجوی دوستان', (_id, _username) => {
+        $('#friendAddedSection').append(`<div class="assignedUserForNewReview user iconClose" onclick="deleteThisAssignedUserToReview(this)">${_username}</div>`);
+    });
+}
+
+function deleteThisAssignedUserToReview(_element){
+    $(_element).remove();
 }

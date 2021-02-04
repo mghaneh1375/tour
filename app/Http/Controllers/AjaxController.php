@@ -573,48 +573,43 @@ class AjaxController extends Controller {
                 $like = LogFeedBack::where($condition)->first();
 
                 $subject = '';
-                if($like == null){
-                    $like = new LogFeedBack();
-                    $like->logId = $request->logId;
-                    $like->userId = $u->id;
-                    if($request->like == 1)
-                        $like->like = 1;
-                    else
-                        $like->like = -1;
-                    $like->save();
+
+                if($like != null && $like->like == $request->like){
+                    Alert::where('referenceTable', 'logFeedBack')->where('referenceId', $like->id)->delete();
+                    $like->delete();
+                    $status = 'delete';
                 }
                 else{
-                    if($request->like == 1)
-                        $like->like = 1;
-                    else
-                        $like->like = -1;
+                    if($like == null){
+                        $like = new LogFeedBack();
+                        $like->logId = $request->logId;
+                        $like->userId = $u->id;
+                    }
+
+                    $like->like = $request->like == 1 ? 1 : -1;
                     $like->save();
+
+                    if($like->like == 1) $subject = 'like';
+                    elseif($like->like == -1) $subject = 'dislike';
+
+                    $log = LogModel::find($request->logId);
+                    $actId = Activity::find($log->activityId);
+                    $subject .= $actId->name == 'نظر' ? 'Review' : 'Ans';
+
+                    $alert = new Alert();
+                    $alert->subject = $subject;
+                    $alert->referenceTable = 'logFeedBack';
+                    $alert->referenceId = $like->id;
+                    $alert->userId = $log->visitorId;
+                    $alert->save();
+
+                    $status = 'ok';
                 }
-
-                if($like->like == 1)
-                    $subject .= 'like';
-                elseif($like->like == -1)
-                    $subject .= 'dislike';
-
-                $log = LogModel::find($request->logId);
-                $reviewAct = Activity::where('name', 'نظر')->first();
-                $ansAct = Activity::where('name', 'پاسخ')->first();
-                if($log->activityId == $reviewAct->id)
-                    $subject .= 'Review';
-                elseif($log->activityId == $ansAct->id)
-                    $subject .= 'Ans';
-
-                $alert = new Alert();
-                $alert->subject = $subject;
-                $alert->referenceTable = 'logFeedBack';
-                $alert->referenceId = $like->id;
-                $alert->userId = $log->visitorId;
-                $alert->save();
 
                 $like = LogFeedBack::where('logId', $request->logId)->where('like', 1)->count();
                 $dislike = LogFeedBack::where('logId', $request->logId)->where('like', -1)->count();
 
-                echo json_encode(['ok', $like, $dislike]);
+                echo json_encode([$status, $like, $dislike]);
             }
             else
                 echo json_encode(['nok2']);

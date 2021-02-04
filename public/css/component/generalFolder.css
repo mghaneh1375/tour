@@ -1814,6 +1814,26 @@ a:hover {
     cursor: pointer;
 }
 
+
+.writeNewReviewModal .searchYouFriendDiv{
+    display: flex;
+    flex-wrap: wrap;
+}
+.writeNewReviewModal .searchYouFriendDiv .results{
+    display: flex;
+    flex-wrap: wrap;
+}
+.writeNewReviewModal .searchYouFriendDiv .results .user{
+    margin: 0px 5px;
+    background: var(--koochita-yellow);
+    padding: 0px 10px;
+    border-radius: 15px;
+    color: white;
+}
+.writeNewReviewModal .searchYouFriendDiv .results .user:before{
+    color: red;
+}
+
 .uploadFileCard{
     background: #f2f2f2;
     padding: 10px;
