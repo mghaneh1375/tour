@@ -275,14 +275,15 @@ function storeNewReview(_element){
             canUpload = true;
     });
 
-    $(_element).next().removeClass('hidden');
-    $(_element).addClass('hidden');
-
     if(canUpload && !fileUploding) {
         var assignedUsers = [];
         var assignedUsersElements = $('.assignedUserForNewReview');
         for(var i = 0; i < assignedUsersElements.length; i++)
             assignedUsers.push($(assignedUsersElements[i]).text());
+
+
+        $(_element).next().removeClass('hidden');
+        $(_element).addClass('hidden');
 
         $.ajax({
             type: 'POST',
