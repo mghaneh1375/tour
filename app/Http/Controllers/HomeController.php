@@ -820,29 +820,37 @@ class HomeController extends Controller
             $item->time = getDifferenceTimeString($item->created_at);
 
             if($item->subject == 'deleteReview' || $item->subject == 'deleteAns' || $item->subject == 'deleteQues'){
-                $reference = \DB::table($item->referenceTable)->find($item->referenceId);
-                if($reference != null) {
-                    $kindPlace = Place::where('tableName', $item->referenceTable)->first();
-                    $placeId = $reference->id;
-                    $place = \DB::table($kindPlace->tableName)->find($placeId);
-                    $placeUrl = createUrl($kindPlace->id, $placeId, 0, 0, 0);
-
-                    if($item->subject == 'deleteReview')
-                        $refType = 'دیدگاه';
-                    else if($item->subject == 'deleteAns')
-                        $refType = 'پاسخ';
-                    else if($item->subject == 'deleteQues')
-                        $refType = 'سوال';
-
-                    $alertText = $refType . ' شما برای ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . ' بدلیل مغایرت با قوانین سایت حذف گردید.';
-
+                if($item->subject == 'deleteReview' && $item->referenceTable == 'free'){
                     $item->color = $redColor;
-                    $item->msg = $alertText;
-                    $item->pic = getPlacePic($placeId, $kindPlace->id, 'l');
+                    $item->msg = 'پست شما حذف شد';
+                    $item->pic = \URL::asset('images/mainPics/noPicSite.jpg');
                     array_push($result, $item);
                 }
-                else
-                    $item->delete();
+                else {
+                    $reference = \DB::table($item->referenceTable)->find($item->referenceId);
+                    if ($reference != null) {
+                        $kindPlace = Place::where('tableName', $item->referenceTable)->first();
+                        $placeId = $reference->id;
+                        $place = \DB::table($kindPlace->tableName)->find($placeId);
+                        $placeUrl = createUrl($kindPlace->id, $placeId, 0, 0, 0);
+
+                        if ($item->subject == 'deleteReview')
+                            $refType = 'دیدگاه';
+                        else if ($item->subject == 'deleteAns')
+                            $refType = 'پاسخ';
+                        else if ($item->subject == 'deleteQues')
+                            $refType = 'سوال';
+
+                        $alertText = $refType . ' شما برای ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . ' بدلیل مغایرت با قوانین سایت حذف گردید.';
+
+                        $item->color = $redColor;
+                        $item->msg = $alertText;
+                        $item->pic = getPlacePic($placeId, $kindPlace->id, 'l');
+                        array_push($result, $item);
+                    }
+                    else
+                        $item->delete();
+                }
             }
             else if($item->subject == 'assignedUserToReview'){
                 $reference = ReviewUserAssigned::find($item->referenceId);
