@@ -195,11 +195,11 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                         </div>
                         <hr>
                         <div>
-                            <span style="font-size: 12px">{{__('در صورتی که دوستانتان شما را معرفی کرده اند، کد معرف خود را در کادر زیر وارد کنید.')}}</span>
-                            <div class="loginRowsPopup loginRowsPopupInline">
-                                <span class="loginInputLabel">{{__('کد معرف')}}</span>
+{{--                            <span style="font-size: 12px">{{__('در صورتی که دوستانتان شما را معرفی کرده اند، کد معرف خود را در کادر زیر وارد کنید.')}}</span>--}}
+{{--                            <div class="loginRowsPopup loginRowsPopupInline">--}}
+{{--                                <span class="loginInputLabel">{{__('کد معرف')}}</span>--}}
 {{--                                <input type="text" id="invitationCode" class="loginInputTemp" maxlength="6">--}}
-                            </div>
+{{--                            </div>--}}
                         </div>
                         <div style="display: flex; margin: 10px 0px;">
                             <input id='checked2' onchange='checkedCheckBox(this)' type='checkbox' value='-1'
@@ -230,10 +230,10 @@ $authUrl = str_replace('state', 'state='.$url, $authUrl);
                         <div class="header_text font-size-14Imp font-weight-700">{{__('قدم آخر!')}}</div>
                             <div>
                                 <span style="font-size: 12px">{{__('در صورتی که دوستانتان شما را معرفی کرده اند، کد معرف خود را در کادر زیر وارد کنید.')}}</span>
-                                <div class="loginRowsPopup loginRowsPopupInline" style="margin-top: 5px">
-                                    <span class="loginInputLabel">{{__('کد معرف')}}</span>
-                                    <input type="text" id="invitationCode" class="loginInputTemp" maxlength="6">
-                                </div>
+{{--                                <div class="loginRowsPopup loginRowsPopupInline" style="margin-top: 5px">--}}
+{{--                                    <span class="loginInputLabel">{{__('کد معرف')}}</span>--}}
+{{--                                    <input type="text" id="invitationCode" class="loginInputTemp" maxlength="6">--}}
+{{--                                </div>--}}
                             </div>
                             <div style="display: flex; margin: 10px 0px;">
                                 <input id='checked1' onchange='checkedCheckBox(this)' type='checkbox' value='-1'

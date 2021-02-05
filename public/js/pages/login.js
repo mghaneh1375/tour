@@ -261,7 +261,7 @@ function registerWithPhone() {
                 password: password,
                 phone: phone,
                 actCode: actCode,
-                invitationCode: inviteCode
+                // invitationCode: inviteCode
             },
             success: function (response) {
                 if (response == "ok")
@@ -370,7 +370,7 @@ function registerWithEmail() {
             username: username,
             password: password,
             email: email,
-            invitationCode: inviteCode
+            // invitationCode: inviteCode
         },
         success: function (response) {
             if (response == "ok")
