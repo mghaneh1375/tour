@@ -962,14 +962,10 @@ class ProfileController extends Controller {
     public function updateProfile2() {
         $user = Auth::user();
         if(isset($_POST["introduction"]) && isset($_POST["sex"]) && isset($_POST["ageId"])) {
-
-
             $user->introduction = makeValidInput($_POST["introduction"]);
             $user->sex = (makeValidInput($_POST["sex"]) == "f") ? 0 :
                 (makeValidInput($_POST["sex"]) == "m") ? 1 : 2;
-
-            $user->ageId = makeValidInput($_POST["ageId"]);
-
+            $user->age = makeValidInput($_POST["ageId"]);
             $user->save();
 
             echo 'ok';
