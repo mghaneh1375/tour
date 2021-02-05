@@ -900,13 +900,13 @@ class ProfileController extends Controller {
 
         $user = Auth::user();
 
-        if(User::whereUserName($_POST['userName'])->where('id', '!=', $user->id)->count() == 0)
+        if(User::where('username', $_POST['userName'])->where('id', '!=', $user->id)->count() == 0)
             $user->username = makeValidInput($_POST["userName"]);
         if(isset($_POST['firstName']))
             $user->first_name = $_POST['firstName'];
         if(isset($_POST['lastName']))
             $user->last_name = $_POST['lastName'];
-        if(isset($_POST['email']) && strlen($_POST['email']) != 0 && User::whereUserName($_POST['email'])->where('id', '!=', $user->id)->count() == 0)
+        if(isset($_POST['email']) && strlen($_POST['email']) != 0 && User::where('username', $_POST['email'])->where('id', '!=', $user->id)->count() == 0)
             $user->email = makeValidInput($_POST["email"]);
         if(isset($_POST['cityId']) && $_POST['cityId'] != 0)
             $user->cityId = makeValidInput($_POST['cityId']);
@@ -916,7 +916,7 @@ class ProfileController extends Controller {
            $user->cityId != null && $user->ageId != null && $user->sex != null && $user->birthday != null)
             event($user->id, $user->id, 'completeUserInfo');
 
-        if (isset($_POST["phone"]) && makeValidInput($_POST["phone"]) != $user->phone && User::wherePhone($_POST['phone'])->count() == 0) {
+        if (isset($_POST["phone"]) && makeValidInput($_POST["phone"]) != $user->phone && User::where('phone', $_POST['phone'])->count() == 0) {
             $phoneNum = makeValidInput($_POST["phone"]);
             $activation = ActivationCode::where('userId', $user->id)->first();
             if ($activation == null) {
