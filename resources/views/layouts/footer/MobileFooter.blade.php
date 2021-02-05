@@ -36,7 +36,7 @@
         </div>
     @else
         <div class="loginHelperSection footerLoginHelperSection hidden" onclick="closeLoginHelperSection()">
-            <div class="login-button">
+            <div class="login-button" style="z-index: 99;" onclick="closeLoginHelperSection()">
                 <span class="footerMenuBarLinks" style="display: flex; align-items: center">
                     {{__('ورود')}}
                     <span class="iconFamily UserIcon" style="font-size: 20px; margin-left: 2px"></span>
