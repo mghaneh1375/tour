@@ -153,8 +153,6 @@ function showFullReviews(_input){
         openMyModal('fullReviewModal');
         $('#fullReview').html(text);
         $('#fullReview').append('<div class="closeFullReview iconClose" onclick="closeFullReview()"></div>');
-
-        $('#fullReviewModal').find('.postCommentChoice').click();
     }
     else if(_kind == 'append') {
         $('#' + _input.sectionId).append(text);
@@ -407,6 +405,8 @@ function setFullReviewContent(_reviews){
     setTimeout(function(){
         resizeFitImg('resizeImgClass');
         autosize($('[id^="ansForReviews_"]'));
+
+        $('#fullReviewModal').find('.postCommentChoice').click();
     }, 100);
 }
 

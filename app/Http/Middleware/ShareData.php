@@ -21,7 +21,7 @@ class ShareData
      */
     public function handle($request, Closure $next)
     {
-        $fileVersions = 163;
+        $fileVersions = 164;
 
         $config = \App\models\ConfigModel::first();
 
