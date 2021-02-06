@@ -21,7 +21,7 @@ class BusinessPanelShareData
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);
-            View::share(['fileVersions' => 1, 'userInfo' => $userInfo]);
+            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo]);
 
             if (!$request->is('completeUserInfo') && ($userInfo->first_name == null || $userInfo->last_name == null || $userInfo->phone == null || $userInfo->birthday == null))
                 return redirect(route('businessPanel.completeUserInfo'));
