@@ -371,7 +371,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                 </div>
                                                 <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"> {{count($photographerPics)}} </div>
                                             </div>
-                                            <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>
+{{--                                            <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>--}}
                                         </div>
                                         <div class="left-nav left-nav-header swiper-button-next mainSliderNavBut"></div>
                                         <div class="right-nav right-nav-header swiper-button-prev mainSliderNavBut"></div>
