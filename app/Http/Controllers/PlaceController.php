@@ -2949,10 +2949,10 @@ class PlaceController extends Controller {
                                     ->pluck('id')
                                     ->toArray();
             }
-        }
-        if(count($placeIds) == 0)
-            return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
 
+            if(count($placeIds) == 0)
+                return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
+        }
 
         // second get places have selected features
         if($reqFilter != null && count($reqFilter) > 0){
@@ -2962,48 +2962,32 @@ class PlaceController extends Controller {
             }
 
             if(count($featureFilters) != 0) {
-                $placeIds = [0];
-
                 if($kindPlace->id == 13){
                     $pIds = LocalShops::whereIn('categoryId', $featureFilters)->pluck('id')->toArray();
+                    $placeIds = [];
                     foreach ($pIds as $item)
                         array_push($placeIds, $item);
                 }
                 else{
                     $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
+                    $placeIds = [];
                     foreach ($pIds as $p){
                         if($p->count == count($featureFilters))
                             array_push($placeIds, $p->placeId);
                     }
                 }
             }
+
+            if(count($placeIds) == 0)
+                return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
         }
-        if(count($placeIds) == 1)
-            return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
 
         // if have rate filter
         if($rateFilter != 0){
-            $questionRate = Question::where('ansType', 'rate')->pluck('id')->toArray();
-            $p = DB::select('SELECT log.placeId as placeId, AVG(qua.ans) as rate FROM log INNER JOIN questionUserAns AS qua ON log.kindPlaceId = ' . $kindPlace->id . ' AND log.placeId IN (' . implode(",", $placeIds) . ') AND qua.questionId IN (' . implode(",", $questionRate) . ') AND qua.logId = log.id GROUP BY log.placeId ORDER BY rate DESC');
-
-            $rateFP = [];
-            foreach ($placeIds as $item){
-                array_push($rateFP, ['id' => $item, 'rate' => 2]);
-                foreach ($p as $item2){
-                    if($item2->placeId == $item){
-                        $rateFP[count($rateFP)-1]['rate'] = $item2->rate;
-                    }
-                }
-            }
-
-            $placeIds = [];
-            foreach ($rateFP as $item){
-                if($item['rate'] > ($rateFilter-1))
-                    array_push($placeIds, $item['id']);
-            }
+            $placeIds = DB::table($kindPlace->tableName)->whereIn('id', $placeIds)->where('fullRate', '>', ($rateFilter-1))->pluck('id')->toArray();
+            if(count($placeIds) == 0)
+                return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
         }
-        if(count($placeIds) == 0)
-            return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
 
         if($kindPlace->id == 13)
             $placeIds = LocalShops::whereIn('id', $placeIds)->where('confirm', 1)->pluck('id')->toArray();

@@ -559,12 +559,32 @@
 
     function doFilterFeature(value){
         if(featureFilter.includes(value))
-            featureFilter[featureFilter.indexOf(value)] = 0;
-        else{
-            var index = featureFilter.includes(0) ? featureFilter.includes(0) : featureFilter.length;
-            featureFilter[index] = value;
-        }
+            featureFilter.splice(featureFilter.indexOf(value), 1);
+        else
+            featureFilter.push(value);
         newSearch();
+    }
+
+    function cancelFeatureFilter(id, kind = 'refresh'){
+        if(id == 0){
+            for(var i = 0; i< featureFilter.length; i++){
+                if(featureFilter[i] != 0) {
+                    $('#feat' + featureFilter[i]).prop("checked", false);
+                    $('#p_feat' + featureFilter[i]).prop("checked", false);
+                }
+            }
+            featureFilter = [];
+        }
+        else {
+            if (featureFilter.includes(id)) {
+                featureFilter.splice(featureFilter.indexOf(id), 1);
+                $('#feat' + id).prop("checked", false);
+                $('#p_feat' + id).prop("checked", false);
+            }
+        }
+
+        if(kind == 'refresh')
+            newSearch();
     }
 
     function createFilter(){
@@ -655,28 +675,6 @@
         }
 
         rateFilter = 0;
-        if(kind == 'refresh')
-            newSearch();
-    }
-
-    function cancelFeatureFilter(id, kind = 'refresh'){
-        if(id == 0){
-            for(i = 0; i< featureFilter.length; i++){
-                if(featureFilter[i] != 0) {
-                    $('#feat' + featureFilter[i]).prop("checked", false);
-                    $('#p_feat' + featureFilter[i]).prop("checked", false);
-                }
-            }
-            featureFilter = [];
-        }
-        else {
-            if (featureFilter.includes(id)) {
-                featureFilter[featureFilter.indexOf(id)] = 0;
-                $('#feat' + id).prop("checked", false);
-                $('#p_feat' + id).prop("checked", false);
-            }
-        }
-
         if(kind == 'refresh')
             newSearch();
     }
@@ -820,11 +818,11 @@
                     _token: '{{csrf_token()}}',
                     pageNum: page,
                     take: take,
+                    sort: sort,
                     specialFilters: specialFilters,
                     rateFilter: rateFilter,
                     nameFilter: nameFilter,
                     materialFilter: materialFilter,
-                    sort: sort,
                     featureFilter: featureFilter,
                     nearPlaceIdFilter: nearPlaceIdFilter,
                     nearKindPlaceIdFilter: nearKindPlaceIdFilter,
