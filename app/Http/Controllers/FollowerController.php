@@ -27,7 +27,7 @@ class FollowerController extends Controller
                     $status = 'store';
                 }
 
-                $followerNumber = Followers::where('followedId', $request->userPageId)->count();
+                $followerNumber = Followers::where('followedId', $followed->id)->count();
                 $followingNumber = Followers::where('userId', $u->id)->count();
                 echo json_encode(['status' => $status, 'followerNumber' => $followerNumber, 'followingNumber' => $followingNumber]);
             }

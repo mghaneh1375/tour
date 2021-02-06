@@ -21,20 +21,19 @@ function uploadFileForNewReview(_input, _kind){
     openLoading();
 
     if(_kind == 'image' && _input.files && _input.files[0]){
-        var reader = new FileReader();
-        reader.onload = e => {
+
+        cleanImgMetaData(_input, function(_imgDataURL, _files){ // in forAllPages.blade.php
             newReviewDataForUpload.files.push({
                 savedFile: '',
                 uploaded: -1,
-                image: e.target.result,
-                kind: _kind,
-                file: _input.files[0],
+                kind: 'image',
+                image: _imgDataURL,
+                file: _files,
                 code: Math.floor(Math.random()*1000)
             });
             createNewFileUploadCardForNewReview(newReviewDataForUpload.files.length - 1);
             reviewFileUploadQueueForNewReview();
-        };
-        reader.readAsDataURL(_input.files[0]);
+        });
     }
     else if(_kind == 'video' || _kind == '360Video'){
         var ind = newReviewDataForUpload.files.push({
@@ -290,8 +289,8 @@ function storeNewReview(_element){
             url: storeNewReviewUrl,
             data: {
                 _token: csrfTokenGlobal,
-                kindPlaceId: 0,
-                placeId: 0,
+                kindPlaceId: $('#kindPlaceIdNewReview').val(),
+                placeId: $('#placeIdNewReview').val(),
                 code: newReviewDataForUpload.code,
                 assignedUser: JSON.stringify(assignedUsers),
                 text: text,
@@ -323,6 +322,42 @@ function storeNewReview(_element){
         })
     }
 
+}
+
+var searchInPlaceForNewReviewAjax = null;
+function addPlaceToNewReview(){
+    createSearchInput(_element => {
+        var value = $(_element).val();
+
+        if (searchInPlaceForNewReviewAjax != null){
+            searchInPlaceForNewReviewAjax.abort();
+            clearGlobalResult();
+        }
+
+        if(value.trim().length > 1) {
+            searchInPlaceForNewReviewAjax = $.ajax({
+                type: 'GET',
+                url: `${searchPlaceForNewReviewUrl}?value=${value}&kindPlaceId=all`,
+                success: response => {
+                    if (response.status == 'ok')
+                        setResultToGlobalSearchDefaultForPlaces(response.result, selectPlaceForNewReview);
+                },
+            })
+        }
+    }, 'محل مورد نظر را جستجو کنید...');
+};
+
+function selectPlaceForNewReview(_kindPlaceId, _placeId, _placeName){
+    $('#kindPlaceIdNewReview').val(_kindPlaceId);
+    $('#placeIdNewReview').val(_placeId);
+
+    $('#addPlaceButtonNewReview').removeClass('atractionIcon').addClass('newReviewButWithPlace').text(_placeName);
+
+    $('.newReviewButWithPlace').on('click', () => {
+        $('#kindPlaceIdNewReview').val(0);
+        $('#placeIdNewReview').val(0);
+        $('#addPlaceButtonNewReview').removeClass('newReviewButWithPlace').addClass('atractionIcon').text('محل عکس را مشخص کنید');
+    })
 }
 
 function openUserSearchForNewReview(){

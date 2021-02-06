@@ -29,12 +29,16 @@
                 <div class="reviewButs">
                     <label for="reviewPictureInput" class="but addPhotoIcon"> عکس اضافه کنید.</label>
                     <label for="reviewVideoInput" class="but addVideoIcon">ویدیو اضافه کنید.</label>
-                    <label for="review360VideoInput" class="but addVideo360Icon">ویدیو 360 اضافه کنید.</label>
+                    <div id="addPlaceButtonNewReview" class="but atractionIcon" onclick="addPlaceToNewReview()">محل عکس را مشخص کنید</div>
+{{--                    <label for="review360VideoInput" class="but addVideo360Icon">ویدیو 360 اضافه کنید.</label>--}}
                     <div class="but addFriendIcon" onclick="openUserSearchForNewReview()">دوستنتان را TAG کنید.</div>
 
                     <input type="file" id="reviewPictureInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display: none;" onchange="uploadFileForNewReview(this, 'image')">
                     <input type="file" id="reviewVideoInput" accept="video/*" style="display: none;" onchange="uploadFileForNewReview(this, 'video')">
                     <input type="file" id="review360VideoInput" accept="video/*" style="display: none;" onchange="uploadFileForNewReview(this, '360Video')">
+
+                    <input type="hidden" id="kindPlaceIdNewReview" value="0">
+                    <input type="hidden" id="placeIdNewReview" value="0">
                 </div>
                 <div class="reviewQues showWhenNeed" style="display: none;"></div>
                 <div class="reviewSubmit showWhenNeed" onclick="storeNewReview(this)">ارسال دیدگاه</div>
@@ -49,6 +53,7 @@
 
 
 <script>
+    var searchPlaceForNewReviewUrl = '{{route("search.place")}}';
     var reviewUploadFileUrl = '{{route("review.uploadFile")}}';
     var uploadNewReviewPicUrl = '{{route("reviewUploadPic")}}';
     var deleteNewReviewPicUrl = '{{route("deleteReviewPic")}}';

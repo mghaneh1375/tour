@@ -307,13 +307,8 @@ class SafarnamehController extends Controller
         $take = $_GET['take'];
 
         $func = getToday();
-        $today = $func["date"];
-        $nowTime = $func["time"];
 
-        $allSafarnameh = Safarnameh::whereRaw('(date <= ' . $today . ' OR (date = ' . $today . ' AND (time <= ' . $nowTime . ' || time IS NULL)))')
-                                    ->where('release', '!=', 'draft')
-                                    ->where('confirm', 1)
-                                    ->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword', 'release')
+        $allSafarnameh = Safarnameh::youCanSee()->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword', 'release')
                                     ->orderBy('date', 'DESC')
                                     ->skip(($page-1) * $take)
                                     ->take($take)
@@ -474,26 +469,18 @@ class SafarnamehController extends Controller
                                             ->pluck('safarnamehTagRelations.safarnamehId')
                                             ->toArray();
 
-                    $safarnamehContentId = Safarnameh::whereRaw('(safarnameh.date < ' . $today . ' OR (safarnameh.date = ' . $today . ' AND  (safarnameh.time <= ' . $nowTime . ' OR safarnameh.time IS NULL)))')
-                                            ->whereRaw('(safarnameh.title LIKE "%' . $search . '%" OR safarnameh.slug LIKE "%' . $search . '%" OR safarnameh.keyword LIKE "%' . $search . '%")')
+                    $safarnamehContentId = Safarnameh::youCanSee()->whereRaw('(safarnameh.title LIKE "%' . $search . '%" OR safarnameh.slug LIKE "%' . $search . '%" OR safarnameh.keyword LIKE "%' . $search . '%")')
                                             ->orWhereIn('safarnameh.id', $tagRelId)
-                                            ->whereRaw('safarnameh.release <> "draft"')
                                             ->pluck('id')
                                             ->toArray();
                     if(count($safarnamehContentId) == 0)
                         $safarnamehContentId = [0];
                 }
-                $categ = SafarnamehCategories::where('name', $search)
-                                            ->pluck('id')
-                                            ->toArray();
-                $safarnamehCatId = SafarnamehCategoryRelations::whereIn('categoryId', $categ)
-                                            ->pluck('safarnamehId')
-                                            ->toArray();
+                $categ = SafarnamehCategories::where('name', $search)->pluck('id')->toArray();
+                $safarnamehCatId = SafarnamehCategoryRelations::whereIn('categoryId', $categ)->pluck('safarnamehId')->toArray();
 
-                $safarnameh = Safarnameh::whereIn('safarnameh.id', $safarnamehCatId)
+                $safarnameh = Safarnameh::youCanSee()->whereIn('safarnameh.id', $safarnamehCatId)
                                         ->orWhereIn('safarnameh.id', $safarnamehContentId)
-                                        ->whereRaw('(safarnameh.date < ' . $today . ' OR (safarnameh.date = ' . $today . ' AND  (safarnameh.time <= ' . $nowTime . ' OR safarnameh.time IS NULL)))')
-                                        ->whereRaw('safarnameh.release <> "draft"')
                                         ->count();
 
 
@@ -535,10 +522,8 @@ class SafarnamehController extends Controller
                     $search = $place->id;
                 }
 
-                $safarnameh = Safarnameh::whereIn('id', $safarnamehId)
+                $safarnameh = Safarnameh::youCanSee()->whereIn('id', $safarnamehId)
                                         ->where('confirm', 1)
-                                        ->where('release', '!=', 'draft')
-                                        ->whereRaw('(date < ' . $today . ' OR (date = ' . $today . ' AND  (time <= ' . $nowTime . ' OR time IS NULL)))')
                                         ->count();
             }
 

@@ -959,6 +959,28 @@ a:hover {
     display: none;
     justify-content: center;
 }
+.globalSearchBlackBackGround .globalSearchItem{
+    margin: 7px 0px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.globalSearchBlackBackGround .globalSearchItem:hover{
+    background: var(--koochita-light-green);
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine{
+    font-weight: bold;
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine .globalSearchItemIcon{
+    font-weight: normal;
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine .globalSearchItemName{
+
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemState{
+    font-size: 10px;
+    color: gray;
+    padding-right: 20px;
+}
 
 .globalSearchWithBox{
     border-radius: 5px;
@@ -1544,7 +1566,9 @@ a:hover {
     z-index: 99999 !important;
 }
 
-
+.followerModal .modalBody{
+    max-height: 90vh;
+}
 .followerModal .header{
     padding-top: 4px;
     border-bottom: solid 1px #e2e2e2;
@@ -1564,7 +1588,7 @@ a:hover {
     border-bottom: solid 2px;
 }
 .followerModal .body{
-    max-height: calc(100vh - 145px);
+    max-height: calc(100vh - 190px);
     min-height: 50vh;
     overflow-y: auto;
     /*transition: .5s;*/
@@ -1715,7 +1739,7 @@ a:hover {
     display: block;
 }
 .writeNewReviewModal .bodySec .inputReviewSec .firsRow .Inp{
-    min-height: 170px;
+    min-height: 400px;
 }
 
 .writeNewReviewModal .modalBody{
@@ -1812,6 +1836,29 @@ a:hover {
     border: none;
     text-align: center;
     cursor: pointer;
+}
+
+.writeNewReviewModal .newReviewButWithPlace{
+    background-color: var(--koochita-blue) !important;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    font-weight: normal !important;
+}
+.writeNewReviewModal .newReviewButWithPlace:after{
+    font-family: 'Shazde_Regular' !important;
+    content: '\E02C';
+    color: var(--koochita-red);
+    font-size: 25px;
+    line-height: 10px;
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: var(--koochita-blue);
 }
 
 
@@ -1921,7 +1968,6 @@ a:hover {
     display: flex;
     flex-wrap: nowrap;
 }
-
 
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

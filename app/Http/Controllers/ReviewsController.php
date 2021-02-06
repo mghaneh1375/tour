@@ -142,7 +142,12 @@ class ReviewsController extends Controller
         else{
             $file_name = $request->file_name;
             $fileType = explode('.', $file_name);
-            $fileName = time().rand(100,999).'.'.end($fileType);
+            $fileType = end($fileType);
+
+            if(strlen($fileType) == 0)
+                $fileType = 'png';
+
+            $fileName = time().rand(100,999).'.'.$fileType;
 
             $direction .= '/'.$fileName;
             $result = uploadLargeFile($direction, $request->file_data);

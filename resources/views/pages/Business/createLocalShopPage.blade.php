@@ -273,7 +273,7 @@
 
 
         function openSearchFindCity(){
-            createSearchInput('searchCity', 'نام شهر را وارد کنید.');
+            createSearchInput(searchCity, 'نام شهر را وارد کنید.');
         }
 
         function searchCity(_element) {

@@ -45,7 +45,7 @@
 
         return setTimeout("movement2()", 1);
     }
-    
+
     function addToFilter(cityId) {
 
         val = $("#GEO_SCOPED_SEARCH_INPUT").val();
@@ -109,7 +109,7 @@
         $("#" + selectedVal).css('width', w + "px").css('height', w + "px");
         setTimeout('movement3()', 1);
     }
-    
+
     function removeFilter(val) {
 
         selectedIdx = -1;
@@ -369,7 +369,7 @@
         $("#" + selectedVal).css('width', w + "px").css('height', w + "px");
         setTimeout('destroyBalloon()', 1);
     }
-    
+
     function searchCity(_element) {
 
         activeCityFilter = false;
@@ -516,7 +516,7 @@
             document.location.href = "{{route('home')}}" + "/showAllPlaces/" + url;
         }
     }
-    
+
 </script>
 
 
@@ -717,10 +717,10 @@
     }
 
     function openSearchFindCity(){
-        createSearchInput('searchCity', 'نام شهر را وارد کنید.');
+        createSearchInput(searchCity, 'نام شهر را وارد کنید.');
     }
 
     function openSearchFindPlace(){
-        createSearchInput('searchInPlaces', 'نام مکان مورد نظر را وارد کنید.');
+        createSearchInput(searchInPlaces, 'نام مکان مورد نظر را وارد کنید.');
     }
 </script>

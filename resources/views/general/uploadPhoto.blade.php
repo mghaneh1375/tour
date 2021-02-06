@@ -696,7 +696,7 @@
     }
 
     function searchPlaceForUploadPhoto(){
-        createSearchInput('searchInPlacesUploadPhoto', '{{__('نام مکان مورد نظر را وارد کنید.')}}');
+        createSearchInput(searchInPlacesUploadPhoto, '{{__('نام مکان مورد نظر را وارد کنید.')}}');
     }
 
     function searchInPlacesUploadPhoto(_element) {
@@ -715,19 +715,19 @@
 
 
             $.ajax({
-                type: 'post',
+                type: 'POST',
                 url: '{{route('proSearch')}}',
                 data: {
-                    'key':  value,
-                    'hotelFilter': hotelFilter,
-                    'amakenFilter': amakenFilter,
-                    'restaurantFilter': restuarantFilter,
-                    'majaraFilter': majaraFilter,
-                    'sogatSanaieFilter': sogatSanaieFilter,
-                    'mahaliFoodFilter': mahaliFoodFilter,
-                    'boomgardyFilter': boomgardyFilter,
-                    'selectedCities': cities,
-                    'mode': 'city'
+                    key:  value,
+                    hotelFilter: hotelFilter,
+                    amakenFilter: amakenFilter,
+                    restaurantFilter: restuarantFilter,
+                    majaraFilter: majaraFilter,
+                    sogatSanaieFilter: sogatSanaieFilter,
+                    mahaliFoodFilter: mahaliFoodFilter,
+                    boomgardyFilter: boomgardyFilter,
+                    selectedCities: cities,
+                    mode: 'city'
                 },
                 success: function (response) {
                     $("#resultPlace").empty();

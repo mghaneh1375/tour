@@ -145,6 +145,10 @@
     content: '\E002';
     font-family: 'Shazde_Regular2' !important;
 }
+.atractionIcon:before {
+    content: '\E002';
+    font-family: 'Shazde_Regular2' !important;
+}
 .restaurant:before {
     content: '\E001';
 }

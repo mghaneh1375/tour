@@ -334,7 +334,7 @@
     <script>
         var category = {!! $category !!}
 
-        $('.searchCityInArticleInput').on('click', () => createSearchInput('searchCityInArticle', 'نام شهر را وارد کنید.'));
+        $('.searchCityInArticleInput').on('click', () => createSearchInput(searchCityInArticle, 'نام شهر را وارد کنید.'));
 
         function changeSearchMethod(_element, _kind){
             $(_element).parent().find('.selected').removeClass('selected');

@@ -1702,7 +1702,7 @@
                 success: function(response){
                     try{
                         cities = JSON.parse(response);
-                        createSearchInput('findCity' ,'{{__('شهر مورد نظر را وارد کنید...')}}');
+                        createSearchInput(findCity ,'{{__('شهر مورد نظر را وارد کنید...')}}');
                     }
                     catch (e) {
                         console.log(e)
@@ -1773,7 +1773,7 @@
                 return;
             }
             else
-                createSearchInput('findCity' ,'شهر خود را وارد کنید...');
+                createSearchInput(findCity ,'شهر خود را وارد کنید...');
         }
     </script>
 

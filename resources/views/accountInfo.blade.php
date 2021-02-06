@@ -305,7 +305,7 @@
         }
 
         function openSearchFindCityFormAccountInfo(){
-            createSearchInput('searchCityForAccountInfo', 'نام شهر را وارد کنید.');
+            createSearchInput(searchCityForAccountInfo, 'نام شهر را وارد کنید.');
         }
 
         function searchCityForAccountInfo(_element) {

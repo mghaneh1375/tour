@@ -34,6 +34,7 @@ function createSmallReviewHtml(item){
     text = text.replace( new RegExp('##havePic##', "g"), item.hasPic ? 'block' : 'none');
     text = text.replace(new RegExp('##hasMorePic##', "g"),item.morePic ? 'block' : 'none');
     text = text.replace(new RegExp('##isConfrim##', "g"), item.confirm == 0 ? 'block' : 'none');
+    text = text.replace(new RegExp('##showWhere##', "g"), item.where == '' ? 'none' : 'block');
 
     var likeClass = '';
     var disLikeClass = '';
@@ -44,13 +45,8 @@ function createSmallReviewHtml(item){
             disLikeClass = 'coloredFullIcon';
     }
 
-    t = '##likeClass##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, likeClass);
-
-    t = '##disLikeClass##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, disLikeClass);
+    text = text.replace(new RegExp('##likeClass##', "g"), likeClass);
+    text = text.replace(new RegExp("##disLikeClass##", "g"), disLikeClass);
 
     var assignedUser = '';
     if(item["assigned"].length != 0) {
@@ -61,9 +57,7 @@ function createSmallReviewHtml(item){
         }
         assignedUser += '</div>\n';
     }
-    t = '##userAssigned##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, assignedUser);
+    text = text.replace( new RegExp("##userAssigned##", "g"), assignedUser);
 
     return text;
 }

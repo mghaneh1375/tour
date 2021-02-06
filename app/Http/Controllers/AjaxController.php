@@ -255,7 +255,9 @@ class AjaxController extends Controller {
     public function searchPlace() {
         $places = [];
         $value = $_GET['value'];
-        if(isset($_GET['kindPlaceId']))
+        if(isset($_GET['kindPlaceId']) && $_GET['kindPlaceId'] == "all")
+            $kindPlace = Place::whereNotNull('tableName')->where('id', '!=', 13)->get();
+        else if(isset($_GET['kindPlaceId']))
             $kindPlace = Place::whereIn('id', [$_GET['kindPlaceId']])->get();
         else
             $kindPlace = Place::whereIn('id', [1, 3, 4, 6, 12])->get();
@@ -271,6 +273,7 @@ class AjaxController extends Controller {
                 $item->city = $city->name;
                 $item->state = $city->getState->name;
                 $item->kindPlaceId = $kind->id;
+                $item->kindPlaceName = $kind->tableName;
                 array_push($places, $item);
             }
         }

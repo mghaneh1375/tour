@@ -214,13 +214,8 @@
                                 </div>
                             </div>
                             <script>
-                                function openGlobalMaterialSearch(){
-                                    createSearchInput('getGlobalInputMaterialSearchKeyUp', 'ماده اولبه مورد نظر خود را وارد کنید.');
-                                }
-
-                                function getGlobalInputMaterialSearchKeyUp(_element){
-                                    searchForMaterial($(_element).val())
-                                }
+                                var openGlobalMaterialSearch = () => createSearchInput(getGlobalInputMaterialSearchKeyUp, 'ماده اولبه مورد نظر خود را وارد کنید.')
+                                var getGlobalInputMaterialSearchKeyUp = (_element) => searchForMaterial($(_element).val());
                             </script>
                         @endif
 

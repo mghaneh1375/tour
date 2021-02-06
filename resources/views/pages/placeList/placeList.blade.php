@@ -694,7 +694,7 @@
     }
 
     function openGlobalSearch(){
-        createSearchInput('searchInPlaces', 'مکان مورد نظر را وارد کنید.');
+        createSearchInput(searchInPlaces, 'مکان مورد نظر را وارد کنید.');
     }
 
     function searchInPlaces(element){

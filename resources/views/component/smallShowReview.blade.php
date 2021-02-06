@@ -67,7 +67,7 @@
                     <a href="##userPageUrl##" target="_blank" class="userProfileName" style="font-weight: bold">##userName##</a>
                     <span class="label label-success inConfirmLabel" style="display: ##isConfrim##">{{__('در انتظار تایید')}}</span>
                 </div>
-                <div style="font-size: 10px">
+                <div style="font-size: 10px; display: ##showWhere##">
                     در
                     <a href="##placeUrl##" target="_blank">
                         <span class="commentWriterExperiencePlace">##where##</span>

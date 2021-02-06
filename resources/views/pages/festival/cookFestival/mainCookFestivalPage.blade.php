@@ -478,7 +478,7 @@
                     سلام {{auth()->user()->username}}
                 </div>
                 <div class="inputCol">
-                    <input id="foodNameInput" type="text" placeholder="نام غذا" readonly onclick="createSearchInput('searchInFoods', 'نام غذا را وارد نمایید')">
+                    <input id="foodNameInput" type="text" placeholder="نام غذا" readonly onclick="createSearchInput(searchInFoods, 'نام غذا را وارد نمایید')">
                 </div>
                 <div id="uploadSec" class="uploadSec">
                     <div class="uploadeShowResults">
