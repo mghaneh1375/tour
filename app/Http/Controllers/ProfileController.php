@@ -887,8 +887,8 @@ class ProfileController extends Controller {
             }
         }
 
-        return view('accountInfo', array('msg' => $msg, 'mode2' => $mode, 'reminder' => $reminder,
-            'ages' => Age::all(), 'phoneNum' => $phoneNum, 'isAcitveCode' => $isAcitveCode));
+        return view('accountInfo', ['msg' => $msg, 'mode2' => $mode, 'reminder' => $reminder,
+            'ages' => Age::all(), 'phoneNum' => $phoneNum, 'isAcitveCode' => $isAcitveCode]);
     }
 
     public function updateProfile1() {

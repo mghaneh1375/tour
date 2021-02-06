@@ -858,20 +858,25 @@ class HomeController extends Controller
                     $assigned = $reference;
                     $log = LogModel::find($assigned->logId);
                     if($log != null){
-                        $kindPlace = Place::find($log->kindPlaceId);
-                        $place = \DB::table($kindPlace->tableName)->find($log->placeId);;
                         $rUser = User::find($log->visitorId);
-                        if($kindPlace != null && $place != null && $rUser != null){
-                            $placeUrl = createUrl($kindPlace->id, $place->id, 0, 0, 0);
-                            $alertText = $rUser->username . ' شما را در پست خود در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>' . 'تگ کرده است.';
 
-                            $item->color = $greenColor;
-                            $item->msg = $alertText;
-                            $item->pic = getPlacePic($place->id, $kindPlace->id, 'l');
-                            array_push($result, $item);
+                        if($log->kindPlaceId == 0 && $log->placeId == 0){
+                            $kindPlace = Place::find($log->kindPlaceId);
+                            $place = \DB::table($kindPlace->tableName)->find($log->placeId);;
+
+                            if($kindPlace != null && $place != null){
+                                $placeUrl = createUrl($kindPlace->id, $place->id, 0, 0, 0);
+                                $alertTTT = ' در ' . '<a href="' . $placeUrl . '" class="alertUrl">' . $place->name . '</a>';
+                            }
+                            else
+                                $item->delete();
                         }
-                        else
-                            $item->delete();
+
+                        $alertText = $rUser->username . ' شما را در پست خود ' . $alertTTT . 'تگ کرده است.';
+                        $item->color = $greenColor;
+                        $item->msg = $alertText;
+                        $item->pic = getPlacePic($place->id, $kindPlace->id, 'l');
+                        array_push($result, $item);
                     }
                     else
                         $item->delete();

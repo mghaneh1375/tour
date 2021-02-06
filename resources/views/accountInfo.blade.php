@@ -4,8 +4,8 @@
 @section('header')
 
     @parent
-    <link rel="stylesheet" type="text/css" media="screen, print" href="{{URL::asset('css/shazdeDesigns/account_info.css?v='.$fileVersions)}}"/>
-    <link rel="stylesheet" type="text/css" media="screen, print" href="{{URL::asset('css/shazdeDesigns/abbreviations.css?v='.$fileVersions)}}"/>
+    <link rel="stylesheet" type="text/css" media="screen, print" href="{{URL::asset('css/shazdeDesigns/account_info.css')}}"/>
+    <link rel="stylesheet" type="text/css" media="screen, print" href="{{URL::asset('css/shazdeDesigns/abbreviations.css')}}"/>
 @stop
 
 @section('main')
@@ -14,9 +14,7 @@
             <div class="wrpHeader">
             </div>
             <div id="main_content" class="accountInfoMainDiv">
-                <h1 class="heading wrap" id="HEADER_DEFAULT">
-                اطلاعات کاربری
-                </h1>
+                <h1 class="heading wrap" id="HEADER_DEFAULT"> اطلاعات کاربری </h1>
                 @if($mode2 == 0)
                     <script>
                         showSuccessNotifi('{{$msg}}');

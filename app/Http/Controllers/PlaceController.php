@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SaveErrorEvent;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
@@ -331,7 +332,7 @@ class PlaceController extends Controller {
                     $item->review = $item->msgs;
                 }
 
-                $places = $this->getNearbies($place->C, $place->D, $count);
+                $places = $this->getNearbies($place->C, $place->D, $count, $_POST["kindPlaceId"]);
 
                 $selectedPlace = \DB::table($kindPlace->tableName)->select(['id', 'name', 'reviewCount', 'fullRate', 'slug', 'alt', 'cityId', 'C', 'D'])->find($place->id);
                 $selectedPlace->pic = getPlacePic($selectedPlace->id, $kindPlace->id);
@@ -3259,14 +3260,19 @@ class PlaceController extends Controller {
         return $place;
     }
 
-    private function getNearbies($C, $D, $count)
+    private function getNearbies($C, $D, $count, $kindPlaceId)
     {
         // Latitude: 1 deg = 110.574 km
         // Longitude: 1 deg = 111.320*cos(latitude) km
 
-        $radius = ConfigModel::first()->radius;
-        $latDeg = $radius/110.574;
-        $lngDeg = $radius/(111.320*cos(deg2rad($C)));
+        try {
+            $radius = ConfigModel::first()->radius;
+            $latDeg = $radius / 110.574;
+            $lngDeg = $radius / (111.320 * cos(deg2rad($C)));
+        }
+        catch (Exception $exception){
+            event(new SaveErrorEvent('placeController', 'getNearbies', json_encode(['radius' => $radius, '$C' => $C, '$D' => $D,'$count' => $count, '$kindPlaceId' => $kindPlaceId])));
+        }
 
 //        $latBetween = [$C + $latDeg, $C - $latDeg];
 //        $lngBetween = [$D + $lngDeg, $D - $lngDeg];
