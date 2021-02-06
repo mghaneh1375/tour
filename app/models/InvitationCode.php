@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $uId
  * @property string $phoneNum
  * @property string $sendTime
- * @method static \Illuminate\Database\Query\Builder|\App\models\InvitationCode where('uId',$value)
  */
 
 class InvitationCode extends Model {

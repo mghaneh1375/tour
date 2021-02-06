@@ -17,6 +17,7 @@ class BusinessPanelShareData
      */
     public function handle($request, Closure $next)
     {
+        $fileVersions = 2;
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);
@@ -27,11 +28,10 @@ class BusinessPanelShareData
 
             return $next($request);
         }
-        else{
+        else
             $userInfo = [];
-        }
 
-        View::share(['fileVersions' => 1, 'userInfo' => $userInfo]);
+        View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo]);
         return $next($request);
 
     }

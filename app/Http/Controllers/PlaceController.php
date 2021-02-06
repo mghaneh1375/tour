@@ -258,198 +258,6 @@ class PlaceController extends Controller {
             'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()));
     }
 
-    private function sogatSanaieDet($place){
-
-        switch ($place->style){
-            case 1:
-                $place->style = 'سنتی';
-                break;
-            case 2:
-                $place->style = 'مدرن';
-                break;
-            case 3:
-                $place->style = 'تلفیقی';
-                break;
-        }
-
-        if($place->fragile == 1)
-            $place->fragile = 'شکستنی';
-        else
-            $place->fragile = 'غیر شکستنی';
-
-        switch ($place->size){
-            case 1:
-                $place->size = 'کوچک';
-                break;
-            case 2:
-                $place->size = 'متوسط';
-                break;
-            case 3:
-                $place->size = 'بزرگ';
-                break;
-        }
-        switch ($place->price){
-            case 1:
-                $place->price = 'ارزان';
-                break;
-            case 2:
-                $place->price = 'متوسط';
-                break;
-            case 3:
-                $place->price = 'گران';
-                break;
-        }
-        switch ($place->weight){
-            case 1:
-                $place->weight = 'سبک';
-                break;
-            case 2:
-                $place->weight = 'متوسط';
-                break;
-            case 3:
-                $place->weight = 'متوسط';
-                break;
-        }
-
-        $place->kind = [];
-        if($place->jewelry == 1)
-            array_push($place->kind, 'زیورآلات');
-        if($place->cloth == 1)
-            array_push($place->kind, 'پارچه و پوشیدنی');
-        if($place->applied == 1)
-            array_push($place->kind, 'لوازم کاربردی منزل');
-        if($place->decorative == 1)
-            array_push($place->kind, 'لوازم تزئینی');
-
-        $place->taste = [];
-        if($place->torsh == 1)
-            array_push($place->taste, 'ترش');
-        if($place->shirin == 1)
-            array_push($place->taste, 'شیرین');
-        if($place->talkh == 1)
-            array_push($place->taste, 'تلخ');
-        if($place->malas == 1)
-            array_push($place->taste, 'ملس');
-        if($place->shor == 1)
-            array_push($place->taste, 'شور');
-        if($place->tond == 1)
-            array_push($place->taste, 'تند');
-
-        return $place;
-    }
-
-    private function mahaliFoodDet($place){
-
-        $place->material = MahaliFood::find($place->id)->materials;
-        foreach($place->material as $mat)
-            $mat->volume = $mat->pivot->volume;
-
-        switch ($place->kind){
-            case 1:
-                $place->kindName = 'چلوخورش';
-                break;
-            case 2:
-                $place->kindName = 'خوراک';
-                break;
-            case 3:
-                $place->kindName = 'سالاد و پیش غذا';
-                break;
-            case 4:
-                $place->kindName = 'ساندویچ';
-                break;
-            case 5:
-                $place->kindName = 'کباب';
-                break;
-            case 6:
-                $place->kindName = 'دسر';
-                break;
-            case 7:
-                $place->kindName = 'نوشیدنی';
-                break;
-            case 8:
-                $place->kindName = 'سوپ و آش';
-                break;
-        }
-
-        if($place->hotOrCold == 1)
-            $place->hotOrCold = 'گرم';
-        else
-            $place->hotOrCold = 'سرد';
-
-        if($place->gram == 1)
-            $place->source = 'گرم';
-        else
-            $place->source = 'قاشق غذاخوری';
-
-        return $place;
-    }
-
-    private function getNearbies($C, $D, $count)
-    {
-    // Latitude: 1 deg = 110.574 km
-    // Longitude: 1 deg = 111.320*cos(latitude) km
-
-        $radius = ConfigModel::first()->radius;
-        $latDeg = $radius/110.574;
-        $lngDeg = $radius/(111.320*cos(deg2rad($C)));
-
-//        $latBetween = [$C + $latDeg, $C - $latDeg];
-//        $lngBetween = [$D + $lngDeg, $D - $lngDeg];
-
-        $D = (float)$D * 3.14 / 180;
-        $C = (float)$C * 3.14 / 180;
-
-        $tableNames = ['hotels', 'restaurant', 'amaken', 'majara', 'boomgardies'];
-
-        foreach ($tableNames as $tableName){
-            $kindPlace = Place::where('tableName', $tableName)->first();
-            if($kindPlace != null) {
-                $nearbys = DB::select("SELECT acos(" . sin($D) . " * sin(D / 180 * 3.14) + " . cos($D) . " * cos(D / 180 * 3.14) * cos(C / 180 * 3.14 - " . $C . ")) * 6371 as distance, id, name, reviewCount, fullRate, slug, alt, cityId, C, D FROM " . $tableName . " HAVING distance between -1 and " . ConfigModel::first()->radius . " order by distance ASC limit 0, " . $count);
-//                $nearbys = DB::select("SELECT id, `name`, reviewCount, fullRate, slug, alt, cityId, `C`, `D` FROM $tableName WHERE `C` > $latBetween[1] AND `C` < $latBetween[0] AND `D` > $lngBetween[1] AND `D` < $lngBetween[0] limit 0, $count" );
-                foreach ($nearbys as $nearby) {
-//                    $condition = ['placeId' => $nearby->id, 'kindPlaceId' => $kindPlace->id, 'confirm' => 1,
-//                                  'activityId' => Activity::whereName('نظر')->first()->id];
-//                    $nearby->review = LogModel::where($condition)->count();
-//                    $nearby->distance = round($nearby->distance, 2);
-                    $nearby->pic = getPlacePic($nearby->id, $kindPlace->id);
-                    $nearby->review = $nearby->reviewCount;
-                    $nearby->rate = floor($nearby->fullRate);
-                    $nearby->url =  createUrl($kindPlace->id, $nearby->id, 0, 0, 0);
-                    if($nearby->cityId != 0) {
-                        $nearby->city = Cities::find($nearby->cityId);
-                        $nearby->state = State::find($nearby->city->stateId);
-
-                        $nearby->cityName = $nearby->city->name;
-                        $nearby->stateName = $nearby->state->name;
-
-                        $nearby->city = $nearby->city->name;
-                        $nearby->state = $nearby->state->name;
-                    }
-                }
-
-                switch ($kindPlace->id){
-                    case 1:
-                        $nearbyAmakens = $nearbys;
-                        break;
-                    case 3:
-                        $nearbyRestaurants = $nearbys;
-                        break;
-                    case 4:
-                        $nearbyHotels = $nearbys;
-                        break;
-                    case 6:
-                        $nearbyMajaras = $nearbys;
-                        break;
-                    case 12:
-                        $nearbyBoomgardi = $nearbys;
-                        break;
-                }
-            }
-        }
-
-        return ['hotels' => $nearbyHotels, 'restaurant' => $nearbyRestaurants, 'amaken' => $nearbyAmakens, 'majara' => $nearbyMajaras, 'boomgardy' => $nearbyBoomgardi];
-    }
-
     public function getNearby()
     {
         if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"])) {
@@ -715,74 +523,6 @@ class PlaceController extends Controller {
 
         }
 
-    }
-
-    private function likeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->dislike = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->like_ = 1;
-        $opOnActivity->save();
-        echo $out;
-    }
-
-    private function dislikeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->like_ = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->dislike = 1;
-        $opOnActivity->save();
-        echo $out;
     }
 
     function getOpinionRate()
@@ -2738,19 +2478,6 @@ class PlaceController extends Controller {
         return;
     }
 
-    private function deleteRelatedQuestion($id){
-        $log = LogModel::find($id);
-        if($log != null){
-            LogFeedBack::where('logId', $log->id)->delete();
-            $logRelated = LogModel::where('relatedTo', $log->id)->get();
-            foreach ($logRelated as $item)
-                $this->deleteRelatedQuestion($item->id);
-            $log->delete();
-        }
-
-        return;
-    }
-
     public function getQuestions()
     {
         if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["page"]) && isset($_POST["count"])) {
@@ -3135,7 +2862,6 @@ class PlaceController extends Controller {
 
     public function getPlaceListElems(Request $request)
     {
-
         $startTime = microtime(true);
 
         $page = (int)$request->pageNum;
@@ -3180,7 +2906,7 @@ class PlaceController extends Controller {
         }
 
         if(count($placeIds) == 0)
-            return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
+            return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
 
 
         //filter with material in mahalifood
@@ -3197,7 +2923,7 @@ class PlaceController extends Controller {
             }
 
             if(count($placeIds) == 0)
-                return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
+                return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
         }
 
         //special filters for each kind place
@@ -3227,6 +2953,7 @@ class PlaceController extends Controller {
         if(count($placeIds) == 0)
             return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
 
+
         // second get places have selected features
         if($reqFilter != null && count($reqFilter) > 0){
             foreach ($reqFilter as $item){
@@ -3251,8 +2978,8 @@ class PlaceController extends Controller {
                 }
             }
         }
-        if(count($placeIds) == 0)
-            return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
+        if(count($placeIds) == 1)
+            return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
 
         // if have rate filter
         if($rateFilter != 0){
@@ -3280,7 +3007,6 @@ class PlaceController extends Controller {
 
         if($kindPlace->id == 13)
             $placeIds = LocalShops::whereIn('id', $placeIds)->where('confirm', 1)->pluck('id')->toArray();
-
 
         $placeCount = count($placeIds);
 
@@ -3378,7 +3104,6 @@ class PlaceController extends Controller {
         return response()->json(['places' => $places, 'placeCount' => $placeCount, 'totalCount' => $totalCount, 'times' => $times]);
     }
 
-
     public function setRateToPlace(Request $request)
     {
         if(isset($request->kindPlaceId) && isset($request->placeId) && isset($request->rate)){
@@ -3423,4 +3148,277 @@ class PlaceController extends Controller {
             return response()->json(['status' => 'error1']);
     }
 
+
+    private function sogatSanaieDet($place){
+
+        switch ($place->style){
+            case 1:
+                $place->style = 'سنتی';
+                break;
+            case 2:
+                $place->style = 'مدرن';
+                break;
+            case 3:
+                $place->style = 'تلفیقی';
+                break;
+        }
+
+        if($place->fragile == 1)
+            $place->fragile = 'شکستنی';
+        else
+            $place->fragile = 'غیر شکستنی';
+
+        switch ($place->size){
+            case 1:
+                $place->size = 'کوچک';
+                break;
+            case 2:
+                $place->size = 'متوسط';
+                break;
+            case 3:
+                $place->size = 'بزرگ';
+                break;
+        }
+        switch ($place->price){
+            case 1:
+                $place->price = 'ارزان';
+                break;
+            case 2:
+                $place->price = 'متوسط';
+                break;
+            case 3:
+                $place->price = 'گران';
+                break;
+        }
+        switch ($place->weight){
+            case 1:
+                $place->weight = 'سبک';
+                break;
+            case 2:
+                $place->weight = 'متوسط';
+                break;
+            case 3:
+                $place->weight = 'متوسط';
+                break;
+        }
+
+        $place->kind = [];
+        if($place->jewelry == 1)
+            array_push($place->kind, 'زیورآلات');
+        if($place->cloth == 1)
+            array_push($place->kind, 'پارچه و پوشیدنی');
+        if($place->applied == 1)
+            array_push($place->kind, 'لوازم کاربردی منزل');
+        if($place->decorative == 1)
+            array_push($place->kind, 'لوازم تزئینی');
+
+        $place->taste = [];
+        if($place->torsh == 1)
+            array_push($place->taste, 'ترش');
+        if($place->shirin == 1)
+            array_push($place->taste, 'شیرین');
+        if($place->talkh == 1)
+            array_push($place->taste, 'تلخ');
+        if($place->malas == 1)
+            array_push($place->taste, 'ملس');
+        if($place->shor == 1)
+            array_push($place->taste, 'شور');
+        if($place->tond == 1)
+            array_push($place->taste, 'تند');
+
+        return $place;
+    }
+
+    private function mahaliFoodDet($place){
+
+        $place->material = MahaliFood::find($place->id)->materials;
+        foreach($place->material as $mat)
+            $mat->volume = $mat->pivot->volume;
+
+        switch ($place->kind){
+            case 1:
+                $place->kindName = 'چلوخورش';
+                break;
+            case 2:
+                $place->kindName = 'خوراک';
+                break;
+            case 3:
+                $place->kindName = 'سالاد و پیش غذا';
+                break;
+            case 4:
+                $place->kindName = 'ساندویچ';
+                break;
+            case 5:
+                $place->kindName = 'کباب';
+                break;
+            case 6:
+                $place->kindName = 'دسر';
+                break;
+            case 7:
+                $place->kindName = 'نوشیدنی';
+                break;
+            case 8:
+                $place->kindName = 'سوپ و آش';
+                break;
+        }
+
+        if($place->hotOrCold == 1)
+            $place->hotOrCold = 'گرم';
+        else
+            $place->hotOrCold = 'سرد';
+
+        if($place->gram == 1)
+            $place->source = 'گرم';
+        else
+            $place->source = 'قاشق غذاخوری';
+
+        return $place;
+    }
+
+    private function getNearbies($C, $D, $count)
+    {
+        // Latitude: 1 deg = 110.574 km
+        // Longitude: 1 deg = 111.320*cos(latitude) km
+
+        $radius = ConfigModel::first()->radius;
+        $latDeg = $radius/110.574;
+        $lngDeg = $radius/(111.320*cos(deg2rad($C)));
+
+//        $latBetween = [$C + $latDeg, $C - $latDeg];
+//        $lngBetween = [$D + $lngDeg, $D - $lngDeg];
+
+        $D = (float)$D * 3.14 / 180;
+        $C = (float)$C * 3.14 / 180;
+
+        $tableNames = ['hotels', 'restaurant', 'amaken', 'majara', 'boomgardies'];
+
+        foreach ($tableNames as $tableName){
+            $kindPlace = Place::where('tableName', $tableName)->first();
+            if($kindPlace != null) {
+                $nearbys = DB::select("SELECT acos(" . sin($D) . " * sin(D / 180 * 3.14) + " . cos($D) . " * cos(D / 180 * 3.14) * cos(C / 180 * 3.14 - " . $C . ")) * 6371 as distance, id, name, reviewCount, fullRate, slug, alt, cityId, C, D FROM " . $tableName . " HAVING distance between -1 and " . ConfigModel::first()->radius . " order by distance ASC limit 0, " . $count);
+//                $nearbys = DB::select("SELECT id, `name`, reviewCount, fullRate, slug, alt, cityId, `C`, `D` FROM $tableName WHERE `C` > $latBetween[1] AND `C` < $latBetween[0] AND `D` > $lngBetween[1] AND `D` < $lngBetween[0] limit 0, $count" );
+                foreach ($nearbys as $nearby) {
+//                    $condition = ['placeId' => $nearby->id, 'kindPlaceId' => $kindPlace->id, 'confirm' => 1,
+//                                  'activityId' => Activity::whereName('نظر')->first()->id];
+//                    $nearby->review = LogModel::where($condition)->count();
+//                    $nearby->distance = round($nearby->distance, 2);
+                    $nearby->pic = getPlacePic($nearby->id, $kindPlace->id);
+                    $nearby->review = $nearby->reviewCount;
+                    $nearby->rate = floor($nearby->fullRate);
+                    $nearby->url =  createUrl($kindPlace->id, $nearby->id, 0, 0, 0);
+                    if($nearby->cityId != 0) {
+                        $nearby->city = Cities::find($nearby->cityId);
+                        $nearby->state = State::find($nearby->city->stateId);
+
+                        $nearby->cityName = $nearby->city->name;
+                        $nearby->stateName = $nearby->state->name;
+
+                        $nearby->city = $nearby->city->name;
+                        $nearby->state = $nearby->state->name;
+                    }
+                }
+
+                switch ($kindPlace->id){
+                    case 1:
+                        $nearbyAmakens = $nearbys;
+                        break;
+                    case 3:
+                        $nearbyRestaurants = $nearbys;
+                        break;
+                    case 4:
+                        $nearbyHotels = $nearbys;
+                        break;
+                    case 6:
+                        $nearbyMajaras = $nearbys;
+                        break;
+                    case 12:
+                        $nearbyBoomgardi = $nearbys;
+                        break;
+                }
+            }
+        }
+
+        return ['hotels' => $nearbyHotels, 'restaurant' => $nearbyRestaurants, 'amaken' => $nearbyAmakens, 'majara' => $nearbyMajaras, 'boomgardy' => $nearbyBoomgardi];
+    }
+
+    private function deleteRelatedQuestion($id){
+        $log = LogModel::find($id);
+        if($log != null){
+            LogFeedBack::where('logId', $log->id)->delete();
+            $logRelated = LogModel::where('relatedTo', $log->id)->get();
+            foreach ($logRelated as $item)
+                $this->deleteRelatedQuestion($item->id);
+            $log->delete();
+        }
+
+        return;
+    }
+
+    private function likeComment($uId, $logId)
+    {
+
+        $out = 1;
+        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
+
+        if (OpOnActivity::where($condition)->count() > 0) {
+            echo 0;
+            return;
+        }
+
+        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
+
+        $opOnActivity = OpOnActivity::where($condition)->first();
+        if ($opOnActivity != null) {
+            $out = 2;
+            $opOnActivity->dislike = 0;
+        } else {
+            $opOnActivity = new OpOnActivity();
+            $opOnActivity->uId = $uId;
+            $opOnActivity->logId = $logId;
+        }
+
+        $log = LogModel::whereId($logId);
+        $log->date = date('Y-m-d');
+        $log->time = getToday()["time"];
+        $log->save();
+
+        $opOnActivity->time = time();
+        $opOnActivity->like_ = 1;
+        $opOnActivity->save();
+        echo $out;
+    }
+
+    private function dislikeComment($uId, $logId)
+    {
+
+        $out = 1;
+        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
+
+        if (OpOnActivity::where($condition)->count() > 0) {
+            echo 0;
+            return;
+        }
+
+        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
+
+        $opOnActivity = OpOnActivity::where($condition)->first();
+        if ($opOnActivity != null) {
+            $out = 2;
+            $opOnActivity->like_ = 0;
+        } else {
+            $opOnActivity = new OpOnActivity();
+            $opOnActivity->uId = $uId;
+            $opOnActivity->logId = $logId;
+        }
+
+        $log = LogModel::whereId($logId);
+        $log->date = date('Y-m-d');
+        $log->time = getToday()["time"];
+        $log->save();
+
+        $opOnActivity->time = time();
+        $opOnActivity->dislike = 1;
+        $opOnActivity->save();
+        echo $out;
+    }
 }

@@ -19,14 +19,15 @@
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/bootstrap/bootstrap-rtl.min.css?v='.$fileVersions)}}'  media="all"/>
     <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/icons.css?v='.$fileVersions)}}' media="all"/>
 
-    <link rel="stylesheet" href="{{URL::asset('css/pages/allBusinessPanel.css')}}">
     <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
+
+    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/allBusinessPanel.css')}}">
 
     <script src="{{URL::asset('js/jquery-3.4.1.min.js')}}"></script>
     <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
 
     <script async src="{{URL::asset('js/bootstrap/bootstrap-rtl.min.js')}}"></script>
-    <script async src="{{URL::asset('js/pages/allBusinessPanel.js')}}"></script>
+    <script async src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js')}}"></script>
 
     <script>
         $.ajaxSetup({

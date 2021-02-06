@@ -316,48 +316,46 @@
 
 
 <script>
-    var listElementSample = `
-                                            <div class="ui_column col-lg-3 col-md-4 col-xs-6 eachPlace">
-                                        <div class="poi listBoxesMainDivs">
-                                            <div class="contentImgSection">
-                                                <a href="##url##" class="thumbnail" style="margin-bottom: 5px !important; height: 100%">
-                                                    <div class="contentImg">
-                                                        <img src='##pic##' class='resizeImgClass' alt='##keyword##' onload="fitThisImg(this)" style="width: 100%">
+    var listElementSample = `<div class="ui_column col-lg-3 col-md-4 col-xs-6 eachPlace">
+                                <div class="poi listBoxesMainDivs">
+                                    <div class="contentImgSection">
+                                        <a href="##url##" class="thumbnail" style="margin-bottom: 5px !important; height: 100%">
+                                            <div class="contentImg">
+                                                <img src='##pic##' class='resizeImgClass' alt='##keyword##' onload="fitThisImg(this)" style="width: 100%">
+                                            </div>
+                                        </a>
+                                        @if(auth()->check())
+                                            <div class="bookMarkIconOnPic ##bookMark##" onclick="bookMarkThisPlace(this)" value="##id##"></div>
+                                        @endif
+                                    </div>
+                                    <div class="detail">
+                                        <div class="contentDetailName lessShowText" title="##name##">
+                                            <a class="poiTitle" target="_blank" href="##url##">##name##</a>
+                                        </div>
+
+                                        <div class="item rating-count">
+                                            <div class="rating-widget">
+                                                <div class="prw_rup prw_common_location_rating_simple">
+                                                    <span class="##ngClass##"></span>
+                                                </div>
+                                            </div>
+                                            <div target="_blank" class="review_count">
+                                                ##reviews##
+                                                <span>{{__('نقد')}}</span>
                                                     </div>
-                                                </a>
-                                                @if(auth()->check())
-    <div class="bookMarkIconOnPic ##bookMark##" onclick="bookMarkThisPlace(this)" value="##id##"></div>
-@endif
-    </div>
-
-    <div class="detail">
-        <div class="contentDetailName lessShowText" title="##name##">
-            <a class="poiTitle" target="_blank" href="##url##">##name##</a>
-        </div>
-
-        <div class="item rating-count">
-            <div class="rating-widget">
-                <div class="prw_rup prw_common_location_rating_simple">
-                    <span class="##ngClass##"></span>
-                </div>
-            </div>
-            <div target="_blank" class="review_count">
-                ##reviews##
-                <span>{{__('نقد')}}</span>
-                    </div>
-                </div>
-                <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px">
-                    {{__('استان')}}:
-                    <span>##state##</span>
-                </div>
-                <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px">
-                    {{__('شهر')}}:
-                    <span>##city##</span>
-                </div>
-                <div class="booking"></div>
-            </div>
-        </div>
-    </div>
+                                                </div>
+                                                <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px">
+                                                    {{__('استان')}}:
+                                                    <span>##state##</span>
+                                                </div>
+                                                <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px">
+                                                    {{__('شهر')}}:
+                                                    <span>##city##</span>
+                                                </div>
+                                                <div class="booking"></div>
+                                            </div>
+                                        </div>
+                                    </div>
 
     `;
 
@@ -385,15 +383,9 @@
     var nearPlaceIdFilter = 0;
     var nearKindPlaceIdFilter = 0;
     var kindPlaceId = '{{$kindPlace->id}}';
-
-{{--    @if(isset($city->id))--}}
-{{--        var cityId = '{{$city->id}}';--}}
-{{--    @else--}}
-{{--        var cityId = 0;--}}
-{{--    @endif--}}
+    var searchNumber = 0;
 
     var cityId = '{{ isset($city->id) ? $city->id : 0}}';
-
 
     @if($kindPlaceId == 4 || $kindPlaceId == 1 || $kindPlaceId == 12 || $kindPlaceId == 3)
         var sort = "seen";
@@ -448,7 +440,6 @@
         newSearch();
     }
 
-    var searchNumber = 0;
     $('#materialSearch').on('keyup', e => e.keyCode == 13 ? materialFilterFunc(e.target.value) : searchForMaterial(e.target.value));
     function searchForMaterial(_value){
         if(_value.trim().length > 1){
@@ -570,12 +561,9 @@
         if(featureFilter.includes(value))
             featureFilter[featureFilter.indexOf(value)] = 0;
         else{
-            if(featureFilter.includes(0))
-                featureFilter[featureFilter.indexOf(0)] = value;
-            else
-                featureFilter[featureFilter.length] = value;
+            var index = featureFilter.includes(0) ? featureFilter.includes(0) : featureFilter.length;
+            featureFilter[index] = value;
         }
-
         newSearch();
     }
 
@@ -803,6 +791,7 @@
     var cityRel = {!! $cityRel !!};
 
     function getPlaceListItems(){
+
         if(cityRel != 0 && mode == 'city' && (kindPlaceId == 10 || kindPlaceId == 11 || kindPlaceId == 6)){
             if(isFinish){
                 mode = 'state';
@@ -823,6 +812,7 @@
         if(!isFinish && !inTake){
             inTake = true;
             openLoading();
+
             getingListItemAjax = $.ajax({
                 type: "POST",
                 url: `{{route("place.list.getElems")}}`,
