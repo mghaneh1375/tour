@@ -29,6 +29,12 @@ class FollowerController extends Controller
 
                 $followerNumber = Followers::where('followedId', $followed->id)->count();
                 $followingNumber = Followers::where('userId', $u->id)->count();
+
+                if($followerNumber > 1000)
+                    $followerNumber = (floor($followerNumber/100)/10) . 'K';
+                if($followingNumber > 1000)
+                    $followingNumber = (floor($followingNumber/100)/10) . 'K';
+
                 echo json_encode(['status' => $status, 'followerNumber' => $followerNumber, 'followingNumber' => $followingNumber]);
             }
             else

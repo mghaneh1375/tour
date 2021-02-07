@@ -307,9 +307,10 @@ class ProfileController extends Controller {
         return;
     }
 
-    public function getUserPicsAndVideo(Request $request)
+    public function getUserPicsAndVideo()
     {
-        $user = User::find($request->userId);
+        $userId = $_GET['userId'];
+        $user = User::find($userId);
         $uId = $user->id;
         $user->picture = getUserPic($uId);
 

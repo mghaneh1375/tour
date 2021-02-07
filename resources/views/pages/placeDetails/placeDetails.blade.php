@@ -54,6 +54,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var doEditReviewPic = '{{route('doEditReviewPic')}}';
         var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
         var placeMode = '{{$placeMode}}';
+        var sliderPics = {!! json_encode($sliderPics) !!};
         var photographerPics = {!! json_encode($photographerPics) !!};
         var sitePics = {!! json_encode($sitePics) !!};
         var hotelDetails;
@@ -343,16 +344,12 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                 <div class="prw_rup prw_common_mercury_photo_carousel">
                                     <div class="carousel bignav">
                                         <div class="carousel_images carousel_images_header">
-                                            <div id="photographerAlbum" {{count($photographerPics) > 0 ? "onclick=showPhotoAlbum('photographer')" : ''}}>
+                                            <div id="photographerAlbum" {{count($sliderPics) > 0 ? "onclick=showPhotoAlbum('sliderPic')" : ''}}>
                                                 <div id="mainSlider" class="swiper-container">
                                                     <div id="mainSliderWrapper" class="swiper-wrapper">
-                                                        @foreach($photographerPics as $pics)
+                                                        @foreach($sliderPics as $pics)
                                                             <div class="swiper-slide" style="overflow: hidden">
-                                                                <img class="eachPicOfSlider resizeImgClass"
-                                                                     src="{{$pics['s']}}"
-                                                                     alt="{{$pics['alt']}}"
-                                                                     style="width: 100%;"
-                                                                     onload="fitThisImg(this)">
+                                                                <img class="eachPicOfSlider resizeImgClass" src="{{$pics['s']}}" alt="{{$pics['alt']}}" onload="fitThisImg(this)">
                                                                 <div class="see_all_count_wrap hideOnPhone">
                                                                     <span class="see_all_count">
                                                                         <div class="circleBase type2" id="photographerIdPic" style="background-color: var(--koochita-light-green);">
@@ -369,7 +366,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                         @endforeach
                                                     </div>
                                                 </div>
-                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"> {{count($photographerPics)}} </div>
+                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"> {{count($sliderPics)}} </div>
                                             </div>
 {{--                                            <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>--}}
                                         </div>
@@ -410,8 +407,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                             @if(count($userPhotos) != 0)
                                                 <img src="{{$userPhotos[0]->pic}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
                                             @else
-                                                <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}"
-                                                     class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                                <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
                                             @endif
                                         </span>
                                             </div>
@@ -430,8 +426,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                 @if(count($userVideo) > 0)
                                                     <img src="{{$userVideo[0]->picName}}" class="resizeImgClass" onload="fitThisImg(this)">
                                                 @else
-                                                    <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}"
-                                                         class="centeredImg" width="100%"/>
+                                                    <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="centeredImg" width="100%"/>
                                                 @endif
                                             </span>
                                             </div>
@@ -470,9 +465,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
                     <a class="postLink topAndBottomBorderAndMargin hideOnPhone" href="#reviewMainDivDetails">
                         <div id="mainStoreReviewDiv" class="postMainDiv">
-                            <div class="postMainDivHeader">
-                                {{__('نظر شما')}}
-                            </div>
+                            <div class="postMainDivHeader">  {{__('نظر شما')}}  </div>
                             <div id="commentInputMainDiv">
                                 <div class="inputBoxGeneralInfo inputBox postInputBox" id="commentInputBox" onclick="newPostModal('textarea')">
                                     <div id="profilePicForComment" class="fullyCenterContent profilePicForPost circleBase type2" style="overflow: hidden; border-radius: 50%;">
@@ -541,19 +534,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">
-                                            سؤالات
-                                        </a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)"> سؤالات </a>
                                     </li>
                                     <li>
-                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)">
-                                            نظرات
-                                        </a>
+                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
-                                            دستور پخت
-                                        </a>
+                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)"> دستور پخت </a>
                                     </li>
                                 </ul>
                             </div>
@@ -565,24 +552,16 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a class="tabLinkMainWrap similarLocationsBtnTopBar similarLocationsBtnTopBar" href="#topPlacesSection" onclick="changeTabBarColor(this)">
-                                            مکان‌های مشابه
-                                        </a>
+                                        <a class="tabLinkMainWrap similarLocationsBtnTopBar similarLocationsBtnTopBar" href="#topPlacesSection" onclick="changeTabBarColor(this)"> مکان‌های مشابه </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">
-                                            سؤالات
-                                        </a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">سؤالات</a>
                                     </li>
                                     <li>
-                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)">
-                                            نظرات
-                                        </a>
+                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
-                                            معرفی کلی
-                                        </a>
+                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)"> معرفی کلی </a>
                                     </li>
                                 </ul>
                             </div>
@@ -1089,6 +1068,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <script>
         var isOpenRateButton = false;
         var photographerPicsForAlbum = [];
+        var sliderPicForAlbum = [];
         var sitePicsForAlbum = [];
         var userPhotosForAlbum = [];
         var userVideoForAlbum = [];
@@ -1111,7 +1091,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 'userLike': item['userLike'],
             };
             photographerPicsForAlbum.push(arr);
-            allPlacePics.push(arr);
         });
         sitePics.map(item => {
             var arr = {
@@ -1129,6 +1108,23 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 'userLike': item['userLike'],
             };
             sitePicsForAlbum.push(arr);
+        });
+        sliderPics.map(item =>{
+            var arr = {
+                'id': item['id'],
+                'sidePic': item['l'],
+                'mainPic': item['s'],
+                'userPic': item['userPic'],
+                'userName': item['name'],
+                'like': item['like'],
+                'dislike': item['dislike'],
+                'alt': item['alt'],
+                'description': item['description'],
+                'uploadTime': item['fromUpload'],
+                'showInfo': item['showInfo'],
+                'userLike': item['userLike'],
+            };
+            sliderPicForAlbum.push(arr);
             allPlacePics.push(arr);
         });
         userPhotos.map(item => {
@@ -1159,7 +1155,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
             allPlacePics.push(arr);
         });
 
-        if (photographerPics.length > 0) {
+        if (sliderPics.length > 0) {
             var mainSlideSwiper = new Swiper('#mainSlider', {
                 spaceBetween: 0,
                 centeredSlides: true,
@@ -1177,9 +1173,9 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         else {
             $('.mainSliderNavBut').css('display', 'none');
             $('.see_all_count_wrap').css('display', 'none');
-            text = '<div class="swiper-slide" style="overflow: hidden">\n' +
-                    '<img class="eachPicOfSlider resizeImgClass" src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" style="width: 100%;">\n' +
-                    '</div>';
+            text = `<div class="swiper-slide" style="overflow: hidden">
+                        <img class="eachPicOfSlider resizeImgClass" src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" style="width: 100%;">
+                    </div>`;
             $('#mainSliderWrapper').append(text);
         }
 
@@ -1190,20 +1186,19 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 success: response => {
                     if(response.status == 'ok'){
                         var result = response.result;
-                        $('.koochitaTvSection').find('.tvOverPic').removeClass('hidden');
-                        $('.koochitaTvSection').find('.tvUserContentDiv').removeClass('hidden');
-                        $('.koochitaTvSection').find('.tvVideoPic').removeClass('fullHeight');
+                        var koochitaTvSectionElement = $('.koochitaTvSection');
+                        koochitaTvSectionElement.find('.tvOverPic').removeClass('hidden');
+                        koochitaTvSectionElement.find('.tvUserContentDiv').removeClass('hidden');
+                        koochitaTvSectionElement.find('.tvVideoPic').removeClass('fullHeight');
 
-                        $('.koochitaTvSection').find('.tvVideoPic').attr('href', result.url);
-                        $('.koochitaTvSection').find('.tvUserName').text(result.username);
-                        $('.koochitaTvSection').find('.tvUserTime').text(result.time);
+                        koochitaTvSectionElement.find('.tvVideoPic').attr('href', result.url);
+                        koochitaTvSectionElement.find('.tvUserName').text(result.username);
+                        koochitaTvSectionElement.find('.tvUserTime').text(result.time);
                         $('.koochitaTvSeen').text(result.seen);
                         $('.koochitaTvDisLikeCount').text(result.disLike);
                         $('.koochitaTvLikeCount').text(result.like);
                         $('.koochitaTvImg').attr('src', result.pic);
-                        $('.tvVideoName').attr('href', result.url);
-                        $('.tvVideoName').text(result.title);
-                        $('.koochitaTvUserImg').attr('src', result.userPic);
+                        $('.tvVideoName').attr('href', result.url).text(result.title);
                         $('.koochitaTvUserImg').attr('src', result.userPic);
                     }
                 },
@@ -1350,9 +1345,12 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         }
 
         function showPhotoAlbum(_kind) {
+            console.log(_kind, sliderPics);
             if($(window).width() <= 767)
                 createPhotoModal('آلبوم عکس', allPlacePics);// in general.photoAlbumModal.blade.php
             else {
+                if (_kind == 'sliderPic' && sliderPicForAlbum.length > 0)
+                    createPhotoModal('آلبوم عکس', sliderPicForAlbum);// in general.photoAlbumModal.blade.php
                 if (_kind == 'photographer' && photographerPicsForAlbum.length > 0)
                     createPhotoModal('عکس های عکاسان', photographerPicsForAlbum);// in general.photoAlbumModal.blade.php
                 else if (_kind == 'sitePics' && sitePicsForAlbum.length > 0)

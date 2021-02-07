@@ -381,6 +381,21 @@ input[type="checkbox"] + label, input[type="radio"] + label{
     max-width: 90%;
 }
 
+.playIconOnPicSection:before{
+    content: '\E0C0';
+    font-family: 'Shazde_Regular2' !important;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #000000a8;
+    color: white;
+    z-index: 1;
+    font-size: 50px;
+}
+
 .lds-ring {
     display: inline-block;
     position: relative;

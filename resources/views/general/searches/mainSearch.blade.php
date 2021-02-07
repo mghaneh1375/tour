@@ -18,7 +18,7 @@
 </style>
 
 <div id="searchPane" class="searchPaneDiv hidden">
-    <span class="statePane ui_overlay ui_modal editTags searchPanes">
+    <span class="statePane editTags searchPanes">
         <div id="searchDivForScroll" class="prw_rup prw_search_typeahead spSearchDivForScroll">
             <div class="ui_picker">
                 <div class="typeahead_align ui_typeahead full-width display-flex" style="font-size: 20px">

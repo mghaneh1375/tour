@@ -526,21 +526,14 @@ function createPhotoModal(_title, _pics, _choosenIndex = 0){
     $('#sidePhotoModal').empty();
 
     for(var i = 0; i < sidePics.length; i++){
-        var re;
         var text = srcSidePic;
         var fk = Object.keys(sidePics[i]);
-        for (var x of fk) {
-            re = new RegExp(`##${x}##`, "g");
-            text = text.replace(re, sidePics[i][x]);
-        }
+        for (var x of fk)
+            text = text.replace(new RegExp(`##${x}##`, "g"), sidePics[i][x]);
 
-        text = text.replace(new RegExp('##picIndex##', "g"), 'chooseAlbumMainPhoto(' + i + ')');
+        text = text.replace(new RegExp('##picIndex##', "g"), `chooseAlbumMainPhoto(${i})`);
         text = text.replace(new RegExp('##index##', "g"), i);
-
-        if(sidePics[i]['video'] != undefined)
-            text = text.replace(new RegExp('##isVideoClass##', "g"), 'playIcon');
-        else
-            text = text.replace(new RegExp('##isVideoClass##', "g"), '');
+        text = text.replace(new RegExp('##isVideoClass##', "g"), sidePics[i]['video'] != undefined ? "playIconOnPicSection" : "");
 
 
         $('#sidePhotoModal').append(text);

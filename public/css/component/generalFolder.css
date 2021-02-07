@@ -453,6 +453,9 @@ textarea, input, select, button, a {
     justify-content: center;
     align-items: center;
 }
+.albumContent > *{
+    max-width: 100%; max-height: 50vh;
+}
 
 .leftColPhotosModalMainDiv{
     display: flex;
@@ -2194,6 +2197,11 @@ a:hover {
     .writeNewReviewModal .inputReviewSec .uploadedFiles{
         max-height: 200px;
         overflow: auto;
+    }
+
+    .writeNewReviewModal .bodySec .inputReviewSec .firsRow .Inp{
+        min-height: 0px;
+        height: 35vh;
     }
 }
 

@@ -4,6 +4,7 @@ use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
 use App\models\localShops\LocalShopsPictures;
+use App\models\PhotographersPic;
 use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\CityPic;
@@ -685,7 +686,7 @@ function compressImage($source, $destination, $quality){
 }
 
 function getAllPlacePicsByKind($kindPlaceId, $placeId){
-
+    $sliderPics = [];
     $sitePics = [];
     $allPics = [];
 
@@ -708,13 +709,15 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
 
     $userVideo = DB::select('SELECT pic.*, users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 1 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
     foreach ($userVideo as $item){
-        $videoArray = explode('.', $item->pic);
-        $videoPicName = '';
-        for($k = 0; $k < count($videoArray)-1; $k++)
-            $videoPicName .= $videoArray[$k] . '.';
-        $videoPicName .= 'png';
+        if($item->thumbnail == null){
+            $thumbnail = explode('.', $item->pic);
+            $thumbnail[count($thumbnail) - 1] = '.png';
+            $thumbnail = implode('', $thumbnail);
+        }
+        else
+            $thumbnail = $item->thumbnail;
 
-        $item->picName = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $videoPicName);
+        $item->picName = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $thumbnail);
         $item->videoUrl = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
 
         $item->video = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
@@ -742,6 +745,7 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
             'fromUpload' => ''];
 
         array_push($sitePics, $s);
+        array_push($sliderPics, $s);
     }
     foreach ($place->pics as $item){
         if(is_file(__DIR__ .'/../../../../assets/_images/' . $MainFile . '/' . $place->file . '/f-' . $item->picNumber)) {
@@ -760,22 +764,26 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
                 'description' => '',
                 'fromUpload' => ''];
             array_push($sitePics, $s);
+            array_push($sliderPics, $s);
         }
     }
 
-    if(\auth()->check())
-        $photographerPic = DB::select('SELECT photo.* FROM photographersPics AS photo WHERE photo.kindPlaceId = ' . $kindPlaceId . ' AND photo.placeId  = ' . $placeId . ' AND ((photo.userId = ' . $user->id . ') OR ( photo.status = 1)) ORDER BY created_at');
-    else
-        $photographerPic = DB::select('SELECT * FROM photographersPics WHERE kindPlaceId = ' . $kindPlaceId . ' AND placeId  = ' . $placeId . ' AND status = 1 ORDER BY created_at');
+//    if(\auth()->check())
+//        $photographerPic = DB::select('SELECT photo.* FROM photographersPics AS photo WHERE photo.kindPlaceId = ' . $kindPlaceId . ' AND photo.placeId  = ' . $placeId . ' AND ((photo.userId = ' . $user->id . ') OR ( photo.status = 1)) ORDER BY created_at');
+//    else
+//        $photographerPic = DB::select('SELECT * FROM photographersPics WHERE kindPlaceId = ' . $kindPlaceId . ' AND placeId  = ' . $placeId . ' AND status = 1 ORDER BY created_at');
+
+    $photographerPic = PhotographersPic::where('kindPlaceId', $kindPlaceId)->where('placeId', $placeId)->where(function($query){
+        if(auth()->check()) $query->where('userId', auth()->user()->id)->orWhere('status', 1);
+        else $query->where('status', 1);
+    })->orderByDesc('created_at')->get();
 
     if($photographerPic != null) {
-        $pid = [];
+        $pid = [0];
         foreach ($photographerPic as $item)
             array_push($pid, $item->id);
-        if(auth()->check())
-            $pidLike = DB::select('SELECT * FROM photographersLogs WHERE picId IN (' . implode(",", $pid) . ') AND userId = ' . $user->id);
-        else
-            $pidLike = null;
+
+        $pidLike = auth()->check() ? DB::select('SELECT * FROM photographersLogs WHERE picId IN (' . implode(",", $pid) . ') AND userId = ' . $user->id) : null;
 
         foreach ($photographerPic as $item) {
             if($pidLike != null) {
@@ -794,13 +802,9 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
     }
 
     $photographerPics = [];
-    if(count($photographerPic) < 5)
-        $photographerPics = $sitePics;
-
     foreach ($photographerPic as $item){
         $user = User::find($item->userId);
         $userName = $user->username;
-
         if($user != null) {
             $s = [
                 'id' => 'photographer_'.$item->id,
@@ -820,13 +824,13 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
                 'fromUpload' => getDifferenceTimeString($item->created_at),
                 'userLike' => $item->userLike
             ];
-
             array_unshift($photographerPics, $s);
             array_unshift($allPics, $s);
+            array_unshift($sliderPics, $s);
         }
     }
 
-    return ['sitePics' => $sitePics, 'photographerPics' => $photographerPics, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'allPics' => $allPics];
+    return ['sitePics' => $sitePics, 'photographerPics' => $photographerPics, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'allPics' => $allPics, 'sliderPics' => $sliderPics];
 }
 
 function deleteReviewPic(){

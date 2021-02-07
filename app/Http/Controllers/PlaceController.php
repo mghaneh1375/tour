@@ -193,6 +193,7 @@ class PlaceController extends Controller {
         $userPhotos = $pics['userPhotos'];
         $userVideo = $pics['userVideo'];
         $allPlacePics = $pics['allPics'];
+        $sliderPics = $pics['sliderPics'];
 
         $result = commonInPlaceDetails($kindPlaceId, $place->id, $city, $state, $place);  // common.php
         $reviewCount = $result[0];
@@ -235,10 +236,10 @@ class PlaceController extends Controller {
 
         $questionAction = Activity::where('name', 'سوال')->first();
         $place->firstQuestion = \DB::table('log')
-                    ->where('activityId', $questionAction->id)
-                    ->where('kindPlaceId', $kindPlaceId)
-                    ->where('placeId', $place->id)
-                    ->first();
+                                    ->where('activityId', $questionAction->id)
+                                    ->where('kindPlaceId', $kindPlaceId)
+                                    ->where('placeId', $place->id)
+                                    ->first();
         if($place->firstQuestion != null)
             $place->firstQuestion = questionTrueType($place->firstQuestion);
 
@@ -249,7 +250,7 @@ class PlaceController extends Controller {
 
         return view('pages.placeDetails.placeDetails', array('place' => $place, 'features' => $features , 'save' => $save, 'city' => $city, 'thumbnail' => $thumbnail,
             'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'], 'locationName' => $locationName, 'localStorageData' => $localStorageData,
-            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount, 'photographerPics' => $photographerPics,
+            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount, 'photographerPics' => $photographerPics, 'sliderPics' => $sliderPics,
             'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
             'sitePics' => $sitePics, 'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
             'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo,

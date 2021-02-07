@@ -336,11 +336,11 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
     Route::get('profile/index/{username?}', 'ProfileController@showProfile')->name('profile')->middleware('shareData');
 
+    Route::get('/profile/getUserPicsAndVideo', 'ProfileController@getUserPicsAndVideo')->name('profile.getUserPicsAndVideo');
+
     Route::post('/profile/getFollower', 'FollowerController@getFollower')->name('profile.getFollower');
 
     Route::post('/profile/getUserMedals', 'ProfileController@getUserMedals')->name('profile.getUserMedals');
-
-    Route::post('/profile/getUserPicsAndVideo', 'ProfileController@getUserPicsAndVideo')->name('profile.getUserPicsAndVideo');
 
     Route::post('/profile/getSafarnameh', 'ProfileController@getSafarnameh')->name('profile.getSafarnameh');
 

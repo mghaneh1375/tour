@@ -29,7 +29,7 @@
                 <div class="reviewButs">
                     <label for="reviewPictureInput" class="but addPhotoIcon"> عکس اضافه کنید.</label>
                     <label for="reviewVideoInput" class="but addVideoIcon">ویدیو اضافه کنید.</label>
-                    <div id="addPlaceButtonNewReview" class="but atractionIcon" onclick="addPlaceToNewReview()">محل عکس را مشخص کنید</div>
+                    <div id="addPlaceButtonNewReview" class="but atractionIcon" onclick="addPlaceToNewReview()">محل پست را مشخص کنید</div>
 {{--                    <label for="review360VideoInput" class="but addVideo360Icon">ویدیو 360 اضافه کنید.</label>--}}
                     <div class="but addFriendIcon" onclick="openUserSearchForNewReview()">دوستنتان را TAG کنید.</div>
 
