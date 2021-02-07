@@ -195,8 +195,9 @@ function reviewTrueType($_log){
     catch (\Exception $exception){
         $_log->timeAgo = '';
     }
+    $noneTagText = strip_tags($_log->text);
+    $_log->summery = strlen($noneTagText) > 180 ? mb_substr($noneTagText, 0, 180, 'utf-8') : null;
 
-    $_log->summery = strlen($_log->text) > 180 ? mb_substr($_log->text, 0, 180, 'utf-8') : null;
 
     $_log->assigned = ReviewUserAssigned::where('logId', $_log->id)->get();
     foreach ($_log->assigned as $item) {

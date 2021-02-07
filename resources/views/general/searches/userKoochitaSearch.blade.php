@@ -26,5 +26,6 @@
 <script>
     var koochitaUserModalButtons = '';
     var koochitaUserModalSelectUser = '';
+    var noDataKoochitaPicUrl_userKoochitaSearch = "{{URL::asset('images/mainPics/noData.png')}}";
     // openKoochitaUserSearchModal() in forAllPages.js
 </script>

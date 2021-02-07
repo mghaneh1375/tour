@@ -99,6 +99,7 @@
 <script>
     var deletePicInAlbumUrl = '{{route("album.pic.delete")}}';
     var likePhotographerUrl = '{{route('likePhotographer')}}';
+    var userProfileUrl_albume = '{{url('addPlace/index')}}';
     var sidePics;
     var choosenIndex;
     var userInPhoto = '{{auth()->check() ? auth()->user()->username : false}}';

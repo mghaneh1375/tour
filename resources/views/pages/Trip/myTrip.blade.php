@@ -137,8 +137,6 @@
 
 @section('main')
 
-    @include('general.addToTripModal')
-
     <div id="MAIN" class="Saves prodp13n_jfy_overflow_visible position-relative">
         <div id="BODYCON" class="col easyClear poolB adjust_padding new_meta_chevron_v2 position-relative">
             <div class="wrpHeader"></div>

@@ -1,7 +1,7 @@
 var nowOpenReviewOption = null;
 var allReviewsCreated = [];
 var showReviewAnsInOneSee = 4; // this number mean show ans in first time and not click on "showAllReviewCommentsFullReview"
-var devaredReview = 0;
+var deletedReview = 0;
 var globalConfirmText = '<span class="label label-success inConfirmLabel">در انتظار تایید</span>';
 var showFullReview = null;
 var showFullReviewKind = null;
@@ -22,13 +22,13 @@ function createSmallReviewHtml(item){
 
     var t;
     var re;
-    if(item.summery != null){
-        text = text.replace(new RegExp('##haveSummery##', "g"), 'block');
-        text = text.replace(new RegExp('##notSummery##', "g"), 'none');
-    }
-    else{
+    if(item.summery == null){
         text = text.replace(new RegExp('##haveSummery##', "g"), 'none');
         text = text.replace(new RegExp('##notSummery##', "g"), 'block');
+    }
+    else{
+        text = text.replace(new RegExp('##haveSummery##', "g"), 'block');
+        text = text.replace(new RegExp('##notSummery##', "g"), 'none');
     }
 
     text = text.replace( new RegExp('##havePic##', "g"), item.hasPic ? 'block' : 'none');
@@ -171,7 +171,7 @@ function setFullReviewContent(_reviews){
                 <a href="${policiRouteUrl}" target="_blank">صفحه قوانین و مقررات</a>`;
 
     if(isUserLoginCheckInSmall && _reviews.yourReview)
-        text += `<span onclick="devareReviewByUserInReviews(${_reviews.id})" style="color: red">حذف پست</span>\n`;
+        text += `<span onclick="deleteReviewByUserInReviews(${_reviews.id})" style="color: red">حذف پست</span>\n`;
 
     text += `</div>
              <div class="commentWriterDetailsShow">
@@ -210,13 +210,13 @@ function setFullReviewContent(_reviews){
     var secCol = '';
 
     if(reviewPicsCount > 5)
-        picDivClassName = 'quintupvarPhotoDiv';
+        picDivClassName = 'quintupletPhotoDiv';
     else if(reviewPicsCount == 5)
-        picDivClassName = 'quintupvarPhotoDiv';
+        picDivClassName = 'quintupletPhotoDiv';
     else if(reviewPicsCount == 4)
         picDivClassName = 'quadruplePhotoDiv';
     else if(reviewPicsCount == 3)
-        picDivClassName = 'tripvarPhotoDiv';
+        picDivClassName = 'tripletPhotoDiv';
     else if(reviewPicsCount == 2)
         picDivClassName = 'doublePhotoDiv';
     else if(reviewPicsCount == 1)
@@ -516,11 +516,11 @@ function checkFullSubmitFullReview(_element){
         $(_element).next().attr('disabled', 'disabled');
 }
 
-function devareReviewByUserInReviews(_reviewId){
+function deleteReviewByUserInReviews(_reviewId){
     if(_reviewId != 0)
-        devaredReview = _reviewId;
+        deletedReview = _reviewId;
     else
-        devaredReview
+        deletedReview
     text = 'آیا از حذف نقد خود اطمینان دارید؟ در صورت حذف عکس ها و فیلم ها افزوده شده پاک می شوند و قابل بازیابی نمی باشد.';
     openWarning(text, doDeleteReviewByUserInReviews); // in general.alert.blade.php
 }
@@ -532,14 +532,14 @@ function doDeleteReviewByUserInReviews(){
         url: deleteReviewURL,
         data: {
             _token: csrfTokenGlobal,
-            id: devaredReview
+            id: deletedReview
         },
         success: function(response){
             closeLoading();
             if(response == 'ok'){
                 closeFullReview();
-                $('#showReview_' + devaredReview).remove();
-                $('#smallReviewHtml_' + devaredReview).remove();
+                $('#showReview_' + deletedReview).remove();
+                $('#smallReviewHtml_' + deletedReview).remove();
                 showSuccessNotifi('نظر شما با موفقیت حذف شد.', 'left', 'green');
             }
             else
@@ -585,10 +585,10 @@ function showFullReviewOptions(_element, _id) {
 
                 if(isUserLoginCheckInSmall) {
                     if (nowOpenReviewOption.yourReview) {
-                        $('#devareReviewOptionInModal').show();
-                        $('#devareReviewOptionInModal').attr('onClick', `devareReviewByUserInReviews(${nowOpenReviewOption.id})`);
+                        $('#deleteReviewOptionInModal').show();
+                        $('#deleteReviewOptionInModal').attr('onClick', `deleteReviewByUserInReviews(${nowOpenReviewOption.id})`);
                     } else
-                        $('#devareReviewOptionInModal').hide();
+                        $('#deleteReviewOptionInModal').hide();
                 }
                 break;
                 }
@@ -615,7 +615,7 @@ function addReviewToBookMark(_elem, _id){
                 $(_elem).addClass('BookMarkIcon');
                 showSuccessNotifi('پست به نشان کرده ها اضافه شد.', 'left', 'var(--koochita-blue)');
             }
-            else if(response == 'devare'){
+            else if(response == 'delete'){
                 $(_elem).addClass('BookMarkIconEmpty');
                 $(_elem).removeClass('BookMarkIcon');
                 showSuccessNotifi('پست از نشان کرده ها حذف شد.', 'left', 'red');
@@ -632,6 +632,10 @@ function addReviewToBookMark(_elem, _id){
             showSuccessNotifi('مشکلی پیش امده دوباره تلاش کنید', 'left', 'red');
         }
     });
+
+}
+
+function goToUserPageReview(_element){
 
 }
 

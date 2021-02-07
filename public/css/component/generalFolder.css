@@ -1738,9 +1738,6 @@ a:hover {
 .writeNewReviewModal .showWhenNeed{
     display: block;
 }
-.writeNewReviewModal .yourReviewHeader .iconClose{
-    display: block;
-}
 .writeNewReviewModal .bodySec .inputReviewSec .firsRow .Inp{
     min-height: 400px;
 }
@@ -1763,12 +1760,21 @@ a:hover {
     padding: 10px;
     position: relative;
 }
-.writeNewReviewModal .yourReviewHeader .iconClose{
+.writeNewReviewModal .closeModal{
     cursor: pointer;
     position: absolute;
     left: 0px;
     top: 0px;
     font-size: 40px;
+    z-index: 1;
+    color: white;
+    height: 37px;
+}
+.writeNewReviewModal .inputNewReviewDiv{
+    width: calc(100% - 50px);
+    height: 200px;
+    padding: 4px;
+    overflow: auto;
 }
 .writeNewReviewModal .inputReviewSec .firsRow{
     display: flex;
@@ -1824,11 +1830,6 @@ a:hover {
     padding-bottom: 5px;
 }
 
-.writeNewReviewModal .addFriendInputNewReview{
-    width: 100%;
-    border: none;
-    padding: 0px 10px;
-}
 .writeNewReviewModal .reviewSubmit{
     background-color: var(--koochita-blue);
     color: white;
@@ -1865,22 +1866,34 @@ a:hover {
 }
 
 
-.writeNewReviewModal .searchYouFriendDiv{
+.searchYouFriendReviewSectionDiv{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    direction: rtl;
+}
+.searchYouFriendReviewSectionDiv .placeHolderText{
+    color: #afafaf;
+    margin-right: 14px;
+    margin-bottom: 10px;
+}
+.searchYouFriendReviewSectionDiv .results{
     display: flex;
     flex-wrap: wrap;
 }
-.writeNewReviewModal .searchYouFriendDiv .results{
-    display: flex;
-    flex-wrap: wrap;
-}
-.writeNewReviewModal .searchYouFriendDiv .results .user{
+.searchYouFriendReviewSectionDiv .results .user{
     margin: 0px 5px;
     background: var(--koochita-yellow);
     padding: 0px 10px;
     border-radius: 15px;
     color: white;
 }
-.writeNewReviewModal .searchYouFriendDiv .results .user:before{
+.searchYouFriendReviewSectionDiv .addFriendInputNewReview{
+    width: 100%;
+    border: none;
+    padding: 0px 10px;
+}
+.searchYouFriendReviewSectionDiv .results .user:before{
     color: red;
 }
 

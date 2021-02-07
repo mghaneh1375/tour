@@ -1,8 +1,9 @@
 var newReviewFileInUpload = false;
+var searchInPlaceForNewReviewAjax = null;
 
-$(window).ready(() => {
-    autosize($('#inputNewReviewText'));
-});
+// $(window).ready(() => {
+//     autosize($('#inputNewReviewText'));
+// });
 
 function openModalWriteNewReview(){
     openMyModal('newReviewSection');
@@ -21,7 +22,6 @@ function uploadFileForNewReview(_input, _kind){
     openLoading();
 
     if(_kind == 'image' && _input.files && _input.files[0]){
-
         cleanImgMetaData(_input, function(_imgDataURL, _files){ // in forAllPages.blade.php
             newReviewDataForUpload.files.push({
                 savedFile: '',
@@ -50,7 +50,6 @@ function uploadFileForNewReview(_input, _kind){
     else
         closeLoading();
 }
-
 function createNewFileUploadCardForNewReview(_index){
     closeLoading();
     var file = newReviewDataForUpload.files[_index];
@@ -72,7 +71,6 @@ function createNewFileUploadCardForNewReview(_index){
         $('.uploadedFiles').append(text);
     }
 }
-
 function convertVideoFileForConvertForNewReview(_index){
     try{
         var uFile = newReviewDataForUpload.files[_index];
@@ -128,7 +126,6 @@ function convertVideoFileForConvertForNewReview(_index){
         closeLoading();
     }
 }
-
 function reviewFileUploadQueueForNewReview(){
     if(!newReviewFileInUpload){
         var uploadFileIndex = null;
@@ -183,7 +180,6 @@ function reviewFileUploadQueueForNewReview(){
         }
     }
 }
-
 function uploadReviewVideoThumbnail(_index){
     var uFile = newReviewDataForUpload.files[_index];
 
@@ -215,7 +211,6 @@ function uploadReviewVideoThumbnail(_index){
         }
     })
 }
-
 function deleteThisUploadedReviewFile(_code){
     var findedIndex = null;
     newReviewDataForUpload.files.map((item, index) => {
@@ -226,7 +221,6 @@ function deleteThisUploadedReviewFile(_code){
     if(findedIndex != null)
         doDeleteNewReviewFile(findedIndex);
 }
-
 function doDeleteNewReviewFile(_index){
     var dFile = newReviewDataForUpload.files[_index];
     if(dFile.uploaded == 1){
@@ -259,7 +253,7 @@ function doDeleteNewReviewFile(_index){
 function storeNewReview(_element){
     var canUpload = false;
     var fileUploding = false;
-    var text = $('#inputNewReviewText').val();
+    var text = `<div>${$('#inputNewReviewText').html()}</div>`;
 
     if(text.trim().length > 0)
         canUpload = true;
@@ -276,7 +270,7 @@ function storeNewReview(_element){
 
     if(canUpload && !fileUploding) {
         var assignedUsers = [];
-        var assignedUsersElements = $('.assignedUserForNewReview');
+        var assignedUsersElements = $('#newReviewSection').find('.assignedUserForNewReview');
         for(var i = 0; i < assignedUsersElements.length; i++)
             assignedUsers.push($(assignedUsersElements[i]).text());
 
@@ -324,7 +318,6 @@ function storeNewReview(_element){
 
 }
 
-var searchInPlaceForNewReviewAjax = null;
 function addPlaceToNewReview(){
     createSearchInput(_element => {
         var value = $(_element).val();
@@ -345,7 +338,7 @@ function addPlaceToNewReview(){
             })
         }
     }, 'محل مورد نظر را جستجو کنید...');
-};
+}
 
 function selectPlaceForNewReview(_kindPlaceId, _placeId, _placeName){
     $('#kindPlaceIdNewReview').val(_kindPlaceId);
@@ -362,10 +355,103 @@ function selectPlaceForNewReview(_kindPlaceId, _placeId, _placeName){
 
 function openUserSearchForNewReview(){
     openKoochitaUserSearchModal('جستجوی دوستان', (_id, _username) => {
-        $('#friendAddedSection').append(`<div class="assignedUserForNewReview user iconClose" onclick="deleteThisAssignedUserToReview(this)">${_username}</div>`);
+        var elements = $('#newReviewSection').find('.assignedUserForNewReview');
+        var hasCheck = true;
+        for(var i = 0; i < elements.length; i++){
+            if($(elements).text() == _username){
+                hasCheck = false;
+                break;
+            }
+        }
+
+        if(hasCheck)
+            $('.friendAddedSection').append(`<div class="assignedUserForNewReview user iconClose" onclick="$(this).remove()">${_username}</div>`);
     });
 }
 
-function deleteThisAssignedUserToReview(_element){
-    $(_element).remove();
+
+var checkWhatIsInput = false;
+$('#inputNewReviewText').keyup(e => {
+    // 32 space
+    // 50 @
+    // 51 #
+
+    if(e.keyCode == 50) {
+        checkWhatIsInput = true;
+    }
+
+    if(e.keyCode == 16 && checkWhatIsInput){
+        var inputPosition = getSelectionCharacterOffsetWithin(document.getElementById('inputNewReviewText'), 'html');
+        openKoochitaUserSearchModal('جستجوی دوستان', (_id, _username) => {
+            var nowHtml = $('#inputNewReviewText').html();
+            var lastOfChar = inputPosition;
+            var firstSection = nowHtml.substr(0, lastOfChar);
+            var lastSection = nowHtml.substr(lastOfChar + 1, nowHtml.length);
+            var newUserName = _username.replace(new RegExp(' ', 'g'), '_');
+            var newHtml =  `${firstSection} <div class="linkInTextArea" onclick="goToUserPageReview(this)">@${newUserName}</div> ${lastSection}`;
+            $('#inputNewReviewText').html(newHtml);
+        });
+        checkWhatIsInput = false;
+    }
+});
+
+function translatePositionToReal(_pos){
+    var counter = 0;
+    var isStartTag = false;
+    var elementHtml = $('#inputNewReviewText').html();
+    for(var i = 0; i < elementHtml.length; i++){
+        if(elementHtml[i] == '&' && elementHtml[i+1] == 'n' && elementHtml[i+2] == 'b' && elementHtml[i+3] == 's' && elementHtml[i+4] == 'p' && elementHtml[i+5] == ';'){
+            i += 4;
+            continue
+        }
+        if(elementHtml[i] == '<') {
+            isStartTag = true;
+            continue;
+        }
+        else if(elementHtml[i] == '>') {
+            isStartTag = false;
+            continue;
+        }
+
+        if(!isStartTag)
+            counter++;
+
+        if(counter == _pos)
+            break;
+    }
+
+    return i;
+}
+
+function getSelectionCharacterOffsetWithin(element, _kind = 'text') {
+    var start = 0;
+    var end = 0;
+    var doc = element.ownerDocument || element.document;
+    var win = doc.defaultView || doc.parentWindow;
+    var sel;
+    if (typeof win.getSelection != "undefined") {
+        sel = win.getSelection();
+        if (sel.rangeCount > 0) {
+            var range = win.getSelection().getRangeAt(0);
+            var preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(element);
+            preCaretRange.setEnd(range.startContainer, range.startOffset);
+            start = preCaretRange.toString().length;
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            end = preCaretRange.toString().length;
+        }
+    } else if ( (sel = doc.selection) && sel.type != "Control") {
+        var textRange = sel.createRange();
+        var preCaretTextRange = doc.body.createTextRange();
+        preCaretTextRange.moveToElementText(element);
+        preCaretTextRange.setEndPoint("EndToStart", textRange);
+        start = preCaretTextRange.text.length;
+        preCaretTextRange.setEndPoint("EndToEnd", textRange);
+        end = preCaretTextRange.text.length;
+    }
+
+    if(_kind == 'text')
+        return start;
+    else
+        return translatePositionToReal(start);
 }

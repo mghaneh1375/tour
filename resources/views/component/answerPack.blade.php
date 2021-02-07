@@ -24,9 +24,7 @@
                       onclick="##likeFunction##(##id##, -1, {'like': $('.likeNumberAnswer_'+##random##), disLike: $('.disLikeNumberAnswer_'+##random##)}); turnOnLike(##random##, -1)">
                     ##disLike##
                 </span>
-                <span class="replayBtn replayReview" onclick="showReplyToAnswerHandle(##random##)">
-                    {{__("پاسخ دهید")}}
-    </span>
+                <span class="replayBtn replayReview" onclick="showReplyToAnswerHandle(##random##)">{{__("پاسخ دهید")}}</span>
 </div>
 <div class="fullReviewSeeAnses" onclick="showAnswersOfAns(##random##, this)" style="display: ##hasAns##">
     <span class="numberOfCommentsIcon commentsStatisticSpan dark-blue" style="margin-left: 20px">##answersCount##</span>
@@ -48,12 +46,10 @@
     <button class="btn submitAnsInReview"
             onclick="##sendAnswerFunction##(##id##, $('#textareaForAns_##random##').val()); $(this).hide(); $(this).next().show()"
             style="height: fit-content"
-            disabled>
-{{__("ارسال")}}
-    </button>
+            disabled>{{__("ارسال")}}</button>
     <div class="sendQuestionBtn sendingQuestionLoading" style="display: none;" disabled>
         <img alt="loading" src="{{URL::asset("images/icons/mGear.svg")}}" style="width: 30px; height: 30px;">
-                    {{__("در حال ثبت")}}
+        {{__("در حال ثبت")}}
     </div>
 </div>
 </div>
@@ -218,11 +214,8 @@
     }
 
     function checkNotEmptyTextArea(_element){
-        let text = $(_element).val();
-        if(text.trim().length > 0)
-            $(_element).next().removeAttr('disabled');
-        else
-            $(_element).next().attr('disabled', true);
+        var text = $(_element).val();
+        $(_element).next().removeAttr('disabled', text.trim().length == 0);
     }
 
     function turnOnLike(_random, _kind){

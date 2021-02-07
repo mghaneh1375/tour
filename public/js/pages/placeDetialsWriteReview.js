@@ -1,4 +1,6 @@
 var isUploadFileForReviewInPlaceDetails = false;
+var fileToUploadInPlaceDetailReview = [];
+
 $(window).ready(() => $("#postTextArea").emojioneArea());
 
 for (i = 0; i < rateQuestion.length; i++)
@@ -22,6 +24,250 @@ function newPostModal(kind = '') {
     }, 500);
 }
 
+function uploadReviewPics(input){
+    if (input.files && input.files[0]) {
+        var lastNumber = reviewPicNumber;
+        fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: 'image', upload: 0});
+
+        var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
+                        <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
+                            <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
+                            <div id="reviewPicLoaderPercent_${reviewPicNumber}" class="loaderReviewPercent"></div>
+                        </div>
+                        <img id="showPic${reviewPicNumber}"  style="width: 100%; height: 100px;">
+                        <input type="hidden" id="fileName_${reviewPicNumber}" >
+                        <div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(${reviewPicNumber})"></div>
+                        <div class="editUploadPhotoComment" onclick="openEditReviewPic(${reviewPicNumber})"></div>
+                    </div>`;
+        $('#reviewShowPics').append(text);
+
+        var reader = new FileReader();
+        reader.onload = e => {
+            var mainPic = e.target.result;
+            $('#showPic' + lastNumber).attr('src', mainPic);
+            uploadedWriteReviewPicture[lastNumber] = mainPic;
+        };
+        reader.readAsDataURL(input.files[0]);
+
+        uploadFileInPlaceDetailsReview(lastNumber);
+        reviewPicNumber++;
+    }
+}
+function uploadReviewVideo(input, _is360){
+    var lastNumber = reviewPicNumber;
+    fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: _is360 == 1 ? '360' : 'video', upload: 0, thumbnail: ''});
+
+    var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
+                    <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
+                        <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
+                        <div id="reviewPicLoaderPercent_${reviewPicNumber}" class="loaderReviewPercent"></div>
+                    </div>
+                    <img id="showPic${reviewPicNumber}"  style="width: 100%; height: 100px;">
+                    <input type="hidden" id="fileName_${reviewPicNumber}" >
+                    <div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(${reviewPicNumber})"></div>
+                    <div class="videoTimeDuration" id="videoDuration_${reviewPicNumber}"></div>
+                </div>`;
+    $('#reviewShowPics').append(text);
+
+    window.URL = window.URL || window.webkitURL;
+
+    var files = input.files;
+    var video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        var duration = video.duration;
+        sec = Math.floor(duration);
+        min = Math.floor(sec/60);
+        sec = sec - (min * 60);
+        $(`#videoDuration_${lastNumber}`).text(min + ':' + sec);
+    };
+    video.src = URL.createObjectURL(files[0]);
+
+    var file = input.files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function() {
+        var blob = new Blob([fileReader.result], {type: file.type});
+        var url = URL.createObjectURL(blob);
+        var timeupdate = function() {
+            if (snapImage()) {
+                video.removeEventListener('timeupdate', timeupdate);
+                video.pause();
+            }
+        };
+        video.addEventListener('loadeddata', function() {
+            if (snapImage())
+                video.removeEventListener('timeupdate', timeupdate);
+        });
+
+        var snapImage = function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            var image = canvas.toDataURL();
+            var success = image.length > 100000;
+            var lastNumber = reviewPicNumber;
+
+            if (success) {
+                var img = document.getElementById('showPic' + lastNumber);
+                img.src = image;
+                uploadedWriteReviewPicture[lastNumber] = image;
+                URL.revokeObjectURL(url);
+                fileToUploadInPlaceDetailReview[lastNumber].thumbnail = image;
+                uploadFileInPlaceDetailsReview(lastNumber);
+                reviewPicNumber++;
+            }
+            return success;
+        };
+        video.addEventListener('timeupdate', timeupdate);
+        video.preload = 'metadata';
+        video.src = url;
+        video.muted = true;
+        video.playsInline = true;
+        video.play();
+    };
+    fileReader.readAsArrayBuffer(file);
+}
+function uploadFileInPlaceDetailsReview(_picNumber){
+
+    if(_picNumber == -1){
+        fileToUploadInPlaceDetailReview.map((item, index) => {
+            if(item.upload == 0){
+                uploadFileInPlaceDetailsReview(index);
+                return;
+            }
+        })
+    }
+
+    if(!isUploadFileForReviewInPlaceDetails) {
+        var uFile = fileToUploadInPlaceDetailReview[_picNumber];
+
+        var isVideo = uFile.kind == 'image' ? 0 : 1;
+        var is360 = (uFile.kind == '360') ? 1 : 0;
+        var sendData = {
+            code: $('#storeReviewCode').val(),
+            is360,
+            isVideo
+        };
+
+        isUploadFileForReviewInPlaceDetails = true;
+        uploadLargeFile(reviewUploadFileURLInPlaceDetails, uFile.file, sendData, (_percent, _fileName = '', _result = '') => {
+            if (_percent == 'done') {
+                $(`#fileName_${_picNumber}`).val(_fileName);
+                fileToUploadInPlaceDetailReview[_picNumber].saveFile = _fileName;
+                fileUploadNum++;
+                if(uFile.kind == 'image') {
+                    fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+                    $(`#reviewPicLoader_${_picNumber}`).remove();
+                    isUploadFileForReviewInPlaceDetails = false;
+                    uploadFileInPlaceDetailsReview(-1);
+                }
+                else
+                    uploadThumbnailInReviewDetail(_picNumber);
+                checkReviewToSend();
+            }
+            else if (_percent == 'error') {
+                isUploadFileForReviewInPlaceDetails = false;
+                showSuccessNotifi("آپلود فایل با مشگل مواجه شد", 'left', 'red');
+                $('#reviewPic_' + _picNumber).remove();
+                fileToUploadInPlaceDetailReview[_picNumber].upload = -2;
+                uploadFileInPlaceDetailsReview(-1);
+            }
+            else if (_percent == 'cancelUpload') {
+                isUploadFileForReviewInPlaceDetails = false;
+                fileToUploadInPlaceDetailReview[_picNumber].upload = -1;
+                $('#reviewPic_' + _picNumber).remove();
+                uploadFileInPlaceDetailsReview(-1);
+                checkReviewToSend();
+            }
+            else {
+                var size = (160 - (_percent * 1.6)) + 'px';
+                var leftBottom = ((_percent * 1.6)/2) + 'px';
+                $(`#reviewPicLoaderPercent_${_picNumber}`).text(_percent+'%');
+                $(`#reviewPicLoaderBackGround_${_picNumber}`).css({width: size, height: size, left: leftBottom, bottom: leftBottom});
+            }
+        });
+    }
+}
+function uploadThumbnailInReviewDetail(_picNumber){
+
+    var uFile = fileToUploadInPlaceDetailReview[_picNumber];
+
+    var videoThumbnail = new FormData();
+    videoThumbnail.append('code', $('#storeReviewCode').val());
+    videoThumbnail.append('kind', 'thumbnail');
+    videoThumbnail.append('file', uFile.thumbnail);
+    videoThumbnail.append('fileName', uFile.saveFile);
+
+    $.ajax({
+        type: 'POST',
+        url: uploadNewReviewPicUrl,
+        data: videoThumbnail,
+        processData: false,
+        contentType: false,
+        success: response => {
+            if(response.status == 'ok'){
+                fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+                $(`#reviewPicLoader_${_picNumber}`).remove();
+                isUploadFileForReviewInPlaceDetails = false;
+                uploadFileInPlaceDetailsReview(-1);
+            }
+        },
+        error: err => {
+            $(`#reviewPicLoader_${_picNumber}`).remove();
+            fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
+            isUploadFileForReviewInPlaceDetails = false;
+            uploadFileInPlaceDetailsReview(-1);
+        }
+    })
+}
+function deleteUploadedReviewFile(_number){
+    var fileName =  document.getElementById('fileName_' + _number).value;
+
+    $.ajax({
+        type: 'post',
+        url: deleteReviewPicUrl,
+        data: {
+            'name': fileName,
+            'code':  $('#storeReviewCode').val()
+        },
+        success: function(response){
+            if(response.status == 'ok') {
+                $('#reviewPic_' + _number).remove();
+                fileUploadNum--;
+                checkReviewToSend();
+            }
+            else{
+                alert('problem')
+            }
+        }
+    })
+}
+
+
+function radioChange(value, _questionId, _index, _ansId){
+    if(reviewMultiAns[_index] != null)
+        $(`#radioAnsStyle_${_questionId}_${reviewMultiAns[_index]}`).removeClass('filterChoose');
+
+    $(`#radioAnsStyle_${_questionId}_${_ansId}`).addClass('filterChoose');
+
+    if(reviewMultiAnsQuestionId.includes(_questionId)){
+        var index = reviewMultiAnsQuestionId.indexOf(_questionId);
+        reviewMultiAnsId[index] = _ansId;
+    }
+    else {
+        reviewMultiAnsQuestionId[reviewMultiAnsQuestionId.length] = _questionId;
+        reviewMultiAnsId[reviewMultiAnsId.length] = _ansId;
+    }
+
+    reviewMultiAns[_index] = _ansId;
+
+    $('#multiQuestionInput').val(JSON.stringify(reviewMultiAnsQuestionId));
+    $('#multiAnsInput').val(JSON.stringify(reviewMultiAnsId));
+
+    checkReviewToSend();
+}
 function momentChangeRate(_index, _value, _kind){
 
     if(_kind == 'in') {
@@ -109,311 +355,6 @@ function chooseQuestionRate(_index, _value, _id){
 
     checkReviewToSend();
 }
-
-function searchUser(_value){
-    if(_value.trim().length > 1) {
-
-        searchForUserCommon(_value)
-            .then(response => {
-                var text = '<ul>';
-                response.userName.map(item => text += `<li onclick="assignedUserToReview('${item.username}')" style="cursor: pointer">${item.username}</li>`);
-                response.email.map(item => text += `<li onclick="assignedUserToReview('${item.email}')" style="cursor: pointer">${item.email}</li>`);
-                text += '</ul>';
-                document.getElementById('assignedResultReview').innerHTML = text;
-            })
-            .catch(err =>{
-                if (err == 'nok3') {
-                    document.getElementById('assignedResultReview').innerHTML = '';
-
-                    if(_value.includes('@') && _value.includes('.')){
-                        text = '<ul style="list-style: none;">';
-                        text += '<li onclick="assignedUserToReview(\'' + _value + '\', 0)"  style="cursor: pointer; color: blue;"> دعوت کردن دوست خود : ' + _value + '</li>';
-                        text += '</ul>';
-
-                        document.getElementById('assignedResultReview').innerHTML = text;
-                    }
-                }
-                console.error(err);
-            });
-
-    }
-    else
-        document.getElementById('assignedResultReview').innerHTML = '';
-
-}
-
-function assignedUserToReview(_email, _id){
-
-    var text =  '<div class="participantDiv">\n' +
-        '   <span class="removeParticipantBtn" onclick="removeAssignedUserToReview(this, \'' + _email + '\')" style="cursor:pointer;"></span>' + _email +
-        '</div>';
-
-    assignedUser[assignedUser.length] = _email;
-
-    document.getElementById('assignedMemberToReview').value = JSON.stringify(assignedUser);
-
-    document.getElementById('assignedResultReview').innerHTML = '';
-    document.getElementById('assignedSearch').value = '';
-    $('#participantDivMainDiv').append(text);
-}
-
-function removeAssignedUserToReview(element, _email){
-    $(element).parent().remove();
-    var index = assignedUser.indexOf(_email);
-    assignedUser[index] = null;
-    document.getElementById('assignedMemberToReview').value = JSON.stringify(assignedUser);
-}
-
-
-var fileToUploadInPlaceDetailReview = [];
-function uploadReviewPics(input){
-    if (input.files && input.files[0]) {
-        var lastNumber = reviewPicNumber;
-        fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: 'image', upload: 0});
-
-        var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
-                        <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
-                            <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
-                            <div id="reviewPicLoaderPercent_${reviewPicNumber}" class="loaderReviewPercent"></div>
-                        </div>
-                        <img id="showPic${reviewPicNumber}"  style="width: 100%; height: 100px;">
-                        <input type="hidden" id="fileName_${reviewPicNumber}" >
-                        <div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(${reviewPicNumber})"></div>
-                        <div class="editUploadPhotoComment" onclick="openEditReviewPic(${reviewPicNumber})"></div>
-                    </div>`;
-        $('#reviewShowPics').append(text);
-
-        var reader = new FileReader();
-        reader.onload = e => {
-            var mainPic = e.target.result;
-            $('#showPic' + lastNumber).attr('src', mainPic);
-            uploadedWriteReviewPicture[lastNumber] = mainPic;
-        };
-        reader.readAsDataURL(input.files[0]);
-
-        uploadFileInPlaceDetailsReview(lastNumber);
-        reviewPicNumber++;
-    }
-}
-
-function uploadReviewVideo(input, _is360){
-    var lastNumber = reviewPicNumber;
-    fileToUploadInPlaceDetailReview.push({ file: input.files[0], kind: _is360 == 1 ? '360' : 'video', upload: 0, thumbnail: ''});
-
-    var text = `<div id="reviewPic_${reviewPicNumber}" class="commentPhotosDiv commentPhotosAndVideos">
-                    <div id="reviewPicLoader_${reviewPicNumber}" class="loaderReviewPiUpload">
-                        <div id="reviewPicLoaderBackGround_${reviewPicNumber}" class="loaderReviewBackGround"></div>
-                        <div id="reviewPicLoaderPercent_${reviewPicNumber}" class="loaderReviewPercent"></div>
-                    </div>
-                    <img id="showPic${reviewPicNumber}"  style="width: 100%; height: 100px;">
-                    <input type="hidden" id="fileName_${reviewPicNumber}" >
-                    <div class="deleteUploadPhotoComment" onclick="deleteUploadedReviewFile(${reviewPicNumber})"></div>
-                    <div class="videoTimeDuration" id="videoDuration_${reviewPicNumber}"></div>
-                </div>`;
-    $('#reviewShowPics').append(text);
-
-    window.URL = window.URL || window.webkitURL;
-
-    var files = input.files;
-    var video = document.createElement('video');
-    video.preload = 'metadata';
-    video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src);
-        var duration = video.duration;
-        sec = Math.floor(duration);
-        min = Math.floor(sec/60);
-        sec = sec - (min * 60);
-        $(`#videoDuration_${lastNumber}`).text(min + ':' + sec);
-    };
-    video.src = URL.createObjectURL(files[0]);
-
-    var file = input.files[0];
-    var fileReader = new FileReader();
-    fileReader.onload = function() {
-        var blob = new Blob([fileReader.result], {type: file.type});
-        var url = URL.createObjectURL(blob);
-        var timeupdate = function() {
-            if (snapImage()) {
-                video.removeEventListener('timeupdate', timeupdate);
-                video.pause();
-            }
-        };
-        video.addEventListener('loadeddata', function() {
-            if (snapImage())
-                video.removeEventListener('timeupdate', timeupdate);
-        });
-
-        var snapImage = function() {
-            var canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            var image = canvas.toDataURL();
-            var success = image.length > 100000;
-            var lastNumber = reviewPicNumber;
-
-            if (success) {
-                var img = document.getElementById('showPic' + lastNumber);
-                img.src = image;
-                uploadedWriteReviewPicture[lastNumber] = image;
-                URL.revokeObjectURL(url);
-                fileToUploadInPlaceDetailReview[lastNumber].thumbnail = image;
-                uploadFileInPlaceDetailsReview(lastNumber);
-                reviewPicNumber++;
-            }
-            return success;
-        };
-        video.addEventListener('timeupdate', timeupdate);
-        video.preload = 'metadata';
-        video.src = url;
-        video.muted = true;
-        video.playsInline = true;
-        video.play();
-    };
-    fileReader.readAsArrayBuffer(file);
-}
-
-function uploadFileInPlaceDetailsReview(_picNumber){
-
-    if(_picNumber == -1){
-        fileToUploadInPlaceDetailReview.map((item, index) => {
-            if(item.upload == 0){
-                uploadFileInPlaceDetailsReview(index);
-                return;
-            }
-        })
-    }
-
-    if(!isUploadFileForReviewInPlaceDetails) {
-        var uFile = fileToUploadInPlaceDetailReview[_picNumber];
-
-        var isVideo = uFile.kind == 'image' ? 0 : 1;
-        var is360 = (uFile.kind == '360') ? 1 : 0;
-        var sendData = {
-            code: $('#storeReviewCode').val(),
-            is360,
-            isVideo
-        };
-
-        isUploadFileForReviewInPlaceDetails = true;
-        uploadLargeFile(reviewUploadFileURLInPlaceDetails, uFile.file, sendData, (_percent, _fileName = '', _result = '') => {
-            if (_percent == 'done') {
-                $(`#fileName_${_picNumber}`).val(_fileName);
-                fileToUploadInPlaceDetailReview[_picNumber].saveFile = _fileName;
-                fileUploadNum++;
-                if(uFile.kind == 'image') {
-                    fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
-                    $(`#reviewPicLoader_${_picNumber}`).remove();
-                    isUploadFileForReviewInPlaceDetails = false;
-                    uploadFileInPlaceDetailsReview(-1);
-                }
-                else
-                    uploadThumbnailInReviewDetail(_picNumber);
-                checkReviewToSend();
-            }
-            else if (_percent == 'error') {
-                isUploadFileForReviewInPlaceDetails = false;
-                showSuccessNotifi("آپلود فایل با مشگل مواجه شد", 'left', 'red');
-                $('#reviewPic_' + _picNumber).remove();
-                fileToUploadInPlaceDetailReview[_picNumber].upload = -2;
-                uploadFileInPlaceDetailsReview(-1);
-            }
-            else if (_percent == 'cancelUpload') {
-                isUploadFileForReviewInPlaceDetails = false;
-                fileToUploadInPlaceDetailReview[_picNumber].upload = -1;
-                $('#reviewPic_' + _picNumber).remove();
-                uploadFileInPlaceDetailsReview(-1);
-                checkReviewToSend();
-            }
-            else {
-                var size = (160 - (_percent * 1.6)) + 'px';
-                var leftBottom = ((_percent * 1.6)/2) + 'px';
-                $(`#reviewPicLoaderPercent_${_picNumber}`).text(_percent+'%');
-                $(`#reviewPicLoaderBackGround_${_picNumber}`).css({width: size, height: size, left: leftBottom, bottom: leftBottom});
-            }
-        });
-    }
-}
-
-function uploadThumbnailInReviewDetail(_picNumber){
-
-    var uFile = fileToUploadInPlaceDetailReview[_picNumber];
-
-    var videoThumbnail = new FormData();
-    videoThumbnail.append('code', $('#storeReviewCode').val());
-    videoThumbnail.append('kind', 'thumbnail');
-    videoThumbnail.append('file', uFile.thumbnail);
-    videoThumbnail.append('fileName', uFile.saveFile);
-
-    $.ajax({
-        type: 'POST',
-        url: uploadNewReviewPicUrl,
-        data: videoThumbnail,
-        processData: false,
-        contentType: false,
-        success: response => {
-            if(response.status == 'ok'){
-                fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
-                $(`#reviewPicLoader_${_picNumber}`).remove();
-                isUploadFileForReviewInPlaceDetails = false;
-                uploadFileInPlaceDetailsReview(-1);
-            }
-        },
-        error: err => {
-            $(`#reviewPicLoader_${_picNumber}`).remove();
-            fileToUploadInPlaceDetailReview[_picNumber].upload = 1;
-            isUploadFileForReviewInPlaceDetails = false;
-            uploadFileInPlaceDetailsReview(-1);
-        }
-    })
-}
-
-function radioChange(value, _questionId, _index, _ansId){
-    if(reviewMultiAns[_index] != null)
-        document.getElementById('radioAnsStyle_' + _questionId + '_' + reviewMultiAns[_index]).classList.remove('filterChoose');
-
-    document.getElementById('radioAnsStyle_' + _questionId + '_' + _ansId).classList.add('filterChoose');
-
-    if(reviewMultiAnsQuestionId.includes(_questionId)){
-        var index = reviewMultiAnsQuestionId.indexOf(_questionId);
-        reviewMultiAnsId[index] = _ansId;
-    }
-    else {
-        reviewMultiAnsQuestionId[reviewMultiAnsQuestionId.length] = _questionId;
-        reviewMultiAnsId[reviewMultiAnsId.length] = _ansId;
-    }
-
-    reviewMultiAns[_index] = _ansId;
-
-    document.getElementById('multiQuestionInput').value = JSON.stringify(reviewMultiAnsQuestionId);
-    document.getElementById('multiAnsInput').value = JSON.stringify(reviewMultiAnsId);
-
-    checkReviewToSend();
-}
-
-function deleteUploadedReviewFile(_number){
-    var fileName =  document.getElementById('fileName_' + _number).value;
-
-    $.ajax({
-        type: 'post',
-        url: deleteReviewPicUrl,
-        data: {
-            'name': fileName,
-            'code':  $('#storeReviewCode').val()
-        },
-        success: function(response){
-            if(response.status == 'ok') {
-                $('#reviewPic_' + _number).remove();
-                fileUploadNum--;
-                checkReviewToSend();
-            }
-            else{
-                alert('problem')
-            }
-        }
-    })
-}
-
 function openEditReviewPic(_number){
 
     $('#editReviewPictures').removeClass('hidden');
@@ -422,7 +363,6 @@ function openEditReviewPic(_number){
     imgCropNumber = _number;
     startReviewCropper(1, _number);
 }
-
 function startReviewCropper(ratio, _number) {
 
     if(first) {
@@ -661,7 +601,6 @@ function startReviewCropper(ratio, _number) {
         inputImage.parentNode.className += ' disabled';
     }
 }
-
 function cropReviewImg(){
     openLoading();
 
@@ -700,15 +639,21 @@ function cropReviewImg(){
     });
 }
 
+
 function sendWriteReview(){
     if(checkReviewToSend()) {
-        let textId = [];
-        let textAns = [];
+        var textId = [];
+        var textAns = [];
+        var assignedUsers = [];
 
         textQuestions.forEach(item => {
             textAns.push($('#textQuestionAns_'+item.id).val());
             textId.push(item.id);
         });
+
+        var assignedUsersElements = $('#reviewMainDivDetails').find('.assignedUserForNewReview');
+        for(var i = 0; i < assignedUsersElements.length; i++)
+            assignedUsers.push($(assignedUsersElements[i]).text());
 
         $('#sendReviewButton').hide();
         $('#sendReviewLoader').css('display', 'flex');
@@ -721,7 +666,7 @@ function sendWriteReview(){
                 kindPlaceId: $('#storeReviewKindPlaceId').val(),
                 placeId: $('#storeReviewPlaceId').val(),
                 code: $('#storeReviewCode').val(),
-                assignedUser: $('#assignedMemberToReview').val(),
+                assignedUser: assignedUsers,
                 multiAns: $('#multiAnsInput').val(),
                 multiQuestion: $('#multiQuestionInput').val(),
                 rateAns: $('#rateAnsInput').val(),
@@ -762,7 +707,6 @@ function sendWriteReview(){
         })
     }
 }
-
 function checkReviewToSend(_kind = ''){
     var error = false;
     var text = $('#postTextArea').val();
@@ -795,10 +739,8 @@ function checkReviewToSend(_kind = ''){
     else
         return false;
 }
-
 function clearStoreReview(){
     $('#reviewShowPics').html('');
-    $('#assignedMemberToReview').val('');
     $('#multiAnsInput').val('');
     $('#multiQuestionInput').val('');
     $('#rateAnsInput').val('');
@@ -822,9 +764,11 @@ function clearStoreReview(){
     textQuestions.forEach(item => $('#textQuestionAns_'+item.id).val('') );
     closeNewPostModal();
 }
-
 function closeNewPostModal() {
     $('#darkModal').hide();
     $(".postModalMainDiv").addClass('hidden');
     $('.showNewTextReviewArea').val($('#postTextArea').val())
 }
+
+
+

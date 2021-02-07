@@ -50,7 +50,7 @@
         <a class="profileNameInReviewOptionModal" href="#"></a>
         <a href="{{route("policies")}}" target="_blank"> صفحه قوانین و مقررات </a>
         @if(auth()->check())
-            <div id="devareReviewOptionInModal" style="color: red; border-bottom: none"> حذف پست </div>
+            <div id="deleteReviewOptionInModal" style="color: red; border-bottom: none"> حذف پست </div>
         @endif
     </div>
 </div>
@@ -73,22 +73,20 @@
                         <span class="commentWriterExperiencePlace">##where##</span>
                     </a>
                 </div>
-<div class="userAssignedSmall" style="font-size: 11px">##userAssigned##</div>
-<div style="font-size: 12px;">##timeAgo##</div>
-</div>
-</div>
-<div class="commentContentsShow position-relative">
-<p class="SummarizedPostTextShown" style="display: ##haveSummery##">
-##summery##
-<span class="smallReviewshowMoreText" onclick="showSmallReviewMoreText(this)"></span>
-</p>
-<p class="compvarePostTextShown" style="display: none">
-##text##
-<span class="showLessText" onclick="showSmallReviewLessText(this)">{{__('کمتر')}}</span>
-            </p>
-            <p class="compvarePostTextShown" style="display: ##notSummery##">
+                <div class="userAssignedSmall" style="font-size: 11px">##userAssigned##</div>
+                <div style="font-size: 12px;">##timeAgo##</div>
+            </div>
+        </div>
+        <div class="commentContentsShow position-relative">
+            <div class="SummarizedPostTextShown" style="display: ##haveSummery##">
+                ##summery##
+                <span class="smallReviewshowMoreText" onclick="showSmallReviewMoreText(this)"></span>
+            </div>
+            <div class="completePostTextShown" style="display: none">
                 ##text##
-            </p>
+                <span class="showLessText" onclick="showSmallReviewLessText(this)">{{__('کمتر')}}</span>
+            </div>
+            <div class="completePostTextShown" style="display: ##notSummery##">##text##</div>
         </div>
         <div class="smallReviewcommentPhotosShow">
             <div class="photosCol col-xs-12" onclick="showSmallReviewPics(##id##)" style="display: ##havePic##; margin-bottom: 10px">
@@ -101,16 +99,13 @@
                 </div>
             </div>
             <div class="quantityOfLikesSmallReview">
-                <div class="smallReviewShowMore" onclick="getSingleFullReview(##id##)">
-                    مشاهده
-                </div>
+                <div class="smallReviewShowMore" onclick="getSingleFullReview(##id##)">مشاهده</div>
                 <div class="reviewLikeNumber_##id## reviewLikeIcon_##id## LikeIconEmpty likedislikeAnsReviews ##likeClass##" onclick="likeReviewInFullReview(##id##, 1, this)">##like##</div>
                 <div class="reviewDisLikeNumber_##id## reviewDisLikeIcon_##id## DisLikeIconEmpty likedislikeAnsReviews ##disLikeClass##" onclick="likeReviewInFullReview(##id##, -1, this)">##disLike##</div>
                 <div style="font-size: 20px;" onclick="getSingleFullReview(##id##)">
                     <span>##answersCount##</span>
                     <span class="EmptyCommentIcon" style="font-size: 24px"></span>
                 </div>
-
             </div>
         </div>
     </div>`;

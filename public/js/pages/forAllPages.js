@@ -473,7 +473,7 @@ function createUserKoochitaSearchResult(_result){
     let text = '';
     if(koochitaUserSearchResults.length == 0) {
         text =  `<div class="emptyPeople">
-                       <img alt="noData" src="{{URL::asset('images/mainPics/noData.png')}}" >
+                       <img alt="noData" src="${noDataKoochitaPicUrl_userKoochitaSearch}">
                        <span class="text">هیچ کاربری ثبت نشده است</span>
                      </div>`;
     }
@@ -553,7 +553,7 @@ function chooseAlbumMainPhoto(_index){
 
     $('.photoAlbumUploadTime').text(sidePics[_index]['uploadTime']);
     $('.photoAlbumUserName').text(sidePics[_index]['userName']);
-    $('.userProfileLinks').attr('href', "{{url('profile/index')}}/" + sidePics[_index]['userName']);
+    $('.userProfileLinks').attr('href', `${userProfileUrl_albume}/${sidePics[_index]['userName']}` );
     $('.photoAlbumWhere').text(sidePics[_index]['where'] ? sidePics[_index]['where'] : '').attr('href', sidePics[_index]['whereUrl']);
     $('.photoAlbumUserPic').attr('src', sidePics[_index]['userPic']);
 
@@ -695,6 +695,463 @@ function likeAlbumPic(_element, _like){
 //         lastSeenLogScroll = window.pageYOffset
 //     }, 1000);
 // });
+
+
+
+
+// addToTripModal
+function saveToTripPopUp(placeId, kindPlaceId) {
+    if (checkLogin) {
+        openLoading();
+        selectedPlaceId = placeId;
+        selectedKindPlaceId = kindPlaceId;
+
+        $.ajax({
+            type: 'POST',
+            url: placeTripUrl_addToTripModal,
+            data: {
+                placeId: placeId,
+                kindPlaceId: kindPlaceId
+            },
+            success: function (response) {
+                closeLoading();
+                selectedTrips = [];
+                response = JSON.parse(response);
+                var newElement = "<center class='row'>";
+                for (i = 0; i < response.length; i++) {
+                    newElement += "<div class='addPlaceBoxes cursor-pointer' onclick='addToSelectedTrips(\"" + response[i].id + "\")'>";
+                    if (response[i].select == "1") {
+                        newElement += "<div id='trip_" + response[i].id + "' onclick='' class='tripResponse addedTrip selectedTrip'>";
+                        selectedTrips[selectedTrips.length] = response[i].id;
+                    } else
+                        newElement += "<div id='trip_" + response[i].id + "' onclick='' class='tripResponse addedTrip'>";
+                    if (response[i].placeCount > 0) {
+                        tmp = 'url("' + response[i].pic1 + '")';
+                        newElement += "<div class='tripImage' style='background: " + tmp + " repeat 0 0; background-size: 100% 100%'></div>";
+                    } else
+                        newElement += "<div class='tripImageEmpty'></div>";
+                    if (response[i].placeCount > 1) {
+                        tmp = 'url("' + response[i].pic2 + '")';
+                        newElement += "<div class='tripImage' style='background: " + tmp + " repeat 0 0; background-size: 100% 100%'></div>";
+                    } else
+                        newElement += "<div class='tripImageEmpty'></div>";
+                    if (response[i].placeCount > 1) {
+                        tmp = 'url("' + response[i].pic3 + '")';
+                        newElement += "<div class='tripImage' style='background: " + tmp + " repeat 0 0; background-size: 100% 100%'></div>";
+                    } else
+                        newElement += "<div class='tripImageEmpty'></div>";
+                    if (response[i].placeCount > 1) {
+                        tmp = 'url("' + response[i].pic4 + '")';
+                        newElement += "<div class='tripImage' style='background: " + tmp + " repeat 0 0; background-size: 100% 100%'></div>";
+                    } else
+                        newElement += "<div class='tripImageEmpty'></div>";
+                    newElement += "</div><div class='create-trip-text font-size-12em'>" + response[i].name + "</div>";
+                    newElement += "</div>";
+                }
+                newElement += "<div class='addPlaceBoxes'>";
+                newElement += "<a onclick='createNewTrip()' class='single-tile is-create-trip'>";
+                newElement += "<div class='tile-content text-align-center font-size-20Imp'>";
+                newElement += "<span class='plus2'></span>";
+                newElement += "<div class='create-trip-text'>ایجاد سفر</div>";
+                newElement += "</div></a></div>";
+                newElement += "</div>";
+                $("#tripsForPlace").empty().append(newElement);
+                openMyModal('addPlaceToTripPrompt')
+            }
+        });
+    }
+}
+
+function addToSelectedTrips(id) {
+    allow = true;
+    for (i = 0; i < selectedTrips.length; i++) {
+        if (selectedTrips[i] == id) {
+            allow = false;
+            $("#trip_" + id).css('border', '2px solid #a0a0a0');
+            selectedTrips.splice(i, 1);
+            break;
+        }
+    }
+    if (allow) {
+        $("#trip_" + id).css('border', '2px solid var(--koochita-light-green)');
+        selectedTrips[selectedTrips.length] = id;
+    }
+}
+
+function refreshThisAddTrip(){
+    closeNewTrip();
+    openMyModal('addPlaceToTripPrompt');
+    saveToTripPopUp(selectedPlaceId, selectedKindPlaceId);
+}
+
+function assignPlaceToTrip() {
+    if (selectedPlaceId != -1) {
+        var checkedValuesTrips = selectedTrips;
+        if (checkedValuesTrips == null || checkedValuesTrips.length == 0)
+            checkedValuesTrips = "empty";
+        $.ajax({
+            type: 'POST',
+            url: assignPlaceToTripUrl_addToTripModal,
+            data: {
+                checkedValuesTrips,
+                placeId: selectedPlaceId,
+                kindPlaceId: selectedKindPlaceId
+            },
+            success: function (response) {
+                if (response == "ok"){
+                    refreshThisAddTrip();
+                    showSuccessNotifi('تغییرات شما با موفقیت اعمال شد.', 'left', 'var(--koochita-blue)');
+                }
+                else {
+                    var err = "<p>به جز سفر های زیر که اجازه ی افزودن مکان به آنها را نداشتید بقیه به درستی اضافه شدند</p>";
+                    JSON.parse(response).map(error => err += `<p>${error}</p>`);
+                    $("#errorAssignPlace").append(err);
+                }
+            }
+        });
+    }
+}
+
+function closeNewTrip() {
+    $('#selectNewTripName').css('display', 'flex');
+    $('#selectNewTripDate').css('display', 'none');
+    closeMyModal('newTripModal');
+    $("#tripName").val("");
+}
+
+function backToNewTripName(){
+    $('#selectNewTripName').css('display', 'flex');
+    $('#selectNewTripDate').css('display', 'none');
+}
+
+function createNewTrip(_callBack = '') {
+    if(!checkLogin())
+        return;
+
+    callBackCreateTrip = null;
+    $("#my-trips-not").hide();
+
+    checkEmptyTripInputs();
+    openMyModal('newTripModal');
+    if(typeof _callBack === 'function')
+        callBackCreateTrip = _callBack;
+}
+
+function checkEmptyTripInputs() {
+    if($("#tripName").val() == "")
+        $("#saves-create-trip-button").addClass("disabled");
+    else
+        $("#saves-create-trip-button").removeClass("disabled");
+}
+
+function nextStep() {
+    if($("#tripName").val() == "")
+        return;
+
+    tripName = $("#tripName").val();
+
+    $("#selectNewTripName").css("display", 'none');
+    $("#selectNewTripDate").css("display", "flex");
+
+    var datePickerOptions = {
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        dateFormat: "yy/mm/dd"
+    };
+    $("#date_input_start").datepicker(datePickerOptions);
+    $("#date_input_end").datepicker(datePickerOptions);
+}
+
+function saveTrip() {
+    var dateInputStart = $("#date_input_start").val();
+    var dateInputEnd = $("#date_input_end").val();
+    $("#error").hide();
+    if(dateInputStart > dateInputEnd && dateInputEnd != '' && dateInputEnd != '') {
+        $("#error").show().empty().append("تاریخ پایان از تاریخ شروع باید بزرگ تر باشد");
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: addTripUrl_addToTripModal,
+        data: {
+            tripName,
+            dateInputStart,
+            dateInputEnd
+        },
+        success: function (response) {
+            $("#error").hide();
+            if(response == "ok") {
+                if(callBackCreateTrip != null && typeof callBackCreateTrip === 'function'){
+                    closeNewTrip();
+                    callBackCreateTrip();
+                    callBackCreateTrip = null;
+                }
+                else
+                    refreshThisAddTrip();
+                showSuccessNotifi('لیست سفر شما با موفقیت ایجاد شد', 'left', 'var(--koochita-blue)');
+            }
+            else
+                $("#error").show().empty().append("تاریخ پایان از تاریخ شروع باید بزرگ تر باشد");
+        }
+    });
+}
+
+
+// followerPopUp
+
+openFromInPageFollower = _kind =>  openFollowerModal(_kind, getUserFollowerInPage);
+
+function openFollowerModal(_kind, _forWho = 0){
+    lastFollowerModalOpenPage = _kind;
+    if(_forWho != 0)
+        getUserFollowerInPage = _forWho;
+
+    if(followerUserId == _forWho)
+        $('#ifYouCanSeeFollowing').removeClass('hidden');
+    else
+        $('#ifYouCanSeeFollowing').addClass('hidden');
+
+    $('#followerModalBody').children().addClass('hidden');
+    $(`#${_kind}`).removeClass('hidden');
+
+    $(`.${_kind}Tab`).parent().find('.selected').removeClass('selected');
+    $(`.${_kind}Tab`).addClass('selected');
+    $('#'+_kind).html(followerPlaceHolder+followerPlaceHolder);
+
+    var sendKind = '';
+    if(_kind == 'resultFollowing')
+        sendKind = 'following';
+    else
+        sendKind = 'follower';
+
+    openMyModal('followerModal');
+    $.ajax({
+        type: 'POST',
+        url: profileGetFollowerUrl_followerPopUp,
+        data: {
+            _token: csrfTokenGlobal,
+            id: _forWho,
+            kind: sendKind
+        },
+        success: function(response){
+            response = JSON.parse(response);
+            if(response.status == 'ok') {
+                if(_kind == 'resultFollowers')
+                    $('.followerNumber').text(response.result.length);
+                createFollower(_kind, response.result)
+            };
+        },
+        // error: err => console.log(err)
+    })
+}
+
+function createFollower(_Id, _follower){
+    var text = '';
+    if(_follower.length == 0) {
+        text =  `<div class="emptyPeople">
+                    <img alt="noData" src="${noDataPic_followerPopUp}" >
+                    <span class="text">هیچ کاربری ثبت نشده است</span>
+                </div>`;
+    }
+    else {
+        _follower.map(item => {
+            var followed = '';
+            if (item.followed == 1)
+                followed = 'followed';
+
+            text += `<div class="peopleRow">
+                            <a href="${item.url}" class="pic">
+                                <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="${item.pic}" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                            </a>
+                            <a href="${item.url}" class="name lessShowText">${item.username}</a>`;
+
+            if (item.notMe == 1) {
+                text += `<div style="display: flex; margin-right: auto;">
+                            <a href="${profileMsgPageUrl_followerPopUp}?user=${item.username}" class="sendMsgButton">ارسال پیام</a>
+                            <div class="button ${followed}"  onclick="followUser(this, ${item.userId})"></div>
+                        </div>`;
+            }
+
+            text += '</div>';
+        });
+    }
+    $('#'+_Id).html(text);
+}
+
+function openFollowerSearch(_value){
+    $('#followerModalBody').children().addClass('hidden');
+    $('#searchResultFollower').removeClass('hidden');
+    $('#followerModalHeaderTabs').addClass('hidden');
+
+    $('#followerModalBody').addClass('openSearch');
+    $('#followerModalSearchButton').children().addClass('hidden');
+    $('#followerModalSearchButton').find('.iconClose').removeClass('hidden');
+}
+
+function searchForFollowerUser(_value){
+    if (ajaxForSearchFollowerUserModal != false) {
+        ajaxForSearchFollowerUserModal.abort();
+        ajaxForSearchFollowerUserModal = false;
+    }
+
+    $("#searchResultFollower").html('');
+    if(_value.trim().length > 1) {
+        $("#searchResultFollower").html(followerPlaceHolder+followerPlaceHolder);
+        searchForUserCommon(_value)
+            .then(response => createFollower('searchResultFollower', response.userName))
+            .catch(err => console.error(err));
+    }
+    else
+        $("#searchResultFollower").html('');
+}
+
+function closeFollowerSearch(_value){
+
+    if(_value == 0)
+        $('#followerModalSearchInput').val('');
+
+    if(_value == 0 || _value.length == 0) {
+        $('#followerModalBody').removeClass('openSearch');
+        $('#followerModalSearchButton').children().addClass('hidden');
+        $('#followerModalSearchButton').find('.searchIcon').removeClass('hidden');
+
+        $('#' + lastFollowerModalOpenPage).removeClass('hidden');
+        $('#followerModalHeaderTabs').removeClass('hidden');
+        $('#searchResultFollower').addClass('hidden');
+    }
+}
+
+function followUser(_elem, _id){
+    if(!checkLogin())
+        return;
+
+    $.ajax({
+        type: 'POST',
+        url: profileSetFollowerUrl_followerPopUp,
+        data: {
+            _token: csrfTokenGlobal,
+            id: _id,
+        },
+        success: function(response){
+            response = JSON.parse(response);
+            if(response.status == 'store') {
+                $(_elem).addClass('followed');
+                showSuccessNotifi('شما به لیست دوستان افزوده شدید', 'left', 'var(--koochita-blue)');
+                $('.followerNumber').text(response.followerNumber);
+                $('.followingNumber').text(response.followingNumber);
+            }
+            else if(response.status == 'delete'){
+                $(_elem).removeClass('followed');
+                showSuccessNotifi('شما از لیست دوستان خارج شدید', 'left', 'red');
+                $('.followerNumber').text(response.followerNumber);
+                $('.followingNumber').text(response.followingNumber);
+            }
+        },
+    })
+}
+
+// reportModal
+function getReportsQuestions(_kindPlaceId){
+    if(getReportsQuestionsKindPlaceId != _kindPlaceId) {
+        getReportsQuestionsKindPlaceId = _kindPlaceId;
+        $.ajax({
+            type: 'post',
+            url: getReportsDir,
+            data: {
+                'kindPlaceId': _kindPlaceId
+            },
+            success: function (response) {
+
+                response = JSON.parse(response);
+
+                let text = '';
+                response.result.forEach(item => {
+                    text +=  '<div class="row reportsRow">\n' +
+                        '<div class="filterItem lhrFilter filter selected radionReportInput">\n' +
+                        '<input id="report_' + item.id + '" name="reportValue" type="radio" value="' + item.id + '" onchange="openReportTxt(this.value)"/>\n' +
+                        '<label class="reportLabel" for="report_' + item.id + '">\n' +
+                        '<span></span>\n' +
+                        '<div>' + item.description + '</div>\n' +
+                        '</label>\n' +
+                        '</div>\n' +
+                        '</div>';
+                });
+
+                text +=  '<div class="row reportsRow">\n' +
+                    '<div class="filterItem lhrFilter filter selected radionReportInput">\n' +
+                    '<input id="report_more" name="reportValue" type="radio" value="more" onchange="openReportTxt(this.value)"/>\n' +
+                    '<label class="reportLabel" for="report_more">\n' +
+                    '<span></span>\n' +
+                    '<div>سایر موارد</div>\n' +
+                    '</label>\n' +
+                    '</div>\n' +
+                    '</div>';
+
+                $('#reportContainer').html(text);
+
+            }
+        });
+    }
+    else{
+        $('input:radio[name=reportValue]').each(function () { $(this).prop('checked', false) });
+        $('#reportTextDiv').css('display', 'none');
+    }
+}
+
+function sendReport() {
+    if(reportValue != 0 && reportLogId != 0 && checkLogin) {
+        let reportTxt = $('#reportText').val();
+
+        $.ajax({
+            type: 'POST',
+            url: storeReportUrl,
+            data: {
+                logId: reportLogId,
+                reports: reportValue,
+                customMsg: reportTxt
+            },
+            success: function (response) {
+                if(response == 'ok'){
+                    closeReportPrompt();
+                    showSuccessNotifi('گزارش شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
+                }
+                else if(response == 'nok2')
+                    showSuccessNotifi('شما برای مطلب خود نمی توانید گزارش دهید.', 'left', 'red');
+                else
+                    showSuccessNotifi('در ثبت گزارش مشکلی پیش آمده لطفا دوباره تلاش کنید.', 'left', 'red');
+            },
+            catch(e){
+                console.log(e);
+                showSuccessNotifi('در ثبت گزارش مشکلی پیش آمده لطفا دوباره تلاش کنید.', 'left', 'red');
+            }
+        });
+    }
+    else if(reportValue == 0)
+        showSuccessNotifi('لطفا نوع گزارش خود را مشخص کنید.', 'left', 'red');
+}
+
+function closeReportPrompt() {
+    $('#reportPane').css('display', 'none');
+}
+
+function showReportPrompt(_logId, _kindPlaceId) {
+    if(checkLogin) {
+        reportValue = 0;
+        reportLogId = _logId;
+        getReportsQuestions(_kindPlaceId);
+        $('#reportPane').css('display', 'flex');
+    }
+}
+
+function openReportTxt(_value){
+    reportValue = _value;
+    if(reportValue == 'more')
+        $('#reportTextDiv').css('display', 'block');
+    else
+        $('#reportTextDiv').css('display', 'none');
+}
+
 
 
 $(window).on('click', e => {

@@ -312,7 +312,7 @@ class ReviewsController extends Controller
                     $newAssigned = new ReviewUserAssigned();
                     $newAssigned->logId = $review->id;
 
-                    $user = User::where('username', $item)->orWhere('email', $item)->first();
+                    $user = User::where('username', $item)->first();
                     if ($user != null) {
                         $newAssigned->userId = $user->id;
                         $findUser = ReviewUserAssigned::where('logId', $review->id)->where('userId', $user->id)->first();

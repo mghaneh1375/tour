@@ -1,27 +1,38 @@
+<style>
+    [contentEditable=true]:empty:not(:focus):before{
+        content:attr(data-ph);
+        color:grey;
+        font-style:italic;
+    }
 
+    [contentEditable=true] .linkInTextArea{
+        pointer-events: none;
+    }
+
+    .linkInTextArea{
+        display: inline-block;
+        direction: rtl;
+    }
+
+</style>
 <div id="newReviewSection" class="modalBlackBack fullCenter writeNewReviewModal" style="z-index: 9999;">
     <div class="modalBody">
         <div class="inputReviewBodies">
             <div class="bodySec">
-                <h2 class="yourReviewHeader EmptyCommentIcon">
-                    پست جدید
-                    <span class="iconClose" onclick="closeMyModal('newReviewSection')"></span>
-                </h2>
+                <span class="closeModal iconClose fullyCenterContent" onclick="closeMyModal('newReviewSection')"></span>
+                <h2 class="yourReviewHeader EmptyCommentIcon"> پست جدید </h2>
                 <div class="inputReviewSec">
                     <div class="firsRow">
                         <div class="fullyCenterContent uPic50">
                             <img src="{{isset($authUserInfos->pic) ? $authUserInfos->pic : ''}}" class="resizeImgClass" onload="fitThisImg(this)" style="width: 100%" >
                         </div>
-                        <textarea id="inputNewReviewText" class="autoResizeTextArea Inp" placeholder="{{$authUserInfos->username ?? 'کاربر'}} چه فکر یا احساسی داری..."></textarea>
+                        <div id="inputNewReviewText" class="inputNewReviewDiv" data-ph="{{$authUserInfos->username ?? 'کاربر'}} چه فکر یا احساسی داری..." contenteditable="true"></div>
+{{--                        <textarea id="inputNewReviewText" class="autoResizeTextArea Inp" placeholder="{{$authUserInfos->username ?? 'کاربر'}} چه فکر یا احساسی داری..."></textarea>--}}
                     </div>
                     <div class="uploadedFiles"></div>
-                    <div class="searchYouFriendDiv">
-                        <div id="friendAddedSection" class="results"></div>
-                        <input id="friendSearchInput"
-                               type="text"
-                               class="addFriendInputNewReview"
-                               placeholder="با چه کسانی بودید؟ نام کاربری را وارد نمایید"
-                               onclick="openUserSearchForNewReview()" readonly>
+                    <div class="searchYouFriendReviewSectionDiv">
+                        <div class="friendAddedSection results"></div>
+                        <div class="placeHolderText" onclick="openUserSearchForNewReview()">با چه کسانی بودید؟ نام کاربری را وارد نمایید</div>
                     </div>
                 </div>
             </div>
@@ -58,6 +69,7 @@
     var uploadNewReviewPicUrl = '{{route("reviewUploadPic")}}';
     var deleteNewReviewPicUrl = '{{route("deleteReviewPic")}}';
     var storeNewReviewUrl = '{{route("storeReview")}}';
+    var userProfileUrl_newReview = '{{url("profile/index")}}';
     var getNewCodeForUploadNewReviewURl = '{{route("review.getNewCodeForUploadNewReview")}}';
     var newReviewDataForUpload = {
         code: false,

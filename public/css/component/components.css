@@ -942,6 +942,10 @@
     position: relative;
     direction: rtl;
 }
+.commentsContentMainBox .fullReviewAnsText{
+    font-size: .7em;
+    margin-top: 5px;
+}
 .ansCommentTimeAgo{
     font-size: 11px;
     margin-right: 5px;
@@ -1524,13 +1528,27 @@
     }
 
     .fullReviewAnsText{
-        width: calc(100% + 60px);
-        margin-right: -40px;
-        margin-top: 15px;
+        /*width: calc(100% + 60px);*/
+        /*margin-right: -40px;*/
+        /*margin-top: 15px;*/
+
+        font-size: .7em;
+        width: 100%;
+        margin: 0;
+        margin-top: 5px;
     }
 
     .newCommentPlaceMainDiv, .answerPlaceMainDiv, .newAnswerPlaceMainDiv, .ansTextAreaReview{
         background: #4dc7bc1a;
+    }
+
+    .newAnswerPlaceMainDiv .inputBox{
+        flex-direction: column;
+        background: #edf9f8;
+        width: 100%;
+    }
+    .newAnswerPlaceMainDiv .inputBox .sendQuestionBtn{
+        background-color: #edf9f8;
     }
 
     .commentsContentMainBox{

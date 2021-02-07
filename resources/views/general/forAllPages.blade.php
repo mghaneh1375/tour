@@ -55,9 +55,7 @@
 
 @include('general.searches.userKoochitaSearch')
 
-@if(!Auth::check())
-{{--    @include('general.nLoginPopUp')--}}
-@else
+@if(Auth::check())
     @include('general.adminInPage')
 
     @include('general.addToTripModal')
