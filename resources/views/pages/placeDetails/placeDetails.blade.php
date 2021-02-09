@@ -160,8 +160,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     </div>
     @include('component.mapMenu')
 
-    @include('component.smallShowReview')
-
     <div id="comeDownHeader" class="topHeaderShowDown hideOnScreen">
         <div class="inOneRow">
             <div class="name">{{$place->name}}</div>

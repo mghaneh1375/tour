@@ -129,8 +129,6 @@
 
 
 @section('main')
-    @include('component.smallShowReview')
-
     <div class="container">
         <div class="col-md-4 placeData">
             <div class="picSec">

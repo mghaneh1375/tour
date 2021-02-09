@@ -35,7 +35,6 @@
 
 @section('body')
 
-    @include('component.smallShowReview')
 
     <div id="topInfos" class="topInfoFixed">
         <div class="infosSec">

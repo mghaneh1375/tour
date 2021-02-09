@@ -48,8 +48,6 @@
 
 @include('layouts.header1')
 
-@include('component.smallShowReview')
-
 <script type="application/ld+json">
                 {
                     "@context": "https://schema.org",

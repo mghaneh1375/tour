@@ -58,8 +58,6 @@
 
 @section('main')
 
-    @include('component.smallShowReview')
-
     @include('component.safarnamehRow')
 
     <div class="userPostsPage">

@@ -49,6 +49,8 @@
 
 @include('component.answerPack')
 
+@include('component.smallShowReview')
+
 @include('general.reportModal')
 
 @include('general.followerPopUp')
