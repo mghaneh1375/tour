@@ -16,8 +16,8 @@ use App\models\places\Place;
 use App\models\QuestionUserAns;
 use App\models\Report;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewPic;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\places\SogatSanaie;
 use Illuminate\Http\Request;
 

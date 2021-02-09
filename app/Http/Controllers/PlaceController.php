@@ -40,8 +40,6 @@ use App\models\Question;
 use App\models\QuestionUserAns;
 use App\models\Report;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SectionPage;

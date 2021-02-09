@@ -24,8 +24,10 @@ use App\models\Report;
 use App\models\ReportsType;
 use App\models\places\Restaurant;
 use App\models\LogFeedBack;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewPic;
+use App\models\Reviews\ReviewTagRelations;
+use App\models\Reviews\ReviewTags;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\UserOpinion;
@@ -245,6 +247,8 @@ class ReviewsController extends Controller
                 $kindPlaceName = $kindPlace->fileName;
             }
 
+            $reviewText = $request->text != null ? $request->text : '';
+
             $uId = Auth::user()->id;
 
             $review = new LogModel();
@@ -254,8 +258,11 @@ class ReviewsController extends Controller
             $review->date = Carbon::now()->format('Y-m-d');
             $review->time = getToday()['time'];
             $review->activityId = $activity->id;
-            $review->text = $request->text != null ? $request->text : '';
+            $review->text = $reviewText;
             $review->save();
+
+            $this->storeReviewTags($reviewText, $review->id);
+            $this->storeReviewUserTagInText($reviewText, $review->id);
 
             $reviewPic = ReviewPic::where('code', $request->code)->get();
 
@@ -330,8 +337,6 @@ class ReviewsController extends Controller
                         $newAlert->referenceTable = 'reviewUserAssigned';
                         $newAlert->referenceId = $newAssigned->id;
                         $newAlert->userId = $user->id;
-                        $newAlert->seen = 0;
-                        $newAlert->click = 0;
                         $newAlert->save();
                     }
 
@@ -630,7 +635,6 @@ class ReviewsController extends Controller
         return;
     }
 
-
     public function getUserReviews()
     {
         $username = $_GET['username'];
@@ -705,6 +709,22 @@ class ReviewsController extends Controller
             $item = reviewTrueType($item); // in common.php
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
+    }
+
+    public function searchInReviewTags()
+    {
+        $tag = $_GET['value'];
+        $dbTag = \DB::select("SELECT RT.tag AS tag, COUNT(RTR.id) AS tagCount FROM reviewTags RT LEFT JOIN reviewTagRelations RTR on RTR.tagId = RT.id WHERE RT.tag LIKE '%{$tag}%' AND RT.tag <> '{$tag}' GROUP BY RT.tag");
+        $feetTag = ReviewTags::where('tag', $tag)->first();
+        if($feetTag == null)
+            $hasInDB = 0;
+        else{
+            $hasInDB = 1;
+            $count = ReviewTagRelations::where('tagId', $feetTag->id)->count();
+            array_unshift($dbTag, ['tag' => $feetTag->tag, 'tagCount' => $count]);
+        }
+
+        return response()->json(['status' => 'ok', 'result' => $dbTag, 'hasInDB' => $hasInDB]);
     }
 
     private function getCityReviews($kind, $id, $take, $notIn = [0]){
@@ -786,6 +806,80 @@ class ReviewsController extends Controller
         return $lastReview;
     }
 
+    private function storeReviewTags($text, $id){
+        $tags = [];
+        $nowIndex = -1;
+        $textLength = strlen($text);
+
+        while(1){
+            $nowIndex = strpos($text, '#', $nowIndex+1);
+            if($nowIndex === false)
+                break;
+            else{
+                $word = '';
+                for($i = $nowIndex+1; $i < $textLength; $i++) {
+                    if($text[$i] == ' '){
+                        $text = substr_replace($text, "</a>", $i, 0);
+                        for($j = $i+3; $j < $textLength; $j++){
+                            if($text[$j] == '<' && $text[$j+1] == '/' && $text[$j+2] == 'a' && $text[$j+3] == '>'){
+                                $text = substr_replace($text, "", $j, 4);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    else if($text[$i] == '<' && $text[$i+1] == '/' && $text[$i+2] == 'a' && $text[$i+3] == '>')
+                        break;
+                    $word .= $text[$i];
+                }
+                array_push($tags, $word);
+            }
+        }
+
+        $tagIds = [];
+        foreach($tags as $tag)
+            array_push($tagIds, ReviewTags::firstOrCreate(['tag' => $tag])->id);
+
+        $revTagIds = [];
+        foreach($tagIds as $item)
+            array_push($revTagIds, ReviewTagRelations::firstOrCreate(['reviewId' => $id, 'tagId' => $item])->id);
+
+        ReviewTagRelations::whereNotIn('id', $revTagIds)->delete();
+        return true;
+    }
+    private function storeReviewUserTagInText($text, $id){
+        $users = [];
+        $nowIndex = -1;
+        $textLength = strlen($text);
+        $skipLength = strlen('data-username="');
+
+        while(1){
+            $nowIndex = strpos($text, 'data-username', $nowIndex+1);
+            if($nowIndex === false)
+                break;
+            else{
+                $word = '';
+                for($i = $nowIndex+$skipLength; $i < $textLength && $text[$i] != '"'; $i++)
+                    $word .= $text[$i];
+                array_push($users, $word);
+            }
+        }
+
+        $usersId = User::whereIn('username', $users)->pluck('id')->toArray();
+
+        foreach($usersId as $item){
+            $assignedId = ReviewUserAssigned::create(['userId' => $item, 'logId' => $id]);
+
+            $newAlert = new Alert();
+            $newAlert->subject = 'assignedUserToReview';
+            $newAlert->referenceTable = 'reviewUserAssigned';
+            $newAlert->referenceId = $assignedId->id;
+            $newAlert->userId = $item;
+            $newAlert->save();
+        }
+
+        return true;
+    }
 
     public function deleteReview(Request $request)
     {
@@ -833,6 +927,7 @@ class ReviewsController extends Controller
                         $item->delete();
                     }
 
+                    ReviewTagRelations::where('reviewId', $review->id)->delete();
                     LogFeedBack::where('logId', $review->id)->delete();
 
                     $anses = LogModel::where('relatedTo', $review->id)->get();
@@ -866,6 +961,5 @@ class ReviewsController extends Controller
 
         return;
     }
-
 }
 

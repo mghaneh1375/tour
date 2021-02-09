@@ -493,9 +493,9 @@
                                     <i class="fa fa-user"></i>{{$safarnameh[0]->username}}
                                 </div>
 
-                                <div class="post-views im-meta-item withColor">
-                                    <i class="fa fa-eye"></i>{{$safarnameh[0]->seen}}
-                                </div>
+{{--                                <div class="post-views im-meta-item withColor">--}}
+{{--                                    <i class="fa fa-eye"></i>{{$safarnameh[0]->seen}}--}}
+{{--                                </div>--}}
                             </div>
                         </div>
                     </article>
@@ -525,9 +525,9 @@
                                                 <div class="author vcard im-meta-item">
                                                     <i class="fa fa-user"></i>{{$safarnameh[$i]->username}}
                                                 </div>
-                                                <div class="post-views im-meta-item">
-                                                    <i class="fa fa-eye"></i>{{$safarnameh[$i]->seen}}
-                                                </div>
+{{--                                                <div class="post-views im-meta-item">--}}
+{{--                                                    <i class="fa fa-eye"></i>{{$safarnameh[$i]->seen}}--}}
+{{--                                                </div>--}}
                                             </div>
                                         </div>
                                     </li>

@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MainEquipment extends Model
 {
-    protected $table = 'mainequipments';
+    protected $table = 'mainEquipments';
     public $timestamps = false;
 }

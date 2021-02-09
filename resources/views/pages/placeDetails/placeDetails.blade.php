@@ -1142,14 +1142,14 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         });
         userVideo.map(item => {
             var arr = {
-                'id': item['id'],
-                'sidePic': item['picName'],
-                'mainPic': item['picName'],
-                'userPic': item['userPic'],
-                'userName': item['username'],
-                'video': item['video'],
-                'uploadTime': item['time'],
-                'showInfo': false,
+                id: item['id'],
+                sidePic: item['picName'],
+                mainPic: item['picName'],
+                userPic: item['userPic'],
+                userName: item['username'],
+                video: item['video'],
+                uploadTime: item['time'],
+                showInfo: false,
             };
             userVideoForAlbum.push(arr);
             allPlacePics.push(arr);

@@ -155,9 +155,9 @@
                             <i class="fa fa-user"></i>
                             {{$safarnameh->user->username}}
                         </div>
-                        <div class="post-views im-meta-item">
-                            <i class="fa fa-eye"></i>{{$safarnameh->seen}}
-                        </div>
+{{--                        <div class="post-views im-meta-item">--}}
+{{--                            <i class="fa fa-eye"></i>{{$safarnameh->seen}}--}}
+{{--                        </div>--}}
                     </div>
                 </div>
                 <h1 class="im-entry-title">

@@ -36,8 +36,7 @@ use App\models\Report;
 use App\models\ReportsType;
 use App\models\places\Restaurant;
 use App\models\RetrievePas;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCategories;
 use App\models\safarnameh\SafarnamehCategoryRelations;
@@ -1390,6 +1389,23 @@ class HomeController extends Controller
         }
         $writer = new Xlsx($spreadsheet);
         $writer->save('exportAmaken.xlsx');
+
+        dd('finniish');
+    }
+
+    public function exporPhone()
+    {
+        $rowNum = 1;
+        $users = User::select(['username', 'phone'])->whereNotNull('phone')->where('phone', '!=', '')->orderByDesc('created_at')->get();
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        foreach($users as $item){
+            $sheet->setCellValue("A".(string)$rowNum, $item->username);
+            $sheet->setCellValue("B".(string)$rowNum, $item->phone);
+            $rowNum++;
+        }
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('exportUsersPhone.xlsx');
 
         dd('finniish');
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\models;
+namespace App\models\Reviews;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ReviewUserAssigned extends Model
+class ReviewTags extends Model
 {
     protected $guarded = [];
-    protected $table = 'reviewUserAssigned';
+    protected $table = "reviewTags";
     public $timestamps = false;
 }

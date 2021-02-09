@@ -223,7 +223,7 @@ function setFullReviewContent(_reviews){
         picDivClassName = 'singlePhotoDiv';
 
     for(var k = 0; k < reviewPicsCount && k < 5; k++) {
-        var ttt =  `<div class="topMainReviewPic" onclick="showSmallReviewPics(${_reviews["id"]})">
+        var ttt =  `<div class="topMainReviewPic ${_reviews["pics"][k]["isVideo"] == 1 ? 'playIconOnPicSection' : ''}" onclick="showSmallReviewPics(${_reviews["id"]})">
                         <img src="${_reviews["pics"][k]["picUrl"]}" class="mainReviewPic resizeImgClass" onload="fitThisImg(this)">`;
         if(reviewPicsCount > 5 && k == 4) {
             ttt += `<div class="morePhotoLinkPosts">
@@ -520,7 +520,8 @@ function deleteReviewByUserInReviews(_reviewId){
     if(_reviewId != 0)
         deletedReview = _reviewId;
     else
-        deletedReview
+        return;
+        // deletedReview
     text = 'آیا از حذف نقد خود اطمینان دارید؟ در صورت حذف عکس ها و فیلم ها افزوده شده پاک می شوند و قابل بازیابی نمی باشد.';
     openWarning(text, doDeleteReviewByUserInReviews); // in general.alert.blade.php
 }
@@ -636,7 +637,21 @@ function addReviewToBookMark(_elem, _id){
 }
 
 function goToUserPageReview(_element){
+    var username = $(_element).attr('data-username');
+    if(username.trim().length > 0){
+        openLoading();
+        location.href = yourProfileUrlSmallShowReview + `/${username}`;
+    }
+}
 
+function goToTagsPageReview(_element){
+    var tag = $(_element).text();
+    if(tag.trim().length > 0){
+        console.log('go to tag page :' + tag);
+        // openLoading();
+        // alert();
+        // location.href = yourProfileUrlSmallShowReview + `/${tag}`;
+    }
 }
 
 $(window).on('click', () => closeMyModal('reviewOptionMenuBar'));

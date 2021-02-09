@@ -1,7 +1,8 @@
 <?php
 
-namespace App\models;
+namespace App\models\Reviews;
 
+use App\models\LogModel;
 use App\models\places\Place;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class ReviewPic extends Model
                 return 'notFoundReview';
 
             if(auth()->user()->id == $review->visitorId){
-                $location = __DIR__.'/../../../assets/userPhoto/';
+                $location = __DIR__ . '/../../../assets/userPhoto/';
                 if($this->kindPlaceId == 0 && $this->placeId == 0)
                     $location .= 'nonePlaces';
                 else{

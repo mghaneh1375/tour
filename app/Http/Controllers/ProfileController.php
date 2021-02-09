@@ -25,7 +25,7 @@ use App\models\PhotographersPic;
 use App\models\places\Place;
 use App\models\places\PlaceFeatures;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
+use App\models\Reviews\ReviewPic;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SafarnamehPlaceRelation;

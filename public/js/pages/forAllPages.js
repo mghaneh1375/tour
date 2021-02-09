@@ -499,7 +499,6 @@ function chooseThisKoochitaUser(_index){
         koochitaUserModalSelectUser(user.id, user.username, user.pic);
 }
 
-
 function createPhotoModal(_title, _pics, _choosenIndex = 0){
     // _pics = [
     //     {
@@ -539,6 +538,7 @@ function createPhotoModal(_title, _pics, _choosenIndex = 0){
         $('#sidePhotoModal').append(text);
     }
     $('#photoAlbumModal').modal({backdrop: 'static', keyboard: false});
+
     chooseAlbumMainPhoto(_choosenIndex);
 }
 
@@ -586,9 +586,9 @@ function chooseAlbumMainPhoto(_index){
 
     $('#photoAlbumDescription').text(sidePics[_index]['description']);
     if(userInPhoto !== false && userInPhoto == sidePics[_index].userName)
-        $('#deletePicIconsPhotoAlbum').css('display', 'flex').attr('dataValue', sidePics[_index].id);
+        $('#deletePicIconsPhotoAlbum').css('display', 'flex').attr('dataValue', sidePics[_index].id).attr('dataIndex', _index);
     else
-        $('#deletePicIconsPhotoAlbum').css('display', 'none').attr('dataValue', 0);
+        $('#deletePicIconsPhotoAlbum').css('display', 'none').attr('dataValue', 0).attr('dataIndex', false);
 
 }
 
@@ -622,8 +622,12 @@ function closePhotoAlbumModal(){
 var deletedPhotoInAlbum = false;
 function openDeletePhotoModal(){
     deletedPhotoInAlbum = $('#deletePicIconsPhotoAlbum').attr('dataValue');
-    var text = 'آیا از حذف عکس خود اطمینان دارید؟ در صورت حذف محتوای مورد نظر قابل بازیابی نمی باشد.';
-    openWarning(text, doPhotoDeleteInAlbum); // in general.alert.blade.php
+    deletedPhotoIndex = $('#deletePicIconsPhotoAlbum').attr('dataIndex');
+
+    if(typeof sidePics[deletedPhotoIndex].deleteFunction === 'function')
+        sidePics[deletedPhotoIndex].deleteFunction(deletedPhotoInAlbum);
+    else
+        openWarning("آیا از حذف عکس خود اطمینان دارید؟ در صورت حذف محتوای مورد نظر قابل بازیابی نمی باشد.", doPhotoDeleteInAlbum); // in general.alert.blade.php
 }
 
 function doPhotoDeleteInAlbum(){

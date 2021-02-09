@@ -483,7 +483,6 @@ class SafarnamehController extends Controller
                                         ->orWhereIn('safarnameh.id', $safarnamehContentId)
                                         ->count();
 
-
                 if($type == 'category')
                     $headerList = 'دسته ' . SafarnamehCategories::where('name', $search)->first()->name;
                 else

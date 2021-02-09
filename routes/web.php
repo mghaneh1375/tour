@@ -4,6 +4,8 @@ use App\models\ConfigModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
 
+Route::get('exportPhonesToExcels', 'HomeController@exporPhone');
+
 Route::any('android', function (Illuminate\Http\Request $request) {
 
     $key = $request["key"];
@@ -255,6 +257,8 @@ Route::middleware(['nothing'])->group(function () {
     Route::get('review/getSingleReview', 'ReviewsController@getSingleReview')->name('review.getSingleReview');
 
     Route::get('review/getCityPageReview', 'ReviewsController@getCityPageReview')->name('review.getCityPageReview');
+
+    Route::get('review/searchInReviewTags', 'ReviewsController@searchInReviewTags')->name('review.searchInReviewTags');
 
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
 

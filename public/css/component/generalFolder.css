@@ -1570,7 +1570,7 @@ a:hover {
 }
 
 .followerModal .modalBody{
-    max-height: 90vh;
+    max-height: 80vh;
 }
 .followerModal .header{
     padding-top: 4px;
@@ -1744,6 +1744,18 @@ a:hover {
 
 .writeNewReviewModal .modalBody{
     padding: 0px !important;
+    height: 100%;
+    top: 0px;
+    bottom: unset !important;
+}
+.writeNewReviewModal .inputReviewBodies{
+    overflow: auto;
+    height: calc(100% - 80px);
+}
+.writeNewReviewModal .sendButtonSec{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
 
 .writeNewReviewModal .bodySec{
@@ -1772,12 +1784,13 @@ a:hover {
 }
 .writeNewReviewModal .inputNewReviewDiv{
     width: calc(100% - 50px);
-    height: 200px;
+    min-height: 25vh;
     padding: 4px;
     overflow: auto;
 }
 .writeNewReviewModal .inputReviewSec .firsRow{
     display: flex;
+    align-items: center;
     padding: 10px;
 }
 
