@@ -19,21 +19,12 @@ function openModalWriteNewReview(){
     }
 }
 
-function uploadFileForNewReview(_input, _kind){
+async function uploadFileForNewReview(_input, _kind){
     openLoading();
 
     if(_kind == 'image' && _input.files && _input.files[0]){
-        cleanImgMetaData(_input, function(_imgDataURL, _files){ // in forAllPages.blade.php
-            newReviewDataForUpload.files.push({
-                savedFile: '',
-                uploaded: -1,
-                kind: 'image',
-                image: _imgDataURL,
-                file: _files,
-                code: Math.floor(Math.random()*1000)
-            });
-            createNewFileUploadCardForNewReview(newReviewDataForUpload.files.length - 1);
-            reviewFileUploadQueueForNewReview();
+        cleanImgMetaData(_input, (_imgDataURL, _files) => {
+            resizeImgTo(_imgDataURL, {width: null, height: 1080} , resizeImageBeforeUploadInNewReview)
         });
     }
     else if(_kind == 'video' || _kind == '360Video'){
@@ -76,7 +67,6 @@ function createNewFileUploadCardForNewReview(_index){
 function openAlbumForNewUploadedFiles(_element){
     var albumPic = [];
     var fileCode = $(_element).attr('data-code');
-    var timeStamp = new Date().getTime();
 
     newReviewDataForUpload.files.map(item => {
         var data = {
@@ -100,8 +90,6 @@ function openAlbumForNewUploadedFiles(_element){
     });
 
     createPhotoModal('فایل های در حال اپلود', albumPic);
-    var timeStamp2 = new Date().getTime();
-    alert(timeStamp2 - timeStamp);
 }
 function convertVideoFileForConvertForNewReview(_index){
     try{
@@ -283,6 +271,23 @@ function doDeleteNewReviewFile(_index){
 
     reviewFileUploadQueueForNewReview();
 }
+
+
+async function resizeImageBeforeUploadInNewReview(_image, _file){
+
+    newReviewDataForUpload.files.push({
+        savedFile: '',
+        uploaded: -1,
+        kind: 'image',
+        image: _image,
+        file: _file,
+        code: Math.floor(Math.random()*1000)
+    });
+    createNewFileUploadCardForNewReview(newReviewDataForUpload.files.length - 1);
+    reviewFileUploadQueueForNewReview();
+
+}
+
 
 function storeNewReview(_element){
     var canUpload = false;

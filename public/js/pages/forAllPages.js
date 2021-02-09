@@ -238,7 +238,6 @@ function cleanImgMetaData(_input, _callBack){
         });
     });
 }
-
 function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -249,6 +248,53 @@ function dataURItoBlob(dataURI) {
 
     var blob = new Blob([ab], {type: mimeString});
     return blob;
+}
+function resizeImgTo(_dataUrl, _size, _callBack){
+    var resize_width = _size.width;
+    var resize_height = _size.height;
+    var img = new Image();
+    img.onload = function(el) {
+        var mainWidth = el.target.width;
+        var mainHeight = el.target.height;
+
+        var scaleFactor;
+        var elem = document.createElement('canvas');
+
+        if(resize_height != null && resize_width != null){
+            elem.height = Math.min(mainHeight, resize_height);
+            elem.width = Math.min(mainWidth, resize_width);
+        }
+        else if(resize_height == null) {
+            if(mainWidth < resize_width){
+                elem.width = mainWidth;
+                elem.height = mainHeight;
+            }
+            else {
+                scaleFactor = resize_width / mainWidth;
+                elem.width = resize_width;
+                elem.height = mainHeight * scaleFactor;
+            }
+        }
+        else if(resize_width == null){
+            if(mainHeight < resize_height){
+                elem.width = mainWidth;
+                elem.height = mainHeight;
+            }
+            else {
+                scaleFactor = resize_height / mainHeight;
+                elem.height = resize_height;
+                elem.width = mainWidth * scaleFactor;
+            }
+        }
+
+        var ctx = elem.getContext('2d');
+        ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+        var srcEncoded = ctx.canvas.toDataURL(el.target, 'image/jpeg', 0);
+        var newFile = dataURItoBlob(srcEncoded);
+        _callBack(srcEncoded, newFile);
+    };
+
+    img.src = _dataUrl;
 }
 
 function openMyModal(_id){
