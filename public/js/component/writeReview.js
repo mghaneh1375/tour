@@ -118,8 +118,21 @@ function convertVideoFileForConvertForNewReview(_index){
 
             var snapImage = function() {
                 var canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                if(video.videoHeight > 1080){
+                    scale = video.videoHeight / 1080;
+                    canvas.height = 1080;
+                    canvas.width = video.videoWidth / scale;
+                }
+                else if(video.videoWidth > 1080){
+                    scale = video.videoWidth / 1080;
+                    canvas.width = 1080;
+                    canvas.height = video.videoHeight / scale;
+                }
+                else{
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                }
+
                 canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
                 var image = canvas.toDataURL();
                 var success = image.length > 100000;

@@ -404,13 +404,57 @@ footer li > img, .small-ico {
 
 /*pop up on phone( phone popUp : pp)*/
 
+
+footer .userInfoMobileFooterBody {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    padding-bottom: 0px;
+    overflow: auto;
+    /*height: calc(100vh - 60px);*/
+    height: calc(100% - 145px);
+}
+footer .userInfoMobileFooterBody > div:first-child {
+    display: flex;
+}
 footer .mainPopUp {
     direction: rtl;
     width: 80%;
+    /*width: 100%;*/
     height: calc(100% - 60px);
     z-index: 200;
     position: fixed;
     background-color: white;
+}
+
+footer .profileFooterPopUp.mainPopUp{
+    width: 100%;
+}
+footer .profileFooterPopUp .profileScoreMainDiv{
+    width: calc(100% - 50px);
+}
+footer .profileFooterPopUp .lp_phoneMenuBar{
+    width: 100%;
+}
+footer .profileFooterPopUp .tabBut .name{
+    font-size: 16px !important;
+    font-weight: bold;
+    color: gray;
+}
+footer .profileFooterPopUp .tabBut.selected .name{
+    color: var(--koochita-blue)
+}
+footer .profileFooterPopUp .exploreReviewInFooterSection{
+
+}
+footer .profileFooterPopUp .exploreReviewInFooterSection .reviewSec{
+    display: flex;
+    flex-direction: column;
+}
+footer .profileFooterPopUp .exploreReviewInFooterSection .indicatorForNewReview{
+    width: 100%;
+    height: 20px;
+    background: red;
 }
 
 .leftPopUp {
@@ -541,20 +585,6 @@ footer .mainPopUp {
 .lp_others_rvPicBox {
     height: 160px;
 }
-
-.userInfoMobileFooterBody {
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    padding-bottom: 0px;
-    overflow: auto;
-    height: calc(100vh - 60px);
-}
-
-.userInfoMobileFooterBody > div:first-child {
-    display: flex;
-}
-
 
 /*the style of article footer & menu in phone*/
 .lp_ar_searchTitle {

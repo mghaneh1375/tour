@@ -456,107 +456,117 @@
                         <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
                         <div class="buttonsLine">
                             <div class="mBLine bLine">
-                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">
-                                    <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>
+{{--                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">--}}
+{{--                                    <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="window.location.href='{{route("profile.message.page")}}'">--}}
+{{--                                    <div class="name" style="font-size: 16px; font-weight: bold; color: {{$authUserInfos->newMsg > 0 ? 'var(--koochita-red)' : ''}};">صندوق پیام</div>--}}
+{{--                                    @if($authUserInfos->newMsg > 0)--}}
+{{--                                        <div class="footerMsgCountNumber">{{$authUserInfos->newMsg}}</div>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+                                <div class="tabBut" onclick="">
+                                    <div class="name">دوستان</div>
                                 </div>
-                                <div onclick="window.location.href='{{route("profile.message.page")}}'">
-                                    <div class="name" style="font-size: 16px; font-weight: bold; color: {{$authUserInfos->newMsg > 0 ? 'var(--koochita-red)' : ''}};">صندوق پیام</div>
-                                    @if($authUserInfos->newMsg > 0)
-                                        <div class="footerMsgCountNumber">{{$authUserInfos->newMsg}}</div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('review')">
-                                    <div class="icon EmptyCommentIcon"></div>
-                                    <div class="name">پست ها</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('photo')">
-                                    <div class="icon emptyCameraIcon"></div>
-                                    <div class="name">عکس و فیلم</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('question')">
-                                    <div class="icon questionIcon"></div>
-                                    <div class="name">سوال و جواب</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('safarnameh')">
-                                    <div class="icon safarnameIcon"></div>
-                                    <div class="name">سفرنامه ها</div>
+                                <div class="tabBut" onclick="">
+                                    <div class="name">همه</div>
                                 </div>
                             </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('medal')">
-                                    <div class="icon medalsIcon"></div>
-                                    <div class="name">جایزه و امتیاز</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('follower')">
-                                    <div class="icon twoManIcon"></div>
-                                    <div class="name" >دنبال کنندگان</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('bookMark')">
-                                    <div class="icon BookMarkIconEmpty" style="font-size: 26px;"></div>
-                                    <div class="name">نشان کرده</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('setting')">
-                                    <div class="icon settingIcon"></div>
-                                    <div class="name">تنظیمات</div>
-                                </div>
-                            </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('festival')">
-                                    <div class="icon festivalIcon"></div>
-                                    <div class="name">فستیوال</div>
-                                </div>
-                                <div onclick="window.location.href = '{{route("myTrips")}}'">
-                                    <div class="icon MyTripsIcon"></div>
-                                    <div class="name">سفرهای من</div>
-                                </div>
-                            </div>
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('review')">--}}
+{{--                                    <div class="icon EmptyCommentIcon"></div>--}}
+{{--                                    <div class="name">پست ها</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('photo')">--}}
+{{--                                    <div class="icon emptyCameraIcon"></div>--}}
+{{--                                    <div class="name">عکس و فیلم</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('question')">--}}
+{{--                                    <div class="icon questionIcon"></div>--}}
+{{--                                    <div class="name">سوال و جواب</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('safarnameh')">--}}
+{{--                                    <div class="icon safarnameIcon"></div>--}}
+{{--                                    <div class="name">سفرنامه ها</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('medal')">--}}
+{{--                                    <div class="icon medalsIcon"></div>--}}
+{{--                                    <div class="name">جایزه و امتیاز</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('follower')">--}}
+{{--                                    <div class="icon twoManIcon"></div>--}}
+{{--                                    <div class="name" >دنبال کنندگان</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('bookMark')">--}}
+{{--                                    <div class="icon BookMarkIconEmpty" style="font-size: 26px;"></div>--}}
+{{--                                    <div class="name">نشان کرده</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('setting')">--}}
+{{--                                    <div class="icon settingIcon"></div>--}}
+{{--                                    <div class="name">تنظیمات</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('festival')">--}}
+{{--                                    <div class="icon festivalIcon"></div>--}}
+{{--                                    <div class="name">فستیوال</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="window.location.href = '{{route("myTrips")}}'">--}}
+{{--                                    <div class="icon MyTripsIcon"></div>--}}
+{{--                                    <div class="name">سفرهای من</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+                        </div>
+
+                        <div class="exploreReviewInFooterSection">
+                            <div id="footerExploreReviewSection" class="reviewSec"></div>
+                            <div id="indicatorForNewReview" class="indicatorForNewReview"></div>
                         </div>
                     </div>
-                    <div class="profileScoreMainDiv">
-                        <div class="memberPointInfo">
-                            <div class="modules-membercenter-level-progress">
-                                <div data-direction="left" id="targetHelp_9" class="targets progress_info tripcollectiveinfo">
-                                    <div>
-                                        <div class="labels">
-                                            <div class="right label">{{__('مرحله فعلی')}}</div>
-                                            <div class="float-leftImp label">{{__('مرحله بعدی')}}</div>
-                                        </div>
-                                        <div class="progress_indicator">
 
-                                            <div class="next_badge myBadge">{{$authUserInfos->userLevel[0]->name}} </div>
-                                            <div class="meter">
-                                                <span id="progressIdPhone" class="progress"></span>
-                                            </div>
-                                            <div class="current_badge myBadge">{{$authUserInfos->userLevel[1]->name}} </div>
-                                        </div>
+{{--                    <div class="profileScoreMainDiv">--}}
+{{--                        <div class="memberPointInfo">--}}
+{{--                            <div class="modules-membercenter-level-progress">--}}
+{{--                                <div data-direction="left" id="targetHelp_9" class="targets progress_info tripcollectiveinfo">--}}
+{{--                                    <div>--}}
+{{--                                        <div class="labels">--}}
+{{--                                            <div class="right label">{{__('مرحله فعلی')}}</div>--}}
+{{--                                            <div class="float-leftImp label">{{__('مرحله بعدی')}}</div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="progress_indicator">--}}
 
-                                        <div class="points_to_go" style="text-align: center; font-size: 10px;">
-                                            <span style="color: var(--koochita-red); font-size: 14px"> {{$authUserInfos->nextLevel}} </span>
-                                            امتیاز
-                                            <span style="color: var(--koochita-red);">کم داری</span>
-                                            تا مرحله
-                                            <span style="color: var(--koochita-red);">بعد</span>
-                                        </div>
+{{--                                            <div class="next_badge myBadge">{{$authUserInfos->userLevel[0]->name}} </div>--}}
+{{--                                            <div class="meter">--}}
+{{--                                                <span id="progressIdPhone" class="progress"></span>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="current_badge myBadge">{{$authUserInfos->userLevel[1]->name}} </div>--}}
+{{--                                        </div>--}}
+
+{{--                                        <div class="points_to_go" style="text-align: center; font-size: 10px;">--}}
+{{--                                            <span style="color: var(--koochita-red); font-size: 14px"> {{$authUserInfos->nextLevel}} </span>--}}
+{{--                                            امتیاز--}}
+{{--                                            <span style="color: var(--koochita-red);">کم داری</span>--}}
+{{--                                            تا مرحله--}}
+{{--                                            <span style="color: var(--koochita-red);">بعد</span>--}}
+{{--                                        </div>--}}
 {{--                                        <div class="text-align-center">--}}
 {{--                                            <a class="cursor-pointer color-black">{{__('مشاهده سیستم سطح بندی')}}</a>--}}
 {{--                                        </div>--}}
-                                        <div class="clear fix"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{--                                        <div class="clear fix"></div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
                     <div class="lp_phoneMenuBar">
                         <div class="lp_eachMenu" onclick="writeNewSafaranmeh()">
                             <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">
                             <div>{{__('نوشتن سفرنامه')}}</div>
                         </div>
-                        <div class="lp_eachMenu"
-{{--                             onclick="openUploadPost()"--}}
-                             onclick="openModalWriteNewReview()">
+                        <div class="lp_eachMenu" onclick="openModalWriteNewReview()">
                             <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">
                             <div>{{__('پست گذاشتن')}}</div>
                         </div>

@@ -56,6 +56,10 @@ function openMobileFooterPopUps(_id){
     closeMyModalClass('footerModals');
     if(opnedMobileFooterId != _id) {
         opnedMobileFooterId = _id;
+
+        if(_id == "profileFooterModal")
+            checkAndGetReviewExploreForMobileFooter();
+
         openMyModal(_id);
     }
     else
@@ -167,6 +171,26 @@ function createTripCardFooter(_response){
         });
         $('#myTripsFooter').html(card);
     }
+}
+
+$('.userInfoMobileFooterBody').on('scroll', () =>{
+    var bottomOfList = document.getElementById('indicatorForNewReview').getBoundingClientRect().top;
+    var windowHeight = $('.userInfoMobileFooterBody').height();
+    if(bottomOfList-windowHeight < 100)
+        console.log('get new reviews');
+});
+
+function addReviewPlaceHolderToFooter(){
+    var reviewPlaceHolder = getReviewPlaceHolder();
+    $('#footerExploreReviewSection').append(reviewPlaceHolder + reviewPlaceHolder);
+}
+
+function checkAndGetReviewExploreForMobileFooter(){
+    var bottomOfList = document.getElementById('indicatorForNewReview').getBoundingClientRect().top;
+    var windowHeight = $('.userInfoMobileFooterBody').height();
+
+    if(bottomOfList-windowHeight < 100)
+        addReviewPlaceHolderToFooter()
 }
 
 
