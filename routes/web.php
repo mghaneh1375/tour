@@ -4,7 +4,7 @@ use App\models\ConfigModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
 
-Route::get('exportPhonesToExcels', 'HomeController@exporPhone');
+//Route::get('exportPhonesToExcels', 'HomeController@exporPhone');
 
 Route::any('android', function (Illuminate\Http\Request $request) {
 

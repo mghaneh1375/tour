@@ -76,6 +76,8 @@ function createNewFileUploadCardForNewReview(_index){
 function openAlbumForNewUploadedFiles(_element){
     var albumPic = [];
     var fileCode = $(_element).attr('data-code');
+    var timeStamp = new Date().getTime();
+
     newReviewDataForUpload.files.map(item => {
         var data = {
             id : item.code,
@@ -98,6 +100,8 @@ function openAlbumForNewUploadedFiles(_element){
     });
 
     createPhotoModal('فایل های در حال اپلود', albumPic);
+    var timeStamp2 = new Date().getTime();
+    console.log(timeStamp2 - timeStamp);
 }
 function convertVideoFileForConvertForNewReview(_index){
     try{
@@ -451,7 +455,6 @@ function openFindUserForNewCharacterInput(){
         inputElement.html(newHtml);
     });
 }
-
 function openFindTagsForNewCharacterInput(){
 
     var inputPosition = getSelectionCharacterOffsetWithin("inputNewReviewText", "html");

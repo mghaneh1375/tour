@@ -43,6 +43,7 @@ use Illuminate\Http\Request;
 class ReviewsController extends Controller
 {
     public $limboLocation = __DIR__ . '/../../../../assets/limbo';
+    public $assetLocation = __DIR__ . '/../../../../assets';
 
     public function showReviewPage($id)
     {
@@ -237,15 +238,23 @@ class ReviewsController extends Controller
 
             $kindPlaceId = 0;
             $placeId = 0;
-            $kindPlaceName = 'nonePlaces';
             if(isset($request->placeId) && $request->placeId != 0 && isset($request->kindPlaceId) && $request->kindPlaceId != 0){
                 $kindPlaceId = $request->kindPlaceId;
                 $placeId = $request->placeId;
 
                 $kindPlace = Place::find($kindPlaceId);
                 $place = DB::table($kindPlace->tableName)->find($placeId);
-                $kindPlaceName = $kindPlace->fileName;
+
+                $location = $this->assetLocation."/userPhoto/{$kindPlace->fileName}";
+                if (!file_exists($location))
+                    mkdir($location);
+
+                $location .= '/' . $place->file;
+                if (!file_exists($location))
+                    mkdir($location);
             }
+            else
+                $location = $this->assetLocation."/userPhoto/nonePlaces";
 
             $reviewText = $request->text != null ? $request->text : '';
 
@@ -268,16 +277,6 @@ class ReviewsController extends Controller
 
             if (count($reviewPic) > 0) {
                 ReviewPic::where('code', $request->code)->update(['logId' => $review->id, 'code' => null]);
-
-                $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlaceName}";
-                if (!file_exists($location))
-                    mkdir($location);
-                if($placeId != 0) {
-                    $location .= '/' . $place->file;
-                    if (!file_exists($location))
-                        mkdir($location);
-                }
-
                 foreach ($reviewPic as $item) {
                     $file = "{$this->limboLocation}/{$item->pic}";
                     $dest = "{$location}/{$item->pic}";
@@ -286,24 +285,27 @@ class ReviewsController extends Controller
 
                     if ($item->isVideo == 1) {
                         if($item->thumbnail != null)
-                            $videoName = $item->thumbnail;
+                            $thumbnail = $item->thumbnail;
                         else{
-                            $videoArray = explode('.', $item->pic);
-                            $videoName = '';
-                            for ($k = 0; $k < count($videoArray) - 1; $k++)
-                                $videoName .= $videoArray[$k] . '.';
-                            $videoName .= 'png';
+                            $thumbnail = explode('.', $item->pic);
+                            $thumbnail[count($thumbnail)-1] = '.png';
+                            $thumbnail = implode('', $thumbnail);
                         }
 
-                        $file = "{$this->limboLocation}/{$videoName}";
-                        $dest = "{$location}/{$videoName}";
+                        $file = "{$this->limboLocation}/{$thumbnail}";
+                        $dest = "{$location}/{$thumbnail}";
                         if (file_exists($file))
                             rename($file, $dest);
                     }
                     else{
-                        $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
-                        $image = file_get_contents($dest);
-                        resizeUploadedImage($image, $size, $item->pic);
+                        try{
+                            $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
+                            $image = file_get_contents($dest);
+                            resizeUploadedImage($image, $size, $item->pic);
+                        }
+                        catch (\Exception $exception){
+                            continue;
+                        }
                     }
                 }
             }
