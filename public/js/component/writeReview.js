@@ -101,7 +101,7 @@ function openAlbumForNewUploadedFiles(_element){
 
     createPhotoModal('فایل های در حال اپلود', albumPic);
     var timeStamp2 = new Date().getTime();
-    console.log(timeStamp2 - timeStamp);
+    alert(timeStamp2 - timeStamp);
 }
 function convertVideoFileForConvertForNewReview(_index){
     try{
