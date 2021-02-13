@@ -264,9 +264,6 @@ function addReviewPlaceHolderToFooter(){
                 if(response.status == 'ok')
                     createReviewUIForExplore(response.result);
             },
-            // error: err => {
-            //     console.log(err);
-            // }
         });
     }
 }
@@ -289,7 +286,7 @@ function createReviewUIForExplore(_result){
 function createReviewExploreMin(review){
     var normalText = review.text.replace(/(<([^>]+)>)/gi, "");
     return `<div class="reviewExploreSquare" onclick="getSingleFullReview(${review.id})">
-                    <div class="picSec ${review.mainPicIsVideo == 1 ? 'playIconOnPicSection' : ''}">
+                    <div class="picSec ${review.mainPic == undefined ? 'isText' : ''} ${review.mainPicIsVideo == 1 ? 'playIconOnPicSection' : ''}">
                         ${
                             review.mainPic != undefined ?
                                 `<img src="${review.mainPic}" class="resizeImgClass" onload="fitThisImg(this)">`

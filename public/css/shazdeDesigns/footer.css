@@ -479,7 +479,11 @@ footer .reviewExploreSquare .picSec{
     border: solid 1px lightgray;
 }
 footer .reviewExploreSquare .text{
-    text-align: center;
+    font-size: 10px;
+    padding: 8px;
+}
+footer .reviewExploreSquare .picSec.isText{
+    align-items: flex-start;
 }
 
 .leftPopUp {

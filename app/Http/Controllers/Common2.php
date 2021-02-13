@@ -181,7 +181,7 @@ function getReviewContents($item, $authUserId){
     $item->userPageUrl = route('profile', ['username' => $item->username]);
     $item->userPic = getUserPic($item->visitorId);
 
-    $likes = \DB::select("SELECT COUNT(IF(`like` = 1, 1, null)) `likeCount`, COUNT(IF(`like` = -1, 1, null)) `disLikeCount`, COUNT(IF(`userId` = {$authUserId}, `like`, null)) `youLike` FROM `logFeedBack` WHERE `logId` = {$item->id}");
+    $likes = \DB::select("SELECT COUNT(IF(`like` = 1, 1, null)) `likeCount`, COUNT(IF(`like` = -1, 1, null)) `disLikeCount`, IF(`userId` = {$authUserId}, `like`, null) `youLike` FROM `logFeedBack` WHERE `logId` = {$item->id}");
     $item->like = $likes[0]->likeCount;
     $item->disLike = $likes[0]->disLikeCount;
     $item->userLike = $likes[0]->youLike;
