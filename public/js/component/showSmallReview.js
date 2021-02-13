@@ -9,6 +9,10 @@ var showFullReviewKind = null;
 var setSmallReviewPlaceHolder = _id => $(`#${_id}`).append(smallReviewPlaceHolder);
 var getReviewPlaceHolder = () => {return smallReviewPlaceHolder};
 
+function setIntoGlobalReviewInput(_review){
+    allReviewsCreated[_review.id] = _review;
+}
+
 function createSmallReviewHtml(item){
 
     allReviewsCreated[item.id] = item;

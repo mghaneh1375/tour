@@ -274,15 +274,16 @@ function createReviewUIForExplore(_result){
     mobileFooterExplorePage++;
 
     var html = '';
-    if(mobileFooterExploreKind == 'followers')
-        _result.map(item => html += createSmallReviewHtml(item));
-    else
-        _result.map(item => html += createReviewExploreMin(item));
+    _result.map(item => {
+        html += mobileFooterExploreKind == 'followers' ? createSmallReviewHtml(item) : createReviewExploreMin(item);
+        setIntoGlobalReviewInput(item);
+    });
 
     $('#footerExploreReviewSection').append(html);
 
     mobileFooterExploreInTake = false;
 }
+
 function createReviewExploreMin(review){
     var normalText = review.text.replace(/(<([^>]+)>)/gi, "");
     return `<div class="reviewExploreSquare" onclick="getSingleFullReview(${review.id})">
