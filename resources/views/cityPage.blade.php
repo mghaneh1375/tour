@@ -553,108 +553,51 @@
     setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
     setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
 
-    @if(isset($place->pic) && count($place->pic) > 0)
-        var cityPic = {!! json_encode($place->pic) !!};
-
-        function showSliderPic(){
-            var cityPicForAlbum = [];
-            cityPic.map((pic, index) => {
-                cityPicForAlbum[index] = {
-                    'id' : pic['id'],
-                    'alt' : pic['alt'],
-                    'sidePic' : pic['smallPic'],
-                    'mainPic' : pic['mainPic'],
-                    'userPic' : '{{getUserPic(0)}}',
-                    'userName' : 'کوچیتا',
-                    'where' : pic['name'],
-                    'whereUrl' : pic['url'],
-                    'uploadTime' : '',
-                    'showInfo' : false,
-                }
-            });
-
-            createPhotoModal('عکس های شهر '+ cityName1, cityPicForAlbum); // in general.photoAlbumModal.blade.php
-        };
-
-        var picSwiper = new Swiper('.cityPagePics', {
-            slidesPerGroup: 1,
-            loop: true,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            loopFillGroupWithBlank: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
-
-        var changeSliderNum = 0;
-        picSwiper.on('slideChange', function () {
-
-            if(showCityPicNumber < cityPic.length) {
-                if (changeSliderNum == 3) {
-                    let nuum = 0;
-                    while (nuum < 5 && showCityPicNumber < cityPic.length) {
-                        slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                    <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
-                                </div>`;
-                        picSwiper.addSlide(showCityPicNumber + 1, slide);
-                        nuum++;
-                        showCityPicNumber++;
-                    }
-                    resizeFitImg('resizeImgClass');
-
-                    changeSliderNum = 0;
-                } else
-                    changeSliderNum++;
-            }
-
-        });
-
-    @endif
+    var cityName1 = '{{ $place->name }}';
+    var topPlacesSections = [
+        {
+            name: '{{__('محبوب‌ترین بوم گردی ها')}}',
+            id: 'topBoomgardyCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 12, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوبترین جاذبه ها')}}',
+            id: 'topAmakenCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 1, 'mode' => $kind, 'city' => $locationName['cityNameUrl'] ])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین رستوران‌ها')}}',
+            id: 'topRestaurantInCity',
+            url: '{{route('place.list', ['kindPlaceId' => 3, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین اقامتگاه ها')}}',
+            id: 'topHotelCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 4, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین طبیعت گردی ها')}}',
+            id: 'topMajaraCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 6, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین صنابع دستی و سوغات')}}',
+            id: 'topSogatCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 10, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین غذاهای محلی')}}',
+            id: 'topFoodCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 11, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+    ];
+    var cityPageKind = '{{$kind}}';
+    var cityPageId = '{{$place->id}}';
+    var getAllPlacesOfCityForMapUrl = '{{route("getCityAllPlaces")}}';
+    var getReviewsForCityPageUrl = '{{route("review.getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}';
 
     var reviews;
     var showCityPicNumber = 5;
-    var cityName1 = '{{ $place->name }}';
-    var topPlacesSections = [
-            {
-                name: '{{__('محبوب‌ترین بوم گردی ها')}}',
-                id: 'topBoomgardyCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 12, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوبترین جاذبه ها')}}',
-                id: 'topAmakenCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 1, 'mode' => $kind, 'city' => $locationName['cityNameUrl'] ])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین رستوران‌ها')}}',
-                id: 'topRestaurantInCity',
-                url: '{{route('place.list', ['kindPlaceId' => 3, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین اقامتگاه ها')}}',
-                id: 'topHotelCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 4, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین طبیعت گردی ها')}}',
-                id: 'topMajaraCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 6, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین صنابع دستی و سوغات')}}',
-                id: 'topSogatCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 10, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین غذاهای محلی')}}',
-                id: 'topFoodCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 11, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-        ];
 
     initPlaceRowSection(topPlacesSections);
 
@@ -676,19 +619,6 @@
                 },
             },
             breakpoints: {
-                // 450: {
-                //     slidesPerView: 1,
-                //     spaceBetween: 20,
-                // },
-                // 550: {
-                //     slidesPerView: 2,
-                //     spaceBetween: 10,
-                // },
-                // 768: {
-                //     slidesPerView: 2,
-                //     spaceBetween: 20,
-                // },
-
                 768: {
                     slidesPerView: 'auto',
                     spaceBetween: 10,
@@ -709,7 +639,7 @@
     function getReviews(){
         $.ajax({
             type: 'get',
-            url : '{{route("review.getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}',
+            url : getReviewsForCityPageUrl,
             success: response => {
                 reviews = response.result;
                 createReviewSections();
@@ -731,8 +661,8 @@
     }
 
     function getTopPlaces(){
-        var kind = '{{$kind}}';
-        var id = '{{$place->id}}';
+        var kind = cityPageKind;
+        var id = cityPageId;
         $.ajax({
             type: 'GET',
             url : `{{route("cityPage.topPlaces")}}?id=${id}&kind=${kind}&city={{$locationName['cityNameUrl']}}`,
@@ -758,12 +688,12 @@
 
     function getAllPlacesForMap(){
         $.ajax({
-            type: 'post',
-            url: '{{route("getCityAllPlaces")}}',
+            type: 'POST',
+            url: getAllPlacesOfCityForMapUrl,
             data: {
-                _token: '{{csrf_token()}}',
-                kind : '{{$kind}}',
-                id: '{{$place->id}}'
+                _token: csrfTokenGlobal,
+                kind : cityPageKind,
+                id: cityPageId
             },
             success: function(response){
                 let map = response.map;
@@ -779,13 +709,80 @@
         })
     }
 
-    $(window).ready(function(){
-        getReviews();
+    $(window).ready(() => {
+
         getTopPlaces();
         getAllPlacesForMap();
-    })
+
+        if(window.innerWidth > 767 )
+            getReviews();
+    });
+
+    @if(isset($place->pic) && count($place->pic) > 0)
+    var cityPic = {!! json_encode($place->pic) !!};
+
+    function showSliderPic(){
+        var cityPicForAlbum = [];
+        cityPic.map((pic, index) => {
+            cityPicForAlbum[index] = {
+                'id' : pic['id'],
+                'alt' : pic['alt'],
+                'sidePic' : pic['smallPic'],
+                'mainPic' : pic['mainPic'],
+                'userPic' : '{{getUserPic(0)}}',
+                'userName' : 'کوچیتا',
+                'where' : pic['name'],
+                'whereUrl' : pic['url'],
+                'uploadTime' : '',
+                'showInfo' : false,
+            }
+        });
+
+        createPhotoModal('عکس های شهر '+ cityName1, cityPicForAlbum); // in general.photoAlbumModal.blade.php
+    };
+
+    var picSwiper = new Swiper('.cityPagePics', {
+        slidesPerGroup: 1,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        loopFillGroupWithBlank: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    var changeSliderNum = 0;
+    picSwiper.on('slideChange', function () {
+
+        if(showCityPicNumber < cityPic.length) {
+            if (changeSliderNum == 3) {
+                let nuum = 0;
+                while (nuum < 5 && showCityPicNumber < cityPic.length) {
+                    slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
+                                    <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
+                                </div>`;
+                    picSwiper.addSlide(showCityPicNumber + 1, slide);
+                    nuum++;
+                    showCityPicNumber++;
+                }
+                resizeFitImg('resizeImgClass');
+
+                changeSliderNum = 0;
+            } else
+                changeSliderNum++;
+        }
+
+    });
+    @endif
+
 
 </script>
+
+<script src="{{URL::asset('js/pages/cityPage.js')}}"></script>
 
 
 </body>

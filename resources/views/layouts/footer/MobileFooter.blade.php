@@ -2,8 +2,9 @@
     .submitFiltersInMobile{
         display: none;
     }
-
 </style>
+
+
 <div class="gapForMobileFooter hideOnScreen"></div>
 
 <div class="footerPhoneMenuBar hideOnScreen">
@@ -213,10 +214,6 @@
                                     <div class="youMaterialSearchResult materialSearchSelected"></div>
                                 </div>
                             </div>
-                            <script>
-                                var openGlobalMaterialSearch = () => createSearchInput(getGlobalInputMaterialSearchKeyUp, 'ماده اولبه مورد نظر خود را وارد کنید.')
-                                var getGlobalInputMaterialSearchKeyUp = (_element) => searchForMaterial($(_element).val());
-                            </script>
                         @endif
 
                         @if($kindPlace->id == 4)
@@ -454,8 +451,26 @@
                             </div>
                         </div>
                         <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
+
+
                         <div class="buttonsLine">
                             <div class="mBLine bLine">
+                                <div class="tabBut selected" onclick="changeMobileFooterReviewExplore(this, 'followers')">
+                                    <div class="name">دوستان</div>
+                                </div>
+                                <div class="tabBut" onclick="changeMobileFooterReviewExplore(this, 'all')">
+                                    <div class="name">همه</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="exploreReviewInFooterSection">
+                            <div id="footerExploreReviewSection" class="reviewSec allReviewSec"></div>
+                            <div id="indicatorForNewReview" class="indicatorForNewReview"></div>
+                        </div>
+
+{{--                        <div class="buttonsLine">--}}
+{{--                            <div>--}}
 {{--                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">--}}
 {{--                                    <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>--}}
 {{--                                </div>--}}
@@ -465,13 +480,7 @@
 {{--                                        <div class="footerMsgCountNumber">{{$authUserInfos->newMsg}}</div>--}}
 {{--                                    @endif--}}
 {{--                                </div>--}}
-                                <div class="tabBut" onclick="">
-                                    <div class="name">دوستان</div>
-                                </div>
-                                <div class="tabBut" onclick="">
-                                    <div class="name">همه</div>
-                                </div>
-                            </div>
+{{--                            </div>--}}
 {{--                            <div class="mBLine bLine">--}}
 {{--                                <div onclick="mobileFooterProfileButton('review')">--}}
 {{--                                    <div class="icon EmptyCommentIcon"></div>--}}
@@ -518,12 +527,8 @@
 {{--                                    <div class="name">سفرهای من</div>--}}
 {{--                                </div>--}}
 {{--                            </div>--}}
-                        </div>
+{{--                        </div>--}}
 
-                        <div class="exploreReviewInFooterSection">
-                            <div id="footerExploreReviewSection" class="reviewSec"></div>
-                            <div id="indicatorForNewReview" class="indicatorForNewReview"></div>
-                        </div>
                     </div>
 
 {{--                    <div class="profileScoreMainDiv">--}}
@@ -586,59 +591,3 @@
     @endif
 </div>
 
-<script>
-    var userSettingPageUrl = "{{route('profile.accountInfo')}}";
-    var addPlaceByUserUrl = "{{route('addPlaceByUser.index')}}";
-    var touchRigthForFooterMobile = 0;
-
-    $('.footerModals').on('touchstart', e => {
-        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-        touchRigthForFooterMobile = touch.pageX;
-    });
-    $('.footerModals').on('touchend', e => {
-        var windowWidth = $(window).width();
-        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-        if((touch.pageX - touchRigthForFooterMobile) > (windowWidth/3) ) {
-            closeMyModalClass('footerModals');
-            opnedMobileFooterId = null;
-        }
-    });
-
-    $('.gombadi').on('click', e => {
-        if($(e.target).hasClass('gombadi')) {
-            closeMyModal($(e.target).parent().attr('id'));
-        }
-    });
-
-    function openListSort(_element){
-        $('.sortListMobileFooter').toggleClass('open');
-        $(_element).toggleClass('selected');
-    }
-
-    function specialMobileFooter(_id, _element){
-        resizeFitImg('resizeImgClass');
-        $('.specPages').addClass('hidden');
-        $(`#${_id}`).removeClass('hidden');
-
-        $('.specTabsFot').removeClass('lp_selectedMenu');
-        $(_element).addClass('lp_selectedMenu');
-    }
-
-    function goToCookFestival(){
-        openLoading();
-        location.href = '{{route("festival.cook")}}';
-    }
-
-    $(window).ready(() => {
-        initMyCalendar('showMyCalTourism', [
-            'ش',
-            'ی',
-            'د',
-            'س',
-            'چ',
-            'پ',
-            'ج',
-        ]);
-    })
-
-</script>

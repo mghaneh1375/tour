@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\Followers;
 use App\models\places\Amaken;
 use App\models\BookMark;
 use App\models\BookMarkReference;
@@ -415,26 +416,18 @@ class ReviewsController extends Controller
             $activity = Activity::where('name', 'نظر')->first();
             $a = Activity::where('name', 'پاسخ')->first();
 
-            $ques = array();
-            $ans = array();
+            $ques = [];
+            $ans = [];
             $isFilter = false;
             $isPicFilter = false;
-            $sqlQuery = '';
             $onlyPic = 0;
 
-            $count = 0;
-            $num = 0;
-            if (isset($request->count))
-                $count = $request->count;
-            if (isset($request->num))
-                $num = $request->num;
+            $count = isset($request->count) ? $request->count : 0;
+            $num = isset($request->num) ? $request->num : 0;
 
-            if (\auth()->check())
-                $uId = \auth()->user()->id;
-            else
-                $uId = 0;
+            $uId = \auth()->check() ? \auth()->user()->id : 0;
 
-            $sqlQuery = 'activityId = ' . $activity->id . ' AND placeId = ' . $request->placeId . ' AND kindPlaceId = ' . $request->kindPlaceId . ' AND relatedTo = 0 AND (visitorId = ' . $uId . ' OR confirm = 1) ';
+            $sqlQuery = '(subject != "dontShowThisText" OR subject IS NULL) AND activityId = ' . $activity->id . ' AND placeId = ' . $request->placeId . ' AND kindPlaceId = ' . $request->kindPlaceId . ' AND relatedTo = 0 AND (visitorId = ' . $uId . ' OR confirm = 1) ';
 
             if (isset($request->filters)) {
                 $sqlQuery .= ' AND CHARACTER_LENGTH(text) >= 0';
@@ -548,15 +541,15 @@ class ReviewsController extends Controller
 
             $logCount = LogModel::whereRaw($sqlQuery)->count();
             if ($num == 0 && $count == 0)
-                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->get();
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->get();
             else
-                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->skip(($num - 1) * $count)->take($count)->get();
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->skip(($num - 1) * $count)->take($count)->get();
 
             if (count($logs) == 0)
                 echo 'nok1';
             else {
-                foreach ($logs as $key => $item)
-                    $item = reviewTrueType($item); // in common.php
+                for($i = 0; $i < count($logs); $i++)
+                    $logs[$i] = reviewTrueType($logs[$i]); // in common.php
 
                 echo json_encode([$logs, $logCount]);
             }
@@ -652,9 +645,9 @@ class ReviewsController extends Controller
         else
             return response()->json(['status' => 'error1']);
 
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
+        $revIds = $reviews->pluck('id')->toArray();
 
+        $reviews = reviewTrueTypeIdArray($revIds);
         $reviews = $reviews->toArray();
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
@@ -677,38 +670,38 @@ class ReviewsController extends Controller
 
     public function getCityPageReview(Request $request)
     {
+        $take = 10;
         $kind = $_GET['kind'];
         $placeId = $_GET['placeId'];
-        $take = 15;
-        $reviews = $this->getCityReviews($kind, $placeId, $take);
-        if(count($reviews) != $take){
+        $reviewIds = $this->getCityReviews($kind, $placeId, $take);
+
+        if(count($reviewIds) != $take){
             $lessReview = [];
             $notIn = [];
-            foreach ($reviews as $item)
+            foreach ($reviewIds as $item)
                 array_push($notIn, $item->id);
 
             if($kind == 'city'){
                 $place = Cities::find($placeId);
-                $less = $take - count($reviews);
+                $less = $take - count($reviewIds);
                 $lessReview = $this->getCityReviews('state', $place->stateId, $less, $notIn);
                 foreach ($lessReview as $item)
-                    array_push($reviews, $item);
+                    array_push($reviewIds, $item);
             }
 
-            $less = $take - count($reviews);
+            $less = $take - count($reviewIds);
             if($less != 0){
                 $notIn = [];
-                foreach ($reviews as $item)
+                foreach ($reviewIds as $item)
                     array_push($notIn, $item->id);
 
                 $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
                 foreach ($lessReview as $item)
-                    array_push($reviews, $item);
+                    array_push($reviewIds, $item);
             }
         }
 
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
+        $reviews = reviewTrueTypeIdArray($reviewIds);
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
     }
@@ -731,81 +724,78 @@ class ReviewsController extends Controller
 
     private function getCityReviews($kind, $id, $take, $notIn = [0]){
         $reviewActivity = Activity::whereName('نظر')->first();
-
-        if($kind == 'city') {
-            $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
-            $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
-            $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
-        }
-        else if($kind == 'state'){
-            $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
-
-            $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
-        }
-        else{
-            if(count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
-
-            return $lastReview;
-        }
-
-
-        $sqlQuery = '';
-        if(count($allAmaken) != 0)
-            $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
-        if(count($allRestaurant) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
-        }
-        if(count($allHotels) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
-        }
-        if(count($allMajara) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
-        }
-        if(count($allSogatSanaie) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
-        }
-        if(count($allMahaliFood) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
-        }
-        if(count($allBoomgardy) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
-        }
-
         $lastReview = [];
+        $ids = [];
+        $sqlQuery = '';
 
-        if($sqlQuery != '') {
-            if (count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
+        if($kind == 'city' || $kind == 'state') {
+            if ($kind == 'city') {
+                $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
+                $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
+                $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
+                $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
+                $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
+                $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
+                $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
+            } else if ($kind == 'state') {
+                $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
+
+                $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            }
+
+            if (count($allAmaken) != 0)
+                $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
+            if (count($allRestaurant) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
+            }
+            if (count($allHotels) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
+            }
+            if (count($allMajara) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
+            }
+            if (count($allSogatSanaie) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
+            }
+            if (count($allMahaliFood) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
+            }
+            if (count($allBoomgardy) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
+            }
         }
 
-        return $lastReview;
+        if (count($notIn) == 0)
+            $notIn = [0];
+
+        $notIn = implode(',', $notIn);
+
+        if($sqlQuery != '')
+            $sqlQuery = '1';
+
+        $lastReview = \DB::select("SELECT id FROM log WHERE {$sqlQuery} AND `subject` != 'dontShowThisText' AND `confirm` = 1 AND `activityId` = {$reviewActivity->id} AND `id` NOT IN ({$notIn}) ORDER BY `created_at` DESC LIMIT {$take}");
+        foreach($lastReview as $i)
+            array_push($ids, $i->id);
+
+        return $ids;
     }
 
     private function storeReviewTags($text, $id){
@@ -962,6 +952,45 @@ class ReviewsController extends Controller
             echo 'nok';
 
         return;
+    }
+
+
+    public function getReviewExplore()
+    {
+        $take = $_GET['take'];
+        $page = $_GET['page'];
+        $kind = $_GET['kind'];
+
+        $reviewAct = Activity::where('name', 'نظر')->first();
+
+        if($kind == 'all'){
+            $reviewIds = LogModel::where('activityId', $reviewAct->id)
+                                ->where('confirm', 1)
+                                ->where(function($query){
+                                    $query->where("subject", '<>', "dontShowThisText")->orWhereNull('subject');
+                                })->orderBy('created_at', 'DESC')
+                                ->skip(($page-1) * $take)
+                                ->take($take)
+                                ->pluck('id')
+                                ->toArray();
+        }
+        else if($kind == 'followers'){
+            $followers = Followers::where('userId', \auth()->user()->id)->pluck('followedId')->toArray();
+            $reviewIds = LogModel::where('activityId', $reviewAct->id)
+                                ->where('confirm', 1)
+                                ->where(function($query){
+                                    $query->where("subject", '<>', "dontShowThisText")->orWhereNull('subject');
+                                })->whereIn('visitorId', $followers)
+                                ->orderByDesc('created_at')
+                                ->skip(($page-1) * $take)
+                                ->take($take)
+                                ->pluck('id')
+                                ->toArray();
+        }
+
+        $reviews = reviewTrueTypeIdArray($reviewIds); // in common.php
+
+        return response()->json(['status' => 'ok', 'result' => $reviews]);
     }
 }
 

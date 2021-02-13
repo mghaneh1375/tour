@@ -954,6 +954,8 @@ function generateRandomString($length = 20) {
 }
 
 function saveViewPerPage($kindPlaceId, $placeId){
+    return;
+
     if(Auth::check())
         $userId = auth()->user()->id;
     else
@@ -982,28 +984,34 @@ function saveViewPerPage($kindPlaceId, $placeId){
 }
 
 function getUserPic($id = 0){
+    $userPicsInArray = config('userPictureArr');
 
-    $user = User::find($id);
-    if($id == 0 || $user == null)
-        $uPic = \URL::asset('images/mainPics/noPicSite.jpg');
-    else{
-        if(strpos($user->picture, 'http') !== false)
-            return $user->picture;
-        else{
-            if($user->uploadPhoto == 0){
-                $deffPic = DefaultPic::find($user->picture);
+    if(!array_key_exists($id, $userPicsInArray)){
+        $user = User::find($id);
+        if ($id == 0 || $user == null)
+            $uPic = \URL::asset('images/mainPics/noPicSite.jpg');
+        else {
+            if (strpos($user->picture, 'http') !== false)
+                $uPic = $user->picture;
+            else {
+                if ($user->uploadPhoto == 0) {
+                    $deffPic = DefaultPic::find($user->picture);
 
-                if($deffPic != null)
-                    $uPic = URL::asset('defaultPic/' . $deffPic->name);
+                    if ($deffPic != null)
+                        $uPic = URL::asset("defaultPic/{$deffPic->name}");
+                    else
+                        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+                }
                 else
-                    $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+                    $uPic = URL::asset("userProfile/{$user->picture}");
             }
-            else
-                $uPic = URL::asset('userProfile/' . $user->picture);
         }
+
+        $userPicsInArray[$id] = $uPic;
+        config(['userPictureArr' => $userPicsInArray]);
     }
 
-    return $uPic;
+    return $userPicsInArray[$id];
 }
 
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){

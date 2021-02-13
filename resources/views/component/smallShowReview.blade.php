@@ -110,7 +110,7 @@
         </div>
     </div>`;
 
-    var smallReviewPlaceHolder = `<div class="smallReviewMainDivShown float-right position-relative">
+    var smallReviewPlaceHolder = `<div class="smallReviewMainDivShown smallReviewPlaceHolder float-right position-relative">
                                     <div class="commentWriterDetailsShow" style="display: flex;">
                                         <div class="placeHolderAnime" style="width: 55px; height: 55px; float: right; border-radius: 50%"></div>
                                         <div class="commentWriterExperienceDetails" style="display: flex; flex-direction: column; padding-right: 10px">

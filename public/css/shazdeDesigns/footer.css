@@ -451,10 +451,35 @@ footer .profileFooterPopUp .exploreReviewInFooterSection .reviewSec{
     display: flex;
     flex-direction: column;
 }
+footer .profileFooterPopUp .exploreReviewInFooterSection .reviewSec.allReviewSec{
+    flex-direction: row !important;
+    flex-wrap: wrap;
+}
 footer .profileFooterPopUp .exploreReviewInFooterSection .indicatorForNewReview{
     width: 100%;
     height: 20px;
-    background: red;
+}
+
+footer .reviewExploreSquare{
+    width: 30%;
+    padding: 15%;
+    margin: 5px;
+    position: relative;
+}
+footer .reviewExploreSquare .picSec{
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    top: 0px;
+    right: 0px;
+    border: solid 1px lightgray;
+}
+footer .reviewExploreSquare .text{
+    text-align: center;
 }
 
 .leftPopUp {
@@ -2058,7 +2083,7 @@ footer .bookMarkSSec .infoSec .state{
     border-radius: 20px 20px 0px 0px;
     font-size: 14px !important;
     flex-direction: column;
-    z-index: 1;
+    z-index: 999;
     bottom: 60px;
     right: calc(50% - 50px);
     display: flex;

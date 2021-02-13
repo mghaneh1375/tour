@@ -6,9 +6,9 @@ var globalConfirmText = '<span class="label label-success inConfirmLabel">در �
 var showFullReview = null;
 var showFullReviewKind = null;
 
-function getReviewPlaceHolder(){
-    return smallReviewPlaceHolder;
-}
+var setSmallReviewPlaceHolder = _id => $(`#${_id}`).append(smallReviewPlaceHolder);
+var getReviewPlaceHolder = () => {return smallReviewPlaceHolder};
+
 
 function createSmallReviewHtml(item){
     allReviewsCreated.push(item);
@@ -20,8 +20,6 @@ function createSmallReviewHtml(item){
 
     text = text.replace(new RegExp('##isVideoClass##', "g"), item.mainPicIsVideo == 1 ? "playIcon" : "");
 
-    var t;
-    var re;
     if(item.summery == null){
         text = text.replace(new RegExp('##haveSummery##', "g"), 'none');
         text = text.replace(new RegExp('##notSummery##', "g"), 'block');
@@ -62,8 +60,29 @@ function createSmallReviewHtml(item){
     return text;
 }
 
-function setSmallReviewPlaceHolder(_id){
-    $('#' + _id).append(smallReviewPlaceHolder);
+function showFullReviews(_input){
+    var _reviews = _input.review;
+    var _kind = _input.kind;
+    // _kind = 'modal' open in modal
+    // _kind = 'append' append to _sectionId
+
+    _reviews['showKind'] = _kind;
+    _reviews['showSectionId'] = _input.sectionId;
+
+    var text = '';
+    text += '<div id="showReview_' + _reviews["id"] + '" class="mainFullReviewDiv"></div>';
+
+    if(_kind == 'modal') {
+        openMyModal('fullReviewModal');
+        $('#fullReview').html(text);
+        $('#fullReview').append('<div class="closeFullReview iconClose" onclick="closeFullReview()"></div>');
+    }
+    else if(_kind == 'append') {
+        $('#' + _input.sectionId).append(text);
+        allReviewsCreated.push(_reviews);
+    }
+
+    setFullReviewContent(_reviews);
 }
 
 function showSmallReviewPics(_id){
@@ -129,31 +148,6 @@ function getSingleFullReview(_id){
 
 function updateFullReview(_id){
     getSingleFullDataReview(_id, _review => setFullReviewContent(_review));
-}
-
-function showFullReviews(_input){
-    var _reviews = _input.review;
-    var _kind = _input.kind;
-    // _kind = 'modal' open in modal
-    // _kind = 'append' append to _sectionId
-
-    _reviews['showKind'] = _kind;
-    _reviews['showSectionId'] = _input.sectionId;
-
-    var text = '';
-    text += '<div id="showReview_' + _reviews["id"] + '" class="mainFullReviewDiv"></div>';
-
-    if(_kind == 'modal') {
-        openMyModal('fullReviewModal');
-        $('#fullReview').html(text);
-        $('#fullReview').append('<div class="closeFullReview iconClose" onclick="closeFullReview()"></div>');
-    }
-    else if(_kind == 'append') {
-        $('#' + _input.sectionId).append(text);
-        allReviewsCreated.push(_reviews);
-    }
-
-    setFullReviewContent(_reviews);
 }
 
 function setFullReviewContent(_reviews){

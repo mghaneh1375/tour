@@ -263,6 +263,8 @@ Route::middleware(['nothing'])->group(function () {
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
 
     Route::middleware(['auth'])->group(function (){
+        Route::get('review/getReviewsForExplore', 'ReviewsController@getReviewExplore')->name('review.explore');
+
         Route::post('review/getNewCodeForUploadNewReview', 'ReviewsController@getNewCodeForUploadNewReview')->name('review.getNewCodeForUploadNewReview');
 
         Route::post('reviewUploadFile', 'ReviewsController@reviewUploadFile')->name('review.uploadFile');

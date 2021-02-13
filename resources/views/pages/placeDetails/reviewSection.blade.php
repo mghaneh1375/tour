@@ -38,8 +38,8 @@
     function loadReviews(){
         $('#showReviewsMain').html(getReviewPlaceHolder()); //in smallShowReview.blade.php
         $.ajax({
-            type: 'post',
-            url: '{{route('getReviews')}}',
+            type: 'POST',
+            url: `{{route('getReviews')}}`,
             data:{
                 'placeId' : placeId,
                 'kindPlaceId' : kindPlaceId,
@@ -73,7 +73,7 @@
                         document.getElementById('postFilters').style.display = 'block';
 
                     firstTimeFilterShow = 0;
-
+console.log(allReviews);
                     createReviewPagination(reviewsCount);
                     showReviews(allReviews);
                 }

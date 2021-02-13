@@ -110,103 +110,15 @@ function createSuggestionPack($_kindPlaceId, $_placeId){
 }
 
 function reviewTrueType($_log){
-    $user = User::select(['first_name', 'last_name', 'username', 'picture', 'uploadPhoto', 'id'])->find($_log->visitorId);
+    $authUserId = auth()->check() ? auth()->user()->id : 0;
 
-    if($_log->kindPlaceId != 0 && $_log->placeId != 0) {
-        $kindPlace = Place::find($_log->kindPlaceId);
-        $place = DB::table($kindPlace->tableName)->select(['id', 'name', 'cityId', 'file'])->find($_log->placeId);
+    $_log = LogModel::join('users', 'users.id', 'log.visitorId')
+                        ->where('log.id', $_log->id)
+                        ->orderByDesc('created_at')
+                        ->select(['log.*', 'users.username'])
+                        ->first();
 
-        $_log->mainFile = $kindPlace->fileName;
-        $_log->placeName = $place->name;
-        $_log->kindPlace = $kindPlace->name;
-        $_log->placeUrl = createUrl($kindPlace->id, $place->id, 0, 0);
-
-        $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
-                                ->where('cities.id', $place->cityId)
-                                ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName'])
-                                ->first();
-        $_log->placeCity = $cityAndState->cityName;
-        $_log->placeState = $cityAndState->stateName;
-
-        $_log->where = "{$place->name} شهر {$cityAndState->cityName}، استان {$cityAndState->stateName}";
-
-        $folderName = "{$kindPlace->fileName}/{$place->file}";
-    }
-    else{
-        $folderName = "nonePlaces";
-        $_log->where = '';
-    }
-
-    $_log->userName = $user->username;
-    $_log->userPageUrl = route('profile', ['username' => $user->username]);
-    $_log->userPic = getUserPic($user->id);
-    $_log->like = LogFeedBack::where('logId', $_log->id)->where('like', 1)->count();
-    $_log->disLike = LogFeedBack::where('logId', $_log->id)->where('like', -1)->count();
-
-    $_log->pics = ReviewPic::where('logId', $_log->id)->get();
-    $_log->pics = getReviewPicsURL($_log->pics, $folderName);
-    if(count($_log->pics) > 0){
-        $_log->hasPic = true;
-        $_log->mainPic = $_log->pics[0]->picUrl;
-        $_log->mainPicIsVideo = $_log->pics[0]->isVideo;
-
-        if(count($_log->pics) > 1){
-            $_log->morePic = true;
-            $_log->picCount = count($_log->pics) - 1;
-        }
-        else
-            $_log->morePic = false;
-    }
-    else {
-        $_log->hasPic = false;
-        $_log->picCount = 0;
-    }
-
-    $getAnses = getAnsToComments($_log->id);
-    $_log->answersCount = $getAnses[1];
-    $_log->answers = count($getAnses[0]) > 0 ? $getAnses[0] : [];
-
-
-    if($_log->created_at != null){
-        if(gettype($_log->created_at) === 'object') {
-            $time = $_log->created_at->format('H:i:s');
-            $date = verta($_log->created_at)->format('Y-m-d');
-        }
-        else{
-            $dateAndTime = explode(' ', $_log->created_at);
-            $time = $dateAndTime[1];
-            $date = Carbon::createFromFormat('Y-m-d', $dateAndTime[0]);
-        }
-    }
-    else if($_log->date != null && $_log->time != null){
-        if(strlen($_log->time) == 1) $_log->time = '000' . $_log->time;
-        else if(strlen($_log->time) == 2) $_log->time = '00' . $_log->time;
-        else if(strlen($_log->time) == 3) $_log->time = '0' . $_log->time;
-
-        $carbon = Carbon::createFromFormat('Y-m-d', $_log->date);
-        $date = \verta($carbon)->format('Y-m-d');
-        $time = substr($_log->time, 0, 2) . ':' . substr($_log->time, 2, 2) .':00';
-    }
-    try {
-        $time = explode(':', $time);
-        $date = explode('-', $date);
-        $_log->timeAgo = Verta::createJalali($date[0], $date[1], $date[2], $time[0], $time[1], $time[2])->formatDifference();
-    }
-    catch (\Exception $exception){
-        $_log->timeAgo = '';
-    }
-    $noneTagText = strip_tags($_log->text);
-    $_log->summery = strlen($noneTagText) > 180 ? mb_substr($noneTagText, 0, 180, 'utf-8') : null;
-
-
-    $_log->assigned = ReviewUserAssigned::where('logId', $_log->id)->get();
-    foreach ($_log->assigned as $item) {
-        if ($item->userId != null) {
-            $u = User::find($item->userId);
-            if ($u != null)
-                $item->name = $u->username;
-        }
-    }
+    $_log = getReviewContents($_log, $authUserId);
 
     $_log->questionAns = \DB::select('SELECT us.logId, us.questionId, us.ans, qus.id, qus.description, qus.ansType FROM questionUserAns AS us , questions AS qus WHERE us.logId = ' . $_log->id . ' AND qus.id = us.questionId ORDER BY qus.ansType');
     if (count($_log->questionAns) != 0) {
@@ -219,26 +131,135 @@ function reviewTrueType($_log){
         }
     }
 
-    $_log->userLike = null;
-    $_log->bookmark = false;
-    $_log->yourReview = false;
-    if (\auth()->check()) {
-        $u = \auth()->user();
-        $_log->userLike = LogFeedBack::where('logId', $_log->id)->where('userId', $u->id)->first();
-        if($_log->visitorId == $u->id)
-            $_log->yourReview = true;
+    return $_log;
+}
 
-        $bookmark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
-                            ->where('bookMarkReferences.group', 'review')
-                            ->where('bookMarks.userId', $u->id)
-                            ->where('bookMarks.referenceId', $_log->id)
-                            ->select(['bookMarks.id', 'bookMarks.userId', 'bookMarks.referenceId', 'bookMarks.bookMarkReferenceId'])
-                            ->first();
-        if($bookmark != null)
-            $_log->bookmark = true;
+function reviewTrueTypeIdArray($reviewIds){
+    $authUserId = auth()->check() ? auth()->user()->id : 0;
+
+    $reviews = LogModel::join('users', 'users.id', 'log.visitorId')
+                        ->whereIn('log.id', $reviewIds)
+                        ->orderByDesc('created_at')
+                        ->select(['log.*', 'users.username'])
+                        ->get();
+
+    foreach($reviews as $item)
+        $item = getReviewContents($item, $authUserId);
+
+    return $reviews;
+}
+
+function getReviewContents($item, $authUserId){
+
+    if($item->kindPlaceId != 0 && $item->placeId != 0) {
+        $kindPlace = Place::find($item->kindPlaceId);
+        $place = DB::table($kindPlace->tableName)->select(['id', 'name', 'cityId', 'file'])->find($item->placeId);
+
+        $item->mainFile = $kindPlace->fileName;
+        $item->placeName = $place->name;
+        $item->kindPlace = $kindPlace->name;
+        $item->placeUrl = createUrl($kindPlace->id, $place->id, 0, 0);
+
+        $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
+            ->where('cities.id', $place->cityId)
+            ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName'])
+            ->first();
+        $item->placeCity = $cityAndState->cityName;
+        $item->placeState = $cityAndState->stateName;
+
+        $item->where = "{$place->name} شهر {$cityAndState->cityName}، استان {$cityAndState->stateName}";
+
+        $folderName = "{$kindPlace->fileName}/{$place->file}";
+    }
+    else{
+        $folderName = "nonePlaces";
+        $item->where = '';
     }
 
-    return $_log;
+    $item->yourReview = $authUserId == $item->visitorId;
+    $item->userName = $item->username;
+    $item->userPageUrl = route('profile', ['username' => $item->username]);
+    $item->userPic = getUserPic($item->visitorId);
+
+    $likes = \DB::select("SELECT COUNT(IF(`like` = 1, 1, null)) `likeCount`, COUNT(IF(`like` = -1, 1, null)) `disLikeCount`, COUNT(IF(`userId` = {$authUserId}, `like`, null)) `youLike` FROM `logFeedBack` WHERE `logId` = {$item->id}");
+    $item->like = $likes[0]->likeCount;
+    $item->disLike = $likes[0]->disLikeCount;
+    $item->userLike = $likes[0]->youLike;
+
+    $getAnses = getAnsToComments($item->id);
+    $item->answersCount = $getAnses[1];
+    $item->answers = count($getAnses[0]) > 0 ? $getAnses[0] : [];
+
+
+    $noneTagText = strip_tags($item->text);
+    $item->summery = strlen($noneTagText) > 180 ? mb_substr($noneTagText, 0, 180, 'utf-8') : null;
+
+    $item->assigned = ReviewUserAssigned::join('users', 'users.id', 'reviewUserAssigned.userId')
+        ->where('reviewUserAssigned.logId', $item->id)
+        ->select(['users.username AS name'])
+        ->get();
+
+    $item->bookmark = false;
+    if ($authUserId != 0) {
+        $bookmark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
+            ->where('bookMarkReferences.group', 'review')
+            ->where('bookMarks.userId', $authUserId)
+            ->where('bookMarks.referenceId', $item->id)
+            ->select(['bookMarks.id', 'bookMarks.userId', 'bookMarks.referenceId', 'bookMarks.bookMarkReferenceId'])
+            ->first();
+        if($bookmark != null)
+            $item->bookmark = true;
+    }
+
+    $item->pics = ReviewPic::where('logId', $item->id)->get();
+    $item->pics = getReviewPicsURL($item->pics, $folderName);
+    if(count($item->pics) > 0){
+        $item->hasPic = true;
+        $item->mainPic = $item->pics[0]->picUrl;
+        $item->mainPicIsVideo = $item->pics[0]->isVideo;
+
+        if(count($item->pics) > 1){
+            $item->morePic = true;
+            $item->picCount = count($item->pics) - 1;
+        }
+        else
+            $item->morePic = false;
+    }
+    else {
+        $item->hasPic = false;
+        $item->picCount = 0;
+    }
+
+    if($item->created_at != null){
+        if(gettype($item->created_at) === 'object') {
+            $time = $item->created_at->format('H:i:s');
+            $date = verta($item->created_at)->format('Y-m-d');
+        }
+        else{
+            $dateAndTime = explode(' ', $item->created_at);
+            $time = $dateAndTime[1];
+            $date = Carbon::createFromFormat('Y-m-d', $dateAndTime[0]);
+        }
+    }
+    else if($item->date != null && $item->time != null){
+        if(strlen($item->time) == 1) $item->time = '000' . $item->time;
+        else if(strlen($item->time) == 2) $item->time = '00' . $item->time;
+        else if(strlen($item->time) == 3) $item->time = '0' . $item->time;
+
+        $carbon = Carbon::createFromFormat('Y-m-d', $item->date);
+        $date = \verta($carbon)->format('Y-m-d');
+        $time = substr($item->time, 0, 2) . ':' . substr($item->time, 2, 2) .':00';
+    }
+    try {
+        $time = explode(':', $time);
+        $date = explode('-', $date);
+        $item->timeAgo = Verta::createJalali($date[0], $date[1], $date[2], $time[0], $time[1], $time[2])->formatDifference();
+    }
+    catch (\Exception $exception){
+        $item->timeAgo = '';
+    }
+
+    return $item;
 }
 
 function getReviewPicsURL($pics, $placeFile){
@@ -261,7 +282,6 @@ function getReviewPicsURL($pics, $placeFile){
     }
     return $pics;
 }
-
 
 function questionTrueType($_ques){
     $user = User::whereId($_ques->visitorId);
