@@ -172,7 +172,7 @@ function openMobileFooterPopUps(_id){
 function mobileFooterProfileButton(_kind){
     let windowUrl = window.location;
     let url = windowUrl.origin + windowUrl.pathname;
-    console.log(_kind, url);
+
     if(_kind == 'setting')
         window.location.href = userSettingPageUrl;
     else if(_kind == 'follower')
@@ -261,14 +261,12 @@ function addReviewPlaceHolderToFooter(){
                 $('#footerExploreReviewSection').find('.smallReviewPlaceHolder').remove();
             },
             success: response => {
-                if(response.status == 'ok'){
+                if(response.status == 'ok')
                     createReviewUIForExplore(response.result);
-                }
-                console.log(response);
             },
-            error: err => {
-                console.log(err);
-            }
+            // error: err => {
+            //     console.log(err);
+            // }
         });
     }
 }
@@ -291,7 +289,7 @@ function createReviewUIForExplore(_result){
 function createReviewExploreMin(review){
     var normalText = review.text.replace(/(<([^>]+)>)/gi, "");
     return `<div class="reviewExploreSquare" onclick="getSingleFullReview(${review.id})">
-                    <div class="picSec">
+                    <div class="picSec ${review.mainPicIsVideo == 1 ? 'playIconOnPicSection' : ''}">
                         ${
                             review.mainPic != undefined ?
                                 `<img src="${review.mainPic}" class="resizeImgClass" onload="fitThisImg(this)">`
