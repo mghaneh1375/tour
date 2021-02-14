@@ -36,7 +36,8 @@
     @include('layouts.header1')
 
     <div class="hideOnPhone">
-        @include('general.secondHeader')
+        @include('pages.secondHeader')
+
         <div style="background: white; width: 100%; padding: 15px 0px;">
             <a href="{{route('festival.cook')}}" class="topPageAd">
                 <img src="{{URL::asset('images/esitrevda/bannerlong.webp')}}" >

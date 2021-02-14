@@ -298,7 +298,6 @@ async function resizeImageBeforeUploadInNewReview(_image, _file){
     });
     createNewFileUploadCardForNewReview(newReviewDataForUpload.files.length - 1);
     reviewFileUploadQueueForNewReview();
-
 }
 
 

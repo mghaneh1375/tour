@@ -1,3 +1,17 @@
+var reviewsCount;
+var imgCropNumber;
+var fileUploadNum = 0;
+var reviewPicNumber = 0;
+
+var assignedUser = [];
+var reviewMultiAns = [];
+var reviewRateAnsId = [];
+var rateQuestionAns = [];
+var reviewMultiAnsId = [];
+var reviewRateAnsQuestionId = [];
+var reviewMultiAnsQuestionId = [];
+var uploadedWriteReviewPicture = [];
+
 var isUploadFileForReviewInPlaceDetails = false;
 var fileToUploadInPlaceDetailReview = [];
 

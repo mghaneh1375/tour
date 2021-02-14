@@ -31,7 +31,7 @@ var result;
 var input;
 var data;
 
-function startCropper(ratio) {
+function startCropper(ratio = 0) {
 
   if(first) {
     'use strict';
@@ -54,7 +54,6 @@ function startCropper(ratio) {
     inputImage.value = null;
   }
   image = container.getElementsByTagName('img').item(0);
-  // image = document.getElementById('editPhotographerPics');
 
   options = {
     aspectRatio: ratio,
@@ -157,10 +156,8 @@ function startCropper(ratio) {
       result = cropper[data.method](data.option, data.secondOption);
       switch (data.method) {
         case 'rotate':
-          if (cropped && options.viewMode > 0) {
+          if (cropped && options.viewMode > 0)
             cropper.crop();
-          }
-
           break;
         case 'scaleX':
         case 'scaleY':
@@ -168,13 +165,12 @@ function startCropper(ratio) {
           break;
         case 'getCroppedCanvas':
           if (result) {
-            if(mode == 1)
-              $('#rectanglePicUploadPhoto').attr('src', result.toDataURL(uploadedImageType));
-            else
-              $('#squarePicPhotographer').attr('src', result.toDataURL(uploadedImageType));
-
-            $("#editPane").addClass('hidden');
-            $("#photoEditor").removeClass('hidden');
+            // if(mode == 1)
+            //   $('#rectanglePicUploadPhoto').attr('src', result.toDataURL(uploadedImageType));
+            // else
+            //   $('#squarePicPhotographer').attr('src', result.toDataURL(uploadedImageType));
+            // $("#editPane").addClass('hidden');
+            // $("#photoEditor").removeClass('hidden');
           }
 
           break;
@@ -257,25 +253,15 @@ function startCropper(ratio) {
   }
 }
 
-function setMode(m) {
-  mode = m;
-}
-
 var RotateX = -1;
 var RotateY = -1;
 function rotateUploadPhoto(_kind){
     if(_kind == 'Y') {
         cropper.scaleY(RotateY);
-        if(RotateY == 1)
-            RotateY = -1;
-        else
-            RotateY = 1;
+        RotateY = RotateY == 1 ? -1 : 1;
     }
     else if(_kind == 'X') {
         cropper.scaleX(RotateX);
-        if(RotateX == 1)
-            RotateX = -1;
-        else
-            RotateX = 1;
+        RotateX = RotateX == 1 ? -1 : 1;
     }
 }

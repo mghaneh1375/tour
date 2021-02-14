@@ -3,7 +3,6 @@
 
 <div id="darkModal" class="display-none" role="dialog"></div>
 
-{{--this dark modal with blur--}}
 <div id="darkModeMainPage" class="ui_backdrop dark" ></div>
 
 <script>
@@ -47,8 +46,6 @@
 
 @include('component.questionPack')
 
-@include('component.answerPack')
-
 @include('component.smallShowReview')
 
 @include('general.reportModal')
@@ -56,6 +53,8 @@
 @include('general.followerPopUp')
 
 @include('general.searches.userKoochitaSearch')
+
+@include('component.cropperModal')
 
 @if(Auth::check())
     @include('general.adminInPage')
@@ -69,9 +68,8 @@
     @include('general.writeReview')
 @endif
 
-<script defer src="{{URL::asset('js/component/load-image.all.min.js')}}"></script>
-
 <script>
+    var profilePageUrlAnswerPack = '{{url("profile/index")}}';
     var openHeadersTab = false;
     var seenToZero = false;
     var csrfTokenGlobal = '{{csrf_token()}}';
@@ -87,7 +85,6 @@
     window.deleteBookMarkUrl = '{{route("profile.bookMark.delete")}}';
     window.storeSeenLogUrl = '{{route('log.storeSeen')}}';
     window.searchInUserUrl = '{{route("findUser")}}';
-
 
     window.seenRelatedId = sessionStorage.getItem("lastPageLogId") == null ? 0 : sessionStorage.getItem("lastPageLogId");
     window.seenPageLogId = 0;
@@ -112,5 +109,7 @@
     });
 </script>
 
+<script src="{{URL::asset('js/component/answerPack.js?v='.$fileVersions)}}"></script>
 <script src="{{URL::asset('js/pages/forAllPages.js?v='.$fileVersions)}}"></script>
+<script defer src="{{URL::asset('js/component/load-image.all.min.js')}}"></script>
 

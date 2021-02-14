@@ -1,100 +1,4 @@
-.addPhotoBtn{
-    font-size: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    border-color: var(--koochita-light-green) !important;
-    background-color: var(--koochita-light-green) !important;
-    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, .25);
-    color: #fff;
-    cursor: pointer;
-}
-/*1st box of styles*/
-.uploadPicCropLeftSection{
-    display: flex;
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: 10px;
-}
 
-.errorField {
-    background-color: #f26C4F;
-}
-
-.rotateRight {
-    width: 22px;
-    height: 24px;
-    margin: 2px 3px;
-    background: url('../../images/cropImagesIcons/rotateRight.png');
-    background-size: contain;
-}
-
-.rotateLeft {
-    width: 22px;
-    height: 24px;
-    margin: 2px 3px;
-    background: url('../../images/cropImagesIcons/rotateLeft.png');
-    background-size: contain;
-}
-
-.flipHorizontal {
-    width: 22px;
-    height: 22px;
-    margin: 3px 3px;
-    background: url('../../images/cropImagesIcons/flip.png');
-    background-size: contain;
-}
-
-.flipVertical {
-    width: 22px;
-    height: 24px;
-    margin: 2px 3px;
-    background: url('../../images/cropImagesIcons/reflect.png');
-    background-size: contain;
-}
-
-.cropping {
-    width: 22px;
-    height: 23px;
-    margin: 3px 3px;
-    background: url('../../images/cropImagesIcons/cropping.png');
-    background-size: contain;
-}
-
-.clearing {
-    width: 23px;
-    height: 23px;
-    margin: 2px 3px;
-    background: url('../../images/cropImagesIcons/clearing.png');
-    background-size: contain;
-}
-
-.innerPic {
-    background: url("../../images/cropImagesIcons/bck.png");
-    width: 300px;
-    height: 285px;
-    background-size: cover;
-    position: absolute;
-    top: 0%;
-    left: 50%;
-    transform: translateX(-112%);
-}
-
-.uploadPicChoosePic {
-    position: relative;
-    height: 185px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
-
-.termsLabel {
-    display: inline-block;
-}
-
-.uploadBtn {
-    padding: 3px 15px;
-    margin-right: 5px;
-}
 
 /*2nd box of styles*/
 
@@ -224,51 +128,7 @@
 
 /*3rd box of styles*/
 
-.img-container {
-    margin: 5px 15px;
-    padding: 5px;
-    border: 1px solid #CCCCCC;
-}
-
 /*4th box of styles*/
-
-.docs-buttons {
-    padding: 10px 0;
-    border-top: 1px solid #cccccc;
-    display: flex;
-    align-items: center;
-    padding-top: 0;
-}
-
-.editBtnsGroup {
-    display: flex;
-    align-items: center;
-    vertical-align: middle;
-    margin: 0 7px;
-}
-
-.editBtns {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #cccccc;
-    display: inline-block;
-    margin: 0 2px;
-}
-
-.upload {
-    float: left;
-}
-
-.editSection {
-    padding: 0;
-    width: 50%;
-    right: auto;
-    /*height: 90%;*/
-    top: 5%;
-    position: fixed;
-    left: 25%;
-}
-
 
 .editSection > div:nth-child(1) > div:nth-child(1) {
     max-height: 600px;
@@ -438,23 +298,44 @@
     left: 0;
 }
 
-#editPane .ui_close_x {
-    right: initial;
-    left: 0;
-    top: -12px;
+
+.addPhotoBtn{
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    border-color: var(--koochita-light-green) !important;
+    background-color: var(--koochita-light-green) !important;
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, .25);
+    color: #fff;
+    cursor: pointer;
+}
+.innerPic {
+    background: url("../../images/cropImagesIcons/bck.png");
+    width: 300px;
+    height: 285px;
+    background-size: cover;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-112%);
 }
 
-.bodyEditFrame {
-    overflow: auto;
-    max-height: 93%;
+.uploadPicChoosePic {
+    position: relative;
+    height: 185px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
 
-.bodyEditFrame .row {
-    margin: 0;
+.termsLabel {
+    display: inline-block;
 }
 
-.bodyEditFrame .return {
-    float: left;
+
+
+.errorField {
+    background-color: #f26C4F;
 }
 
 .returnBtnEditPhoto {
@@ -560,17 +441,11 @@
     width: 100%;
 }
 
-
-#editPane > div:nth-child(1) > div:nth-child(1) {
-    max-height: 600px;
-    overflow: auto
-}
-
 #actions {
     margin: 20px 20px 0;
 }
 
-#photoEditor, #editPane {
+#photoEditor{
     padding: 0;
     top: 5%;
     position: fixed;
@@ -580,10 +455,6 @@
     overflow-y: auto;
     z-index: 999;
     background: white;
-}
-
-#editPane {
-    top: 5% !important;
 }
 
 #photoUploadHeader, .photoUploadHeader {
@@ -599,7 +470,6 @@
     height: 100%;
     top: 0px;
     right: 0px;
-    backdrop-filter: blur(2px);
     background-color: #000000bf;
 }
 .closeAddPhotographer{
@@ -1268,29 +1138,57 @@
     margin-bottom: 0px;
 }
 
+
+.mainPicUploadPercentDiv{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+}
+.mainUploadProgressBar{
+    position: absolute;
+    bottom: 25%;
+    background: #ffffffd1;
+    width: 90%;
+    right: 5%;
+    border-radius: 10px;
+    height: 25px;
+    display: flex;
+    overflow: hidden;
+}
+.progressPercent{
+    width: 0%;
+    background: var(--koochita-yellow);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
 @media (max-width: 1340px) {
-    #photoEditor, #editPane {
+    #photoEditor{
         left: 20%;
         right: 20%;
     }
 }
 
 @media (max-width: 1120px) {
-    #photoEditor, #editPane {
+    #photoEditor{
         left: 15%;
         right: 15%;
     }
 }
 
 @media (max-width: 960px) {
-    #photoEditor, #editPane {
+    #photoEditor{
         left: 10%;
         right: 10%;
     }
 }
 
 @media (max-width: 850px) {
-    #photoEditor, #editPane {
+    #photoEditor{
         left: 5%;
         right: 5%;
     }
@@ -1329,7 +1227,7 @@
         display: none !important;
     }
 
-    #photoEditor, #editPane {
+    #photoEditor{
         left: 0%;
         right: 0%;
         top: 0% !important;

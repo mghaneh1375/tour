@@ -1,5 +1,3 @@
-
-
 @if(!Request::is('main') && !Request::is('main/*') && !Request::is('/'))
     <style>
         .headerSecondSection{
@@ -226,173 +224,14 @@
     </div>
 </div>
 
-
 <script>
-    function showCampingModal(){
-        $('#campingHeader').css('display', 'flex');
-        resizeFitImg('resizeImgClass');
-    }
+    var bookMarksData = null;
 
-    function goToLanding(){
-        if(!checkLogin('{{route("addPlaceByUser.index")}}'))
-            return;
-        else
-            location.href = '{{route("addPlaceByUser.index")}}';
-    }
-
-    function openUploadPost(){
-        if(!checkLogin('{{route("addPlaceByUser.index")}}'))
-            return;
-        else
-            openUploadPhotoModal('کوچیتا', '{{route('addPhotoToPlace')}}', 0, 0, '');
-    }
-    function writeNewSafaranmeh(){
-        if(checkLogin()) {
-            $('#campingHeader').hide();
-            openNewSafarnameh();
-        }
-    }
-    function hideAllTopNavs(){
-        openHeadersTab = false;
-
-        $("#alert").hide();
-        $("#bookmarkmenu").hide();
-        $("#languageMenu").hide();
-        $("#my-trips-not").hide();
-        $("#profile-drop").hide();
-    }
-
-    $('#close_span_search').click(function(e) {
-        hideAllTopNavs();
-        $('#searchspan').animate({height: '0vh'});
-        $("#myCloseBtn").addClass('hidden');
-    });
-
-    $('#openSearch').click(function(e) {
-        hideAllTopNavs();
-        $("#myCloseBtn").removeClass('hidden');
-        $('#searchspan').animate({height: '100vh'});
-    });
-
+    var locked = false;
+    var superAccess = false;
+    var getRecentlyPath = '{{route('recentlyViewed')}}';
+    var addPlaceByUserPageUrl = '{{route("addPlaceByUser.index")}}';
+    var addPhotoToPlaceUrlHeader1 = "{{route('addPhotoToPlace')}}";
 </script>
 
-@if(Auth::check())
-    <script>
-        let bookMarksData = null;
-
-        var locked = false;
-        var superAccess = false;
-        var getRecentlyPath = '{{route('recentlyViewed')}}';
-
-
-        function openHeaderTabsVariable(){
-            setTimeout(() => openHeadersTab = true, 500);
-        }
-
-        $('#memberTop').click(function(e) {
-            if( $("#profile-drop").is(":hidden")) {
-                hideAllTopNavs();
-                $("#profile-drop").show();
-                openHeaderTabsVariable()
-            }
-            else {
-                hideAllTopNavs();
-            }
-        });
-
-        $('#bookmarkicon').click(function(e) {
-            if( $("#bookmarkmenu").is(":hidden")){
-                hideAllTopNavs();
-                $("#bookmarkmenu").css('display', 'block');
-                openHeaderTabsVariable()
-            }
-            else
-                hideAllTopNavs();
-        });
-
-        $('#languageIcon').click(function(e) {
-            if( $("#languageMenu").is(":hidden")){
-                hideAllTopNavs();
-                $("#languageMenu").css('display', 'block');
-                openHeaderTabsVariable()
-            }
-            else
-                hideAllTopNavs();
-        });
-
-        $('.notification-bell').click(function(e) {
-            if( $("#alert").is(":hidden")) {
-                hideAllTopNavs();
-                $("#alert").css('display', 'block');
-                setSeenAlert(0, '');
-                getAlertItems();
-                openHeaderTabsVariable();
-            }
-            else
-                hideAllTopNavs();
-        });
-
-        $("#Settings").on({
-            mouseenter: function () {
-                $(".settingsDropDown").css('display', 'block')
-            }, mouseleave: function () {
-                $(".settingsDropDown").hide()
-            }
-        });
-
-        function getRecentlyViews(containerId) {
-            $("#" + containerId).empty();
-
-            $.ajax({
-                type: 'post',
-                url: getRecentlyPath,
-                success: function (response) {
-
-                    response = JSON.parse(response);
-
-                    for(i = 0; i < response.length; i++) {
-                        element = "<div>";
-                        element += "<a class='masthead-recent-card' style='text-align: right !important;' target='_self' href='" + response[i].placeRedirect + "'>";
-                        element += "<div class='media-left' style='padding: 0 12px !important; margin: 0 !important;'>";
-                        element += "<div class='thumbnail' style='background-image: url(" + response[i].placePic + ");'></div>";
-                        element += "</div>";
-                        element += "<div class='content-right'>";
-                        element += "<div class='poi-title'>" + response[i].placeName + "</div>";
-                        element += "<div class='rating'>";
-
-                        if (response[i].placeRate == 5)
-                            element += "<div class='ui_bubble_rating bubble_50'></div>";
-                        else if (response[i].placeRate == 4)
-                            element += "<div class='ui_bubble_rating bubble_40'></div>";
-                        else if (response[i].placeRate == 3)
-                            element += "<div class='ui_bubble_rating bubble_30'></div>";
-                        else if (response[i].placeRate == 2)
-                            element += "<div class='ui_bubble_rating bubble_20'></div>";
-                        else
-                            element += "<div class='ui_bubble_rating bubble_10'></div>";
-
-                        element += "<br/>" + response[i].placeReviews + " {{__('نقد')}} ";
-                        element += "</div>";
-                        element += "<div class='geo'>" + response[i].placeCity + "/ " + response[i].placeState + "</div>";
-                        element += "</div>";
-                        element += "</a></div>";
-
-                        $("#" + containerId).append(element);
-                    }
-
-                }
-            });
-        }
-
-        function showRecentlyViews(element) {
-            if( $("#my-trips-not").is(":hidden")){
-                hideAllTopNavs();
-                $("#my-trips-not").css('display', 'block');
-                getRecentlyViews(element);
-            }
-            else
-                hideAllTopNavs();
-        }
-
-    </script>
-@endif
+<script src="{{URL::asset('js/pages/layout/header1.js')}}"></script>

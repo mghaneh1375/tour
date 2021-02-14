@@ -461,9 +461,9 @@ footer .profileFooterPopUp .exploreReviewInFooterSection .indicatorForNewReview{
 }
 
 footer .reviewExploreSquare{
-    width: 30%;
+    width: 32%;
     padding: 15%;
-    margin: 5px;
+    margin: 1px;
     position: relative;
 }
 footer .reviewExploreSquare .picSec{

@@ -255,25 +255,10 @@
 </div>
 
 <script>
-    var allReviews;
-    var reviewsCount;
-    var imgCropNumber;
-    var fileUploadNum = 0;
-    var reviewPicNumber = 0;
-
-    var assignedUser = [];
-    var reviewMultiAns = [];
-    var reviewRateAnsId = [];
-    var rateQuestionAns = [];
-    var reviewMultiAnsId = [];
-    var reviewRateAnsQuestionId = [];
-    var reviewMultiAnsQuestionId = [];
-    var uploadedWriteReviewPicture = [];
-
     var rateQuestion = {!! json_encode($rateQuestion) !!} ;
     var textQuestions = {!! json_encode($textQuestion) !!};
-
     var storeReviewURLM = '{{route("storeReview")}}';
 </script>
-<script defer src="{{URL::asset('js/pages/placeDetialsWriteReview.js?v=1')}}"></script>
+
+<script defer src="{{URL::asset('js/pages/placeDetails/placeDetialsWriteReview.js?v='.$fileVersions)}}"></script>
 

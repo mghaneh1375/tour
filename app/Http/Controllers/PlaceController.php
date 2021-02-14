@@ -2003,7 +2003,6 @@ class PlaceController extends Controller {
 
     public function addPhotoToPlace(Request $request)
     {
-
         $placeId = $request->placeId;
         $kindPlaceId = $request->kindPlaceId;
 
@@ -2016,26 +2015,51 @@ class PlaceController extends Controller {
                 if($kindPlace == null)
                     return response()->json(['status' => 'nok9']);
 
-                $kindPlaceName = $kindPlace->fileName;
                 $place = DB::table($kindPlace->tableName)->find($id);
 
                 if($place != null) {
 
-                    $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlaceName . '/' . $place->file;
+                    $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlace->fileName}/{$place->file}";
                     if(!file_exists($location))
                         mkdir($location);
 
+                    $tSize = [
+                        'width' => 150,
+                        'height' => null,
+                        'name' => 't-',
+                        'destination' => $location
+                    ];
+                    $lSize = [
+                        'width' => 200,
+                        'height' => null,
+                        'name' => 'l-',
+                        'destination' => $location
+                    ];
+                    $fSize =[
+                        'width' => 350,
+                        'height' => 250,
+                        'name' => 'f-',
+                        'destination' => $location
+                    ];
+                    $sSize =[
+                        'width' => 600,
+                        'height' => 400,
+                        'name' => 's-',
+                        'destination' => $location
+                    ];
+
                     if(isset($request->fileName) && $request->fileName == 'null'){
-                        $fileType = explode('.', $_FILES['pic']['name']);
-                        $filename = time().'_'.generateRandomString(3).'.'.end($fileType);
+
+                        $filename = time().'_'.generateRandomString(3).'.png';
+
                         $photographer = new PhotographersPic();
                         $photographer->userId = Auth::user()->id;
                         $photographer->name = $request->name;
+                        $photographer->alt = $request->alt;
+                        $photographer->description = $request->description;
                         $photographer->pic = $filename;
                         $photographer->kindPlaceId = $kindPlaceId;
                         $photographer->placeId = $placeId;
-                        $photographer->alt = $request->alt;
-                        $photographer->description = $request->description;
                         $photographer->like = 0;
                         $photographer->dislike = 0;
                         $photographer->isSitePic = 0;
@@ -2046,41 +2070,30 @@ class PlaceController extends Controller {
                     else
                         $filename = $request->fileName;
 
-                    if($request->fileKind == 'squ')
-                        $size = [
-                            [
-                                'width' => 150,
-                                'height' => null,
-                                'name' => 't-',
-                                'destination' => $location
-                            ],
-                            [
-                                'width' => 200,
-                                'height' => null,
-                                'name' => 'l-',
-                                'destination' => $location
-                            ],
-                        ];
-                    else
-                        $size = [
-                            [
-                                'width' => 350,
-                                'height' => 250,
-                                'name' => 'f-',
-                                'destination' => $location
-                            ],
-                            [
-                                'width' => 600,
-                                'height' => 400,
-                                'name' => 's-',
-                                'destination' => $location
-                            ],
-                        ];
+                    $size = [];
+                    if($request->fileKind === "mainFile"){
+                        if(strpos($request->otherSize, "squ") !== false){
+                            array_push($size, $tSize);
+                            array_push($size, $lSize);
+                        }
+                        if(strpos($request->otherSize, "req") !== false){
+                            array_push($size, $fSize);
+                            array_push($size, $sSize);
+                        }
+                    }
+                    else if($request->fileKind === "squ")
+                        $size = [$tSize, $lSize];
+                    else if($request->fileKind === "req")
+                        $size = [$fSize, $sSize];
+
+
+                    if(count($size) === 0)
+                        return response()->json(['status' => 'ok', 'result' => [$filename, '']]);
 
                     $image = $request->file('pic');
                     $result = resizeImage($image, $size, $filename);
                     if($result) {
-                        $url = \URL::asset('userPhoto/' . $kindPlaceName . '/' . $place->file.'/f-'.$request->fileName);
+                        $url = \URL::asset("userPhoto/{$kindPlace->fileName}/{$place->file}/f-{$filename}");
                         return response()->json(['status' => 'ok', 'result' => [$filename, $url]]);
                     }
                     else
