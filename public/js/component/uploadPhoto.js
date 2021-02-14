@@ -250,6 +250,7 @@ function newUploadPic(){
 }
 
 function goToPage3() {
+    newUploadPic();
     closeLoading();
     $('.mainPicUploadPercentDiv').hide();
 
