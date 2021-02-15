@@ -486,7 +486,7 @@
                         @for($i = 0; $i < 30; $i++)
                             <div class="item">
                                 <div class="pic">
-                                    <img src="http://localhost/assets/_images/mahalifood/kabab_bonab_azarbayejan_sharghi/t-1.jpg" class="resizeImgClass" onload="fitThisImg(this)">
+                                    <img src="https://static.koochita.com/_images/hotels/1206857/t-1603266313.jpg" class="resizeImgClass" onload="fitThisImg(this)">
                                 </div>
                                 <div class="content">
                                     <div class="firstRow">  {{$i}}هتل عباسی</div>
