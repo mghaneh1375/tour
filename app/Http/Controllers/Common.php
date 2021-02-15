@@ -1029,14 +1029,14 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
         }
 
         if($place != null && $place->file != 'none' && $place->file != null){
-            $location = __DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic;
+            $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/{$kind}/{$pic}";
             if (is_file($location))
-                return URL::asset('_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic);
+                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}/{$pic}");
         }
 
     }
 
-    return URL::asset('images/mainPics/nopicv01.jpg');
+    return URL::asset("images/mainPics/noPicSite.jpg");
 }
 
 

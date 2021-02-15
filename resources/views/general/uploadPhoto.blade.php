@@ -86,14 +86,14 @@
                              <a href="{{route('policies')}}" target="_blank" class="footerPolicyLink">{{__('صفحه مقررات')}}</a>
                          </div>
                      </div>
-                     <div class="template itemRow loading" style="height: 100%; overflow-y: auto; width: 100%">
+                     <div id="uploadedPicInfoPage" class="template itemRow loading hidden" style="height: 100%; overflow-y: auto; width: 100%">
                          <div class="row uploadPicMainSection" style="display: flex">
                              <div class="col-xs-7" style="margin-bottom: 10px;">
                                  <div>
                                      <div class="epPicBox">
                                          <div class="epPic">
-                                             <div class="imgContainer">
-                                                 <img alt="loading" id="rectanglePicUploadPhoto">
+                                             <div class="imgContainer rectangularImgBox">
+                                                 <img alt="loading" id="rectanglePicUploadPhoto" class="resizeImgClass" onload="fitThisImg(this)">
                                              </div>
                                          </div>
                                          <div class="step6picText epicText">{{__('قاب مستطیل')}}</div>
@@ -101,8 +101,8 @@
                                      </div>
                                      <div class="epPicBox">
                                          <div class="epPic">
-                                             <div class="imgContainer">
-                                                 <img alt="loading" id="squarePicUploadPhoto">
+                                             <div class="imgContainer squareImgBox">
+                                                 <img alt="loading" id="squarePicUploadPhoto" class="resizeImgClass" onload="fitThisImg(this)">
                                              </div>
                                          </div>
                                          <div class="epPicText">{{__('قاب مربع')}}</div>
@@ -193,15 +193,9 @@
                                  </div>
 
                              </div>
-{{--                             <div class="col-xs-12 footer secondStepFooter">--}}
-{{--                                 <div id="photographerErrors" style="color: red; position: absolute; bottom: 0px"></div>--}}
-{{--                                 <div class="upload secondFooterVerification">--}}
-{{--                                     <div onclick="resizeImg()" class="uploadBtn ui_button primary confirmButton" style="padding: 8px 20px;">{{__('تایید و انتشار')}}</div>--}}
-{{--                                 </div>--}}
-{{--                             </div>--}}
                          </div>
                      </div>
-                     <div class="successScreen hidden">
+                     <div id="sucessUploadPicPage" class="successScreen hidden">
                          <div class="successTextBox">
                             <div class="successText">{{__('موفق شدید')}}</div>
                             <div class="successTextDes">{{__('عکس شما برای ما ارسال گردید و پس از بررسی بارگذاری خواهد شد')}}</div>

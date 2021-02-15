@@ -251,6 +251,8 @@ function startCropper(ratio = 0) {
     inputImage.disabled = true;
     inputImage.parentNode.className += ' disabled';
   }
+
+  closeLoading();
 }
 
 var RotateX = -1;

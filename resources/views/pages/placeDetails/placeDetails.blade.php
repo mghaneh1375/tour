@@ -20,10 +20,10 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <meta name="keywords" content="{{$place->keyword}}">
     <meta property="og:url" content="{{Request::url()}}"/>
 
-    @if(count($photos) > 0)
-        <meta property="og:image" content="{{$photos[0]}}"/>
-        <meta property="og:image:secure_url" content="{{$photos[0]}}"/>
-        <meta name="twitter:image" content="{{$photos[0]}}"/>
+    @if(isset($place->mainPic))
+        <meta property="og:image" content="{{$place->mainPic}}"/>
+        <meta property="og:image:secure_url" content="{{$place->mainPic}}"/>
+        <meta name="twitter:image" content="{{$place->mainPic}}"/>
         <meta property="og:image:width" content="550"/>
         <meta property="og:image:height" content="367"/>
     @endif
@@ -41,40 +41,38 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <link rel="stylesheet" href="{{URL::asset('js/emoji/area/emojionearea.css?v='.$fileVersions)}}">
 
     <script>
-        var thisUrl = '{{Request::url()}}';
-        var userCode = '{{$userCode}}';
-        var yourRateForThisPlace = '{{$yourRate}}';
-        var userPic = '{{$userPic}}';
-        var userPhotos = {!! json_encode($userPhotos) !!};
-        var userVideo = {!! json_encode($userVideo) !!};
-        var placeMode = '{{$placeMode}}';
-        var getQuestions = '{{route('getQuestions')}}';
-        var likeLog = '{{route('likeLog')}}';
-        var reviewUploadPic = '{{route('reviewUploadPic')}}';
-        var doEditReviewPic = '{{route('doEditReviewPic')}}';
-        var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
-        var placeMode = '{{$placeMode}}';
-        var sliderPics = {!! json_encode($sliderPics) !!};
-        var photographerPics = {!! json_encode($photographerPics) !!};
-        var sitePics = {!! json_encode($sitePics) !!};
+
         var hotelDetails;
         var hotelDetailsInAskQuestionMode;
         var hotelDetailsInAnsMode;
         var hotelDetailsInSaveToTripMode;
+
+        var thisUrl = '{{Request::url()}}';
+        var userCode = '{{$userCode}}';
+        var userPic = '{{$userPic}}';
         var placeId = '{{$place->id}}';
+        var placeMode = '{{$placeMode}}';
+        var placeMode = '{{$placeMode}}';
         var kindPlaceId = '{{$kindPlaceId}}';
-        var getCommentsCount = '{{route('getCommentsCount')}}';
-        var totalPhotos = '{{count($sitePics) + count($userPhotos)}}';
-        var sitePhotosCount = {{count($sitePics)}};
-        var opOnComment = '{{route('opOnComment')}}';
-        var askQuestionDir = '{{route('askQuestion')}}';
+        var yourRateForThisPlace = '{{$yourRate}}';
+
+        var likeLog = '{{route('likeLog')}}';
         var sendAnsDir = '{{route('sendAns')}}';
+        var getPhotosDir = '{{route('getPhotos')}}';
+        var opOnComment = '{{route('opOnComment')}}';
         var showAllAnsDir = '{{route('showAllAns')}}';
+        var getQuestions = '{{route('getQuestions')}}';
+        var askQuestionDir = '{{route('askQuestion')}}';
+        var getPlacePicsUrl = '{{route("place.getPics")}}';
         var filterComments = '{{route('filterComments')}}';
         var getPhotoFilter = '{{route('getPhotoFilter')}}';
-        var getPhotosDir = '{{route('getPhotos')}}';
-        var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
+        var reviewUploadPic = '{{route('reviewUploadPic')}}';
+        var doEditReviewPic = '{{route('doEditReviewPic')}}';
+        var getCommentsCount = '{{route('getCommentsCount')}}';
         var deleteReviewPicUrl = '{{route('deleteReviewPic')}}';
+        var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
+        var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
+
     </script>
 
     <script defer src="{{URL::asset('js/emoji/area/emojionearea.js')}}"></script>
@@ -97,7 +95,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
             <div class="name">{{$place->name}}</div>
             <div class="buttonsH">
                 <div class="circlePlaceDetailButtons" onclick="addPlaceToBookMark()">
-                    <div class="icon saveAsBookmarkIcon  {{auth()->check() && $bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
+                    <div class="icon saveAsBookmarkIcon  {{$bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
                 </div>
                 <div class="circlePlaceDetailButtons" onclick="$(this).find('.sharesButtons').toggleClass('open')">
                     <div class="icon" style="z-index: 10;">
@@ -243,13 +241,12 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             </a>
                         </div>
                     </div>
+
                     <div class="clear-both"></div>
                     <div id="targetHelp_8" class="wideScreen targets float-left col-xs-6 pd-0">
                         <span onclick="addPlaceToBookMark()" class="ui_button save-location-7306673 saveAsBookmarkMainDiv">
-                            <div id="bookMarkIcon" class="saveAsBookmarkIcon {{auth()->check() && $bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
-                            <div class="saveAsBookmarkLabel">
-                                {{__('ذخیره این صفحه')}}
-                            </div>
+                            <div id="bookMarkIcon" class="saveAsBookmarkIcon {{$bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
+                            <div class="saveAsBookmarkLabel">ذخیره این صفحه</div>
                         </span>
                     </div>
 
@@ -267,31 +264,14 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                         <div class="inner">
                             <div class="primaryWrap">
                                 <div class="prw_rup prw_common_mercury_photo_carousel">
-                                    <div class="carousel bignav">
+                                    <div id="mainSliderPlaceHolderSectionPlaceDetail" class="placeHolderAnime"></div>
+                                    <div id="mainSliderSectionPlaceDetail" class="carousel bignav hidden">
                                         <div class="carousel_images carousel_images_header">
-                                            <div id="photographerAlbum" {{count($sliderPics) > 0 ? "onclick=showPhotoAlbum('sliderPic')" : ''}}>
+                                            <div id="photographerAlbum" onclick=showPhotoAlbum('sliderPic')>
                                                 <div id="mainSlider" class="swiper-container">
-                                                    <div id="mainSliderWrapper" class="swiper-wrapper">
-                                                        @foreach($sliderPics as $pics)
-                                                            <div class="swiper-slide" style="overflow: hidden">
-                                                                <img class="eachPicOfSlider resizeImgClass" src="{{$pics['s']}}" alt="{{$pics['alt']}}" onload="fitThisImg(this)">
-                                                                <div class="see_all_count_wrap hideOnPhone">
-                                                                    <span class="see_all_count">
-                                                                        <div class="circleBase type2" id="photographerIdPic" style="background-color: var(--koochita-light-green);">
-                                                                            <img src="{{$pics['userPic']}}" style="width: 100%; height: 100%; border-radius: 50%;">
-                                                                        </div>
-                                                                        <div class="display-inline-block mg-rt-10 mg-tp-2">
-                                                                            <span class="display-block font-size-12">عکس از</span>
-                                                                            <span class="display-block">{{$pics['name']}}</span>
-                                                                        </div>
-                                                                    </span>
-                                                                </div>
-
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
+                                                    <div id="mainSliderWrapper" class="swiper-wrapper"></div>
                                                 </div>
-                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"> {{count($sliderPics)}} </div>
+                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"></div>
                                             </div>
                                             <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>
                                         </div>
@@ -301,70 +281,46 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                 </div>
                             </div>
 
-                            <div class="secondaryWrap hideOnPhone">
-                                <div class="tileWrap" onclick="showPhotoAlbum('sitePics')">
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                                @if(count($sitePics) != 0)
-                                                    <span class="imgWrap imgWrap1stTemp">
-                                                        <img alt="{{$place->alt}}" src="{{$thumbnail}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                                    </span>
-                                                @else
-                                                    <span class="imgWrap imgWrap1stTemp">
-                                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                                    </span>
-                                                @endif
-                                            </div>
+                            <div class="secondaryWrap sideSliderPicsSection hideOnPhone">
 
-                                            <div class="albumInfo" {{count($sitePics) != 0 ? 'data-toggle="modal" data-target="#showingSitePicsModal"' : ''}}>
-                                                <span class="ui_icon camera">&nbsp;</span>
-                                                عکس‌های سایت - {{count($sitePics)}}
-                                            </div>
+                                <div id="sideSliderSite" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('sitePics')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>عکس‌های سایت -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
-                                <div class="tileWrap" onclick=showPhotoAlbum("userPics")>
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                        <span class="imgWrap imgWrap1stTemp">
-                                            @if(count($userPhotos) != 0)
-                                                <img src="{{$userPhotos[0]->pic}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                            @else
-                                                <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                            @endif
-                                        </span>
-                                            </div>
-                                            <div {{(count($userPhotos) != 0) ? 'onclick=showPhotoAlbum("userPics")' : "" }}  class="albumInfo">
-                                                <span class="ui_icon camera">&nbsp;</span>عکس‌های
-                                                کاربران - {{count($userPhotos)}}
-                                            </div>
+                                <div id="sideSliderUsers" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('userPics')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>عکس‌های کاربران -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
-                                <div class="tileWrap" onclick="showPhotoAlbum('userVideo')">
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                            <span class="imgWrap imgWrap1stTemp">
-                                                @if(count($userVideo) > 0)
-                                                    <img src="{{$userVideo[0]->picName}}" class="resizeImgClass" onload="fitThisImg(this)">
-                                                @else
-                                                    <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="centeredImg" width="100%"/>
-                                                @endif
-                                            </span>
-                                            </div>
-                                            <div class="albumInfo">
-                                                <span class="ui_icon camera">&nbsp;</span>
-                                                ویدیو و فیلم 360 - {{ count($userVideo) }}
-                                            </div>
+                                <div id="sideSliderVideos" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('userVideo')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>ویدیو و فیلم 360 -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="hSectionInPlaceDetail hideOnScreen">
                     @if($placeMode == 'mahaliFood')
                         <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>

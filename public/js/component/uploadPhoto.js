@@ -55,7 +55,7 @@ function submitPhoto(input) {
     $('#uploadPhotoPicName').val('');
     $('#uploadPhotoPicAlt').val('');
     $('#uploadPhotoDescription').val('');
-    $(".successScreen").addClass('hidden');
+    $("#sucessUploadPicPage").addClass('hidden');
 
     cleanImgMetaData(input, (_imgDataURL, _files) => {
         $('#rectanglePicUploadPhoto').attr('src', _imgDataURL);
@@ -63,12 +63,12 @@ function submitPhoto(input) {
         $('#mainPicUploadPhotoImg').attr('src', _imgDataURL);
         mainPicUploadPhoto = _imgDataURL;
         closeLoading();
+
+        resizeFitImg('resizeImgClass');
     });
 
-    $(".itemRow").css('display', 'block');
-    $(".startScreen").addClass('hidden');
-    $(".action").css('display', 'block');
-    $(".footer").removeClass('hidden');
+    $("#uploadedPicInfoPage").removeClass('hidden');
+    $("#dropArea").addClass('hidden');
 }
 
 function doEdit(ratio, result) {
@@ -82,8 +82,9 @@ function doEdit(ratio, result) {
 }
 
 function closePhotoModal(){
-    $(".successScreen").addClass('hidden');
     newUploadPic();
+
+    $("#sucessUploadPicPage").addClass('hidden');
     $('#addPhotographerModal').addClass('hidden');
 }
 
@@ -240,17 +241,22 @@ function newUploadPic(){
     $('#uploadPhotoPicAlt').val('');
     $('#uploadPhotoDescription').val('');
 
-    $(".itemRow").css('display', 'none');
-    $(".startScreen").removeClass('hidden');
-    $(".action").css('display', 'none');
-    $(".footer").addClass('hidden');
+    $("#uploadedPicInfoPage").addClass('hidden');
+    $("#dropArea").removeClass('hidden');
 
     squerImg = { file: null, blob: null};
     reqImg = {file: null, blob: null};
 }
 
 function goToPage3() {
-    newUploadPic();
+
+    $('#uploadPhotoInputPic').val('');
+    $('#uploadPhotoPicName').val('');
+    $('#uploadPhotoPicAlt').val('');
+    $('#uploadPhotoDescription').val('');
+    squerImg = { file: null, blob: null};
+    reqImg = {file: null, blob: null};
+
     closeLoading();
     $('.mainPicUploadPercentDiv').hide();
 
@@ -263,8 +269,8 @@ function goToPage3() {
     }
 
     $('#uploadedImgDiv').html(text);
-    $(".itemRow").css('display', 'none');
-    $(".successScreen").removeClass('hidden');
+    $("#uploadedPicInfoPage").addClass('hidden');
+    $("#sucessUploadPicPage").removeClass('hidden');
 }
 
 function searchPlaceForUploadPhoto(){

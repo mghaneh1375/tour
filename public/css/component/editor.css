@@ -93,6 +93,9 @@
     background-color: #e5e5e5;
     border: 1px solid #cccccc;
     border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .epEditPicText {
@@ -235,16 +238,24 @@
     font-weight: 700;
 }
 
-#rectanglePicUploadPhoto {
-    width: 213px;
-    height: 168px;
+#rectanglePicUploadPhoto, #squarePicUploadPhoto  {
     transform: rotate(0deg);
 }
-
-#squarePicUploadPhoto {
+.rectangularImgBox{
+    width: 200px;
+    max-height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.squareImgBox{
     width: 100px;
     height: 100px;
-    transform: rotate(0deg);
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 #photoTags {
@@ -676,9 +687,6 @@
 }
 .uploaderDlg .uploadList .itemRow:hover {
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.2);
-}
-.uploaderDlg .template {
-    display: none;
 }
 .uploaderDlg .itemRow .progress,
 .uploaderDlg .itemRow .action {

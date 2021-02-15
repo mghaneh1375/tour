@@ -1706,7 +1706,7 @@ DIV.ppr_rup.ppr_priv_hr_btf_similar_hotels .hotelName {
     position: relative;
 }
 
-#photographerIdPic {
+.photographerIdPic {
     display: inline-block;
     width: 45px;
     height: 45px;
@@ -4291,6 +4291,38 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .photos{
     display: none;
 }
 
+
+.sideSliderPicsSection{
+    display: flex;
+    flex-direction: column;
+}
+.sideSliderPicsSection .sideSecPicRow .mainContent{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.sideSliderPicsSection .sideSecPicRow .mainContent .moreContent{
+    position: absolute;
+    padding: 16px 8px 8px;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+    font-size: 14px;
+    white-space: normal;
+    background-color: transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, .8)));
+    background: -moz-linear-gradient(top, transparent 0, rgba(0, 0, 0, .8) 100%);
+    background: -o-linear-gradient(top, transparent 0, rgba(0, 0, 0, .8) 100%);
+    background: -ms-linear-gradient(top, transparent 0, rgba(0, 0, 0, .8) 100%);
+    background: linear-gradient(top, transparent 0, rgba(0, 0, 0, .8) 100%);
+    direction: rtl;
+    width: 100%;
+    text-align: right;
+}
 
 /*responsive for tablets*/
 @media only screen and (min-width: 992px) {

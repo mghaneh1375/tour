@@ -1,6 +1,7 @@
 var callBackAfterFinishCropImg = null;
 
 function openCropImgModal(_ratio, _img, _callBack) {
+    openLoading();
     openMyModal('editCropModal');
     $('#editUploadPhoto').attr('src', _img);
     startCropper(_ratio);

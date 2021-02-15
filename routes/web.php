@@ -99,13 +99,9 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
     Route::post('showAllAns', array('as' => 'showAllAns', 'uses' => 'PlaceController@showAllAns'));
 
-    Route::post('getOpinionRate', array('as' => 'getOpinionRate', 'uses' => 'PlaceController@getOpinionRate'));
-
     Route::post('getComment', array('as' => 'getComment', 'uses' => 'PlaceController@getComment'));
 
     Route::post('filterComments', array('as' => 'filterComments', 'uses' => 'PlaceController@filterComments'));
-
-    Route::get('seeAllAns/{questionId}/{mode?}/{logId?}', array('as' => 'seeAllAns', 'uses' => 'PlaceController@seeAllAns'));
 
     Route::post('showUserBriefDetail', array('as' => 'showUserBriefDetail', 'uses' => 'PlaceController@showUserBriefDetail'));
 
@@ -179,6 +175,7 @@ Route::group(array('middleware' => ['throttle:30', 'shareData']), function(){
 //detailsPage
 Route::get('place-details/{kindPlaceId}/{placeId}', 'PlaceController@setPlaceDetailsURL')->name('placeDetails');
 Route::middleware(['throttle:60'])->group(function (){
+
     Route::middleware(['shareData'])->group(function (){
         Route::get('myLocation', 'MainController@myLocation')->name('myLocation');
         Route::get('placeList/{kindPlaceId}/{mode}/{city?}', 'PlaceController@showPlaceList')->name('place.list');
@@ -190,6 +187,7 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
 
+    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
     Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
     Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
@@ -487,17 +485,11 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('addPhotoToComment/{placeId}/{kindPlaceId}', array('as' => 'addPhotoToComment', 'uses' => 'PlaceController@addPhotoToComment'));
 
-        Route::post('sendComment', array('as' => 'sendComment', 'uses' => 'PlaceController@sendComment'));
-
-        Route::post('setPlaceRate', array('as' => 'setPlaceRate', 'uses' => 'PlaceController@setPlaceRate'));
-
         Route::post('setBookMark', array('as' => 'setBookMark', 'uses' => 'PlaceController@setBookMark'));
 
         Route::get('/alert/get', 'HomeController@getAlerts')->name('getAlerts');
 
         Route::post('/alert/seen', 'HomeController@seenAlerts')->name('alert.seen');
-
-        Route::post('opOnComment', array('as' => 'opOnComment', 'uses' => 'PlaceController@opOnComment'));
 
         Route::post('deleteUserPicFromComment', array('as' => 'deleteUserPicFromComment', 'uses' => 'PlaceController@deleteUserPicFromComment'));
 
@@ -810,6 +802,13 @@ Route::group(array('middleware' => ['nothing']), function () {
     Route::get('majara-details/{placeId}/{placeName}/{mode?}', 'NotUseController@showMajaraDetail');
     Route::get('sanaiesogat-details/{placeId}/{placeName}/{mode?}', 'NotUseController@showSogatSanaieDetails');
     Route::get('mahaliFood-details/{placeId}/{placeName}/{mode?}', 'NotUseController@showMahaliFoodDetails');
+
+    Route::post('opOnComment', 'NotUseController@opOnComment')->name('opOnComment');
+    Route::post('getOpinionRate', 'NotUseController@getOpinionRate')->name('getOpinionRate');
+    Route::post('setPlaceRate', 'NotUseController@setPlaceRate')->name('setPlaceRate');
+    Route::post('sendComment', 'NotUseController@sendComment')->name('sendComment');
+    Route::get('seeAllAns/{questionId}/{mode?}/{logId?}', 'PlaceController@seeAllAns')->name('seeAllAns');
+
 });
 
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');

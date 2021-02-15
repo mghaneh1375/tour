@@ -85,7 +85,7 @@ class PlaceController extends Controller {
             return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->id));
     }
 
-    public function showPlaceDetails($kindPlaceName, $slug, Request $request){
+    public function showPlaceDetails($kindPlaceName, $slug){
         deleteReviewPic();  // common.php
 
         $kindPlace = Place::where('fileName', $kindPlaceName)->first();
@@ -137,37 +137,39 @@ class PlaceController extends Controller {
 
         $place->tags = PlaceTag::getTags($kindPlace->id, $place->id);
 
-        $hasLogin = true;
         $uId = -1;
+        $hasLogin = true;
+        $bookMark = false;
+        $save = false;
+        $youRate =0;
         if(auth()->check()){
             $uId = Auth::user()->id;
             $userCode = $uId . '_' . rand(10000,99999);
             $uPic = getUserPic(\auth()->user()->id); // common.php
+
+            $bookMark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
+                    ->where('userId', $uId)
+                    ->where('bookMarks.referenceId', $place->id)
+                    ->where('bookMarkReferences.tableName', $kindPlace->tableName)
+                    ->count() > 0;
+
+            $youRate = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->where('userId', $uId)->first();
+            $youRate = $youRate != null ? $youRate->rate : 0;
+
+            $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = " . $place->id . " and tripPlace.kindPlaceId = " . $kindPlaceId . " and tripPlace.tripId = trip.id and trip.uId = " . $uId);
+            if ($count[0]->tripPlaceNum > 0)
+                $save = true;
         }
         else{
             $userCode = null;
             $hasLogin = false;
             $uPic = getUserPic(); // common.php
         }
-        saveViewPerPage($kindPlaceId, $place->id); // common.php
 
-        $bmcheck = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
-                            ->where('userId', $uId)
-                            ->where('bookMarks.referenceId', $place->id)
-                            ->where('bookMarkReferences.tableName', $kindPlace->tableName)
-                            ->count();
-        $bookMark = $bmcheck > 0;
 
-        $youRate = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->where('userId', $uId)->first();
-        $youRate = $youRate != null ? $youRate->rate : 0;
 
         $getRates = getRate($place->id, $kindPlace->id);
         $rates = ['numOfRate' => $getRates[0], 'avg' => $getRates[1], 'yourRate' => $youRate];
-
-        $save = false;
-        $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = " . $place->id . " and tripPlace.kindPlaceId = " . $kindPlaceId . " and tripPlace.tripId = trip.id and trip.uId = " . $uId);
-        if ($count[0]->tripPlaceNum > 0)
-            $save = true;
 
         if(isset($place->phone) && $place->phone != null) {
             if(strpos($place->phone, '-') !== false)
@@ -181,18 +183,6 @@ class PlaceController extends Controller {
         $city = Cities::whereId($place->cityId);
         $state = State::whereId($city->stateId);
 
-        $photos = [];
-        $photos[count($photos)] = getPlacePic($place->id, $kindPlaceId, 'f');
-        $thumbnail = getPlacePic($place->id, $kindPlaceId, 's');
-
-        $pics = getAllPlacePicsByKind($kindPlaceId, $place->id); // common.php
-        $sitePics = $pics['sitePics'];
-        $photographerPics = $pics['photographerPics'];
-        $userPhotos = $pics['userPhotos'];
-        $userVideo = $pics['userVideo'];
-        $allPlacePics = $pics['allPics'];
-        $sliderPics = $pics['sliderPics'];
-
         $result = commonInPlaceDetails($kindPlaceId, $place->id, $city, $state, $place);  // common.php
         $reviewCount = $result[0];
         $ansReviewCount = $result[1];
@@ -201,11 +191,11 @@ class PlaceController extends Controller {
         $textQuestion = $result[4];
         $rateQuestion = $result[5];
 
+        $featId = [];
         $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
-        $featId = array();
         foreach ($features as $item) {
             $item->subFeat = PlaceFeatures::where('parent', $item->id)->get();
-            $fId = PlaceFeatures::where('parent', $item->id)->pluck('id')->toArray();
+            $fId = $item->subFeat->pluck('id')->toArray();
             $featId = array_merge($featId, $fId);
         }
         $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
@@ -220,15 +210,12 @@ class PlaceController extends Controller {
                         'cityName' => $city->name, 'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl,
                         'kindState' => 'city', 'kindPage' => 'place'];
 
-        $mainPic = count($sitePics) > 0 ? $sitePics[0]['f'] : URL::asset('images/mainPics/nopicv01.jpg');
-        $video = isset($place->video) ? $place->video : '';
-
         $reviewAction = Activity::where('name', 'نظر')->first();
         $place->firstReview = \DB::table('log')
-                    ->where('activityId', $reviewAction->id)
-                    ->where('kindPlaceId', $kindPlaceId)
-                    ->where('placeId', $place->id)
-                    ->first();
+                                    ->where('activityId', $reviewAction->id)
+                                    ->where('kindPlaceId', $kindPlaceId)
+                                    ->where('placeId', $place->id)
+                                    ->first();
         if($place->firstReview != null)
             $place->firstReview = reviewTrueType($place->firstReview);
 
@@ -241,21 +228,38 @@ class PlaceController extends Controller {
         if($place->firstQuestion != null)
             $place->firstQuestion = questionTrueType($place->firstQuestion);
 
-        $place->mainPic = $mainPic;
 
-        $localStorageData = ['kind' => 'place', 'name' => $place->name, 'city' => $city->name, 'state' => $state->name, 'mainPic' => $mainPic, 'redirect' => \Request::url()];
+//        $mainPic = count($sitePics) > 0 ? $sitePics[0]['f'] : URL::asset('images/mainPics/nopicv01.jpg');
+//        $video = isset($place->video) ? $place->video : '';
+        $place->mainPic = getPlacePic($place->id, $kindPlaceId, 'f');
+
+        $localStorageData = ['kind' => 'place', 'name' => $place->name, 'city' => $city->name, 'state' => $state->name, 'redirect' => \Request::url()];
         session(['inPage' => 'place_' . $kindPlaceId . '_' . $place->id]);
 
-        return view('pages.placeDetails.placeDetails', array('place' => $place, 'features' => $features , 'save' => $save, 'city' => $city, 'thumbnail' => $thumbnail,
+        return view('pages.placeDetails.placeDetails',
+            ['place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
             'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'], 'locationName' => $locationName, 'localStorageData' => $localStorageData,
-            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount, 'photographerPics' => $photographerPics, 'sliderPics' => $sliderPics,
+            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount,
             'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
-            'sitePics' => $sitePics, 'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
-            'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo,
-            'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'err' => '',
-            'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'kindPlace' => $kindPlace,
-            'placeMode' => $kindPlace->tableName, 'video' => $video,
-            'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()));
+            'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
+            'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
+//            'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'err' => '',
+//            'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'photographerPics' => $photographerPics, 'sliderPics' => $sliderPics, 'thumbnail' => $thumbnail, 'sitePics' => $sitePics, 'video' => $video,, 'mainPic' => $mainPic
+            'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()]);
+    }
+
+    public function getPlacePics()
+    {
+        $kindPlaceId = $_GET['kindPlaceId'];
+        $placeId = $_GET['placeId'];
+
+//        $photos = [];
+//        $photos[count($photos)] = getPlacePic($placeId, $kindPlaceId, 'f');
+//        $thumbnail = getPlacePic($placeId, $kindPlaceId, 's');
+
+        $pics = getAllPlacePicsByKind($kindPlaceId, $placeId); // common.php
+
+        return response()->json(['status' => 'ok', 'result' => $pics]);
     }
 
     public function getNearby()
@@ -503,228 +507,6 @@ class PlaceController extends Controller {
         }
     }
 
-    function opOnComment()
-    {
-
-        if (isset($_POST["logId"]) && isset($_POST["mode"])) {
-
-            $uId = Auth::user()->id;
-            $logId = makeValidInput($_POST["logId"]);
-            $mode = makeValidInput($_POST["mode"]);
-
-            $tmp = LogModel::whereId($logId);
-            if ($tmp == null || $tmp->confirm != 1)
-                return;
-
-            if ($mode == "like")
-                echo $this->likeComment($uId, $logId);
-            else if ($mode == "dislike")
-                echo $this->dislikeComment($uId, $logId);
-
-        }
-
-    }
-
-    function getOpinionRate()
-    {
-
-        if (isset($_POST["opinionId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeId"])) {
-
-            $uId = Auth::user()->id;
-            $condition = ['placeId' => makeValidInput($_POST["placeId"]), 'confirm' => 1,
-                'kindPlaceId' => makeValidInput($_POST["kindPlaceId"]), 'visitorId' => $uId,
-                'activityId' => Activity::whereName('امتیاز')->first()->id];
-
-            try {
-                $logId = LogModel::where($condition)->first()->id;
-
-                $condition = ['logId' => $logId, 'opinionId' => makeValidInput($_POST["opinionId"])];
-                echo UserOpinion::where($condition)->first()->rate;
-            } catch (Exception $x) {
-                echo 0;
-            }
-        }
-    }
-
-    function setPlaceRate()
-    {
-        if (isset($_POST["opinionId"]) && isset($_POST["rate"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeId"])) {
-
-            $placeId = makeValidInput($_POST["placeId"]);
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-            $uId = Auth::user()->id;
-            $activityId = Activity::whereName('امتیاز')->first()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId, 'activityId' => $activityId];
-
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-
-                $log = new LogModel();
-                $log->visitorId = $uId;
-                $log->time = getToday()["time"];
-                $log->activityId = $activityId;
-                $log->placeId = $placeId;
-                $log->kindPlaceId = $kindPlaceId;
-                $log->date = date('Y-m-d');
-                $log->confirm = 1;
-                $log->save();
-
-                $opinion = new UserOpinion();
-                $opinion->logId = $log->id;
-                $opinion->opinionId = makeValidInput($_POST["opinionId"]);
-                $opinion->rate = makeValidInput($_POST["rate"]);
-
-                try {
-                    $opinion->save();
-                } catch (Exception $x) {
-                    echo $x->getMessage();
-                }
-
-            } else {
-
-                $condition = ['logId' => $log->id, 'opinionId' => makeValidInput($_POST["opinionId"])];
-                $opinion = UserOpinion::where($condition)->first();
-                if ($opinion == null) {
-                    $opinion = new UserOpinion();
-                    $opinion->logId = $log->id;
-                    $opinion->opinionId = makeValidInput($_POST["opinionId"]);
-                    $opinion->rate = makeValidInput($_POST["rate"]);
-
-                    try {
-                        $opinion->save();
-                    } catch (Exception $x) {
-                        echo $x->getMessage();
-                    }
-
-                } else {
-                    $opinion->rate = makeValidInput($_POST["rate"]);
-
-                    try {
-                        $opinion->save();
-                    } catch (Exception $x) {
-                        echo $x->getMessage();
-                    }
-                }
-            }
-        }
-    }
-
-    function sendComment()
-    {
-
-        if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeStyle"]) &&
-            isset($_POST["reviewTitle"]) && isset($_POST["reviewText"]) && isset($_POST["src"]) &&
-            isset($_POST["seasonTrip"]) && isset($_POST["status"])) {
-
-            $placeId = makeValidInput($_POST["placeId"]);
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-            $placeStyle = makeValidInput($_POST["placeStyle"]);
-            $reviewText = makeValidInput($_POST["reviewText"]);
-            $reviewTitle = makeValidInput($_POST["reviewTitle"]);
-            $src = makeValidInput($_POST["src"]);
-            $seasonTrip = makeValidInput($_POST["seasonTrip"]);
-            $status = makeValidInput($_POST["status"]);
-            $uId = Auth::user()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId,
-                'activityId' => Activity::whereName('امتیاز')->first()->id];
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-                echo "-1";
-                return;
-            }
-
-            if (empty($reviewTitle)) {
-                echo "-2";
-                return;
-            }
-
-            if (empty($reviewText)) {
-                echo "-3";
-                return;
-            }
-
-            if (empty($placeStyle)) {
-                echo "-4";
-                return;
-            }
-
-            if (empty($src)) {
-                echo "-5";
-                return;
-            }
-
-            if (empty($seasonTrip)) {
-                echo "-6";
-                return;
-            }
-
-            if (Cities::whereName($src)->count() == 0) {
-                echo "-7";
-                return;
-            }
-
-            if ($status == 1)
-                $status = true;
-            else
-                $status = false;
-
-            $activityId = Activity::whereName('نظر')->first()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId,
-                'activityId' => $activityId];
-
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-                $log = new LogModel();
-                $log->visitorId = $uId;
-                $log->time = getToday()["time"];
-                $log->activityId = Activity::whereName('نظر')->first()->id;
-                $log->placeId = $placeId;
-                $log->kindPlaceId = $kindPlaceId;
-                $log->date = date('Y-m-d');
-                $log->text = $reviewText;
-                $log->subject = $reviewTitle;
-
-                $log->save();
-
-                $comment = new Comment();
-                $comment->status = $status;
-                $comment->src = $src;
-                $comment->logId = $log->id;
-                $comment->placeStyleId = $placeStyle;
-                $comment->seasonTrip = $seasonTrip;
-                $comment->save();
-
-            } else {
-
-                $log->text = $reviewText;
-                $log->subject = $reviewTitle;
-                $log->confirm = 0;
-                $log->save();
-
-                $comment = Comment::whereLogId($log->id)->first();
-
-                if ($comment != null) {
-                    $comment->status = $status;
-                    $comment->src = $src;
-                    $comment->logId = $log->id;
-                    $comment->placeStyleId = $placeStyle;
-                    $comment->seasonTrip = $seasonTrip;
-                    $comment->save();
-                }
-
-            }
-
-            echo "ok";
-
-        }
-
-    }
 
     function getComment()
     {
@@ -913,141 +695,6 @@ class PlaceController extends Controller {
             echo json_encode($logs);
         }
 
-    }
-
-    public function seeAllAns($questionId, $mode = "", $logId = -1)
-    {
-        $hasLogin = true;
-        if (!Auth::check())
-            $hasLogin = false;
-
-        $log = LogModel::whereId($questionId);
-        if ($log == null || $log->confirm != 1)
-            return Redirect::to('profile');
-
-        $placeId = $log->placeId;
-        $kindPlaceId = $log->kindPlaceId;
-
-        switch ($kindPlaceId) {
-            case 1:
-            default:
-                $place = Amaken::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/amaken/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "amaken";
-                break;
-            case 3:
-                $place = Restaurant::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/restaurant/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "restaurant";
-                break;
-            case 4:
-                $place = Hotel::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/hotels/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "hotel";
-                break;
-            case 6:
-                $place = Majara::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/majara/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "majara";
-                break;
-            case 8:
-                $place = Adab::whereId($placeId);
-                if ($place->category == 3) {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                } else {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/soghat/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                }
-                $placeMode = "adab";
-                break;
-        }
-
-        $city = Cities::whereId($place->cityId);
-        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId,
-            'activityId' => Activity::whereName('پاسخ')->first()->id,
-            'relatedTo' => $questionId];
-
-        $answers = LogModel::where($condition)->get();
-
-        foreach ($answers as $answer) {
-
-            $user = User::whereId($answer->visitorId);
-            $pic = $user->picture;
-
-            if (count(explode('.', $pic)) != 2) {
-                $defaultPic = DefaultPic::whereId($pic);
-                if ($defaultPic == null)
-                    $pic = URL::asset('defaultPic/' . $defaultPic->name);
-                else
-                    $pic = URL::asset('defaultPic/' . DefaultPic::first()->name);
-            } else {
-                $pic = URL::asset('userPhoto/' . $pic);
-            }
-
-            $condition = ['logId' => $answer->id, 'like_' => 1];
-            $answer->rate = OpOnActivity::where($condition)->count();
-            $condition = ['logId' => $answer->id, 'dislike' => 1];
-            $answer->rate -= OpOnActivity::where($condition)->count();
-
-            $answer->userPhoto = $pic;
-            $city = Cities::whereId($user->cityId);
-            $answer->city = $city->name;
-            $answer->state = State::whereId($city->stateId)->name;
-            $answer->visitorId = $user->username;
-            $answer->date = convertDate($answer->date);
-        }
-
-        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId,
-            'activityId' => Activity::whereName('نظر')->first()->id];
-        $reviews = LogModel::where($condition)->count();
-
-        $question = LogModel::whereId($questionId);
-        if ($question != null) {
-
-            $user = User::whereId($question->visitorId);
-            $pic = $user->picture;
-
-            if (count(explode('.', $pic)) != 2) {
-                $defaultPic = DefaultPic::whereId($pic);
-                if ($defaultPic == null)
-                    $pic = URL::asset('defaultPic/' . $defaultPic->name);
-                else
-                    $pic = URL::asset('defaultPic/' . DefaultPic::first()->name);
-            } else {
-                $pic = URL::asset('userPhoto/' . $pic);
-            }
-
-            $question->userPhoto = $pic;
-
-            $city = Cities::whereId($user->cityId);
-            $question->city = $city->name;
-            $question->state = State::whereId($city->stateId)->name;
-            $question->visitorId = $user->username;
-            $question->date = convertDate($question->date);
-        }
-
-        return view('questionList', array('placePic' => $placePic, 'city' => $city->name,
-            'state' => State::whereId($city->stateId)->name, 'placeId' => $placeId, 'placeName' => $place->name,
-            'kindPlaceId' => $kindPlaceId, 'answers' => $answers, 'mode' => $mode, 'logId' => $logId,
-            'rate' => $place->fullRate, 'hasLogin' => $hasLogin,
-            'reviews' => $reviews, 'question' => $question, 'placeMode' => $placeMode));
     }
 
     public function getPlaceStyles()
@@ -3354,73 +3001,5 @@ class PlaceController extends Controller {
         }
 
         return;
-    }
-
-    private function likeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->dislike = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->like_ = 1;
-        $opOnActivity->save();
-        echo $out;
-    }
-
-    private function dislikeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->like_ = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->dislike = 1;
-        $opOnActivity->save();
-        echo $out;
     }
 }

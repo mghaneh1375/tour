@@ -1,116 +1,11 @@
 var isOpenRateButton = false;
+
 var photographerPicsForAlbum = [];
 var sliderPicForAlbum = [];
 var sitePicsForAlbum = [];
 var userPhotosForAlbum = [];
 var userVideoForAlbum = [];
 var allPlacePics = [];
-
-photographerPics.map(item => {
-    var arr = {
-        'id': item['id'],
-        'sidePic': item['l'],
-        'mainPic': item['s'],
-        'userPic': item['userPic'],
-        'userName': item['name'],
-        'picName': item['picName'],
-        'like': item['like'],
-        'dislike': item['dislike'],
-        'alt': item['alt'],
-        'description': item['description'],
-        'uploadTime': item['fromUpload'],
-        'showInfo': item['showInfo'],
-        'userLike': item['userLike'],
-    };
-    photographerPicsForAlbum.push(arr);
-});
-sitePics.map(item => {
-    var arr = {
-        'id': item['id'],
-        'sidePic': item['l'],
-        'mainPic': item['s'],
-        'userPic': item['userPic'],
-        'userName': item['name'],
-        'like': item['like'],
-        'dislike': item['dislike'],
-        'alt': item['alt'],
-        'description': item['description'],
-        'uploadTime': item['fromUpload'],
-        'showInfo': item['showInfo'],
-        'userLike': item['userLike'],
-    };
-    sitePicsForAlbum.push(arr);
-});
-sliderPics.map(item =>{
-    var arr = {
-        'id': item['id'],
-        'sidePic': item['l'],
-        'mainPic': item['s'],
-        'userPic': item['userPic'],
-        'userName': item['name'],
-        'like': item['like'],
-        'dislike': item['dislike'],
-        'alt': item['alt'],
-        'description': item['description'],
-        'uploadTime': item['fromUpload'],
-        'showInfo': item['showInfo'],
-        'userLike': item['userLike'],
-    };
-    sliderPicForAlbum.push(arr);
-    allPlacePics.push(arr);
-});
-userPhotos.map(item => {
-    var arr = {
-        'id': item['id'],
-        'sidePic': item['pic'],
-        'mainPic': item['pic'],
-        'userPic': item['userPic'],
-        'userName': item['username'],
-        'uploadTime': item['time'],
-        'showInfo': false,
-    };
-    userPhotosForAlbum.push(arr);
-    allPlacePics.push(arr);
-});
-userVideo.map(item => {
-    var arr = {
-        id: item['id'],
-        sidePic: item['picName'],
-        mainPic: item['picName'],
-        userPic: item['userPic'],
-        userName: item['username'],
-        video: item['video'],
-        uploadTime: item['time'],
-        showInfo: false,
-    };
-    userVideoForAlbum.push(arr);
-    allPlacePics.push(arr);
-});
-
-
-if (sliderPics.length > 0) {
-    new Swiper('#mainSlider', {
-        spaceBetween: 0,
-        centeredSlides: true,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        navigation: {
-            prevEl: '.swiper-button-next',
-            nextEl: '.swiper-button-prev',
-        },
-    });
-}
-else {
-    $('.mainSliderNavBut').css('display', 'none');
-    $('.see_all_count_wrap').css('display', 'none');
-    text = `<div class="swiper-slide" style="overflow: hidden">
-                <img class="eachPicOfSlider resizeImgClass" src="${noPicUrl}" style="width: 100%;">
-            </div>`;
-    $('#mainSliderWrapper').append(text);
-}
 
 function getVideoFromTv(){
     $.ajax({
@@ -265,7 +160,6 @@ function filterChoices(element) {
 }
 
 function showPhotoAlbum(_kind) {
-    console.log(_kind, sliderPics);
     if($(window).width() <= 767)
         createPhotoModal('آلبوم عکس', allPlacePics);// in general.photoAlbumModal.blade.php
     else {
@@ -315,8 +209,178 @@ function addThisPlaceToTrip() {
 }
 
 
-$(document).ready(() => {
+function getPlacePics(){
+    $.ajax({
+        type: 'GET',
+        url: `${getPlacePicsUrl}?kindPlaceId=${kindPlaceId}&placeId=${placeId}`,
+        success: response => {
+            if(response.status == 'ok')
+                fillPlacePicSections(response.result);
+        },
+        error: err =>{
+
+        }
+    })
+}
+
+function fillPlacePicSections(_result){
+    var sideSecPicRowElement = $('.sideSecPicRow');
+    var sitePicElement = $('#sideSliderSite');
+    var userPicElement = $('#sideSliderUsers');
+    var videoPicElement = $('#sideSliderVideos');
+
+    $('#mainSliderPlaceHolderSectionPlaceDetail').remove();
+    $('#mainSliderSectionPlaceDetail').removeClass('hidden');
+    sideSecPicRowElement.find('.placeHolderAnime').remove();
+    sideSecPicRowElement.find('.mainContent').removeClass('hidden');
+
+    if(_result['sitePics'].length > 0){
+        sitePicElement.find('img').attr('src', _result['sitePics'][0].f);
+        sitePicElement.find('.countOfPic').text(_result['sitePics'].length);
+    }
+    if(_result['userPhotos'].length > 0){
+        userPicElement.find('img').attr('src', _result['userPhotos'][0].pic);
+        userPicElement.find('.countOfPic').text(_result['userPhotos'].length);
+    }
+    if(_result['userVideo'].length > 0){
+        videoPicElement.find('img').attr('src', _result['userVideo'][0].picName);
+        videoPicElement.find('.countOfPic').text(_result['userVideo'].length);
+    }
+
+
+    _result['photographerPics'].map(item => {
+        var arr = {
+            'id': item['id'],
+            'sidePic': item['l'],
+            'mainPic': item['s'],
+            'userPic': item['userPic'],
+            'userName': item['name'],
+            'picName': item['picName'],
+            'like': item['like'],
+            'dislike': item['dislike'],
+            'alt': item['alt'],
+            'description': item['description'],
+            'uploadTime': item['fromUpload'],
+            'showInfo': item['showInfo'],
+            'userLike': item['userLike'],
+        };
+        photographerPicsForAlbum.push(arr);
+    });
+    _result['sitePics'].map(item => {
+        var arr = {
+            'id': item['id'],
+            'sidePic': item['l'],
+            'mainPic': item['s'],
+            'userPic': item['userPic'],
+            'userName': item['name'],
+            'like': item['like'],
+            'dislike': item['dislike'],
+            'alt': item['alt'],
+            'description': item['description'],
+            'uploadTime': item['fromUpload'],
+            'showInfo': item['showInfo'],
+            'userLike': item['userLike'],
+        };
+        sitePicsForAlbum.push(arr);
+    });
+    _result['sliderPics'].map(item =>{
+        var arr = {
+            'id': item['id'],
+            'sidePic': item['l'],
+            'mainPic': item['s'],
+            'userPic': item['userPic'],
+            'userName': item['name'],
+            'like': item['like'],
+            'dislike': item['dislike'],
+            'alt': item['alt'],
+            'description': item['description'],
+            'uploadTime': item['fromUpload'],
+            'showInfo': item['showInfo'],
+            'userLike': item['userLike'],
+        };
+        sliderPicForAlbum.push(arr);
+        allPlacePics.push(arr);
+    });
+    _result['userPhotos'].map(item => {
+        var arr = {
+            'id': item['id'],
+            'sidePic': item['pic'],
+            'mainPic': item['pic'],
+            'userPic': item['userPic'],
+            'userName': item['username'],
+            'uploadTime': item['time'],
+            'showInfo': false,
+        };
+        userPhotosForAlbum.push(arr);
+        allPlacePics.push(arr);
+    });
+    _result['userVideo'].map(item => {
+        var arr = {
+            id: item['id'],
+            sidePic: item['picName'],
+            mainPic: item['picName'],
+            userPic: item['userPic'],
+            userName: item['username'],
+            video: item['video'],
+            uploadTime: item['time'],
+            showInfo: false,
+        };
+        userVideoForAlbum.push(arr);
+        allPlacePics.push(arr);
+    });
+
     $('#allPlacePicturesCount').text(allPlacePics.length);
+
+    if (_result['sliderPics'].length > 0) {
+        var html = '';
+        _result['sliderPics'].map(item => {
+            html += `<div class="swiper-slide" style="overflow: hidden">
+                                                            <img class="eachPicOfSlider resizeImgClass" src="${item.s}" alt="${item.alt}" onload="fitThisImg(this)">
+                                                            <div class="see_all_count_wrap hideOnPhone">
+                                                                <span class="see_all_count">
+                                                                    <div class="photographerIdPic circleBase type2" style="background-color: var(--koochita-light-green);">
+                                                                        <img src="${item.userPic}" style="width: 100%; height: 100%; border-radius: 50%;">
+                                                                    </div>
+                                                                    <div class="display-inline-block mg-rt-10 mg-tp-2">
+                                                                        <span class="display-block font-size-12">عکس از</span>
+                                                                        <span class="display-block">${item.name}</span>
+                                                                    </div>
+                                                                </span>
+                                                            </div>
+                                                        </div>`;
+        });
+        $('#mainSliderWrapper').html(html);
+
+        new Swiper('#mainSlider', {
+            spaceBetween: 0,
+            centeredSlides: true,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                prevEl: '.swiper-button-next',
+                nextEl: '.swiper-button-prev',
+            },
+        });
+    }
+    else {
+        $('.mainSliderNavBut').addClass('hidden');
+        $('.see_all_count_wrap').addClass('hidden');
+        text = `<div class="swiper-slide" style="overflow: hidden">
+                                                        <img class="eachPicOfSlider resizeImgClass" src="${noPicUrl}" style="width: 100%;">
+                                                    </div>`;
+        $('#mainSliderWrapper').append(text);
+    }
+
+
+}
+
+
+$(document).ready(() => {
+    getPlacePics();
+
     autosize($(".inputBoxInputComment"));
     autosize($(".inputBoxInputAnswer"));
 
