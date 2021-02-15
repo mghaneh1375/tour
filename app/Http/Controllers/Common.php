@@ -106,16 +106,16 @@ function getTakenMedal($userId){
             $item->take = $countsTaken[$item->kindPlaceId . '_' . $item->activityId];
             if ($item->take >= $item->floor) {
                 $item->take = $item->floor;
-                $item->offPic = \URL::asset('_images/badges/' . $item->pic_2);
+                $item->offPic = URL::asset('_images/badges/' . $item->pic_2);
                 $item->percent = 0;
             }
             else {
-                $item->offPic = \URL::asset('_images/badges/' . $item->pic_1);
+                $item->offPic = URL::asset('_images/badges/' . $item->pic_1);
                 $item->percent = floor(($item->take / $item->floor) * 100);
             }
 
             $item->text = 'این مدال بعد از ' . $item->floor . ' تا ' . $act->name . ' ' . $kindPlaceName . ' بدست می آید';
-            $item->onPic = \URL::asset('_images/badges/' . $item->pic_2);
+            $item->onPic = URL::asset('_images/badges/' . $item->pic_2);
         }
     }
 
@@ -686,9 +686,11 @@ function compressImage($source, $destination, $quality){
 }
 
 function getAllPlacePicsByKind($kindPlaceId, $placeId){
+
+    $userPhotosArr = [];
+    $userVideoArr = [];
     $sliderPics = [];
     $sitePics = [];
-    $allPics = [];
 
     if(auth()->check())
         $user = auth()->user();
@@ -701,10 +703,17 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
 
     $userPhotos = DB::select('SELECT pic.* , users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 0 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
     foreach ($userPhotos as $item){
-        $item->pic = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
-        $item->userPic = getUserPic($item->userId);
-        $item->time = getDifferenceTimeString($item->created_at);
-        $item->id = 'review_' . $item->id;
+        $item->pic = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}");
+
+        array_push($userPhotosArr, [
+            'id' => "review_{$item->id}",
+            'sidePic' => $item->pic ,
+            'mainPic' => $item->pic ,
+            'userName' => $item->username ,
+            'userPic' => getUserPic($item->userId) ,
+            'uploadTime' => getDifferenceTimeString($item->created_at) ,
+            'showInfo' => false ,
+        ]);
     }
 
     $userVideo = DB::select('SELECT pic.*, users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 1 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
@@ -717,66 +726,61 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
         else
             $thumbnail = $item->thumbnail;
 
-        $item->picName = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $thumbnail);
-        $item->videoUrl = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
+        $item->picName = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$thumbnail}");
+        $item->videoUrl = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}");
 
-        $item->video = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
-        $item->userPic = getUserPic($item->userId);
-
-        $item->time = getDifferenceTimeString($item->created_at);
-        $item->id = 'review_' . $item->id;
+        array_push($userVideoArr, [
+            'id' => "review_{$item->id}",
+            'sidePic' => $item->picName ,
+            'mainPic' => $item->picName ,
+            'userPic' => getUserPic($item->userId) ,
+            'userName' => $item->username ,
+            'video' => $item->videoUrl ,
+            'uploadTime' => getDifferenceTimeString($item->created_at) ,
+            'showInfo' => false ,
+        ]);
     }
 
+    $baseLocation = __DIR__.'/../../../../assets/_images';
+
     $koochitaPic = URL::asset('images/icons/KOFAV0.svg');
-    if(is_file(__DIR__ .'/../../../../assets/_images/' . $MainFile . '/' . $place->file . '/f-' . $place->picNumber)) {
-        $s = ['id' => 0,
-            's' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $place->picNumber),
-            'f' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/f-' . $place->picNumber),
-            'l' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/l-' . $place->picNumber),
-            't' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/t-' . $place->picNumber),
-            'mainPic' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/' . $place->picNumber),
+    if(is_file("{$baseLocation}/{$MainFile}/{$place->file}/f-{$place->picNumber}")) {
+        $s = [
+            'id' => 'sitePic_0',
+            'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$place->picNumber}"),
+            'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$place->picNumber}"),
             'alt' => $place->alt,
-            'name' => 'کوچیتا',
+            'userName' => 'کوچیتا',
             'userPic' => $koochitaPic,
             'showInfo' => false,
-            'like' => 0,
-            'dislike' => 0,
-            'description' => '',
-            'fromUpload' => ''];
+            'uploadTime' => ''
+        ];
 
         array_push($sitePics, $s);
         array_push($sliderPics, $s);
     }
-    foreach ($place->pics as $item){
-        if(is_file(__DIR__ .'/../../../../assets/_images/' . $MainFile . '/' . $place->file . '/f-' . $item->picNumber)) {
-            $s = ['id' => $place->id,
-                's' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $item->picNumber),
-                'f' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/f-' . $item->picNumber),
-                'l' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/l-' . $item->picNumber),
-                't' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/t-' . $item->picNumber),
-                'mainPic' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $item->picNumber),
+    foreach ($place->pics as $index => $item){
+        if(is_file("{$baseLocation}/{$MainFile}/{$place->file}/f-{$item->picNumber}")) {
+            $s = [
+                'id' => "sitePic_{$index}",
+                'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$item->picNumber}"),
+                'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$item->picNumber}"),
                 'alt' => $place->alt,
-                'name' => 'کوچیتا',
+                'userName' => 'کوچیتا',
                 'userPic' => $koochitaPic,
                 'showInfo' => false,
-                'like' => 0,
-                'dislike' => 0,
-                'description' => '',
-                'fromUpload' => ''];
+                'uploadTime' => ''
+            ];
+
             array_push($sitePics, $s);
             array_push($sliderPics, $s);
         }
     }
 
-//    if(\auth()->check())
-//        $photographerPic = DB::select('SELECT photo.* FROM photographersPics AS photo WHERE photo.kindPlaceId = ' . $kindPlaceId . ' AND photo.placeId  = ' . $placeId . ' AND ((photo.userId = ' . $user->id . ') OR ( photo.status = 1)) ORDER BY created_at');
-//    else
-//        $photographerPic = DB::select('SELECT * FROM photographersPics WHERE kindPlaceId = ' . $kindPlaceId . ' AND placeId  = ' . $placeId . ' AND status = 1 ORDER BY created_at');
-
-    $photographerPic = PhotographersPic::where('kindPlaceId', $kindPlaceId)->where('placeId', $placeId)->where(function($query){
-        if(auth()->check()) $query->where('userId', auth()->user()->id)->orWhere('status', 1);
-        else $query->where('status', 1);
-    })->orderByDesc('created_at')->get();
+    $photographerPic = PhotographersPic::join('users', 'users.id', 'photographersPics.userId')->where('photographersPics.kindPlaceId', $kindPlaceId)->where('photographersPics.placeId', $placeId)->where(function($query){
+        if(auth()->check()) $query->where('photographersPics.userId', auth()->user()->id)->orWhere('photographersPics.status', 1);
+        else $query->where('photographersPics.status', 1);
+    })->orderByDesc('photographersPics.created_at')->select(['photographersPics.*', 'users.username'])->get();
 
     if($photographerPic != null) {
         $pid = [0];
@@ -801,36 +805,30 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
         }
     }
 
-    $photographerPics = [];
     foreach ($photographerPic as $item){
-        $user = User::find($item->userId);
-        $userName = $user->username;
-        if($user != null) {
-            $s = [
-                'id' => 'photographer_'.$item->id,
-                's' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/s-' . $item->pic),
-                'f' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/f-' . $item->pic),
-                'l' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/l-' . $item->pic),
-                't' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/t-' . $item->pic),
-                'mainPic' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic),
-                'alt' => $item->alt,
-                'name' => $userName,
-                'picName' => $item->name,
-                'userPic' =>  getUserPic($user->id),
-                'showInfo' => true,
-                'like' => $item->like,
-                'dislike' => $item->dislike,
-                'description' => $item->description,
-                'fromUpload' => getDifferenceTimeString($item->created_at),
-                'userLike' => $item->userLike
-            ];
-            array_unshift($photographerPics, $s);
-            array_unshift($allPics, $s);
-            array_unshift($sliderPics, $s);
-        }
+        $s = [
+            'id' => "photographer_{$item->id}",
+            'sidePic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/l-{$item->pic}"),
+            'mainPic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/s-{$item->pic}"),
+            'userPic' =>  getUserPic($item->userId),
+            'userName' => $item->username,
+            'picName' => $item->name,
+            'alt' => $item->alt,
+            'showInfo' => true,
+            'like' => $item->like,
+            'dislike' => $item->dislike,
+            'description' => $item->description,
+            'uploadTime' => getDifferenceTimeString($item->created_at),
+            'userLike' => $item->userLike
+        ];
+
+        if($item->isSitePic == 1)
+            array_push($sliderPics, $s);
+
+        array_unshift($userPhotosArr, $s);
     }
 
-    return ['sitePics' => $sitePics, 'photographerPics' => $photographerPics, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'allPics' => $allPics, 'sliderPics' => $sliderPics];
+    return ['sitePics' => $sitePics, 'userPhotos' => $userPhotosArr, 'userVideo' => $userVideoArr, 'sliderPics' => $sliderPics];
 }
 
 function deleteReviewPic(){
@@ -989,7 +987,7 @@ function getUserPic($id = 0){
     if(!array_key_exists($id, $userPicsInArray)){
         $user = User::find($id);
         if ($id == 0 || $user == null)
-            $uPic = \URL::asset('images/mainPics/noPicSite.jpg');
+            $uPic = URL::asset('images/mainPics/noPicSite.jpg');
         else {
             if (strpos($user->picture, 'http') !== false)
                 $uPic = $user->picture;
@@ -1029,9 +1027,9 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
         }
 
         if($place != null && $place->file != 'none' && $place->file != null){
-            $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/{$kind}/{$pic}";
+            $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}";
             if (is_file($location))
-                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}/{$pic}");
+                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}");
         }
 
     }
@@ -1138,7 +1136,7 @@ function getCityPic($cityId){
             if(count($pics) != 0) {
                 foreach ($pics as $pic) {
                     if(is_file($loc . '/' . $pic->pic)) {
-                        $resultPic = \URL::asset('_images/city/' . $city->id . '/' . $pic->pic);
+                        $resultPic = URL::asset('_images/city/' . $city->id . '/' . $pic->pic);
                         break;
                     }
                 }
@@ -1167,7 +1165,7 @@ function getCityPic($cityId){
             }
         }
         else
-            $resultPic = \URL::asset('_images/city/' . $city->id . '/' . $city->image);
+            $resultPic = URL::asset('_images/city/' . $city->id . '/' . $city->image);
 
     }
 

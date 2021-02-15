@@ -1,6 +1,5 @@
 var isOpenRateButton = false;
 
-var photographerPicsForAlbum = [];
 var sliderPicForAlbum = [];
 var sitePicsForAlbum = [];
 var userPhotosForAlbum = [];
@@ -165,8 +164,8 @@ function showPhotoAlbum(_kind) {
     else {
         if (_kind == 'sliderPic' && sliderPicForAlbum.length > 0)
             createPhotoModal('آلبوم عکس', sliderPicForAlbum);// in general.photoAlbumModal.blade.php
-        if (_kind == 'photographer' && photographerPicsForAlbum.length > 0)
-            createPhotoModal('عکس های عکاسان', photographerPicsForAlbum);// in general.photoAlbumModal.blade.php
+        // if (_kind == 'photographer' && photographerPicsForAlbum.length > 0)
+        //     createPhotoModal('عکس های عکاسان', photographerPicsForAlbum);// in general.photoAlbumModal.blade.php
         else if (_kind == 'sitePics' && sitePicsForAlbum.length > 0)
             createPhotoModal('عکس های سایت', sitePicsForAlbum);// in general.photoAlbumModal.blade.php
         else if (_kind == 'userPics' && userPhotosForAlbum.length > 0)
@@ -216,9 +215,6 @@ function getPlacePics(){
         success: response => {
             if(response.status == 'ok')
                 fillPlacePicSections(response.result);
-        },
-        error: err =>{
-
         }
     })
 }
@@ -235,99 +231,38 @@ function fillPlacePicSections(_result){
     sideSecPicRowElement.find('.mainContent').removeClass('hidden');
 
     if(_result['sitePics'].length > 0){
-        sitePicElement.find('img').attr('src', _result['sitePics'][0].f);
+        sitePicElement.find('img').attr('src', _result['sitePics'][0].sidePic);
         sitePicElement.find('.countOfPic').text(_result['sitePics'].length);
     }
     if(_result['userPhotos'].length > 0){
-        userPicElement.find('img').attr('src', _result['userPhotos'][0].pic);
+        userPicElement.find('img').attr('src', _result['userPhotos'][0].sidePic);
         userPicElement.find('.countOfPic').text(_result['userPhotos'].length);
     }
     if(_result['userVideo'].length > 0){
-        videoPicElement.find('img').attr('src', _result['userVideo'][0].picName);
+        videoPicElement.find('img').attr('src', _result['userVideo'][0].sidePic);
         videoPicElement.find('.countOfPic').text(_result['userVideo'].length);
     }
 
 
-    _result['photographerPics'].map(item => {
-        var arr = {
-            'id': item['id'],
-            'sidePic': item['l'],
-            'mainPic': item['s'],
-            'userPic': item['userPic'],
-            'userName': item['name'],
-            'picName': item['picName'],
-            'like': item['like'],
-            'dislike': item['dislike'],
-            'alt': item['alt'],
-            'description': item['description'],
-            'uploadTime': item['fromUpload'],
-            'showInfo': item['showInfo'],
-            'userLike': item['userLike'],
-        };
-        photographerPicsForAlbum.push(arr);
-    });
     _result['sitePics'].map(item => {
-        var arr = {
-            'id': item['id'],
-            'sidePic': item['l'],
-            'mainPic': item['s'],
-            'userPic': item['userPic'],
-            'userName': item['name'],
-            'like': item['like'],
-            'dislike': item['dislike'],
-            'alt': item['alt'],
-            'description': item['description'],
-            'uploadTime': item['fromUpload'],
-            'showInfo': item['showInfo'],
-            'userLike': item['userLike'],
-        };
-        sitePicsForAlbum.push(arr);
-    });
-    _result['sliderPics'].map(item =>{
-        var arr = {
-            'id': item['id'],
-            'sidePic': item['l'],
-            'mainPic': item['s'],
-            'userPic': item['userPic'],
-            'userName': item['name'],
-            'like': item['like'],
-            'dislike': item['dislike'],
-            'alt': item['alt'],
-            'description': item['description'],
-            'uploadTime': item['fromUpload'],
-            'showInfo': item['showInfo'],
-            'userLike': item['userLike'],
-        };
-        sliderPicForAlbum.push(arr);
-        allPlacePics.push(arr);
+        sitePicsForAlbum.push(item);
+        allPlacePics.push(item);
     });
     _result['userPhotos'].map(item => {
-        var arr = {
-            'id': item['id'],
-            'sidePic': item['pic'],
-            'mainPic': item['pic'],
-            'userPic': item['userPic'],
-            'userName': item['username'],
-            'uploadTime': item['time'],
-            'showInfo': false,
-        };
-        userPhotosForAlbum.push(arr);
-        allPlacePics.push(arr);
+        userPhotosForAlbum.push(item);
+        allPlacePics.push(item);
     });
     _result['userVideo'].map(item => {
-        var arr = {
-            id: item['id'],
-            sidePic: item['picName'],
-            mainPic: item['picName'],
-            userPic: item['userPic'],
-            userName: item['username'],
-            video: item['video'],
-            uploadTime: item['time'],
-            showInfo: false,
-        };
-        userVideoForAlbum.push(arr);
-        allPlacePics.push(arr);
+        userVideoForAlbum.push(item);
+        allPlacePics.push(item);
     });
+    _result['sliderPics'].map(item => sliderPicForAlbum.push(item));
+
+    // _result['photographerPics'].map(item => {
+    //     photographerPicsForAlbum.push(item);
+    //     allPlacePics.push(item);
+    // });
+
 
     $('#allPlacePicturesCount').text(allPlacePics.length);
 
@@ -335,19 +270,19 @@ function fillPlacePicSections(_result){
         var html = '';
         _result['sliderPics'].map(item => {
             html += `<div class="swiper-slide" style="overflow: hidden">
-                                                            <img class="eachPicOfSlider resizeImgClass" src="${item.s}" alt="${item.alt}" onload="fitThisImg(this)">
-                                                            <div class="see_all_count_wrap hideOnPhone">
-                                                                <span class="see_all_count">
-                                                                    <div class="photographerIdPic circleBase type2" style="background-color: var(--koochita-light-green);">
-                                                                        <img src="${item.userPic}" style="width: 100%; height: 100%; border-radius: 50%;">
-                                                                    </div>
-                                                                    <div class="display-inline-block mg-rt-10 mg-tp-2">
-                                                                        <span class="display-block font-size-12">عکس از</span>
-                                                                        <span class="display-block">${item.name}</span>
-                                                                    </div>
-                                                                </span>
-                                                            </div>
-                                                        </div>`;
+                        <img class="eachPicOfSlider resizeImgClass" src="${item.mainPic}" alt="${item.alt}" onload="fitThisImg(this)">
+                        <div class="see_all_count_wrap hideOnPhone">
+                            <span class="see_all_count">
+                                <div class="photographerIdPic circleBase type2" style="background-color: var(--koochita-light-green);">
+                                    <img src="${item.userPic}" style="width: 100%; height: 100%; border-radius: 50%;">
+                                </div>
+                                <div class="display-inline-block mg-rt-10 mg-tp-2">
+                                    <span class="display-block font-size-12">عکس از</span>
+                                    <span class="display-block">${item.userName}</span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>`;
         });
         $('#mainSliderWrapper').html(html);
 
@@ -369,11 +304,10 @@ function fillPlacePicSections(_result){
         $('.mainSliderNavBut').addClass('hidden');
         $('.see_all_count_wrap').addClass('hidden');
         text = `<div class="swiper-slide" style="overflow: hidden">
-                                                        <img class="eachPicOfSlider resizeImgClass" src="${noPicUrl}" style="width: 100%;">
-                                                    </div>`;
+                    <img class="eachPicOfSlider resizeImgClass" src="${noPicUrl}" style="width: 100%;">
+                </div>`;
         $('#mainSliderWrapper').append(text);
     }
-
 
 }
 

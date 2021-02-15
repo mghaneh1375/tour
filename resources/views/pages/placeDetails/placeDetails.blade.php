@@ -926,6 +926,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
     </script>
 
-    <script src="{{URL::asset('js/pages/placeDetails/placeDetails.js')}}"></script>
+    <script src="{{URL::asset('js/pages/placeDetails/placeDetails.js?v='.$fileVersions)}}"></script>
 @stop
 

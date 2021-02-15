@@ -138,10 +138,10 @@ class PlaceController extends Controller {
         $place->tags = PlaceTag::getTags($kindPlace->id, $place->id);
 
         $uId = -1;
+        $youRate =0;
         $hasLogin = true;
         $bookMark = false;
         $save = false;
-        $youRate =0;
         if(auth()->check()){
             $uId = Auth::user()->id;
             $userCode = $uId . '_' . rand(10000,99999);
@@ -165,7 +165,6 @@ class PlaceController extends Controller {
             $hasLogin = false;
             $uPic = getUserPic(); // common.php
         }
-
 
 
         $getRates = getRate($place->id, $kindPlace->id);
@@ -229,11 +228,16 @@ class PlaceController extends Controller {
             $place->firstQuestion = questionTrueType($place->firstQuestion);
 
 
-//        $mainPic = count($sitePics) > 0 ? $sitePics[0]['f'] : URL::asset('images/mainPics/nopicv01.jpg');
-//        $video = isset($place->video) ? $place->video : '';
         $place->mainPic = getPlacePic($place->id, $kindPlaceId, 'f');
 
-        $localStorageData = ['kind' => 'place', 'name' => $place->name, 'city' => $city->name, 'state' => $state->name, 'redirect' => \Request::url()];
+        $localStorageData = [
+            'kind' => 'place',
+            'name' => $place->name,
+            'city' => $city->name,
+            'state' => $state->name,
+            'redirect' => \Request::url(),
+            'mainPic' => $place->mainPic
+        ];
         session(['inPage' => 'place_' . $kindPlaceId . '_' . $place->id]);
 
         return view('pages.placeDetails.placeDetails',
@@ -243,8 +247,6 @@ class PlaceController extends Controller {
             'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
             'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
             'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
-//            'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'err' => '',
-//            'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'photographerPics' => $photographerPics, 'sliderPics' => $sliderPics, 'thumbnail' => $thumbnail, 'sitePics' => $sitePics, 'video' => $video,, 'mainPic' => $mainPic
             'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()]);
     }
 
@@ -252,10 +254,6 @@ class PlaceController extends Controller {
     {
         $kindPlaceId = $_GET['kindPlaceId'];
         $placeId = $_GET['placeId'];
-
-//        $photos = [];
-//        $photos[count($photos)] = getPlacePic($placeId, $kindPlaceId, 'f');
-//        $thumbnail = getPlacePic($placeId, $kindPlaceId, 's');
 
         $pics = getAllPlacePicsByKind($kindPlaceId, $placeId); // common.php
 
