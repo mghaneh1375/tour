@@ -411,8 +411,15 @@ footer .userInfoMobileFooterBody {
     flex-direction: column;
     padding-bottom: 0px;
     overflow: auto;
-    /*height: calc(100vh - 60px);*/
-    height: calc(100% - 145px);
+    height: calc(100% - 60px);
+    /*height: calc(100% - 145px);*/
+    padding: 0px;
+}
+footer .userInfoMobileFooterBody .threeDotIconVertical{
+    position: absolute;
+    left: 5px;
+    font-size: 32px;
+    top: 0px;
 }
 footer .userInfoMobileFooterBody > div:first-child {
     display: flex;
@@ -436,10 +443,18 @@ footer .profileFooterPopUp .profileScoreMainDiv{
 footer .profileFooterPopUp .lp_phoneMenuBar{
     width: 100%;
 }
+footer .profileFooterPopUp .tabBut{
+    margin: 0px 5px;
+    border: solid 1px !important;
+}
 footer .profileFooterPopUp .tabBut .name{
     font-size: 16px !important;
     font-weight: bold;
     color: gray;
+}
+
+footer .profileFooterPopUp .tabBut.selected{
+    background: #fcc15647;
 }
 footer .profileFooterPopUp .tabBut.selected .name{
     color: var(--koochita-blue)
@@ -461,9 +476,9 @@ footer .profileFooterPopUp .exploreReviewInFooterSection .indicatorForNewReview{
 }
 
 footer .reviewExploreSquare{
-    width: 32%;
+    width: 33.3333%;
     padding: 15%;
-    margin: 1px;
+    /*margin: 1px;*/
     position: relative;
 }
 footer .reviewExploreSquare .picSec{
@@ -1530,6 +1545,8 @@ footer .profileFooterPopUp .firsLine{
     display: flex;
     width: 100%;
     align-items: center;
+    padding: 15px;
+    padding-bottom: 0px;
 }
 footer .profileFooterPopUp .firsLine .pic{
     width: 60px;
@@ -1564,11 +1581,10 @@ footer .profileFooterPopUp .firsLine .pic > img{
 footer .profileFooterPopUp .secondLine {
     padding: 5px 25px;
     font-size: 18px;
-    padding-right: 5px;
     font-weight: normal;
 }
 footer .profileFooterPopUp .buttonsLine {
-
+    margin-bottom: 10px;
 }
 footer .profileFooterPopUp .buttonsLine .bLine{
     display: flex;
@@ -2107,6 +2123,138 @@ footer .bookMarkSSec .infoSec .state{
     align-items: center;
     border-radius: 6px;
     font-weight: normal;
+}
+
+
+footer .profileFooterPopUp .profileSideMenu{
+    position: absolute;
+    left: 0;
+    width: 0px;
+    background: #00000082;
+    z-index: 2;
+    height: 100%;
+    border-right: solid 1px black;
+    box-shadow: 0px 0px 5px 3px #0000004a;
+    transition: .2s;
+    overflow: hidden;
+}
+footer .profileFooterPopUp .profileSideMenu.open{
+    width: 100%;
+}
+footer .profileFooterPopUp .profileSideMenu .body{
+    width: 60%;
+    height: 100%;
+    background: white;
+    margin-right: auto;
+    top: 0px;
+}
+footer .profileFooterPopUp .profileSideMenu .iconClose{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    font-size: 30px;
+    z-index: 1;
+}
+footer .profileFooterPopUp .profileSideMenu .tabs .tab{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 5px 5px;
+    border-bottom: solid 1px #d3d3d340;
+    color: #333;
+}
+footer .profileFooterPopUp .profileSideMenu .tabs .tab .icon{
+    margin-left: 10px;
+}
+footer .profileFooterPopUp .profileSideMenu .tabs .tab .icon .pic{
+    width: 20px;
+    height: 20px;
+}
+
+
+footer .profileFooterPopUp .searchReviewMFooter{
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    background: white;
+    z-index: 2;
+    transition: .3s;
+    overflow: hidden;
+    bottom: 60px;
+}
+footer .profileFooterPopUp .searchReviewMFooter.open{
+    height: calc(100% - 60px);
+}
+
+footer .profileFooterPopUp .searchReviewMFooter .searchBar{
+    display: flex;
+    padding-top: 15px;
+    padding-right: 15px;
+    height: 50px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchBar .iconClose{
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchBar input{
+    width: 100%;
+    border: none;
+    background: #8080803b;
+    padding: 0px 10px;
+    border-radius: 5px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchKindTab{
+    display: flex;
+    width: 100%;
+    padding-top: 20px;
+    height: 50px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchKindTab .tab{
+    width: 33%;
+    text-align: center;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 3px;
+    color: gray;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchKindTab .tab.select{
+    font-weight: bold;
+    border-bottom: solid 2px black;
+    color: black;
+}
+
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec{
+    height: calc(100% - 100px);
+    overflow: auto;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec .item{
+    display: flex;
+    padding: 5px 5px;
+    margin: 5px 0px;
+    border-bottom: solid 1px lightgray;
+    align-items: center;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec .item .pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec .item .content{
+    font-size: 15px;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec .item .content .firstRow{
+    font-size: 1em;
+}
+footer .profileFooterPopUp .searchReviewMFooter .searchResultSec .item .content .secRow{
+    font-size: .7em;
+    color: gray;
 }
 
 @keyframes writePostAnimationInMobile {

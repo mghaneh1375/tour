@@ -79,6 +79,7 @@
     </div>
 
     <script>
+        var updateMsgTime = 20000;
         var contacts = {!! json_encode($contacts) !!};
         var uId = {{auth()->user()->id}};
         var showMsgUserId = 0;
@@ -282,6 +283,7 @@
                 })
             }
         }
+
         function createContacts(_contacts){
             $('#contacts').empty();
 
@@ -344,10 +346,10 @@
                     console.log(err);
                 }
             });
-            setTimeout(updateMsg, 4000);
+            setTimeout(updateMsg, updateMsgTime);
         }
 
-        setTimeout(updateMsg, 5000);
+        setTimeout(updateMsg, updateMsgTime);
 
         @if(isset($specUser) && $specUser != null)
             specUser = {!! $specUser !!};

@@ -15,13 +15,13 @@ function openCropImgModal(_ratio, _img, _callBack) {
 }
 
 function submitCropInModal(){
-    openLoading();
-
-    var canvas1;
-    canvas1 = cropper.getCroppedCanvas();
-    canvas1.toBlob(blob => {
-        callBackAfterFinishCropImg(blob, canvas1.toDataURL());
-        closeCropImgModal();
+    openLoading(false, () => {
+        var canvas1;
+        canvas1 = cropper.getCroppedCanvas();
+        canvas1.toBlob(blob => {
+            callBackAfterFinishCropImg(blob, canvas1.toDataURL());
+            closeCropImgModal();
+        });
     });
 }
 

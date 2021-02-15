@@ -120,6 +120,35 @@ function submitUpload(type){
 
     resizeImgTo(im, {width: null, height: 1080}, (_src, _file) => {
 
+        // uploadLargeFile(uploadPhotoUrl, _file, {code: newReviewDataForUpload.code, is360, isVideo}, (_percent, _fileName = '', _result = '') => {
+        //     if(_percent == 'done') {
+        //         newReviewFileInUpload = false;
+        //         newReviewDataForUpload.files[uploadFileIndex].savedFile = _fileName;
+        //         if(uFile.kind == 'image'){
+        //             $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
+        //             newReviewDataForUpload.files[uploadFileIndex].uploaded = 1;
+        //             reviewFileUploadQueueForNewReview();
+        //         }
+        //         else
+        //             uploadReviewVideoThumbnail(uploadFileIndex);
+        //     }
+        //     else if(_percent == 'error') {
+        //         newReviewFileInUpload = false;
+        //         $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
+        //         newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
+        //         reviewFileUploadQueueForNewReview();
+        //     }
+        //     else if(_percent == 'cancelUpload'){
+        //         newReviewFileInUpload = false;
+        //         newReviewDataForUpload.files[uploadFileIndex].uploaded = -1;
+        //         doDeleteNewReviewFile(uploadFileIndex);
+        //     }
+        //     else {
+        //         newReviewDataForUpload.code = _result;
+        //         $('#uplaodedImgForNewReview_' + uFile.code).find('.processCounter').text(_percent + '%');
+        //     }
+        // });
+
         var uploadPhotoFormData = new FormData();
         uploadPhotoFormData.append('name', $('#uploadPhotoPicName').val());
         uploadPhotoFormData.append('alt', $('#uploadPhotoPicAlt').val());

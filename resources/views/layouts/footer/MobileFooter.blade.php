@@ -429,8 +429,78 @@
             </div>
 
             <div class="mainPopUp rightPopUp profileFooterPopUp">
+
+                <div id="profileSideMenu" class="profileSideMenu">
+                    <div class="body">
+                        <div class="iconClose" onclick="openSideMenuInProfileFooter()"></div>
+                        <div class="tabs">
+                            <a href="{{route('profile')}}" class="tab">
+                                <div class="icon far fa-user"></div>
+                                <div class="name">صفحه من</div>
+                            </a>
+                            <a href="{{route('profile.message.page')}}" class="tab">
+                                <div class="icon far fa-envelope"></div>
+                                <div class="name">پیام ها</div>
+                            </a>
+                            <div class="tab" onclick="goToAddPlacePageInFooter()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/koochit.svg')}}" class="pic" alt="koochitaSho">
+                                </div>
+                                <div class="name">افزودن مکان</div>
+                            </div>
+                            <div class="tab" onclick="openModalWriteNewReview()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="pic" alt="addPicture">
+                                </div>
+                                <div class="name">ایجاد پست</div>
+                            </div>
+                            <div class="tab" onclick="writeNewSafaranmeh()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="pic" alt="addSafarnameh">
+                                </div>
+                                <div class="name">نوشتن سفرنامه</div>
+                            </div>
+                            <a href="{{route('profile.accountInfo')}}" class="tab">
+                                <div class="icon settingIcon"></div>
+                                <div class="name">تنظیمات</div>
+                            </a>
+                            <a href="{{route("logout")}}" class="tab">
+                                <div class="icon fas fa-sign-out-alt"></div>
+                                <div class="name">خروج</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profileSearchReviewsMFooter" class="searchReviewMFooter">
+                    <div class="searchBar">
+                        <input id="searchInReviewMFooter" type="text" placeholder="جستجو">
+                        <div class="iconClose" onclick="openSearchModalReviewMFooter()"></div>
+                    </div>
+                    <div class="searchKindTab">
+                        <div class="tab select" onclick="chooseThisSearchTypeReviewMFooter(this, 'user')">افراد</div>
+                        <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'tag')">هشتگ</div>
+                        <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'place')">مکان</div>
+                    </div>
+                    <div class="searchResultSec">
+                        @for($i = 0; $i < 30; $i++)
+                            <div class="item">
+                                <div class="pic">
+                                    <img src="http://localhost/assets/_images/mahalifood/kabab_bonab_azarbayejan_sharghi/t-1.jpg" class="resizeImgClass" onload="fitThisImg(this)">
+                                </div>
+                                <div class="content">
+                                    <div class="firstRow">  {{$i}}هتل عباسی</div>
+                                    <div class="secRow">شیراز در فارس</div>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+
                 <div class="userInfoMobileFooterBody">
-                    <div class="row" style="width: 100%; margin: 0px; flex-direction: column;">
+                    <div class="row" style="width: 100%; margin: 0px; flex-direction: column; position: relative;">
+                        <div class="threeDotIconVertical" onclick="openSideMenuInProfileFooter()"></div>
+
                         <div class="firsLine">
                             <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="pic">
                                 <img src="{{isset($authUserInfos->pic) ? $authUserInfos->pic : ''}}" alt="userPic" class="resizeImgClass" onload="fitThisImg(this)"/>
@@ -450,9 +520,9 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
-
-
+                        <div>
+                            <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
+                        </div>
                         <div class="buttonsLine">
                             <div class="mBLine bLine">
                                 <div class="tabBut selected" onclick="changeMobileFooterReviewExplore(this, 'followers')">
@@ -460,6 +530,9 @@
                                 </div>
                                 <div class="tabBut" onclick="changeMobileFooterReviewExplore(this, 'all')">
                                     <div class="name">همه</div>
+                                </div>
+                                <div class="tabBut" style="width: 100px;" onclick="openSearchModalReviewMFooter()">
+                                    <div class="searchIcon" style="font-weight: bold;"></div>
                                 </div>
                             </div>
                         </div>
@@ -566,24 +639,24 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
 
-                    <div class="lp_phoneMenuBar">
-                        <div class="lp_eachMenu" onclick="writeNewSafaranmeh()">
-                            <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">
-                            <div>{{__('نوشتن سفرنامه')}}</div>
-                        </div>
-                        <div class="lp_eachMenu" onclick="openModalWriteNewReview()">
-                            <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">
-                            <div>{{__('پست گذاشتن')}}</div>
-                        </div>
-                        <div class="lp_eachMenu" onclick="goToAddPlacePageInFooter()">
-                            <img src="{{URL::asset('images/icons/koochit.svg')}}" class="profileMobileFooterImg" alt="koochitaSho">
-                            <div>{{__('کوچیت کن')}}</div>
-                        </div>
-                        <div class="lp_eachMenu" onclick="mobileFooterProfileButton('setting')">
-                            <div class="settingIcon lp_icons"></div>
-                            <div>{{__('تنظیمات')}}</div>
-                        </div>
-                    </div>
+{{--                    <div class="lp_phoneMenuBar">--}}
+{{--                        <div class="lp_eachMenu" onclick="writeNewSafaranmeh()">--}}
+{{--                            <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">--}}
+{{--                            <div>{{__('نوشتن سفرنامه')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="openModalWriteNewReview()">--}}
+{{--                            <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">--}}
+{{--                            <div>{{__('پست گذاشتن')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="goToAddPlacePageInFooter()">--}}
+{{--                            <img src="{{URL::asset('images/icons/koochit.svg')}}" class="profileMobileFooterImg" alt="koochitaSho">--}}
+{{--                            <div>{{__('کوچیت کن')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="mobileFooterProfileButton('setting')">--}}
+{{--                            <div class="settingIcon lp_icons"></div>--}}
+{{--                            <div>{{__('تنظیمات')}}</div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
 
             </div>
@@ -591,3 +664,17 @@
     @endif
 </div>
 
+<script>
+    var reviewSearchMFooterType = 'user';
+    function openSearchModalReviewMFooter(){
+        $('#profileSearchReviewsMFooter').toggleClass('open');
+    }
+
+    function chooseThisSearchTypeReviewMFooter(_element, _type){
+        _element = $(_element);
+        _element.parent().find('.select').removeClass('select');
+        _element.addClass('select');
+
+        reviewSearchMFooterType = _type;
+    }
+</script>

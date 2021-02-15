@@ -1,25 +1,5 @@
 var opnedMobileFooterId = null;
 
-$('.footerModals').on('touchstart', e => {
-    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    touchRigthForFooterMobile = touch.pageX;
-});
-
-$('.footerModals').on('touchend', e => {
-    var windowWidth = $(window).width();
-    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    if((touch.pageX - touchRigthForFooterMobile) > (windowWidth/3) ) {
-        closeMyModalClass('footerModals');
-        opnedMobileFooterId = null;
-    }
-});
-
-$('.gombadi').on('click', e => {
-    if($(e.target).hasClass('gombadi')) {
-        closeMyModal($(e.target).parent().attr('id'));
-    }
-});
-
 var openGlobalMaterialSearch = () => createSearchInput(getGlobalInputMaterialSearchKeyUp, 'ماده اولبه مورد نظر خود را وارد کنید.');
 
 var getGlobalInputMaterialSearchKeyUp = _element => searchForMaterial($(_element).val());
@@ -218,21 +198,17 @@ function goToCookFestival(){
 }
 
 
+var mobileFooterExploreTryNum = 3;
 var mobileFooterExplorePage = 1;
 var mobileFooterExploreKind = 'followers';
 var mobileFooterExploreTake = 5;
 var mobileFooterExploreIsEnd = false;
 var mobileFooterExploreInTake = false;
 
-$('.userInfoMobileFooterBody').on('scroll', () => {
-    var bottomOfList = document.getElementById('indicatorForNewReview').getBoundingClientRect().top;
-    var windowHeight = $('.userInfoMobileFooterBody').height();
-    if(bottomOfList-windowHeight < 100 && !mobileFooterExploreIsEnd && !mobileFooterExploreInTake)
-        addReviewPlaceHolderToFooter();
-});
 
 function addReviewPlaceHolderToFooter(){
     if(!mobileFooterExploreIsEnd && !mobileFooterExploreInTake) {
+        var footerExploreReviewSectionElement = $('#footerExploreReviewSection');
         var reviewPlaceHolder = '';
         mobileFooterExploreInTake = true;
 
@@ -241,32 +217,36 @@ function addReviewPlaceHolderToFooter(){
             reviewPlaceHolder += reviewPlaceHolder;
             mobileFooterExploreTake = 5;
 
-            $('#footerExploreReviewSection').removeClass('allReviewSec')
+            footerExploreReviewSectionElement.removeClass('allReviewSec')
         }
         else{
             reviewPlaceHolder1 = createReviewExploreMinPlaceHolder();
             for(var i = 0; i < 9; i++)
                 reviewPlaceHolder += reviewPlaceHolder1;
 
-            mobileFooterExploreTake = 15;
-            $('#footerExploreReviewSection').addClass('allReviewSec');
+            mobileFooterExploreTake = 25;
+            footerExploreReviewSectionElement.addClass('allReviewSec');
         }
 
-        $('#footerExploreReviewSection').append(reviewPlaceHolder);
+        footerExploreReviewSectionElement.append(reviewPlaceHolder);
 
         $.ajax({
             type: 'GET',
             url: `${getReviewExploreUrl}?take=${mobileFooterExploreTake}&page=${mobileFooterExplorePage}&kind=${mobileFooterExploreKind}`,
             complete: () => {
-                $('#footerExploreReviewSection').find('.smallReviewPlaceHolder').remove();
+                footerExploreReviewSectionElement.find('.smallReviewPlaceHolder').remove();
             },
             success: response => {
                 if(response.status == 'ok')
                     createReviewUIForExplore(response.result);
             },
+            error: err =>{
+                mobileFooterExploreInTake = false;
+            }
         });
     }
 }
+
 function createReviewUIForExplore(_result){
     if(_result.length != mobileFooterExploreTake)
         mobileFooterExploreIsEnd = true;
@@ -297,6 +277,7 @@ function createReviewExploreMin(review){
                     </div>
                 </div>`;
 }
+
 function createReviewExploreMinPlaceHolder(){
     return '<div class="reviewExploreSquare smallReviewPlaceHolder placeHolderAnime"></div>';
 }
@@ -313,6 +294,41 @@ function changeMobileFooterReviewExplore(_element, _kind){
     $('#footerExploreReviewSection').empty();
     addReviewPlaceHolderToFooter();
 }
+
+
+function openSideMenuInProfileFooter(){
+    $('#profileSideMenu').toggleClass('open');
+}
+
+$('#profileSideMenu').on('click', e => {
+    if($(e.target).hasClass('profileSideMenu'))
+        openSideMenuInProfileFooter();
+});
+
+$('.userInfoMobileFooterBody').on('scroll', () => {
+    var bottomOfList = document.getElementById('indicatorForNewReview').getBoundingClientRect().top;
+    var windowHeight = $('.userInfoMobileFooterBody').height();
+    if(bottomOfList-windowHeight < 100 && !mobileFooterExploreIsEnd && !mobileFooterExploreInTake)
+        addReviewPlaceHolderToFooter();
+});
+
+$('.footerModals').on('touchstart', e => {
+    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    touchRigthForFooterMobile = touch.pageX;
+}).on('touchend', e => {
+    var windowWidth = $(window).width();
+    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    if((touch.pageX - touchRigthForFooterMobile) > (windowWidth/3) ) {
+        closeMyModalClass('footerModals');
+        opnedMobileFooterId = null;
+    }
+});
+
+$('.gombadi').on('click', e => {
+    if($(e.target).hasClass('gombadi')) {
+        closeMyModal($(e.target).parent().attr('id'));
+    }
+});
 
 $(window).ready(() => {
     // initMyCalendar('showMyCalTourism', [
