@@ -218,7 +218,6 @@ function startCropper(ratio = 0) {
     first = false;
   }
 
-
   // Import image
   inputImage = document.getElementById('editUploadPhoto');
 

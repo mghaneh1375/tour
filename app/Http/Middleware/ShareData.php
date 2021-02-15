@@ -21,7 +21,7 @@ class ShareData
      */
     public function handle($request, Closure $next)
     {
-        $fileVersions = 183;
+        $fileVersions = 184;
 
         $config = \App\models\ConfigModel::first();
 
@@ -31,9 +31,7 @@ class ShareData
             $authUserInfos->userTotalPoint = User::getUserPointInModel($authUserInfos->id);
             $authUserInfos->nextLevel = $authUserInfos->userLevel[1]->floor - $authUserInfos->userTotalPoint;
             $authUserInfos->pic = getUserPic($authUserInfos->id);
-            $authUserInfos->newMsg = Message::where('seen', 0)
-                                    ->where('receiverId', $authUserInfos->id)
-                                    ->count();
+            $authUserInfos->newMsg = Message::where('seen', 0)->where('receiverId', $authUserInfos->id)->count();
 
             $authUserInfos->followerCount = Followers::where('followedId', $authUserInfos->id)->count();
             $authUserInfos->followingCount = Followers::where('userId', $authUserInfos->id)->count();

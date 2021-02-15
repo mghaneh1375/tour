@@ -8,12 +8,17 @@ function openLoading(_process = false, _callBack = ''){
     if(_process)
         $('#fullPageLoader').find('.processBar').removeClass('hidden');
 
-    setTimeout(function(){
-        if(typeof _callBack === 'function')
-            _callBack();
-        else if(typeof _process === 'function')
-            _process();
-    }, 200);
+    try{
+        setTimeout(function(){
+            if(typeof _callBack === 'function')
+                _callBack();
+            else if(typeof _process === 'function')
+                _process();
+        }, 200);
+    }
+    catch (e) {
+        closeLoading();
+    }
 }
 
 function closeLoading(){

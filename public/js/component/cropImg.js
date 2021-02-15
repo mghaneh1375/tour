@@ -1,11 +1,17 @@
 var callBackAfterFinishCropImg = null;
 
 function openCropImgModal(_ratio, _img, _callBack) {
-    openLoading();
     openMyModal('editCropModal');
-    $('#editUploadPhoto').attr('src', _img);
-    startCropper(_ratio);
-    callBackAfterFinishCropImg = _callBack;
+    openLoading(false, () => {
+        $('#editUploadPhoto').attr('src', _img);
+        try {
+            startCropper(_ratio);
+        }
+        catch (e) {
+            closeCropImgModal();
+        }
+        callBackAfterFinishCropImg = _callBack;
+    });
 }
 
 function submitCropInModal(){

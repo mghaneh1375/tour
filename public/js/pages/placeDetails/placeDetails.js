@@ -258,11 +258,6 @@ function fillPlacePicSections(_result){
     });
     _result['sliderPics'].map(item => sliderPicForAlbum.push(item));
 
-    // _result['photographerPics'].map(item => {
-    //     photographerPicsForAlbum.push(item);
-    //     allPlacePics.push(item);
-    // });
-
 
     $('#allPlacePicturesCount').text(allPlacePics.length);
 

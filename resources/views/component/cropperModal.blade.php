@@ -58,6 +58,6 @@
     </div>
 </div>
 
-<script defer src="{{URL::asset('js/cropper.js')}}"></script>
-<script defer src="{{URL::asset('js/mainCrop.js')}}"></script>
-<script defer src="{{URL::asset('js/component/cropImg.js')}}"></script>
+<script defer src="{{URL::asset('js/cropper.js?v='.$fileVersions)}}"></script>
+<script defer src="{{URL::asset('js/mainCrop.js?v='.$fileVersions)}}"></script>
+<script defer src="{{URL::asset('js/component/cropImg.js?v='.$fileVersions)}}"></script>
