@@ -839,6 +839,7 @@ class ReviewsController extends Controller
         ReviewTagRelations::whereNotIn('id', $revTagIds)->delete();
         return true;
     }
+
     private function storeReviewUserTagInText($text, $id){
         $users = [];
         $nowIndex = -1;
@@ -954,38 +955,111 @@ class ReviewsController extends Controller
         return;
     }
 
+    public function searchForReview()
+    {
+        $result = [];
+        $kind = $_GET['kind'];
+        $value = $_GET['value'];
+
+        if($kind === "user"){
+            $users = User::where('username', 'LIKE', '%'.$value.'%')->get();
+            foreach($users as $item){
+                array_push($result, [
+                    'id' => $item->username,
+                    'name' => $item->username,
+                    'pic' => getUserPic($item->id)
+                ]);
+            }
+        }
+        else if($kind === "tag"){
+            $tags = ReviewTags::where('tag', 'LIKE', '%'.$value.'%')->get();
+            foreach($tags as $item){
+                array_push($result, [
+                    'id' => $item->id,
+                    'name' => $item->tag,
+                ]);
+            }
+        }
+        else if($kind === "place"){
+            $kindPlaces = Place::where('mainSearch', 1)->whereNotNull('tableName')->get();
+            foreach ($kindPlaces as $item){
+                $places = DB::select("SELECT place.*, cities.name AS city, state.name AS state FROM {$item->tableName} AS place, cities, state WHERE place.name LIKE '%{$value}%' AND place.cityId = cities.id AND cities.stateId = state.id");
+                foreach($places as $place){
+                    $pic = URL::asset("images/mainPics/noPicSite.jpg");
+                    if(is_file("{$this->assetLocation}/_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}"))
+                        $pic = URL::asset("_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}");
+
+                    array_push($result, [
+                        'id' => $place->id,
+                        'kindPlace' => $item->id,
+                        'city' => $place->city,
+                        'state' => $place->state,
+                        'name' => $place->name,
+                        'pic' => $pic
+                    ]);
+                }
+            }
+        }
+        else
+            return response()->json(['status' => 'error']);
+
+
+        return response()->json(['status' => 'ok', 'result' => $result]);
+    }
+
 
     public function getReviewExplore()
     {
         $take = $_GET['take'];
         $page = $_GET['page'];
         $kind = $_GET['kind'];
+        $value = $_GET['value'];
+
+        $reviewIds = [0];
 
         $reviewAct = Activity::where('name', 'نظر')->first();
 
-        if($kind == 'all'){
-            $reviewIds = LogModel::where('activityId', $reviewAct->id)
-                                ->where('confirm', 1)
-                                ->where(function($query){
-                                    $query->where("subject", '<>', "dontShowThisText")->orWhereNull('subject');
-                                })->orderBy('created_at', 'DESC')
+        if($kind === 'all'){
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                ->orderBy('created_at', 'DESC')
                                 ->skip(($page-1) * $take)
                                 ->take($take)
                                 ->pluck('id')
                                 ->toArray();
         }
-        else if($kind == 'followers'){
+        else if($kind === 'followers'){
             $followers = Followers::where('userId', \auth()->user()->id)->pluck('followedId')->toArray();
-            $reviewIds = LogModel::where('activityId', $reviewAct->id)
-                                ->where('confirm', 1)
-                                ->where(function($query){
-                                    $query->where("subject", '<>', "dontShowThisText")->orWhereNull('subject');
-                                })->whereIn('visitorId', $followers)
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                ->whereIn('visitorId', $followers)
                                 ->orderByDesc('created_at')
                                 ->skip(($page-1) * $take)
                                 ->take($take)
                                 ->pluck('id')
                                 ->toArray();
+        }
+        else if($kind === "search_tag"){
+            $reviewIds = ReviewTagRelations::join('reviewTags', 'reviewTags.id','reviewTagRelations.tagId')->where('reviewTags.tag', $value)->groupBy('reviewTagRelations.reviewId')->pluck('reviewTagRelations.reviewId')->toArray();
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                    ->whereIn('id', $reviewIds)
+                                    ->orderBy('created_at', 'DESC')
+                                    ->skip(($page-1) * $take)
+                                    ->take($take)
+                                    ->pluck('id')
+                                    ->toArray();
+        }
+        else if($kind === "search_place"){
+            $idExplode = explode('_', $value);
+            $kindPlaceId = $idExplode[0];
+            $placeId = $idExplode[1];
+
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                        ->where('kindPlaceId', $kindPlaceId)
+                        ->where('placeId', $placeId)
+                        ->orderBy('created_at', 'DESC')
+                        ->skip(($page-1) * $take)
+                        ->take($take)
+                        ->pluck('id')
+                        ->toArray();
         }
 
         $reviews = reviewTrueTypeIdArray($reviewIds); // in common.php

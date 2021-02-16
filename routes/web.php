@@ -258,6 +258,8 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::get('review/searchInReviewTags', 'ReviewsController@searchInReviewTags')->name('review.searchInReviewTags');
 
+    Route::get('review/searchForContent', 'ReviewsController@searchForReview')->name('review.search.reviewContent');
+
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
 
     Route::middleware(['auth'])->group(function (){

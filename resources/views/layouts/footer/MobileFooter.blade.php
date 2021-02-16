@@ -474,7 +474,7 @@
 
                 <div id="profileSearchReviewsMFooter" class="searchReviewMFooter">
                     <div class="searchBar">
-                        <input id="searchInReviewMFooter" type="text" placeholder="جستجو">
+                        <input id="searchInReviewMFooter" type="text" placeholder="جستجو" onkeyup="searchInReviewSearch(this.value)">
                         <div class="iconClose" onclick="openSearchModalReviewMFooter()"></div>
                     </div>
                     <div class="searchKindTab">
@@ -482,19 +482,23 @@
                         <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'tag')">هشتگ</div>
                         <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'place')">مکان</div>
                     </div>
-                    <div class="searchResultSec">
-                        @for($i = 0; $i < 30; $i++)
-                            <div class="item">
-                                <div class="pic">
-                                    <img src="https://static.koochita.com/_images/hotels/1206857/t-1603266313.jpg" class="resizeImgClass" onload="fitThisImg(this)">
-                                </div>
-                                <div class="content">
-                                    <div class="firstRow">  {{$i}}هتل عباسی</div>
-                                    <div class="secRow">شیراز در فارس</div>
-                                </div>
+                    <div class="searchResultPlaceHolderSec hidden">
+                        <div class="item placeHolder">
+                            <div class="pic placeHolderAnime"></div>
+                            <div class="content" style="width: 50%;">
+                                <div class="rr placeHolderAnime"></div>
+                                <div class="rr placeHolderAnime"></div>
                             </div>
-                        @endfor
+                        </div>
+                        <div class="item placeHolder">
+                            <div class="pic placeHolderAnime"></div>
+                            <div class="content" style="width: 50%;">
+                                <div class="rr placeHolderAnime"></div>
+                                <div class="rr placeHolderAnime"></div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="searchResultSec"></div>
                 </div>
 
                 <div class="userInfoMobileFooterBody">
@@ -531,7 +535,7 @@
                                 <div class="tabBut" onclick="changeMobileFooterReviewExplore(this, 'all')">
                                     <div class="name">همه</div>
                                 </div>
-                                <div class="tabBut" style="width: 100px;" onclick="openSearchModalReviewMFooter()">
+                                <div id="searchReviewButton" class="tabBut" style="width: 100px;" onclick="openSearchModalReviewMFooter()">
                                     <div class="searchIcon" style="font-weight: bold;"></div>
                                 </div>
                             </div>
@@ -665,16 +669,9 @@
 </div>
 
 <script>
-    var reviewSearchMFooterType = 'user';
-    function openSearchModalReviewMFooter(){
-        $('#profileSearchReviewsMFooter').toggleClass('open');
-    }
+    var userProfileUrl = '{{route("profile")}}';
+    var searchInForReviewUrl = '{{route("review.search.reviewContent")}}';
 
-    function chooseThisSearchTypeReviewMFooter(_element, _type){
-        _element = $(_element);
-        _element.parent().find('.select').removeClass('select');
-        _element.addClass('select');
-
-        reviewSearchMFooterType = _type;
-    }
 </script>
+
+<script src="{{URL::asset('js/pages/layout/mobileFooter.js?v='.$fileVersions)}}"></script>

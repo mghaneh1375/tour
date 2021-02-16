@@ -634,10 +634,10 @@ function goToUserPageReview(_element){
 function goToTagsPageReview(_element){
     var tag = $(_element).text();
     if(tag.trim().length > 0){
-        console.log('go to tag page :' + tag);
-        // openLoading();
-        // alert();
-        // location.href = yourProfileUrlSmallShowReview + `/${tag}`;
+        tag = tag.replace('#', '');
+        if($(window).width() < 767)
+            openReviewTagSearchFromReview(tag); //  in mobileFooter.js
+
     }
 }
 

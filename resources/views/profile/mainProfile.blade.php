@@ -1352,11 +1352,12 @@
             }
         }
 
-        var url = new URL(location.href);
-        if(url.hash === '')
-            changePages('review');
-        else if(url.hash != '')
-            changePages(url.hash.replace("#", ""));
-
+        $(document).ready(() => {
+            var url = new URL(location.href);
+            if(url.hash === '')
+                changePages('review');
+            else if(url.hash != '')
+                changePages(url.hash.replace("#", ""));
+        })
     </script>
 @stop

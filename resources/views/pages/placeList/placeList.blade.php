@@ -784,16 +784,16 @@
     var isFinish = false;
     var inTake = false;
     var take = 24;
-    var mode = '{{$mode}}';
+    var placeListModel = '{{$mode}}';
     var mustBeTaken = false;
 
     var cityRel = {!! $cityRel !!};
 
     function getPlaceListItems(){
 
-        if(cityRel != 0 && mode == 'city' && (kindPlaceId == 10 || kindPlaceId == 11 || kindPlaceId == 6)){
+        if(cityRel != 0 && placeListModel == 'city' && (kindPlaceId == 10 || kindPlaceId == 11 || kindPlaceId == 6)){
             if(isFinish){
-                mode = 'state';
+                placeListModel = 'state';
                 cityId = cityRel.stateId;
                 cityRel = 0;
                 isFinish = false;
@@ -803,7 +803,7 @@
             }
             else{
                 mustBeTaken = true;
-                mode = 'city';
+                placeListModel = 'city';
                 cityId = cityRel.id;
             }
         }
@@ -828,7 +828,7 @@
                     nearPlaceIdFilter: nearPlaceIdFilter,
                     nearKindPlaceIdFilter: nearKindPlaceIdFilter,
                     city: cityId,
-                    mode: mode,
+                    mode: placeListModel,
                     kindPlaceId: '{{$kindPlace->id}}'
                 },
                 complete: e =>{

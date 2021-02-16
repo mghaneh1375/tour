@@ -2520,7 +2520,6 @@ class PlaceController extends Controller {
 
     public function getPlaceListElems(Request $request)
     {
-        $startTime = microtime(true);
 
         $page = (int)$request->pageNum;
         $take = (int)$request->take;
@@ -2546,11 +2545,11 @@ class PlaceController extends Controller {
         $rateActivityId = Activity::whereName('امتیاز')->first()->id;
 
         //first get all places in state or city
-        if($request->mode == 'country') {
+        if($request->mode === "country") {
             $placeIds = DB::table($table)->where('name', 'LIKE', '%' . $nameFilter . '%')->pluck('id')->toArray();
             $totalCount = DB::table($table)->count();
         }
-        else if($request->mode == 'state'){
+        else if($request->mode === "state"){
             $state = State::find($request->city);
             $cities = Cities::where('stateId', $request->city)->pluck('id')->toArray();
             $placeIds = DB::table($table)->whereIn('cityId', $cities)->where('name', 'LIKE', '%'.$nameFilter.'%')->pluck('id')->toArray();
@@ -2652,8 +2651,6 @@ class PlaceController extends Controller {
 
         $placeCount = count($placeIds);
 
-        $filterTime = microtime(true);
-
         // and sort results by kind
         if($sort == 'distance' && $nearPlaceIdFilter != 0 && $nearKindPlaceIdFilter != 0){
             $nearKind = Place::find($nearKindPlaceIdFilter);
@@ -2677,9 +2674,6 @@ class PlaceController extends Controller {
         else
             $places = \DB::table($table)->whereIn('id', $placeIds)->orderByDesc('fullRate')->skip(($page - 1) * $take)->take($take)->get();
 
-
-        $sortTime = microtime(true);
-
         $uId = 0;
         if(\auth()->check())
             $uId = Auth::id();
@@ -2698,9 +2692,9 @@ class PlaceController extends Controller {
                 else
                     $picNm = $place->picNumber;
 ;
-                $location = __DIR__ . "/../../../../assets/_images/$kindPlace->fileName/$place->file/l-$picNm";
+                $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}";
                 if (is_file($location))
-                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/l-$picNm");
+                    $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}");
             }
             $place->reviews = $place->reviewCount;
 
@@ -2735,15 +2729,7 @@ class PlaceController extends Controller {
                 $place->bookMark = 0;
         }
 
-        $formatTime = microtime(true);
-
-        $times = [
-            'filter' => $filterTime - $startTime,
-            'sort' => $sortTime - $filterTime,
-            'format' => $formatTime - $sortTime,
-        ];
-
-        return response()->json(['places' => $places, 'placeCount' => $placeCount, 'totalCount' => $totalCount, 'times' => $times]);
+        return response()->json(['places' => $places, 'placeCount' => $placeCount, 'totalCount' => $totalCount]);
     }
 
     public function setRateToPlace(Request $request)

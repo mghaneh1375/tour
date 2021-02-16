@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $seen
  * @property boolean $confirm
  * @method static \Illuminate\Database\Query\Builder|\App\models\LogModel whereRelatedTo($value)
- * @method static \Illuminate\Database\Query\Builder|\App\models\LogModel where('activityId',$value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\LogModel whereVisitorId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\LogModel whereSeen($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\LogModel whereConfirm($value)
@@ -27,6 +26,13 @@ class LogModel extends Model {
 
     public static function whereId($value) {
         return LogModel::find($value);
+    }
+
+    public function scopeYouCanSeeReview($query, $actId)
+    {
+        return $query->where('activityId', $actId)->where('confirm', 1)->where(function($queryIn){
+                    $queryIn->where("subject", '<>', "dontShowThisText")->orWhereNull('subject');
+                });
     }
 
 }
