@@ -20,7 +20,6 @@ function specialMobileFooter(_id, _element){
 }
 
 function openMobileFooterPopUps(_id, _type = "toggle"){
-    console.log(opnedMobileFooterId);
     closeMyModalClass('footerModals');
     if(opnedMobileFooterId != _id || _type === "open") {
         opnedMobileFooterId = _id;

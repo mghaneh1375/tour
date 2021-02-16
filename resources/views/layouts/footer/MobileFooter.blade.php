@@ -671,7 +671,6 @@
 <script>
     var userProfileUrl = '{{route("profile")}}';
     var searchInForReviewUrl = '{{route("review.search.reviewContent")}}';
-
 </script>
 
 <script src="{{URL::asset('js/pages/layout/mobileFooter.js?v='.$fileVersions)}}"></script>

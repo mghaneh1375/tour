@@ -711,8 +711,7 @@ if(Auth::check()) {
         var superAccess = false;
         var getRecentlyPath = '{{route('recentlyViewed')}}';
 
-        $('#nameTop').click(function(e) {
-
+        $('#nameTop').click(e => {
             if( $("#profile-drop").is(":hidden")) {
                 hideAllTopNavs();
                 $("#profile-drop").show();
@@ -721,7 +720,7 @@ if(Auth::check()) {
                 hideAllTopNavs();
         });
 
-        $('#memberTop').click(function(e) {
+        $('#memberTop').click(e => {
             if( $("#profile-drop").is(":hidden")) {
                 hideAllTopNavs();
                 $("#profile-drop").show();
@@ -730,7 +729,7 @@ if(Auth::check()) {
                 hideAllTopNavs();
         });
 
-        $('#bookmarkicon').click(function(e) {
+        $('#bookmarkicon').click(e => {
             if( $("#bookmarkmenu").is(":hidden")){
                 hideAllTopNavs();
                 $("#bookmarkmenu").show();
@@ -740,7 +739,7 @@ if(Auth::check()) {
                 hideAllTopNavs();
         });
 
-        $('.notification-bell').click(function(e) {
+        $('.notification-bell').click(e => {
             if( $("#alert").is(":hidden")) {
                 hideAllTopNavs();
                 $("#alert").show();
@@ -759,7 +758,7 @@ if(Auth::check()) {
 
 
         function openUploadPost(){
-            openUploadPhotoModal('کوچیتا', '{{route('addPhotoToPlace')}}', 0, 0, '');
+            openUploadPhotoModal('کوچیتا', '{{route('photographer.uploadFile')}}', 0, 0, '');
         }
     </script>
 @endif

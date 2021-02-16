@@ -124,10 +124,9 @@ function isPhotographer() {
         return;
 
     //additionalData must be json format
-    var additionalData = {placeId, kindPlaceId};
     var _title = `${placeNamePlaceDetail} در ${cityNamePlaceDetails}`;
     additionalData = JSON.stringify(additionalData);
-    openUploadPhotoModal(_title, addPhotoToPlaceUrl, placeId, kindPlaceId, additionalData);
+    openUploadPhotoModal(_title, addPhotoToPlaceUrl, placeId, kindPlaceId);
 }
 
 function openCity(cityName, elmnt, color, fontColor) {

@@ -19,6 +19,7 @@ function openUploadPost(){
     else
         openUploadPhotoModal('کوچیتا', addPhotoToPlaceUrlHeader1, 0, 0, '');
 }
+
 function writeNewSafaranmeh(){
     if(checkLogin()) {
         $('#campingHeader').hide();

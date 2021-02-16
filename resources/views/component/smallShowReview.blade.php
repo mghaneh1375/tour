@@ -146,4 +146,4 @@
     var isUserLoginCheckInSmall = '{{auth()->check()}}';
 </script>
 
-<script async src="{{URL::asset('js/component/showSmallReview.js')}}"></script>
+<script async src="{{URL::asset('js/component/showSmallReview.js?v'.$fileVersions)}}"></script>

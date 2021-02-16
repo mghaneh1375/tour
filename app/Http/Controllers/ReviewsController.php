@@ -106,7 +106,6 @@ class ReviewsController extends Controller
 
         $success = uploadLargeFile($filePath, $request->file);
         if($success){
-
             $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
             $image = file_get_contents($filePath);
             $thumbnailFileName = resizeUploadedImage($image, $size, $thumbnailFileName);

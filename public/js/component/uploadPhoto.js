@@ -1,11 +1,11 @@
 
 var file;
-var uploadPhotoUrl;
+var uploadPhotoUrlInJsFile;
 var mainPicUploadPhoto;
-var dropzone = $('#dropArea');
+var dropZoneHoverUploadPhoto = $('#dropAreaForUploadPhoto');
 var userId = window.user.id;
 var additionalData;
-var mainFileName = null;
+var mainFileNameForUploadedPhoto = null;
 var mainFilesUploaded = [];
 var repeatTime = 3;
 var squerImg = {
@@ -18,31 +18,29 @@ var reqImg = {
 };
 
 //drag and drop file
-dropzone.on('dragover', () => {
-    dropzone.addClass('hover');
+dropZoneHoverUploadPhoto.on('dragover', () => {
+    dropZoneHoverUploadPhoto.addClass('hover');
     return false;
-});
-dropzone.on('dragleave', () => {
-    dropzone.removeClass('hover');
+}).on('dragleave', () => {
+    dropZoneHoverUploadPhoto.removeClass('hover');
     return false;
-});
-dropzone.on('drop', e => {
+}).on('drop', e => {
     e.stopPropagation();
     e.preventDefault();
-    dropzone.removeClass('hover');
+    dropZoneHoverUploadPhoto.removeClass('hover');
     var files = e.originalEvent.dataTransfer;
     submitPhoto(files);
     return false;
 });
 
-function openUploadPhotoModal(_title, _uploadUrl, _placeId = 0, _kindPlaceId = 0, _additionalData){
+function openUploadPhotoModal(_title, _uploadUrl, _placeId = 0, _kindPlaceId = 0, _additionalData = ''){
 
     $('#placeIdUploadPhoto').val(_placeId);
     $('#kindPlaceIdUploadPhoto').val(_kindPlaceId);
     $('#placeNameUploadPhoto').val(_title);
 
     $('.titleOfUploadPhoto').text(_title);
-    uploadPhotoUrl = _uploadUrl;
+    uploadPhotoUrlInJsFile = _uploadUrl;
     additionalData = _additionalData;
 
     if(!checkLogin())
@@ -68,7 +66,7 @@ function submitPhoto(input) {
     });
 
     $("#uploadedPicInfoPage").removeClass('hidden');
-    $("#dropArea").addClass('hidden');
+    dropZoneHoverUploadPhoto.addClass('hidden');
 }
 
 function doEdit(ratio, result) {
@@ -120,104 +118,34 @@ function submitUpload(type){
 
     resizeImgTo(im, {width: null, height: 1080}, (_src, _file) => {
 
-        // uploadLargeFile(uploadPhotoUrl, _file, {code: newReviewDataForUpload.code, is360, isVideo}, (_percent, _fileName = '', _result = '') => {
-        //     if(_percent == 'done') {
-        //         newReviewFileInUpload = false;
-        //         newReviewDataForUpload.files[uploadFileIndex].savedFile = _fileName;
-        //         if(uFile.kind == 'image'){
-        //             $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
-        //             newReviewDataForUpload.files[uploadFileIndex].uploaded = 1;
-        //             reviewFileUploadQueueForNewReview();
-        //         }
-        //         else
-        //             uploadReviewVideoThumbnail(uploadFileIndex);
-        //     }
-        //     else if(_percent == 'error') {
-        //         newReviewFileInUpload = false;
-        //         $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('error');
-        //         newReviewDataForUpload.files[uploadFileIndex].uploaded = -2;
-        //         reviewFileUploadQueueForNewReview();
-        //     }
-        //     else if(_percent == 'cancelUpload'){
-        //         newReviewFileInUpload = false;
-        //         newReviewDataForUpload.files[uploadFileIndex].uploaded = -1;
-        //         doDeleteNewReviewFile(uploadFileIndex);
-        //     }
-        //     else {
-        //         newReviewDataForUpload.code = _result;
-        //         $('#uplaodedImgForNewReview_' + uFile.code).find('.processCounter').text(_percent + '%');
-        //     }
-        // });
+        var dataToSend = {
+            alt : $('#uploadPhotoPicAlt').val(),
+            name : $('#uploadPhotoPicName').val(),
+            placeId : $('#placeIdUploadPhoto').val(),
+            description : $('#uploadPhotoDescription').val(),
+            kindPlaceId : $('#kindPlaceIdUploadPhoto').val(),
+            fileName : mainFileNameForUploadedPhoto,
+            otherSize : otherSize,
+            fileKind : type,
+        };
 
-        var uploadPhotoFormData = new FormData();
-        uploadPhotoFormData.append('name', $('#uploadPhotoPicName').val());
-        uploadPhotoFormData.append('alt', $('#uploadPhotoPicAlt').val());
-        uploadPhotoFormData.append('description', $('#uploadPhotoDescription').val());
-        uploadPhotoFormData.append('additionalData', additionalData);
-        uploadPhotoFormData.set('pic', _file);
-        uploadPhotoFormData.set('fileName', mainFileName);
-        uploadPhotoFormData.set('otherSize', otherSize);
-        uploadPhotoFormData.set('fileKind', type);
-        uploadPhotoFormData.set('placeId', $('#placeIdUploadPhoto').val());
-        uploadPhotoFormData.set('kindPlaceId', $('#kindPlaceIdUploadPhoto').val());
-
-        $.ajax({
-            type : 'post',
-            url : uploadPhotoUrl,
-            data: uploadPhotoFormData,
-            processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = new XMLHttpRequest();
-                xhr.upload.onprogress = e => {
-                    var percent = '0';
-                    if (e.lengthComputable) {
-                        percent = Math.round((e.loaded / e.total) * 100);
-                        percent = percent/2 + (type === 'req' ? 50 : 0);
-                        updatePercentLoadingBar(percent);
-                    }
-                };
-                return xhr;
-            },
-            success: response => {
-                if(response.status == 'ok'){
-                    console.log(nextSend);
-                    mainFileName = response.result[0];
-                    if(nextSend !== false)
-                        submitUpload(nextSend);
-                    else{
-                        mainFilesUploaded[mainFilesUploaded.length] = response.result[1];
-                        mainFileName = null;
-                        goToPage3();
-                    }
+        uploadLargeFile(uploadPhotoUrlInJsFile, _file, dataToSend, (_percent, _fileName = '', _result = '') => {
+            if(_percent == 'done') {
+                mainFileNameForUploadedPhoto = _fileName;
+                if(nextSend !== false)
+                    submitUpload(nextSend);
+                else{
+                    mainFilesUploaded[mainFilesUploaded.length] = _result['url'];
+                    goToPage3();
                 }
-                else if(response.status == 'nok1'){
-                    if(repeatTime != 0){
-                        closeLoading();
-                        showSuccessNotifi("در بارگذاری عکس مشکلی پیش امده لطفا دوباره تلاش کنید.", 'left', 'red');
-                    }
-                    else{
-                        repeatTime--;
-                        resizeImg();
-                    }
-                }
-                else if(response.status == 'nok2'){
-                    closeLoading();
-                    showSuccessNotifi("فرمت عکس باید jpg و یا webp و یا jpeg و یا png باشد", 'left', 'red');
-                }
-                else if(response.status == 'sizeError'){
-                    closeLoading();
-                    showSuccessNotifi("حجم عکس باید از 2 مگابایت کمتر باشد.", 'left', 'red');
-                }
-            },
-            error: function(err){
-                closeLoading();
-                showSuccessNotifi("در بارگذاری عکس مشکلی پیش امده لطفا دوباره تلاش کنید.", 'left', 'red');
             }
-        })
+            else if(_percent == 'error')
+                showSuccessNotifi("در بارگذاری عکس مشکلی پیش امده لطفا دوباره تلاش کنید.", 'left', 'red');
+            else
+                updatePercentLoadingBar(_percent);
+        });
     });
 }
-
 
 function resizeImg(){
     var errorElement = $('.photographerErrors');
@@ -271,13 +199,14 @@ function newUploadPic(){
     $('#uploadPhotoDescription').val('');
 
     $("#uploadedPicInfoPage").addClass('hidden');
-    $("#dropArea").removeClass('hidden');
+    dropZoneHoverUploadPhoto.removeClass('hidden');
 
     squerImg = { file: null, blob: null};
     reqImg = {file: null, blob: null};
 }
 
 function goToPage3() {
+    mainFileNameForUploadedPhoto = null;
 
     $('#uploadPhotoInputPic').val('');
     $('#uploadPhotoPicName').val('');

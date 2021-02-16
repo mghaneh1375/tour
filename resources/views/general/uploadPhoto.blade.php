@@ -53,7 +53,7 @@
                      </h3>
                  </div>
                  <div id="uploader-dlg" class="uploaderDlg hasFiles" style="height: calc(100% - 48px);">
-                     <div id="dropArea" class="startScreen infoScreen">
+                     <div id="dropAreaForUploadPhoto" class="startScreen infoScreen">
                          <div class="inner">
                              <div class="innerPic"></div>
                              <label for="uploadPhotoInputPic" class="uploadPicChoosePic">
@@ -225,14 +225,9 @@
     </span>
 </div>
 
-{{--<div class="mainPicUploadPercentDiv" style="display: none;">--}}
-{{--    <div class="mainUploadProgressBar">--}}
-{{--        <div class="progressPercent">0%</div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-
 <script>
     var proSearchUrl = '{{route("proSearch")}}';
+    var uploadPhotographerFileUrl = '{{route("photographer.uploadFile")}}';
 </script>
 
-<script defer src="{{URL::asset('js/component/uploadPhoto.js')}}"></script>
+<script defer src="{{URL::asset('js/component/uploadPhoto.js?v='.$fileVersions)}}"></script>

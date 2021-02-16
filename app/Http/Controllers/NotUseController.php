@@ -6,6 +6,7 @@ use App\models\Activity;
 use App\models\Adab;
 use App\models\Comment;
 use App\models\OpOnActivity;
+use App\models\PicItem;
 use App\models\places\Amaken;
 use App\models\Cities;
 use App\models\ConfigModel;
@@ -577,4 +578,10 @@ class NotUseController extends Controller
     }
 
 
+    public function getPhotoFilter()
+    {
+        if (isset($_POST["kindPlaceId"])) {
+            echo json_encode(PicItem::where('kindPlaceId', '=', makeValidInput($_POST["kindPlaceId"]))->get());
+        }
+    }
 }

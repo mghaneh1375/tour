@@ -107,8 +107,6 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
     Route::post('getPhotos', array('as' => 'getPhotos', 'uses' => 'PlaceController@getPhotos'));
 
-    Route::post('getPhotoFilter', array('as' => 'getPhotoFilter', 'uses' => 'PlaceController@getPhotoFilter'));
-
     Route::get('showAllPlaces/{placeId1}/{kindPlaceId1}/{placeId2?}/{kindPlaceId2?}/{placeId3?}/{kindPlaceId3?}/{placeId4?}/{kindPlaceId4?}', array('as' => 'showAllPlaces4', 'uses' => 'PlaceController@showAllPlaces'));
 
     Route::post('getPlaceStyles', array('as' => 'getPlaceStyles', 'uses' => 'PlaceController@getPlaceStyles'));
@@ -481,7 +479,8 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('sendAns2', array('as' => 'sendAns2', 'uses' => 'PlaceController@sendAns2'));
 
-        Route::post('addPhotoToPlace', 'PlaceController@addPhotoToPlace')->name('addPhotoToPlace');
+
+        Route::post('photographer/uploadFile', 'PlaceController@storePhotographerFile')->name('photographer.uploadFile');
 
         Route::post('likePhotographer', 'PlaceController@likePhotographer')->name('likePhotographer');
 
@@ -809,7 +808,8 @@ Route::group(array('middleware' => ['nothing']), function () {
     Route::post('getOpinionRate', 'NotUseController@getOpinionRate')->name('getOpinionRate');
     Route::post('setPlaceRate', 'NotUseController@setPlaceRate')->name('setPlaceRate');
     Route::post('sendComment', 'NotUseController@sendComment')->name('sendComment');
-    Route::get('seeAllAns/{questionId}/{mode?}/{logId?}', 'PlaceController@seeAllAns')->name('seeAllAns');
+    Route::get('seeAllAns/{questionId}/{mode?}/{logId?}', 'NotUseController@seeAllAns')->name('seeAllAns');
+    Route::post('getPhotoFilter', 'NotUseController@getPhotoFilter')->name('getPhotoFilter');
 
 });
 

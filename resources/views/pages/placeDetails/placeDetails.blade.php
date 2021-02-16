@@ -916,14 +916,15 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     @endif
 
     <script>
+        var placeId = '{{$place->id}}';
+        var cityNamePlaceDetails = '{{$city->name}}';
+        var placeNamePlaceDetail = '{{$place->name}}';
         var noPicUrl = "{{URL::asset('images/mainPics/nopictext1.jpg')}}";
+
+        var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
         var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
-        var placeId = '{{$place->id}}';
-        var placeNamePlaceDetail = '{{$place->name}}';
-        var cityNamePlaceDetails = '{{$city->name}}';
-        var addPhotoToPlaceUrl = '{{route("addPhotoToPlace")}}';
-        var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
+        var addPhotoToPlaceUrl = '{{route("photographer.uploadFile")}}';
     </script>
 
     <script src="{{URL::asset('js/pages/placeDetails/placeDetails.js?v='.$fileVersions)}}"></script>
