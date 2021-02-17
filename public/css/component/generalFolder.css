@@ -894,6 +894,7 @@ div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
     color: var(--koochita-light-green);
 }
 .mainSearchpoi{
+    overflow: hidden;
     position: relative;
     padding-top: 100%;
 }

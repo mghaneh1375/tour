@@ -65,7 +65,7 @@
                 <div class="prw_rup prw_common_thumbnail_no_style_responsive prw_common_thumbnail_no_style_responsive22">
                     <div class="prv_thumb has_image" style="height: 100%">
                         <div class="image_wrapper spImageWrapper landscape landscapeWide mainSearchImgTop">
-                            <img src="##mainPic##" alt="##name##" class="image" style="height: 100%">
+                            <img src="##mainPic##" alt="##name##" class="resizeImgClass" style="height: 100%" onload="fitThisImg(this)">
                         </div>
                     </div>
                 </div>

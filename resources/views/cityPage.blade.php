@@ -665,12 +665,18 @@
     }
 
     $(window).ready(() => {
-
         getTopPlaces();
-        getAllPlacesForMap();
 
-        if(window.innerWidth > 767 )
+        if(cityPageKind === "city") {
+            getAllPlacesForMap();
+        }
+        else{
+            $('#cpMap').addClass('hidden');
+        }
+
+        if(window.innerWidth > 767 ){
             getReviews();
+        }
     });
 
     @if(isset($place->pic) && count($place->pic) > 0)
