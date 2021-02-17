@@ -118,9 +118,7 @@
 
     <div class="row">
         <div id="commentSection" class="col-md-3 text-align-right mainReviewSection hideOnTablet">
-            <div class="row" style="font-size: 25px; margin: 5px 10px; border-bottom: solid 1px #f3f3f3;">
-                {{__('تازه ترین پست ها')}}
-            </div>
+            <div class="row" style="font-size: 25px; margin: 5px 10px; border-bottom: solid 1px #f3f3f3;">{{__('تازه ترین پست ها')}}</div>
             <div id="reviewSection" class="postsMainDivInSpecificMode cpCommentBox cpBorderBottom" style="display: none; width: 100%"></div>
             <div id="reviewPlaceHolderSection" class="postsMainDivInSpecificMode cpCommentBox cpBorderBottom" style="width: 100%"></div>
         </div>
@@ -133,7 +131,7 @@
                             <div class="swiper-wrapper position-relative"  style="height: 100%">
                                 @for($i = 0; $i < count($place->pic) && $i < 5; $i++)
                                     <div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                        <img src="{{$place->pic[$i]['mainPic']}}" class="resizeImgClass" style="width: 100%;" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
+                                        <img src="{{$place->pic[$i]['pic']}}" class="resizeImgClass" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
                                     </div>
                                 @endfor
                             </div>
@@ -160,7 +158,9 @@
                             </div>
                         </div>
                     @else
-                        <img class="cityPagePics cpPic" src="{{$place->image}}">
+                        <div class="cityPagePics fullyCenterContent">
+                            <img class="cityPagePics cpPic resizeImgClass" src="{{$place->image}}" onload="fitThisImg(this)">
+                        </div>
                     @endif
                     <div class="col-xs-12 underSlider hideOnTablet ">
                         <div class="cpLittleMenu infoLittleMenu">
@@ -629,7 +629,7 @@
         let fk = Object.keys(_result);
         for (let x of fk) {
             if(_result[x].length > 4){
-                createSuggestionPack(`${x}Content`, _result[x], function() { // in suggestionPack.blade.php
+                createSuggestionPack(`${x}Content`, _result[x], () => { // in suggestionPack.blade.php
                     $(`#${x}Content`).find('.suggestionPackDiv').addClass('swiper-slide');
                 });
             }
@@ -651,10 +651,9 @@
                 kind : cityPageKind,
                 id: cityPageId
             },
-            success: function(response){
+            success: response => {
                 let map = response.map;
                 let allPlaces = response.allPlaces;
-
                 let center = {
                     x: map.C,
                     y: map.D
@@ -683,8 +682,8 @@
                 cityPicForAlbum[index] = {
                     'id' : pic['id'],
                     'alt' : pic['alt'],
-                    'sidePic' : pic['smallPic'],
-                    'mainPic' : pic['mainPic'],
+                    'sidePic' : pic['pic'],
+                    'mainPic' : pic['pic'],
                     'userPic' : '{{getUserPic(0)}}',
                     'userName' : 'کوچیتا',
                     'where' : pic['name'],
@@ -702,7 +701,7 @@
             slidesPerGroup: 1,
             loop: true,
             autoplay: {
-                delay: 6000,
+                delay: 10000,
                 disableOnInteraction: false,
             },
             loopFillGroupWithBlank: true,
@@ -710,34 +709,32 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-        }).on('slideChange', function () {
-            if(showCityPicNumber < cityPic.length) {
-                if (changeSliderNum == 5) {
-                    let nuum = 0;
-                    while (nuum < 10 && showCityPicNumber < cityPic.length) {
-                        slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                    <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
-                                </div>`;
-                        picSwiper.addSlide(showCityPicNumber + 1, slide);
-                        showCityPicNumber++;
-                        nuum++;
-                    }
-                    resizeFitImg('resizeImgClass');
-
-                    changeSliderNum = 0;
-                } else
-                    changeSliderNum++;
-            }
-
         });
+        // .on('slideChange', function () {
+        // if(showCityPicNumber < cityPic.length) {
+        //     if (changeSliderNum == 5) {
+        //         let nuum = 0;
+        //         while (nuum < 10 && showCityPicNumber < cityPic.length) {
+        //             slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
+        //                         <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
+        //                     </div>`;
+        //             picSwiper.addSlide(showCityPicNumber + 1, slide);
+        //             showCityPicNumber++;
+        //             nuum++;
+        //         }
+        //         resizeFitImg('resizeImgClass');
+        //
+        //         changeSliderNum = 0;
+        //     } else
+        //         changeSliderNum++;
+        // }
+        //
+        // });
 
     @endif
 
 
 </script>
-
-<script src="{{URL::asset('js/pages/cityPage.js')}}"></script>
-
 
 </body>
 

@@ -130,7 +130,7 @@ input[type="checkbox"] + label, input[type="radio"] + label{
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 99999;
+    z-index: 999999;
     left: 0;
     top: 0;
     display: flex;

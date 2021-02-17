@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{URL::asset('css/component/cropImg.css')}}">
+<link rel="stylesheet" href="{{URL::asset('css/component/cropImg.css?v='.$fileVersions)}}">
 
 <div id="editCropModal" class="modalBlackBack editCropModal fullCenter notCloseOnClick">
     <div class="modalBody">

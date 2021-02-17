@@ -1,6 +1,6 @@
 
 .editCropModal{
-    z-index: 9992;
+    z-index: 99999;
 }
 .editCropModal .modalBody{
     padding: 0px !important;

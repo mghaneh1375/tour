@@ -143,10 +143,28 @@
             L.marker([parseFloat(mapCenter.x), parseFloat(mapCenter.y)]).addTo(mainMapInBlade);
 
         let fk = Object.keys(mapData);
+        var topRightCorner = {lat: null, lng: null};
+        var bottomLeftCorner = {lat: null, lng: null};
+
         for (let x of fk) {
             mapData[x].forEach(item => {
-                if(item['C'] != mapCenter.x && item['D'] != mapCenter.y) {
+                if(topRightCorner.lat === null){
+                    topRightCorner = {lat: item['C'], lng: item['D']};
+                    bottomLeftCorner = {lat: item['C'], lng: item['D']};
+                }
+                else{
+                    if(item['C'] > topRightCorner.lat)
+                        topRightCorner.lat = item['C'];
+                    else if(item['C'] < bottomLeftCorner.lat)
+                        bottomLeftCorner.lat = item['C'];
 
+                    if(item['D'] > topRightCorner.lng)
+                        topRightCorner.lng = item['D'];
+                    else if(item['D'] < bottomLeftCorner.lng)
+                        bottomLeftCorner.lng = item['D'];
+                }
+
+                if(item['C'] != mapCenter.x && item['D'] != mapCenter.y) {
                     var marker = L.marker([parseFloat(item['C']), parseFloat(item['D'])], {
                         title: item['name'],
                         icon: L.icon({
@@ -178,13 +196,16 @@
                     // loc = new google.maps.LatLng(item['C'], item['D']);
                     // bounds.extend(loc);
                 }
-
             });
         }
 
         if(!forceCenter) {
-            mainMapInBlade.fitBounds(bounds);
-            mainMapInBlade.panToBounds(bounds);
+            // mainMapInBlade.fitBounds(bounds);
+            // mainMapInBlade.panToBounds(bounds);
+            mainMapInBlade.fitBounds([
+                [parseFloat(topRightCorner.lat), parseFloat(topRightCorner.lng)],
+                [parseFloat(bottomLeftCorner.lat), parseFloat(bottomLeftCorner.lng)]
+            ]);
         }
     }
 

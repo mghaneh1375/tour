@@ -281,9 +281,9 @@
                 </div>
 
                 <div id="calendarRowPage" class="lp_others_content specPages hidden" style="position: relative;">
-                    <div id="showMyCalTourism"></div>
-                    <div id="showMyCalTourism1"></div>
-                    @include('layouts.calendar')
+{{--                    <div id="showMyCalTourism"></div>--}}
+{{--                    <div id="showMyCalTourism1"></div>--}}
+{{--                    @include('layouts.calendar')--}}
                 </div>
 
                 <div id="translateRowsPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
