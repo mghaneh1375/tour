@@ -8,6 +8,7 @@ function openCropImgModal(_ratio, _img, _callBack) {
             startCropper(_ratio);
         }
         catch (e) {
+            console.log(e);
             closeCropImgModal();
         }
         callBackAfterFinishCropImg = _callBack;

@@ -225,6 +225,7 @@ function cleanImgMetaData(_input, _callBack){
     openLoading(false, function(){
         options = { canvas: true };
         loadImage.parseMetaData(_input.files[0], function(data) {
+
             if (data.exif)
                 options.orientation = data.exif.get('Orientation');
 

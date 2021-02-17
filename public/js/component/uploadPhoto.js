@@ -1,6 +1,7 @@
 
 var file;
 var uploadPhotoUrlInJsFile;
+var mainInputFileForUploadPhoto;
 var mainPicUploadPhoto;
 var dropZoneHoverUploadPhoto = $('#dropAreaForUploadPhoto');
 var userId = window.user.id;
@@ -29,6 +30,7 @@ dropZoneHoverUploadPhoto.on('dragover', () => {
     e.preventDefault();
     dropZoneHoverUploadPhoto.removeClass('hover');
     var files = e.originalEvent.dataTransfer;
+    console.log(files.files);
     submitPhoto(files);
     return false;
 });
@@ -37,7 +39,10 @@ function openUploadPhotoModal(_title, _uploadUrl, _placeId = 0, _kindPlaceId = 0
 
     $('#placeIdUploadPhoto').val(_placeId);
     $('#kindPlaceIdUploadPhoto').val(_kindPlaceId);
-    $('#placeNameUploadPhoto').val(_title);
+    if(_placeId != 0 && _title != 0)
+        $('#placeNameUploadPhoto').val(_title);
+    else
+        $('#placeNameUploadPhoto').val('');
 
     $('.titleOfUploadPhoto').text(_title);
     uploadPhotoUrlInJsFile = _uploadUrl;
@@ -49,21 +54,24 @@ function openUploadPhotoModal(_title, _uploadUrl, _placeId = 0, _kindPlaceId = 0
     $("#addPhotographerModal").removeClass('hidden');
 }
 
-function submitPhoto(input) {
+function submitPhoto(_input) {
+    openLoading();
+
     $('#uploadPhotoPicName').val('');
     $('#uploadPhotoPicAlt').val('');
     $('#uploadPhotoDescription').val('');
     $("#sucessUploadPicPage").addClass('hidden');
 
-    cleanImgMetaData(input, (_imgDataURL, _files) => {
-        $('#rectanglePicUploadPhoto').attr('src', _imgDataURL);
-        $('#squarePicUploadPhoto').attr('src', _imgDataURL);
-        $('#mainPicUploadPhotoImg').attr('src', _imgDataURL);
-        mainPicUploadPhoto = _imgDataURL;
-        closeLoading();
-
+    var reader = new FileReader();
+    reader.onload = e => {
+        $('#rectanglePicUploadPhoto').attr('src', e.target.result);
+        $('#squarePicUploadPhoto').attr('src', e.target.result);
+        mainPicUploadPhoto = e.target.result;
+        mainInputFileForUploadPhoto = _input;
         resizeFitImg('resizeImgClass');
-    });
+        closeLoading();
+    };
+    reader.readAsDataURL(_input.files[0]);
 
     $("#uploadedPicInfoPage").removeClass('hidden');
     dropZoneHoverUploadPhoto.addClass('hidden');
@@ -107,6 +115,11 @@ function submitUpload(type){
             submitUpload('squ');
             return;
         }
+        // else{
+        //     cleanImgMetaData(mainInputFileForUploadPhoto, (_imgDataURL, _files) => {
+        //         im = _imgDataURL;
+        //     });
+        // }
     }
     else if(type === 'squ' && squerImg.blob != null) {
         im = squerImg.file;
@@ -149,12 +162,11 @@ function submitUpload(type){
 
 function resizeImg(){
     var errorElement = $('.photographerErrors');
-    var name = document.getElementById('uploadPhotoPicName').value;
-    var alt = document.getElementById('uploadPhotoPicAlt').value;
-    var description = document.getElementById('uploadPhotoDescription').value;
+    var name = $('#uploadPhotoPicName').val();
+    var description = $('#uploadPhotoDescription').val();
 
-    placeIdUploadPhoto = $('#placeIdUploadPhoto').val();
-    kindPlaceIdUploadPhoto = $('#kindPlaceIdUploadPhoto').val();
+    var placeIdUploadPhoto = $('#placeIdUploadPhoto').val();
+    var kindPlaceIdUploadPhoto = $('#kindPlaceIdUploadPhoto').val();
 
     errorElement.text('');
 
@@ -190,7 +202,6 @@ function resizeImg(){
         errorElement.text(text);
     }
 }
-
 
 function newUploadPic(){
     $('#uploadPhotoInputPic').val('');

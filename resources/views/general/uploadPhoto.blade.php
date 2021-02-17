@@ -122,7 +122,7 @@
                                     <div class="epInputBoxText">
                                         <div class="epInputBoxRequired"><div class="icons epInputIconRequired redStar"></div>{{__('عکس برای')}}:</div>
                                     </div>
-                                    <input class="epInputBoxInput" id="placeNameUploadPhoto" onclick="searchPlaceForUploadPhoto()" readonly>
+                                    <input id="placeNameUploadPhoto" class="epInputBoxInput" onclick="searchPlaceForUploadPhoto()" placeholder="نام محل را وارد نمایید" readonly>
                                     <input type="hidden" class="epInputBoxInput" id="placeIdUploadPhoto">
                                     <input type="hidden" class="epInputBoxInput" id="kindPlaceIdUploadPhoto" >
                                 </div>
