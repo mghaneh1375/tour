@@ -36,7 +36,11 @@
         .im-meta-item{
             font-size: 9px !important;
         }
+        .addNewReviewButtonMobileFooter{
+            display: none;
+        }
     </style>
+
 </head>
 
 <body class="rebrand_2017 desktop HomeRebranded  js_logging rtl home page-template-default page page-id-119 group-blog wpb-js-composer js-comp-ver-4.12 vc_responsive">
@@ -181,13 +185,6 @@
                         <div class="closeThisModal iconClose" onclick="closeMyModal('safarnamehMobileCategory')"></div>
                     </div>
                 </div>
-                <style>
-                    .safarnamehMainCategoryListMobile .newFull{
-                        width: 100%;
-                        padding: 5px;
-                        margin: 0px 10px;
-                    }
-                </style>
                 <div class="safarnamehMainCategoryListMobile">
                     <div class="list">
                         <a href="{{route('news.main')}}" class="categ newFull">
@@ -212,7 +209,7 @@
         <div id="safarnamehSearchMobile" class="modalBlackBack fullCenter hideOnScreen">
             <div class="gombadi">
                 <div class="mobileFooterFilterPic" style="max-height: 400px">
-                    <img src="{{URL::asset('images/mainPics/naser.jpg')}}" style="width: 100%">
+                    <img src="{{URL::asset('images/mainPics/naser.jpg')}}" style="width: 100%; display: none">
                     <div class="gradientWhite">
                         <div class="closeThisModal iconClose" onclick="closeMyModal('safarnamehSearchMobile')"></div>
                     </div>
@@ -439,7 +436,6 @@
                 }
             })
         }
-
 
         function resizeMobileListHeight(){
             var height = $('#safarnamehMobileCategory').find('.mobileFooterFilterPic').height() + 5;

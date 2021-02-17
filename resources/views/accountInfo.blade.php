@@ -8,6 +8,11 @@
     <link rel="stylesheet" type="text/css" media="screen, print" href="{{URL::asset('css/shazdeDesigns/abbreviations.css')}}"/>
 
 
+    <style>
+        .addNewReviewButtonMobileFooter{
+            display: none;sa
+        }
+    </style>
     <title>تنظیمات اطلاعات کاربری</title>
 @stop
 

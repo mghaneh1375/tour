@@ -392,7 +392,7 @@
                             <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">رستوران‌های ایران</a>
                             <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">جاذبه‌‌های ایران</a>
                             <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood"> غذاهای محلی ایران</a>
-                            <a href="#" class="pSC_cityDetails traditionalFood">
+                            <a href="#" class="pSC_cityDetails">
                                 <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
                                 نوشیدنی های ایران
                             </a>

@@ -635,9 +635,10 @@ function goToTagsPageReview(_element){
     var tag = $(_element).text();
     if(tag.trim().length > 0){
         tag = tag.replace('#', '');
-        if($(window).width() < 767)
+        if($(window).width() < 767) {
             openReviewTagSearchFromReview(tag); //  in mobileFooter.js
-
+            closeFullReview();
+        }
     }
 }
 

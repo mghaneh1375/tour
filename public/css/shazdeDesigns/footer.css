@@ -2159,7 +2159,7 @@ footer .profileFooterPopUp .profileSideMenu .tabs .tab{
     display: flex;
     align-items: center;
     margin-bottom: 5px;
-    padding: 5px 5px;
+    padding: 15px 5px;
     border-bottom: solid 1px #d3d3d340;
     color: #333;
 }

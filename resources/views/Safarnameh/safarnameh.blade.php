@@ -95,7 +95,7 @@
             <div class="content">
                 <div class="withBack">
                     <div class="text">
-                        <div style="margin-bottom: 50px; text-align: left;">اخبار</div>
+{{--                        <div style="margin-bottom: 50px; text-align: left;">اخبار</div>--}}
                         <div style="margin-bottom: 9px;">سفرنامه</div>
                         <div style="line-height: 38px; padding-bottom: 12px; padding-top: 19px;">کوچیتا</div>
                     </div>

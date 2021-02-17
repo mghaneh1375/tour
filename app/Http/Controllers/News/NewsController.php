@@ -98,15 +98,14 @@ class NewsController extends Controller
     public function newsListPage($kind, $content = ''){
 
         $header = '';
-        if($kind == 'all'){
+        if($kind == 'all')
             $header = 'آخرین اخبار';
-        }
-        else if($kind == 'category'){
+        else if($kind == 'category')
             $header = 'اخبار ' . $content;
-        }
-        else if($kind == 'tag'){
+        else if($kind == 'tag')
             $header = 'اخبار مرتبط با  ' . $content;
-        }
+        else if($kind == 'content')
+            $header = 'اخبار مرتبط با  ' . $content;
 
         return view('pages.News.newsList', compact(['kind', 'content', 'header']));
     }
@@ -134,13 +133,26 @@ class NewsController extends Controller
                         ->get();
         }
         else if($kind == 'tag'){
-            $category = NewsTags::where('tag', $content)->first();
+            $tag = NewsTags::where('tag', $content)->first();
             $news = News::youCanSee()->join('newsTagsRelations', 'newsTagsRelations.newsId', 'news.id')
-                        ->where('newsTagsRelations.tagId', $category->id)
+                        ->where('newsTagsRelations.tagId', $tag->id)
                         ->orderByDesc('news.dateAndTime')
                         ->select($joinSelectCol)
                         ->skip($page*$take)->take($take)
                         ->get();
+        }
+        else if($kind == 'content'){
+            $newsIdInTag = NewsTags::join('newsTagsRelations', 'newsTagsRelations.tagId', 'newsTags.id')->where('newsTags.tag', 'LIKE', "%$content%")->pluck('newsTagsRelations.newsId')->toArray();
+            $newsIdInKeyWord = News::youCanSee()->where('keyword', 'LIKE', "%$content%")->pluck('id')->toArray();
+
+            $newsId = array_merge($newsIdInTag, $newsIdInKeyWord);
+
+            $news = News::youCanSee()->whereIn('id', $newsId)
+                                    ->orderByDesc('dateAndTime')
+                                    ->select($selectCol)
+                                    ->skip($page*$take)
+                                    ->take($take)
+                                    ->get();
         }
 
         foreach($news as $item)
