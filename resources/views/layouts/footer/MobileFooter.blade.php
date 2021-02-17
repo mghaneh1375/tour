@@ -2,6 +2,12 @@
     .submitFiltersInMobile{
         display: none;
     }
+    .fontAwesomIconMFooter{
+        color: var(--koochita-green);
+        margin-left: 8px !important;
+        width: 20px !important;
+        font-size: 20px !important;
+    }
 </style>
 
 
@@ -351,6 +357,10 @@
                                class="pSC_cityDetails traditionalFood">
                                 غذاهای محلی {{$locationName['cityNameUrl']}}
                             </a>
+                            <a href="#" class="pSC_cityDetails ">
+                                <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
+                                نوشیدنی های {{$locationName['cityNameUrl']}}
+                            </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}"
                                class="pSC_cityDetails souvenirIcon">
                                 صنایع دستی {{$locationName['cityNameUrl']}}
@@ -359,36 +369,47 @@
                                class="pSC_cityDetails adventureIcon">
                                 طبیعت گردی ‌های {{$locationName['cityNameUrl']}}
                             </a>
+                            <a href="#" class="pSC_cityDetails">
+                                <i class=" fas fa-mug-hot fontAwesomIconMFooter"></i>
+                                کافه های {{$locationName['cityNameUrl']}}
+                            </a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های {{$locationName['cityNameUrl']}}</a>
+
                             <a href="{{route('safarnameh.list', ['type' => $locationName['kindState'], 'search' => $locationName['cityNameUrl'] ])}}" class="pSC_cityDetails safarnameIcon">
                                 سفرنامه های {{$locationName['cityNameUrl']}}
                             </a>
                             <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+
+                            <a href="https://koochitatv.com" class="pSC_cityDetails">
+                                <i class=" fas fa-tv fontAwesomIconMFooter"></i>
+                                کوچیتا TV
+                            </a>
                         </div>
                     @else
                         <div class="pSC_boxOfCityDetails" style="display: flex; flex-wrap: wrap;">
-                            <a href="{{route('place.list', ['kindPlaceId' => 4, 'mode' => 'country'])}}" class="pSC_cityDetails hotelIcon">
-                                اقامتگاه‌های ایران
+                            <a href="{{route('place.list', ['kindPlaceId' => 4, 'mode' => 'country'])}}" class="pSC_cityDetails hotelIcon">اقامتگاه‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'country'])}}" class="pSC_cityDetails boomIcon">بوم گردی های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">رستوران‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">جاذبه‌‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood"> غذاهای محلی ایران</a>
+                            <a href="#" class="pSC_cityDetails traditionalFood">
+                                <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
+                                نوشیدنی های ایران
                             </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'country'])}}" class="pSC_cityDetails boomIcon">
-                                بوم گردی های ایران
+                            <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => 'country'])}}" class="pSC_cityDetails souvenirIcon"> صنایع دستی ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">طبیعت گردی های ایران</a>
+                            <a href="#" class="pSC_cityDetails">
+                                <i class=" fas fa-mug-hot fontAwesomIconMFooter"></i>
+                                کافه های ایران
                             </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">
-                                رستوران‌های ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">
-                                جاذبه‌‌های ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood">
-                                غذاهای محلی ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => 'country'])}}" class="pSC_cityDetails souvenirIcon">
-                                صنایع دستی ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">
-                                طبیعت گردی های ایران
-                            </a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => 'country'])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های ایران</a>
                             <a href="{{route('safarnameh.index')}}" class="pSC_cityDetails safarnameIcon">سفرنامه</a>
                             <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+
+                            <a href="https://koochitatv.com" class="pSC_cityDetails">
+                                <i class=" fas fa-tv fontAwesomIconMFooter"></i>
+                                کوچیتا TV
+                            </a>
                         </div>
                     @endif
                 </div>
@@ -402,11 +423,18 @@
                                     استان {{$locationName['stateNameUrl']}}
                                 </div>
                             </a>
+
+                            <script>
+                                $('.pSC_boxOfDetails').css('height', 'calc(100% - 175px)');
+                            </script>
                         @endif
                         @if(isset($locationName['cityNameUrl']) && $locationName['kindState'] == 'city')
                             <a href="{{route('cityPage', ['kind' => 'city', 'city' => $locationName['cityNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton">
                                 <div class="icc locationIcon" style="word-spacing: -4px;  color: black;">شهر {{$locationName['cityNameUrl']}}</div>
                             </a>
+                            <script>
+                                $('.pSC_boxOfDetails').css('height', 'calc(100% - 235px)');
+                            </script>
                         @endif
                     </div>
 {{--                    <a href="https://koochitatv.com" class="pSC_cityDetails koochitaTvRowPhoneFooter" style="width: 49%;">--}}

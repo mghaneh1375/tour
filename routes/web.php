@@ -225,7 +225,7 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::post('proSearch', array('as' => 'proSearch', 'uses' => 'AjaxController@proSearch'));
 
-    Route::post('searchForCity', array('as' => 'searchForCity', 'uses' => 'AjaxController@searchForCity'));
+    Route::post('searchForCity', 'AjaxController@searchForCity')->name('searchForCity');
 
     Route::post('searchForLine', array('as' => 'searchForLine', 'uses' => 'AjaxController@searchForLine'));
 
@@ -352,6 +352,34 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
     Route::group(array('middleware' => ['throttle:60', 'auth']), function () {
 
+        Route::middleware(['shareData'])->group(function() {
+            Route::get('profile/editPhoto', 'ProfileController@editPhoto')->name('profile.editPhoto');
+            Route::get('profile/message', 'MessageController@messagingPage')->name('profile.message.page');
+            Route::get('profile/myTrips', 'MyTripsController@myTrips')->name('myTrips');
+            Route::get('profile/tripPlaces/{tripId}/{sortMode?}', 'MyTripsController@myTripsInner')->name('tripPlaces');
+            Route::get('profile/recentlyView', 'MyTripsController@recentlyViewTotal')->name('recentlyViewTotal');
+            Route::get('messages', array('as' => 'msgs', 'uses' => 'MessageController@showMessages'));
+            Route::get('messagesErr/{err}', array('as' => 'msgsErr', 'uses' => 'MessageController@showMessages'));
+            Route::get('travel', array('as' => 'travel', 'uses' => 'TravelController@showTravel'));
+
+            Route::get('profile/accountInfo', 'ProfileController@accountInfo')->name('profile.accountInfo');
+
+        });
+
+        Route::middleware(['throttle:20'])->group(function() {
+            Route::post('profile/accountInfo/editUsername', 'UserLoginController@editUsernameAccountInfo')->name('profile.accountInfo.editUsername');
+
+            Route::post('profile/accountInfo/editPhoneNumber', 'UserLoginController@editPhoneNumberAccountInfo')->name('profile.accountInfo.editPhoneNumber');
+
+            Route::post('profile/accountInfo/editGeneralInfo', 'UserLoginController@editGeneralAccountInfo')->name('profile.accountInfo.editGeneralInfo');
+
+            Route::post('profile/accountInfo/editSocialInfo', 'UserLoginController@editSocialInfo')->name('profile.accountInfo.editSocialInfo');
+
+            Route::post('profile/accountInfo/editPassword', 'UserLoginController@editPassword')->name('profile.accountInfo.editPassword');
+
+        });
+
+
         Route::get('profile/getUserInfoFooter', 'ProfileController@getUserInfoFooter')->name('profile.getUserInfoFooter');
 
         Route::get('profile/getBookMarks', 'ProfileController@getBookMarks')->name('profile.getBookMarks');
@@ -372,25 +400,13 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('profile/updateBannerPic', 'ProfileController@updateBannerPic')->name('profile.updateBannerPic');
 
-        Route::get('profile/editPhoto', 'ProfileController@editPhoto')->name('profile.editPhoto')->middleware('shareData');
-
-        Route::get('profile/message', 'MessageController@messagingPage')->name('profile.message.page')->middleware('shareData');
-
         Route::post('profile/message/get', 'MessageController@getMessages')->name('profile.message.get');
 
         Route::post('profile/message/update', 'MessageController@updateMessages')->name('profile.message.update');
 
         Route::post('profile/message/send', 'MessageController@sendMessages')->name('profile.message.send');
 
-        Route::get('profile/myTrips', 'MyTripsController@myTrips')->name('myTrips')->middleware('shareData');
-
         Route::get('profile/myTrips/getTrips', 'MyTripsController@getTrips')->name('myTrips.getTrips');
-
-        Route::get('profile/tripPlaces/{tripId}/{sortMode?}', 'MyTripsController@myTripsInner')->name('tripPlaces')->middleware('shareData');
-
-        Route::get('profile/recentlyView', 'MyTripsController@recentlyViewTotal')->name('recentlyViewTotal')->middleware('shareData');
-
-        Route::get('profile/accountInfo', 'ProfileController@accountInfo')->name('profile.accountInfo')->middleware('shareData');
 
         Route::post('profile/setFollower', 'FollowerController@setFollower')->name('profile.setFollower');
 
@@ -414,10 +430,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
         Route::post('updateTripStyles', array('as' => 'updateTripStyles', 'uses' => 'TripStyleController@updateTripStyles'));
 
         Route::post('sendMyInvitationCode', array('as' => 'sendMyInvitationCode', 'uses' => 'ProfileController@sendMyInvitationCode'));
-
-        Route::get('messages', array('as' => 'msgs', 'uses' => 'MessageController@showMessages'))->middleware('shareData');
-
-        Route::get('messagesErr/{err}', array('as' => 'msgsErr', 'uses' => 'MessageController@showMessages'))->middleware('shareData');
 
         Route::post('opOnMsgs', array('as' => 'opOnMsgs', 'uses' => 'MessageController@opOnMsgs'));
 
@@ -443,15 +455,7 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('getBannerPics', array('as' => 'getBannerPics', 'uses' => 'ProfileController@getBannerPics'));
 
-        Route::post('updateProfile1', array('as' => 'updateProfile1', 'uses' => 'ProfileController@updateProfile1'));
-
-        Route::post('checkAuthCode', array('as' => 'checkAuthCode', 'uses' => 'ProfileController@checkAuthCode'));
-
-        Route::post('resendAuthCode', array('as' => 'resendAuthCode', 'uses' => 'ProfileController@resendAuthCode'));
-
         Route::post('updateProfile2', array('as' => 'updateProfile2', 'uses' => 'ProfileController@updateProfile2'));
-
-        Route::post('updateProfile3', array('as' => 'changePas', 'uses' => 'ProfileController@updateProfile3'));
 
         Route::post('placeTrips', array('as' => 'placeTrips', 'uses' => 'MyTripsController@placeTrips'));
 
@@ -472,8 +476,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
         Route::post('changePlaceDate', array('as' => 'changePlaceDate', 'uses' => 'MyTripsController@changePlaceDate'));
 
         Route::post('changeTripDate', array('as' => 'changeTripDate', 'uses' => 'MyTripsController@changeTripDate'));
-
-        Route::get('travel', array('as' => 'travel', 'uses' => 'TravelController@showTravel'))->middleware('shareData');
 
         Route::post('sendAns', array('as' => 'sendAns', 'uses' => 'PlaceController@sendAns'));
 
@@ -811,6 +813,10 @@ Route::group(array('middleware' => ['nothing']), function () {
     Route::get('seeAllAns/{questionId}/{mode?}/{logId?}', 'NotUseController@seeAllAns')->name('seeAllAns');
     Route::post('getPhotoFilter', 'NotUseController@getPhotoFilter')->name('getPhotoFilter');
 
+
+    Route::post('checkAuthCode', 'NotUseController@checkAuthCode')->name('checkAuthCode');
+    Route::post('resendAuthCode', 'NotUseController@resendAuthCode')->name('resendAuthCode');
+
 });
 
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
@@ -818,3 +824,10 @@ Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.
 Route::get('seenLogExport/{num}', 'MainController@seenLogExport');
 
 Route::get('/getVideosFromKoochitaTv', 'AjaxController@getVideosFromKoochitaTv')->name('getVideosFromKoochitaTv');
+
+
+//<Directory /var/www/tvKoochita/public>
+//        Options Indexes FollowSymLinks
+//        AllowOverride All
+//        Require all granted
+//</Directory>

@@ -292,7 +292,7 @@
 
             {{--banner_3--}}
             @if(isset($middleBan['4']) && count($middleBan['4']) > 0)
-                <div class="circleSliderMainPage marginBetweenMainPageMobileElements hideOnPhone">
+                <div class="circleSliderMainPage marginBetweenMainPageMobileElements">
                     <div class='parent'>
                         <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="header hideOnScreen">
                             {{__('سفر طبیعت‌گردی')}}

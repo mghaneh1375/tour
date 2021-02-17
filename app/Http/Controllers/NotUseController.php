@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Comment;
@@ -583,5 +584,59 @@ class NotUseController extends Controller
         if (isset($_POST["kindPlaceId"])) {
             echo json_encode(PicItem::where('kindPlaceId', '=', makeValidInput($_POST["kindPlaceId"]))->get());
         }
+    }
+
+
+    public function checkAuthCode() {
+        return;
+
+        if(isset($_POST["phoneNum"]) && isset($_POST["code"])) {
+
+            $phoneNum = makeValidInput($_POST["phoneNum"]);
+            $code = makeValidInput($_POST["code"]);
+
+            $condition = ['phoneNum' => $phoneNum, 'code' => $code, 'userId' => \auth()->user()->id];
+            $activation = ActivationCode::where($condition)->first();
+            if($activation != null) {
+
+                $user = Auth::user();
+                $user->phone = $phoneNum;
+                $user->save();
+
+                $activation->delete();
+
+                return "ok";
+            }
+        }
+
+        return "nok";
+    }
+
+    public function resendAuthCode() {
+        return;
+
+        if(isset($_POST["phoneNum"])) {
+
+            $phoneNum = makeValidInput($_POST["phoneNum"]);
+
+            $condition = ['phoneNum' => $phoneNum, 'userId' =>  \auth()->user()->id];
+            $activation = ActivationCode::where($condition)->first();
+            if($activation != null) {
+
+                if(time() - $activation->sendTime < 90) {
+                    return json_encode(['msg' => 'err', 'reminder' => 90 - time() + $activation->sendTime]);
+                }
+
+                $activation->code = createCode();
+                $activation->sendTime = time();
+                $activation->save();
+
+                sendSMS($phoneNum, $activation->code, 'sms');
+
+                return json_encode(['msg' => 'ok', 'reminder' => 90]);
+            }
+        }
+
+        return json_encode(['msg' => 'err', 'reminder' => 90]);
     }
 }

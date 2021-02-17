@@ -205,7 +205,6 @@ $(window).ready(() => {
 });
 
 
-
 if(numSlidesMiddleBan4 > 0){
     var svg = true;
     var click = true;

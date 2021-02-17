@@ -281,8 +281,8 @@ class AjaxController extends Controller {
     }
 
     public function searchForCity(Request $request) {
-        $key = $_POST["key"];
-        $result = array();
+        $result = [];
+        $key = $request->key;
         if(isset($request->state) && $request->state == 1)
             $result = DB::select("SELECT state.id, state.name as stateName FROM state WHERE state.name LIKE '%$key%' ");
 
@@ -295,10 +295,12 @@ class AjaxController extends Controller {
             array_push($result, $item);
         }
 
-        $village = DB::select("SELECT cities.id, cities.name as cityName, state.name as stateName, cities.isVillage as isVillage FROM cities, state WHERE cities.stateId = state.id AND isVillage != 0 AND cities.name LIKE '%$key%' ");
-        foreach ($village as $item) {
-            $item->kind = 'village';
-            array_push($result, $item);
+        if(isset($request->village) && $request->village == 1) {
+            $village = DB::select("SELECT cities.id, cities.name as cityName, state.name as stateName, cities.isVillage as isVillage FROM cities, state WHERE cities.stateId = state.id AND isVillage != 0 AND cities.name LIKE '%$key%' ");
+            foreach ($village as $item) {
+                $item->kind = 'village';
+                array_push($result, $item);
+            }
         }
         echo json_encode($result);
         return;
