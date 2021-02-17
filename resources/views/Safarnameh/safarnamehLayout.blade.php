@@ -187,7 +187,7 @@
                 </div>
                 <div class="safarnamehMainCategoryListMobile">
                     <div class="list">
-                        <a href="{{route('news.main')}}" class="categ newFull">
+                        <a href="{{route('news.main')}}" class="categ newFull" style="width: 100%;">
                             <div class="categIcon" style="margin: 0px">
                                 <img src="{{URL::asset('_images/safarnamehIcon/news.svg')}}" alt="اخبار" style="height: 30px;">
                             </div>
