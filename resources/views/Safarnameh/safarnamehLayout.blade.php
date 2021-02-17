@@ -207,8 +207,8 @@
         </div>
 
         <div id="safarnamehSearchMobile" class="modalBlackBack fullCenter hideOnScreen">
-            <div class="gombadi">
-                <div class="mobileFooterFilterPic" style="max-height: 400px">
+            <div class="gombadi" style="    max-height: 60%;">
+                <div class="mobileFooterFilterPic" style="max-height: 400px;min-height: 30px;">
                     <img src="{{URL::asset('images/mainPics/naser.jpg')}}" style="width: 100%; display: none">
                     <div class="gradientWhite">
                         <div class="closeThisModal iconClose" onclick="closeMyModal('safarnamehSearchMobile')"></div>
