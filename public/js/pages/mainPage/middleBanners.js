@@ -7,10 +7,12 @@ var sugg4PlaceHolder = getSuggestionPackPlaceHolder();
 sugg4PlaceHolder += sugg4PlaceHolder+sugg4PlaceHolder+sugg4PlaceHolder;
 
 divNames.forEach(item => {
-    $(`.${item}`).html(sugg4PlaceHolder);
-    $(`.${item}`).find('.suggestionPackDiv').addClass('swiper-slide');
-    $(`.${item}`).css('direction', 'ltr');
+    var elem = $(`.${item}`);
+    elem.html(sugg4PlaceHolder);
+    elem.find('.suggestionPackDiv').addClass('swiper-slide');
+    elem.css('direction', 'ltr');
 });
+
 runMainSwiper('mainSuggestion');
 
 if (typeof(Storage) !== "undefined") {
@@ -39,10 +41,12 @@ function ajaxToFillMainPageSuggestion(){
 }
 
 function loadMainPageSliders(){
-    bannerIsLoaded = true;
+    var cityMainPageSliderElement = $('.cityMainPageSlider');
     var text = '';
+
+    bannerIsLoaded = true;
     if(middleBan5.length > 0){
-        $('.cityMainPageSlider').parent().removeClass('hidden');
+        cityMainPageSliderElement.parent().removeClass('hidden');
         middleBan5.map((item, index) => {
             text += `<div class="swiper-slide position-relative citySliderMainPageItem">
                            <figure class="snip1091 ${middleBan5Color[index%3]}">
@@ -54,7 +58,7 @@ function loadMainPageSliders(){
                            </figure>
                         </div>`
         });
-        $('.cityMainPageSlider').html(text);
+        cityMainPageSliderElement.html(text);
 
         new Swiper('.threeSlider', {
             loop: true,
@@ -77,12 +81,12 @@ function loadMainPageSliders(){
         });
     }
     else
-        $('.cityMainPageSlider').parent().remove();
+        cityMainPageSliderElement.parent().remove();
 
 
     if(middleBan4.length > 0){
-        Baner4isLoaded = true;
         var Ban4Text = '';
+        Baner4isLoaded = true;
         middleBan4.map((item, index) => Ban4Text += `<a href="${placeListOfMajaraUrl}" id='slide${index+1}' class='mainBlubSlider ${index == 0 ? 'up1' : ''}' style="background-image: url('${item.pic}'); ">${item.text}</a>`)
         $('#middleBan4Body').html(Ban4Text);
     }
@@ -152,21 +156,11 @@ function createMainPageSuggestion(_result){
 
 function runMainSwiper(_class){
     new Swiper('.' + _class, {
-
         loop: true,
-        updateOnWindowResize: true,
+        // updateOnWindowResize: true,
         navigation: {
             prevEl: '.swiper-button-next',
             nextEl: '.swiper-button-prev',
-        },
-        on: {
-            init: function(){
-                this.update();
-            },
-            resize: function () {
-                resizeFitImg('resizeImgClass');
-                this.update()
-            },
         },
         breakpoints: {
             768: {
@@ -209,6 +203,123 @@ $(window).ready(() => {
         }
     });
 });
+
+
+
+if(numSlidesMiddleBan4 > 0){
+    var svg = true;
+    var click = true;
+    var sliding = false;
+    var Baner4isLoaded = false;
+
+    var curpage = 1;
+    var pageShift = 500;
+
+    var transitionPrefix = "circle";
+    var pagePrefixBanner4 = "slide";
+
+    var leftMiddleBan4 = document.getElementById("banner3_left");
+    var rightMiddleBan4 = document.getElementById("banner3_right");
+
+    function leftSlide() {
+        if (click && Baner4isLoaded) {
+            if (curpage == 1) curpage = numSlidesMiddleBan4+1;
+            sliding = true;
+            curpage--;
+            svg = true;
+            click = false;
+            for (k = 1; k <= numSlidesMiddleBan4; k++) {
+                var a1 = document.getElementById(pagePrefixBanner4 + k);
+                a1.className += " tran";
+            }
+            setTimeout(() => move(), 200);
+            setTimeout(() => {
+                for (k = 1; k <= numSlidesMiddleBan4; k++) {
+                    var a1 = document.getElementById(pagePrefixBanner4 + k);
+                    a1.classList.remove("tran");
+                }
+            }, 1400);
+        }
+    }
+
+    function rightSlide() {
+        if (click && Baner4isLoaded) {
+            if (curpage == numSlidesMiddleBan4) curpage = 0;
+            sliding = true;
+            curpage++;
+            svg = false;
+            click = false;
+            for (k = 1; k <= numSlidesMiddleBan4; k++) {
+                var a1 = document.getElementById(pagePrefixBanner4 + k);
+                a1.className += " tran";
+            }
+            setTimeout(() => move(), 200);
+            setTimeout(() => {
+                for (k = 1; k <= numSlidesMiddleBan4; k++) {
+                    var a1 = document.getElementById(pagePrefixBanner4 + k);
+                    a1.classList.remove("tran");
+                }
+            }, 1400);
+        }
+    }
+
+    function move() {
+        if (sliding && Baner4isLoaded) {
+            sliding = false;
+            if (svg) {
+                for (j = 1; j <= 9; j++) {
+                    var c = document.getElementById(transitionPrefix + j);
+                    c.classList.remove("steap");
+                    c.setAttribute("class", transitionPrefix + j + " streak");
+                }
+            } else {
+                for (j = 10; j <= 18; j++) {
+                    var c = document.getElementById(transitionPrefix + j);
+                    c.classList.remove("steap");
+                    c.setAttribute("class", transitionPrefix + j + " streak");
+                }
+            }
+            setTimeout(() => {
+                for (i = 1; i <= numSlidesMiddleBan4; i++) {
+                    if (i == curpage) {
+                        var a = document.getElementById(pagePrefixBanner4 + i);
+                        a.className += " up1";
+                    } else {
+                        var b = document.getElementById(pagePrefixBanner4 + i);
+                        b.classList.remove("up1");
+                    }
+                }
+                sliding = true;
+            }, 600);
+            setTimeout(() => {
+                click = true;
+            }, 1700);
+
+            setTimeout(() => {
+                if (svg) {
+                    for (j = 1; j <= 9; j++) {
+                        var c = document.getElementById(transitionPrefix + j);
+                        c.classList.remove("streak");
+                        c.setAttribute("class", transitionPrefix + j + " steap");
+                    }
+                } else {
+                    for (j = 10; j <= 18; j++) {
+                        var c = document.getElementById(transitionPrefix + j);
+                        c.classList.remove("streak");
+                        c.setAttribute("class", transitionPrefix + j + " steap");
+                    }
+                    sliding = true;
+                }
+            }, 850);
+            setTimeout(() => {
+                click = true;
+            }, 1700);
+        }
+    }
+    leftMiddleBan4.onmousedown = () => leftSlide();
+    rightMiddleBan4.onmousedown = () =>  rightSlide();
+    setInterval(() => rightSlide(), 8000);
+}
 
 
 if($(window).width() > 767){
@@ -390,119 +501,4 @@ if($(window).width() > 767){
         }, initialAnimDur + animDelay);
     }
     //END middleBan1
-
-    if(numSlidesMiddleBan4 > 0){
-        var svg = true;
-        var click = true;
-        var sliding = false;
-        var Baner4isLoaded = false;
-
-        var curpage = 1;
-        var pageShift = 500;
-
-        var transitionPrefix = "circle";
-        var pagePrefixBanner4 = "slide";
-
-        var leftMiddleBan4 = document.getElementById("banner3_left");
-        var rightMiddleBan4 = document.getElementById("banner3_right");
-
-        function leftSlide() {
-            if (click && Baner4isLoaded) {
-                if (curpage == 1) curpage = numSlidesMiddleBan4+1;
-                sliding = true;
-                curpage--;
-                svg = true;
-                click = false;
-                for (k = 1; k <= numSlidesMiddleBan4; k++) {
-                    var a1 = document.getElementById(pagePrefixBanner4 + k);
-                    a1.className += " tran";
-                }
-                setTimeout(() => move(), 200);
-                setTimeout(() => {
-                    for (k = 1; k <= numSlidesMiddleBan4; k++) {
-                        var a1 = document.getElementById(pagePrefixBanner4 + k);
-                        a1.classList.remove("tran");
-                    }
-                }, 1400);
-            }
-        }
-
-        function rightSlide() {
-            if (click && Baner4isLoaded) {
-                if (curpage == numSlidesMiddleBan4) curpage = 0;
-                sliding = true;
-                curpage++;
-                svg = false;
-                click = false;
-                for (k = 1; k <= numSlidesMiddleBan4; k++) {
-                    var a1 = document.getElementById(pagePrefixBanner4 + k);
-                    a1.className += " tran";
-                }
-                setTimeout(() => move(), 200);
-                setTimeout(() => {
-                    for (k = 1; k <= numSlidesMiddleBan4; k++) {
-                        var a1 = document.getElementById(pagePrefixBanner4 + k);
-                        a1.classList.remove("tran");
-                    }
-                }, 1400);
-            }
-        }
-
-        function move() {
-            if (sliding && Baner4isLoaded) {
-                sliding = false;
-                if (svg) {
-                    for (j = 1; j <= 9; j++) {
-                        var c = document.getElementById(transitionPrefix + j);
-                        c.classList.remove("steap");
-                        c.setAttribute("class", transitionPrefix + j + " streak");
-                    }
-                } else {
-                    for (j = 10; j <= 18; j++) {
-                        var c = document.getElementById(transitionPrefix + j);
-                        c.classList.remove("steap");
-                        c.setAttribute("class", transitionPrefix + j + " streak");
-                    }
-                }
-                setTimeout(() => {
-                    for (i = 1; i <= numSlidesMiddleBan4; i++) {
-                        if (i == curpage) {
-                            var a = document.getElementById(pagePrefixBanner4 + i);
-                            a.className += " up1";
-                        } else {
-                            var b = document.getElementById(pagePrefixBanner4 + i);
-                            b.classList.remove("up1");
-                        }
-                    }
-                    sliding = true;
-                }, 600);
-                setTimeout(() => {
-                    click = true;
-                }, 1700);
-
-                setTimeout(() => {
-                    if (svg) {
-                        for (j = 1; j <= 9; j++) {
-                            var c = document.getElementById(transitionPrefix + j);
-                            c.classList.remove("streak");
-                            c.setAttribute("class", transitionPrefix + j + " steap");
-                        }
-                    } else {
-                        for (j = 10; j <= 18; j++) {
-                            var c = document.getElementById(transitionPrefix + j);
-                            c.classList.remove("streak");
-                            c.setAttribute("class", transitionPrefix + j + " steap");
-                        }
-                        sliding = true;
-                    }
-                }, 850);
-                setTimeout(() => {
-                    click = true;
-                }, 1700);
-            }
-        }
-        leftMiddleBan4.onmousedown = () => leftSlide();
-        rightMiddleBan4.onmousedown = () =>  rightSlide();
-        setInterval(() => rightSlide(), 8000);
-    }
 }

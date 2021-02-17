@@ -560,19 +560,10 @@
     function runMainSwiper(){
         new Swiper('.mainSuggestion', {
             loop: true,
-            updateOnWindowResize: true,
+            // updateOnWindowResize: true,
             navigation: {
                 prevEl: '.swiper-button-next',
                 nextEl: '.swiper-button-prev',
-            },
-            on: {
-                init: function(){
-                    this.update();
-                },
-                resize: function () {
-                    resizeFitImg('resizeImgClass');
-                    this.update()
-                },
             },
             breakpoints: {
                 768: {
