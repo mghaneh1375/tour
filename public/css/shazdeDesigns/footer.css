@@ -2576,6 +2576,16 @@ footer .profileFooterPopUp .searchReviewMFooter .item .content .secRow{
         text-align: center;
         padding: 5px 0px;
     }
+
+    .myTripFooter .myTripCard{
+        margin: 5px;
+        width: calc(50% - 10px);
+    }
+
+
+    .pSC_boxOfDetails {
+        overflow: auto;
+    }
 }
 
 @media (max-height: 700px) {
@@ -2584,10 +2594,6 @@ footer .profileFooterPopUp .searchReviewMFooter .item .content .secRow{
         display: block;
     }
 
-    .pSC_boxOfDetails {
-        overflow: auto;
-        /*height: inherit;*/
-    }
 
     .pSC_tilte {
         padding: 15px 20px;
@@ -2737,6 +2743,10 @@ footer .profileFooterPopUp .searchReviewMFooter .item .content .secRow{
 
     .modules-membercenter-member-profile .aboutMeDesc {
         margin: 0 0 0 15px;
+    }
+
+    .myTripFooter .myTripCard{
+        width: calc(100% - 10px);
     }
 }
 

@@ -147,7 +147,8 @@
                                                 <span class="entry-date published updated">{{$safarnameh->date}}</span>
                                             </div>
                                             <div class="comments-link im-meta-item">
-                                                <i class="fa fa-comment-o"></i>{{$item->msgs}}
+                                                <i class="fas fa-comments"></i>
+                                                {{$item->msgs}}
                                             </div>
                                             <div class="author vcard im-meta-item">
                                                 <i class="fa fa-user"></i>
@@ -262,7 +263,8 @@
                                     <span class="entry-date published updated">##date##</span>
                                 </div>
                                 <div class="comments-link im-meta-item">
-                                    <i class="fa fa-comment-o"></i>##msgs##
+                                <i class="fas fa-comments"></i>
+                                    ##msgs##
                                 </div>
                                 <div class="author vcard im-meta-item">
                                     <i class="fa fa-user"></i>##username##
@@ -371,16 +373,16 @@
 
                         for(i = 0; i < response.length; i++) {
                             if(response[i]['kind'] == 'state')
-                                newElement += '<div onclick="goToCityFromArticle(\'' + response[i].stateName + '\', \'' + response[i].id + '\', 1)" class="articleCityResultRow">' +
-                                                '<div class="icons location spIcons" style="display: inline"></div>' +
-                                                '<p class="suggest cursor-pointer font-weight-700" style="margin: 0px; display: inline;">استان ' + response[i].stateName + '</p>' +
-                                              '</div>';
+                                newElement += `<div onclick="goToCityFromArticle('${response[i].stateName}', '${response[i].id}', 1)" class="articleCityResultRow">
+                                                <div class="icons location spIcons" style="display: inline"></div>
+                                                <p class="suggest cursor-pointer font-weight-700" style="margin: 0px; display: inline;">استان ${response[i].stateName}</p>
+                                              </div>`;
                             else
-                                newElement += '<div onclick="goToCityFromArticle(\'' + response[i].cityName + '\', \'' + response[i].id + '\', 2)" class="articleCityResultRow">' +
-                                                '<div class="icons location spIcons" style="display: inline"></div>' +
-                                                '<p class="suggest cursor-pointer font-weight-700" style="margin: 0px; display: inline;">شهر ' + response[i].cityName + '</p>' +
-                                                '<p class="suggest cursor-pointer stateName">' + response[i].stateName + '</p>' +
-                                              '</div>';
+                                newElement += `<div onclick="goToCityFromArticle('${response[i].cityName}', '${response[i].id}', 2)" class="articleCityResultRow">
+                                                <div class="icons location spIcons" style="display: inline"></div>
+                                                <p class="suggest cursor-pointer font-weight-700" style="margin: 0px; display: inline;">شهر ${response[i].cityName}</p>
+                                                <p class="suggest cursor-pointer stateName">${response[i].stateName}</p>
+                                              </div>`;
                         }
                         setResultToGlobalSearch(newElement);
                     }
@@ -391,19 +393,15 @@
         }
 
         function goToCityFromArticle(val, id, kind) {
-            if(kind == 2)
-                kind = 'city';
-            else
-                kind = 'state';
-
-            window.location.href = '{{url("/safarnameh/list/")}}/' + kind + '/' + val;
+            kind = kind == 2 ? 'city' : 'state';
+            window.location.href = `{{url("/safarnameh/list/")}}/${kind}/${val}`;
         }
 
         function searchInArticle(id){
             var text = $(`#${id}`).val();
             if(text.trim().length != 0) {
                 openLoading();
-                window.location.href = '{{url("/safarnameh/list")}}' + '/content/' + text;
+                window.location.href = `{{url("/safarnameh/list")}}/content/${text}`;
             }
         }
 
@@ -438,8 +436,9 @@
         }
 
         function resizeMobileListHeight(){
-            var height = $('#safarnamehMobileCategory').find('.mobileFooterFilterPic').height() + 5;
-            $('#safarnamehMobileCategory').find('.safarnamehMainCategoryListMobile').css('height', `calc(100% - ${height}px)`);
+            var safarnamehMobileCategoryElement = $('#safarnamehMobileCategory');
+            var height = safarnamehMobileCategoryElement.find('.mobileFooterFilterPic').height() + 5;
+            safarnamehMobileCategoryElement.find('.safarnamehMainCategoryListMobile').css('height', `calc(100% - ${height}px)`);
         }
 
         $(window).on('resize', resizeMobileListHeight);

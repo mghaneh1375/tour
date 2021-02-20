@@ -93,6 +93,10 @@
     var seenLogStartTime = new Date().getTime();
     var lastSeenLogScroll = 0;
 
+
+    var playTvImg = "{{URL::asset('images/icons/play.webp')}}";
+    var eyeTvImg = "{{URL::asset('images/icons/eye.png')}}";
+
     $(document, window).ready(() => {
         window.isMobile = window.mobileAndTabletCheck() ? 1 : 0;
 

@@ -30,9 +30,7 @@
                     <div class="pic">
                         <img src="{{URL::asset('images/mainPics/notElemList.png')}}" style="width: 100px;">
                     </div>
-                    <div class="text">
-                        هیچ سفرنامه ای با این موضوع یافت نشد.
-                    </div>
+                    <div class="text">هیچ سفرنامه ای با این موضوع یافت نشد.</div>
                 </div>
             </div>
 

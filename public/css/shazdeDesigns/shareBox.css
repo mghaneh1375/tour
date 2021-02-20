@@ -43,6 +43,10 @@
     width: 100%;
     padding: 0 5px;
 }
+#share_box > a > img, #share_box_mobile > a > img{
+    width: 20px;
+    height: 20px;
+}
 
 #share_box > a > div {
     color: #16174f;

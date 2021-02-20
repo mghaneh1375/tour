@@ -1209,6 +1209,63 @@ function openReportTxt(_value){
 }
 
 
+//START tvCard section
+function createTvCard(_video){
+    var tvHtml = `<div class="tvContentVideo ">
+                    <a href="${_video.url}" class="tvVideoPic" target="_blank">
+                        <div class="tvImgHover">
+                            <img src="${playTvImg}" style="width: 50px">
+                        </div>
+                        <div class="tvOverPic tvSeenSection">
+                            <span class="koochitaTvSeen">${_video.seen}</span>
+                            <img src="${eyeTvImg}" style="height: 15px; margin-right: 5px">
+                        </div>
+                        <div class="tvOverPic tvLikeSection">
+                            <div class="tvLike">
+                                <span class="koochitaTvDisLikeCount">${_video.like}</span>
+                                <i class="DisLikeIcon"></i>
+                            </div>
+                            <div class="tvLike" style="margin-right: 10px">
+                                <span class="koochitaTvLikeCount">${_video.disLike}</span>
+                                <i class="LikeIcon"></i>
+                            </div>
+                        </div>
+                        <img src="${_video.pic}" class="koochitaTvImg resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                    </a>
+                    <a href="${_video.url}" class="tvVideoName showLessText" target="_blank">${_video.title}</a>
+                    <div class="tvUserContentDiv">
+                        <div class="tvUserPic">
+                            <img src="${_video.userPic}" class="koochitaTvUserImg resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                        </div>
+                        <div class="tvUserInfo">
+                            <div class="tvUserName">${_video.username}</div>
+                            <div class="tvUserTime">${_video.time}</div>
+                        </div>
+                    </div>
+                </div>`;
+
+    return tvHtml;
+}
+
+function createTvCardPlaceHolder(){
+    var card = `<div class="tvContentVideo PH">
+                    <div class="tvVideoPic placeHolderAnime"></div>
+                    <div class="tvVideoName showLessText placeHolderAnime"></div>
+                    <div class="tvUserContentDiv">
+                        <div class="tvUserPic placeHolderAnime"></div>
+                        <div class="tvUserInfo">
+                            <div class="tvUserName placeHolderAnime"></div>
+                            <div class="tvUserName placeHolderAnime"></div>
+                        </div>
+                    </div>
+                </div>`;
+
+    return card;
+}
+
+//END tvCard section
+
+
 
 $(window).on('click', e => {
     if($('.modalBlackBack.closeWithClick.showModal:not(.notCloseOnClick)').length > 0){

@@ -943,6 +943,7 @@
     direction: rtl;
 }
 .commentsContentMainBox .fullReviewAnsText{
+    white-space: pre-wrap;
     font-size: .7em;
     margin-top: 5px;
 }
@@ -1086,6 +1087,15 @@
     margin: 10px 0 5px;
     display: inline-block;
     width: 100%;
+    margin-bottom: 10px;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 20px;
+}
+.usersCommentHeaderText{
+    color: var(--koochita-blue);
+    font-weight: bold;
+    font-size: 23px;
+    margin-bottom: 5px;
 }
 
 .newAnswerPlaceMainDiv{

@@ -14,12 +14,9 @@
     <link rel="stylesheet" href="{{URL::asset('css/pages/messagePage.css?v='.$fileVersions)}}">
 
     <style>
-        body{
-            overflow: hidden;
-        }
         .msgBody{
-            background-image: url("{{URL::asset('images/mainPics/msgBack.jpg')}}");
-            background-image: url("{{URL::asset('images/mainPics/msgBack2.jpg')}}");
+            {{--background-image: url("{{URL::asset('images/mainPics/msgBack.jpg')}}");--}}
+            {{--background-image: url("{{URL::asset('images/mainPics/msgBack2.jpg')}}");--}}
             background-image: url("{{URL::asset('images/mainPics/msgBack3.jpg')}}");
             background-size: auto;
         }
@@ -28,6 +25,10 @@
         }
         .msgContent .myText.corner:before{
             background-image: url("{{URL::asset('images/icons/greenCorner2.png')}}");
+        }
+
+        .addNewReviewButtonMobileFooter{
+            display: none;
         }
 
     </style>
@@ -342,9 +343,6 @@
                         $('#bodyMsg').scrollTop($('#bodyMsg')[0].scrollHeight);
                     }
                 },
-                error: function (err) {
-                    console.log(err);
-                }
             });
             setTimeout(updateMsg, updateMsgTime);
         }

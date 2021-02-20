@@ -293,6 +293,8 @@
                 </div>
 
                 <div id="translateRowsPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
+
+                <div id="koochitaTvMFooterPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
             </div>
 
             <div class="lp_phoneMenuBar">
@@ -309,7 +311,7 @@
                     <div>{{__('ترجمه')}}</div>
                     <span class="newMsgMainFooterCount newAlertNumber hidden" style="left: 0; top: 5px;">0</span>
                 </div>
-                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
+                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('koochitaTvMFooterPage', this)">
                     <div class="lp_icons tvIcon"></div>
                     <div>{{__('ببینیم')}}</div>
                 </div>
@@ -378,7 +380,10 @@
                             <a href="{{route('safarnameh.list', ['type' => $locationName['kindState'], 'search' => $locationName['cityNameUrl'] ])}}" class="pSC_cityDetails safarnameIcon">
                                 سفرنامه های {{$locationName['cityNameUrl']}}
                             </a>
-                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails">
+                                <i class="far fa-newspaper fontAwesomIconMFooter"></i>
+                                اخبار
+                            </a>
 
                             <a href="https://koochitatv.com" class="pSC_cityDetails">
                                 <i class=" fas fa-tv fontAwesomIconMFooter"></i>
@@ -404,7 +409,10 @@
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => 'country'])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های ایران</a>
                             <a href="{{route('safarnameh.index')}}" class="pSC_cityDetails safarnameIcon">سفرنامه</a>
-                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails">
+                                <i class="far fa-newspaper fontAwesomIconMFooter"></i>
+                                اخبار
+                            </a>
 
                             <a href="https://koochitatv.com" class="pSC_cityDetails">
                                 <i class=" fas fa-tv fontAwesomIconMFooter"></i>
@@ -699,6 +707,7 @@
 <script>
     var userProfileUrl = '{{route("profile")}}';
     var searchInForReviewUrl = '{{route("review.search.reviewContent")}}';
+    var getKoochitaTvNewesUrlMFooter = '{{route("koochitatv.getNewestVideoFromKoochitaTv")}}';
 </script>
 
 <script src="{{URL::asset('js/pages/layout/mobileFooter.js?v='.$fileVersions)}}"></script>

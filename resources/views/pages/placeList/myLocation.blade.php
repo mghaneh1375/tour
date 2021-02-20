@@ -135,7 +135,7 @@
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
 
-    <script src="{{URL::asset('js/pages/myLocation.js')}}"></script>
+    <script src="{{URL::asset('js/pages/myLocation.js?v='.$fileVersions)}}"></script>
 
 </body>
 </html>

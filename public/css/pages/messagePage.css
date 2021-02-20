@@ -1,5 +1,6 @@
 body{
     min-width: 0px;
+    overflow: hidden;
 }
 .Scroll{
     scrollbar-color: var(--koochita-green) #f1f1f1;
@@ -215,6 +216,7 @@ footer{
     border-radius: 15px;
     position: relative;
     direction: rtl;
+    font-size: 13px;
 }
 .msgContent .myText{
     margin-left: auto;
@@ -464,3 +466,4 @@ footer{
         top: 0px;
     }
 }
+

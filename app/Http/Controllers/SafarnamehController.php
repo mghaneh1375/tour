@@ -709,9 +709,10 @@ class SafarnamehController extends Controller
         return view('Safarnameh.safarnamehShow', compact(['safarnameh', 'uPic', 'localStorageData', 'similarSafarnameh']));
     }
 
-    public function getSafarnamehComments(Request $request)
+    public function getSafarnamehComments()
     {
-        $safarnameh = Safarnameh::find($request->id);
+        $result = [];
+        $safarnameh = Safarnameh::find($_GET['id']);
         $comments = SafarnamehComments::where('safarnamehId', $safarnameh->id)
             ->where(function($query){
                 if(auth()->check())
@@ -724,14 +725,13 @@ class SafarnamehController extends Controller
             ->get();
         foreach ($comments as $comment) {
             $uComment = User::find($comment->userId);
+            $likes = SafarnamehCommentLikes::where('commentId', $comment->id)->selectRaw('COUNT(IF(`like`= 1 , 1, null)) AS likeCount, COUNT(IF(`like` = -1, 1, null)) AS disLikeCount')->first();
 
-            $comment->like = SafarnamehCommentLikes::where('commentId', $comment->id)->where('like', 1)->count();
-            $comment->disLike = SafarnamehCommentLikes::where('commentId', $comment->id)->where('like', -1)->count();
+            $comment->like = $likes->likeCount;
+            $comment->disLike = $likes->disLikeCount;
             $comment->youLike = 0;
             if(auth()->check()) {
-                $youLike = SafarnamehCommentLikes::where('commentId', $comment->id)
-                    ->where('userId', auth()->user()->id)
-                    ->first();
+                $youLike = SafarnamehCommentLikes::where('commentId', $comment->id)->where('userId', auth()->user()->id)->first();
                 if($youLike != null)
                     $comment->youLike = $youLike->like;
             }
@@ -740,21 +740,33 @@ class SafarnamehController extends Controller
             $comment->writerPic = getUserPic($uComment->id);
             $comment->timeAgo = convertJalaliToText(\verta($comment->created_at)->format('Ym%d'));
             $comment->answersCount = count($comment->answers);
+
+
+            array_push($result, [
+                'id' => $comment->id,
+                'text' => $comment->text,
+                'confirm' => $comment->confirm,
+                'youLike' => $comment->youLike,
+                'answers' => $comment->answers,
+                'userName' => $comment->userName,
+                'writerPic' => $comment->writerPic,
+                'timeAgo' => $comment->timeAgo,
+                'answersCount' => $comment->answersCount,
+                'like' => $comment->like,
+                'disLike' => $comment->disLike,
+            ]);
         }
 
-        return $comments;
+        return \response()->json(['status' => 'ok', 'result' => $result]);
     }
 
     public function LikeSafarnameh(Request $request)
     {
-        if(!\auth()->check()){
-            echo json_encode(['status' => 'auth']);
-            return;
-        }
 
         if(isset($request->id) && isset($request->like)){
             $id = $request->id;
             $like = $request->like;
+            $type = 'add';
             $safarnameh = Safarnameh::find($id);
             if($safarnameh != null){
                 $safarnamehLike = SafarnamehLike::where('userId', \auth()->user()->id)
@@ -763,23 +775,31 @@ class SafarnamehController extends Controller
                 if($safarnamehLike == null)
                     $safarnamehLike = new SafarnamehLike();
 
-                $safarnamehLike->safarnamehId = $id;
-                $safarnamehLike->userId = \auth()->user()->id;
-                $safarnamehLike->like = $like;
-                $safarnamehLike->save();
+                if($safarnamehLike->like != $like) {
+                    $safarnamehLike->safarnamehId = $id;
+                    $safarnamehLike->userId = \auth()->user()->id;
+                    $safarnamehLike->like = $like;
+                    $safarnamehLike->save();
+                }
+                else {
+                    $safarnamehLike->delete();
+                    $type = 'delete';
+                }
 
-                $like = SafarnamehLike::where('safarnamehId', $id)->where('like', 1)->count();
-                $disLike = SafarnamehLike::where('safarnamehId', $id)->where('like', -1)->count();
 
-                echo json_encode(['status' => 'ok', 'like' => $like, 'disLike' => $disLike]);
+                $likeDisLike = SafarnamehLike::where('safarnamehId', $id)
+                                ->selectRaw('COUNT(IF(`like` = 1, 1, null)) AS `likeCount`, COUNT(IF(`like` = -1, 1, null)) AS `disLikeCount`')
+                                ->first();
+                $like = $likeDisLike->likeCount;
+                $disLike = $likeDisLike->disLikeCount;
+
+                return \response()->json(['status' => 'ok', 'like' => $like, 'disLike' => $disLike, 'type' => $type]);
             }
             else
-                echo json_encode(['status' => 'nok2']);
+                return \response()->json(['status' => 'nok2']);
         }
         else
-            echo json_encode(['status' => 'nok1']);
-
-        return;
+            return \response()->json(['status' => 'nok1']);
     }
 
     public function StoreSafarnamehComment(Request $request)
@@ -825,28 +845,28 @@ class SafarnamehController extends Controller
         if(\auth()->check()){
             $comment = SafarnamehComments::find($request->id);
             if($comment != null){
-                $commentLike = SafarnamehCommentLikes::where('commentId', $request->id)
-                                                    ->where('userId', \auth()->user()->id)
-                                                    ->first();
-                if($commentLike == null) {
-                    $commentLike = new SafarnamehCommentLikes();
-                    $commentLike->userId = \auth()->user()->id;
-                    $commentLike->commentId = $request->id;
+                $commentLike = SafarnamehCommentLikes::where('commentId', $request->id)->where('userId', \auth()->user()->id)->first();
+
+                if($commentLike != null && $request->like == $commentLike->like)
+                    $commentLike->delete();
+                else {
+                    if ($commentLike == null) {
+                        $commentLike = new SafarnamehCommentLikes();
+                        $commentLike->userId = \auth()->user()->id;
+                        $commentLike->commentId = $request->id;
+                    }
+                    $commentLike->like = $request->like;
+                    $commentLike->save();
                 }
 
-                $commentLike->like = $request->like;
-                $commentLike->save();
-
-                $likeCount = \DB::select('SELECT SUM(CASE WHEN `like` = 1 THEN 1 ELSE 0 END) as likeCount, SUM(CASE WHEN `like` = -1 THEN 1 ELSE 0 END) as disLikeCount FROM safarnamehCommentLikes WHERE commentId = ' . $request->id);
-                echo json_encode(['status' => 'ok', 'result' => $likeCount]);
+                $likeCount = \DB::select('SELECT COUNT(IF(`like` = 1, 1, null)) as likeCount, COUNT(IF(`like` = -1, 1, null)) as disLikeCount FROM safarnamehCommentLikes WHERE commentId = ' . $request->id);
+                return \response()->json(['status' => 'ok', 'result' => $likeCount]);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return \response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'authError']);
-
-        return;
+            return \response()->json(['status' => 'authError']);
     }
 
 

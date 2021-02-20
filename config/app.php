@@ -13,6 +13,9 @@ return [
     |
     */
 
+    'koochitaTvNouncCode' => env('KOOCHITATV_NOUNC_CODE'),
+    'KOOCHITATV_URL_API' => env('KOOCHITATV_URL_API'),
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

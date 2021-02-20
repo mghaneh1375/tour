@@ -13,6 +13,7 @@ function getVideoFromTv(){
         success: response => {
             if(response.status == 'ok'){
                 var result = response.result;
+
                 var koochitaTvSectionElement = $('.koochitaTvSection');
                 koochitaTvSectionElement.find('.tvOverPic').removeClass('hidden');
                 koochitaTvSectionElement.find('.tvUserContentDiv').removeClass('hidden');
@@ -21,12 +22,13 @@ function getVideoFromTv(){
                 koochitaTvSectionElement.find('.tvVideoPic').attr('href', result.url);
                 koochitaTvSectionElement.find('.tvUserName').text(result.username);
                 koochitaTvSectionElement.find('.tvUserTime').text(result.time);
-                $('.koochitaTvSeen').text(result.seen);
-                $('.koochitaTvDisLikeCount').text(result.disLike);
-                $('.koochitaTvLikeCount').text(result.like);
-                $('.koochitaTvImg').attr('src', result.pic);
-                $('.tvVideoName').attr('href', result.url).text(result.title);
-                $('.koochitaTvUserImg').attr('src', result.userPic);
+
+                koochitaTvSectionElement.find('.koochitaTvSeen').text(result.seen);
+                koochitaTvSectionElement.find('.koochitaTvDisLikeCount').text(result.disLike);
+                koochitaTvSectionElement.find('.koochitaTvLikeCount').text(result.like);
+                koochitaTvSectionElement.find('.koochitaTvImg').attr('src', result.pic);
+                koochitaTvSectionElement.find('.tvVideoName').attr('href', result.url).text(result.title);
+                koochitaTvSectionElement.find('.koochitaTvUserImg').attr('src', result.userPic);
             }
         },
     })

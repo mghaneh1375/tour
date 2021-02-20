@@ -1,4 +1,5 @@
 var opnedMobileFooterId = null;
+var isGetKoochitaTvForMFooter = false;
 var profileSideMenuElement = $('#profileSideMenu');
 
 
@@ -17,7 +18,31 @@ function specialMobileFooter(_id, _element){
 
     $('.specTabsFot').removeClass('lp_selectedMenu');
     $(_element).addClass('lp_selectedMenu');
+
+    if(_id === "koochitaTvMFooterPage" && !isGetKoochitaTvForMFooter)
+        getTopKoochitaTvVideosForFooter();
 }
+
+function getTopKoochitaTvVideosForFooter(){
+    if(!isGetKoochitaTvForMFooter){
+        var cardPlaceHolder = createTvCardPlaceHolder(); //in forAllPages.js
+        cardPlaceHolder = cardPlaceHolder+cardPlaceHolder;
+        $('#koochitaTvMFooterPage').html(cardPlaceHolder);
+
+        $.ajax({
+            type: 'GET',
+            url: getKoochitaTvNewesUrlMFooter,
+            success: response => {
+                if(response.status === "ok"){
+                    var card = '';
+                    response.result.map(item => card += createTvCard(item));
+                    $('#koochitaTvMFooterPage').html(card);
+                }
+            }
+        })
+    }
+}
+
 
 function openMobileFooterPopUps(_id, _type = "toggle"){
     closeMyModalClass('footerModals');

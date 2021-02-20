@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('exportPhonesToExcels', 'HomeController@exporPhone');
 
+Route::get('/getVideosFromKoochitaTv', 'AjaxController@getVideosFromKoochitaTv')->name('getVideosFromKoochitaTv');
+Route::get('/getNewestVideoFromKoochitaTv', 'AjaxController@getNewestVideoFromKoochitaTv')->name('koochitatv.getNewestVideoFromKoochitaTv');
+
 Route::any('android', function (Illuminate\Http\Request $request) {
 
     $key = $request["key"];
@@ -288,27 +291,39 @@ Route::middleware(['nothing'])->group(function () {
 Route::group([], function () {
     Route::middleware(['shareData', 'SafarnamehShareData'])->group(function(){
         Route::get('/safarnameh', 'SafarnamehController@safarnamehMainPage')->name('safarnameh.index');
+
         Route::get('/safarnameh/show/{id}', 'SafarnamehController@showSafarnameh')->name('safarnameh.show');
+
         Route::get('/safarnameh/list/{type?}/{search?}', 'SafarnamehController@safarnamehList')->name('safarnameh.list');
     });
 
     Route::get('/article/{slug}', 'SafarnamehController@safarnamehRedirect');
+
     Route::get('/article/list/{type}/{search}', 'SafarnamehController@safarnamehListRedirect');
 
     Route::get('/safarnameh/mainPageData', 'SafarnamehController@safarnamehMainPageData')->name('safarnameh.getMainPageData');
+
     Route::get('/safarnameh/getListElement', 'SafarnamehController@getSafarnamehListElements')->name('safarnameh.getListElement');
+
     Route::get('/paginationInSafarnamehList', 'SafarnamehController@paginationInSafarnamehList')->name('safarnameh.list.pagination');
-    Route::post('/getSafarnamehComments', 'SafarnamehController@getSafarnamehComments')->name('safarnameh.comment.get');
+
+    Route::get('/getSafarnamehComments', 'SafarnamehController@getSafarnamehComments')->name('safarnameh.comment.get');
 
     Route::group(['middleware' => ['auth']], function (){
         Route::post('/safarnameh/like', 'SafarnamehController@LikeSafarnameh')->name('safarnameh.like');
+
         Route::post('/safarnameh/comment/store', 'SafarnamehController@StoreSafarnamehComment')->name('safarnameh.comment.store');
+
         Route::post('/safarnameh/comment/like', 'SafarnamehController@likeSafarnamehComment')->name('safarnameh.comment.like');
+
         Route::post('/safarnameh/bookMark', 'SafarnamehController@addSafarnamehBookMark')->name('safarnameh.bookMark');
 
         Route::post('safarnameh/store', 'SafarnamehController@storeSafarnameh')->name('safarnameh.store');
+
         Route::post('safarnameh/getForEdit', 'SafarnamehController@getSafarnameh')->name('safarnameh.get');
+
         Route::post('safarnameh/delete', 'SafarnamehController@deleteSafarnameh')->name('safarnameh.delete');
+
         Route::post('safarnameh/storePic', 'SafarnamehController@storeSafarnamehPics')->name('safarnameh.storePic');
     });
 });
@@ -376,7 +391,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
             Route::post('profile/accountInfo/editSocialInfo', 'UserLoginController@editSocialInfo')->name('profile.accountInfo.editSocialInfo');
 
             Route::post('profile/accountInfo/editPassword', 'UserLoginController@editPassword')->name('profile.accountInfo.editPassword');
-
         });
 
 
@@ -822,8 +836,6 @@ Route::group(array('middleware' => ['nothing']), function () {
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 
 Route::get('seenLogExport/{num}', 'MainController@seenLogExport');
-
-Route::get('/getVideosFromKoochitaTv', 'AjaxController@getVideosFromKoochitaTv')->name('getVideosFromKoochitaTv');
 
 
 //<Directory /var/www/tvKoochita/public>

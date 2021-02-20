@@ -51,7 +51,7 @@
                                     <span class="entry-date published updated">##date##</span>
                                 </div>
                                 <div class="comments-link im-meta-item">
-                                    <i class="fa fa-comment-o"></i>
+                                    <i class="fas fa-comments"></i>
                                     ##msgs##
                                 </div>
                                 <div class="author vcard im-meta-item">
@@ -354,13 +354,16 @@
                                         <span class="entry-date published updated">##date##</span>
                                     </div>
                                     <div class="comments-link im-meta-item">
-                                        <i class="fa fa-comment-o"></i>##msgs##
+                                        <i class="fas fa-comments"></i>
+                                        ##msgs##
                                     </div>
                                     <div class="author vcard im-meta-item">
-                                        <i class="fa fa-user"></i>##username##
+                                        <i class="fa fa-user"></i>
+                                        ##username##
                                     </div>
                                     <div class="post-views im-meta-item">
-                                        <i class="fa fa-eye"></i>##seen##
+                                        <i class="fa fa-eye"></i>
+                                        ##seen##
                                     </div>
                                 </div>
                             </div>
@@ -407,13 +410,16 @@
                         <span class="entry-date published updated">##date##</span>
                     </div>
                     <div class="comments-link im-meta-item">
-                        <i class="fa fa-comment-o"></i>##msgs##
+                        <i class="fas fa-comments"></i>
+                        ##msgs##
                     </div>
                     <div class="author vcard im-meta-item">
-                        <i class="fa fa-user"></i>##username##
+                        <i class="fa fa-user"></i>
+                        ##username##
                     </div>
                     <div class="post-views im-meta-item">
-                        <i class="fa fa-eye"></i>##seen##
+                        <i class="fa fa-eye"></i>
+                        ##seen##
                     </div>
                 </div>
             </div>

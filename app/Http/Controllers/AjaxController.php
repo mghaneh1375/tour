@@ -84,20 +84,23 @@ class AjaxController extends Controller {
 
     public function getVideosFromKoochitaTv()
     {
-        $nouns = env('KOOCHITATV_NOUNC_CODE');
-        $time = Carbon::now()->getTimestamp();
-        $hash = Hash::make($nouns.'_'.$time);
+        $nouns = config('app.koochitaTvNouncCode');
+        $KOOCHITATV_URL_API = config('app.KOOCHITATV_URL_API');
 
         $kindPlace = Place::find($_GET['kindPlaceId']);
         $place = \DB::table($kindPlace->tableName)->find($_GET['id']);
+
 
         if($place != null && $kindPlace != null){
             $curl = curl_init();
             $kindPlaceId = $kindPlace->id;
             $placeId = $place->id;
 
+            $time = Carbon::now()->getTimestamp();
+            $hash = Hash::make($nouns.'_'.$time.'_'.$kindPlaceId.'_'.$placeId);
+
             curl_setopt_array($curl, array(
-                CURLOPT_URL => env('KOOCHITATV_URL_API')."/getVideosForPlaces?time=$time&code=$hash&kind=$kindPlaceId&id=$placeId",
+                CURLOPT_URL => "{$KOOCHITATV_URL_API}/getVideosForPlaces?time={$time}&code={$hash}&kind={$kindPlaceId}&id={$placeId}",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -124,6 +127,46 @@ class AjaxController extends Controller {
         else
             return response()->json(['status' => 'error1']);
     }
+
+    public function getNewestVideoFromKoochitaTv()
+    {
+        $nouns = config('app.koochitaTvNouncCode');
+        $KOOCHITATV_URL_API = config('app.KOOCHITATV_URL_API');
+
+        $curl = curl_init();
+
+        $time = Carbon::now()->getTimestamp();
+        $hash = Hash::make($nouns.'_'.$time);
+
+        $getCount = 10;
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "{$KOOCHITATV_URL_API}/getNewestVideos?time={$time}&code={$hash}&count={$getCount}",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+        ]);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        if($response){
+            $response = json_decode($response);
+            if($response->status == 'ok')
+                return response()->json(['status' => 'ok', 'result' => $response->result]);
+            else
+                return response()->json(['status' => 'errorInResult']);
+        }
+        else
+            return response()->json(['status' => 'errorInGet']);
+
+    }
+
 
     public function searchForFoodMaterial()
     {
