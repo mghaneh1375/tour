@@ -256,7 +256,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="sharePageLabel">اشتراک‌گذاری صفحه</div>
                         </span>
                     </div>
-                    @include('layouts.shareBox')
+                    @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                 </div>
 
                 <div class="prw_rup prw_common_location_photos photos position-relative">

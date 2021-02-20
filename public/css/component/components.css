@@ -1477,9 +1477,17 @@
 
 
 @media only screen and (max-width: 767px) {
+    .commentsContentMainBox .colInAns{
+        display: flex;
+        flex-direction: column;
+    }
     .commentWriterExperienceParticipation, .userProfileName, .userProfileNameAnswers{
         margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
+
 
     .fullReviewLikeAnsSeeAllSection{
         width: 100%;
@@ -1785,9 +1793,9 @@
 }
 
 @media only screen and (max-width: 370px) {
-    .fullReviewLikeAnsSeeAllSection{
-        display: block;
-    }
+    /*.fullReviewLikeAnsSeeAllSection{*/
+    /*    display: flex;*/
+    /*}*/
 
     .fullReviewSeeAnses{
         text-align: left;

@@ -198,7 +198,7 @@
                     <div class="left">
                         <div id="share_pic" class="postsActionsChoices postShareChoice col-xs-6 col-md-3">
                             <span class="icon commentsShareIconFeedback"></span>
-                            @include('layouts.shareBox')
+                            @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                         </div>
                         <div class="postsActionsChoices col-xs-6 col-md-3 {{$safarnameh->bookMark ? 'BookMarkIcon' : 'BookMarkIconEmpty'}}"
                              onclick="bookMarkSafarnameh({{$safarnameh->id}}, this)" style="cursor: pointer; font-size: 1.3em;"></div>

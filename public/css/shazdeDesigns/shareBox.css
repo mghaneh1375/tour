@@ -106,6 +106,25 @@
     margin: 5px 5px 0;
 }
 
+.shareBoxModalForMobile .modalBody{
+    display: flex;
+    flex-direction: column;
+}
+.shareBoxModalForMobile .modalBody > a{
+    color: black;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 15px;
+}
+.shareBoxModalForMobile .modalBody > a > img{
+    width: 30px;
+    height: 30px;
+}
+
 /*#lastDivOfShareBox > a {*/
 /*    cursor: pointer;*/
 /*    float: left;*/

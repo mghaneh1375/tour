@@ -67,12 +67,13 @@ var answerAnsPackSample = `<div id="ansOfAns_##random##" style="margin-bottom: 1
                                     </div>
                                     <div class="commentsContentMainBox">
                                         <div class="userProfileName userProfileNameFullReview">
-                                            <a href="${profilePageUrlAnswerPack}/##userName##"
-                                               class="userProfileNameFullReview float-right"
-                                               target="_blank"
-                                               style="font-weight:bold">##userName##</a>
-                                            <b class="commentReplyDesc display-inline-block">در پاسخ به ##repTo##</b>
-                                            <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                                            <div class="colInAns">
+                                                <a href="${profilePageUrlAnswerPack}/##userName##" class="userProfileNameFullReview float-right" target="_blank" style="font-weight: bold;">##userName##</a>
+                                                <b class="commentReplyDesc display-inline-block">در پاسخ به ##repTo##</b>
+                                            </div>
+                                            <div>
+                                                <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                                            </div>
                                         </div>
                                         <div class="fullReviewAnsText">##text##</div>
                                     </div>
