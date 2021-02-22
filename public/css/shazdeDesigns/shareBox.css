@@ -1,7 +1,4 @@
-#share_box, #share_box_mobile{
-    display: none;
-    /*width: 22%;*/
-    /*height: 60px;*/
+.share_boxDiv, #share_box_mobile{
     background: #FFF;
     position: absolute;
     right: 0;
@@ -18,7 +15,7 @@
     bottom: -240px;
 }
 
-#share_box::before, #share_box_mobile::before {
+.share_boxDiv::before, #share_box_mobile::before {
     content: '';
     position: absolute;
     left: 55px;
@@ -36,19 +33,19 @@
     filter: drop-shadow(0 0 0 #999);
 }
 
-#share_box > a, #share_box_mobile > a {
+.share_boxDiv > a, #share_box_mobile > a {
     cursor: pointer;
     float: right;
     display: inline-block;
     width: 100%;
     padding: 0 5px;
 }
-#share_box > a > img, #share_box_mobile > a > img{
+.share_boxDiv > a > img, #share_box_mobile > a > img{
     width: 20px;
     height: 20px;
 }
 
-#share_box > a > div {
+.share_boxDiv > a > div {
     color: #16174f;
 }
 
@@ -64,11 +61,11 @@
     color: var(--koochita-blue);
 }
 
-#share_box > a:hover, #share_box_mobile > a:hover {
+.share_boxDiv > a:hover, #share_box_mobile > a:hover {
     background-color: #E5E5E5;
 }
 
-#share_box > span, #share_box_mobile > span {
+.share_boxDiv > span, #share_box_mobile > span {
     cursor: pointer;
     float: right;
     margin-left: 5px;

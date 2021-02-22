@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\View;
 
-
-class BusinessShareData
+class LocalShopsShareData
 {
     /**
      * Handle an incoming request.

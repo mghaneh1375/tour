@@ -410,16 +410,15 @@ class ReviewsController extends Controller
 
     public function getReviews(Request $request)
     {
-
         if (isset($request->placeId) && isset($request->kindPlaceId)) {
             $activity = Activity::where('name', 'نظر')->first();
             $a = Activity::where('name', 'پاسخ')->first();
 
-            $ques = [];
-            $ans = [];
             $isFilter = false;
             $isPicFilter = false;
             $onlyPic = 0;
+            $ques = [];
+            $ans = [];
 
             $count = isset($request->count) ? $request->count : 0;
             $num = isset($request->num) ? $request->num : 0;
@@ -553,9 +552,7 @@ class ReviewsController extends Controller
                 echo json_encode([$logs, $logCount]);
             }
         }
-
         return;
-
     }
 
     public function ansReview(Request $request)

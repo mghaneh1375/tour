@@ -59,7 +59,7 @@
         </div>
 
     </div>
-    <div class="questionContentMainBox" style="white-space: pre-line">##text##</div>
+    <div class="questionContentMainBox"">##text##</div>
     <div class="questionSubMenuBar">
         <b class="replyBtn replyAnswerBtn" onclick="openReplyQuestionSection(##id##)"> {{__('پاسخ دهید')}} </b>
         <div class="dark-blue float-right display-inline-black cursor-pointer" onclick="showAllQuestionAnswer(##id##, this)" style="direction: rtl">

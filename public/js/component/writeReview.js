@@ -435,8 +435,6 @@ async function findWhatNewKeyInput(){
             if (newText.length > lastTextInputed.length) {
                 var youFind = false;
                 for (var i = 0; i <= lastTextInputed.length; i++) {
-                    if(newText[i] == '&nbsp;')
-                        console.log('&nbsp;');
                     if (newText[i] != lastTextInputed[i]) {
                         youFind = i;
                         break;
@@ -585,9 +583,6 @@ function getSelectionCharacterOffsetWithin(_id, _kind = 'text') {
         preCaretTextRange.setEndPoint("EndToEnd", textRange);
         end = preCaretTextRange.text.length;
     }
-
-    console.log($('#'+_id).text()[start]);
-
     if(_kind == 'text')
         return start;
     else

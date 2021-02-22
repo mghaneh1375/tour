@@ -46,7 +46,7 @@
     backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
-    z-index: 999999;
+    z-index: 99999998;
     justify-content: center;
     display: none;
 }

@@ -1,19 +1,19 @@
 var questions;
 var questionCount;
-var questionPerPage = 0;
-var questionPerPageNum = [3, 5, 10];
-var questionPage = 1;
 var answerCount;
 var isQuestionCount = true;
+var questionPage = 1;
+var questionPerPageIndex = 0;
+
 
 function sendQuestion(_element){
 
     if(!checkLogin())
         return;
 
-    var text = document.getElementById('questionInput').value;
+    var text = $('#questionInput').val();
 
-    if(text != null && text != ''){
+    if(text.trim().length > 0){
         $(_element).toggle();
         $(_element).next().toggle();
         $.ajax({
@@ -54,7 +54,7 @@ function getQuestion(){
             _token: csrfTokenGlobal,
             placeId: placeId,
             kindPlaceId : kindPlaceId,
-            count : questionPerPageNum[questionPerPage],
+            count : questionPerPageNum[questionPerPageIndex],
             page : questionPage,
             isQuestionCount : isQuestionCount
         },
@@ -65,17 +65,17 @@ function getQuestion(){
                 if (isQuestionCount) {
                     questionCount = response.allCount;
                     answerCount = response.answerCount;
+                    isQuestionCount = false;
                     $('#questionCount').text(questionCount);
                     $('#answerCount').text(answerCount);
-                    isQuestionCount = false;
                 }
 
                 if (questionCount == 0)
                     $('#questionPaginationDiv').hide();
                 else {
                     $('#questionSectionDiv').empty();
-                    createQuestionPagination(questionCount);
                     questions.map(ques => createQuestionPack(ques, 'questionSectionDiv') /**in questoinPack**/  )
+                    createQuestionPagination(questionCount);
                 }
             }
         }
@@ -83,10 +83,9 @@ function getQuestion(){
 }
 
 function changeQuestionPerPage(_count){
-
-    document.getElementById('questionPerView' + questionPerPage).classList.remove('color-blue');
-    document.getElementById('questionPerView' + _count).classList.add('color-blue');
-    questionPerPage = _count;
+    $(`#questionPerView${questionPerPageIndex}`).removeClass('color-blue');
+    $(`#questionPerView${_count}`).addClass('color-blue');
+    questionPerPageIndex = _count;
     questionPage = 1;
     getQuestion();
 }
@@ -98,9 +97,8 @@ function changeQuestionPage(_page){
 
 function createQuestionPagination(questionCount){
     var text = '';
-    var page = Math.ceil(questionCount/questionPerPageNum[questionPerPage]);
+    var page = Math.ceil(questionCount/questionPerPageNum[questionPerPageIndex]);
 
-    createQuestionPerPage();
 
     if(page >= 5){
         if(questionPage == 1){
@@ -155,26 +153,18 @@ function createQuestionPagination(questionCount){
         }
     }
     else{
-        for (var i = 1; i <= page; i++){
-            if(i == questionPage)
-                text += '<span class="cursor-pointer color-blue mg-rt-5" onclick="changeQuestionPage(' + i + ')">' + i + '</span>';
-            else
-                text += '<span class="cursor-pointer mg-rt-5" onclick="changeQuestionPage(' + i + ')">' + i + '</span>';
-        }
+        for (var i = 1; i <= page; i++)
+            text += `<span class="cursor-pointer ${i == questionPage ? 'color-blue' : ''} mg-rt-5" onclick="changeQuestionPage(${i})">${i}</span>`;
     }
 
-    document.getElementById('questionPagination').innerHTML = text;
+    $('#questionPagination').html(text);
 }
 
 function createQuestionPerPage(){
     var text = '';
 
     for(var i = 0; i < questionPerPageNum.length; i++){
-        if(i == questionPerPage)
-            text += '<span id="questionPerView' + i + '" class="mg-0-2 cursor-pointer color-blue" onclick="changeQuestionPerPage(' + i + ')">' + questionPerPageNum[i] + '</span>';
-        else
-            text += '<span id="questionPerView' + i + '" class="mg-0-2 cursor-pointer" onclick="changeQuestionPerPage(' + i + ')">' + questionPerPageNum[i] + '</span>';
-
+        text += `<span id="questionPerView${i}" class="mg-0-2 cursor-pointer ${i == questionPerPageIndex ? 'color-blue' : ''} " onclick="changeQuestionPerPage(${i})">${questionPerPageNum[i]}</span>`;
         if(i != (questionPerPageNum.length - 1))
             text += '-';
     }

@@ -74,6 +74,8 @@
 <script>
     var askQuestionUrl = '{{route("askQuestion")}}';
     var getQuestionsUrl = '{{route("getQuestions")}}';
+
+    var questionPerPageNum = [3, 5, 10];
 </script>
 
-<script src="{{URL::asset('js/pages/placeDetails/questionPlaceDetailsSection.js')}}"></script>
+<script src="{{URL::asset('js/component/getAndAskQuestionForPlaces.js?v='.$fileVersions)}}"></script>

@@ -100,7 +100,7 @@ class LocalShops extends Model
                             else
                                 $query->where('confirm', 1);
                         })
-                        ->orderByDesc('date')->get();
+                        ->orderByDesc('created_at')->get();
 
         foreach ($reviews as $item)
             $item = \reviewTrueType($item);

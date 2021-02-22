@@ -1,9 +1,11 @@
 <?php
 $config = \App\models\ConfigModel::first();
+$randomThisPage = rand(1000, 9999);
+$idToClick = isset($idToClick) ? $idToClick : "share_pic"
 ?>
 <link rel='stylesheet' type='text/css' media='screen, print' href='{{URL::asset('css/shazdeDesigns/shareBox.css?v='.$fileVersions)}}'/>
 
-<div id="share_box" style="width: 200px">
+<div id="share_box_{{$randomThisPage}}" class="shareBoxSection share_boxDiv hidden" style="width: 200px">
     <a target="_blank" class="link mg-tp-5" href="https://www.facebook.com/sharer/sharer.php?u={{$urlInThisShareBox}}">
         <img src="{{URL::asset("images/shareBoxImg/facebook.png")}}" class="display-inline-block float-right">
         <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه در فیسبوک</div>
@@ -12,7 +14,7 @@ $config = \App\models\ConfigModel::first();
         <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}" class="display-inline-block float-right">
         <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه در توییتر</div>
     </a>
-    <a target="_blank" class="link mg-tp-5 whatsappLink" href="#">
+    <a target="_blank" class="link mg-tp-5 whatsappLink whatsappLink_{{$randomThisPage}}" href="#">
         <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}" class="display-inline-block float-right">
         <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه واتس اپ</div>
     </a>
@@ -34,7 +36,7 @@ $config = \App\models\ConfigModel::first();
     </div>
 </div>
 
-<div id="shareBoxModalForMobile" class="modalBlackBack fullCenter shareBoxModalForMobile hideOnPc">
+<div id="shareBoxModalForMobile_{{$randomThisPage}}" class="modalBlackBack fullCenter shareBoxModalForMobile hideOnPc">
     <div class="modalBody">
         <a target="_blank" class="link mg-tp-5" href="https://www.facebook.com/sharer/sharer.php?u={{$urlInThisShareBox}}">
             <img src="{{URL::asset("images/shareBoxImg/facebook.png")}}" class="display-inline-block float-right">
@@ -44,7 +46,7 @@ $config = \App\models\ConfigModel::first();
             <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}" class="display-inline-block float-right">
             <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه در توییتر</div>
         </a>
-        <a target="_blank" class="link mg-tp-5 whatsappLink" href="#">
+        <a target="_blank" class="link mg-tp-5 whatsappLink whatsappLink_{{$randomThisPage}}" href="#">
             <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}" class="display-inline-block float-right">
             <div class="display-inline-block float-right mg-rt-5">اشتراک صفحه واتس اپ</div>
         </a>
@@ -76,44 +78,46 @@ $config = \App\models\ConfigModel::first();
         $(elmt).children('div.first').toggleClass('sharePageIcon').toggleClass('sharePageIconFill');
     }
 
-    $('#share_pic').click(function () {
-        var element = $('#share_box');
-        if (element.is(":hidden")) {
-            openShareBox = true;
+    $('#{{$idToClick}}').click(function () {
+        setTimeout(() => {
+            var element = $('#share_box_{{$randomThisPage}}');
+            if (element.hasClass("hidden")) {
+                openShareBox = true;
+                if($(window).width() > 767) {
+                    element.removeClass('hidden');
+                    $('.shareIconDiv').addClass('sharePageIconFill').removeClass('sharePageIcon');
+                }
+                else
+                    openMyModal('shareBoxModalForMobile_{{$randomThisPage}}');
 
-            if($(window).width() > 767) {
-                element.show();
-                $('.shareIconDiv').addClass('sharePageIconFill').removeClass('sharePageIcon');
+            } else {
+                openShareBox = false;
+                element.addClass('hidden');
+                $('.shareIconDiv').removeClass('sharePageIconFill').addClass('sharePageIcon');
+                closeMyModalClass('shareBoxModalForMobile');
             }
-            else
-                openMyModal('shareBoxModalForMobile');
-        } else {
-            openShareBox = false;
-            element.hide();
-            $('.shareIconDiv').removeClass('sharePageIconFill').addClass('sharePageIcon');
-            closeMyModal('shareBoxModalForMobile');
-        }
+        }, 10);
     });
+
 
     $(window).on('click', function(e){
         if(openShareBox){
-            if(!($(e.target).attr('id') == 'share_pic' || $(e.target).hasClass('sharePageLabel')||
+            if(!($(e.target).attr('id') == '{{$idToClick}}' || $(e.target).hasClass('sharePageLabel')||
                 $(e.target).attr('id') == 'share_pic_mobile' ||
-                $(e.target.parentElement).attr('id') == 'share_pic' ||
+                $(e.target.parentElement).attr('id') == '{{$idToClick}}' ||
                 $(e.target.parentElement).attr('id') == 'share_pic_mobile'))
             {
                 openShareBox = false;
-                $('#share_box').hide();
-                $('#share_box_mobile').hide();
+                $('.share_boxDiv').addClass('hidden');
                 $('.shareIconDiv').removeClass('sharePageIconFill').addClass('sharePageIcon');
-                closeMyModal('shareBoxModalForMobile');
+                closeMyModalClass('shareBoxModalForMobile');
             }
         }
     }).ready(() => {
         let encodeurlShareBox = encodeURIComponent('{{$urlInThisShareBox}}');
         let textShareBox = 'whatsapp://send?text=';
         textShareBox += 'در کوچیتا ببینید:' + ' %0a ' + encodeurlShareBox;
-        $('.whatsappLink').attr('href', textShareBox);
+        $('.whatsappLink_{{$randomThisPage}}').attr('href', textShareBox);
     });
 </script>
 

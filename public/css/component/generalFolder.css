@@ -225,7 +225,7 @@ textarea, input, select, button, a {
     background-color: #000000bf;
     display: flex;
     justify-content: center;
-    z-index: 9999;
+    z-index: 9999999;
 }
 
 .loginCloseIcon{
@@ -1082,7 +1082,7 @@ a:hover {
     backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
-    z-index: 999999;
+    z-index: 99999998;
     justify-content: center;
     display: none;
 }

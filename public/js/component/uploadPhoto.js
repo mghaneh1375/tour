@@ -30,7 +30,6 @@ dropZoneHoverUploadPhoto.on('dragover', () => {
     e.preventDefault();
     dropZoneHoverUploadPhoto.removeClass('hover');
     var files = e.originalEvent.dataTransfer;
-    console.log(files.files);
     submitPhoto(files);
     return false;
 });

@@ -1459,6 +1459,13 @@
     padding: 10px;
     margin-bottom: 20px;
 }
+.questionPack .questionContentMainBox{
+    white-space: pre-line;
+    font-size: 17px;
+}
+.questionPack .commentsContentMainBox .fullReviewAnsText{
+    font-size: 1em;
+}
 
 .questionSubMenuBar{
     padding: 8px 0;

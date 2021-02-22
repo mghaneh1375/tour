@@ -280,7 +280,7 @@ body{
     box-shadow: 0px 0px 5px 2px #7d7d7d;
     top: -130px;
     transition: .5s;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .topInfoFixed.open{
     top: 0px !important;

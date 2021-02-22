@@ -1,0 +1,107 @@
+
+.leaflet-top.leaflet-left{
+    z-index: 998;
+}
+.leaflet-bottom.leaflet-right{
+    z-index: 998;
+}
+.plPc-0{
+    padding-left: 0px;
+}
+.prPc-0{
+    padding-right: 0px;
+}
+div[class^="col-"]{
+    float: right;
+}
+.showBody{
+    padding-bottom: 0px;
+}
+
+.ratingSection{
+    /*width: 30%;*/
+    border-right: 1px solid #eee;
+    padding-right: 10px;
+}
+.ratingSection .title{
+    margin-top: 0;
+}
+.ratingSection .ratingStarsSection{
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    direction: ltr;
+    cursor: pointer;
+}
+.ratingSection .ratingStarsSection .star{
+
+}
+.ratingSection .ratingStarsSection .fullStarRating.star{
+    color: var(--koochita-yellow);
+}
+
+.featuresSection{
+    /*width: 70%;*/
+}
+.featuresSection .topFeatRow{
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.featuresSection .topFeatRow .featName{
+    font-size: 20px;
+    /*font-weight: bold;*/
+}
+.featuresSection .topFeatRow .subFeatSec{
+    display: flex;
+    margin-top: 10px;
+}
+.featuresSection .topFeatRow .subFeatSec .subFeatName{
+    margin-left: 20px;
+    font-size: 15px;
+    color: #636363;
+}
+
+.shareBoxSection{
+    top: calc(100% + 10px);
+    bottom: auto !important;
+    left: 0 !important;
+    right: auto !important;
+}
+@media (max-width: 991px) {
+    div[class^="col-md"]{
+        width: 100%;
+    }
+    .plPc-0{
+        padding-left: 15px;
+    }
+    .prPc-0{
+        padding-right: 15px;
+    }
+    .fastAccess .tab{
+        font-size: 13px;
+    }
+    .topInfoFixed .mainHeaderButts{
+        margin-top: 10px;
+    }
+    .mainHeaderButts > div{
+        font-size: 10px;
+    }
+}
+@media (max-width: 767px) {
+    .fastAccess .tab{
+        font-size: 18px;
+    }
+    .fastAccess .tab .text{
+        font-size: .7em;
+    }
+    .fastAccess .tab:before{
+        font-size: 1em;
+    }
+    .ratingSection .title{
+        font-size: 22px !important;
+    }
+    .ratingSection{
+        border-right: none;
+    }
+}

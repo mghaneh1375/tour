@@ -7,6 +7,8 @@ $total = $total == 0 ? 1 : $total;
 $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $city->name . " | " . $place->name;
 ?>
 @section('head')
+    <meta property="article:author " content="کوچیتا"/>
+
     <meta content="article" property="og:type"/>
     <meta property="og:title" content="{{$seoTitle}}"/>
     <meta property="title" content="{{$seoTitle}}"/>
@@ -16,7 +18,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <meta name="twitter:description" content="{{$place->meta}}"/>
     <meta property="og:description" content="{{$place->meta}}"/>
     <meta property="article:section" content="{{$placeMode}}"/>
-    <meta property="article:author " content="کوچیتا"/>
     <meta name="keywords" content="{{$place->keyword}}">
     <meta property="og:url" content="{{Request::url()}}"/>
 

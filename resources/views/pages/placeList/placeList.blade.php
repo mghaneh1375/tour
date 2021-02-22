@@ -73,7 +73,7 @@
                     <div class="sharePageLabel">
                         {{__('اشتراک گذاری صفحه')}}
                     </div>
-                    @include('layouts.shareBox')
+                    @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                 </div>
             </div>
         </div>
@@ -82,28 +82,18 @@
             <div class="col-md-9 col-sm-8 rightLightBorder placeListBodyContentSection PlaceController">
                 <div id="listBody" class="coverpage">
                     <div id="FilterTopController" class="placeListSortDiv bottomLightBorder hideOnPhone">
-                        <div class="ordering sorting" style="font-weight: bold">
-                            {{__('مرتب سازی بر اساس')}}:
+                        <div class="ordering sorting" style="font-weight: bold"> {{__('مرتب سازی بر اساس')}}:</div>
+                        <div class="ordering">
+                            <div class="orders" onclick="selectingOrder($(this),'review')" id="z1">{{__('بیشترین نظر')}} </div>
                         </div>
                         <div class="ordering">
-                            <div class="orders" onclick="selectingOrder($(this),'review')" id="z1">
-                                {{__('بیشترین نظر')}}
-                            </div>
+                            <div class="orders" onclick="selectingOrder(this, 'rate')" id="z2"> {{__('بهترین بازخورد')}} </div>
                         </div>
                         <div class="ordering">
-                            <div class="orders" onclick="selectingOrder(this, 'rate')" id="z2">
-                                {{__('بهترین بازخورد')}}
-                            </div>
+                            <div class="orders" onclick="selectingOrder(this, 'seen')" id="z3"> {{__('بیشترین بازدید')}} </div>
                         </div>
                         <div class="ordering">
-                            <div class="orders" onclick="selectingOrder(this, 'seen')" id="z3">
-                                {{__('بیشترین بازدید')}}
-                            </div>
-                        </div>
-                        <div class="ordering">
-                            <div class="orders" onclick="selectingOrder(this, 'alphabet')" id="z4" >
-                                {{__('حروف الفبا')}}
-                            </div>
+                            <div class="orders" onclick="selectingOrder(this, 'alphabet')" id="z4" > {{__('حروف الفبا')}} </div>
                         </div>
                         @if($kindPlace->id != 10 && $kindPlace->id != 11)
                             <div class="ordering"  >

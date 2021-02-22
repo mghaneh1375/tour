@@ -2122,6 +2122,8 @@ class PlaceController extends Controller {
     public function getQuestions()
     {
         if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["page"]) && isset($_POST["count"])) {
+            $allCount = 0;
+            $allAnswerCount = 0;
 
             $placeId = makeValidInput($_POST["placeId"]);
             $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
@@ -2130,16 +2132,13 @@ class PlaceController extends Controller {
             $activityId = Activity::whereName('سوال')->first()->id;
             $ansActivityId = Activity::whereName('پاسخ')->first()->id;
 
-            if(\auth()->check())
-                $uId = \auth()->user()->id;
+            $uId = \auth()->check() ? \auth()->user()->id : 0;
+
+            $sqlQuery = " placeId = {$placeId} AND kindPlaceId = {$kindPlaceId} AND activityId = {$activityId} AND relatedTo = 0 AND ( visitorId = {$uId} OR confirm = 1)";
+            if($count == -1)
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->get();
             else
-                $uId = 0;
-
-            $sqlQuery = ' placeId = ' . $placeId . ' AND kindPlaceId = ' . $kindPlaceId . ' AND activityId = ' . $activityId . ' AND relatedTo = 0 AND (( visitorId = ' . $uId . ' AND confirm = 0) OR (confirm = 1))';
-            $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->skip(($page - 1) * $count)->take($count)->get();
-
-            $allCount = 0;
-            $allAnswerCount = 0;
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->skip(($page - 1) * $count)->take($count)->get();
 
             if($_POST['isQuestionCount'])
                 $allCount = LogModel::whereRaw($sqlQuery)->count();

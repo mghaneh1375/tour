@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Business;
+namespace App\Http\Controllers\LocalShop;
 
 use App\Http\Requests\StoreLocalShopInfos;
 use App\models\Activity;
+use App\models\BookMark;
+use App\models\localShops\LocalShopFeatures;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
 use App\models\localShops\LocalShopsPictures;
@@ -18,164 +20,45 @@ use App\Http\Controllers\Controller;
 
 class LocalShopController extends Controller
 {
-    public function createLocalShopPage()
-    {
-        $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
+    public function showLocalShops($id = 0){
+        $localShop = LocalShops::find($id);
+        if($localShop == null)
+            dd('not found');
 
-        return view('pages.Business.createLocalShopPage', compact(['localShopCategories']));
-    }
+        $localShop->user = User::select(['id', 'username'])->find($localShop->userId);
+        $localShop->ownerPic = getUserPic($localShop->user != null ? $localShop->user->id : 0);
+        $localShop->ownerUsername = $localShop->user != null ? $localShop->user->username : '';
 
-    public function storeLocalShop(StoreLocalShopInfos $request)
-    {
-        if($request->id != 0){
-            $localShop = LocalShops::find($request->id);
-            if($localShop == null)
-                return response()->json(['status' => 'notFound']);
+        $localShop->telephone = explode('-', $localShop->phone);
+        $localShop->pics = $localShop->getPictures();
+        $localShop->mainPic = $localShop->getMainPicture();
+//        $localShop->tags = $localShop->getTags();
+        if($localShop->description == '')
+            $localShop->description = null;
 
-            if($localShop->userId != auth()->user()->id)
-                return response()->json(['status' => 'notYours']);
+
+
+        $codeForReview = null;
+        $localShop->bookMark = 0;
+        if(auth()->check()) {
+            $user = auth()->user();
+            $codeForReview = $user->id . '_' . random_int(100000, 999999);
+            $localShop->bookMark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
+                ->where('bookMarkReferences.tableName', 'localShops')
+                ->where('bookMarks.referenceId', $localShop->id)
+                ->where('bookMarks.userId', $user->id)->count();
         }
-        else{
-            $localShop = new LocalShops();
-            $localShop->userId = auth()->user()->id;
-            $localShop->author = auth()->user()->id;
+
+        $localShop->features = LocalShopFeatures::where('categoryId', $localShop->categoryId)->where('parentId', 0)->get();
+        foreach($localShop->features as $feat){
+            $feat->subs = LocalShopFeatures::join('local_shop_features_relations', 'local_shop_features_relations.featureId', 'local_shop_features.id')
+                            ->where('local_shop_features.parentId', $feat->id)
+                            ->where('local_shop_features_relations.localShopId', $localShop->id)
+                            ->select(['local_shop_features.*'])
+                            ->get();
         }
 
-        $localShop->name = $request->name;
-        $localShop->categoryId = $request->category;
-        $localShop->description = $request->description;
-        $localShop->phone = $request->phone;
-        $localShop->cityId = $request->cityId;
-        $localShop->address = $request->address;
-        $localShop->lat = $request->lat;
-        $localShop->lng = $request->lng;
-        $localShop->website = $request->website;
-        $localShop->instagram = $request->instagram;
-        if($request->inPlaceId != 0)
-            $localShop->relatedPlaceId = $request->inPlaceId;
-        if($request->inPlace)
-            $localShop->relatedPlaceName = $request->inPlace;
-
-        $localShop->isBoarding = $request->fullOpen === 'true' ? 1 : 0;
-        $localShop->afterClosedDayIsOpen = $request->afterClosedDayButton === 'false' ? 1 : 0;
-        $localShop->closedDayIsOpen = $request->closedDayButton === 'false' ? 1 : 0;
-
-        $localShop->inWeekOpenTime = $request->inWeekDayStart;
-        $localShop->inWeekCloseTime = $request->inWeekDayEnd;
-        $localShop->afterClosedDayOpenTime = $request->afterClosedDayStart;
-        $localShop->afterClosedDayCloseTime = $request->afterClosedDayEnd;
-        $localShop->closedDayOpenTime = $request->closedDayStart;
-        $localShop->closedDayCloseTime = $request->closedDayEnd;
-        $localShop->save();
-
-        $localShop->file = $localShop->id;
-        $localShop->save();
-
-        $location = __DIR__.'/../../../../../assets/_images/localShops';
-        if(!is_dir($location))
-            mkdir($location);
-        $location .= '/'.$localShop->id;
-        if(!is_dir($location))
-            mkdir($location);
-
-        return response()->json(['status' => 'ok', 'result' => $localShop->id]);
-    }
-
-    public function storeLocalShopPics(Request $request)
-    {
-        if(isset($request->localShopId)){
-            if(isset($_FILES['pic']) && $_FILES['pic']['error'] == 0){
-                $localShop = LocalShops::find($request->localShopId);
-                if($localShop != null && $localShop->userId == auth()->user()->id){
-
-                    $nLocation = __DIR__ . '/../../../../../assets/_images/localShops';
-                    if(!is_dir($nLocation))
-                        mkdir($nLocation);
-
-                    $nLocation .= '/'.$request->localShopId;
-                    if(!is_dir($nLocation))
-                        mkdir($nLocation);
-
-                    $size = [
-                        [
-                            'width' => 1080,
-                            'height' => null,
-                            'name' => '',
-                            'destination' => $nLocation
-                        ],
-                        [
-                            'width' => 600,
-                            'height' => 400,
-                            'name' => 's-',
-                            'destination' => $nLocation
-                        ],
-                        [
-                            'width' => 350,
-                            'height' => 250,
-                            'name' => 'f-',
-                            'destination' => $nLocation
-                        ],
-                        [
-                            'width' => 150,
-                            'height' => 150,
-                            'name' => 't-',
-                            'destination' => $nLocation
-                        ],
-                        [
-                            'width' => 200,
-                            'height' => 200,
-                            'name' => 'l-',
-                            'destination' => $nLocation
-                        ],
-                    ];
-
-                    $image = $request->file('pic');
-
-                    $nFileName = resizeImage($image, $size);
-                    if($nFileName == 'error')
-                        return response()->json(['status' => 'error4']);
-
-                    $webpFileName = explode('.', $nFileName);
-                    $fileType = end($webpFileName);
-                    $webpFileName[count($webpFileName)-1] = '.webp';
-                    $webpFileName = implode('', $webpFileName);
-
-                    foreach ($size as $siz){
-                        $imgLoc = $nLocation.'/'.$siz['name'].$nFileName;
-                        if($fileType == 'png')
-                            $img = imagecreatefrompng($imgLoc);
-                        else if($fileType == 'jpg' || $fileType == 'jpeg')
-                            $img = imagecreatefromjpeg($imgLoc);
-                        else if($fileType == 'gif')
-                            $img = imagecreatefromgif($imgLoc);
-                        else
-                            continue;
-
-                        $checkConvert = imagewebp($img, $nLocation.'/'.$siz['name'].$webpFileName, 75);
-                        if($checkConvert && is_file($imgLoc))
-                            unlink($imgLoc);
-                    }
-
-                    $findMain = LocalShopsPictures::where('localShopId', $localShop->id)
-                                                    ->where('isMain', 1)
-                                                    ->count();
-
-                    $newPic = new LocalShopsPictures();
-                    $newPic->localShopId = $localShop->id;
-                    $newPic->isMain = $findMain == 0 ? 1 : 0;
-                    $newPic->pic = $webpFileName;
-                    $newPic->save();
-
-                    return response()->json(['status' => 'ok', 'result' => $newPic->pic]);
-                }
-                else
-                    return response()->json(['status' => 'error3']);
-            }
-            else
-                return response()->json(['status' => 'error2']);
-        }
-        else
-            return response()->json(['status' => 'error1']);
+        return view('pages.localShops.showLocalShops', compact(['localShop', 'codeForReview']));
     }
 
     public function deleteLocalShopPics(Request $request)
