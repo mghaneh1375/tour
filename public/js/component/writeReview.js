@@ -1,12 +1,13 @@
 var newReviewFileInUpload = false;
 var searchInPlaceForNewReviewAjax = null;
 var searchInTagNewReviewAjax = null;
+var completeSendNewReviewCallBack = null;
 
 // $(window).ready(() => {
 //     autosize($('#inputNewReviewText'));
 // });
 
-function openModalWriteNewReview(){
+function openModalWriteNewReview(_callBack = ''){
     openMyModal('newReviewSection');
 
     if(!newReviewDataForUpload.code){
@@ -17,9 +18,14 @@ function openModalWriteNewReview(){
             success: response => newReviewDataForUpload.code = response.code,
         })
     }
+
+    if(typeof _callBack === 'function')
+        completeSendNewReviewCallBack = _callBack;
+    else
+        completeSendNewReviewCallBack = null;
 }
 
-async function uploadFileForNewReview(_input, _kind){
+function uploadFileForNewReview(_input, _kind){
     openLoading();
 
     if(_kind == 'image' && _input.files && _input.files[0]){
@@ -285,8 +291,7 @@ function doDeleteNewReviewFile(_index){
     reviewFileUploadQueueForNewReview();
 }
 
-
-async function resizeImageBeforeUploadInNewReview(_image, _file){
+function resizeImageBeforeUploadInNewReview(_image, _file){
 
     newReviewDataForUpload.files.push({
         savedFile: '',
@@ -299,7 +304,6 @@ async function resizeImageBeforeUploadInNewReview(_image, _file){
     createNewFileUploadCardForNewReview(newReviewDataForUpload.files.length - 1);
     reviewFileUploadQueueForNewReview();
 }
-
 
 function storeNewReview(_element){
     var canUpload = false;
@@ -357,6 +361,9 @@ function storeNewReview(_element){
                     $('.uploadedFiles').empty();
 
                     showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
+
+                    if(completeSendNewReviewCallBack != null)
+                        completeSendNewReviewCallBack();
                 }
                 else
                     showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
@@ -422,7 +429,6 @@ function openUserSearchForNewReview(){
     });
 }
 
-
 async function findWhatNewKeyInput(){
     var inputElement = $('#inputNewReviewText');
     var findNewKey = new Promise((myResolve, myReject) => {
@@ -470,6 +476,7 @@ function openFindUserForNewCharacterInput(){
         inputElement.html(newHtml);
     });
 }
+
 function openFindTagsForNewCharacterInput(){
 
     var inputPosition = getSelectionCharacterOffsetWithin("inputNewReviewText", "html");

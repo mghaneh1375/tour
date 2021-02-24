@@ -2586,6 +2586,10 @@ footer .profileFooterPopUp .searchReviewMFooter .item .content .secRow{
     .pSC_boxOfDetails {
         overflow: auto;
     }
+
+    .squerRadioInputSec.filterItem.hidden{
+        display: flex !important;
+    }
 }
 
 @media (max-height: 700px) {

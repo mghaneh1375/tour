@@ -6,6 +6,7 @@ use App\Events\SaveErrorEvent;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\localShops\LocalShopFeaturesRelations;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
 use App\models\localShops\LocalShopsPictures;
@@ -2446,7 +2447,6 @@ class PlaceController extends Controller {
 
                     $placeMode = 'mahaliFood';
                     $kindPlace->title = 'غذاهای '.$kindSearch;
-//                    $meta['title'] = 'عکس+دستور پخت '.$kindSearch2.' +میزان کالری+ غذاهای '.$kindSearch .' '.$inHeaderName;
                     $meta['title'] = 'معرفی غذاهای '.$kindSearch.' '.$inHeaderName.'+ عکس و دستور پخت و کالری';
                     $meta['keyword'] = 'غذاهای ' . $kindSearch . $inHeaderName . ' ، غذاهای سنتی ' . $inHeaderName . ' ، طرز تهیه غذای ' . $kindSearch . $inHeaderName . ' ، دستور پخت غذای '.$kindSearch . $inHeaderName . ' ، غذای '.$kindSearch . $inHeaderName . ' چیست ، غذای سنتی ' . $inHeaderName . ' چیست ، غذای مناسب برای افراد گیاه خوار، غذاهای مناسب برای افراد وگان ، غذاهای مناسب برای افراد دیابتی ، آش های محلی ' . $inHeaderName . ' ، خورشت های ' . $inHeaderName . ' ، خورش های ' . $inHeaderName . ' ، خوراک های ' . $inHeaderName ;
                     $meta['description'] = 'ما برای شما غذاهای محلی '.$inHeaderName.' و غذاهای سنتی '.$inHeaderName.' همراه با دستور پخت و عکس و میزان کالری که شامل آش های '.$inHeaderName.'، سوپ های '.$inHeaderName.'، خورشت های '.$inHeaderName.' ، خوراک های '.$inHeaderName.' ،شیرینی ها '.$inHeaderName.'، نان ها '.$inHeaderName.'، مربا های '.$inHeaderName.' و سالاد های '.$inHeaderName.' را جمع اوری کرده ایم.';
@@ -2462,21 +2462,18 @@ class PlaceController extends Controller {
                     $kindPlace->title = 'بوم گردی های ';
                     $meta['title'] = 'بوم گردی های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'بوم گردی های '.$inHeaderName.'اقامتگاه بوم گردی '.$inHeaderName.' ، خونه محلی '.$inHeaderName.'، خونه روستایی '.$inHeaderName.'، خونه شخصی در '.$inHeaderName.'';
-//                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
                     $meta['description'] = 'معرفی بوم گردی های '.$inHeaderName.' با کوچیتا. تلفن بوم گردی '.$inHeaderName.' با بررسی عکس ها، قیمت، نظرات میهمانان، مقایسه بوم گردی در '.$inHeaderName.' و موقعیت نقشه بوم گردی های '.$inHeaderName.'';
                     break;
                 case 13:
                     $topPic = 'boom.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'کسب و کاری برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-//                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ بوم گردی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'localShop';
                     $kindPlace->title = 'کسب و کار های ';
                     $meta['title'] = 'کسب و کار های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'کسب و کار های '.$inHeaderName;
-//                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
                     $meta['description'] = 'معرفی کسب و کار های '.$inHeaderName.' با کوچیتا. تلفن کسب و کار '.$inHeaderName;
                     break;
             }
@@ -2486,15 +2483,18 @@ class PlaceController extends Controller {
                 $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->where('type', 'YN')->get();
             $kind = $mode;
 
+            $localShopCategories = [];
             if($kindPlace->id == 13){
-                $features = LocalShopsCategory::where('parentId', 0)->get();
-                foreach ($features as $feature)
-                    $feature->subFeat = LocalShopsCategory::where('parentId', $feature->id)->get();
+                $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
+                foreach ($localShopCategories as $item)
+                    $item->subs = LocalShopsCategory::where('parentId', $item->id)->get();
             }
 
-            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
-                                                                    'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
-                                                                    'contentCount', 'notItemToShow', 'topPic', 'cityRel']));
+            return view('pages.placeList.placeList',
+                compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
+                        'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
+                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategories'])
+            );
         }
         else
             return \redirect(\url('/'));
@@ -2513,6 +2513,7 @@ class PlaceController extends Controller {
         $materialFilter = $request->materialFilter;
         $nearPlaceIdFilter = $request->nearPlaceIdFilter;
         $nearKindPlaceIdFilter = $request->nearKindPlaceIdFilter;
+        $categoryFilter = $request->categoryFilter;
 
         $places = [];
         $placeIds = [];
@@ -2582,12 +2583,13 @@ class PlaceController extends Controller {
                     }
                 }
 
-                foreach ($kindName as $index => $value)
+                foreach ($kindName as $index => $value) {
                     $placeIds = DB::table($kindPlace->tableName)
-                                    ->whereIn($value, $kindValues[$index])
-                                    ->whereIn('id', $placeIds)
-                                    ->pluck('id')
-                                    ->toArray();
+                        ->whereIn($value, $kindValues[$index])
+                        ->whereIn('id', $placeIds)
+                        ->pluck('id')
+                        ->toArray();
+                }
             }
 
             if(count($placeIds) == 0)
@@ -2601,20 +2603,12 @@ class PlaceController extends Controller {
                     array_push($featureFilters, $item);
             }
 
-            if(count($featureFilters) != 0) {
-                if($kindPlace->id == 13){
-                    $pIds = LocalShops::whereIn('categoryId', $featureFilters)->pluck('id')->toArray();
-                    $placeIds = [];
-                    foreach ($pIds as $item)
-                        array_push($placeIds, $item);
-                }
-                else{
-                    $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
-                    $placeIds = [];
-                    foreach ($pIds as $p){
-                        if($p->count == count($featureFilters))
-                            array_push($placeIds, $p->placeId);
-                    }
+            if($kindPlace->id != 13 && count($featureFilters) != 0){
+                $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
+                $placeIds = [];
+                foreach ($pIds as $p){
+                    if($p->count == count($featureFilters))
+                        array_push($placeIds, $p->placeId);
                 }
             }
 
@@ -2629,8 +2623,40 @@ class PlaceController extends Controller {
                 return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
         }
 
-        if($kindPlace->id == 13)
+        if($kindPlace->id == 13) {
+            if(isset($categoryFilter) && $categoryFilter != 0){
+                $categIds = [];
+                $category = LocalShopsCategory::find($categoryFilter);
+                if($category != null){
+                    if ($category->parentId == 0)
+                        $categIds = LocalShopsCategory::where('parentId', $category->id)->pluck('id')->toArray();
+                    else
+                        $categIds = LocalShopsCategory::where('id', $category->id)->pluck('id')->toArray();
+                }
+                if(count($categIds) == 0)
+                    $categIds = [0];
+
+                $placeIds = LocalShops::whereIn('categoryId', $categIds)->whereIn('id', $placeIds)->pluck('id')->toArray();
+
+                if(count($placeIds) == 0)
+                    return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
+            }
+
+            if($featureFilters != null && count($featureFilters) > 0){
+                $pIds = LocalShopFeaturesRelations::whereIn('localShopId', $placeIds)->whereIn('featureId', $featureFilters)->get()->groupBy('localShopId');
+
+                $placeIds = [];
+                foreach ($pIds as $index => $p){
+                    if(count($p) == count($featureFilters))
+                        array_push($placeIds, $index);
+                }
+
+                if(count($placeIds) == 0)
+                    return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
+            }
+
             $placeIds = LocalShops::whereIn('id', $placeIds)->where('confirm', 1)->pluck('id')->toArray();
+        }
 
         $placeCount = count($placeIds);
 
@@ -2727,9 +2753,9 @@ class PlaceController extends Controller {
 
             if($place != null) {
                 $rate = PlaceRates::where('kindPlaceId', $kindPlace->id)
-                        ->where('placeId', $place->id)
-                        ->where('userId', $user->id)
-                        ->first();
+                                    ->where('placeId', $place->id)
+                                    ->where('userId', $user->id)
+                                    ->first();
 
                 if($rate == null){
                     $rate = new PlaceRates();

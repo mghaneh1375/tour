@@ -1752,6 +1752,7 @@ a:hover {
 .writeNewReviewModal .inputReviewBodies{
     overflow: auto;
     height: calc(100% - 80px);
+    padding-bottom: 35px;
 }
 .writeNewReviewModal .sendButtonSec{
     position: absolute;
@@ -2111,6 +2112,57 @@ a:hover {
 }
 
 
+.userRateToPlaceModal .header{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    padding: 0px 40px;
+    color: white;
+}
+.userRateToPlaceModal .body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 78px;
+    font-size: 40px;
+    color: white;
+    direction: ltr;
+}
+.userRateToPlaceModal .body .fullStarRating{
+    color: #ffc71f;
+}
+.userRateToPlaceModal .body .starIcons{
+    cursor: pointer;
+}
+.userRateToPlaceModal .footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.userRateToPlaceModal .footer button{
+    width: 85%;
+    background: white;
+    border: solid 1px #ffc71f;
+    border-radius: 20px;
+    padding: 7px 0px;
+    font-size: 18px;
+    color: black;
+}
+.userRateToPlaceModal .modalBody{
+    border-radius: 200px !important;
+    padding-top: 55px !important;
+    background: black;
+    border: solid 1px #ffc71f;
+}
+.userRateToPlaceModal .modalBody .topIcon{
+    position: absolute;
+    top: -50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    right: 0;
+}
 
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
@@ -2211,6 +2263,12 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+    .userRateToPlaceModal .modalBody{
+        border-radius: 200px 200px 0px 0px !important;
+    }
+    .userRateToPlaceModal .footer button{
+        width: 100%;
+    }
     #tripsForPlace{
         height: 75vh;
     }

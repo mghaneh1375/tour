@@ -673,8 +673,9 @@ function closePhotoAlbumModal(){
 
 var deletedPhotoInAlbum = false;
 function openDeletePhotoModal(){
-    deletedPhotoInAlbum = $('#deletePicIconsPhotoAlbum').attr('dataValue');
-    deletedPhotoIndex = $('#deletePicIconsPhotoAlbum').attr('dataIndex');
+    var element = $('#deletePicIconsPhotoAlbum');
+    var deletedPhotoInAlbum = element.attr('dataValue');
+    var deletedPhotoIndex = element.attr('dataIndex');
 
     if(typeof sidePics[deletedPhotoIndex].deleteFunction === 'function')
         sidePics[deletedPhotoIndex].deleteFunction(deletedPhotoInAlbum);

@@ -3,305 +3,13 @@ var cancelThisReviewFile = false;
 var reviewFileInUpload = false;
 var uploadReviewFileAjax = null;
 
-function uploadFileForReview(_input, _kind){
-    openWriteReview();
-    if(_kind == 'image' && _input.files && _input.files[0]){
-        var reader = new FileReader();
-        reader.onload = e => {
-            newReview.files.push({
-                savedFile: '',
-                uploaded: -1,
-                image: e.target.result,
-                kind: _kind,
-                file: _input.files[0],
-                code: Math.floor(Math.random()*1000)
-            });
-            createNewFileUploadCard(newReview.files.length - 1);
-            reviewFileUploadQueue();
-        };
-        reader.readAsDataURL(_input.files[0]);
-    }
-    else if(_kind == 'video' || _kind == '360Video'){
-        var ind = newReview.files.push({
-            savedFile: '',
-            thumbnailFile: '',
-            uploaded: -1,
-            image: '',
-            kind: _kind,
-            file: _input.files[0],
-            code: Math.floor(Math.random()*1000)
-        });
-        convertVideoFileForConvert(ind-1);
-    }
-}
 
-function createNewFileUploadCard(_index){
-    var file = newReview.files[_index];
-    var text = `<div id="uplaodedImg_${file.code}" class="uploadFileCard">
-                    <div class="img">
-                        <img src="${file.image}" class="resizeImgClass" onload="fitThisImg(this)">
-                    </div>
-                    <div class="absoluteBackground tickIcon"></div>
-                    <div class="absoluteBackground warningIcon">اشکال در بارگذاری</div>
-                    <div class="absoluteBackground process">
-                        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                        <div class="processCounter">0%</div>
-                    </div>
-                    <div class="hoverInfos">
-                        <div onclick="deleteThisUploadedReviewFile(${file.code})" class="cancelButton closeIconWithCircle" >حذف عکس</div>
-                    </div>
-                </div>`;
-    $('.uploadedFiles').append(text);
-}
+function openWriteReview(){
+    if(!checkLogin())
+        return;
 
-function convertVideoFileForConvert(_index){
-    var uFile = newReview.files[_index];
-    window.URL = window.URL || window.webkitURL;
-
-    var video = document.createElement('video');
-    video.preload = 'metadata';
-    video.src = URL.createObjectURL(uFile.file);
-
-    var fileReader = new FileReader();
-    fileReader.onload = function() {
-        var blob = new Blob([fileReader.result], {type: uFile.file.type});
-        var url = URL.createObjectURL(blob);
-        var timeupdate = function() {
-            if (snapImage()) {
-                video.removeEventListener('timeupdate', timeupdate);
-                video.pause();
-            }
-        };
-        video.addEventListener('loadeddata', function() {
-            if (snapImage()) {
-                video.removeEventListener('timeupdate', timeupdate);
-            }
-        });
-
-        var snapImage = function() {
-            var canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            var image = canvas.toDataURL();
-            var success = image.length > 100000;
-
-            if (success) {
-                newReview.files[_index].image = image;
-                URL.revokeObjectURL(url);
-                createNewFileUploadCard(_index);
-                reviewFileUploadQueue();
-            }
-            return success;
-        };
-        video.addEventListener('timeupdate', timeupdate);
-        video.preload = 'metadata';
-        video.src = url;
-        video.muted = true;
-        video.playsInline = true;
-        video.play();
-    };
-    fileReader.readAsArrayBuffer(uFile.file);
-}
-
-function reviewFileUploadQueue(){
-    if(!reviewFileInUpload){
-        var uploadFileIndex = null;
-        newReview.files.map((item, index) =>{
-            if(item.uploaded == -1 && uploadFileIndex == null)
-                uploadFileIndex = index;
-        });
-        if(uploadFileIndex != null){
-            reviewFileInUpload = true;
-            newReview.files[uploadFileIndex].uploaded = 0;
-            var uFile = newReview.files[uploadFileIndex];
-            $('#uplaodedImg_' + uFile.code).addClass('process');
-
-            var formData = new FormData();
-            formData.append('code', newReview.code);
-            formData.append('file', uFile.file);
-            formData.append('kind', uFile.kind);
-
-            uploadReviewFileAjax = $.ajax({
-                type: 'POST',
-                url: uploadReviewPicForLocalShop,
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhr: function () {
-                    var xhr = new XMLHttpRequest();
-                    xhr.upload.onprogress = e => {
-                        if (e.lengthComputable) {
-                            var percent = Math.round((e.loaded / e.total) * 100);
-                            $(`#uplaodedImg_${uFile.code}`).find('.processCounter').text(percent + '%');
-                        }
-                    };
-                    return xhr;
-                },
-                success: response => {
-                    reviewFileInUpload = false;
-                    if (response.status == 'ok') {
-                        if(cancelThisReviewFile) {
-                            doDeleteReviewFile(uploadFileIndex);
-                            cancelThisReviewFile = false;
-                        }
-                        if(uFile == 'image'){
-                            $('#uplaodedImg_' + uFile.code).removeClass('process');
-                            $('#uplaodedImg_' + uFile.code).addClass('done');
-                            newReview.files[uploadFileIndex].uploaded = 1;
-                            newReview.files[uploadFileIndex].savedFile = response.result;
-                            reviewFileUploadQueue();
-                        }
-                        else{
-                            newReview.files[uploadFileIndex].savedFile = response.result;
-                            uploadReviewVideoThumbnail(uploadFileIndex);
-                        }
-                    }
-                    else{
-                        $('#uplaodedImg_' + uFile.code).removeClass('process');
-                        $('#uplaodedImg_' + uFile.code).addClass('error');
-                        newReview.files[uploadFileIndex].uploaded = -2;
-                        reviewFileUploadQueue();
-                    }
-                },
-                error: err => {
-                    reviewFileInUpload = false;
-                    $('#uplaodedImg_' + uFile.code).removeClass('process');
-                    $('#uplaodedImg_' + uFile.code).addClass('error');
-                    newReview.files[uploadFileIndex].uploaded = -2;
-                    reviewFileUploadQueue();
-                }
-            })
-        }
-    }
-}
-
-function uploadReviewVideoThumbnail(_index){
-    var uFile = newReview.files[_index];
-
-    var videoThumbnail = new FormData();
-    videoThumbnail.append('code', newReview.code);
-    videoThumbnail.append('kind', 'videoPic');
-    videoThumbnail.append('file', uFile.image);
-    videoThumbnail.append('fileName', uFile.savedFile);
-
-    $.ajax({
-        type: 'POST',
-        url: uploadReviewPicForLocalShop,
-        data: videoThumbnail,
-        processData: false,
-        contentType: false,
-        success: response => {
-            if(response.status == 'ok'){
-                $('#uplaodedImg_' + uFile.code).removeClass('process');
-                $('#uplaodedImg_' + uFile.code).addClass('done');
-                newReview.files[_index].uploaded = 1;
-                newReview.files[_index].thumbnailFile = response.result;
-                reviewFileUploadQueue();
-            }
-        },
-        error: err => {
-            $('#uplaodedImg_' + uFile.code).removeClass('process');
-            $('#uplaodedImg_' + uFile.code).addClass('error');
-            newReview.files[_index].uploaded = -2;
-            reviewFileUploadQueue();
-        }
-    })
-}
-
-function deleteThisUploadedReviewFile(_code){
-    var findedIndex = null;
-    newReview.files.map((item, index) => {
-        if(item.code == _code)
-            findedIndex = index;
-    });
-
-    if(findedIndex != null)
-        doDeleteReviewFile(findedIndex);
-}
-
-function doDeleteReviewFile(_index){
-    var dFile = newReview.files[_index];
-    if(dFile.uploaded == 1){
-        $.ajax({
-            type: 'delete',
-            url: deleteReviewPicForLocalShop,
-            data:{
-                _token: csrfTokenGlobal,
-                fileName: dFile.savedFile,
-                code: newReview.code,
-            },
-            success: response => {
-                if(response.status == 'ok'){
-                    $(`#uplaodedImg_${dFile.code}`).remove();
-                    newReview.files.splice(_index, 1);
-                }
-            },
-        })
-    }
-    else if(dFile.uploaded == 0)
-        cancelThisReviewFile = true;
-    else{
-        $(`#uplaodedImg_${dFile.code}`).remove();
-        newReview.files.splice(_index, 1);
-    }
-}
-
-function storeReview(_element){
-    var canUpload = false;
-    var text = $('#inputReviewText').val();
-
-    if(text.trim().length > 0)
-        canUpload = true;
-
-    newReview.files.map(item =>{
-        if(item.uploaded == 0){
-            openWarning('یکی از فایل ها درحال آپلود می باشد. منتظر بمانید.');
-            return;
-        }
-        if(item.uploaded == 1)
-            canUpload = true;
-    });
-
-    $(_element).next().removeClass('hidden');
-    $(_element).addClass('hidden');
-
-    $.ajax({
-        type: 'POST',
-        url: reviewPicForLocalShop,
-        data: {
-            _token: csrfToken,
-            kindPlaceId: 13,
-            placeId: localShop.id,
-            code: newReview.code,
-            userAssigned: JSON.stringify(newReview.userAssigned),
-            text: text,
-        },
-        success: response =>{
-            $(_element).next().addClass('hidden');
-            $(_element).removeClass('hidden');
-
-            if(response.status == 'ok'){
-                closeWriteReview();
-                newReview.code = response.result;
-                newReview.userAssigned = [];
-                newReview.files = [];
-                $('#inputReviewText').val('');
-                $('#friendAddedSection').find('.acceptedUserFriend').remove();
-                $('.uploadedFiles').find('.uploadFileCard').remove();
-                showSuccessNotifi('دیدگاه شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
-            }
-            else
-                showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
-        },
-        error: err => {
-            console.log(err);
-            showSuccessNotifi('در ثبت دیدگاه مشکلی پیش امده.', 'left', 'red');
-            $(_element).next().addClass('hidden');
-            $(_element).removeClass('hidden');
-        }
-    })
-
+    selectPlaceForNewReview(kindPlaceId, placeId, localShop.name);
+    openModalWriteNewReview(getLocalShopReviews);
 }
 
 function openAlbum(_kind, selectId = 0){
@@ -387,15 +95,6 @@ function initMap(){
     // new google.maps.Marker({
     //     position: new google.maps.LatLng(localShop.lat, localShop.lng)
     // }).setMap(mainMap);
-}
-
-function openWriteReview(){
-    if(!checkLogin())
-        return;
-
-    $('#darkModal').show();
-    $('#inputReviewSec').addClass('openReviewSec');
-    autosize($('#inputReviewText'));
 }
 
 function closeWriteReview(){
@@ -515,6 +214,7 @@ function getLocalShopReviews(){
             response = JSON.parse(response);
             var reviews = response[0];
             var reviewsText = [[], []];
+
             reviews.map((item, index) => {
                 var small = createSmallReviewHtml(item);
                 reviewsText[index%2].push(small);
@@ -526,6 +226,78 @@ function getLocalShopReviews(){
 }
 
 
+
+function openRateBoxForPlace(){
+    if(!checkLogin())
+        return;
+    openMyModal('userRateToPlaceModal');
+}
+
+function ratingToPlace(_rate){
+    for(var i = 1; i <= 5; i++){
+        if(i <= _rate)
+            $(`.ratingStar${i}`).addClass('fullStarRating').removeClass('emptyStarRating').attr('data-selected', 1);
+        else
+            $(`.ratingStar${i}`).addClass('emptyStarRating').removeClass('fullStarRating').attr('data-selected', 0);
+    }
+}
+
+function submitRating(){
+    var lastSelected = 0;
+    for(var i = 5; i > 0; i--){
+        var element = $(`.ratingStar${i}`);
+        if(element.attr('data-selected') == 1){
+            lastSelected = element.attr('data-star');
+            break;
+        }
+    }
+
+    if(lastSelected == 0)
+        alert('برای ثبت امتیاز باید روی ستاره مورد نظر کلیک کنید');
+    else{
+        openLoading();
+        $.ajax({
+            type: 'POST',
+            url: setRateToPlaceUrl,
+            data:{
+                _token: csrfTokenGlobal,
+                placeId: placeId,
+                kindPlaceId: kindPlaceId,
+                rate: lastSelected
+            },
+            complete: closeLoading,
+            success: response =>{
+                if(response.status == 'ok'){
+                    updatePlaceRating(response.rates.avg, response.rates.rate);
+                    closeMyModal('userRateToPlaceModal');
+                    showSuccessNotifi('امتیاز شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
+                }
+                else if(response.status == 'error3')
+                    alert('برای ثبت امتیاز باید روی ستاره مورد نظر کلیک کنید');
+                else
+                    showSuccessNotifi('خطا در ثبت امتیاز', 'left', 'red');
+            },
+            error: err => showSuccessNotifi('خطا در ثبت امتیاز', 'left', 'red')
+        })
+    }
+}
+
+function updatePlaceRating(_avg, _separate = []){
+    var elements = $('.ratingSection').find('.star');
+    var elementsModal = $('.userRateToPlaceModal').find('.starIcons');
+    for(var i = 0; i < elements.length; i++){
+        if(i < _avg){
+            $(elements[i]).removeClass('emptyStarRating').addClass('fullStarRating');
+            $(elementsModal[i]).removeClass('emptyStarRating').addClass('fullStarRating');
+        }
+        else{
+            $(elements[i]).addClass('emptyStarRating').removeClass('fullStarRating');
+            $(elementsModal[i]).addClass('emptyStarRating').removeClass('fullStarRating');
+        }
+    }
+}
+
+
 $('.localShopPageBookMark').on('click', bookMarkThisLocalShop);
 
 $(window).ready(() => {
@@ -533,11 +305,7 @@ $(window).ready(() => {
     autosize($('.autoResizeTextArea'));
     getLocalShopReviews();
 
-// console.log(localShop);
-//     var reviewsText = [[], []];
-//     localShop.review.map((item, index) => reviewsText[index%2].push(createSmallReviewHtml(item)) );
-//     $('#showReviewsMain1').html(reviewsText[0]);
-//     $('#showReviewsMain2').html(reviewsText[1]);
+    updatePlaceRating(localShop.fullRate);
 
     new Swiper('#mainSlider', {
         spaceBetween: 0,

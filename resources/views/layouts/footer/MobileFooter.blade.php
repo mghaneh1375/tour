@@ -211,7 +211,7 @@
                             <div class="submitFiltersInMobile" onclick="closeMyModal('placeListMobileFilter')">اعمال فیلتر</div>
                         </div>
                     </div>
-                    <div id="EATERY_FILTERS_CONT" class="eatery_filters">
+                    <div id="EATERY_FILTERS_CONT" class="eatery_filters featureListSection">
                         @if($kindPlace->id == 11)
                             <div class="prw_rup prw_restaurants_restaurant_filters">
                                 <div id="jfy_filter_bar_establishmentTypeFilters" class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">
@@ -238,16 +238,15 @@
                                     </div>
 
                                     <div class="filterContent ui_label_group inline">
-                                        @for($i = 0; $i < count($feature->subFeat); $i++)
+                                        @foreach($feature->subFeat as $sub)
                                             <div class="filterItem lhrFilter filter selected squerRadioInputSec">
-                                                <input onclick="doFilterFeature({{$feature->subFeat[$i]->id}})" type="checkbox" id="p_feat{{$feature->subFeat[$i]->id}}" value="{{$feature->subFeat[$i]->name}}"/>
-                                                <label for="p_feat{{$feature->subFeat[$i]->id}}" class="inputRadionSquer">
+                                                <input id="p_feat{{$sub->id}}" class="featurePlaceListInput_{{$sub->id}}" type="checkbox" value="{{$sub->name}}" onclick="doFilterFeature({{$sub->id}})"/>
+                                                <label for="p_feat{{$sub->id}}" class="inputRadionSquer">
                                                     <span class="labelBox"></span>
-                                                    <span class="name">{{$feature->subFeat[$i]->name}}</span>
+                                                    <span class="name">{{$sub->name}}</span>
                                                 </label>
                                             </div>
-                                        @endfor
-
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

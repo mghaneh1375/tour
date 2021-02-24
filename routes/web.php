@@ -193,7 +193,28 @@ Route::middleware(['throttle:60'])->group(function (){
     Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
+
 });
+
+Route::middleware(['throttle:60'])->group(function (){
+
+    Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
+        Route::get('/business/show/{id?}', 'LocalShop\LocalShopController@showLocalShops')->name('business.show');
+        Route::get('/localShops/show/{id?}', 'LocalShop\LocalShopController@showLocalShops')->name('localShops.show');
+    });
+
+    Route::get('/localShop/getFeatures', 'LocalShop\LocalShopController@getFeatures')->name('localShop.getFeatureList');
+
+    Route::middleware(['auth'])->group(function(){
+        Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
+            Route::get('/localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
+        });
+        Route::post('/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
+        Route::post('/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
+        Route::delete('/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+    });
+});
+
 
 //ajaxController
 Route::middleware(['nothing'])->group(function () {

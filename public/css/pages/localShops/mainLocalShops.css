@@ -305,6 +305,7 @@ body{
     display: flex;
     position: absolute;
     bottom: 0;
+    z-index: 1;
 }
 .topInfoFixed .mainHeaderButts{
     margin-left: 20px;

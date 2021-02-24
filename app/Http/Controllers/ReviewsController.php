@@ -177,32 +177,56 @@ class ReviewsController extends Controller
 
     public function deleteReviewPic(Request $request)
     {
-        $code = $request->code;
-        $name = $request->name;
+        if(isset($request->picId))
+            $pic = ReviewPic::find($request->picId);
+        else {
+            $code = $request->code;
+            $name = $request->name;
+            $pic = ReviewPic::where('code', $code)->where('pic', $name)->first();
+        }
 
-        $pics = ReviewPic::where('code', $code)->where('pic', $name)->first();
+        if ($pic != null) {
+            if($pic->logId === null)
+                $fileLocation = $this->limboLocation;
+            else{
+                $fileLocation = $this->assetLocation;
+                $log = LogModel::find($pic->logId);
+                if($log === null)
+                    return response()->json(['status' => 'notFoundReview']);
+                else if($log->visitorId != \auth()->user()->id)
+                    return response()->json(['status' => 'accessDenied']);
+                else{
+                    if($log->kindPlaceId == 0 && $log->placeId == 0)
+                        $fileLocation .= '/userPhoto/nonePlaces';
+                    else{
+                        $kindPlace = Place::find($log->kindPlaceId);
+                        $place = \DB::table($kindPlace->tableName)->find($log->placeId);
+                        $fileLocation .= "/userPhoto/{$kindPlace->fileName}/{$place->file}";
+                    }
+                }
+            }
 
-        if ($pics != null) {
-            if ($pics->isVideo == 1) {
-                if($pics->thumbnail != null)
-                    $videoName = $pics->thumbnail;
+            if ($pic->isVideo == 1) {
+                if($pic->thumbnail != null)
+                    $videoName = $pic->thumbnail;
                 else {
-                    $videoArray = explode('.', $pics->pic);
+                    $videoArray = explode('.', $pic->pic);
                     $videoName = '';
                     for ($k = 0; $k < count($videoArray) - 1; $k++)
                         $videoName .= $videoArray[$k] . '.';
                     $videoName .= 'png';
                 }
 
-                $thumbnailLocation = $this->limboLocation.'/'.$videoName;
+                $thumbnailLocation = $fileLocation.'/'.$videoName;
                 if (file_exists($thumbnailLocation))
                     unlink($thumbnailLocation);
             }
 
-            $picLocation = "{$this->limboLocation}/{$pics->pic}";
+            $picLocation = "{$fileLocation}/{$pic->pic}";
             if (file_exists($picLocation))
                 unlink($picLocation);
-            $pics->delete();
+
+            $pic->delete();
 
             return response()->json(['status' => 'ok']);
         }
@@ -885,10 +909,10 @@ class ReviewsController extends Controller
                         $kindPlaceTableName = $kindPlace->tableName;
                         $placeId = $review->placeId;
                         $place = \DB::table($kindPlaceTableName)->find($review->placeId);
-                        $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
+                        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
                     }
                     else
-                        $location = __DIR__ . '/../../../../assets/userPhoto/nonePlaces';
+                        $location = "{$this->assetLocation}/userPhoto/nonePlaces";
 
                     $reviewPics = ReviewPic::where('logId', $review->id)->get();
                     foreach ($reviewPics as $pic){
@@ -903,7 +927,6 @@ class ReviewsController extends Controller
                             if(is_file($location.'/'.$thumbnail))
                                 unlink($location.'/'.$thumbnail);
                         }
-
 
                         if(is_file($location.'/'.$pic->pic))
                             unlink($location.'/'.$pic->pic);
@@ -933,7 +956,7 @@ class ReviewsController extends Controller
                     $alert->referenceId = $placeId;
                     $alert->save();
 
-                    if($kindPlaceTableName)
+                    if($kindPlaceTableName && $review->confirm === 1)
                         \DB::table($kindPlaceTableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
 
                     $review->delete();

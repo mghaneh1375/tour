@@ -40,10 +40,11 @@ function createSmallReviewHtml(item){
 
     var likeClass = '';
     var disLikeClass = '';
+    console.log(item.userLike);
     if(item.userLike){
-        if(item.userLike.like == 1)
+        if(item.userLike == 1)
             likeClass = 'coloredFullIcon';
-        else if(item.userLike.like == -1)
+        else if(item.userLike == -1)
             disLikeClass = 'coloredFullIcon';
     }
 
@@ -96,20 +97,52 @@ function showSmallReviewPics(_id){
         var revPic = selectReview['pics'];
         for(var i = 0; i < revPic.length; i++){
             reviewPicForAlbum[i] = {
-                'id' : 'review_' + revPic[i]['id'],
-                'sidePic' : revPic[i]['picUrl'],
-                'mainPic' : revPic[i]['picUrl'],
-                'video' : revPic[i]['videoUrl'],
-                'userPic' : selectReview['userPic'],
-                'userName' : selectReview['userName'],
-                'uploadTime' : selectReview['timeAgo'],
-                'where' : selectReview['where'],
-                'whereUrl' : selectReview['placeUrl'],
-                'showInfo' : false,
+                id : 'review_' + revPic[i]['id'],
+                sidePic : revPic[i]['picUrl'],
+                mainPic : revPic[i]['picUrl'],
+                video : revPic[i]['videoUrl'],
+                userPic : selectReview['userPic'],
+                userName : selectReview['userName'],
+                uploadTime : selectReview['timeAgo'],
+                where : selectReview['where'],
+                whereUrl : selectReview['placeUrl'],
+                showInfo : false,
+                deleteFunction: doDeleteReviewPic,
             }
         }
         createPhotoModal('عکس های پست', reviewPicForAlbum);// in general.photoAlbumModal.blade.php
     }
+}
+
+function doDeleteReviewPic(_id){
+    openWarning("آیا از حذف عکس خود اطمینان دارید؟ در صورت حذف محتوای مورد نظر قابل بازیابی نمی باشد.", () => {
+        openLoading(false, () => {
+            var sendId = _id.split('_');
+            sendId = sendId[1];
+
+            $.ajax({
+                type: 'POST',
+                url: deleteReviewPicInAlbumUrl,
+                data: {
+                    _token: csrfTokenGlobal,
+                    picId: sendId
+                },
+                success: response =>{
+                    if(response.status === 'ok')
+                        location.reload();
+                    else{
+                        closeLoading();
+                        showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general/alert.blade.php
+                    }
+                },
+                error: err => {
+                    closeLoading();
+                    showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general/alert.blade.php
+                }
+            })
+        })
+
+    }); // in general/alert.blade.php
 }
 
 function showSmallReviewMoreText(element){

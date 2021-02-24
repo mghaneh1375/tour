@@ -11,8 +11,8 @@
     <meta name="twitter:card" content="{{$localShop->meta}}"/>
     <meta name="description" content="{{$localShop->meta}}"/>
     <meta name="twitter:description" content="{{$localShop->meta}}"/>
-    <meta property="og:description" content="{{$localShop->meta}}"/>
     <meta name="keywords" content="{{$localShop->keyword}}">
+    <meta property="og:description" content="{{$localShop->meta}}"/>
     <meta property="og:url" content="{{Request::url()}}"/>
 
     @if(isset($localShop->mainPic))
@@ -26,9 +26,12 @@
     @if(isset($localShop->lat) && isset($localShop->lng))
         <meta NAME="geo.position" CONTENT="{{$localShop->lat}}; {{$localShop->lng}}">
     @endif
-{{--    @foreach($localShop->tags as $item)--}}
-{{--        <meta property="article:tag" content="{{$item}}"/>--}}
-{{--    @endforeach--}}
+
+    @if(isset($localShop->tags ))
+        @foreach($localShop->tags as $item)
+            <meta property="article:tag" content="{{$item}}"/>
+        @endforeach
+    @endif
 
 
     <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
@@ -118,7 +121,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="bodySec infoSec">
-                        <div class="iWasHere flagIcon">من اینجا بودم</div>
+{{--                        <div class="iWasHere flagIcon">من اینجا بودم</div>--}}
                         <div class="boldText">{{$localShop->name}}</div>
                         <div class="normText">{{$localShop->address}}</div>
                         <div class="phone telephoneIconAfter">
@@ -272,9 +275,9 @@
 
                             <div class="col-md-4 ratingSection">
                                 <h2 class="title">امتیاز کاربران</h2>
-                                <div class="ratingStarsSection">
-                                    <div class="fullStarRating star"></div>
-                                    <div class="fullStarRating star"></div>
+                                <div class="ratingStarsSection" onclick="openRateBoxForPlace()">
+                                    <div class="emptyStarRating star"></div>
+                                    <div class="emptyStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
@@ -311,29 +314,26 @@
                                     <div class="fullyCenterContent uPic50">
                                         <img src="{{$userPic}}" class="resizeImgClass" onload="fitThisImg(this)" style="width: 100%" >
                                     </div>
-                                    <textarea id="inputReviewText" class="autoResizeTextArea Inp" placeholder="کاربر چه فکر یا احساسی داری..." onfocus="openWriteReview()"></textarea>
+                                    <textarea class="autoResizeTextArea Inp" placeholder="کاربر چه فکر یا احساسی داری..." onclick="openWriteReview()" readonly></textarea>
                                 </div>
-                                <div class="uploadedFiles"></div>
-                                <div id="friendAddedSection" class="searchYouFriendDiv" onclick="$('#friendSearchInput').focus()">
-                                    <input id="friendSearchInput"
-                                           type="text"
+                                <div class="searchYouFriendDiv" onclick="$('#friendSearchInput').focus()">
+                                    <input type="text"
                                            placeholder="با چه کسانی بودید؟ نام کاربری را وارد نمایید"
-                                           onfocus="openWriteReview()"
-                                           onkeyup="searchUserFriend(this)">
-                                    <div class="searchResultUserFriend"></div>
+                                           onclick="openWriteReview()"
+                                           onkeyup="searchUserFriend(this)" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="bodySec">
                             <div class="reviewButs">
-                                <label for="reviewPictureInput" class="but addPhotoIcon"> عکس اضافه کنید.</label>
-                                <label for="reviewVideoInput" class="but addVideoIcon">ویدیو اضافه کنید.</label>
-                                <label for="review360VideoInput" class="but addVideo360Icon">ویدیو 360 اضافه کنید.</label>
-                                <div class="but addFriendIcon" onclick="openWriteReview(); $('#friendSearchInput').focus();">دوستنتان را TAG کنید.</div>
+                                <label for="reviewPictureInput" class="but addPhotoIcon"  onclick="openWriteReview()"> عکس اضافه کنید.</label>
+                                <label for="reviewVideoInput" class="but addVideoIcon"  onclick="openWriteReview()">ویدیو اضافه کنید.</label>
+                                <label for="review360VideoInput" class="but addVideo360Icon"  onclick="openWriteReview()">ویدیو 360 اضافه کنید.</label>
+                                <div class="but addFriendIcon" onclick="openWriteReview();">دوستنتان را TAG کنید.</div>
 
-                                <input type="file" id="reviewPictureInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display: none;" onchange="uploadFileForReview(this, 'image')">
-                                <input type="file" id="reviewVideoInput" accept="video/*" style="display: none;" onchange="uploadFileForReview(this, 'video')">
-                                <input type="file" id="review360VideoInput" accept="video/*" style="display: none;" onchange="uploadFileForReview(this, '360Video')">
+{{--                                <input type="file" id="reviewPictureInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display: none;">--}}
+{{--                                <input type="file" id="reviewVideoInput" accept="video/*" style="display: none;" onclick="openWriteReview()">--}}
+{{--                                <input type="file" id="review360VideoInput" accept="video/*" style="display: none;" onclick="openWriteReview()">--}}
                             </div>
                             <div class="reviewQues showWhenNeed" style="display: none;"></div>
                             <div class="reviewSubmit showWhenNeed" onclick="storeReview(this)">ارسال دیدگاه</div>
@@ -400,6 +400,26 @@
         </div>
     </div>
 
+    <div id="userRateToPlaceModal" class="userRateToPlaceModal modalBlackBack fullCenter">
+        <div class="modalBody">
+            <div class="topIcon">
+                <img src="{{URL::asset('images/icons/koochitaPlaceRate.svg?v=1')}}" style="width: 88px">
+            </div>
+            <div class="header">امتیاز شما به {{$localShop->name}} چیست؟</div>
+            <div class="body">
+                <div class="starIcons emptyStarRating ratingStar1" data-star="1" data-selected="0" onclick="ratingToPlace(1)"></div>
+                <div class="starIcons emptyStarRating ratingStar2" data-star="2" data-selected="0" onclick="ratingToPlace(2)"></div>
+                <div class="starIcons emptyStarRating ratingStar3" data-star="3" data-selected="0" onclick="ratingToPlace(3)"></div>
+                <div class="starIcons emptyStarRating ratingStar4" data-star="4" data-selected="0" onclick="ratingToPlace(4)"></div>
+                <div class="starIcons emptyStarRating ratingStar5" data-star="5" data-selected="0" onclick="ratingToPlace(5)"></div>
+            </div>
+            <div class="footer">
+                <button onclick="submitRating()">ثبت امتیاز</button>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @section('script')
@@ -409,14 +429,13 @@
     <script defer type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
 
     <script>
+
         var photographerUploadFileLocalShop = '{{route('photographer.uploadFile')}}';
-        var uploadReviewPicForLocalShop = '{{route("localShop.review.storePic")}}';
-        var deleteReviewPicForLocalShop = '{{route("localShop.review.deletePic")}}';
-        var reviewPicForLocalShop = '{{route("localShop.review.store")}}';
         var getLocalShopReviewsUrl = '{{route("getReviews")}}';
         var setBookMarkInLocalShop = '{{route("setBookMark")}}';
         var askQuestionUrl = '{{route("askQuestion")}}';
         var getQuestionsUrl = '{{route("getQuestions")}}';
+        var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
 
         var localShop = {!! $localShop !!};
         var newReview = {

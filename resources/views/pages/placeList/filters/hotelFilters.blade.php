@@ -1,14 +1,6 @@
 <div class="bottomLightBorder headerFilter">
     <div class="filterHeaderWithClose">
         <div class="filterGroupTitle">{{__('مراکز اقامتی')}}</div>
-{{--        <span onclick="showMoreItems(0)" class="moreItems0 moreItems">--}}
-{{--            {{__('نمایش کامل فیلترها')}}--}}
-{{--            <span class="downArrowIcon"></span>--}}
-{{--        </span>--}}
-{{--        <span onclick="showLessItems(0)" class="lessItems hidden extraItem0">--}}
-{{--            {{__('پنهان سازی فیلتر‌ها')}}--}}
-{{--            <span class="upArrowIcon"></span>--}}
-{{--        </span>--}}
     </div>
 
     <div class="filterContent ui_label_group inline specialFiltersSection">

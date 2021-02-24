@@ -4089,59 +4089,6 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .photos{
     width: 100%;
 }
 
-.userRateToPlaceModal{
-
-}
-.userRateToPlaceModal .header{
-    font-size: 18px;
-    font-weight: normal;
-    text-align: center;
-    padding: 0px 40px;
-    color: white;
-}
-.userRateToPlaceModal .body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 78px;
-    font-size: 40px;
-    color: white;
-    direction: ltr;
-}
-.userRateToPlaceModal .body .fullStarRating{
-    color: #ffc71f;
-}
-.userRateToPlaceModal .footer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.userRateToPlaceModal .footer button{
-    width: 100%;
-    background: white;
-    border: solid 1px #ffc71f;
-    border-radius: 20px;
-    padding: 7px 0px;
-    font-size: 18px;
-    color: black;
-}
-.userRateToPlaceModal .modalBody{
-    border-radius: 200px 200px 0px 0px !important;
-    padding-top: 55px !important;
-    background: black;
-    border: solid 1px #ffc71f;
-}
-.userRateToPlaceModal .modalBody .topIcon{
-    position: absolute;
-    top: -50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    right: 0;
-}
-
-
 .sogatSanieMobileFeatures{
     display: flex;
     flex-wrap: wrap;
