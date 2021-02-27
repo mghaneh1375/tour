@@ -388,6 +388,7 @@
     border: solid 1px lightgray;
     border-radius: 25px;
     margin: 10px 0px;
+    cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .shortcutSec .shortcutButton .icon{
     margin-left: 5px;
@@ -408,6 +409,7 @@
     background: var(--koochita-blue);
     color: white;
     align-items: center;
+    cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .rowButton .butts{
     text-align: center;
@@ -419,6 +421,7 @@
     border-radius: 10px;
     font-weight: normal;
     color: gray;
+    cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .rowButton .butts.showAll{
     color: var(--koochita-blue);
@@ -459,12 +462,13 @@
     position: relative;
     margin-left: 10px;
     color: gray;
+    cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .showIcon .slash{
     display: block;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: -2px;
+    top: 2px;
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .showIcon.show{
     font-size: 24px;
@@ -497,6 +501,7 @@
     margin: 5px 10px;
     color: gray;
     display: inline-flex;
+    cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter .name > div{
     display: inline-block;

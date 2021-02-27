@@ -85,7 +85,7 @@
                 <div class="shortcutSec">
                     @foreach($localShopCategories as $category)
                         <div class="shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
-                            <div class="icon manSportIcon"></div>
+{{--                            <div class="icon manSportIcon"></div>--}}
                             <div>{{$category->name}}</div>
                         </div>
                     @endforeach
@@ -104,7 +104,7 @@
                         <div id="localShopMainCategorySection_{{$category->id}}" class="rowFilter">
                             <div class="head">
                                 <div>
-                                    <span class="icon manSportIcon"></span>
+{{--                                    <span class="icon manSportIcon"></span>--}}
                                     <span>{{$category->name}}</span>
                                 </div>
                                 <div class="showIcon showIconCategories" data-type="off" onclick="toggleLocalShopCategories({{$category->id}}, this)">
@@ -117,7 +117,7 @@
                                     <div class="filter">
                                         <input id="localShopCategories_{{$sub->id}}" data-id="{{$sub->id}}" class="categoryFilterInput_0 categoryFilterInput_{{$category->id}}" type="checkbox" checked>
                                         <label for="localShopCategories_{{$sub->id}}" class="name checked">
-                                            <div class="icon manSportIcon"></div>
+{{--                                            <div class="icon manSportIcon"></div>--}}
                                             <div>{{$sub->name}}</div>
                                         </label>
                                     </div>
