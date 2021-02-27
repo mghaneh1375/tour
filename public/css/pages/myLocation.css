@@ -372,15 +372,7 @@
     /*overflow-x: hidden;*/
 }
 .localShopCategoriesModal .mainFullBody .shortcutSec{
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    display: block;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-.localShopCategoriesModal .mainFullBody .shortcutSec::-webkit-scrollbar {
-    display: none;
+    height: 45px;
 }
 .localShopCategoriesModal .mainFullBody .shortcutSec .shortcutButton{
     display: inline-flex;
@@ -389,6 +381,8 @@
     border-radius: 25px;
     margin: 10px 0px;
     cursor: pointer;
+    height: 30px;
+    width: auto;
 }
 .localShopCategoriesModal .mainFullBody .shortcutSec .shortcutButton .icon{
     margin-left: 5px;

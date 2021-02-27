@@ -82,13 +82,15 @@
             <div onclick="closeMyModal('localShopCategoriesModal')" class="iconClose closeModal"></div>
             <div class="mainFullBody">
                 <div class="header">دسته بندی کسب و کارها</div>
-                <div class="shortcutSec">
-                    @foreach($localShopCategories as $category)
-                        <div class="shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
-{{--                            <div class="icon manSportIcon"></div>--}}
-                            <div>{{$category->name}}</div>
-                        </div>
-                    @endforeach
+                <div id="mapLocationShortcutDiv" class="swiper-container shortcutSec">
+                    <div class="swiper-wrapper">
+                        @foreach($localShopCategories as $category)
+                            <div class="swiper-slide shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
+    {{--                            <div class="icon manSportIcon"></div>--}}
+                                <div>{{$category->name}}</div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
                 <div class="rowButton">
                     <div class="butts showAll" onclick="showAllLocalShopCategories(-1, 0, this)">
@@ -206,7 +208,13 @@
         localShopCategories.map(item => item.sub.map(sub => totalLocalShopCategories++));
 
         function openLocalShopCategoriesFilter(){
-            openMyModal('localShopCategoriesModal')
+            openMyModal('localShopCategoriesModal');
+
+            new Swiper('#mapLocationShortcutDiv', {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                freeMode: true,
+            });
         }
 
         function showAllLocalShopCategories(_kind, _parent, _element = ''){
@@ -276,7 +284,6 @@
                 scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
             }, 1000).scrollTop();
         }
-
     </script>
 
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
