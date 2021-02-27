@@ -18,8 +18,7 @@ $('.topSecMobileList').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     startTouchY = touch.pageY;
     startMobileListHeight = $('#mobileListSection').height();
-});
-$('.topSecMobileList').on('touchend', e => {
+}).on('touchend', e => {
     var height = $('#mobileListSection').height();
     var windowHeight = $(window).height();
     var resultHeight;
@@ -29,8 +28,7 @@ $('.topSecMobileList').on('touchend', e => {
     else
         resultHeight = height > startMobileListHeight ? "middle" : "min";
     toggleMobileListNearPlace(resultHeight);
-});
-$('.topSecMobileList').on('touchmove', e => {
+}).on('touchmove', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     var maxHeight = $(window).height() - 150;
     var height = startMobileListHeight + startTouchY - touch.pageY;
@@ -49,8 +47,7 @@ $('.mobileListContent').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     movePositionMobileList = touch.pageY;
     mobileListScrollIsTop = $('.mobileListContent').scrollTop() == 0;
-});
-$('.mobileListContent').on('touchend', e => {
+}).on('touchend', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     if(mobileListIsFull && mobileListScrollIsTop && movePositionMobileList < touch.pageY)
         toggleMobileListNearPlace("middle");
@@ -91,7 +88,7 @@ function createFilterHtml(){
     var text = '';
     var mobile = '';
     for(var item in filterButtons){
-        text += `<div class="filKind ${filterButtons[item].enName}" onclick="toggleFilter(${filterButtons[item].id}, this)">
+            text += `<div class="filKind ${filterButtons[item].enName} filterButtonMap_${filterButtons[item].id}" onclick="toggleFilter(${item}, this)">
                             <div class="fullyCenterContent icon ${filterButtons[item].icon}"></div>
                             <div class="name">${filterButtons[item].name}</div>
                         </div>`;
@@ -107,16 +104,21 @@ function createFilterHtml(){
 
 createFilterHtml();
 
-function toggleFilter(_id, _element){
-    $(_element).toggleClass('offFilter');
-    if($(_element).hasClass('offFilter'))
-        dontShowfilters.push(_id);
-    else{
-        var index = dontShowfilters.indexOf(_id);
-        if(index != -1)
-            dontShowfilters.splice(index, 1);
+function toggleFilter(_item, _element){
+    if(typeof filterButtons[_item].onClick === 'function')
+        filterButtons[_item].onClick();
+    else {
+        var id = filterButtons[_item].id;
+        $(_element).toggleClass('offFilter');
+        if ($(_element).hasClass('offFilter'))
+            dontShowfilters.push(id);
+        else {
+            var index = dontShowfilters.indexOf(id);
+            if (index != -1)
+                dontShowfilters.splice(index, 1);
+        }
+        togglePlaces();
     }
-    togglePlaces();
 }
 
 function initMap(){
@@ -187,7 +189,6 @@ function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
 
     if(yourPosition != 0)
         mainMap.removeLayer(yourPosition);
-    // yourPosition.setMap(null);
 
     if(_name != '')
         $('.nearName').text(_name);
@@ -238,16 +239,17 @@ function chooseFromMap(){
 }
 
 function searchPlace(_element){
+    var searchButtonElement = $('.searchButton');
     var value = _element.value;
     if(value.trim().length > 1){
-        $('.searchButton').find('.searchIcon').addClass('hidden');
-        $('.searchButton').find('.lds-ring').removeClass('hidden');
+        searchButtonElement.find('.searchIcon').addClass('hidden');
+        searchButtonElement.find('.lds-ring').removeClass('hidden');
         if(searchPlaceAjax != null)
             searchPlaceAjax.abort();
 
         searchPlaceAjax = $.ajax({
             type: 'GET',
-            url: `${searchPlaceUrl}?value=${value}`,
+            url: `${searchPlaceUrl}?value=${value}&kindPlaceId=${JSON.stringify([1, 3, 4, 6, 12, 13])}&forWhere=map`,
             success: response => {
                 if(response.status == 'ok')
                     createSearchResult(response.result);
@@ -258,8 +260,8 @@ function searchPlace(_element){
         })
     }
     else{
-        $('.searchButton').find('.searchIcon').removeClass('hidden');
-        $('.searchButton').find('.lds-ring').addClass('hidden');
+        searchButtonElement.find('.searchIcon').removeClass('hidden');
+        searchButtonElement.find('.lds-ring').addClass('hidden');
         $('#resultMapSearch').find('.resSec').empty();
     }
 }
@@ -381,7 +383,6 @@ function createListElement(_result){
         $('.pcPlaceList').html(elements);
     }
 
-
     for(var kindPlaceId in filterButtons){
         if($(`#mobileResultRow_${kindPlaceId}`).find('.body').html() == '')
             $(`#mobileResultRow_${kindPlaceId}`).addClass('hidden');
@@ -397,10 +398,24 @@ function createListElement(_result){
 function togglePlaces(){
     nearPlaces.map(item =>{
         if(dontShowfilters.indexOf(item.kindPlaceId) == -1){
-            if(item.markerInfo)
-                item.marker = item.markerInfo.addTo(mainMap);
+            if(item.kindPlaceId === 13){
+                if((localShopFilterCategory.length == 1 && localShopFilterCategory[0] == 0) || localShopFilterCategory.indexOf(`${item.categoryId}`) > -1) {
+                    $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
+                    if (item.markerInfo)
+                        item.marker = item.markerInfo.addTo(mainMap);
+                }
+                else{
+                    if (item.markerInfo)
+                        mainMap.removeLayer(item.marker);
+                    $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).addClass('hidden');
+                }
+            }
+            else {
+                if (item.markerInfo)
+                    item.marker = item.markerInfo.addTo(mainMap);
+                $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
+            }
             $(`#mobileResultRow_${item.kindPlaceId}`).removeClass('hidden');
-            $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
         }
         else{
             if(item.marker)
@@ -415,4 +430,7 @@ function togglePlaces(){
 $(window).ready(() => {
     initMap();
     toggleMobileListNearPlace("middle");
+
+    if(selectedPlaceFromBack.lat)
+        setMarkerToMap(selectedPlaceFromBack.lat, selectedPlaceFromBack.lng, selectedPlaceFromBack.id, selectedPlaceFromBack.name);
 });

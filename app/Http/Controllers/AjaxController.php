@@ -299,23 +299,43 @@ class AjaxController extends Controller {
         $value = $_GET['value'];
         if(isset($_GET['kindPlaceId']) && $_GET['kindPlaceId'] == "all")
             $kindPlace = Place::whereNotNull('tableName')->where('id', '!=', 13)->get();
+        else if(isset($_GET['forWhere']) && $_GET['forWhere'] === 'map')
+            $kindPlace = Place::whereIn('id', json_decode($_GET['kindPlaceId']))->get();
         else if(isset($_GET['kindPlaceId']))
-            $kindPlace = Place::whereIn('id', [$_GET['kindPlaceId']])->get();
+            $kindPlace = Place::whereIn('id', $_GET['kindPlaceId'])->get();
         else
             $kindPlace = Place::whereIn('id', [1, 3, 4, 6, 12])->get();
 
         foreach ($kindPlace as $kind){
             if($kind->id == 11 || $kind->id == 10)
                 $pds = \DB::select("SELECT `id`, `name`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%".$value."%'");
-            else
-                $pds = \DB::select("SELECT `id`, `name`, `C`, `D`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%".$value."%'");
+            else {
+                if($kind->id == 13)
+                    $selectRow = '`id`, `name`, `lat`, `lng`, `cityId`';
+                else
+                    $selectRow = '`id`, `name`, `C`, `D`, `cityId`';
+
+                $pds = \DB::select("SELECT {$selectRow} FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%'");
+            }
 
             foreach ($pds as $item){
                 $city = Cities::find($item->cityId);
-                $item->city = $city->name;
-                $item->state = $city->getState->name;
+                if($city != null) {
+                    $item->city = $city->name;
+                    $item->state = $city->getState->name;
+                }
+                else{
+                    $item->city = '';
+                    $item->state = '';
+                }
                 $item->kindPlaceId = $kind->id;
                 $item->kindPlaceName = $kind->tableName;
+
+                if($kind->id == 13){
+                    $item->C = $item->lat;
+                    $item->D = $item->lng;
+                }
+
                 array_push($places, $item);
             }
         }

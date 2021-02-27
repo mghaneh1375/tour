@@ -2382,7 +2382,7 @@ class PlaceController extends Controller {
                     $errorTxt[0] = 'هتلی برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ هتل های ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
-                    $placeMode = 'hotel';
+                    $placeMode = 'hotels';
                     $kindPlace->title = 'اقامتگاه های ';
                     $meta['title'] = 'هتل ها و مهمانسراهای '.$inHeaderName.'+ عکس و آدرس و تلفن';
                     $meta['keyword'] = 'هتل در ' . $inHeaderName . ' , هتل در ' . $inHeaderName . ' با قیمت مناسب , هتل ارزان در ' . $inHeaderName . '  , رزرو هتل در ' . $inHeaderName . ' ,مهمانسراهای '.$inHeaderName.' , هتل آپارتمان های '.$inHeaderName;
@@ -2458,7 +2458,7 @@ class PlaceController extends Controller {
                     $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ بوم گردی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
-                    $placeMode = 'boomgardy';
+                    $placeMode = 'boomgardies';
                     $kindPlace->title = 'بوم گردی های ';
                     $meta['title'] = 'بوم گردی های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'بوم گردی های '.$inHeaderName.'اقامتگاه بوم گردی '.$inHeaderName.' ، خونه محلی '.$inHeaderName.'، خونه روستایی '.$inHeaderName.'، خونه شخصی در '.$inHeaderName.'';
@@ -2470,7 +2470,7 @@ class PlaceController extends Controller {
                     $errorTxt[0] = 'کسب و کاری برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ بوم گردی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
-                    $placeMode = 'localShop';
+                    $placeMode = 'localShops';
                     $kindPlace->title = 'کسب و کار های ';
                     $meta['title'] = 'کسب و کار های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'کسب و کار های '.$inHeaderName;

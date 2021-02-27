@@ -476,6 +476,6 @@
         });
     </script>
 
-    <script defer src="{{URL::asset('js/pages/tour/tourShow.js')}}"></script>
+    <script defer src="{{URL::asset('js/pages/tour/tourShow.js?v='.$fileVersions)}}"></script>
 
 @stop

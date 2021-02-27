@@ -8,6 +8,12 @@
 
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/mapp.min.css')}}">--}}
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/fa/style.css')}}">--}}
+
+    <style>
+        footer .addNewReviewButtonMobileFooter{
+            display: none;
+        }
+    </style>
 </head>
 <body>
     @include('general.forAllPages')
@@ -42,6 +48,8 @@
             <div class="filtersSec"></div>
         </div>
 
+{{--        <div class="searchThisAreaButton">جستجوی این بخش</div>--}}
+
         <div class="listSection">
             <div class="leftArrowIcon" onclick="$('.bodySec').toggleClass('fullMap');"></div>
             <div class="content">
@@ -69,6 +77,60 @@
         </div>
     </div>
 
+    <div id="localShopCategoriesModal" class="modalBlackBack fullCenter localShopCategoriesModal">
+        <div class="modalBody">
+            <div onclick="closeMyModal('localShopCategoriesModal')" class="iconClose closeModal"></div>
+            <div class="mainFullBody">
+                <div class="header">دسته بندی کسب و کارها</div>
+                <div class="shortcutSec">
+                    @foreach($localShopCategories as $category)
+                        <div class="shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
+                            <div class="icon manSportIcon"></div>
+                            <div>{{$category->name}}</div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="rowButton">
+                    <div class="butts showAll" onclick="showAllLocalShopCategories(-1, 0, this)">
+                        <span class="text">تمامی دسته بندی ها</span>
+                        <span class="icon">
+                            <i class="far fa-eye"></i>
+                            <i class="fas fa-slash slash"></i>
+                        </span>
+                    </div>
+                </div>
+                <div id="localShopCategoryFilterSection" class="filterSection">
+                    @foreach($localShopCategories as $category)
+                        <div id="localShopMainCategorySection_{{$category->id}}" class="rowFilter">
+                            <div class="head">
+                                <div>
+                                    <span class="icon manSportIcon"></span>
+                                    <span>{{$category->name}}</span>
+                                </div>
+                                <div class="showIcon showIconCategories" data-type="off" onclick="toggleLocalShopCategories({{$category->id}}, this)">
+                                    <i class="far fa-eye"></i>
+                                    <i class="fas fa-slash slash"></i>
+                                </div>
+                            </div>
+                            <div class="body">
+                                @foreach($category->sub as $sub)
+                                    <div class="filter">
+                                        <input id="localShopCategories_{{$sub->id}}" data-id="{{$sub->id}}" class="categoryFilterInput_0 categoryFilterInput_{{$category->id}}" type="checkbox" checked>
+                                        <label for="localShopCategories_{{$sub->id}}" class="name checked">
+                                            <div class="icon manSportIcon"></div>
+                                            <div>{{$sub->name}}</div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="submitFilter" onclick="doLocalShopCategoryFilter()">اعمال فیلتر</div>
+        </div>
+    </div>
+
     @include('layouts.footer.layoutFooter')
     {{--    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCdVEd4L2687AfirfAnUY1yXkx-7IsCER0"></script>--}}
 
@@ -77,10 +139,12 @@
 
 
     <script>
+        var localShopCategories = {!! $localShopCategories !!};
+        var selectedPlaceFromBack = {!! json_encode($selectedPlaceName) !!};
         var searchPlaceUrl = "{{route('search.place')}}";
         var getPlacesLocationUrl = "{{route("getPlaces.location")}}";
         var noDataPicUrl = "{{URL::asset('images/mainPics/noData.png')}}";
-        let filterButtons = {
+        var filterButtons = {
             1: {
                 id: 1,
                 enName: 'amakenFilter',
@@ -88,6 +152,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/att.png')}}',
                 name: 'جاذبه',
                 nameTitle: 'جاهای دیدنی نزدیک',
+                onClick: '',
             },
             3: {
                 id: 3,
@@ -96,6 +161,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/res.png')}}',
                 name: 'رستوران',
                 nameTitle: 'رستوران های نزدیک',
+                onClick: '',
             },
             4: {
                 id: 4,
@@ -104,6 +170,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/hotel.png')}}',
                 name: 'اقامتگاه',
                 nameTitle: 'اقامتگاه های نزدیک',
+                onClick: '',
             },
             6: {
                 id: 6,
@@ -112,6 +179,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/adv.png')}}',
                 name: 'طبیعت گردی',
                 nameTitle: 'طبیعت گردی های نزدیک',
+                onClick: '',
             },
             12: {
                 id: 12,
@@ -120,6 +188,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'بوم گردی',
                 nameTitle: 'بوم گردی های نزدیک',
+                onClick: '',
             },
             13: {
                 id: 13,
@@ -128,14 +197,91 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'فروشگاه',
                 nameTitle: 'فروشگاه های نزدیک',
+                onClick: openLocalShopCategoriesFilter
             },
         };
+        var localShopFilterCategory = [0];
+        var totalLocalShopCategories = 0;
+
+        localShopCategories.map(item => item.sub.map(sub => totalLocalShopCategories++));
+
+        function openLocalShopCategoriesFilter(){
+            openMyModal('localShopCategoriesModal')
+        }
+
+        function showAllLocalShopCategories(_kind, _parent, _element = ''){
+            if(_kind === 1)
+                $('.categoryFilterInput_'+_parent).prop('checked', true);
+            else if(_kind === 0)
+                $('.categoryFilterInput_'+_parent).prop('checked', false);
+            else if(_kind === -1){
+                if($(_element).hasClass('showAll')) {
+                    $(_element).removeClass('showAll');
+                    $('.showIconCategories').attr('data-type', 'on').addClass('show');
+                    showAllLocalShopCategories(0, 0);
+                }
+                else {
+                    $(_element).addClass('showAll');
+                    $('.showIconCategories').attr('data-type', 'off').removeClass('show');
+                    showAllLocalShopCategories(1, 0);
+                }
+            }
+        }
+
+        function toggleLocalShopCategories(_id, _element){
+            var type = $(_element).attr('data-type');
+            if(type === 'on'){
+                $(_element).attr('data-type', 'off').removeClass('show');
+                showAllLocalShopCategories(1, _id);
+            }
+            else{
+                $(_element).attr('data-type', 'on').addClass('show');
+                showAllLocalShopCategories(0, _id);
+            }
+        }
+
+        function doLocalShopCategoryFilter(){
+            openLoading(false, () => {
+                localShopFilterCategory = [];
+                var elements = $('.categoryFilterInput_0');
+                for(var i = 0; i < elements.length; i++){
+                    if($(elements[i]).prop('checked'))
+                        localShopFilterCategory.push($(elements[i]).attr('data-id'))
+                }
+
+                if(totalLocalShopCategories === localShopFilterCategory.length)
+                    localShopFilterCategory = [0];
+
+                if(localShopFilterCategory.length == 0){
+                    $('.filterButtonMap_13').addClass('offFilter');
+                    dontShowfilters.push(13);
+                }
+                else{
+                    $('.filterButtonMap_13').removeClass('offFilter');
+                    var index = dontShowfilters.indexOf(13);
+                    if (index != -1)
+                        dontShowfilters.splice(index, 1);
+                }
+
+                closeLoading();
+                closeMyModal('localShopCategoriesModal');
+                togglePlaces();
+            })
+        }
+
+        var scrollNumber = -170;
+        function goToMainCategorySection(_id){
+            var element = $('#localShopCategoryFilterSection');
+            element.animate({
+                scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
+            }, 1000).scrollTop();
+        }
+
     </script>
 
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
 
     <script src="{{URL::asset('js/pages/myLocation.js?v='.$fileVersions)}}"></script>
-
 </body>
 </html>

@@ -338,9 +338,7 @@
                                         <div class="booking"></div>
                                     </div>
                                 </div>
-                            </div>
-
-    `;
+                            </div>`;
 
     var cityId = '{{ isset($city->id) ? $city->id : 0}}';
     var cityRel = {!! $cityRel !!};
@@ -367,7 +365,7 @@
     @endif
 </script>
 
-<script src="{{URL::asset('js/pages/placeDetails/placeList.js')}}"></script>
+<script src="{{URL::asset('js/pages/placeDetails/placeList.js?v='.$fileVersions)}}"></script>
 
 </body>
 </html>

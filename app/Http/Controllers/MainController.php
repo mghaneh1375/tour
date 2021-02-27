@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
+use App\models\CityPic;
+use App\models\localShops\LocalShopsCategory;
 use App\models\places\Amaken;
 use App\models\BannerPics;
 use App\models\places\Boomgardy;
@@ -16,6 +18,7 @@ use App\models\MainSliderPic;
 use App\models\places\Place;
 use App\models\places\Restaurant;
 use App\models\safarnameh\Safarnameh;
+use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\safarnameh\SafarnamehComments;
 use App\models\SectionPage;
 use App\models\places\SogatSanaie;
@@ -32,7 +35,24 @@ class MainController extends Controller
 {
     public function myLocation()
     {
-        return view('pages.placeList.myLocation');
+        $selected = [];
+        if(isset($_GET['place']) && isset($_GET['kindPlace'])) {
+            $kindPlace = Place::where('tableName', $_GET['kindPlace'])->first();
+            $place = \DB::table($_GET['kindPlace'])->find($_GET['place']);
+
+            if($place != null) {
+                if($kindPlace->id == 13)
+                    $selected = ['lat' => $place->lat, 'lng' => $place->lng, 'name' => $place->name, 'id' => $place->id];
+                else
+                    $selected = ['lat' => $place->C, 'lng' => $place->D, 'name' => $place->name, 'id' => $place->id];
+            }
+        }
+
+        $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
+        foreach ($localShopCategories as $category)
+            $category->sub = LocalShopsCategory::where('parentId', $category->id)->get();
+
+        return view('pages.placeList.myLocation', compact(['localShopCategories']))->with(['selectedPlaceName' => $selected]);
     }
 
     public function getPlacesWithLocation()
@@ -55,7 +75,7 @@ class MainController extends Controller
             $kindPlace = Place::find($kId);
             if($kindPlace != null) {
                 if($kindPlace->id == 13)
-                    $DBPlace = DB::select("SELECT `id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `lat`, `lng` FROM ".$kindPlace->tableName." WHERE `lat` > ".$latBetween[1]." AND `lat` < ".$latBetween[0]." AND `lng` > ".$lngBetween[1]." AND `lng` < ".$lngBetween[0]);
+                    $DBPlace = DB::select("SELECT `id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `lat`, `lng`, `categoryId` FROM ".$kindPlace->tableName." WHERE `lat` > ".$latBetween[1]." AND `lat` < ".$latBetween[0]." AND `lng` > ".$lngBetween[1]." AND `lng` < ".$lngBetween[0]);
                 else
                     $DBPlace = DB::select("SELECT `id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `C`, `D` FROM ".$kindPlace->tableName." WHERE `C` > ".$latBetween[1]." AND `C` < ".$latBetween[0]." AND `D` > ".$lngBetween[1]." AND `D` < ".$lngBetween[0] );
 
@@ -452,8 +472,9 @@ class MainController extends Controller
 //        }
     }
 
-    public function seenLogExport($num)
+    public function exampleExportCode($num)
     {
+        dd('bakkkkkk');
         if($num == 1)
             $log = UserSeenLog::where('relatedId', 0)
                                 ->where('url', '/placeList/1/country')
@@ -483,6 +504,43 @@ class MainController extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('seenLogExport.xlsx');
+
+        dd('finniish');
+    }
+
+    public function whereCityIsFullyNull()
+    {
+        $acceptedCity = [];
+        $cities = Cities::where('isVillage', 0)->get();
+        $kindPlaces = Place::whereNotNull('tableName')->get();
+        foreach ($cities as $city){
+            $count = 0;
+            foreach ($kindPlaces as $kindPlace)
+                $count += \DB::table($kindPlace->tableName)->where('cityId', $city->id)->count();
+
+            $count += SafarnamehCityRelations::where('cityId', $city->id)->count();
+
+            if($count > 0){
+                $city->stateName = $city->getState->name;
+                array_push($acceptedCity, $city);
+            }
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1','نام شهر');
+        $sheet->setCellValue('B1', 'نام استان');
+
+        $rowNum = 2;
+        foreach($acceptedCity as $city){
+            $sheet->setCellValue('A'.$rowNum, $city->name);
+            $sheet->setCellValue('B'.$rowNum, $city->stateName);
+            $rowNum++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('citiesPlaceCount.xlsx');
 
         dd('finniish');
     }

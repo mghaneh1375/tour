@@ -81,21 +81,19 @@ function selectDay(_element){
 
     $('html, body').animate({ scrollTop: $('#dayInfoSection').offset().top }, 500);
     $('#fullDayDetailSection').removeClass('showMinDetail');
-    $('#showBigDays').removeClass('hidden');
 
     var day = $(_element).attr('data-day');
 
     $(_element).parent().find('.selected').removeClass('selected');
     $(_element).addClass('selected');
 
-    $('#showBigDays').find('.selected').removeClass('selected');
+    $('#showBigDays').removeClass('hidden').find('.selected').removeClass('selected');
     $('#mainDayShow_'+day).addClass('selected');
 
 
     $('#showBigDays').animate({
         scrollTop: $('#showBigDays').scrollTop() + $('#mainDayShow_' + day).position().top
-    }, 1000);
-    $('#showBigDays').scrollTop();
+    }, 1000).scrollTop();
 }
 
 function selectBuyButton(){

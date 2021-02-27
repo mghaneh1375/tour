@@ -38,7 +38,7 @@ if(url.search.split('?filter=')[1] != undefined){
     };
 }
 
-if(placeMode == 'hotel'){
+if(placeMode == 'hotels'){
     $(window).ready(() => doKindFilter('kind_id', 1))
 }
 

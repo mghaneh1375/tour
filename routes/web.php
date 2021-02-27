@@ -856,7 +856,8 @@ Route::group(array('middleware' => ['nothing']), function () {
 
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 
-Route::get('seenLogExport/{num}', 'MainController@seenLogExport');
+Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
+Route::get('whereCityIsFullyNull', 'MainController@whereCityIsFullyNull');
 
 
 //<Directory /var/www/tvKoochita/public>
