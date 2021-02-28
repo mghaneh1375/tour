@@ -305,7 +305,7 @@ class MainController extends Controller
             }
 
             $writer = new Xlsx($spreadsheet);
-            $file = "exportExecls\placeDistance_{$kindPlace->tableName}.xlsx";
+            $file = "exportExecls/placeDistance_{$kindPlace->tableName}.xlsx";
             array_push($folderName, $file);
             $writer->save($file);
         }
