@@ -183,11 +183,17 @@ function initMapForMyLocation(){
             var changeCenter = mainMap.distance(lastLocationGetData, center);
             var radius = mainMap.distance(bounds._northEast, center);
 
-            if(changeCenter > 1000 && radius < 5000)
+            if(changeCenter > 2500 && radius < 5000)
                 $('#searchThisAreaButton').removeClass('hidden');
             else
                 turnOffSearchThisAreaButton();
         }
+
+        var zoom = mainMap.getZoom();
+        if(zoom < 13)
+            $('.mapImgIcon').addClass('smallIcon');
+        else
+            $('.mapImgIcon').removeClass('smallIcon');
 
     });
 

@@ -537,6 +537,43 @@
     }
 }
 
+
+.amakenImgIcon{
+    border-color: #ec008c !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.restaurantImgIcon{
+    border-color: #fcee23 !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.hotelImgIcon{
+    border-color: #00516f !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.majaraImgIcon{
+    border-color: #ed1c24 !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.boomgardyImgIcon{
+    border-color: #00aeef !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.localShopImgIcon{
+    border-color: #00ef1d !important;
+    border-radius: 50%;
+    border: solid 2px;
+}
+.mapImgIcon.smallIcon{
+    width: 10px !important;
+    height: 10px !important;
+    border: solid 5px;
+}
+
 @media (max-width: 767px) {
     .leaflet-control-zoom.leaflet-bar.leaflet-control{
         display: none;
