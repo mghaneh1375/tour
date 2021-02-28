@@ -311,7 +311,8 @@ class MainController extends Controller
         }
 
         foreach ($folderName as $file){
-            echo "<a href='{$file}'>{$file}</a>";
+            $url = URL::asset($file);
+            echo "<a href='{$url}'>{$file}</a>";
             echo "<br>";
         }
 
