@@ -397,8 +397,12 @@ function createListElement(_result){
                 item.markerInfo = L.marker([item.C, item.D], {
                     title: item.name,
                     icon: L.icon({
-                        iconUrl: filterButtons[item.kindPlaceId].mapIcon,
-                        iconSize: [30, 35], // size of the icon
+                        iconUrl: item.minPic,
+                        iconSize: [35, 35], // size of the icon
+                        classToImg: filterButtons[item.kindPlaceId].classToImg
+
+                        // iconUrl: filterButtons[item.kindPlaceId].mapIcon,
+                        // iconSize: [30, 35], // size of the icon
                     })
                 }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name));
                 // item.marker = new google.maps.Marker({
@@ -416,6 +420,7 @@ function createListElement(_result){
                 // item.marker.addListener('click', function () {
                 //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
                 // });
+
             }
 
             $(`#mobileResultRow_${item.kindPlaceId}`).find('.body').append(text);

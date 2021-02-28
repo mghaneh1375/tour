@@ -13,6 +13,37 @@
         footer .addNewReviewButtonMobileFooter{
             display: none;
         }
+
+        .amakenImgIcon{
+            border-color: #ec008c !important;
+            border-radius: 50%;
+            border: solid 2px;
+        }
+        .restaurantImgIcon{
+            border-color: #fcee23 !important;
+            border-radius: 50%;
+            border: solid 2px;÷
+        }
+        .hotelImgIcon{
+            border-color: #00516f !important;
+            border-radius: 50%;
+            border: solid 2px;
+        }
+        .majaraImgIcon{
+            border-color: #ed1c24 !important;
+            border-radius: 50%;
+            border: solid 2px;
+        }
+        .boomgardyImgIcon{
+            border-color: #00aeef !important;
+            border-radius: 50%;
+            border: solid 2px;
+        }
+        .localShopImgIcon{
+            border-color: #00ef1d !important;
+            border-radius: 50%;
+            border: solid 2px;
+        }
     </style>
 </head>
 <body>
@@ -154,6 +185,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/att.png')}}',
                 name: 'جاذبه',
                 nameTitle: 'جاهای دیدنی نزدیک',
+                classToImg: 'amakenImgIcon',
                 onClick: '',
             },
             3: {
@@ -163,6 +195,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/res.png')}}',
                 name: 'رستوران',
                 nameTitle: 'رستوران های نزدیک',
+                classToImg: 'restaurantImgIcon',
                 onClick: '',
             },
             4: {
@@ -172,6 +205,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/hotel.png')}}',
                 name: 'اقامتگاه',
                 nameTitle: 'اقامتگاه های نزدیک',
+                classToImg: 'hotelImgIcon',
                 onClick: '',
             },
             6: {
@@ -181,6 +215,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/adv.png')}}',
                 name: 'طبیعت گردی',
                 nameTitle: 'طبیعت گردی های نزدیک',
+                classToImg: 'majaraImgIcon',
                 onClick: '',
             },
             12: {
@@ -190,6 +225,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'بوم گردی',
                 nameTitle: 'بوم گردی های نزدیک',
+                classToImg: 'boomgardyImgIcon',
                 onClick: '',
             },
             13: {
@@ -199,6 +235,7 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'فروشگاه',
                 nameTitle: 'فروشگاه های نزدیک',
+                classToImg: 'localShopImgIcon',
                 onClick: openLocalShopCategoriesFilter
             },
         };
@@ -215,7 +252,7 @@
 
     </script>
 
-    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-src.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
 
     <script src="{{URL::asset('js/pages/myLocation.js?v='.$fileVersions)}}"></script>

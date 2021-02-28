@@ -7432,7 +7432,8 @@
 
   		// @option autoPanSpeed: Number = 10
   		// Number of pixels the map should pan by.
-  		autoPanSpeed: 10
+  		autoPanSpeed: 10,
+        classToImg: ''
   	},
 
   	/* @section
@@ -7565,6 +7566,9 @@
   		}
 
   		addClass(icon, classToAdd);
+
+        if(options.icon.options.classToImg)
+  		    addClass(icon, options.icon.options.classToImg);
 
   		if (options.keyboard) {
   			icon.tabIndex = '0';
