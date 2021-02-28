@@ -2938,12 +2938,7 @@ class PlaceController extends Controller {
             $kindPlace = Place::where('tableName', $tableName)->first();
             if($kindPlace != null) {
                 $nearbys = DB::select("SELECT acos(" . sin($D) . " * sin(D / 180 * 3.14) + " . cos($D) . " * cos(D / 180 * 3.14) * cos(C / 180 * 3.14 - " . $C . ")) * 6371 as distance, id, name, reviewCount, fullRate, slug, alt, cityId, C, D FROM " . $tableName . " HAVING distance between -1 and " . ConfigModel::first()->radius . " order by distance ASC limit 0, " . $count);
-//                $nearbys = DB::select("SELECT id, `name`, reviewCount, fullRate, slug, alt, cityId, `C`, `D` FROM $tableName WHERE `C` > $latBetween[1] AND `C` < $latBetween[0] AND `D` > $lngBetween[1] AND `D` < $lngBetween[0] limit 0, $count" );
                 foreach ($nearbys as $nearby) {
-//                    $condition = ['placeId' => $nearby->id, 'kindPlaceId' => $kindPlace->id, 'confirm' => 1,
-//                                  'activityId' => Activity::whereName('نظر')->first()->id];
-//                    $nearby->review = LogModel::where($condition)->count();
-//                    $nearby->distance = round($nearby->distance, 2);
                     $nearby->pic = getPlacePic($nearby->id, $kindPlace->id);
                     $nearby->review = $nearby->reviewCount;
                     $nearby->rate = floor($nearby->fullRate);

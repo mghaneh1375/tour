@@ -13,13 +13,22 @@ var mobileListScrollIsTop = false;
 var movePositionMobileList = 0;
 var isFullMobileList = true;
 var startTouchY = 0;
-var startMobileListHeight = $('#mobileListSection').height();
+
+var lastLocationGetData = null;
+
+
+var localShopFilterCategory = [0];
+var totalLocalShopCategories = 0;
+var scrollNumber = -170;
+
+var mobileListSectionElement = $('#mobileListSection');
+var startMobileListHeight = mobileListSectionElement.height();
 $('.topSecMobileList').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     startTouchY = touch.pageY;
-    startMobileListHeight = $('#mobileListSection').height();
+    startMobileListHeight = mobileListSectionElement.height();
 }).on('touchend', e => {
-    var height = $('#mobileListSection').height();
+    var height = mobileListSectionElement.height();
     var windowHeight = $(window).height();
     var resultHeight;
 
@@ -34,13 +43,13 @@ $('.topSecMobileList').on('touchstart', e => {
     var height = startMobileListHeight + startTouchY - touch.pageY;
 
     if(height > 75 && height < maxHeight)
-        $('#mobileListSection').height(height);
+        mobileListSectionElement.height(height);
     else if(height <= 75)
-        $('#mobileListSection').height(75);
+        mobileListSectionElement.height(75);
     else if(height >= maxHeight)
-        $('#mobileListSection').height(maxHeight);
+        mobileListSectionElement.height(maxHeight);
     else
-        $('#mobileListSection').height(75);
+        mobileListSectionElement.height(75);
 });
 
 $('.mobileListContent').on('touchstart', e => {
@@ -54,6 +63,20 @@ $('.mobileListContent').on('touchstart', e => {
     else if(!mobileListIsFull && movePositionMobileList > touch.pageY)
         toggleMobileListNearPlace("full");
 });
+
+var turnOffSearchThisAreaButton = () => $('#searchThisAreaButton').addClass('hidden');
+
+function searchThisArea(){
+    var bounds = mainMap.getBounds();
+    var center = mainMap.getCenter();
+    var radius = mainMap.distance(bounds._northEast, center);
+    radius = Math.floor(radius/100)/10;
+
+    lastLocationGetData = center;
+
+    turnOffSearchThisAreaButton();
+    getPlacesWithLocation(lastLocationGetData, radius);
+}
 
 function toggleMobileListNearPlace(_kind){
     var windowHeight = $(window).height();
@@ -72,16 +95,16 @@ function toggleMobileListNearPlace(_kind){
 
     if(_kind == "full"){
         $('.sideSection').addClass('fullMobileList');
-        $('#mobileListSection').addClass('fullMobileList');
+        mobileListSectionElement.addClass('fullMobileList');
         mobileListIsFull = true;
     }
     else {
         $('.sideSection').removeClass('fullMobileList');
-        $('#mobileListSection').removeClass('fullMobileList');
+        mobileListSectionElement.removeClass('fullMobileList');
         mobileListIsFull = false;
     }
 
-    $('#mobileListSection').animate({ height: resultHeight}, 300);
+    mobileListSectionElement.animate({ height: resultHeight}, 300);
 }
 
 function createFilterHtml(){
@@ -121,7 +144,7 @@ function toggleFilter(_item, _element){
     }
 }
 
-function initMap(){
+function initMapForMyLocation(){
 
     mainMap = L.map("map", {
         minZoom: 1,
@@ -150,6 +173,24 @@ function initMap(){
             }
         ]
     ).addTo(mainMap);
+
+    lastLocationGetData = mainMap.getCenter();
+    mainMap.on('moveend', function(e) {
+        var bounds = mainMap.getBounds();
+        var center = mainMap.getCenter();
+
+        if(lastLocationGetData != null){
+            var changeCenter = mainMap.distance(lastLocationGetData, center);
+            var radius = mainMap.distance(bounds._northEast, center);
+
+            if(changeCenter > 1000 && radius < 5000)
+                $('#searchThisAreaButton').removeClass('hidden');
+            else
+                turnOffSearchThisAreaButton();
+        }
+
+    });
+
     getMyLocation();
 
     // mainMap = new Mapp({
@@ -211,7 +252,7 @@ function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
     // });
     // mainMap.setZoom(16);
 
-    getPlacesWithLocation();
+    getPlacesWithLocation(markerLocation);
 }
 
 function getMyLocation(){
@@ -290,20 +331,19 @@ function choosePlaceForMap(_id){
     })
 }
 
-function getPlacesWithLocation(){
+function getPlacesWithLocation(_center = {lat: 0, lng: 0}, _radius = 0){
     $('.placeListLoading').removeClass('hidden');
     $('.bodySec').removeClass('fullMap');
 
     $.ajax({
         type: 'get',
-        url: `${getPlacesLocationUrl}?lat=${markerLocation.lat}&lng=${markerLocation.lng}`,
+        url: `${getPlacesLocationUrl}?lat=${_center.lat}&lng=${_center.lng}&radius=${_radius}`,
         success: response => {
-            if(response.status == 'ok')
+
+            turnOffSearchThisAreaButton();
+            if(response.status === "ok")
                 createListElement(response.result);
         },
-        error: err => {
-            console.error(err);
-        }
     })
 }
 
@@ -427,8 +467,78 @@ function togglePlaces(){
 }
 
 
+
+localShopCategories.map(item => item.sub.map(sub => totalLocalShopCategories++));
+
+function showAllLocalShopCategories(_kind, _parent, _element = ''){
+    if(_kind === 1)
+        $('.categoryFilterInput_'+_parent).prop('checked', true);
+    else if(_kind === 0)
+        $('.categoryFilterInput_'+_parent).prop('checked', false);
+    else if(_kind === -1){
+        if($(_element).hasClass('showAll')) {
+            $(_element).removeClass('showAll');
+            $('.showIconCategories').attr('data-type', 'on').addClass('show');
+            showAllLocalShopCategories(0, 0);
+        }
+        else {
+            $(_element).addClass('showAll');
+            $('.showIconCategories').attr('data-type', 'off').removeClass('show');
+            showAllLocalShopCategories(1, 0);
+        }
+    }
+}
+
+function toggleLocalShopCategories(_id, _element){
+    var type = $(_element).attr('data-type');
+    if(type === 'on'){
+        $(_element).attr('data-type', 'off').removeClass('show');
+        showAllLocalShopCategories(1, _id);
+    }
+    else{
+        $(_element).attr('data-type', 'on').addClass('show');
+        showAllLocalShopCategories(0, _id);
+    }
+}
+
+function doLocalShopCategoryFilter(){
+    openLoading(false, () => {
+        localShopFilterCategory = [];
+        var elements = $('.categoryFilterInput_0');
+        for(var i = 0; i < elements.length; i++){
+            if($(elements[i]).prop('checked'))
+                localShopFilterCategory.push($(elements[i]).attr('data-id'))
+        }
+
+        if(totalLocalShopCategories === localShopFilterCategory.length)
+            localShopFilterCategory = [0];
+
+        if(localShopFilterCategory.length == 0){
+            $('.filterButtonMap_13').addClass('offFilter');
+            dontShowfilters.push(13);
+        }
+        else{
+            $('.filterButtonMap_13').removeClass('offFilter');
+            var index = dontShowfilters.indexOf(13);
+            if (index != -1)
+                dontShowfilters.splice(index, 1);
+        }
+
+        closeLoading();
+        closeMyModal('localShopCategoriesModal');
+        togglePlaces();
+    })
+}
+
+function goToMainCategorySection(_id){
+    var element = $('#localShopCategoryFilterSection');
+    element.animate({
+        scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
+    }, 1000).scrollTop();
+}
+
 $(window).ready(() => {
-    initMap();
+    initMapForMyLocation();
     toggleMobileListNearPlace("middle");
 
     if(selectedPlaceFromBack.lat)

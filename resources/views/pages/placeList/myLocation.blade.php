@@ -48,7 +48,7 @@
             <div class="filtersSec"></div>
         </div>
 
-{{--        <div class="searchThisAreaButton">جستجوی این بخش</div>--}}
+        <div id="searchThisAreaButton" class="searchThisAreaButton hidden" onclick="searchThisArea()">جستجوی این بخش</div>
 
         <div class="listSection">
             <div class="leftArrowIcon" onclick="$('.bodySec').toggleClass('fullMap');"></div>
@@ -202,10 +202,6 @@
                 onClick: openLocalShopCategoriesFilter
             },
         };
-        var localShopFilterCategory = [0];
-        var totalLocalShopCategories = 0;
-
-        localShopCategories.map(item => item.sub.map(sub => totalLocalShopCategories++));
 
         function openLocalShopCategoriesFilter(){
             openMyModal('localShopCategoriesModal');
@@ -217,73 +213,6 @@
             });
         }
 
-        function showAllLocalShopCategories(_kind, _parent, _element = ''){
-            if(_kind === 1)
-                $('.categoryFilterInput_'+_parent).prop('checked', true);
-            else if(_kind === 0)
-                $('.categoryFilterInput_'+_parent).prop('checked', false);
-            else if(_kind === -1){
-                if($(_element).hasClass('showAll')) {
-                    $(_element).removeClass('showAll');
-                    $('.showIconCategories').attr('data-type', 'on').addClass('show');
-                    showAllLocalShopCategories(0, 0);
-                }
-                else {
-                    $(_element).addClass('showAll');
-                    $('.showIconCategories').attr('data-type', 'off').removeClass('show');
-                    showAllLocalShopCategories(1, 0);
-                }
-            }
-        }
-
-        function toggleLocalShopCategories(_id, _element){
-            var type = $(_element).attr('data-type');
-            if(type === 'on'){
-                $(_element).attr('data-type', 'off').removeClass('show');
-                showAllLocalShopCategories(1, _id);
-            }
-            else{
-                $(_element).attr('data-type', 'on').addClass('show');
-                showAllLocalShopCategories(0, _id);
-            }
-        }
-
-        function doLocalShopCategoryFilter(){
-            openLoading(false, () => {
-                localShopFilterCategory = [];
-                var elements = $('.categoryFilterInput_0');
-                for(var i = 0; i < elements.length; i++){
-                    if($(elements[i]).prop('checked'))
-                        localShopFilterCategory.push($(elements[i]).attr('data-id'))
-                }
-
-                if(totalLocalShopCategories === localShopFilterCategory.length)
-                    localShopFilterCategory = [0];
-
-                if(localShopFilterCategory.length == 0){
-                    $('.filterButtonMap_13').addClass('offFilter');
-                    dontShowfilters.push(13);
-                }
-                else{
-                    $('.filterButtonMap_13').removeClass('offFilter');
-                    var index = dontShowfilters.indexOf(13);
-                    if (index != -1)
-                        dontShowfilters.splice(index, 1);
-                }
-
-                closeLoading();
-                closeMyModal('localShopCategoriesModal');
-                togglePlaces();
-            })
-        }
-
-        var scrollNumber = -170;
-        function goToMainCategorySection(_id){
-            var element = $('#localShopCategoryFilterSection');
-            element.animate({
-                scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
-            }, 1000).scrollTop();
-        }
     </script>
 
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
