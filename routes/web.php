@@ -857,7 +857,8 @@ Route::group(array('middleware' => ['nothing']), function () {
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 
 Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
-//Route::get('whereCityIsFullyNull', 'MainController@whereCityIsFullyNull');
+
+Route::get('exportDistanceFromCityCenter/alakiii', 'MainController@exportDistanceFromCityCenter')->middleware(['auth']);
 
 
 //<Directory /var/www/tvKoochita/public>

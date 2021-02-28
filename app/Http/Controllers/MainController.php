@@ -268,4 +268,52 @@ class MainController extends Controller
 
         dd('finniish');
     }
+
+    public function exportDistanceFromCityCenter(){
+        $folderName = [];
+        $kindPlaces = Place::whereIn('id', [1, 3, 4, 6, 12, 13])->get();
+        foreach($kindPlaces as $kindPlace){
+
+            if($kindPlace->id == 13){
+                $latRow = 'lat';
+                $lngRow = 'lng';
+                $selectRows = 'placeTable.name AS placeName, placeTable.lat AS placeLat, placeTable.lng AS placeLng, cityTable.name AS cityName, cityTable.x AS cityLat, cityTable.y AS cityLng';
+            }
+            else{
+                $latRow = 'C';
+                $lngRow = 'D';
+                $selectRows = "placeTable.name AS placeName, placeTable.C AS placeLat, placeTable.D AS placeLng, cityTable.name AS cityName, cityTable.x AS cityLat, cityTable.y AS cityLng";
+            }
+
+            $formula = "(acos(sin(cityTable.y *3.14/180) * sin({$lngRow} / 180 * 3.14) + cos(cityTable.y * 3.14 / 180) * cos({$lngRow} / 180 * 3.14) * cos(({$latRow} / 180 * 3.14) - (cityTable.x * 3.14 / 180))) * 6371) as distance";
+            $DBPlace = DB::select("SELECT {$formula}, {$selectRows} FROM {$kindPlace->tableName} AS `placeTable`, cities as `cityTable` WHERE placeTable.cityId = cityTable.id order by distance DESC ");
+
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $sheet->setCellValue('A1','نام مکان');
+            $sheet->setCellValue('B1', 'نام شهر');
+            $sheet->setCellValue('C1', 'فاصله');
+
+            $rowNum = 2;
+            foreach($DBPlace as $place){
+                $sheet->setCellValue('A'.$rowNum, $place->placeName);
+                $sheet->setCellValue('B'.$rowNum, $place->cityName);
+                $sheet->setCellValue('C'.$rowNum, $place->distance);
+                $rowNum++;
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            $file = "exportExecls\placeDistance_{$kindPlace->tableName}.xlsx";
+            array_push($folderName, $file);
+            $writer->save($file);
+        }
+
+        foreach ($folderName as $file){
+            echo "<a href='{$file}'>{$file}</a>";
+            echo "<br>";
+        }
+
+    }
 }
