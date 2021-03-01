@@ -1,7 +1,6 @@
 var mainSearchAjax = null;
 var numOfMainSearchResult = 0;
 var lastTimeMainSearch = 0;
-var localStorageData = 0;
 var recentlyMainSearchSample = `<div class="prw_rup prw_shelves_rebrand_poi_shelf_item_widget spBoxOfSuggestion">
                                     <div class="mainSearchpoi">
                                         <div class="prw_rup prw_common_thumbnail_no_style_responsive prw_common_thumbnail_no_style_responsive22">

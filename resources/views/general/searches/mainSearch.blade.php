@@ -62,6 +62,7 @@
     var searchDir = '{{route('totalSearch')}}';
     var myLocationUrlMainSearch = "{{route('myLocation')}}";
     var placeListUrlMainSearch = "{{url('placeList')}}";
+    var localStorageData = 0;
     @if(isset($localStorageData))
         localStorageData = {!! json_encode($localStorageData) !!}
     @endif

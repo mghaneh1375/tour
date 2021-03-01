@@ -1,12 +1,13 @@
 
 function openLoading(_process = false, _callBack = ''){
-    $('#fullPageLoader').removeClass('hidden');
+    var fullPageLoaderElement = $('#fullPageLoader');
+    fullPageLoaderElement.removeClass('hidden');
 
-    $('#fullPageLoader').find('.percentBar').text(`0%`);
-    $('#fullPageLoader').find('.bar').css('width', `0%`);
+    fullPageLoaderElement.find('.percentBar').text(`0%`);
+    fullPageLoaderElement.find('.bar').css('width', `0%`);
 
     if(_process)
-        $('#fullPageLoader').find('.processBar').removeClass('hidden');
+        fullPageLoaderElement.find('.processBar').removeClass('hidden');
 
     try{
         setTimeout(function(){
@@ -26,8 +27,10 @@ function closeLoading(){
 }
 
 function updatePercentLoadingBar(_percent){
-    $('#fullPageLoader').find('.percentBar').text(`${_percent}%`);
-    $('#fullPageLoader').find('.bar').css('width', `${_percent}%`);
+    var fullPageLoaderElement = $('#fullPageLoader');
+
+    fullPageLoaderElement.find('.percentBar').text(`${_percent}%`);
+    fullPageLoaderElement.find('.bar').css('width', `${_percent}%`);
 }
 
 
@@ -35,17 +38,14 @@ let alertWarningCallBack = false;
 var errorAlertCallBack;
 
 function showSuccessNotifi(_msg, _side = 'right', _color = '#0076ac'){
-    $('#successNotifiAlert').text(_msg);
-    $('#successNotifiAlert').addClass('topAlert');
+    var successNotifiAlertElement = $('#successNotifiAlert');
 
-    $('#successNotifiAlert').css('background', _color);
-    $('#successNotifiAlert').addClass(_side == 'right' ? 'rightAlert' : 'leftAlert');
+    successNotifiAlertElement.text(_msg).css('background', _color).addClass('topAlert').addClass(_side == 'right' ? 'rightAlert' : 'leftAlert');
 
     setTimeout(function(){
-        $('#successNotifiAlert').removeClass('topAlert');
+        successNotifiAlertElement.removeClass('topAlert');
         setTimeout(function () {
-            $('#successNotifiAlert').removeClass('leftAlert');
-            $('#successNotifiAlert').removeClass('rightAlert');
+            successNotifiAlertElement.removeClass('leftAlert').removeClass('rightAlert');
         }, 1000);
     }, 5000);
 

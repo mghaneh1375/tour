@@ -1,16 +1,18 @@
 
 var answerPackSample = `
-        <div id="ansDiv_##random##" style="margin-bottom: 15px; direction: rtl">
+        <div id="ansDiv_##random##" class="answerPackDiv">
             <div class="eachCommentMainBox" style="margin-bottom: 0px">
                 <div class="circleBase commentsWriterProfilePic">
-                    <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="##writerPic##" style="width: 100%; height: 100%; border-radius: 50%;">
+                    <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="##writerPic##" class="resizeImgClass userImgAnswerPack" onload="fitThisImg(this)">
                 </div>
                 <div class="commentsContentMainBox">
-                    <b class="userProfileName userProfileNameFullReview">
-                        <a href="${profilePageUrlAnswerPack}/##userName##" target="_blank" style="font-weight:bold">##userName##</a>
-                        <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                    <div class="userProfileName userProfileNameFullReview">
+                        <div class="inOneRow">
+                            <a href="${profilePageUrlAnswerPack}/##userName##" target="_blank" style="font-weight:bold">##userName##</a>
+                            <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                        </div>
                         <span class="ansCommentTimeAgo">##timeAgo##</span>
-                    </b>
+                    </div>
                     <div class="fullReviewAnsText">##text##</div>
                 </div>
             </div>
@@ -37,7 +39,7 @@ var answerPackSample = `
             <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="##userPic##" style="width: 100%; border-radius: 50%;">
         </div>
         <div class="inputBox setButtonToBot">
-            <b class="replyCommentTitle">در پاسخ به ##userName##</b>
+            <div class="replyCommentTitle">در پاسخ به ##userName##</div>
             <textarea id="textareaForAns_##random##"
                       class="inputBoxInput inputBoxInputComment"
                       rows="1" placeholder="شما چه نظری دارید؟"
@@ -60,19 +62,19 @@ var answerPackSample = `
 `;
 
 
-var answerAnsPackSample = `<div id="ansOfAns_##random##" style="margin-bottom: 15px; direction: rtl;">
+var answerAnsPackSample = `<div id="ansOfAns_##random##" class="answerPackDiv">
                                 <div class="eachCommentMainBox"  style="margin-bottom: 0px">
                                     <div class="circleBase commentsWriterProfilePic">
-                                        <img alt="userPic" src="##writerPic##" style="width: 100%; height: 100%; border-radius: 50%;">
+                                        <img alt="userPic" src="##writerPic##" class="resizeImgClass userImgAnswerPack" onclick="fitThisImg(class)">
                                     </div>
                                     <div class="commentsContentMainBox">
                                         <div class="userProfileName userProfileNameFullReview">
                                             <div class="colInAns">
-                                                <a href="${profilePageUrlAnswerPack}/##userName##" class="userProfileNameFullReview float-right" target="_blank" style="font-weight: bold;">##userName##</a>
-                                                <b class="commentReplyDesc display-inline-block">در پاسخ به ##repTo##</b>
-                                            </div>
-                                            <div>
-                                                <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                                                <div class="inOneRow">
+                                                    <a href="${profilePageUrlAnswerPack}/##userName##" class="userProfileNameFullReview float-right" target="_blank" style="font-weight: bold;">##userName##</a>
+                                                    <span class="label inConfirmLabel" style="display: ##confirmDisplay##">در انتظار تایید</span>
+                                                </div>
+                                                <div class="commentReplyDesc display-inline-block">در پاسخ به ##repTo##</div>
                                             </div>
                                         </div>
                                         <div class="fullReviewAnsText">##text##</div>
@@ -95,7 +97,7 @@ var answerAnsPackSample = `<div id="ansOfAns_##random##" style="margin-bottom: 1
                                         <img alt="userPic" src="##userPic##" style="width: 100%; border-radius: 50%;">
                                     </div>
                                     <div class="inputBox setButtonToBot">
-                                        <b class="replyCommentTitle">در پاسخ به ##userName##</b>
+                                        <div class="replyCommentTitle">در پاسخ به ##userName##</div>
                                         <textarea id="textareaForAns_##random##" class="inputBoxInput inputBoxInputComment" rows="1" placeholder="شما چه نظری دارید؟" onclick="checkLogin()" onkeydown="checkNotEmptyTextArea(this)"></textarea>
                                         <button class="btn submitAnsInReview" onclick="##sendAnswerFunction##(##id##, $('#textareaForAns_##random##').val()); $(this).hide(); $(this).next().show()" style="height: fit-content" disabled>ارسال</button>
                                         <div class="sendQuestionBtn sendingQuestionLoading" style="display: none;" disabled>

@@ -42,9 +42,9 @@ class MainController extends Controller
 
             if($place != null) {
                 if($kindPlace->id == 13)
-                    $selected = ['lat' => $place->lat, 'lng' => $place->lng, 'name' => $place->name, 'id' => $place->id];
+                    $selected = ['lat' => $place->lat, 'lng' => $place->lng, 'name' => $place->name, 'id' => $place->id, 'kindPlaceId' => $kindPlace->id];
                 else
-                    $selected = ['lat' => $place->C, 'lng' => $place->D, 'name' => $place->name, 'id' => $place->id];
+                    $selected = ['lat' => $place->C, 'lng' => $place->D, 'name' => $place->name, 'id' => $place->id, 'kindPlaceId' => $kindPlace->id];
             }
         }
 
@@ -59,12 +59,47 @@ class MainController extends Controller
     {
         // Latitude: 1 deg = 110.574 km
         // Longitude: 1 deg = 111.320*cos(latitude) km
+        $selectPlace = null;
         $places = [];
+        $specificData = $_GET['specific'];
+        $mainLat = $_GET['lat'];
+        $mainLng = $_GET['lng'];
         $lat = (float)$_GET['lat'] * 3.14 / 180;
         $lng = (float)$_GET['lng'] * 3.14 / 180;
         $radius = (float)$_GET['radius'];
 
         $radius = ($radius == 0 ? 2 : $radius) + 1;
+        $specificData = explode('_', $specificData);
+
+        if($specificData[0] != 0 && $specificData[1] != 0) {
+            $selectKindPlace = Place::find($specificData[0]);
+            if($selectKindPlace != null){
+                $selectRows = "`id`, `name`, `reviewCount` AS `review`, `fullRate`, `slug`, `cityId`";
+                if($selectKindPlace->id == 13){
+                    $selectRows .= ", `lat`, `lng`, `categoryId`, `address` AS address";
+                }
+                else{
+                    $address = $selectKindPlace->id == 6 ? 'dastresi' : 'address';
+                    $selectRows .= ", `C`, `D`, `{$address}` AS address";
+                }
+
+                $selectPlace = \DB::table($selectKindPlace->tableName)->selectRaw($selectRows)->find($specificData[1]);
+                if($selectPlace != null){
+
+                    $selectPlace->kindPlaceId = $selectKindPlace->id;
+                    $selectPlace->rate = floor($selectPlace->fullRate);
+                    $selectPlace->pic = getPlacePic($selectPlace->id, $selectKindPlace->id);
+                    $selectPlace->minPic = getPlacePic($selectPlace->id, $selectKindPlace->id, 't');
+                    $selectPlace->url =  createUrl($selectKindPlace->id, $selectPlace->id, 0, 0, 0);
+                    if($selectKindPlace->id == 13) {
+                        $selectPlace->C = $selectPlace->lat;
+                        $selectPlace->D = $selectPlace->lng;
+                    }
+
+                }
+            }
+        }
+
 
         $kindPlaces = Place::whereIn('id', [1, 3, 4, 6, 12, 13])->get();
 
@@ -83,7 +118,7 @@ class MainController extends Controller
                 }
 
                 $formula = "(acos(" . sin($lng) . " * sin({$lngRow} / 180 * 3.14) + " . cos($lng) . " * cos({$lngRow} / 180 * 3.14) * cos(({$latRow} / 180 * 3.14) - {$lat})) * 6371) as distance";
-                $DBPlace = DB::select("SELECT {$formula}, {$selectRows} FROM {$kindPlace->tableName} HAVING distance < {$radius} order by distance ASC ");
+                $DBPlace = DB::select("SELECT {$formula}, {$selectRows} FROM {$kindPlace->tableName} HAVING distance <= {$radius} OR (`{$latRow}` = {$mainLat} AND `{$lngRow}` = {$mainLng}) order by distance ASC");
 
                 foreach ($DBPlace as $place) {
                     $place->kindPlaceId = $kindPlace->id;
@@ -111,7 +146,7 @@ class MainController extends Controller
             }
         }
 
-        return response()->json(['status' => 'ok', 'result' => $places]);
+        return response()->json(['status' => 'ok', 'result' => $places, 'selectPlace' => $selectPlace]);
     }
 
     public function landingPage()

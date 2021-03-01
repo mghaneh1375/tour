@@ -1,4 +1,5 @@
-var selectedPlaceId = '';
+var selectedPlaceId = 0;
+var selectedKindPlaceId = 0;
 var dontShowfilters = [];
 var nearPlacesMapMarker = [];
 var nearPlaces = [];
@@ -71,8 +72,6 @@ function searchThisArea(){
     var center = mainMap.getCenter();
     var radius = mainMap.distance(bounds._northEast, center);
     radius = Math.floor(radius/100)/10;
-
-    lastLocationGetData = center;
 
     turnOffSearchThisAreaButton();
     getPlacesWithLocation(lastLocationGetData, radius);
@@ -230,7 +229,7 @@ function initMapForMyLocation(){
     // });
 }
 
-function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
+function setMarkerToMap(_lat, _lng, _id = 0, _name = '', _kindPlaceId = 0){
     _lat = parseFloat(_lat);
     _lng = parseFloat(_lng);
 
@@ -241,6 +240,8 @@ function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
         $('.nearName').text(_name);
 
     selectedPlaceId = _id;
+    selectedKindPlaceId = _kindPlaceId;
+
     canChooseFromMap = false;
     markerLocation = {lat: _lat, lng: _lng};
 
@@ -314,26 +315,29 @@ function searchPlace(_element){
 }
 
 function createSearchResult(_result){
-    searchPlaceResult = _result;
     var text = '';
+    var searchButtonElement = $('.searchButton');
+
+    searchPlaceResult = _result;
+
     _result.map(item => {
-        text += `<div class="res" onclick="choosePlaceForMap(${item.id})">
-                            <div class="icon ${filterButtons[item.kindPlaceId].icon}"></div>
-                            <div class="name">${item.name}</div>
-                        </div>`;
+        text += `<div class="res" onclick="choosePlaceForMap(${item.id}, ${item.kindPlaceId})">
+                    <div class="icon ${filterButtons[item.kindPlaceId].icon}"></div>
+                    <div class="name">${item.name}</div>
+                </div>`;
     });
-    $('.searchButton').find('.searchIcon').removeClass('hidden');
-    $('.searchButton').find('.lds-ring').addClass('hidden');
+    searchButtonElement.find('.searchIcon').removeClass('hidden');
+    searchButtonElement.find('.lds-ring').addClass('hidden');
 
     $('#resultMapSearch').find('.resSec').html(text);
 }
 
-function choosePlaceForMap(_id){
+function choosePlaceForMap(_id, _kindPlaceId){
     $('#resultMapSearch').find('.resSec').empty();
     $('#searchPlaceInput').val('');
     searchPlaceResult.map(item => {
-        if(item.id == _id)
-            setMarkerToMap(item.C, item.D, item.id, item.name);
+        if(item.id == _id && item.kindPlaceId == _kindPlaceId)
+            setMarkerToMap(item.C, item.D, item.id, item.name, _kindPlaceId);
     })
 }
 
@@ -341,19 +345,20 @@ function getPlacesWithLocation(_center = {lat: 0, lng: 0}, _radius = 0){
     $('.placeListLoading').removeClass('hidden');
     $('.bodySec').removeClass('fullMap');
 
+    var specificData = `${selectedKindPlaceId}_${selectedPlaceId}`;
     $.ajax({
         type: 'get',
-        url: `${getPlacesLocationUrl}?lat=${_center.lat}&lng=${_center.lng}&radius=${_radius}`,
+        url: `${getPlacesLocationUrl}?lat=${_center.lat}&lng=${_center.lng}&radius=${_radius}&specific=${specificData}`,
         success: response => {
-
+            lastLocationGetData = _center;
             turnOffSearchThisAreaButton();
             if(response.status === "ok")
-                createListElement(response.result);
+                createListElement(response.result, response.selectPlace);
         },
     })
 }
 
-function createListElement(_result){
+function createListElement(_result, _selectPlaceOnMap){
     var elements = '';
 
     nearPlaces.map(place => {
@@ -380,8 +385,28 @@ function createListElement(_result){
         $('#mobileShowList').html(emptyHtml);
     }
     else{
+        if(_selectPlaceOnMap != null){
+            var html = `<div class="placeCard listPlaceCard_${_selectPlaceOnMap.kindPlaceId}_${_selectPlaceOnMap.id}" onclick="setMarkerToMap(${_selectPlaceOnMap.C}, ${_selectPlaceOnMap.D}, ${_selectPlaceOnMap.id}, '${_selectPlaceOnMap.name}', ${_selectPlaceOnMap.kindPlaceId})">
+                            <div class="fullyCenterContent img">
+                                <img src="${_selectPlaceOnMap.pic}" class="resizeImgClass" onload="fitThisImg(this)">
+                            </div>
+                            <div class="info">
+                                <div class="name showOneLineText">${_selectPlaceOnMap.name}</div>
+                                <div class="star">
+                                    <div class="ui_bubble_rating bubble_${_selectPlaceOnMap.rate}0"></div>
+                                    |
+                                    ${_selectPlaceOnMap.review} نقد
+                                </div>
+                                <div class="address">${_selectPlaceOnMap.address}</div>
+                            </div>
+                            <a href="${_selectPlaceOnMap.url}" class="showPlacePage" >اطلاعات بیشتر</a>
+                        </div>`;
+            $('.selectedPlace').html(html);
+        }
+
+
         nearPlaces.map(item => {
-            text = `<div class="placeCard listPlaceCard_${item.kindPlaceId}_${item.id}" onclick="setMarkerToMap(${item.C}, ${item.D}, ${item.id}, '${item.name}')">
+            text = `<div class="placeCard listPlaceCard_${item.kindPlaceId}_${item.id}" onclick="setMarkerToMap(${item.C}, ${item.D}, ${item.id}, '${item.name}', ${item.kindPlaceId})">
                             <div class="fullyCenterContent img">
                                 <img src="${item.pic}" class="resizeImgClass" onload="fitThisImg(this)">
                             </div>
@@ -397,37 +422,33 @@ function createListElement(_result){
                             <a href="${item.url}" class="showPlacePage" >اطلاعات بیشتر</a>
                         </div>`;
             elements += text;
-            if(selectedPlaceId == item.id)
-                $('.selectedPlace').html(text);
-            else {
-                item.markerInfo = L.marker([item.C, item.D], {
-                    title: item.name,
-                    icon: L.icon({
-                        iconUrl: item.minPic,
-                        iconSize: [35, 35], // size of the icon
-                        classToImg: filterButtons[item.kindPlaceId].classToImg
 
-                        // iconUrl: filterButtons[item.kindPlaceId].mapIcon,
-                        // iconSize: [30, 35], // size of the icon
-                    })
-                }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name));
-                // item.marker = new google.maps.Marker({
-                //     position: new google.maps.LatLng(item.C, item.D),
-                //     map: mainMap,
-                //     lat: item.C,
-                //     lng: item.D,
-                //     title: item.name,
-                //     id: item.id,
-                //     icon: {
-                //         url: filterButtons[item.kindPlaceId].mapIcon,
-                //         scaledSize: new google.maps.Size(30, 35), // scaled size
-                //     },
-                // });
-                // item.marker.addListener('click', function () {
-                //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
-                // });
+            item.markerInfo = L.marker([item.C, item.D], {
+                title: item.name,
+                icon: L.icon({
+                    iconUrl: item.minPic,
+                    iconSize: [35, 35], // size of the icon
+                    classToImg: filterButtons[item.kindPlaceId].classToImg
+                    // iconUrl: filterButtons[item.kindPlaceId].mapIcon,
+                    // iconSize: [30, 35], // size of the icon
+                })
+            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
+            // item.marker = new google.maps.Marker({
+            //     position: new google.maps.LatLng(item.C, item.D),
+            //     map: mainMap,
+            //     lat: item.C,
+            //     lng: item.D,
+            //     title: item.name,
+            //     id: item.id,
+            //     icon: {
+            //         url: filterButtons[item.kindPlaceId].mapIcon,
+            //         scaledSize: new google.maps.Size(30, 35), // scaled size
+            //     },
+            // });
+            // item.marker.addListener('click', function () {
+            //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
+            // });
 
-            }
 
             $(`#mobileResultRow_${item.kindPlaceId}`).find('.body').append(text);
         });
@@ -435,10 +456,11 @@ function createListElement(_result){
     }
 
     for(var kindPlaceId in filterButtons){
-        if($(`#mobileResultRow_${kindPlaceId}`).find('.body').html() == '')
-            $(`#mobileResultRow_${kindPlaceId}`).addClass('hidden');
+        var mobileResultRow_ = $(`#mobileResultRow_${kindPlaceId}`);
+        if(mobileResultRow_.find('.body').html() == '')
+            mobileResultRow_.addClass('hidden');
         else
-            $(`#mobileResultRow_${kindPlaceId}`).removeClass('hidden');
+            mobileResultRow_.removeClass('hidden');
     }
 
     $('.placeListLoading').addClass('hidden');
@@ -553,5 +575,5 @@ $(window).ready(() => {
     toggleMobileListNearPlace("middle");
 
     if(selectedPlaceFromBack.lat)
-        setMarkerToMap(selectedPlaceFromBack.lat, selectedPlaceFromBack.lng, selectedPlaceFromBack.id, selectedPlaceFromBack.name);
+        setMarkerToMap(selectedPlaceFromBack.lat, selectedPlaceFromBack.lng, selectedPlaceFromBack.id, selectedPlaceFromBack.name, selectedPlaceFromBack.kindPlaceId);
 });

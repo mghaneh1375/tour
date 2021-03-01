@@ -211,9 +211,12 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
             Route::get('/localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
         });
-        Route::post('/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
-        Route::post('/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
-        Route::delete('/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+        Route::post('/localShops/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
+        Route::post('/localShops/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
+        Route::delete('/localShops/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+
+        Route::post('/localShops/addIAmHere', 'LocalShop\LocalShopController@addImAmHereLocalShop')->name('localShop.addIAmHere');
+
     });
 });
 

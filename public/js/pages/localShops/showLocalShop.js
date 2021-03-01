@@ -297,6 +297,33 @@ function updatePlaceRating(_avg, _separate = []){
     }
 }
 
+function imAmHereFunc(_element){
+    openLoading();
+
+    $.ajax({
+        type: 'POST',
+        url: iAmHereLocalShopUrl,
+        data:{
+            _token: csrfTokenGlobal,
+            localShopId: placeId
+        },
+        complete: closeLoading,
+        success: response => {
+            if(response.status == 'ok'){
+                if(response.result == 1)
+                    $(_element).addClass('selected');
+                else
+                    $(_element).removeClass('selected');
+            }
+            else
+                showSuccessNotifi('ثبت نظر با مشکل مواجه شد', 'left', 'red');
+        },
+        error: err =>{
+            showSuccessNotifi('ثبت نظر با مشکل مواجه شد', 'left', 'red');
+        }
+    })
+}
+
 
 $('.localShopPageBookMark').on('click', bookMarkThisLocalShop);
 
