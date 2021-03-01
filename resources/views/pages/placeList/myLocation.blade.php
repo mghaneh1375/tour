@@ -121,7 +121,7 @@
                                         <input id="localShopCategories_{{$sub->id}}" data-id="{{$sub->id}}" class="categoryFilterInput_0 categoryFilterInput_{{$category->id}}" type="checkbox" checked>
                                         <label for="localShopCategories_{{$sub->id}}" class="name checked">
 {{--                                            <div class="icon manSportIcon"></div>--}}
-                                            <div>{{$sub->name}}</div>
+                                            <div class="showOneLineText">{{$sub->name}}</div>
                                         </label>
                                     </div>
                                 @endforeach

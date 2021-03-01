@@ -386,7 +386,7 @@ function createListElement(_result){
                                 <img src="${item.pic}" class="resizeImgClass" onload="fitThisImg(this)">
                             </div>
                             <div class="info">
-                                <div class="name">${item.name}</div>
+                                <div class="name showOneLineText">${item.name}</div>
                                 <div class="star">
                                     <div class="ui_bubble_rating bubble_${item.rate}0"></div>
                                     |

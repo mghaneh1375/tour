@@ -91,44 +91,27 @@ class PlaceController extends Controller {
     public function showPlaceDetails($kindPlaceName, $slug){
         deleteReviewPic();  // common.php
 
-        $kindPlace = Place::where('fileName', $kindPlaceName)->first();
+        $kindPlace = Place::where('fileName', $kindPlaceName)->firstOrFail();
         if($kindPlace == null)
             return \redirect(\url('/'));
 
         $kindPlaceId = $kindPlace->id;
-        switch ($kindPlaceId){
-            case 1:
-                $placeMode = 'amaken';
-                $kindPlace->title = 'جاذبه های';
-                break;
-            case 3:
-                $placeMode = 'restaurant';
-                $kindPlace->title = 'رستوران های';
-                break;
-            case 4:
-                $placeMode = 'hotel';
-                $kindPlace->title = 'مراکز اقامتی';
-                break;
-            case 6:
-                $placeMode = 'majara';
-                $kindPlace->title = 'طبیعت گردی های';
-                break;
-            case 10:
-                $placeMode = 'sogatSanaies';
-                $kindPlace->title = 'صنایع دستی و سوغات';
-                break;
-            case 11:
-                $placeMode = 'mahaliFood';
-                $kindPlace->title = 'غذاهای محلی';
-                break;
-            case 12:
-                $placeMode = 'boomgardy';
-                $kindPlace->title = 'بوم گردی های';
-                break;
-            case 13:
-                return \redirect(\url('/'));
-                break;
-        }
+        if($kindPlaceId == 1)
+            $kindPlace->title = 'جاذبه های';
+        else if($kindPlaceId == 3)
+            $kindPlace->title = 'رستوران های';
+        else if($kindPlaceId == 4)
+            $kindPlace->title = 'مراکز اقامتی';
+        else if($kindPlaceId == 6)
+            $kindPlace->title = 'طبیعت گردی های';
+        else if($kindPlaceId == 10)
+            $kindPlace->title = 'صنایع دستی و سوغات';
+        else if($kindPlaceId == 11)
+            $kindPlace->title = 'غذاهای محلی';
+        else if($kindPlaceId == 12)
+            $kindPlace->title = 'بوم گردی های';
+        else if($kindPlaceId == 13)
+            return \redirect(\url('/'));
 
         if(is_numeric($slug))
             $place = DB::table($kindPlace->tableName)->find((int)$slug);
@@ -136,12 +119,11 @@ class PlaceController extends Controller {
             $place = DB::table($kindPlace->tableName)->where('slug', $slug)->first();
 
         if($place == null)
-            return \redirect(\url('/'));
+            abort(404);
 
         $place->tags = PlaceTag::getTags($kindPlace->id, $place->id);
 
-        $uId = -1;
-        $youRate =0;
+        $youRate = 0;
         $hasLogin = true;
         $bookMark = false;
         $save = false;
@@ -151,15 +133,15 @@ class PlaceController extends Controller {
             $uPic = getUserPic(\auth()->user()->id); // common.php
 
             $bookMark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
-                    ->where('userId', $uId)
-                    ->where('bookMarks.referenceId', $place->id)
-                    ->where('bookMarkReferences.tableName', $kindPlace->tableName)
-                    ->count() > 0;
+                                ->where('userId', $uId)
+                                ->where('bookMarks.referenceId', $place->id)
+                                ->where('bookMarkReferences.tableName', $kindPlace->tableName)
+                                ->count() > 0;
 
             $youRate = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->where('userId', $uId)->first();
             $youRate = $youRate != null ? $youRate->rate : 0;
 
-            $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = " . $place->id . " and tripPlace.kindPlaceId = " . $kindPlaceId . " and tripPlace.tripId = trip.id and trip.uId = " . $uId);
+            $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = {$place->id} and tripPlace.kindPlaceId = {$kindPlaceId} and tripPlace.tripId = trip.id and trip.uId = {$uId}");
             if ($count[0]->tripPlaceNum > 0)
                 $save = true;
         }
@@ -207,25 +189,27 @@ class PlaceController extends Controller {
         else if($kindPlace->tableName == 'mahaliFood')
             $place = $this->mahaliFoodDet($place);
 
-        $articleUrl = route('safarnameh.list', ['type' => 'place', 'search' => $kindPlaceId . '_' . $place->id]);
-        $locationName = ["name" => $place->name, 'state' => $state->name, "stateNameUrl" => $state->name,
+        $articleUrl = route('safarnameh.list', ['type' => 'place', 'search' => "{$kindPlaceId}_{$place->id}"]);
+        $locationName = ['name' => $place->name, 'state' => $state->name, 'stateNameUrl' => $state->name, 'stateIsCountry' => $state->isCountry,
                         'cityName' => $city->name, 'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl,
                         'kindState' => 'city', 'kindPage' => 'place'];
 
-        $reviewAction = Activity::where('name', 'نظر')->first();
-        $place->firstReview = \DB::table('log')
-                                    ->where('activityId', $reviewAction->id)
-                                    ->where('kindPlaceId', $kindPlaceId)
-                                    ->where('placeId', $place->id)
-                                    ->first();
+        $place->firstReview = \DB::table('log')->join('activity', 'activity.id', 'log.activityId')
+                                ->where('activity.name', 'نظر')
+                                ->where('log.kindPlaceId', $kindPlaceId)
+                                ->where('log.placeId', $place->id)
+                                ->where('log.confirm', 1)
+                                ->select('log.*')
+                                ->first();
         if($place->firstReview != null)
             $place->firstReview = reviewTrueType($place->firstReview);
 
-        $questionAction = Activity::where('name', 'سوال')->first();
-        $place->firstQuestion = \DB::table('log')
-                                    ->where('activityId', $questionAction->id)
-                                    ->where('kindPlaceId', $kindPlaceId)
-                                    ->where('placeId', $place->id)
+        $place->firstQuestion = \DB::table('log')->join('activity', 'activity.id', 'log.activityId')
+                                    ->where('activity.name', 'سوال')
+                                    ->where('log.kindPlaceId', $kindPlaceId)
+                                    ->where('log.placeId', $place->id)
+                                    ->where('log.confirm', 1)
+                                    ->select('log.*')
                                     ->first();
         if($place->firstQuestion != null)
             $place->firstQuestion = questionTrueType($place->firstQuestion);
@@ -244,13 +228,16 @@ class PlaceController extends Controller {
         session(['inPage' => 'place_' . $kindPlaceId . '_' . $place->id]);
 
         return view('pages.placeDetails.placeDetails',
-            ['place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
-            'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'], 'locationName' => $locationName, 'localStorageData' => $localStorageData,
-            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount,
-            'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
-            'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
-            'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
-            'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()]);
+            [
+                'place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
+                'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'],
+                'locationName' => $locationName, 'localStorageData' => $localStorageData,
+                'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount,
+                'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
+                'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
+                'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
+                'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()
+            ]);
     }
 
     public function getPlacePics()
@@ -2267,7 +2254,7 @@ class PlaceController extends Controller {
 
     }
 
-    public function showPlaceList($kindPlaceId, $mode, $city = '')
+    public function showPlaceList($kindPlaceId, $mode, $city = 0)
     {
         $kindPlace = Place::find($kindPlaceId);
 
@@ -2275,7 +2262,6 @@ class PlaceController extends Controller {
             $meta = [];
             $mode = strtolower($mode);
 
-            $kindPlaceId = $kindPlace->id;
             $showOther = false;
             $notItemToShow = false;
             $cityRel = 0;
@@ -2293,17 +2279,17 @@ class PlaceController extends Controller {
             }
             else if ($mode == "state") {
                 $city = str_replace('+', ' ', $city);
-                $state = State::whereName($city)->first();
+                $state = State::where('name', $city)->firstOrFail();
                 $city = $state;
-                if ($state == null)
-                    return "نتیجه ای یافت نشد";
 
                 $cityIds = Cities::where('stateId', $city->id)->pluck('id')->toArray();
 
-                $articleUrl = \url('/safarnameh/list/city/' . $state->name);
-                $n = ' استان ' . $state->name;
+                $articleUrl = \url("/safarnameh/list/city/{$state->name}");
+                $n = $state->isCountry == 1 ? ' کشور ' : ' استان ';
+                $n .= $state->name;
+
                 $locationName = ['name' => $n, 'state' => $state->name, "stateNameUrl" => $state->name,
-                                'cityName' => $n, 'cityNameUrl' => $state->name,
+                                'cityName' => $n, 'cityNameUrl' => $state->name, 'stateIsCountry' => $state->isCountry,
                                 'articleUrl' => $articleUrl, 'kindState' => 'state',
                                 'kindPage' => 'list'];
 
@@ -2313,17 +2299,12 @@ class PlaceController extends Controller {
             }
             else if ($mode == "city") {
                 $city = str_replace('+', ' ', $city);
-                $city = Cities::whereName($city)->first();
-                if ($city == null)
-                    return "نتیجه ای یافت نشد";
-
-                $state = State::whereId($city->stateId);
-                if ($state == null)
-                    return "نتیجه ای یافت نشد";
+                $city = Cities::where('name', $city)->firstOrFail();
+                $state = State::where('id', $city->stateId)->firstOrFail();
 
                 $articleUrl = route('safarnameh.list', ['type' => 'city', 'search' => $city->name]);
                 $locationName = ["name" => $city->name, 'state' => $state->name, 'stateNameUrl' => $state->name, 'cityName' => $city->name,
-                                'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl,
+                                'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl, 'stateIsCountry' => $state->isCountry,
                                 'kindState' => 'city', 'kindPage' => 'list'];
 
                 $inHeaderName = $city->name;
@@ -2530,19 +2511,22 @@ class PlaceController extends Controller {
 
         //first get all places in state or city
         if($request->mode === "country") {
-            $placeIds = DB::table($table)->where('name', 'LIKE', '%' . $nameFilter . '%')->pluck('id')->toArray();
+            $countryStateIds = State::country()->pluck('id')->toArray();
+            $countryCityIds = Cities::whereIn('stateId', $countryStateIds)->pluck('id')->toArray();
+
+            $placeIds = DB::table($table)->whereNotIn('cityId', $countryCityIds)->where('name', 'LIKE', "%{$nameFilter}%")->pluck('id')->toArray();
             $totalCount = DB::table($table)->count();
         }
         else if($request->mode === "state"){
             $state = State::find($request->city);
             $cities = Cities::where('stateId', $request->city)->pluck('id')->toArray();
-            $placeIds = DB::table($table)->whereIn('cityId', $cities)->where('name', 'LIKE', '%'.$nameFilter.'%')->pluck('id')->toArray();
+            $placeIds = DB::table($table)->whereIn('cityId', $cities)->where('name', 'LIKE', "%{$nameFilter}%")->pluck('id')->toArray();
             $totalCount = DB::table($table)->whereIn('cityId', $cities)->count();
         }
         else {
             $city = Cities::find($request->city);
             $state = $city->getState;
-            $placeIds = DB::table($table)->where('cityId', $request->city)->where('name', 'LIKE', '%' . $nameFilter . '%')->pluck('id')->toArray();
+            $placeIds = DB::table($table)->where('cityId', $request->city)->where('name', 'LIKE', "%{$nameFilter}%")->pluck('id')->toArray();
             $totalCount = DB::table($table)->where('cityId', $request->city)->count();
         }
 
@@ -2718,12 +2702,14 @@ class PlaceController extends Controller {
             }
             else if($request->mode == 'state'){
                 $place->state = $state->name;
+                $place->isCountry = $state->isCountry;
                 $cityObj = Cities::find($place->cityId);
                 if($cityObj != null)
                     $place->city = $cityObj->name;
             }
             else if($request->mode == 'city'){
                 $place->state = $state->name;
+                $place->isCountry = $state->isCountry;
                 $place->city = $city->name;
             }
             $place->avgRate = (int)$place->fullRate;

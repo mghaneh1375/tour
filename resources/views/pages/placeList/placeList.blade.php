@@ -328,7 +328,7 @@
                                             </div>
                                         </div>
                                         <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px">
-                                            <span>{{__('استان')}}:</span>
+                                            <span>##stateKindText##:</span>
                                             <span>##state##</span>
                                         </div>
                                         <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px">

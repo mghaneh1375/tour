@@ -481,6 +481,9 @@ function createListItemCard(_result){
         for (var x of Object.keys(item))
             text = text.replace(new RegExp(`##${x}##`, "g"), item[x]);
 
+        var stateKindText = item.isCountry == 1 ? 'کشور ' : 'استان ';
+        text = text.replace(new RegExp('##stateKindText##', "g"), stateKindText);
+
         cards += text;
     });
 

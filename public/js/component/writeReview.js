@@ -308,9 +308,10 @@ function resizeImageBeforeUploadInNewReview(_image, _file){
 function storeNewReview(_element){
     var canUpload = false;
     var fileUploding = false;
-    var text = `<div>${$('#inputNewReviewText').html()}</div>`;
+    var reviewText = $('#inputNewReviewText').html();
+    var text = `<div>${reviewText}</div>`;
 
-    if(text.trim().length > 0)
+    if(reviewText.trim().length > 0)
         canUpload = true;
 
     newReviewDataForUpload.files.map(item =>{
@@ -322,6 +323,7 @@ function storeNewReview(_element){
         if(item.uploaded == 1)
             canUpload = true;
     });
+
 
     if(canUpload && !fileUploding) {
         var assignedUsers = [];

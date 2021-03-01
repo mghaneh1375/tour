@@ -1011,15 +1011,18 @@ class AjaxController extends Controller {
         if($kindPlace == 'state' || $kindPlace == 'village' || $kindPlace == 'city'){
             if($kindPlace == 'state'){
                 $result = State::where('name', 'LIKE', '%'.$request->text.'%')->get();
-                foreach ($result as $item)
-                    array_push($inPlace, ['kindPlaceId' => 'state', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'استان ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => '']);
+                foreach ($result as $item) {
+                    $stateText = $item->isCountry == 1 ? ' کشور ' : ' استان ';
+                    array_push($inPlace, ['kindPlaceId' => 'state', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => $stateText . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => '']);
+                }
             }
             else if($kindPlace == 'city'){
                 $result = Cities::where('name', 'LIKE','%'.$request->text.'%')->where('isVillage', 0)->get();
 
                 foreach ($result as $item) {
                     $state = State::find($item->stateId);
-                    array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => 'در استان ' . $state->name]);
+                    $stateText = $state->isCountry == 1 ? ' کشور ' : ' استان ';
+                    array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => "در {$stateText} " . $state->name]);
                 }
             }
             else{
@@ -1027,7 +1030,8 @@ class AjaxController extends Controller {
                 foreach ($result as $item) {
                     $state = State::find($item->stateId);
                     $city = Cities::find($item->isVillage);
-                    array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => 'در استان ' . $state->name . ' ، در شهر ' . $city->name]);
+                    $stateText = $state->isCountry == 1 ? ' کشور ' : ' استان ';
+                    array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => "در {$stateText} " . $state->name . ' ، در شهر ' . $city->name]);
                 }
             }
         }
@@ -1038,7 +1042,9 @@ class AjaxController extends Controller {
                 $pic = getPlacePic($pl->id, $kindPlace->id, 'f');
                 $cit = Cities::find($pl->cityId);
                 $sta = State::find($cit->stateId);
-                $stasent = 'استان ' . $sta->name . ' ، شهر' . $cit->name;
+                $stateText = $sta->isCountry == 1 ? ' کشور ' : ' استان ';
+
+                $stasent = $stateText . $sta->name . ' ، شهر' . $cit->name;
                 array_push($inPlace, ['kindPlaceId' => $kindPlace->id, 'kindPlaceName' => $kindPlace->name, 'placeId' => $pl->id, 'name' => $pl->name, 'pic' => $pic, 'state' => $stasent]);
             }
         }

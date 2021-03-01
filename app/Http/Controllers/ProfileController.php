@@ -969,7 +969,7 @@ class ProfileController extends Controller {
 
     public function addPlaceByUserPage()
     {
-        $states = State::all();
+        $states = State::iranStates()->get();
         $kindPlace = [
             'amaken' => [
                 'id' => 1,

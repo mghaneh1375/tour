@@ -188,10 +188,12 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
 
-    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
     Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
-    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
+
+    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
     Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
+
+    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
 
 });
@@ -859,10 +861,3 @@ Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.
 Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
 
 Route::get('exportDistanceFromCityCenter/alakiii', 'MainController@exportDistanceFromCityCenter')->middleware(['auth']);
-
-
-//<Directory /var/www/tvKoochita/public>
-//        Options Indexes FollowSymLinks
-//        AllowOverride All
-//        Require all granted
-//</Directory>

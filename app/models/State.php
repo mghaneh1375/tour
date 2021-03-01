@@ -22,6 +22,14 @@ class State extends Model {
         return State::find($value);
     }
 
+    public function scopeIranStates($query){
+        $query->where('isCountry', 0);
+    }
+
+    public function scopeCountry($query){
+        $query->where('isCountry', 1);
+    }
+
     public function getCities()
     {
         return $this->hasMany(Cities::class, 'stateId', 'id');

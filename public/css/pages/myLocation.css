@@ -500,10 +500,6 @@
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter .name > div{
     display: inline-block;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 /*.localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter .name.checked{*/
 /*    background: #0076a312;*/

@@ -1,11 +1,14 @@
+<?php
+    $placeTitleName = isset($place->state) ? $place->listName : $place->name;
+    $stateOrCountryText = isset($locationName['stateIsCountry']) && $locationName['stateIsCountry'] === 1 ? ' کشور' : ' استان ';
+?>
+
 <!DOCTYPE html>
 <html lang="fa">
 
 <head>
     @include('layouts.topHeader')
-    <?php
-        $placeTitleName = isset($place->state) ? $place->listName : $place->name;
-    ?>
+
     <title>کوچیتا |معرفی اقامتگاه ها و جاهای دیدنی {{$placeTitleName}} </title>
 
     <meta content="article" property="og:type"/>
@@ -59,8 +62,8 @@
             "@type": "ListItem",
             "item":  {
                 "@type": "Thing",
-                "name": "استان {{$place->state}}",
-                                "alternateName": "استان {{$place->state}}",
+                "name": "{{$stateOrCountryText}} {{$place->state}}",
+                                "alternateName": "{{$stateOrCountryText}} {{$place->state}}",
                                 "url": "{{url('cityPage/state/'.$place->state)}}",
                                 "id":"state"
                             },
@@ -104,7 +107,7 @@
             <span style="color: var(--koochita-yellow)"> > </span>
             @if(isset($place->state))
                 <a href="{{url('cityPage/state/'.$place->state)}}" class="navigatorLinks">
-                    <span>استان {{$place->state}}</span>
+                    <span>{{$stateOrCountryText}} {{$place->state}}</span>
                 </a>
                 <span style="color: var(--koochita-yellow)"> > </span>
                 <span class="navigatorLinks" style="font-size: 13px">{{$place->name}}</span>
@@ -142,7 +145,7 @@
                             <div class="hideOnScreen cpShowOnSlider">
                                 @if(isset($place->state))
                                     <div class="cpStateName" onclick="openMainSearch(0)">
-                                        <span class="cpNameLabel">استان :</span>
+                                        <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
                                         {{$place->state}}
                                     </div>
                                     <div class="cpCityName" onclick="openMainSearch(0)">
@@ -151,7 +154,7 @@
                                     </div>
                                 @else
                                     <div class="cpStateName" onclick="openMainSearch(0)">
-                                        <span class="cpNameLabel">استان :</span>
+                                        <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
                                         {{$place->name}}
                                     </div>
                                 @endif
@@ -194,7 +197,7 @@
                 </div>
                 <div class="col-md-4 col-xs-12 pd-0Imp hideOnPhone">
                     <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/4/' . $kind . '/' . $place->listName)}}">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/4/{$kind}/{$place->listName}")}}">
                             <div class="cityPageIcon hotel"></div>
                             <div class="textCityPageIcon">{{__('هتل')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>
@@ -505,10 +508,6 @@
 @include('component.mapMenu')
 
 <script>
-
-    setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
-    setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
-
     var cityName1 = '{{ $place->name }}';
     var topPlacesSections = [
         {
@@ -554,8 +553,6 @@
 
     var reviews;
     var showCityPicNumber = 5;
-
-    initPlaceRowSection(topPlacesSections);
 
     function runMainSwiper(){
         new Swiper('.mainSuggestion', {
@@ -616,6 +613,7 @@
             success: response => createTopPlacesDiv(response.topPlaces)
         })
     }
+
     function createTopPlacesDiv(_result){
         let fk = Object.keys(_result);
         for (let x of fk) {
@@ -656,18 +654,20 @@
     }
 
     $(window).ready(() => {
+        setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
+        setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
+
+        initPlaceRowSection(topPlacesSections);
+
         getTopPlaces();
 
-        if(cityPageKind === "city") {
+        if(cityPageKind === "city")
             getAllPlacesForMap();
-        }
-        else{
+        else
             $('#cpMap').addClass('hidden');
-        }
 
-        if(window.innerWidth > 767 ){
+        if(window.innerWidth > 767 )
             getReviews();
-        }
     });
 
     @if(isset($place->pic) && count($place->pic) > 0)
