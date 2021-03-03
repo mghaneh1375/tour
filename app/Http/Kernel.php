@@ -64,6 +64,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adminAccess' => \App\Http\Middleware\AdminAccess::class,
+        'businessAccess' => \App\Http\Middleware\BusinessAccess::class,
+        'businessModify' => \App\Http\Middleware\BusinessModify::class,
         'nothing' => \App\Http\Middleware\Nothing::class,
         'SafarnamehShareData' => \App\Http\Middleware\SafarnamehShareData::class,
         'shareData' => \App\Http\Middleware\ShareData::class,

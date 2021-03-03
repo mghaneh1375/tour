@@ -17,7 +17,7 @@ class BusinessPanelShareData
      */
     public function handle($request, Closure $next)
     {
-        $fileVersions = 2;
+        $fileVersions = 3;
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);

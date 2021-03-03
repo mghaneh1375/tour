@@ -23,26 +23,21 @@
         // _doFuncName must be string
         clearGlobalResult();
 
-        $('#globalSearchInput').attr('onkeyup', _doFuncName+'(this)');
-        $('#globalSearchInput').attr('placeholder', _placeHolderTxt);
-        $('#globalSearchInput').val('');
+        $('#globalSearchInput').attr('onkeyup', _doFuncName+'(this)')
+            .attr('placeholder', _placeHolderTxt).val('');
 
-        $('#globalSearchResult').html('');
-        $('#globalSearchResult').hide();
-
+        $('#globalSearchResult').html('').hide();
         $('#globalSearch').css('display', 'flex');
 
         $('#globalSearchInput').focus();
     }
 
     function setResultToGlobalSearch(_txt){
-        $('#globalSearchResult').show();
-        $('#globalSearchResult').html(_txt);
+        $('#globalSearchResult').show().html(_txt);
     }
 
     function clearGlobalResult(){
-        $('#globalSearchResult').hide();
-        $('#globalSearchResult').html('');
+        $('#globalSearchResult').hide().html('');
     }
 
     function closeSearchInput(){

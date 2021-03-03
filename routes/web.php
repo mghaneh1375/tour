@@ -613,7 +613,7 @@ Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), func
 
     Route::post('testMethod', array('as' => 'testMethod', 'uses' => 'TestController@methodTest'));
 
-    Route::post('changeMeta/kind={kind}/id={id}', 'MetaController@changeMeta');
+//    Route::post('changeMeta/kind={kind}/id={id}', 'MetaController@changeMeta');
 
     Route::post('findPlace', array('as' => 'findPlace', 'uses' => 'HomeController@findPlace'));
 });

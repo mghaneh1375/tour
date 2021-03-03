@@ -18,6 +18,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $email
  * @property string $phone
  * @property string $username
+ * @property string $codeMeli
+ * @property string $birthday
  * @property string $password
  * @property string $invitationCode
  * @property string $link
@@ -25,8 +27,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property integer $level
  * @property boolean $uploadPhoto
  * @property boolean $status
+ * @property boolean $isForeign
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereUserName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\User whereCodeMeli($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereLevel($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereInvitationCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User wherePhone($value)

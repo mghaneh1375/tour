@@ -430,8 +430,7 @@
                 $('#shopName').addClass('wrongInput');
             }
             else{
-                $('#shopName').addClass('correctInput');
-                $('#shopName').removeClass('wrongInput');
+                $('#shopName').addClass('correctInput').removeClass('wrongInput');
             }
 
             if(category == null) {
@@ -439,8 +438,7 @@
                 $('#shopCategory').addClass('wrongInput');
             }
             else{
-                $('#shopCategory').addClass('correctInput');
-                $('#shopCategory').removeClass('wrongInput');
+                $('#shopCategory').addClass('correctInput').removeClass('wrongInput');
             }
 
             if(phone.trim().length < 2){
@@ -448,8 +446,7 @@
                 $('#shopPhone').addClass('wrongInput');
             }
             else{
-                $('#shopPhone').addClass('correctInput');
-                $('#shopPhone').removeClass('wrongInput');
+                $('#shopPhone').addClass('correctInput').removeClass('wrongInput');
             }
 
             if(cityId == 0){
@@ -457,17 +454,15 @@
                 $('#shopCity').addClass('wrongInput');
             }
             else{
-                $('#shopCity').addClass('correctInput');
-                $('#shopCity').removeClass('wrongInput');
+                $('#shopCity').addClass('correctInput').removeClass('wrongInput');
             }
 
-            if(address == 0){
+            if(address == 0) {
                 errorText += '<li>نوشتن آدرس کسب و کار اجباری است</li>';
                 $('#shopAddress').addClass('wrongInput');
             }
             else{
-                $('#shopAddress').addClass('correctInput');
-                $('#shopAddress').removeClass('wrongInput');
+                $('#shopAddress').addClass('correctInput').removeClass('wrongInput');
             }
 
             if(lat == 0 || lng == 0)
@@ -540,8 +535,8 @@
         });
 
         function iAm24Hour(){
-            isCheked = $('#allDay24').prop('checked');
-            if(isCheked){
+            isChecked = $('#allDay24').prop('checked');
+            if(isChecked){
                 $('#inWeekDiv').addClass('hidden');
                 $('#closedBeforeDayDiv').addClass('hidden');
             }
@@ -552,8 +547,8 @@
         }
 
         function iAmClose(_element){
-            var isCheked = $(_element).prop('checked');
-            if(isCheked){
+            var isChecked = $(_element).prop('checked');
+            if(isChecked){
                 $(_element).parent().addClass('checked');
                 $(_element).parent().prev().addClass('hidden');
             }
@@ -617,7 +612,7 @@
         var uploadPicAjax = null;
         var uploadProcess = false;
         var cancelThisImg = false;
-        function uploadQueuePictures(){
+        function uploadQueuePictures() {
             if(uploadProcess == false){
                 uploadProcess = true;
                 var uploadIndex = null;
