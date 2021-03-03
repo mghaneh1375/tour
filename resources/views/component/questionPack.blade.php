@@ -59,7 +59,7 @@
         </div>
 
     </div>
-    <div class="questionContentMainBox" style="white-space: pre-line">##text##</div>
+    <div class="questionContentMainBox"">##text##</div>
     <div class="questionSubMenuBar">
         <b class="replyBtn replyAnswerBtn" onclick="openReplyQuestionSection(##id##)"> {{__('پاسخ دهید')}} </b>
         <div class="dark-blue float-right display-inline-black cursor-pointer" onclick="showAllQuestionAnswer(##id##, this)" style="direction: rtl">
@@ -69,7 +69,7 @@
     </div>
     <div id="ansToQuestion##id##" class="hidden last newAnswerPlaceMainDiv" style="margin-top: 0px;">
         <div class="circleBase type2 newCommentWriterProfilePic">
-            <img alt="userPic" src="##userPic##" style="height: 100%; border-radius: 50%;">
+            <img alt="userPic" src="##yourPic##" style="height: 100%; border-radius: 50%;">
         </div>
         <div class="inputBox" style="flex-direction: column">
             <b class="replyAnswerTitle">{{__("در پاسخ به سوال")}} ##userName##</b>
@@ -113,19 +113,16 @@
 
     function createQuestionPack(_question, _sectionId){
         if($('#questionSection_' + _question.id).length == 0) {
-            let firstTime = '<div id="questionSection_' + _question.id + '" class="questionPack"></div>';
+            var firstTime = '<div id="questionSection_' + _question.id + '" class="questionPack"></div>';
             $(`#${_sectionId}`).append(firstTime);
         }
 
-        let obj = Object.keys(_question);
-        let text = questionSample;
+        var obj = Object.keys(_question);
+        var text = questionSample;
 
-        text = text.replace(new RegExp(`##userPic##`, "g"), window.userPic);
-        for (let x of obj) {
-            let t = '##' + x + '##';
-            let re = new RegExp(t, "g");
-            text = text.replace(re, _question[x]);
-        }
+        text = text.replace(new RegExp(`##yourPic##`, "g"), window.userPic);
+        for (var x of obj)
+            text = text.replace(new RegExp(`##${x}##`, "g"), _question[x]);
 
         $(`#questionSection_${_question.id}`).html(text);
 
@@ -134,7 +131,7 @@
         else if(!_question.yourReview)
             $('#questionSection_' + _question['id']).find('.isConfirmed').remove();
 
-        let answersHtml = '';
+        var answersHtml = '';
 
         _question.answers.map(_ans => {
             _ans.likeFunction = 'likeQuestion';
@@ -155,8 +152,8 @@
                 type: 'post',
                 url : '{{route("sendAns")}}',
                 data:{
-                    'text' : _value,
-                    'relatedTo' : _id
+                    text : _value,
+                    relatedTo : _id
                 },
                 success: function(response){
                     if(response == 'ok') {
@@ -208,7 +205,7 @@
     $(window).on('click', () => closeMyModal('questionOptionMenuBar'));
 
     function showAllQuestionAnswer(_id, _element){
-        let textElement = $(_element).find('.seeAllText');
+        var textElement = $(_element).find('.seeAllText');
         $("#ansOfQuestion" + _id).toggleClass('hidden');
         textElement.text(textElement.text() == 'مشاهده پاسخ‌ها' ? 'بستن پاسخ‌ها' : 'مشاهده پاسخ‌ها');
     }
@@ -227,8 +224,8 @@
             type: 'post',
             url: '{{route('likeLog')}}',
             data:{
-                'logId' : _logId,
-                'like' : _like
+                logId : _logId,
+                like : _like
             },
             success: function(response){
                 response = JSON.parse(response);
@@ -240,7 +237,7 @@
         })
     }
 
-    let deletedQuestion = 0;
+    var deletedQuestion = 0;
     function deleteQuestionByUser(_id){
         deletedQuestion = _id;
         openWarning('آیا از حذف سوال خود اطمینان دارید؟', doDeleteQuestionByUser, 'بله، حذف شود');

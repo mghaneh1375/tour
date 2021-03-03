@@ -3,9 +3,13 @@
 
     @include('layouts.footer.MobileFooter')
 
-    <script async src="{{URL::asset('js/pages/placeFooter.js?v='.$fileVersions)}}"></script>
     <script>
 
+        var userSettingPageUrl = "{{route('profile.accountInfo')}}";
+        var addPlaceByUserUrl = "{{route('addPlaceByUser.index')}}";
+        var getReviewExploreUrl = "{{route('review.explore')}}";
+        var cookFestivalUrl = '{{route("festival.cook")}}';
+        var touchRigthForFooterMobile = 0;
     @if(Auth::check())
         let profileUrl = '{{route("profile")}}';
         function initialProgressFooter() {
@@ -36,27 +40,9 @@
         else
             console.log('your browser not support localStorage');
     @endif
-        </script>
-
-
-
-
-
-    <script>
-        {{--var serviceWorkerUrl = '{{URL::asset("ServiceWorker.js")}}';--}}
-        {{--serviceWorkerUrl = serviceWorkerUrl.replace('http://', 'https://');--}}
-
-        {{--if ('serviceWorker' in navigator) {--}}
-        {{--    window.addEventListener('load', function(){--}}
-        {{--        navigator.serviceWorker.register(serviceWorkerUrl).then(--}}
-        {{--            registration => {--}}
-        {{--                console.log('Service Worker is registered', registration);--}}
-        {{--            }).catch(--}}
-        {{--            err => {--}}
-        {{--                console.error('Registration failed:', err);--}}
-        {{--            });--}}
-        {{--    })--}}
-        {{--}--}}
     </script>
 
+    <script src="{{URL::asset('js/pages/layout/placeFooter.js?v='.$fileVersions)}}"></script>
 </footer>
+
+

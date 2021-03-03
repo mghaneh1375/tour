@@ -48,8 +48,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapBusinessWebRoutes();
-
         $this->mapTourWebRoutes();
 
         $this->mapNewsRoutes();
@@ -76,14 +74,6 @@ class RouteServiceProvider extends ServiceProvider
              ->domain('businessPanel.localhost')
             ->namespace($this->namespace.'\PanelBusiness')
             ->group(base_path('routes/businessPanelRoutes.php'));
-    }
-
-    protected function mapBusinessWebRoutes()
-    {
-        Route::middleware('web')
-//             ->domain('business.'.env('ROUTURL'))
-            ->namespace($this->namespace.'\Business')
-            ->group(base_path('routes/businessRoutes.php'));
     }
 
     protected function mapTourWebRoutes()

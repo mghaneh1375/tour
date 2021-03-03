@@ -31,8 +31,8 @@
                     <div id="leftColPhotosModalMainDiv" class="selectedPhotoShowingModal" style="position: relative;">
                         <div style="position: relative; width: 100%;">
                             <div class="albumContent">
-                                <img id="mainPhotoAlbum" alt="کوچیتا، سامانه جامع گردشگری ایران" style="max-width: 100%; max-height: 100%;">
-                                <video id="mainVideoPhotoAlbum" controls style="max-width: 100%; max-height: 50vh;"></video>
+                                <img id="mainPhotoAlbum" alt="کوچیتا، سامانه جامع گردشگری ایران">
+                                <video id="mainVideoPhotoAlbum" controls></video>
                             </div>
                             <div style="position: absolute; bottom: -25px; right: 0px; margin-top: 7px; display: flex; justify-content: center;">
                                 <div id="photoAlbumLikeSection" class="photoAlbumLikeSection" style="display:none;">
@@ -99,6 +99,7 @@
 <script>
     var deletePicInAlbumUrl = '{{route("album.pic.delete")}}';
     var likePhotographerUrl = '{{route('likePhotographer')}}';
+    var userProfileUrl_albume = '{{url('addPlace/index')}}';
     var sidePics;
     var choosenIndex;
     var userInPhoto = '{{auth()->check() ? auth()->user()->username : false}}';

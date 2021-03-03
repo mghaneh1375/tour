@@ -6,6 +6,7 @@ use App\Events\SaveErrorEvent;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\localShops\LocalShopFeaturesRelations;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
 use App\models\localShops\LocalShopsPictures;
@@ -40,8 +41,6 @@ use App\models\Question;
 use App\models\QuestionUserAns;
 use App\models\Report;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SectionPage;
@@ -66,6 +65,8 @@ use Illuminate\Http\Request;
 
 class PlaceController extends Controller {
 
+    public $assetLocation = __DIR__.'/../../../../assets' ;
+
     public function setPlaceDetailsURL($kindPlaceId, $placeId)
     {
         $kindPlace = Place::find($kindPlaceId);
@@ -87,7 +88,7 @@ class PlaceController extends Controller {
             return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->id));
     }
 
-    public function showPlaceDetails($kindPlaceName, $slug, Request $request){
+    public function showPlaceDetails($kindPlaceName, $slug){
         deleteReviewPic();  // common.php
 
         $kindPlace = Place::where('fileName', $kindPlaceName)->first();
@@ -139,37 +140,38 @@ class PlaceController extends Controller {
 
         $place->tags = PlaceTag::getTags($kindPlace->id, $place->id);
 
-        $hasLogin = true;
         $uId = -1;
+        $youRate =0;
+        $hasLogin = true;
+        $bookMark = false;
+        $save = false;
         if(auth()->check()){
             $uId = Auth::user()->id;
             $userCode = $uId . '_' . rand(10000,99999);
             $uPic = getUserPic(\auth()->user()->id); // common.php
+
+            $bookMark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
+                    ->where('userId', $uId)
+                    ->where('bookMarks.referenceId', $place->id)
+                    ->where('bookMarkReferences.tableName', $kindPlace->tableName)
+                    ->count() > 0;
+
+            $youRate = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->where('userId', $uId)->first();
+            $youRate = $youRate != null ? $youRate->rate : 0;
+
+            $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = " . $place->id . " and tripPlace.kindPlaceId = " . $kindPlaceId . " and tripPlace.tripId = trip.id and trip.uId = " . $uId);
+            if ($count[0]->tripPlaceNum > 0)
+                $save = true;
         }
         else{
             $userCode = null;
             $hasLogin = false;
             $uPic = getUserPic(); // common.php
         }
-        saveViewPerPage($kindPlaceId, $place->id); // common.php
 
-        $bmcheck = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
-                            ->where('userId', $uId)
-                            ->where('bookMarks.referenceId', $place->id)
-                            ->where('bookMarkReferences.tableName', $kindPlace->tableName)
-                            ->count();
-        $bookMark = $bmcheck > 0;
-
-        $youRate = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->where('userId', $uId)->first();
-        $youRate = $youRate != null ? $youRate->rate : 0;
 
         $getRates = getRate($place->id, $kindPlace->id);
         $rates = ['numOfRate' => $getRates[0], 'avg' => $getRates[1], 'yourRate' => $youRate];
-
-        $save = false;
-        $count = DB::select("select count(*) as tripPlaceNum from trip, tripPlace WHERE tripPlace.placeId = " . $place->id . " and tripPlace.kindPlaceId = " . $kindPlaceId . " and tripPlace.tripId = trip.id and trip.uId = " . $uId);
-        if ($count[0]->tripPlaceNum > 0)
-            $save = true;
 
         if(isset($place->phone) && $place->phone != null) {
             if(strpos($place->phone, '-') !== false)
@@ -183,17 +185,6 @@ class PlaceController extends Controller {
         $city = Cities::whereId($place->cityId);
         $state = State::whereId($city->stateId);
 
-        $photos = [];
-        $photos[count($photos)] = getPlacePic($place->id, $kindPlaceId, 'f');
-        $thumbnail = getPlacePic($place->id, $kindPlaceId, 's');
-
-        $pics = getAllPlacePicsByKind($kindPlaceId, $place->id); // common.php
-        $sitePics = $pics['sitePics'];
-        $photographerPics = $pics['photographerPics'];
-        $userPhotos = $pics['userPhotos'];
-        $userVideo = $pics['userVideo'];
-        $allPlacePics = $pics['allPics'];
-
         $result = commonInPlaceDetails($kindPlaceId, $place->id, $city, $state, $place);  // common.php
         $reviewCount = $result[0];
         $ansReviewCount = $result[1];
@@ -202,11 +193,11 @@ class PlaceController extends Controller {
         $textQuestion = $result[4];
         $rateQuestion = $result[5];
 
+        $featId = [];
         $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
-        $featId = array();
         foreach ($features as $item) {
             $item->subFeat = PlaceFeatures::where('parent', $item->id)->get();
-            $fId = PlaceFeatures::where('parent', $item->id)->pluck('id')->toArray();
+            $fId = $item->subFeat->pluck('id')->toArray();
             $featId = array_merge($featId, $fId);
         }
         $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
@@ -221,42 +212,55 @@ class PlaceController extends Controller {
                         'cityName' => $city->name, 'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl,
                         'kindState' => 'city', 'kindPage' => 'place'];
 
-        $mainPic = count($sitePics) > 0 ? $sitePics[0]['f'] : URL::asset('images/mainPics/nopicv01.jpg');
-        $video = isset($place->video) ? $place->video : '';
-
         $reviewAction = Activity::where('name', 'نظر')->first();
         $place->firstReview = \DB::table('log')
-                    ->where('activityId', $reviewAction->id)
-                    ->where('kindPlaceId', $kindPlaceId)
-                    ->where('placeId', $place->id)
-                    ->first();
+                                    ->where('activityId', $reviewAction->id)
+                                    ->where('kindPlaceId', $kindPlaceId)
+                                    ->where('placeId', $place->id)
+                                    ->first();
         if($place->firstReview != null)
             $place->firstReview = reviewTrueType($place->firstReview);
 
         $questionAction = Activity::where('name', 'سوال')->first();
         $place->firstQuestion = \DB::table('log')
-                    ->where('activityId', $questionAction->id)
-                    ->where('kindPlaceId', $kindPlaceId)
-                    ->where('placeId', $place->id)
-                    ->first();
+                                    ->where('activityId', $questionAction->id)
+                                    ->where('kindPlaceId', $kindPlaceId)
+                                    ->where('placeId', $place->id)
+                                    ->first();
         if($place->firstQuestion != null)
             $place->firstQuestion = questionTrueType($place->firstQuestion);
 
-        $place->mainPic = $mainPic;
 
-        $localStorageData = ['kind' => 'place', 'name' => $place->name, 'city' => $city->name, 'state' => $state->name, 'mainPic' => $mainPic, 'redirect' => \Request::url()];
+        $place->mainPic = getPlacePic($place->id, $kindPlaceId, 'f');
+
+        $localStorageData = [
+            'kind' => 'place',
+            'name' => $place->name,
+            'city' => $city->name,
+            'state' => $state->name,
+            'redirect' => \Request::url(),
+            'mainPic' => $place->mainPic
+        ];
         session(['inPage' => 'place_' . $kindPlaceId . '_' . $place->id]);
 
-        return view('pages.placeDetails.placeDetails', array('place' => $place, 'features' => $features , 'save' => $save, 'city' => $city, 'thumbnail' => $thumbnail,
+        return view('pages.placeDetails.placeDetails',
+            ['place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
             'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'], 'locationName' => $locationName, 'localStorageData' => $localStorageData,
-            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount, 'photographerPics' => $photographerPics,
+            'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount,
             'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
-            'sitePics' => $sitePics, 'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
-            'photos' => $photos, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo,
-            'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'err' => '',
-            'placeStyles' => PlaceStyle::where('kindPlaceId',$kindPlaceId)->get(), 'kindPlace' => $kindPlace,
-            'placeMode' => $kindPlace->tableName, 'video' => $video,
-            'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()));
+            'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
+            'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
+            'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()]);
+    }
+
+    public function getPlacePics()
+    {
+        $kindPlaceId = $_GET['kindPlaceId'];
+        $placeId = $_GET['placeId'];
+
+        $pics = getAllPlacePicsByKind($kindPlaceId, $placeId); // common.php
+
+        return response()->json(['status' => 'ok', 'result' => $pics]);
     }
 
     public function getNearby()
@@ -504,228 +508,6 @@ class PlaceController extends Controller {
         }
     }
 
-    function opOnComment()
-    {
-
-        if (isset($_POST["logId"]) && isset($_POST["mode"])) {
-
-            $uId = Auth::user()->id;
-            $logId = makeValidInput($_POST["logId"]);
-            $mode = makeValidInput($_POST["mode"]);
-
-            $tmp = LogModel::whereId($logId);
-            if ($tmp == null || $tmp->confirm != 1)
-                return;
-
-            if ($mode == "like")
-                echo $this->likeComment($uId, $logId);
-            else if ($mode == "dislike")
-                echo $this->dislikeComment($uId, $logId);
-
-        }
-
-    }
-
-    function getOpinionRate()
-    {
-
-        if (isset($_POST["opinionId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeId"])) {
-
-            $uId = Auth::user()->id;
-            $condition = ['placeId' => makeValidInput($_POST["placeId"]), 'confirm' => 1,
-                'kindPlaceId' => makeValidInput($_POST["kindPlaceId"]), 'visitorId' => $uId,
-                'activityId' => Activity::whereName('امتیاز')->first()->id];
-
-            try {
-                $logId = LogModel::where($condition)->first()->id;
-
-                $condition = ['logId' => $logId, 'opinionId' => makeValidInput($_POST["opinionId"])];
-                echo UserOpinion::where($condition)->first()->rate;
-            } catch (Exception $x) {
-                echo 0;
-            }
-        }
-    }
-
-    function setPlaceRate()
-    {
-        if (isset($_POST["opinionId"]) && isset($_POST["rate"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeId"])) {
-
-            $placeId = makeValidInput($_POST["placeId"]);
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-            $uId = Auth::user()->id;
-            $activityId = Activity::whereName('امتیاز')->first()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId, 'activityId' => $activityId];
-
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-
-                $log = new LogModel();
-                $log->visitorId = $uId;
-                $log->time = getToday()["time"];
-                $log->activityId = $activityId;
-                $log->placeId = $placeId;
-                $log->kindPlaceId = $kindPlaceId;
-                $log->date = date('Y-m-d');
-                $log->confirm = 1;
-                $log->save();
-
-                $opinion = new UserOpinion();
-                $opinion->logId = $log->id;
-                $opinion->opinionId = makeValidInput($_POST["opinionId"]);
-                $opinion->rate = makeValidInput($_POST["rate"]);
-
-                try {
-                    $opinion->save();
-                } catch (Exception $x) {
-                    echo $x->getMessage();
-                }
-
-            } else {
-
-                $condition = ['logId' => $log->id, 'opinionId' => makeValidInput($_POST["opinionId"])];
-                $opinion = UserOpinion::where($condition)->first();
-                if ($opinion == null) {
-                    $opinion = new UserOpinion();
-                    $opinion->logId = $log->id;
-                    $opinion->opinionId = makeValidInput($_POST["opinionId"]);
-                    $opinion->rate = makeValidInput($_POST["rate"]);
-
-                    try {
-                        $opinion->save();
-                    } catch (Exception $x) {
-                        echo $x->getMessage();
-                    }
-
-                } else {
-                    $opinion->rate = makeValidInput($_POST["rate"]);
-
-                    try {
-                        $opinion->save();
-                    } catch (Exception $x) {
-                        echo $x->getMessage();
-                    }
-                }
-            }
-        }
-    }
-
-    function sendComment()
-    {
-
-        if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["placeStyle"]) &&
-            isset($_POST["reviewTitle"]) && isset($_POST["reviewText"]) && isset($_POST["src"]) &&
-            isset($_POST["seasonTrip"]) && isset($_POST["status"])) {
-
-            $placeId = makeValidInput($_POST["placeId"]);
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-            $placeStyle = makeValidInput($_POST["placeStyle"]);
-            $reviewText = makeValidInput($_POST["reviewText"]);
-            $reviewTitle = makeValidInput($_POST["reviewTitle"]);
-            $src = makeValidInput($_POST["src"]);
-            $seasonTrip = makeValidInput($_POST["seasonTrip"]);
-            $status = makeValidInput($_POST["status"]);
-            $uId = Auth::user()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId,
-                'activityId' => Activity::whereName('امتیاز')->first()->id];
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-                echo "-1";
-                return;
-            }
-
-            if (empty($reviewTitle)) {
-                echo "-2";
-                return;
-            }
-
-            if (empty($reviewText)) {
-                echo "-3";
-                return;
-            }
-
-            if (empty($placeStyle)) {
-                echo "-4";
-                return;
-            }
-
-            if (empty($src)) {
-                echo "-5";
-                return;
-            }
-
-            if (empty($seasonTrip)) {
-                echo "-6";
-                return;
-            }
-
-            if (Cities::whereName($src)->count() == 0) {
-                echo "-7";
-                return;
-            }
-
-            if ($status == 1)
-                $status = true;
-            else
-                $status = false;
-
-            $activityId = Activity::whereName('نظر')->first()->id;
-
-            $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => $uId,
-                'activityId' => $activityId];
-
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-                $log = new LogModel();
-                $log->visitorId = $uId;
-                $log->time = getToday()["time"];
-                $log->activityId = Activity::whereName('نظر')->first()->id;
-                $log->placeId = $placeId;
-                $log->kindPlaceId = $kindPlaceId;
-                $log->date = date('Y-m-d');
-                $log->text = $reviewText;
-                $log->subject = $reviewTitle;
-
-                $log->save();
-
-                $comment = new Comment();
-                $comment->status = $status;
-                $comment->src = $src;
-                $comment->logId = $log->id;
-                $comment->placeStyleId = $placeStyle;
-                $comment->seasonTrip = $seasonTrip;
-                $comment->save();
-
-            } else {
-
-                $log->text = $reviewText;
-                $log->subject = $reviewTitle;
-                $log->confirm = 0;
-                $log->save();
-
-                $comment = Comment::whereLogId($log->id)->first();
-
-                if ($comment != null) {
-                    $comment->status = $status;
-                    $comment->src = $src;
-                    $comment->logId = $log->id;
-                    $comment->placeStyleId = $placeStyle;
-                    $comment->seasonTrip = $seasonTrip;
-                    $comment->save();
-                }
-
-            }
-
-            echo "ok";
-
-        }
-
-    }
 
     function getComment()
     {
@@ -914,141 +696,6 @@ class PlaceController extends Controller {
             echo json_encode($logs);
         }
 
-    }
-
-    public function seeAllAns($questionId, $mode = "", $logId = -1)
-    {
-        $hasLogin = true;
-        if (!Auth::check())
-            $hasLogin = false;
-
-        $log = LogModel::whereId($questionId);
-        if ($log == null || $log->confirm != 1)
-            return Redirect::to('profile');
-
-        $placeId = $log->placeId;
-        $kindPlaceId = $log->kindPlaceId;
-
-        switch ($kindPlaceId) {
-            case 1:
-            default:
-                $place = Amaken::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/amaken/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "amaken";
-                break;
-            case 3:
-                $place = Restaurant::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/restaurant/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "restaurant";
-                break;
-            case 4:
-                $place = Hotel::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/hotels/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "hotel";
-                break;
-            case 6:
-                $place = Majara::whereId($placeId);
-                if (file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place->file . '/' . $place->pic_1)))
-                    $placePic = URL::asset('_images/majara/' . $place->file . '/' . $place->pic_1);
-                else
-                    $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                $placeMode = "majara";
-                break;
-            case 8:
-                $place = Adab::whereId($placeId);
-                if ($place->category == 3) {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/ghazamahali/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                } else {
-                    if (file_exists((__DIR__ . '/../../../../assets/_images/adab/soghat/' . $place->file . '/' . $place->pic_1)))
-                        $placePic = URL::asset('_images/adab/soghat/' . $place->file . '/' . $place->pic_1);
-                    else
-                        $placePic = URL::asset('images/mainPics/noPicSite.jpg');
-                }
-                $placeMode = "adab";
-                break;
-        }
-
-        $city = Cities::whereId($place->cityId);
-        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId,
-            'activityId' => Activity::whereName('پاسخ')->first()->id,
-            'relatedTo' => $questionId];
-
-        $answers = LogModel::where($condition)->get();
-
-        foreach ($answers as $answer) {
-
-            $user = User::whereId($answer->visitorId);
-            $pic = $user->picture;
-
-            if (count(explode('.', $pic)) != 2) {
-                $defaultPic = DefaultPic::whereId($pic);
-                if ($defaultPic == null)
-                    $pic = URL::asset('defaultPic/' . $defaultPic->name);
-                else
-                    $pic = URL::asset('defaultPic/' . DefaultPic::first()->name);
-            } else {
-                $pic = URL::asset('userPhoto/' . $pic);
-            }
-
-            $condition = ['logId' => $answer->id, 'like_' => 1];
-            $answer->rate = OpOnActivity::where($condition)->count();
-            $condition = ['logId' => $answer->id, 'dislike' => 1];
-            $answer->rate -= OpOnActivity::where($condition)->count();
-
-            $answer->userPhoto = $pic;
-            $city = Cities::whereId($user->cityId);
-            $answer->city = $city->name;
-            $answer->state = State::whereId($city->stateId)->name;
-            $answer->visitorId = $user->username;
-            $answer->date = convertDate($answer->date);
-        }
-
-        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId,
-            'activityId' => Activity::whereName('نظر')->first()->id];
-        $reviews = LogModel::where($condition)->count();
-
-        $question = LogModel::whereId($questionId);
-        if ($question != null) {
-
-            $user = User::whereId($question->visitorId);
-            $pic = $user->picture;
-
-            if (count(explode('.', $pic)) != 2) {
-                $defaultPic = DefaultPic::whereId($pic);
-                if ($defaultPic == null)
-                    $pic = URL::asset('defaultPic/' . $defaultPic->name);
-                else
-                    $pic = URL::asset('defaultPic/' . DefaultPic::first()->name);
-            } else {
-                $pic = URL::asset('userPhoto/' . $pic);
-            }
-
-            $question->userPhoto = $pic;
-
-            $city = Cities::whereId($user->cityId);
-            $question->city = $city->name;
-            $question->state = State::whereId($city->stateId)->name;
-            $question->visitorId = $user->username;
-            $question->date = convertDate($question->date);
-        }
-
-        return view('questionList', array('placePic' => $placePic, 'city' => $city->name,
-            'state' => State::whereId($city->stateId)->name, 'placeId' => $placeId, 'placeName' => $place->name,
-            'kindPlaceId' => $kindPlaceId, 'answers' => $answers, 'mode' => $mode, 'logId' => $logId,
-            'rate' => $place->fullRate, 'hasLogin' => $hasLogin,
-            'reviews' => $reviews, 'question' => $question, 'placeMode' => $placeMode));
     }
 
     public function getPlaceStyles()
@@ -2002,99 +1649,102 @@ class PlaceController extends Controller {
 
     }
 
-    public function addPhotoToPlace(Request $request)
-    {
+    public function storePhotographerFile(Request $request){
+        $data = json_decode($request->data);
+        $placeId = $data->placeId;
+        $kindPlaceId = $data->kindPlaceId;
 
-        $placeId = $request->placeId;
-        $kindPlaceId = $request->kindPlaceId;
+        $kindPlace = Place::find($kindPlaceId);
+        $place = DB::table($kindPlace->tableName)->find($placeId);
+        if($kindPlace == null)
+            return response()->json(['status' => 'error']);
 
-        if( isset($_FILES['pic']) && $_FILES['pic']['error'] == 0 && isset($request->name) && isset($placeId) && isset($kindPlaceId)){
-            $valid_ext = array('image/jpeg', 'image/png', 'image/jpg', 'image/webp');
-            if(in_array($_FILES['pic']['type'], $valid_ext)){
-                $id = $placeId;
+        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
+        if(!file_exists($location))
+            mkdir($location);
 
-                $kindPlace = Place::find($kindPlaceId);
-                if($kindPlace == null)
-                    return response()->json(['status' => 'nok9']);
+        $tSize = [
+            'width' => 150,
+            'height' => null,
+            'name' => 't-',
+            'destination' => $location
+        ];
+        $lSize = [
+            'width' => 200,
+            'height' => null,
+            'name' => 'l-',
+            'destination' => $location
+        ];
+        $fSize =[
+            'width' => 350,
+            'height' => 250,
+            'name' => 'f-',
+            'destination' => $location
+        ];
+        $sSize =[
+            'width' => 600,
+            'height' => 400,
+            'name' => 's-',
+            'destination' => $location
+        ];
 
-                $kindPlaceName = $kindPlace->fileName;
-                $place = DB::table($kindPlace->tableName)->find($id);
+        if(isset($request->storeFileName) && isset($request->file_data) && $request->storeFileName != 0)
+            $fileName = $request->storeFileName;
+        else {
+            if(isset($data->fileName) && $data->fileName != null)
+                $fileName = $data->fileName;
+            else {
+                $fileName = time() . rand(100, 999) . '_' . \auth()->user()->id . '.png';
 
-                if($place != null) {
-
-                    $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlaceName . '/' . $place->file;
-                    if(!file_exists($location))
-                        mkdir($location);
-
-                    if(isset($request->fileName) && $request->fileName == 'null'){
-                        $fileType = explode('.', $_FILES['pic']['name']);
-                        $filename = time().'_'.generateRandomString(3).'.'.end($fileType);
-                        $photographer = new PhotographersPic();
-                        $photographer->userId = Auth::user()->id;
-                        $photographer->name = $request->name;
-                        $photographer->pic = $filename;
-                        $photographer->kindPlaceId = $kindPlaceId;
-                        $photographer->placeId = $placeId;
-                        $photographer->alt = $request->alt;
-                        $photographer->description = $request->description;
-                        $photographer->like = 0;
-                        $photographer->dislike = 0;
-                        $photographer->isSitePic = 0;
-                        $photographer->isPostPic = 0;
-                        $photographer->status = 0;
-                        $photographer->save();
-                    }
-                    else
-                        $filename = $request->fileName;
-
-                    if($request->fileKind == 'squ')
-                        $size = [
-                            [
-                                'width' => 150,
-                                'height' => null,
-                                'name' => 't-',
-                                'destination' => $location
-                            ],
-                            [
-                                'width' => 200,
-                                'height' => null,
-                                'name' => 'l-',
-                                'destination' => $location
-                            ],
-                        ];
-                    else
-                        $size = [
-                            [
-                                'width' => 350,
-                                'height' => 250,
-                                'name' => 'f-',
-                                'destination' => $location
-                            ],
-                            [
-                                'width' => 600,
-                                'height' => 400,
-                                'name' => 's-',
-                                'destination' => $location
-                            ],
-                        ];
-
-                    $image = $request->file('pic');
-                    $result = resizeImage($image, $size, $filename);
-                    if($result) {
-                        $url = \URL::asset('userPhoto/' . $kindPlaceName . '/' . $place->file.'/f-'.$request->fileName);
-                        return response()->json(['status' => 'ok', 'result' => [$filename, $url]]);
-                    }
-                    else
-                        return response()->json(['status' => 'nok5']);
-                }
-                else
-                    return response()->json(['status' => 'nok3']);
+                $photographer = new PhotographersPic();
+                $photographer->userId = Auth::user()->id;
+                $photographer->name = $data->name;
+                $photographer->alt = $data->alt;
+                $photographer->description = $data->description;
+                $photographer->pic = $fileName;
+                $photographer->kindPlaceId = $kindPlaceId;
+                $photographer->placeId = $placeId;
+                $photographer->like = 0;
+                $photographer->dislike = 0;
+                $photographer->isSitePic = 0;
+                $photographer->isPostPic = 0;
+                $photographer->status = 0;
+                $photographer->save();
             }
-            else
-                return response()->json(['status' => 'nok2']);
         }
+
+        $location .= "/{$fileName}";
+        $result = uploadLargeFile($location, $request->file_data);
+
+        if($request->last == "true"){
+            $size = [];
+            if($data->fileKind === "mainFile"){
+                if(array_search( "squ", $data->otherSize) !== false){
+                    array_push($size, $tSize);
+                    array_push($size, $lSize);
+                }
+                if(array_search( "req", $data->otherSize) !== false){
+                    array_push($size, $fSize);
+                    array_push($size, $sSize);
+                }
+            }
+            else if($data->fileKind === "squ")
+                $size = [$tSize, $lSize];
+            else if($data->fileKind === "req")
+                $size = [$fSize, $sSize];
+
+            $image = file_get_contents("{$location}");
+            resizeUploadedImage($image, $size, $fileName);
+
+            unlink($location);
+        }
+
+        $url = URL::asset("userPhoto/{$kindPlace->fileName}/{$place->file}/f-{$fileName}");
+
+        if($result)
+            return response()->json(['status' => 'ok', 'fileName' => $fileName, 'result' => ['fileName' => $fileName, 'url' => $url]]);
         else
-            return response()->json(['status' => 'nok1']);
+            return response()->json(['status' => 'nok']);
     }
 
     public function addPhotoToComment($placeId, $kindPlaceId)
@@ -2191,15 +1841,6 @@ class PlaceController extends Controller {
         }
 
         echo "nok";
-
-    }
-
-    public function getPhotoFilter()
-    {
-
-        if (isset($_POST["kindPlaceId"])) {
-            echo json_encode(PicItem::where('kindPlaceId', '=', makeValidInput($_POST["kindPlaceId"]))->get());
-        }
 
     }
 
@@ -2482,6 +2123,8 @@ class PlaceController extends Controller {
     public function getQuestions()
     {
         if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"]) && isset($_POST["page"]) && isset($_POST["count"])) {
+            $allCount = 0;
+            $allAnswerCount = 0;
 
             $placeId = makeValidInput($_POST["placeId"]);
             $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
@@ -2490,16 +2133,13 @@ class PlaceController extends Controller {
             $activityId = Activity::whereName('سوال')->first()->id;
             $ansActivityId = Activity::whereName('پاسخ')->first()->id;
 
-            if(\auth()->check())
-                $uId = \auth()->user()->id;
+            $uId = \auth()->check() ? \auth()->user()->id : 0;
+
+            $sqlQuery = " placeId = {$placeId} AND kindPlaceId = {$kindPlaceId} AND activityId = {$activityId} AND relatedTo = 0 AND ( visitorId = {$uId} OR confirm = 1)";
+            if($count == -1)
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->get();
             else
-                $uId = 0;
-
-            $sqlQuery = ' placeId = ' . $placeId . ' AND kindPlaceId = ' . $kindPlaceId . ' AND activityId = ' . $activityId . ' AND relatedTo = 0 AND (( visitorId = ' . $uId . ' AND confirm = 0) OR (confirm = 1))';
-            $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->skip(($page - 1) * $count)->take($count)->get();
-
-            $allCount = 0;
-            $allAnswerCount = 0;
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->skip(($page - 1) * $count)->take($count)->get();
 
             if($_POST['isQuestionCount'])
                 $allCount = LogModel::whereRaw($sqlQuery)->count();
@@ -2807,7 +2447,6 @@ class PlaceController extends Controller {
 
                     $placeMode = 'mahaliFood';
                     $kindPlace->title = 'غذاهای '.$kindSearch;
-//                    $meta['title'] = 'عکس+دستور پخت '.$kindSearch2.' +میزان کالری+ غذاهای '.$kindSearch .' '.$inHeaderName;
                     $meta['title'] = 'معرفی غذاهای '.$kindSearch.' '.$inHeaderName.'+ عکس و دستور پخت و کالری';
                     $meta['keyword'] = 'غذاهای ' . $kindSearch . $inHeaderName . ' ، غذاهای سنتی ' . $inHeaderName . ' ، طرز تهیه غذای ' . $kindSearch . $inHeaderName . ' ، دستور پخت غذای '.$kindSearch . $inHeaderName . ' ، غذای '.$kindSearch . $inHeaderName . ' چیست ، غذای سنتی ' . $inHeaderName . ' چیست ، غذای مناسب برای افراد گیاه خوار، غذاهای مناسب برای افراد وگان ، غذاهای مناسب برای افراد دیابتی ، آش های محلی ' . $inHeaderName . ' ، خورشت های ' . $inHeaderName . ' ، خورش های ' . $inHeaderName . ' ، خوراک های ' . $inHeaderName ;
                     $meta['description'] = 'ما برای شما غذاهای محلی '.$inHeaderName.' و غذاهای سنتی '.$inHeaderName.' همراه با دستور پخت و عکس و میزان کالری که شامل آش های '.$inHeaderName.'، سوپ های '.$inHeaderName.'، خورشت های '.$inHeaderName.' ، خوراک های '.$inHeaderName.' ،شیرینی ها '.$inHeaderName.'، نان ها '.$inHeaderName.'، مربا های '.$inHeaderName.' و سالاد های '.$inHeaderName.' را جمع اوری کرده ایم.';
@@ -2823,21 +2462,18 @@ class PlaceController extends Controller {
                     $kindPlace->title = 'بوم گردی های ';
                     $meta['title'] = 'بوم گردی های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'بوم گردی های '.$inHeaderName.'اقامتگاه بوم گردی '.$inHeaderName.' ، خونه محلی '.$inHeaderName.'، خونه روستایی '.$inHeaderName.'، خونه شخصی در '.$inHeaderName.'';
-//                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
                     $meta['description'] = 'معرفی بوم گردی های '.$inHeaderName.' با کوچیتا. تلفن بوم گردی '.$inHeaderName.' با بررسی عکس ها، قیمت، نظرات میهمانان، مقایسه بوم گردی در '.$inHeaderName.' و موقعیت نقشه بوم گردی های '.$inHeaderName.'';
                     break;
                 case 13:
                     $topPic = 'boom.webp';
                     $errorTxt = [];
                     $errorTxt[0] = 'کسب و کاری برای نمایش در ' . $locationName['cityName'] . ' موجود نمی باشد.';
-//                    $errorTxt[1] = 'برای شما اطلاعات ' . $locationName['cityName'] . ' را نمایش داده ایم.';
                     $errorTxt[2] = 'اهل ' . $locationName['cityName'] . ' هستید؟ تا به حال به ' . $locationName['cityName'] . ' رفته اید؟ بوم گردی ' . $locationName['cityName'] . ' را در <span class="goToCampain" onclick="goToCampain()">در اینجا</span> معرفی کنید';
 
                     $placeMode = 'localShop';
                     $kindPlace->title = 'کسب و کار های ';
                     $meta['title'] = 'کسب و کار های '.$inHeaderName.'+ عکس و آدرس و تلفن و نقشه';
                     $meta['keyword'] = 'کسب و کار های '.$inHeaderName;
-//                    $meta['description'] = 'بوم گردی های ' . $inHeaderName . ' برای سفر شما ، ما اطلاعات کاملی به همراه عکس ، نقشه و آدرس و شماره تلفن و معرفی همراه با امتیازبندی کاربران در بستر شبکه‌ی اجتماعی جمع آوری کرده ایم تا بهترین اقامت خود را در سفر داشته باشید. ';
                     $meta['description'] = 'معرفی کسب و کار های '.$inHeaderName.' با کوچیتا. تلفن کسب و کار '.$inHeaderName;
                     break;
             }
@@ -2847,15 +2483,18 @@ class PlaceController extends Controller {
                 $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->where('type', 'YN')->get();
             $kind = $mode;
 
+            $localShopCategories = [];
             if($kindPlace->id == 13){
-                $features = LocalShopsCategory::where('parentId', 0)->get();
-                foreach ($features as $feature)
-                    $feature->subFeat = LocalShopsCategory::where('parentId', $feature->id)->get();
+                $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
+                foreach ($localShopCategories as $item)
+                    $item->subs = LocalShopsCategory::where('parentId', $item->id)->get();
             }
 
-            return view('pages.placeList.placeList', compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
-                                                                    'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
-                                                                    'contentCount', 'notItemToShow', 'topPic', 'cityRel']));
+            return view('pages.placeList.placeList',
+                compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
+                        'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
+                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategories'])
+            );
         }
         else
             return \redirect(\url('/'));
@@ -2863,21 +2502,22 @@ class PlaceController extends Controller {
 
     public function getPlaceListElems(Request $request)
     {
-        $startTime = microtime(true);
 
-        $page = (int)$request->pageNum;
-        $take = (int)$request->take;
-        $reqFilter = $request->featureFilter;
         $sort = $request->sort;
+        $take = (int)$request->take;
+        $page = (int)$request->pageNum;
         $rateFilter = $request->rateFilter;
-        $specialFilters = $request->specialFilters;
         $nameFilter = $request->nameFilter;
+        $reqFilter = $request->featureFilter;
+        $specialFilters = $request->specialFilters;
         $materialFilter = $request->materialFilter;
         $nearPlaceIdFilter = $request->nearPlaceIdFilter;
         $nearKindPlaceIdFilter = $request->nearKindPlaceIdFilter;
-        $featureFilters = [];
-        $placeIds = [];
+        $categoryFilter = $request->categoryFilter;
+
         $places = [];
+        $placeIds = [];
+        $featureFilters = [];
 
         $kindPlace = Place::find($request->kindPlaceId);
         $table = $kindPlace->tableName;
@@ -2889,11 +2529,11 @@ class PlaceController extends Controller {
         $rateActivityId = Activity::whereName('امتیاز')->first()->id;
 
         //first get all places in state or city
-        if($request->mode == 'country') {
+        if($request->mode === "country") {
             $placeIds = DB::table($table)->where('name', 'LIKE', '%' . $nameFilter . '%')->pluck('id')->toArray();
             $totalCount = DB::table($table)->count();
         }
-        else if($request->mode == 'state'){
+        else if($request->mode === "state"){
             $state = State::find($request->city);
             $cities = Cities::where('stateId', $request->city)->pluck('id')->toArray();
             $placeIds = DB::table($table)->whereIn('cityId', $cities)->where('name', 'LIKE', '%'.$nameFilter.'%')->pluck('id')->toArray();
@@ -2943,12 +2583,13 @@ class PlaceController extends Controller {
                     }
                 }
 
-                foreach ($kindName as $index => $value)
+                foreach ($kindName as $index => $value) {
                     $placeIds = DB::table($kindPlace->tableName)
-                                    ->whereIn($value, $kindValues[$index])
-                                    ->whereIn('id', $placeIds)
-                                    ->pluck('id')
-                                    ->toArray();
+                        ->whereIn($value, $kindValues[$index])
+                        ->whereIn('id', $placeIds)
+                        ->pluck('id')
+                        ->toArray();
+                }
             }
 
             if(count($placeIds) == 0)
@@ -2962,20 +2603,12 @@ class PlaceController extends Controller {
                     array_push($featureFilters, $item);
             }
 
-            if(count($featureFilters) != 0) {
-                if($kindPlace->id == 13){
-                    $pIds = LocalShops::whereIn('categoryId', $featureFilters)->pluck('id')->toArray();
-                    $placeIds = [];
-                    foreach ($pIds as $item)
-                        array_push($placeIds, $item);
-                }
-                else{
-                    $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
-                    $placeIds = [];
-                    foreach ($pIds as $p){
-                        if($p->count == count($featureFilters))
-                            array_push($placeIds, $p->placeId);
-                    }
+            if($kindPlace->id != 13 && count($featureFilters) != 0){
+                $pIds = DB::select('SELECT placeId, COUNT(id) AS count FROM placeFeatureRelations WHERE featureId IN (' . implode(",", $featureFilters) . ') AND placeId IN (' . implode(",", $placeIds) . ') GROUP BY placeId');
+                $placeIds = [];
+                foreach ($pIds as $p){
+                    if($p->count == count($featureFilters))
+                        array_push($placeIds, $p->placeId);
                 }
             }
 
@@ -2990,12 +2623,42 @@ class PlaceController extends Controller {
                 return response()->json(['places' => array(), 'placeCount' => 0, 'totalCount' => $totalCount]);
         }
 
-        if($kindPlace->id == 13)
+        if($kindPlace->id == 13) {
+            if(isset($categoryFilter) && $categoryFilter != 0){
+                $categIds = [];
+                $category = LocalShopsCategory::find($categoryFilter);
+                if($category != null){
+                    if ($category->parentId == 0)
+                        $categIds = LocalShopsCategory::where('parentId', $category->id)->pluck('id')->toArray();
+                    else
+                        $categIds = LocalShopsCategory::where('id', $category->id)->pluck('id')->toArray();
+                }
+                if(count($categIds) == 0)
+                    $categIds = [0];
+
+                $placeIds = LocalShops::whereIn('categoryId', $categIds)->whereIn('id', $placeIds)->pluck('id')->toArray();
+
+                if(count($placeIds) == 0)
+                    return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
+            }
+
+            if($featureFilters != null && count($featureFilters) > 0){
+                $pIds = LocalShopFeaturesRelations::whereIn('localShopId', $placeIds)->whereIn('featureId', $featureFilters)->get()->groupBy('localShopId');
+
+                $placeIds = [];
+                foreach ($pIds as $index => $p){
+                    if(count($p) == count($featureFilters))
+                        array_push($placeIds, $index);
+                }
+
+                if(count($placeIds) == 0)
+                    return response()->json(['places' => [], 'placeCount' => 0, 'totalCount' => $totalCount]);
+            }
+
             $placeIds = LocalShops::whereIn('id', $placeIds)->where('confirm', 1)->pluck('id')->toArray();
+        }
 
         $placeCount = count($placeIds);
-
-        $filterTime = microtime(true);
 
         // and sort results by kind
         if($sort == 'distance' && $nearPlaceIdFilter != 0 && $nearKindPlaceIdFilter != 0){
@@ -3020,9 +2683,6 @@ class PlaceController extends Controller {
         else
             $places = \DB::table($table)->whereIn('id', $placeIds)->orderByDesc('fullRate')->skip(($page - 1) * $take)->take($take)->get();
 
-
-        $sortTime = microtime(true);
-
         $uId = 0;
         if(\auth()->check())
             $uId = Auth::id();
@@ -3041,9 +2701,9 @@ class PlaceController extends Controller {
                 else
                     $picNm = $place->picNumber;
 ;
-                $location = __DIR__ . "/../../../../assets/_images/$kindPlace->fileName/$place->file/l-$picNm";
+                $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}";
                 if (is_file($location))
-                    $place->pic = URL::asset("_images/$kindPlace->fileName/$place->file/l-$picNm");
+                    $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}");
             }
             $place->reviews = $place->reviewCount;
 
@@ -3078,15 +2738,7 @@ class PlaceController extends Controller {
                 $place->bookMark = 0;
         }
 
-        $formatTime = microtime(true);
-
-        $times = [
-            'filter' => $filterTime - $startTime,
-            'sort' => $sortTime - $filterTime,
-            'format' => $formatTime - $sortTime,
-        ];
-
-        return response()->json(['places' => $places, 'placeCount' => $placeCount, 'totalCount' => $totalCount, 'times' => $times]);
+        return response()->json(['places' => $places, 'placeCount' => $placeCount, 'totalCount' => $totalCount]);
     }
 
     public function setRateToPlace(Request $request)
@@ -3101,9 +2753,9 @@ class PlaceController extends Controller {
 
             if($place != null) {
                 $rate = PlaceRates::where('kindPlaceId', $kindPlace->id)
-                        ->where('placeId', $place->id)
-                        ->where('userId', $user->id)
-                        ->first();
+                                    ->where('placeId', $place->id)
+                                    ->where('userId', $user->id)
+                                    ->first();
 
                 if($rate == null){
                     $rate = new PlaceRates();
@@ -3342,73 +2994,5 @@ class PlaceController extends Controller {
         }
 
         return;
-    }
-
-    private function likeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->dislike = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->like_ = 1;
-        $opOnActivity->save();
-        echo $out;
-    }
-
-    private function dislikeComment($uId, $logId)
-    {
-
-        $out = 1;
-        $condition = ['logId' => $logId, 'uId' => $uId, 'dislike' => 1];
-
-        if (OpOnActivity::where($condition)->count() > 0) {
-            echo 0;
-            return;
-        }
-
-        $condition = ['logId' => $logId, 'uId' => $uId, 'like_' => 1];
-
-        $opOnActivity = OpOnActivity::where($condition)->first();
-        if ($opOnActivity != null) {
-            $out = 2;
-            $opOnActivity->like_ = 0;
-        } else {
-            $opOnActivity = new OpOnActivity();
-            $opOnActivity->uId = $uId;
-            $opOnActivity->logId = $logId;
-        }
-
-        $log = LogModel::whereId($logId);
-        $log->date = date('Y-m-d');
-        $log->time = getToday()["time"];
-        $log->save();
-
-        $opOnActivity->time = time();
-        $opOnActivity->dislike = 1;
-        $opOnActivity->save();
-        echo $out;
     }
 }

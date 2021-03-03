@@ -31,7 +31,7 @@ var result;
 var input;
 var data;
 
-function startCropper(ratio) {
+function startCropper(ratio = 0) {
 
   if(first) {
     'use strict';
@@ -39,7 +39,7 @@ function startCropper(ratio) {
     URL = window.URL || window.webkitURL;
 
     container = document.querySelector('.img-container-photogrpher');
-    download = document.getElementById('download');
+    // download = document.getElementById('download');
     actions = document.getElementById('actions');
     dataX = document.getElementById('dataX');
     dataY = document.getElementById('dataY');
@@ -54,7 +54,6 @@ function startCropper(ratio) {
     inputImage.value = null;
   }
   image = container.getElementsByTagName('img').item(0);
-  // image = document.getElementById('editPhotographerPics');
 
   options = {
     aspectRatio: ratio,
@@ -85,110 +84,107 @@ function startCropper(ratio) {
     }
 
     // Download
-    if (typeof download.download === 'undefined') {
-      download.className += ' disabled';
-    }
+    // if (typeof download.download === 'undefined') {
+    //   download.className += ' disabled';
+    // }
 
     // Methods
-    actions.querySelector('.docs-buttons').onclick = function (event) {
-    e = event || window.event;
-    target = e.target || e.srcElement;
 
-    if (!cropper) {
-      return;
-    }
+    if(actions != null) {
+          actions.querySelector('.docs-buttons').onclick = function (event) {
+              e = event || window.event;
+              target = e.target || e.srcElement;
 
-    while (target !== this) {
-      if (target.getAttribute('data-method')) {
-        break;
+              if (!cropper) {
+                  return;
+              }
+
+              while (target !== this) {
+                  if (target.getAttribute('data-method'))
+                      break;
+                  target = target.parentNode;
+              }
+
+              if (target === this || target.disabled || target.className.indexOf('disabled') > -1)
+                  return;
+
+              data = {
+                  method: target.getAttribute('data-method'),
+                  target: target.getAttribute('data-target'),
+                  option: target.getAttribute('data-option') || undefined,
+                  secondOption: target.getAttribute('data-second-option') || undefined
+              };
+
+              cropped = cropper.cropped;
+
+              if (data.method) {
+                  if (typeof data.target !== 'undefined') {
+                      input = document.querySelector(data.target);
+
+                      if (!target.hasAttribute('data-option') && data.target && input) {
+                          try {
+                              data.option = JSON.parse(input.value);
+                          } catch (e) {
+                              console.log(e.message);
+                          }
+                      }
+                  }
+
+                  switch (data.method) {
+                      case 'rotate':
+                          if (cropped && options.viewMode > 0)
+                              cropper.clear();
+                          break;
+                      case 'getCroppedCanvas':
+                          try {
+                              data.option = JSON.parse(data.option);
+                          } catch (e) {
+                              console.log(e.message);
+                          }
+
+                          if (uploadedImageType === 'image/jpeg') {
+                              if (!data.option) {
+                                  data.option = {};
+                              }
+
+                              data.option.fillColor = '#fff';
+                          }
+
+                          break;
+                  }
+                  result = cropper[data.method](data.option, data.secondOption);
+                  switch (data.method) {
+                      case 'rotate':
+                          if (cropped && options.viewMode > 0)
+                              cropper.crop();
+                          break;
+                      case 'scaleX':
+                      case 'scaleY':
+                          target.setAttribute('data-option', -data.option);
+                          break;
+                      case 'getCroppedCanvas':
+                          if (result) {
+                              // if(mode == 1)
+                              //   $('#rectanglePicUploadPhoto').attr('src', result.toDataURL(uploadedImageType));
+                              // else
+                              //   $('#squarePicPhotographer').attr('src', result.toDataURL(uploadedImageType));
+                              // $("#editPane").addClass('hidden');
+                              // $("#photoEditor").removeClass('hidden');
+                          }
+
+                          break;
+                  }
+
+                  if (typeof result === 'object' && result !== cropper && input) {
+                      try {
+                          input.value = JSON.stringify(result);
+                      } catch (e) {
+                          console.log(e.message);
+                      }
+                  }
+              }
+          };
       }
-
-      target = target.parentNode;
-    }
-
-    if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
-      return;
-    }
-
-    data = {
-      method: target.getAttribute('data-method'),
-      target: target.getAttribute('data-target'),
-      option: target.getAttribute('data-option') || undefined,
-      secondOption: target.getAttribute('data-second-option') || undefined
-    };
-
-    cropped = cropper.cropped;
-
-    if (data.method) {
-      if (typeof data.target !== 'undefined') {
-        input = document.querySelector(data.target);
-
-        if (!target.hasAttribute('data-option') && data.target && input) {
-          try {
-            data.option = JSON.parse(input.value);
-          } catch (e) {
-            console.log(e.message);
-          }
-        }
-      }
-
-      switch (data.method) {
-        case 'rotate':
-          if (cropped && options.viewMode > 0)
-            cropper.clear();
-          break;
-        case 'getCroppedCanvas':
-          try {
-            data.option = JSON.parse(data.option);
-          } catch (e) {
-            console.log(e.message);
-          }
-
-          if (uploadedImageType === 'image/jpeg') {
-            if (!data.option) {
-              data.option = {};
-            }
-
-            data.option.fillColor = '#fff';
-          }
-
-          break;
-      }
-      result = cropper[data.method](data.option, data.secondOption);
-      switch (data.method) {
-        case 'rotate':
-          if (cropped && options.viewMode > 0) {
-            cropper.crop();
-          }
-
-          break;
-        case 'scaleX':
-        case 'scaleY':
-          target.setAttribute('data-option', -data.option);
-          break;
-        case 'getCroppedCanvas':
-          if (result) {
-            if(mode == 1)
-              $('#rectanglePicUploadPhoto').attr('src', result.toDataURL(uploadedImageType));
-            else
-              $('#squarePicPhotographer').attr('src', result.toDataURL(uploadedImageType));
-
-            $("#editPane").addClass('hidden');
-            $("#photoEditor").removeClass('hidden');
-          }
-
-          break;
-      }
-
-      if (typeof result === 'object' && result !== cropper && input) {
-        try {
-          input.value = JSON.stringify(result);
-        } catch (e) {
-          console.log(e.message);
-        }
-      }
-    }
-  };
 
     document.body.onkeydown = function (event) {
       var e = event || window.event;
@@ -222,7 +218,6 @@ function startCropper(ratio) {
     first = false;
   }
 
-
   // Import image
   inputImage = document.getElementById('editUploadPhoto');
 
@@ -255,10 +250,8 @@ function startCropper(ratio) {
     inputImage.disabled = true;
     inputImage.parentNode.className += ' disabled';
   }
-}
 
-function setMode(m) {
-  mode = m;
+  closeLoading();
 }
 
 var RotateX = -1;
@@ -266,16 +259,10 @@ var RotateY = -1;
 function rotateUploadPhoto(_kind){
     if(_kind == 'Y') {
         cropper.scaleY(RotateY);
-        if(RotateY == 1)
-            RotateY = -1;
-        else
-            RotateY = 1;
+        RotateY = RotateY == 1 ? -1 : 1;
     }
     else if(_kind == 'X') {
         cropper.scaleX(RotateX);
-        if(RotateX == 1)
-            RotateX = -1;
-        else
-            RotateX = 1;
+        RotateX = RotateX == 1 ? -1 : 1;
     }
 }

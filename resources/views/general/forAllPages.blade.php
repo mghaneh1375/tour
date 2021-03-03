@@ -3,7 +3,6 @@
 
 <div id="darkModal" class="display-none" role="dialog"></div>
 
-{{--this dark modal with blur--}}
 <div id="darkModeMainPage" class="ui_backdrop dark" ></div>
 
 <script>
@@ -47,7 +46,7 @@
 
 @include('component.questionPack')
 
-@include('component.answerPack')
+@include('component.smallShowReview')
 
 @include('general.reportModal')
 
@@ -55,9 +54,9 @@
 
 @include('general.searches.userKoochitaSearch')
 
-@if(!Auth::check())
-{{--    @include('general.nLoginPopUp')--}}
-@else
+@include('component.cropperModal')
+
+@if(Auth::check())
     @include('general.adminInPage')
 
     @include('general.addToTripModal')
@@ -69,9 +68,8 @@
     @include('general.writeReview')
 @endif
 
-<script defer src="{{URL::asset('js/component/load-image.all.min.js')}}"></script>
-
 <script>
+    var profilePageUrlAnswerPack = '{{url("profile/index")}}';
     var openHeadersTab = false;
     var seenToZero = false;
     var csrfTokenGlobal = '{{csrf_token()}}';
@@ -88,13 +86,16 @@
     window.storeSeenLogUrl = '{{route('log.storeSeen')}}';
     window.searchInUserUrl = '{{route("findUser")}}';
 
-
     window.seenRelatedId = sessionStorage.getItem("lastPageLogId") == null ? 0 : sessionStorage.getItem("lastPageLogId");
     window.seenPageLogId = 0;
     window.userScrollPageLog = [];
     var userWindowInScrolling = null;
     var seenLogStartTime = new Date().getTime();
     var lastSeenLogScroll = 0;
+
+
+    var playTvImg = "{{URL::asset('images/icons/play.webp')}}";
+    var eyeTvImg = "{{URL::asset('images/icons/eye.png')}}";
 
     $(document, window).ready(() => {
         window.isMobile = window.mobileAndTabletCheck() ? 1 : 0;
@@ -112,5 +113,7 @@
     });
 </script>
 
+<script src="{{URL::asset('js/component/answerPack.js?v='.$fileVersions)}}"></script>
 <script src="{{URL::asset('js/pages/forAllPages.js?v='.$fileVersions)}}"></script>
+<script defer src="{{URL::asset('js/component/load-image.all.min.js')}}"></script>
 

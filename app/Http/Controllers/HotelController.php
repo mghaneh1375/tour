@@ -21,7 +21,6 @@ use App\models\places\PlacePic;
 use App\models\places\PlaceStyle;
 use App\models\QuestionAns;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
 use App\models\saveApiInfo;
 use App\models\SectionPage;
 use App\models\State;

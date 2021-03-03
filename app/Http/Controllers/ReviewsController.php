@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
+use App\models\Followers;
 use App\models\places\Amaken;
 use App\models\BookMark;
 use App\models\BookMarkReference;
@@ -24,8 +25,10 @@ use App\models\Report;
 use App\models\ReportsType;
 use App\models\places\Restaurant;
 use App\models\LogFeedBack;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewPic;
+use App\models\Reviews\ReviewTagRelations;
+use App\models\Reviews\ReviewTags;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\UserOpinion;
@@ -41,6 +44,7 @@ use Illuminate\Http\Request;
 class ReviewsController extends Controller
 {
     public $limboLocation = __DIR__ . '/../../../../assets/limbo';
+    public $assetLocation = __DIR__ . '/../../../../assets';
 
     public function showReviewPage($id)
     {
@@ -102,7 +106,6 @@ class ReviewsController extends Controller
 
         $success = uploadLargeFile($filePath, $request->file);
         if($success){
-
             $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
             $image = file_get_contents($filePath);
             $thumbnailFileName = resizeUploadedImage($image, $size, $thumbnailFileName);
@@ -142,7 +145,12 @@ class ReviewsController extends Controller
         else{
             $file_name = $request->file_name;
             $fileType = explode('.', $file_name);
-            $fileName = time().rand(100,999).'.'.end($fileType);
+            $fileType = end($fileType);
+
+            if(strlen($fileType) == 0)
+                $fileType = 'png';
+
+            $fileName = time().rand(100,999).'.'.$fileType;
 
             $direction .= '/'.$fileName;
             $result = uploadLargeFile($direction, $request->file_data);
@@ -169,32 +177,56 @@ class ReviewsController extends Controller
 
     public function deleteReviewPic(Request $request)
     {
-        $code = $request->code;
-        $name = $request->name;
+        if(isset($request->picId))
+            $pic = ReviewPic::find($request->picId);
+        else {
+            $code = $request->code;
+            $name = $request->name;
+            $pic = ReviewPic::where('code', $code)->where('pic', $name)->first();
+        }
 
-        $pics = ReviewPic::where('code', $code)->where('pic', $name)->first();
+        if ($pic != null) {
+            if($pic->logId === null)
+                $fileLocation = $this->limboLocation;
+            else{
+                $fileLocation = $this->assetLocation;
+                $log = LogModel::find($pic->logId);
+                if($log === null)
+                    return response()->json(['status' => 'notFoundReview']);
+                else if($log->visitorId != \auth()->user()->id)
+                    return response()->json(['status' => 'accessDenied']);
+                else{
+                    if($log->kindPlaceId == 0 && $log->placeId == 0)
+                        $fileLocation .= '/userPhoto/nonePlaces';
+                    else{
+                        $kindPlace = Place::find($log->kindPlaceId);
+                        $place = \DB::table($kindPlace->tableName)->find($log->placeId);
+                        $fileLocation .= "/userPhoto/{$kindPlace->fileName}/{$place->file}";
+                    }
+                }
+            }
 
-        if ($pics != null) {
-            if ($pics->isVideo == 1) {
-                if($pics->thumbnail != null)
-                    $videoName = $pics->thumbnail;
+            if ($pic->isVideo == 1) {
+                if($pic->thumbnail != null)
+                    $videoName = $pic->thumbnail;
                 else {
-                    $videoArray = explode('.', $pics->pic);
+                    $videoArray = explode('.', $pic->pic);
                     $videoName = '';
                     for ($k = 0; $k < count($videoArray) - 1; $k++)
                         $videoName .= $videoArray[$k] . '.';
                     $videoName .= 'png';
                 }
 
-                $thumbnailLocation = $this->limboLocation.'/'.$videoName;
+                $thumbnailLocation = $fileLocation.'/'.$videoName;
                 if (file_exists($thumbnailLocation))
                     unlink($thumbnailLocation);
             }
 
-            $picLocation = "{$this->limboLocation}/{$pics->pic}";
+            $picLocation = "{$fileLocation}/{$pic->pic}";
             if (file_exists($picLocation))
                 unlink($picLocation);
-            $pics->delete();
+
+            $pic->delete();
 
             return response()->json(['status' => 'ok']);
         }
@@ -230,15 +262,25 @@ class ReviewsController extends Controller
 
             $kindPlaceId = 0;
             $placeId = 0;
-            $kindPlaceName = 'nonePlaces';
             if(isset($request->placeId) && $request->placeId != 0 && isset($request->kindPlaceId) && $request->kindPlaceId != 0){
                 $kindPlaceId = $request->kindPlaceId;
                 $placeId = $request->placeId;
 
                 $kindPlace = Place::find($kindPlaceId);
                 $place = DB::table($kindPlace->tableName)->find($placeId);
-                $kindPlaceName = $kindPlace->fileName;
+
+                $location = $this->assetLocation."/userPhoto/{$kindPlace->fileName}";
+                if (!file_exists($location))
+                    mkdir($location);
+
+                $location .= '/' . $place->file;
+                if (!file_exists($location))
+                    mkdir($location);
             }
+            else
+                $location = $this->assetLocation."/userPhoto/nonePlaces";
+
+            $reviewText = $request->text != null ? $request->text : '';
 
             $uId = Auth::user()->id;
 
@@ -249,23 +291,16 @@ class ReviewsController extends Controller
             $review->date = Carbon::now()->format('Y-m-d');
             $review->time = getToday()['time'];
             $review->activityId = $activity->id;
-            $review->text = $request->text != null ? $request->text : '';
+            $review->text = $reviewText;
             $review->save();
+
+            $this->storeReviewTags($reviewText, $review->id);
+            $this->storeReviewUserTagInText($reviewText, $review->id);
 
             $reviewPic = ReviewPic::where('code', $request->code)->get();
 
             if (count($reviewPic) > 0) {
                 ReviewPic::where('code', $request->code)->update(['logId' => $review->id, 'code' => null]);
-
-                $location = __DIR__ . "/../../../../assets/userPhoto/{$kindPlaceName}";
-                if (!file_exists($location))
-                    mkdir($location);
-                if($placeId != 0) {
-                    $location .= '/' . $place->file;
-                    if (!file_exists($location))
-                        mkdir($location);
-                }
-
                 foreach ($reviewPic as $item) {
                     $file = "{$this->limboLocation}/{$item->pic}";
                     $dest = "{$location}/{$item->pic}";
@@ -274,24 +309,27 @@ class ReviewsController extends Controller
 
                     if ($item->isVideo == 1) {
                         if($item->thumbnail != null)
-                            $videoName = $item->thumbnail;
+                            $thumbnail = $item->thumbnail;
                         else{
-                            $videoArray = explode('.', $item->pic);
-                            $videoName = '';
-                            for ($k = 0; $k < count($videoArray) - 1; $k++)
-                                $videoName .= $videoArray[$k] . '.';
-                            $videoName .= 'png';
+                            $thumbnail = explode('.', $item->pic);
+                            $thumbnail[count($thumbnail)-1] = '.png';
+                            $thumbnail = implode('', $thumbnail);
                         }
 
-                        $file = "{$this->limboLocation}/{$videoName}";
-                        $dest = "{$location}/{$videoName}";
+                        $file = "{$this->limboLocation}/{$thumbnail}";
+                        $dest = "{$location}/{$thumbnail}";
                         if (file_exists($file))
                             rename($file, $dest);
                     }
                     else{
-                        $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
-                        $image = file_get_contents($dest);
-                        resizeUploadedImage($image, $size, $item->pic);
+                        try{
+                            $size = [['width' => 800, 'height' => null, 'name' => '', 'destination' => $location]];
+                            $image = file_get_contents($dest);
+                            resizeUploadedImage($image, $size, $item->pic);
+                        }
+                        catch (\Exception $exception){
+                            continue;
+                        }
                     }
                 }
             }
@@ -307,7 +345,7 @@ class ReviewsController extends Controller
                     $newAssigned = new ReviewUserAssigned();
                     $newAssigned->logId = $review->id;
 
-                    $user = User::where('username', $item)->orWhere('email', $item)->first();
+                    $user = User::where('username', $item)->first();
                     if ($user != null) {
                         $newAssigned->userId = $user->id;
                         $findUser = ReviewUserAssigned::where('logId', $review->id)->where('userId', $user->id)->first();
@@ -325,8 +363,6 @@ class ReviewsController extends Controller
                         $newAlert->referenceTable = 'reviewUserAssigned';
                         $newAlert->referenceId = $newAssigned->id;
                         $newAlert->userId = $user->id;
-                        $newAlert->seen = 0;
-                        $newAlert->click = 0;
                         $newAlert->save();
                     }
 
@@ -398,31 +434,22 @@ class ReviewsController extends Controller
 
     public function getReviews(Request $request)
     {
-
         if (isset($request->placeId) && isset($request->kindPlaceId)) {
             $activity = Activity::where('name', 'نظر')->first();
             $a = Activity::where('name', 'پاسخ')->first();
 
-            $ques = array();
-            $ans = array();
             $isFilter = false;
             $isPicFilter = false;
-            $sqlQuery = '';
             $onlyPic = 0;
+            $ques = [];
+            $ans = [];
 
-            $count = 0;
-            $num = 0;
-            if (isset($request->count))
-                $count = $request->count;
-            if (isset($request->num))
-                $num = $request->num;
+            $count = isset($request->count) ? $request->count : 0;
+            $num = isset($request->num) ? $request->num : 0;
 
-            if (\auth()->check())
-                $uId = \auth()->user()->id;
-            else
-                $uId = 0;
+            $uId = \auth()->check() ? \auth()->user()->id : 0;
 
-            $sqlQuery = 'activityId = ' . $activity->id . ' AND placeId = ' . $request->placeId . ' AND kindPlaceId = ' . $request->kindPlaceId . ' AND relatedTo = 0 AND (visitorId = ' . $uId . ' OR confirm = 1) ';
+            $sqlQuery = '(subject != "dontShowThisText" OR subject IS NULL) AND activityId = ' . $activity->id . ' AND placeId = ' . $request->placeId . ' AND kindPlaceId = ' . $request->kindPlaceId . ' AND relatedTo = 0 AND (visitorId = ' . $uId . ' OR confirm = 1) ';
 
             if (isset($request->filters)) {
                 $sqlQuery .= ' AND CHARACTER_LENGTH(text) >= 0';
@@ -536,22 +563,20 @@ class ReviewsController extends Controller
 
             $logCount = LogModel::whereRaw($sqlQuery)->count();
             if ($num == 0 && $count == 0)
-                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->get();
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->get();
             else
-                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('date')->orderByDesc('time')->skip(($num - 1) * $count)->take($count)->get();
+                $logs = LogModel::whereRaw($sqlQuery)->orderByDesc('created_at')->skip(($num - 1) * $count)->take($count)->get();
 
             if (count($logs) == 0)
                 echo 'nok1';
             else {
-                foreach ($logs as $key => $item)
-                    $item = reviewTrueType($item); // in common.php
+                for($i = 0; $i < count($logs); $i++)
+                    $logs[$i] = reviewTrueType($logs[$i]); // in common.php
 
                 echo json_encode([$logs, $logCount]);
             }
         }
-
         return;
-
     }
 
     public function ansReview(Request $request)
@@ -625,7 +650,6 @@ class ReviewsController extends Controller
         return;
     }
 
-
     public function getUserReviews()
     {
         $username = $_GET['username'];
@@ -641,9 +665,9 @@ class ReviewsController extends Controller
         else
             return response()->json(['status' => 'error1']);
 
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
+        $revIds = $reviews->pluck('id')->toArray();
 
+        $reviews = reviewTrueTypeIdArray($revIds);
         $reviews = $reviews->toArray();
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
@@ -666,121 +690,209 @@ class ReviewsController extends Controller
 
     public function getCityPageReview(Request $request)
     {
+        $take = 10;
         $kind = $_GET['kind'];
         $placeId = $_GET['placeId'];
-        $take = 15;
-        $reviews = $this->getCityReviews($kind, $placeId, $take);
-        if(count($reviews) != $take){
+        $reviewIds = $this->getCityReviews($kind, $placeId, $take);
+
+        if(count($reviewIds) != $take){
             $lessReview = [];
             $notIn = [];
-            foreach ($reviews as $item)
+            foreach ($reviewIds as $item)
                 array_push($notIn, $item->id);
 
             if($kind == 'city'){
                 $place = Cities::find($placeId);
-                $less = $take - count($reviews);
+                $less = $take - count($reviewIds);
                 $lessReview = $this->getCityReviews('state', $place->stateId, $less, $notIn);
                 foreach ($lessReview as $item)
-                    array_push($reviews, $item);
+                    array_push($reviewIds, $item);
             }
 
-            $less = $take - count($reviews);
+            $less = $take - count($reviewIds);
             if($less != 0){
                 $notIn = [];
-                foreach ($reviews as $item)
+                foreach ($reviewIds as $item)
                     array_push($notIn, $item->id);
 
                 $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
                 foreach ($lessReview as $item)
-                    array_push($reviews, $item);
+                    array_push($reviewIds, $item);
             }
         }
 
-        foreach ($reviews as $item)
-            $item = reviewTrueType($item); // in common.php
+        $reviews = reviewTrueTypeIdArray($reviewIds);
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
     }
 
-    private function getCityReviews($kind, $id, $take, $notIn = [0]){
-        $reviewActivity = Activity::whereName('نظر')->first();
-
-        if($kind == 'city') {
-            $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
-            $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
-            $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
-        }
-        else if($kind == 'state'){
-            $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
-
-            $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
-            $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
-        }
+    public function searchInReviewTags()
+    {
+        $tag = $_GET['value'];
+        $dbTag = \DB::select("SELECT RT.tag AS tag, COUNT(RTR.id) AS tagCount FROM reviewTags RT LEFT JOIN reviewTagRelations RTR on RTR.tagId = RT.id WHERE RT.tag LIKE '%{$tag}%' AND RT.tag <> '{$tag}' GROUP BY RT.tag");
+        $feetTag = ReviewTags::where('tag', $tag)->first();
+        if($feetTag == null)
+            $hasInDB = 0;
         else{
-            if(count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
-
-            return $lastReview;
+            $hasInDB = 1;
+            $count = ReviewTagRelations::where('tagId', $feetTag->id)->count();
+            array_unshift($dbTag, ['tag' => $feetTag->tag, 'tagCount' => $count]);
         }
 
-
-        $sqlQuery = '';
-        if(count($allAmaken) != 0)
-            $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
-        if(count($allRestaurant) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
-        }
-        if(count($allHotels) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
-        }
-        if(count($allMajara) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
-        }
-        if(count($allSogatSanaie) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
-        }
-        if(count($allMahaliFood) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
-        }
-        if(count($allBoomgardy) != 0){
-            if($sqlQuery != '')
-                $sqlQuery .= ' OR ';
-            $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
-        }
-
-        $lastReview = [];
-
-        if($sqlQuery != '') {
-            if (count($notIn) == 0)
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') ORDER BY `date` DESC LIMIT ' . $take);
-            else
-                $lastReview = DB::select('SELECT * FROM log WHERE subject != "dontShowThisText" AND activityId = ' . $reviewActivity->id . ' AND confirm = 1 AND (' . $sqlQuery . ') AND id NOT IN (' . implode(",", $notIn) . ') ORDER BY `date` DESC LIMIT ' . $take);
-        }
-
-        return $lastReview;
+        return response()->json(['status' => 'ok', 'result' => $dbTag, 'hasInDB' => $hasInDB]);
     }
 
+    private function getCityReviews($kind, $id, $take, $notIn = [0]){
+        $reviewActivity = Activity::whereName('نظر')->first();
+        $lastReview = [];
+        $ids = [];
+        $sqlQuery = '';
+
+        if($kind == 'city' || $kind == 'state') {
+            if ($kind == 'city') {
+                $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
+                $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
+                $allHotels = Hotel::where('cityId', $id)->pluck('id')->toArray();
+                $allRestaurant = Restaurant::where('cityId', $id)->pluck('id')->toArray();
+                $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
+                $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
+                $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
+            } else if ($kind == 'state') {
+                $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
+
+                $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allMajara = Majara::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allHotels = Hotel::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allRestaurant = Restaurant::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
+                $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
+            }
+
+            if (count($allAmaken) != 0)
+                $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
+            if (count($allRestaurant) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
+            }
+            if (count($allHotels) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
+            }
+            if (count($allMajara) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
+            }
+            if (count($allSogatSanaie) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
+            }
+            if (count($allMahaliFood) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
+            }
+            if (count($allBoomgardy) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
+            }
+        }
+
+        if (count($notIn) == 0)
+            $notIn = [0];
+
+        $notIn = implode(',', $notIn);
+
+        if($sqlQuery != '')
+            $sqlQuery = '1';
+
+        $lastReview = \DB::select("SELECT id FROM log WHERE {$sqlQuery} AND `subject` != 'dontShowThisText' AND `confirm` = 1 AND `activityId` = {$reviewActivity->id} AND `id` NOT IN ({$notIn}) ORDER BY `created_at` DESC LIMIT {$take}");
+        foreach($lastReview as $i)
+            array_push($ids, $i->id);
+
+        return $ids;
+    }
+
+    private function storeReviewTags($text, $id){
+        $tags = [];
+        $nowIndex = -1;
+        $textLength = strlen($text);
+
+        while(1){
+            $nowIndex = strpos($text, '#', $nowIndex+1);
+            if($nowIndex === false)
+                break;
+            else{
+                $word = '';
+                for($i = $nowIndex+1; $i < $textLength; $i++) {
+                    if($text[$i] == ' '){
+                        $text = substr_replace($text, "</a>", $i, 0);
+                        for($j = $i+3; $j < $textLength; $j++){
+                            if($text[$j] == '<' && $text[$j+1] == '/' && $text[$j+2] == 'a' && $text[$j+3] == '>'){
+                                $text = substr_replace($text, "", $j, 4);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    else if($text[$i] == '<' && $text[$i+1] == '/' && $text[$i+2] == 'a' && $text[$i+3] == '>')
+                        break;
+                    $word .= $text[$i];
+                }
+                array_push($tags, $word);
+            }
+        }
+
+        $tagIds = [];
+        foreach($tags as $tag)
+            array_push($tagIds, ReviewTags::firstOrCreate(['tag' => $tag])->id);
+
+        $revTagIds = [];
+        foreach($tagIds as $item)
+            array_push($revTagIds, ReviewTagRelations::firstOrCreate(['reviewId' => $id, 'tagId' => $item])->id);
+
+        ReviewTagRelations::whereNotIn('id', $revTagIds)->delete();
+        return true;
+    }
+
+    private function storeReviewUserTagInText($text, $id){
+        $users = [];
+        $nowIndex = -1;
+        $textLength = strlen($text);
+        $skipLength = strlen('data-username="');
+
+        while(1){
+            $nowIndex = strpos($text, 'data-username', $nowIndex+1);
+            if($nowIndex === false)
+                break;
+            else{
+                $word = '';
+                for($i = $nowIndex+$skipLength; $i < $textLength && $text[$i] != '"'; $i++)
+                    $word .= $text[$i];
+                array_push($users, $word);
+            }
+        }
+
+        $usersId = User::whereIn('username', $users)->pluck('id')->toArray();
+
+        foreach($usersId as $item){
+            $assignedId = ReviewUserAssigned::create(['userId' => $item, 'logId' => $id]);
+
+            $newAlert = new Alert();
+            $newAlert->subject = 'assignedUserToReview';
+            $newAlert->referenceTable = 'reviewUserAssigned';
+            $newAlert->referenceId = $assignedId->id;
+            $newAlert->userId = $item;
+            $newAlert->save();
+        }
+
+        return true;
+    }
 
     public function deleteReview(Request $request)
     {
@@ -797,10 +909,10 @@ class ReviewsController extends Controller
                         $kindPlaceTableName = $kindPlace->tableName;
                         $placeId = $review->placeId;
                         $place = \DB::table($kindPlaceTableName)->find($review->placeId);
-                        $location = __DIR__ . '/../../../../assets/userPhoto/' . $kindPlace->fileName . '/' . $place->file;
+                        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
                     }
                     else
-                        $location = __DIR__ . '/../../../../assets/userPhoto/nonePlaces';
+                        $location = "{$this->assetLocation}/userPhoto/nonePlaces";
 
                     $reviewPics = ReviewPic::where('logId', $review->id)->get();
                     foreach ($reviewPics as $pic){
@@ -816,7 +928,6 @@ class ReviewsController extends Controller
                                 unlink($location.'/'.$thumbnail);
                         }
 
-
                         if(is_file($location.'/'.$pic->pic))
                             unlink($location.'/'.$pic->pic);
                         $pic->delete();
@@ -828,6 +939,7 @@ class ReviewsController extends Controller
                         $item->delete();
                     }
 
+                    ReviewTagRelations::where('reviewId', $review->id)->delete();
                     LogFeedBack::where('logId', $review->id)->delete();
 
                     $anses = LogModel::where('relatedTo', $review->id)->get();
@@ -844,7 +956,7 @@ class ReviewsController extends Controller
                     $alert->referenceId = $placeId;
                     $alert->save();
 
-                    if($kindPlaceTableName)
+                    if($kindPlaceTableName && $review->confirm === 1)
                         \DB::table($kindPlaceTableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
 
                     $review->delete();
@@ -862,5 +974,116 @@ class ReviewsController extends Controller
         return;
     }
 
+    public function searchForReview()
+    {
+        $result = [];
+        $kind = $_GET['kind'];
+        $value = $_GET['value'];
+
+        if($kind === "user"){
+            $users = User::where('username', 'LIKE', '%'.$value.'%')->get();
+            foreach($users as $item){
+                array_push($result, [
+                    'id' => $item->username,
+                    'name' => $item->username,
+                    'pic' => getUserPic($item->id)
+                ]);
+            }
+        }
+        else if($kind === "tag"){
+            $tags = ReviewTags::where('tag', 'LIKE', '%'.$value.'%')->get();
+            foreach($tags as $item){
+                array_push($result, [
+                    'id' => $item->id,
+                    'name' => $item->tag,
+                ]);
+            }
+        }
+        else if($kind === "place"){
+            $kindPlaces = Place::where('mainSearch', 1)->whereNotNull('tableName')->get();
+            foreach ($kindPlaces as $item){
+                $places = DB::select("SELECT place.*, cities.name AS city, state.name AS state FROM {$item->tableName} AS place, cities, state WHERE place.name LIKE '%{$value}%' AND place.cityId = cities.id AND cities.stateId = state.id");
+                foreach($places as $place){
+                    $pic = URL::asset("images/mainPics/noPicSite.jpg");
+                    if(is_file("{$this->assetLocation}/_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}"))
+                        $pic = URL::asset("_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}");
+
+                    array_push($result, [
+                        'id' => $place->id,
+                        'kindPlace' => $item->id,
+                        'city' => $place->city,
+                        'state' => $place->state,
+                        'name' => $place->name,
+                        'pic' => $pic
+                    ]);
+                }
+            }
+        }
+        else
+            return response()->json(['status' => 'error']);
+
+
+        return response()->json(['status' => 'ok', 'result' => $result]);
+    }
+
+
+    public function getReviewExplore()
+    {
+        $take = $_GET['take'];
+        $page = $_GET['page'];
+        $kind = $_GET['kind'];
+        $value = $_GET['value'];
+
+        $reviewIds = [0];
+
+        $reviewAct = Activity::where('name', 'نظر')->first();
+
+        if($kind === 'all'){
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                ->orderBy('created_at', 'DESC')
+                                ->skip(($page-1) * $take)
+                                ->take($take)
+                                ->pluck('id')
+                                ->toArray();
+        }
+        else if($kind === 'followers'){
+            $followers = Followers::where('userId', \auth()->user()->id)->pluck('followedId')->toArray();
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                ->whereIn('visitorId', $followers)
+                                ->orderByDesc('created_at')
+                                ->skip(($page-1) * $take)
+                                ->take($take)
+                                ->pluck('id')
+                                ->toArray();
+        }
+        else if($kind === "search_tag"){
+            $reviewIds = ReviewTagRelations::join('reviewTags', 'reviewTags.id','reviewTagRelations.tagId')->where('reviewTags.tag', $value)->groupBy('reviewTagRelations.reviewId')->pluck('reviewTagRelations.reviewId')->toArray();
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                                    ->whereIn('id', $reviewIds)
+                                    ->orderBy('created_at', 'DESC')
+                                    ->skip(($page-1) * $take)
+                                    ->take($take)
+                                    ->pluck('id')
+                                    ->toArray();
+        }
+        else if($kind === "search_place"){
+            $idExplode = explode('_', $value);
+            $kindPlaceId = $idExplode[0];
+            $placeId = $idExplode[1];
+
+            $reviewIds = LogModel::youCanSeeReview($reviewAct->id)
+                        ->where('kindPlaceId', $kindPlaceId)
+                        ->where('placeId', $placeId)
+                        ->orderBy('created_at', 'DESC')
+                        ->skip(($page-1) * $take)
+                        ->take($take)
+                        ->pluck('id')
+                        ->toArray();
+        }
+
+        $reviews = reviewTrueTypeIdArray($reviewIds); // in common.php
+
+        return response()->json(['status' => 'ok', 'result' => $reviews]);
+    }
 }
 

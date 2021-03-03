@@ -51,7 +51,7 @@
                                     <span class="entry-date published updated">##date##</span>
                                 </div>
                                 <div class="comments-link im-meta-item">
-                                    <i class="fa fa-comment-o"></i>
+                                    <i class="fas fa-comments"></i>
                                     ##msgs##
                                 </div>
                                 <div class="author vcard im-meta-item">
@@ -95,7 +95,7 @@
             <div class="content">
                 <div class="withBack">
                     <div class="text">
-                        <div style="margin-bottom: 50px; text-align: left;">اخبار</div>
+{{--                        <div style="margin-bottom: 50px; text-align: left;">اخبار</div>--}}
                         <div style="margin-bottom: 9px;">سفرنامه</div>
                         <div style="line-height: 38px; padding-bottom: 12px; padding-top: 19px;">کوچیتا</div>
                     </div>
@@ -354,13 +354,16 @@
                                         <span class="entry-date published updated">##date##</span>
                                     </div>
                                     <div class="comments-link im-meta-item">
-                                        <i class="fa fa-comment-o"></i>##msgs##
+                                        <i class="fas fa-comments"></i>
+                                        ##msgs##
                                     </div>
                                     <div class="author vcard im-meta-item">
-                                        <i class="fa fa-user"></i>##username##
+                                        <i class="fa fa-user"></i>
+                                        ##username##
                                     </div>
                                     <div class="post-views im-meta-item">
-                                        <i class="fa fa-eye"></i>##seen##
+                                        <i class="fa fa-eye"></i>
+                                        ##seen##
                                     </div>
                                 </div>
                             </div>
@@ -407,13 +410,16 @@
                         <span class="entry-date published updated">##date##</span>
                     </div>
                     <div class="comments-link im-meta-item">
-                        <i class="fa fa-comment-o"></i>##msgs##
+                        <i class="fas fa-comments"></i>
+                        ##msgs##
                     </div>
                     <div class="author vcard im-meta-item">
-                        <i class="fa fa-user"></i>##username##
+                        <i class="fa fa-user"></i>
+                        ##username##
                     </div>
                     <div class="post-views im-meta-item">
-                        <i class="fa fa-eye"></i>##seen##
+                        <i class="fa fa-eye"></i>
+                        ##seen##
                     </div>
                 </div>
             </div>

@@ -54,41 +54,20 @@
     function createPictureRow(){
         let addedPic = 0;
         let text = '';
-        let nowWidths;
-        let rand = [];
 
         if (nowShow.length == 0)
             $('.userProfilePhotosAndVideos').find('.notData').removeClass('hidden');
 
         for(let i = 0; i < nowShow.length; i++){
-            if(addedPic == 0) {
-                randThree = [0, 1, 2];
-                rand = [];
-                random = Math.floor(Math.random()*4);
+            if(addedPic == 0)
                 text += '<div class="profilePicturesRow kind2">';
 
-                if(nowShow.length > 2) {
-                    while (true) {
-                        if (randThree.length == 0)
-                            break;
-                        let rr = Math.floor(Math.random() * randThree.length);
-                        rand.push(randThree[rr]);
-                        randThree.splice(rr, 1);
-                    }
-                }
-                else if(nowShow.length == 2) {
-                    rand = [0,1];
-                    nowWidths = [50, 50]
-                }
-                else if(nowShow.length == 1) {
-                    rand = [0];
-                    nowWidths = [100]
-                }
-            }
             if(showKind[nowShow[i]["fileKind"]]) {
-                text += '<div class="profilePictureDiv" style="width: 33%;" onclick="showThisPictures(' + i + ')"> \n' +
-                        '   <img src="' + nowShow[i]["sidePic"] + '" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">\n' +
-                        '</div>';
+                console.log(nowShow[i], showKind);
+                var isVideo = nowShow[i].fileKind == 'video'|| nowShow[i].fileKind == 'video360' ? true : false;
+                text += `<div class="profilePictureDiv ${isVideo ? "playIconOnPicSection" : ""}" style="width: 33%;" onclick="showThisPictures(${i})"> \\n' +
+                            <img src="${nowShow[i]["sidePic"]}" class="resizeImgClass" style="width: 100%" onload="fitThisImg(this)">\\n' +
+                        </div>`;
                 addedPic++;
             }
 
@@ -110,24 +89,12 @@
     }
 
     function getAllUserPicsAndVideo(){
-        let data;
-        if(userPageId == 0)
-            data = {
-                _token: '{{csrf_token()}}',
-                sort: reviewSort
-            };
-        else
-            data = {
-                _token: '{{csrf_token()}}',
-                userId: userPageId, // in mainProfile.blade.php
-            };
 
         $('.userProfilePhotosAndVideos').find('.notData').addClass('hidden');
         $('#pictureSection').html(picAndVideoPlaceHolder+picAndVideoPlaceHolder+picAndVideoPlaceHolder);
         $.ajax({
-            type: 'post',
-            url: '{{route("profile.getUserPicsAndVideo")}}',
-            data: data,
+            type: 'GET',
+            url: `{{route("profile.getUserPicsAndVideo")}}?userId=${userPageId}`,
             success: function(response){
                 if(response.status == 'ok'){
                     allPics = response.result;
@@ -135,9 +102,6 @@
                     createPictureRow();
                 }
             },
-            error: function(err){
-                console.log(err);
-            }
         })
     }
 

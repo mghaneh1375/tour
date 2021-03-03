@@ -225,7 +225,7 @@ textarea, input, select, button, a {
     background-color: #000000bf;
     display: flex;
     justify-content: center;
-    z-index: 9999;
+    z-index: 9999999;
 }
 
 .loginCloseIcon{
@@ -452,6 +452,9 @@ textarea, input, select, button, a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.albumContent > *{
+    max-width: 100%; max-height: 50vh;
 }
 
 .leftColPhotosModalMainDiv{
@@ -891,6 +894,7 @@ div.prw_rup.prw_search_typeahead .typeahead_align .typeahead_input {
     color: var(--koochita-light-green);
 }
 .mainSearchpoi{
+    overflow: hidden;
     position: relative;
     padding-top: 100%;
 }
@@ -958,6 +962,28 @@ a:hover {
     z-index: 9999999;
     display: none;
     justify-content: center;
+}
+.globalSearchBlackBackGround .globalSearchItem{
+    margin: 7px 0px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.globalSearchBlackBackGround .globalSearchItem:hover{
+    background: var(--koochita-light-green);
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine{
+    font-weight: bold;
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine .globalSearchItemIcon{
+    font-weight: normal;
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemFirstLine .globalSearchItemName{
+
+}
+.globalSearchBlackBackGround .globalSearchItem .globalSearchItemState{
+    font-size: 10px;
+    color: gray;
+    padding-right: 20px;
 }
 
 .globalSearchWithBox{
@@ -1056,7 +1082,7 @@ a:hover {
     backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
-    z-index: 999999;
+    z-index: 99999998;
     justify-content: center;
     display: none;
 }
@@ -1544,7 +1570,9 @@ a:hover {
     z-index: 99999 !important;
 }
 
-
+.followerModal .modalBody{
+    max-height: 80vh;
+}
 .followerModal .header{
     padding-top: 4px;
     border-bottom: solid 1px #e2e2e2;
@@ -1564,7 +1592,7 @@ a:hover {
     border-bottom: solid 2px;
 }
 .followerModal .body{
-    max-height: calc(100vh - 145px);
+    max-height: calc(100vh - 190px);
     min-height: 50vh;
     overflow-y: auto;
     /*transition: .5s;*/
@@ -1711,15 +1739,25 @@ a:hover {
 .writeNewReviewModal .showWhenNeed{
     display: block;
 }
-.writeNewReviewModal .yourReviewHeader .iconClose{
-    display: block;
-}
 .writeNewReviewModal .bodySec .inputReviewSec .firsRow .Inp{
-    min-height: 170px;
+    min-height: 400px;
 }
 
 .writeNewReviewModal .modalBody{
     padding: 0px !important;
+    height: 100%;
+    top: 0px;
+    bottom: unset !important;
+}
+.writeNewReviewModal .inputReviewBodies{
+    overflow: auto;
+    height: calc(100% - 80px);
+    padding-bottom: 35px;
+}
+.writeNewReviewModal .sendButtonSec{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
 
 .writeNewReviewModal .bodySec{
@@ -1736,15 +1774,25 @@ a:hover {
     padding: 10px;
     position: relative;
 }
-.writeNewReviewModal .yourReviewHeader .iconClose{
+.writeNewReviewModal .closeModal{
     cursor: pointer;
     position: absolute;
     left: 0px;
     top: 0px;
     font-size: 40px;
+    z-index: 1;
+    color: white;
+    height: 37px;
+}
+.writeNewReviewModal .inputNewReviewDiv{
+    width: calc(100% - 50px);
+    min-height: 25vh;
+    padding: 4px;
+    overflow: auto;
 }
 .writeNewReviewModal .inputReviewSec .firsRow{
     display: flex;
+    align-items: center;
     padding: 10px;
 }
 
@@ -1797,11 +1845,6 @@ a:hover {
     padding-bottom: 5px;
 }
 
-.writeNewReviewModal .addFriendInputNewReview{
-    width: 100%;
-    border: none;
-    padding: 0px 10px;
-}
 .writeNewReviewModal .reviewSubmit{
     background-color: var(--koochita-blue);
     color: white;
@@ -1814,23 +1857,58 @@ a:hover {
     cursor: pointer;
 }
 
+.writeNewReviewModal .newReviewButWithPlace{
+    background-color: var(--koochita-blue) !important;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    font-weight: normal !important;
+}
+.writeNewReviewModal .newReviewButWithPlace:after{
+    font-family: 'Shazde_Regular' !important;
+    content: '\E02C';
+    color: var(--koochita-red);
+    font-size: 25px;
+    line-height: 10px;
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: var(--koochita-blue);
+}
 
-.writeNewReviewModal .searchYouFriendDiv{
+
+.searchYouFriendReviewSectionDiv{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    direction: rtl;
+}
+.searchYouFriendReviewSectionDiv .placeHolderText{
+    color: #afafaf;
+    margin-right: 14px;
+    margin-bottom: 10px;
+}
+.searchYouFriendReviewSectionDiv .results{
     display: flex;
     flex-wrap: wrap;
 }
-.writeNewReviewModal .searchYouFriendDiv .results{
-    display: flex;
-    flex-wrap: wrap;
-}
-.writeNewReviewModal .searchYouFriendDiv .results .user{
+.searchYouFriendReviewSectionDiv .results .user{
     margin: 0px 5px;
     background: var(--koochita-yellow);
     padding: 0px 10px;
     border-radius: 15px;
     color: white;
 }
-.writeNewReviewModal .searchYouFriendDiv .results .user:before{
+.searchYouFriendReviewSectionDiv .addFriendInputNewReview{
+    width: 100%;
+    border: none;
+    padding: 0px 10px;
+}
+.searchYouFriendReviewSectionDiv .results .user:before{
     color: red;
 }
 
@@ -1922,6 +2000,169 @@ a:hover {
     flex-wrap: nowrap;
 }
 
+
+
+.tvContentVideo{
+    width: 100%;
+    height: 230px;
+    background: #232323;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 5px;
+}
+.tvContentVideo .tvVideoPic{
+    position: relative;
+    width: 100%;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.tvContentVideo .tvVideoName{
+    color: white;
+    font-size: 12px;
+    margin-top: 10px;
+    padding-right: 10px;
+    display: block;
+}
+.tvContentVideo .tvVideoName.placeHolderAnime{
+    height: 10px;
+    border-radius: 20px;
+    width: 100px;
+}
+.tvContentVideo .tvUserContentDiv{
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    margin-top: 10px;
+}
+.tvContentVideo .tvUserPic{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.tvContentVideo .tvUserInfo{
+    margin-right: 10px;
+    font-size: 11px;
+}
+.tvContentVideo.PH .tvUserInfo{
+    width: 200px;
+}
+.tvContentVideo .tvUserName{
+    color: var(--koochita-blue);
+}
+.tvContentVideo .tvUserName.placeHolderAnime{
+    margin: 5px 0px;
+    border-radius: 11px;
+    height: 10px;
+}
+.tvContentVideo .tvUserTime{
+    color: white;
+}
+.tvContentVideo .tvImgHover{
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    background: #00000085;
+}
+.tvContentVideo .tvVideoPic:hover .tvImgHover{
+    display: flex;
+}
+.tvContentVideo .tvOverPic{
+    position: absolute;
+    background: #000000d1;
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+}
+.tvContentVideo .tvSeenSection{
+    top: 10px;
+    left: 20px;
+}
+.tvContentVideo .tvLikeSection{
+    bottom: 10px;
+    left: 20px;
+}
+.tvContentVideo .tvLike{
+
+}
+.tvContentVideo .tvLike > i{
+    font-style: normal;
+    display: inline-block;
+    width: 6px;
+    display: inline-flex;
+    justify-content: center;
+}
+.tvContentVideo .tvVideoPic.fullHeight{
+    height: 100%;
+}
+
+
+.userRateToPlaceModal .header{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    padding: 0px 40px;
+    color: white;
+}
+.userRateToPlaceModal .body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 78px;
+    font-size: 40px;
+    color: white;
+    direction: ltr;
+}
+.userRateToPlaceModal .body .fullStarRating{
+    color: #ffc71f;
+}
+.userRateToPlaceModal .body .starIcons{
+    cursor: pointer;
+}
+.userRateToPlaceModal .footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.userRateToPlaceModal .footer button{
+    width: 85%;
+    background: white;
+    border: solid 1px #ffc71f;
+    border-radius: 20px;
+    padding: 7px 0px;
+    font-size: 18px;
+    color: black;
+}
+.userRateToPlaceModal .modalBody{
+    border-radius: 200px !important;
+    padding-top: 55px !important;
+    background: black;
+    border: solid 1px #ffc71f;
+}
+.userRateToPlaceModal .modalBody .topIcon{
+    position: absolute;
+    top: -50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    right: 0;
+}
 
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
@@ -2022,6 +2263,12 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+    .userRateToPlaceModal .modalBody{
+        border-radius: 200px 200px 0px 0px !important;
+    }
+    .userRateToPlaceModal .footer button{
+        width: 100%;
+    }
     #tripsForPlace{
         height: 75vh;
     }
@@ -2148,6 +2395,11 @@ a:hover {
     .writeNewReviewModal .inputReviewSec .uploadedFiles{
         max-height: 200px;
         overflow: auto;
+    }
+
+    .writeNewReviewModal .bodySec .inputReviewSec .firsRow .Inp{
+        min-height: 0px;
+        height: 35vh;
     }
 }
 

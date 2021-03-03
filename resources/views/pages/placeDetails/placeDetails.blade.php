@@ -7,6 +7,8 @@ $total = $total == 0 ? 1 : $total;
 $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $city->name . " | " . $place->name;
 ?>
 @section('head')
+    <meta property="article:author " content="کوچیتا"/>
+
     <meta content="article" property="og:type"/>
     <meta property="og:title" content="{{$seoTitle}}"/>
     <meta property="title" content="{{$seoTitle}}"/>
@@ -16,14 +18,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <meta name="twitter:description" content="{{$place->meta}}"/>
     <meta property="og:description" content="{{$place->meta}}"/>
     <meta property="article:section" content="{{$placeMode}}"/>
-    <meta property="article:author " content="کوچیتا"/>
     <meta name="keywords" content="{{$place->keyword}}">
     <meta property="og:url" content="{{Request::url()}}"/>
 
-    @if(count($photos) > 0)
-        <meta property="og:image" content="{{$photos[0]}}"/>
-        <meta property="og:image:secure_url" content="{{$photos[0]}}"/>
-        <meta name="twitter:image" content="{{$photos[0]}}"/>
+    @if(isset($place->mainPic))
+        <meta property="og:image" content="{{$place->mainPic}}"/>
+        <meta property="og:image:secure_url" content="{{$place->mainPic}}"/>
+        <meta name="twitter:image" content="{{$place->mainPic}}"/>
         <meta property="og:image:width" content="550"/>
         <meta property="og:image:height" content="367"/>
     @endif
@@ -41,112 +42,42 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <link rel="stylesheet" href="{{URL::asset('js/emoji/area/emojionearea.css?v='.$fileVersions)}}">
 
     <script>
-        var thisUrl = '{{Request::url()}}';
-        var userCode = '{{$userCode}}';
-        var yourRateForThisPlace = '{{$yourRate}}';
-        var userPic = '{{$userPic}}';
-        var userPhotos = {!! json_encode($userPhotos) !!};
-        var userVideo = {!! json_encode($userVideo) !!};
-        var placeMode = '{{$placeMode}}';
-        var getQuestions = '{{route('getQuestions')}}';
-        var likeLog = '{{route('likeLog')}}';
-        var reviewUploadPic = '{{route('reviewUploadPic')}}';
-        var doEditReviewPic = '{{route('doEditReviewPic')}}';
-        var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
-        var placeMode = '{{$placeMode}}';
-        var photographerPics = {!! json_encode($photographerPics) !!};
-        var sitePics = {!! json_encode($sitePics) !!};
+
         var hotelDetails;
         var hotelDetailsInAskQuestionMode;
         var hotelDetailsInAnsMode;
         var hotelDetailsInSaveToTripMode;
+
+        var thisUrl = '{{Request::url()}}';
+        var userCode = '{{$userCode}}';
+        var userPic = '{{$userPic}}';
         var placeId = '{{$place->id}}';
+        var placeMode = '{{$placeMode}}';
+        var placeMode = '{{$placeMode}}';
         var kindPlaceId = '{{$kindPlaceId}}';
-        var getCommentsCount = '{{route('getCommentsCount')}}';
-        var totalPhotos = '{{count($sitePics) + count($userPhotos)}}';
-        var sitePhotosCount = {{count($sitePics)}};
-        var opOnComment = '{{route('opOnComment')}}';
-        var askQuestionDir = '{{route('askQuestion')}}';
+        var yourRateForThisPlace = '{{$yourRate}}';
+
+        var likeLog = '{{route('likeLog')}}';
         var sendAnsDir = '{{route('sendAns')}}';
+        var getPhotosDir = '{{route('getPhotos')}}';
+        var opOnComment = '{{route('opOnComment')}}';
         var showAllAnsDir = '{{route('showAllAns')}}';
+        var getQuestions = '{{route('getQuestions')}}';
+        var askQuestionDir = '{{route('askQuestion')}}';
+        var getPlacePicsUrl = '{{route("place.getPics")}}';
         var filterComments = '{{route('filterComments')}}';
         var getPhotoFilter = '{{route('getPhotoFilter')}}';
-        var getPhotosDir = '{{route('getPhotos')}}';
-        var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
+        var reviewUploadPic = '{{route('reviewUploadPic')}}';
+        var doEditReviewPic = '{{route('doEditReviewPic')}}';
+        var getCommentsCount = '{{route('getCommentsCount')}}';
         var deleteReviewPicUrl = '{{route('deleteReviewPic')}}';
-    </script>
+        var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
+        var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
 
-{{--    <script defer src= {{URL::asset("js/calendar.js") }}></script>--}}
-{{--    <script defer src= {{URL::asset("js/jalali.js") }}></script>--}}
-{{--    <script defer src="{{URL::asset('js/adv.js')}}"></script>--}}
-{{--    <script async src="{{URL::asset('js/swiper/swiper.min.js')}}"></script>--}}
+    </script>
 
     <script defer src="{{URL::asset('js/emoji/area/emojionearea.js')}}"></script>
     <script defer src="{{URL::asset('js/hotelDetails/hoteldetails_2.js')}}"></script>
-
-    <style>
-
-        .sogatSanieMobileFeatures{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            background: white;
-            padding-top: 15px;
-            margin: 0px;
-        }
-        .featureBox{
-            text-align: center;
-            padding: 5px 15px;
-            box-shadow: 2px 2px 4px 0px #333;
-            margin: 6px 7px;
-            border-radius: 8px;
-        }
-        .featureBox .title{
-            font-weight: bold;
-            color: var(--koochita-green);
-        }
-        .featureBox .value{
-            display: flex;
-            justify-content: center;
-        }
-        .featureBox .value .val{
-            margin: 0px 10px;
-            font-size: 11px;
-            text-align: center;
-        }
-
-        .sogatFeature{
-            margin: 10px 0px;
-        }
-        .sogatFeature .feat{
-            display: flex;
-            margin: 5px 0px;
-        }
-        .sogatFeature .feat .title{
-            color: black;
-            margin-left: 5px;
-        }
-        .sogatFeature .feat .value{
-            font-weight: bold;
-            color: green;
-        }
-
-        .seperatorSections{
-            background: #f8f8f8;
-            height: 15px;
-            width: 100%;
-            border-top: solid 1px #4dc7bc52;
-            border-bottom: solid 1px #4dc7bc52;
-            display: none;
-        }
-
-        @media (max-width: 767px) {
-            .seperatorSections{
-                display: block;
-            }
-        }
-
-    </style>
 
 @stop
 
@@ -155,43 +86,42 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     @include('general.schema')
 
     <div class="hideOnPhone">
-        @include('general.secondHeader')
+        @include('pages.secondHeader')
     </div>
-    @include('component.mapMenu')
 
-    @include('component.smallShowReview')
+    @include('component.mapMenu')
 
     <div id="comeDownHeader" class="topHeaderShowDown hideOnScreen">
         <div class="inOneRow">
             <div class="name">{{$place->name}}</div>
             <div class="buttonsH">
-            <div class="circlePlaceDetailButtons" onclick="addPlaceToBookMark()">
-                <div class="icon saveAsBookmarkIcon  {{auth()->check() && $bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
-            </div>
-            <div class="circlePlaceDetailButtons" onclick="$(this).find('.sharesButtons').toggleClass('open')">
-                <div class="icon" style="z-index: 10;">
-                    <img src="{{URL::asset('images/icons/shareIcon.svg')}}" style="margin-right: 3px;width: 18px;">
+                <div class="circlePlaceDetailButtons" onclick="addPlaceToBookMark()">
+                    <div class="icon saveAsBookmarkIcon  {{$bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
                 </div>
-                <div class="sharesButtons">
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{Request::url()}}" target="_blank" class="share">
-                        <img src="{{URL::asset("images/shareBoxImg/facebook.png")}}">
-                    </a>
-                    <a href="https://twitter.com/home?status={{Request::url()}}" target="_blank" class="share">
-                        <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}">
-                    </a>
-                    <a href="#" class="share whatsappLink">
-                        <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}">
-                    </a>
-                    <a href="https://telegram.me/share/url?url={{Request::url()}}" target="_blank" class="share">
-                        <img src="{{URL::asset("images/shareBoxImg/telegram.png")}}">
-                    </a>
-                    <span class="share" style="color: black;" onclick="copyLinkAddress()"> کپی </span>
+                <div class="circlePlaceDetailButtons" onclick="$(this).find('.sharesButtons').toggleClass('open')">
+                    <div class="icon" style="z-index: 10;">
+                        <img src="{{URL::asset('images/icons/shareIcon.svg')}}" style="margin-right: 3px;width: 18px;">
+                    </div>
+                    <div class="sharesButtons">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{Request::url()}}" target="_blank" class="share">
+                            <img src="{{URL::asset("images/shareBoxImg/facebook.png")}}">
+                        </a>
+                        <a href="https://twitter.com/home?status={{Request::url()}}" target="_blank" class="share">
+                            <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}">
+                        </a>
+                        <a href="#" class="share whatsappLink">
+                            <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}">
+                        </a>
+                        <a href="https://telegram.me/share/url?url={{Request::url()}}" target="_blank" class="share">
+                            <img src="{{URL::asset("images/shareBoxImg/telegram.png")}}">
+                        </a>
+                        <span class="share" style="color: black;" onclick="copyLinkAddress()"> کپی </span>
+                    </div>
+                </div>
+                <div class="circlePlaceDetailButtons" onclick="addThisPlaceToTrip()" >
+                    <div class="icon MyTripsIcon"></div>
                 </div>
             </div>
-            <div class="circlePlaceDetailButtons" onclick="addThisPlaceToTrip()" >
-                <div class="icon MyTripsIcon"></div>
-            </div>
-        </div>
         </div>
         <div class="tabs">
             @if($placeMode == 'mahaliFood')
@@ -269,9 +199,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                 <img src="{{URL::asset('images/mainPics/vodLobo.webp')}}" style="max-height: 100%; max-width: 100%;">
                             </a>
                             <div class="tvContentDiv">
-                                <div class="tvContentText">
-                                    کوچیتا تی وی برای تماشای آنلاین و زنده محتواهای بصری و صوتی در تمامی حوزه های گردشگری و سفر
-                                </div>
+                                <div class="tvContentText"> کوچیتا تی وی برای تماشای آنلاین و زنده محتواهای بصری و صوتی در تمامی حوزه های گردشگری و سفر </div>
                                 <div class="tvContentVideo">
                                     <a href="#" class="tvVideoPic fullHeight" target="_blank">
                                         <div class="tvImgHover">
@@ -314,26 +242,22 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             </a>
                         </div>
                     </div>
+
                     <div class="clear-both"></div>
                     <div id="targetHelp_8" class="wideScreen targets float-left col-xs-6 pd-0">
                         <span onclick="addPlaceToBookMark()" class="ui_button save-location-7306673 saveAsBookmarkMainDiv">
-                            <div id="bookMarkIcon" class="saveAsBookmarkIcon {{auth()->check() && $bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
-                            <div class="saveAsBookmarkLabel">
-                                {{__('ذخیره این صفحه')}}
-                            </div>
+                            <div id="bookMarkIcon" class="saveAsBookmarkIcon {{$bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>
+                            <div class="saveAsBookmarkLabel">ذخیره این صفحه</div>
                         </span>
                     </div>
 
                     <div id="share_pic" class="wideScreen targets float-left col-xs-6 pd-0">
                         <span class="ui_button save-location-7306673 sharePageMainDiv">
                             <div class="shareIconDiv sharePageIcon first"></div>
-                            <div class="sharePageLabel">
-                                {{__('اشتراک‌گذاری صفحه')}}
-                            </div>
+                            <div class="sharePageLabel">اشتراک‌گذاری صفحه</div>
                         </span>
                     </div>
-                    @include('layouts.shareBox')
-
+                    @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                 </div>
 
                 <div class="prw_rup prw_common_location_photos photos position-relative">
@@ -341,37 +265,16 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                         <div class="inner">
                             <div class="primaryWrap">
                                 <div class="prw_rup prw_common_mercury_photo_carousel">
-                                    <div class="carousel bignav">
+                                    <div id="mainSliderPlaceHolderSectionPlaceDetail" class="placeHolderAnime"></div>
+                                    <div id="mainSliderSectionPlaceDetail" class="carousel bignav hidden">
                                         <div class="carousel_images carousel_images_header">
-                                            <div id="photographerAlbum" {{count($photographerPics) > 0 ? "onclick=showPhotoAlbum('photographer')" : ''}}>
+                                            <div id="photographerAlbum" onclick=showPhotoAlbum('sliderPic')>
                                                 <div id="mainSlider" class="swiper-container">
-                                                    <div id="mainSliderWrapper" class="swiper-wrapper">
-                                                        @foreach($photographerPics as $pics)
-                                                            <div class="swiper-slide" style="overflow: hidden">
-                                                                <img class="eachPicOfSlider resizeImgClass"
-                                                                     src="{{$pics['s']}}"
-                                                                     alt="{{$pics['alt']}}"
-                                                                     style="width: 100%;"
-                                                                     onload="fitThisImg(this)">
-                                                                <div class="see_all_count_wrap hideOnPhone">
-                                                                    <span class="see_all_count">
-                                                                        <div class="circleBase type2" id="photographerIdPic" style="background-color: var(--koochita-light-green);">
-                                                                            <img src="{{$pics['userPic']}}" style="width: 100%; height: 100%; border-radius: 50%;">
-                                                                        </div>
-                                                                        <div class="display-inline-block mg-rt-10 mg-tp-2">
-                                                                            <span class="display-block font-size-12">عکس از</span>
-                                                                            <span class="display-block">{{$pics['name']}}</span>
-                                                                        </div>
-                                                                    </span>
-                                                                </div>
-
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
+                                                    <div id="mainSliderWrapper" class="swiper-wrapper"></div>
                                                 </div>
-                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"> {{count($photographerPics)}} </div>
+                                                <div id="allPlacePicturesCount" class="hideOnScreen fullCameraIcon allPictureOnMainSlider"></div>
                                             </div>
-{{--                                            <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>--}}
+                                            <a id="photographersLink" class="hideOnPhone" onclick="isPhotographer()"> عکاس هستید؟ کلیک کنید </a>
                                         </div>
                                         <div class="left-nav left-nav-header swiper-button-next mainSliderNavBut"></div>
                                         <div class="right-nav right-nav-header swiper-button-prev mainSliderNavBut"></div>
@@ -379,72 +282,46 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                 </div>
                             </div>
 
-                            <div class="secondaryWrap hideOnPhone">
-                                <div class="tileWrap" onclick="showPhotoAlbum('sitePics')">
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                                @if(count($sitePics) != 0)
-                                                    <span class="imgWrap imgWrap1stTemp">
-                                                        <img alt="{{$place->alt}}" src="{{$thumbnail}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                                    </span>
-                                                @else
-                                                    <span class="imgWrap imgWrap1stTemp">
-                                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                                    </span>
-                                                @endif
-                                            </div>
+                            <div class="secondaryWrap sideSliderPicsSection hideOnPhone">
 
-                                            <div class="albumInfo" {{count($sitePics) != 0 ? 'data-toggle="modal" data-target="#showingSitePicsModal"' : ''}}>
-                                                <span class="ui_icon camera">&nbsp;</span>
-                                                عکس‌های سایت - {{count($sitePics)}}
-                                            </div>
+                                <div id="sideSliderSite" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('sitePics')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>عکس‌های سایت -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
-                                <div class="tileWrap" onclick=showPhotoAlbum("userPics")>
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                        <span class="imgWrap imgWrap1stTemp">
-                                            @if(count($userPhotos) != 0)
-                                                <img src="{{$userPhotos[0]->pic}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                            @else
-                                                <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}"
-                                                     class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
-                                            @endif
-                                        </span>
-                                            </div>
-                                            <div {{(count($userPhotos) != 0) ? 'onclick=showPhotoAlbum("userPics")' : "" }}  class="albumInfo">
-                                                <span class="ui_icon camera">&nbsp;</span>عکس‌های
-                                                کاربران - {{count($userPhotos)}}
-                                            </div>
+                                <div id="sideSliderUsers" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('userPics')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>عکس‌های کاربران -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
-                                <div class="tileWrap" onclick="showPhotoAlbum('userVideo')">
-                                    <div class="prw_rup prw_hotels_flexible_album_thumb tile">
-                                        <div class="albumThumbnail">
-                                            <div class="prw_rup prw_common_centered_image">
-                                            <span class="imgWrap imgWrap1stTemp">
-                                                @if(count($userVideo) > 0)
-                                                    <img src="{{$userVideo[0]->picName}}" class="resizeImgClass" onload="fitThisImg(this)">
-                                                @else
-                                                    <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}"
-                                                         class="centeredImg" width="100%"/>
-                                                @endif
-                                            </span>
-                                            </div>
-                                            <div class="albumInfo">
-                                                <span class="ui_icon camera">&nbsp;</span>
-                                                ویدیو و فیلم 360 - {{ count($userVideo) }}
-                                            </div>
+                                <div id="sideSliderVideos" class="sideSecPicRow">
+                                    <div class="mainContent hidden" onclick="showPhotoAlbum('userVideo')">
+                                        <img src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" class="resizeImgClass centeredImg" width="100%" onload="fitThisImg(this)"/>
+                                        <div class="moreContent">
+                                            <span class="ui_icon camera">&nbsp;</span>
+                                            <span>ویدیو و فیلم 360 -</span>
+                                            <span class="countOfPic">0</span>
                                         </div>
                                     </div>
+                                    <div class="placeHolderAnime"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="hSectionInPlaceDetail hideOnScreen">
                     @if($placeMode == 'mahaliFood')
                         <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
@@ -470,9 +347,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
                     <a class="postLink topAndBottomBorderAndMargin hideOnPhone" href="#reviewMainDivDetails">
                         <div id="mainStoreReviewDiv" class="postMainDiv">
-                            <div class="postMainDivHeader">
-                                {{__('نظر شما')}}
-                            </div>
+                            <div class="postMainDivHeader">  {{__('نظر شما')}}  </div>
                             <div id="commentInputMainDiv">
                                 <div class="inputBoxGeneralInfo inputBox postInputBox" id="commentInputBox" onclick="newPostModal('textarea')">
                                     <div id="profilePicForComment" class="fullyCenterContent profilePicForPost circleBase type2" style="overflow: hidden; border-radius: 50%;">
@@ -541,19 +416,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">
-                                            سؤالات
-                                        </a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)"> سؤالات </a>
                                     </li>
                                     <li>
-                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)">
-                                            نظرات
-                                        </a>
+                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
-                                            دستور پخت
-                                        </a>
+                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)"> دستور پخت </a>
                                     </li>
                                 </ul>
                             </div>
@@ -565,24 +434,16 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a class="tabLinkMainWrap similarLocationsBtnTopBar similarLocationsBtnTopBar" href="#topPlacesSection" onclick="changeTabBarColor(this)">
-                                            مکان‌های مشابه
-                                        </a>
+                                        <a class="tabLinkMainWrap similarLocationsBtnTopBar similarLocationsBtnTopBar" href="#topPlacesSection" onclick="changeTabBarColor(this)"> مکان‌های مشابه </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">
-                                            سؤالات
-                                        </a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">سؤالات</a>
                                     </li>
                                     <li>
-                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)">
-                                            نظرات
-                                        </a>
+                                        <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
-                                            معرفی کلی
-                                        </a>
+                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)"> معرفی کلی </a>
                                     </li>
                                 </ul>
                             </div>
@@ -884,15 +745,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
                     <div class="Ad3InRowPc" style="display: none">
                         <div id="pos-article-display-16123"></div>
-{{--                        <div class="ad">--}}
-{{--                            <img src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" >--}}
-{{--                        </div>--}}
-{{--                        <div class="ad">--}}
-{{--                            <img src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" >--}}
-{{--                        </div>--}}
-{{--                        <div class="ad">--}}
-{{--                            <img src="{{URL::asset('images/festival/cookFestival/gitcooking.webp')}}" >--}}
-{{--                        </div>--}}
                     </div>
 
                     @include('pages.placeDetails.questionSection')
@@ -1001,35 +853,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             spaceBetween: 20,
                         }
                     },
-                    autoplay: {
-                        delay: 4000,
-                    },
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
                     },
-                    // breakpoints: {
-                    //     450: {
-                    //         slidesPerView: 1,
-                    //         spaceBetween: 15,
-                    //     },
-                    //     520: {
-                    //         slidesPerView: 2,
-                    //         spaceBetween: 15,
-                    //     },
-                    //     768: {
-                    //         slidesPerView: 2,
-                    //         spaceBetween: 30,
-                    //     },
-                    //     992: {
-                    //         slidesPerView: 3,
-                    //         spaceBetween: 30,
-                    //     },
-                    //     10000: {
-                    //         slidesPerView: 4,
-                    //         spaceBetween: 30,
-                    //     }
-                    // }
+                    // autoplay: {
+                    //     delay: 4000,
+                    // },
                 });
             }
 
@@ -1087,392 +917,17 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     @endif
 
     <script>
-        var isOpenRateButton = false;
-        var photographerPicsForAlbum = [];
-        var sitePicsForAlbum = [];
-        var userPhotosForAlbum = [];
-        var userVideoForAlbum = [];
-        var allPlacePics = [];
+        var placeId = '{{$place->id}}';
+        var cityNamePlaceDetails = '{{$city->name}}';
+        var placeNamePlaceDetail = '{{$place->name}}';
+        var noPicUrl = "{{URL::asset('images/mainPics/nopictext1.jpg')}}";
 
-        photographerPics.map(item => {
-            var arr = {
-                'id': item['id'],
-                'sidePic': item['l'],
-                'mainPic': item['s'],
-                'userPic': item['userPic'],
-                'userName': item['name'],
-                'picName': item['picName'],
-                'like': item['like'],
-                'dislike': item['dislike'],
-                'alt': item['alt'],
-                'description': item['description'],
-                'uploadTime': item['fromUpload'],
-                'showInfo': item['showInfo'],
-                'userLike': item['userLike'],
-            };
-            photographerPicsForAlbum.push(arr);
-            allPlacePics.push(arr);
-        });
-        sitePics.map(item => {
-            var arr = {
-                'id': item['id'],
-                'sidePic': item['l'],
-                'mainPic': item['s'],
-                'userPic': item['userPic'],
-                'userName': item['name'],
-                'like': item['like'],
-                'dislike': item['dislike'],
-                'alt': item['alt'],
-                'description': item['description'],
-                'uploadTime': item['fromUpload'],
-                'showInfo': item['showInfo'],
-                'userLike': item['userLike'],
-            };
-            sitePicsForAlbum.push(arr);
-            allPlacePics.push(arr);
-        });
-        userPhotos.map(item => {
-            var arr = {
-                'id': item['id'],
-                'sidePic': item['pic'],
-                'mainPic': item['pic'],
-                'userPic': item['userPic'],
-                'userName': item['username'],
-                'uploadTime': item['time'],
-                'showInfo': false,
-            };
-            userPhotosForAlbum.push(arr);
-            allPlacePics.push(arr);
-        });
-        userVideo.map(item => {
-            var arr = {
-                'id': item['id'],
-                'sidePic': item['picName'],
-                'mainPic': item['picName'],
-                'userPic': item['userPic'],
-                'userName': item['username'],
-                'video': item['video'],
-                'uploadTime': item['time'],
-                'showInfo': false,
-            };
-            userVideoForAlbum.push(arr);
-            allPlacePics.push(arr);
-        });
-
-        if (photographerPics.length > 0) {
-            var mainSlideSwiper = new Swiper('#mainSlider', {
-                spaceBetween: 0,
-                centeredSlides: true,
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    prevEl: '.swiper-button-next',
-                    nextEl: '.swiper-button-prev',
-                },
-            });
-        }
-        else {
-            $('.mainSliderNavBut').css('display', 'none');
-            $('.see_all_count_wrap').css('display', 'none');
-            text = '<div class="swiper-slide" style="overflow: hidden">\n' +
-                    '<img class="eachPicOfSlider resizeImgClass" src="{{URL::asset('images/mainPics/nopictext1.jpg')}}" style="width: 100%;">\n' +
-                    '</div>';
-            $('#mainSliderWrapper').append(text);
-        }
-
-        function getVideoFromTv(){
-            $.ajax({
-                type: 'get',
-                url: `{{route('getVideosFromKoochitaTv')}}?id=${placeId}&kindPlaceId=${kindPlaceId}`,
-                success: response => {
-                    if(response.status == 'ok'){
-                        var result = response.result;
-                        $('.koochitaTvSection').find('.tvOverPic').removeClass('hidden');
-                        $('.koochitaTvSection').find('.tvUserContentDiv').removeClass('hidden');
-                        $('.koochitaTvSection').find('.tvVideoPic').removeClass('fullHeight');
-
-                        $('.koochitaTvSection').find('.tvVideoPic').attr('href', result.url);
-                        $('.koochitaTvSection').find('.tvUserName').text(result.username);
-                        $('.koochitaTvSection').find('.tvUserTime').text(result.time);
-                        $('.koochitaTvSeen').text(result.seen);
-                        $('.koochitaTvDisLikeCount').text(result.disLike);
-                        $('.koochitaTvLikeCount').text(result.like);
-                        $('.koochitaTvImg').attr('src', result.pic);
-                        $('.tvVideoName').attr('href', result.url);
-                        $('.tvVideoName').text(result.title);
-                        $('.koochitaTvUserImg').attr('src', result.userPic);
-                        $('.koochitaTvUserImg').attr('src', result.userPic);
-                    }
-                },
-            })
-        }
-        getVideoFromTv();
-
-        function openRateBoxForPlace(){
-            if(!checkLogin())
-                return;
-
-            openMyModal('userRateToPlaceModal');
-        }
-
-        function ratingToPlace(_rate){
-            for(var i = 1; i <= 5; i++){
-                if(i <= _rate)
-                    $(`.ratingStar${i}`).addClass('fullStarRating').removeClass('emptyStarRating').attr('data-selected', 1);
-                else
-                    $(`.ratingStar${i}`).addClass('emptyStarRating').removeClass('fullStarRating').attr('data-selected', 0);
-            }
-        }
-
-        function submitRating(){
-            var lastSelected = 0;
-            for(var i = 5; i > 0; i--){
-                if($(`.ratingStar${i}`).attr('data-selected') == 1){
-                    lastSelected = $(`.ratingStar${i}`).attr('data-star');
-                    break;
-                }
-            }
-
-            if(lastSelected == 0)
-                alert('برای ثبت امتیاز باید روی ستاره مورد نظر کلیک کنید');
-            else{
-                openLoading();
-                $.ajax({
-                    type: 'POST',
-                    url: '{{route("places.setRateToPlaces")}}',
-                    data:{
-                        _token: '{{csrf_token()}}',
-                        placeId: '{{$place->id}}',
-                        kindPlaceId: '{{$kindPlaceId}}',
-                        rate: lastSelected
-                    },
-                    complete: () => {
-                        closeLoading()
-                    },
-                    success: response =>{
-                        if(response.status == 'ok'){
-                            updatePlaceRating(response.rates);
-                            closeMyModal('userRateToPlaceModal');
-                            showSuccessNotifi('امتیاز شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
-                        }
-                        else if(response.status == 'error3')
-                            alert('برای ثبت امتیاز باید روی ستاره مورد نظر کلیک کنید');
-                        else
-                            showSuccessNotifi('خطا در ثبت امتیاز', 'left', 'red');
-                    },
-                    error: err => showSuccessNotifi('خطا در ثبت امتیاز', 'left', 'red')
-                })
-            }
-        }
-
-        function updatePlaceRating(_rates){
-            var totalRate = 0;
-            var avg = Math.round(_rates.avg);
-            var rates = _rates.rate;
-            var elements = $('.placeRateStars');
-
-            Object.keys(rates).forEach(key => totalRate += rates[key]);
-            for(var i = 0; i < elements.length; i++){
-                var lastAvg = $(elements[i]).attr('content');
-                $(elements[i]).removeClass(`bubble_${lastAvg}0`).addClass(`bubble_${avg}0`);
-                $(elements[i]).attr('content', avg);
-            }
-
-            Object.keys(rates).forEach(key => {
-                var percent = (rates[key]*100/totalRate)+'%';
-                $(`.ratePercent${key}`).text(percent);
-                $(`.rateLine${key}`).css('width', percent);
-            });
-        }
-
-        function changeTabBarColor(_elemnt, _section){
-            if($(window).width() < 767){
-                $('html, body').animate({
-                    scrollTop: $(`#${_section}`).offset().top-100
-                }, 300);
-            }
-
-            $('.tabLinkMainWrap').css('color', 'black');
-            setTimeout(() => {
-                $(_elemnt).css('color', 'var(--koochita-light-green)');
-            }, 100)
-        }
-
-        function isPhotographer() {
-            if (!checkLogin())
-                return;
-
-            //additionalData must be json format
-            var additionalData = {
-                'placeId': '{{$place->id}}',
-                'kindPlaceId': '{{$kindPlaceId}}'
-            };
-            var _title = '{{$place->name}}' + ' در ' + '{{$city->name}}';
-            additionalData = JSON.stringify(additionalData);
-            openUploadPhotoModal(_title, '{{route('addPhotoToPlace')}}', '{{$place->id}}', '{{$kindPlaceId}}', additionalData);
-        }
-
-        function openCity(cityName, elmnt, color, fontColor) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabContent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tabLink");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].style.backgroundColor = "";
-            }
-            tablinks = document.getElementsByClassName("tabLink");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].style.color = "";
-            }
-            tablinks = document.getElementsByClassName("tabLink");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].style.borderColor = "";
-            }
-            document.getElementById(cityName).style.display = "block";
-            elmnt.style.backgroundColor = color;
-            elmnt.style.color = fontColor;
-            elmnt.style.borderColor = fontColor;
-
-        }
-
-        function showAnswersActionBox(element) {
-            $(element).next().toggle() ,
-                $(element).toggleClass("bg-color-darkgrey")
-        }
-
-        function filterChoices(element) {
-            $(element).toggleClass('bg-color-yellowImp')
-        }
-
-        function showPhotoAlbum(_kind) {
-            if($(window).width() <= 767)
-                createPhotoModal('آلبوم عکس', allPlacePics);// in general.photoAlbumModal.blade.php
-            else {
-                if (_kind == 'photographer' && photographerPicsForAlbum.length > 0)
-                    createPhotoModal('عکس های عکاسان', photographerPicsForAlbum);// in general.photoAlbumModal.blade.php
-                else if (_kind == 'sitePics' && sitePicsForAlbum.length > 0)
-                    createPhotoModal('عکس های سایت', sitePicsForAlbum);// in general.photoAlbumModal.blade.php
-                else if (_kind == 'userPics' && userPhotosForAlbum.length > 0)
-                    createPhotoModal('عکس های کاربران', userPhotosForAlbum);// in general.photoAlbumModal.blade.php
-                else if (_kind == 'userVideo' && userVideoForAlbum.length > 0)
-                    createPhotoModal('ویدیو های کاربران', userVideoForAlbum);// in general.photoAlbumModal.blade.php
-            }
-        }
-
-        function addPlaceToBookMark() {
-
-            if (!checkLogin())
-                return;
-
-            $.ajax({
-                type: 'POST',
-                url: '{{route("setBookMark")}}',
-                data: {placeId, kindPlaceId},
-                success: function (response) {
-                    if (response == "ok-del"){
-                        changeBookmarkIcon();
-                        showSuccessNotifi('این صفحه از حالت ذخیره خارج شد', 'left', 'red');
-                    }
-                    else if(response == 'ok-add'){
-                        changeBookmarkIcon();
-                        showSuccessNotifi('این صفحه ذخیره شد', 'left', 'var(--koochita-blue)');
-                    }
-                }
-            })
-        }
-
-        function addThisPlaceToTrip() {
-            selectedPlaceId = placeId;
-            selectedKindPlaceId = kindPlaceId;
-
-            if(!checkLogin())
-                return;
-
-            saveToTripPopUp(placeId, kindPlaceId);
-        }
-
-
-        $(document).ready(() => {
-            $('#allPlacePicturesCount').text(allPlacePics.length);
-            autosize($(".inputBoxInputComment"));
-            autosize($(".inputBoxInputAnswer"));
-
-            if (window.matchMedia('(max-width: 373px)').matches)
-                $('.eachCommentMainBox').removeClass('mg-rt-45');
-
-            ratingToPlace(yourRateForThisPlace);
-        });
-
-        $(window).on('scroll', function(e){
-            let topOfSticky = document.getElementById('BODYCON').getBoundingClientRect().top;
-            if(topOfSticky < 20 && !$('#sticky').hasClass('stickyFixTop'))
-                $('#sticky').addClass('stickyFixTop');
-            else if(topOfSticky >= 25 && $('#sticky').hasClass('stickyFixTop'))
-                $('#sticky').removeClass('stickyFixTop');
-
-            $('.tabLinkMainWrap').css('color', 'black');
-
-            var showWhatId = null;
-            var sum = $(window).width() <= 767 ? 120 : 0;
-
-            var topOfInfo = document.getElementById('generalDescLinkRel').getBoundingClientRect().top - sum;
-            var topOfQA = document.getElementById('QAndAMainDivId').getBoundingClientRect().top - sum;
-            var topOfPost = document.getElementById('mainDivPlacePost').getBoundingClientRect().top - sum;
-            var topOfMap = document.getElementById('goToMapSection');
-            var topOfSimilar = document.getElementById('topPlacesSection');
-            var topOfRecipe = document.getElementById('recepieForFood');
-
-            if(topOfSimilar){
-                topOfSimilar = document.getElementById('topPlacesSection').getBoundingClientRect().top;
-                if(topOfSimilar < 0)
-                    showWhatId = 'similarLocationsBtnTopBar';
-            }
-
-            if(topOfQA < 0 && showWhatId == null)
-                showWhatId = 'QAndAsBtnTopBar';
-
-            if(topOfPost < 0 && showWhatId == null)
-                showWhatId = 'postsBtnTopBar';
-
-            if(topOfMap){
-                topOfMap = document.getElementById('goToMapSection').getBoundingClientRect().top - sum;
-                if(topOfMap < 0 && showWhatId == null)
-                    showWhatId = 'mapBtnTopBar';
-            }
-
-            if(topOfRecipe){
-                topOfRecipe = document.getElementById('recepieForFood').getBoundingClientRect().top - sum;
-                if(topOfRecipe < 0 && showWhatId == null)
-                    showWhatId = 'recipeDescBtnTopBar';
-            }
-
-            if(topOfInfo < 0 && showWhatId == null)
-                showWhatId = 'generalDescBtnTopBar';
-
-            if(showWhatId != null)
-                $(`.${showWhatId}`).css('color', 'var(--koochita-light-green)');
-
-            if($(window).width() <= 767){
-                var indecTop = document.getElementById('indicForShowDown').getBoundingClientRect().top;
-                indecTop += $('#indicForShowDown').height() - 110;
-                if(indecTop < 0){
-                    if(!isOpenRateButton && yourRateForThisPlace == 0){
-                        isOpenRateButton = true;
-                        $('.setScoreForThisPlaceComeUp').removeClass('hidden');
-                        setTimeout(() => $('.setScoreForThisPlaceComeUp').addClass('open'), 100);
-                    }
-                    $('#comeDownHeader').addClass('show');
-                }
-                else
-                    $('#comeDownHeader').removeClass('show');
-            }
-        });
-
+        var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
+        var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
+        var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
+        var addPhotoToPlaceUrl = '{{route("photographer.uploadFile")}}';
     </script>
+
+    <script src="{{URL::asset('js/pages/placeDetails/placeDetails.js?v='.$fileVersions)}}"></script>
 @stop
 

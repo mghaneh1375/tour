@@ -4,6 +4,7 @@ use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
 use App\models\localShops\LocalShopsPictures;
+use App\models\PhotographersPic;
 use App\models\places\places\Amaken;
 use App\models\Cities;
 use App\models\CityPic;
@@ -22,8 +23,8 @@ use App\models\places\PlaceRates;
 use App\models\QuestionAns;
 use App\models\BookMarkReference;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewPic;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\places\SogatSanaie;
 use App\models\State;
 use App\models\User;
@@ -105,16 +106,16 @@ function getTakenMedal($userId){
             $item->take = $countsTaken[$item->kindPlaceId . '_' . $item->activityId];
             if ($item->take >= $item->floor) {
                 $item->take = $item->floor;
-                $item->offPic = \URL::asset('_images/badges/' . $item->pic_2);
+                $item->offPic = URL::asset('_images/badges/' . $item->pic_2);
                 $item->percent = 0;
             }
             else {
-                $item->offPic = \URL::asset('_images/badges/' . $item->pic_1);
+                $item->offPic = URL::asset('_images/badges/' . $item->pic_1);
                 $item->percent = floor(($item->take / $item->floor) * 100);
             }
 
             $item->text = 'این مدال بعد از ' . $item->floor . ' تا ' . $act->name . ' ' . $kindPlaceName . ' بدست می آید';
-            $item->onPic = \URL::asset('_images/badges/' . $item->pic_2);
+            $item->onPic = URL::asset('_images/badges/' . $item->pic_2);
         }
     }
 
@@ -197,7 +198,7 @@ function getNearestMedals($uId) {
 }
 
 function uploadLargeFile($_direction, $_file_data){
-        $file_data = decode_chunk($_file_data);
+    $file_data = decode_chunk($_file_data);
     if ($file_data === false)
         return false;
     else
@@ -686,8 +687,10 @@ function compressImage($source, $destination, $quality){
 
 function getAllPlacePicsByKind($kindPlaceId, $placeId){
 
+    $userPhotosArr = [];
+    $userVideoArr = [];
+    $sliderPics = [];
     $sitePics = [];
-    $allPics = [];
 
     if(auth()->check())
         $user = auth()->user();
@@ -700,82 +703,91 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
 
     $userPhotos = DB::select('SELECT pic.* , users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 0 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
     foreach ($userPhotos as $item){
-        $item->pic = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
-        $item->userPic = getUserPic($item->userId);
-        $item->time = getDifferenceTimeString($item->created_at);
-        $item->id = 'review_' . $item->id;
+        $item->pic = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}");
+
+        array_push($userPhotosArr, [
+            'id' => "review_{$item->id}",
+            'sidePic' => $item->pic ,
+            'mainPic' => $item->pic ,
+            'userName' => $item->username ,
+            'userPic' => getUserPic($item->userId) ,
+            'uploadTime' => getDifferenceTimeString($item->created_at) ,
+            'showInfo' => false ,
+        ]);
     }
 
     $userVideo = DB::select('SELECT pic.*, users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 1 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
     foreach ($userVideo as $item){
-        $videoArray = explode('.', $item->pic);
-        $videoPicName = '';
-        for($k = 0; $k < count($videoArray)-1; $k++)
-            $videoPicName .= $videoArray[$k] . '.';
-        $videoPicName .= 'png';
+        if($item->thumbnail == null){
+            $thumbnail = explode('.', $item->pic);
+            $thumbnail[count($thumbnail) - 1] = '.png';
+            $thumbnail = implode('', $thumbnail);
+        }
+        else
+            $thumbnail = $item->thumbnail;
 
-        $item->picName = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $videoPicName);
-        $item->videoUrl = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
+        $item->picName = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$thumbnail}");
+        $item->videoUrl = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}");
 
-        $item->video = URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic);
-        $item->userPic = getUserPic($item->userId);
-
-        $item->time = getDifferenceTimeString($item->created_at);
-        $item->id = 'review_' . $item->id;
+        array_push($userVideoArr, [
+            'id' => "review_{$item->id}",
+            'sidePic' => $item->picName ,
+            'mainPic' => $item->picName ,
+            'userPic' => getUserPic($item->userId) ,
+            'userName' => $item->username ,
+            'video' => $item->videoUrl ,
+            'uploadTime' => getDifferenceTimeString($item->created_at) ,
+            'showInfo' => false ,
+        ]);
     }
+
+    $baseLocation = __DIR__.'/../../../../assets/_images';
 
     $koochitaPic = URL::asset('images/icons/KOFAV0.svg');
-    if(is_file(__DIR__ .'/../../../../assets/_images/' . $MainFile . '/' . $place->file . '/f-' . $place->picNumber)) {
-        $s = ['id' => 0,
-            's' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $place->picNumber),
-            'f' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/f-' . $place->picNumber),
-            'l' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/l-' . $place->picNumber),
-            't' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/t-' . $place->picNumber),
-            'mainPic' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/' . $place->picNumber),
+    if(is_file("{$baseLocation}/{$MainFile}/{$place->file}/f-{$place->picNumber}")) {
+        $s = [
+            'id' => 'sitePic_0',
+            'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$place->picNumber}"),
+            'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$place->picNumber}"),
             'alt' => $place->alt,
-            'name' => 'کوچیتا',
+            'userName' => 'کوچیتا',
             'userPic' => $koochitaPic,
             'showInfo' => false,
-            'like' => 0,
-            'dislike' => 0,
-            'description' => '',
-            'fromUpload' => ''];
+            'uploadTime' => ''
+        ];
 
         array_push($sitePics, $s);
+        array_push($sliderPics, $s);
     }
-    foreach ($place->pics as $item){
-        if(is_file(__DIR__ .'/../../../../assets/_images/' . $MainFile . '/' . $place->file . '/f-' . $item->picNumber)) {
-            $s = ['id' => $place->id,
-                's' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $item->picNumber),
-                'f' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/f-' . $item->picNumber),
-                'l' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/l-' . $item->picNumber),
-                't' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/t-' . $item->picNumber),
-                'mainPic' => URL::asset('_images/' . $MainFile . '/' . $place->file . '/s-' . $item->picNumber),
+    foreach ($place->pics as $index => $item){
+        if(is_file("{$baseLocation}/{$MainFile}/{$place->file}/f-{$item->picNumber}")) {
+            $s = [
+                'id' => "sitePic_{$index}",
+                'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$item->picNumber}"),
+                'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$item->picNumber}"),
                 'alt' => $place->alt,
-                'name' => 'کوچیتا',
+                'userName' => 'کوچیتا',
                 'userPic' => $koochitaPic,
                 'showInfo' => false,
-                'like' => 0,
-                'dislike' => 0,
-                'description' => '',
-                'fromUpload' => ''];
+                'uploadTime' => ''
+            ];
+
             array_push($sitePics, $s);
+            array_push($sliderPics, $s);
         }
     }
 
-    if(\auth()->check())
-        $photographerPic = DB::select('SELECT photo.* FROM photographersPics AS photo WHERE photo.kindPlaceId = ' . $kindPlaceId . ' AND photo.placeId  = ' . $placeId . ' AND ((photo.userId = ' . $user->id . ') OR ( photo.status = 1)) ORDER BY created_at');
-    else
-        $photographerPic = DB::select('SELECT * FROM photographersPics WHERE kindPlaceId = ' . $kindPlaceId . ' AND placeId  = ' . $placeId . ' AND status = 1 ORDER BY created_at');
+    $photographerPic = PhotographersPic::join('users', 'users.id', 'photographersPics.userId')->where('photographersPics.kindPlaceId', $kindPlaceId)->where('photographersPics.placeId', $placeId)->where(function($query){
+        if(auth()->check()) $query->where('photographersPics.userId', auth()->user()->id)->orWhere('photographersPics.status', 1);
+        else $query->where('photographersPics.status', 1);
+    })->orderByDesc('photographersPics.created_at')->select(['photographersPics.*', 'users.username'])->get();
 
     if($photographerPic != null) {
-        $pid = [];
+        $pid = [0];
         foreach ($photographerPic as $item)
             array_push($pid, $item->id);
-        if(auth()->check())
-            $pidLike = DB::select('SELECT * FROM photographersLogs WHERE picId IN (' . implode(",", $pid) . ') AND userId = ' . $user->id);
-        else
-            $pidLike = null;
+
+        $pidLike = auth()->check() ? DB::select('SELECT * FROM photographersLogs WHERE picId IN (' . implode(",", $pid) . ') AND userId = ' . $user->id) : null;
 
         foreach ($photographerPic as $item) {
             if($pidLike != null) {
@@ -793,40 +805,30 @@ function getAllPlacePicsByKind($kindPlaceId, $placeId){
         }
     }
 
-    $photographerPics = [];
-    if(count($photographerPic) < 5)
-        $photographerPics = $sitePics;
-
     foreach ($photographerPic as $item){
-        $user = User::find($item->userId);
-        $userName = $user->username;
+        $s = [
+            'id' => "photographer_{$item->id}",
+            'sidePic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/l-{$item->pic}"),
+            'mainPic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/s-{$item->pic}"),
+            'userPic' =>  getUserPic($item->userId),
+            'userName' => $item->username,
+            'picName' => $item->name,
+            'alt' => $item->alt,
+            'showInfo' => true,
+            'like' => $item->like,
+            'dislike' => $item->dislike,
+            'description' => $item->description,
+            'uploadTime' => getDifferenceTimeString($item->created_at),
+            'userLike' => $item->userLike
+        ];
 
-        if($user != null) {
-            $s = [
-                'id' => 'photographer_'.$item->id,
-                's' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/s-' . $item->pic),
-                'f' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/f-' . $item->pic),
-                'l' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/l-' . $item->pic),
-                't' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/t-' . $item->pic),
-                'mainPic' => URL::asset('userPhoto/' . $MainFile . '/' . $place->file . '/' . $item->pic),
-                'alt' => $item->alt,
-                'name' => $userName,
-                'picName' => $item->name,
-                'userPic' =>  getUserPic($user->id),
-                'showInfo' => true,
-                'like' => $item->like,
-                'dislike' => $item->dislike,
-                'description' => $item->description,
-                'fromUpload' => getDifferenceTimeString($item->created_at),
-                'userLike' => $item->userLike
-            ];
+        if($item->isSitePic == 1)
+            array_push($sliderPics, $s);
 
-            array_unshift($photographerPics, $s);
-            array_unshift($allPics, $s);
-        }
+        array_unshift($userPhotosArr, $s);
     }
 
-    return ['sitePics' => $sitePics, 'photographerPics' => $photographerPics, 'userPhotos' => $userPhotos, 'userVideo' => $userVideo, 'allPics' => $allPics];
+    return ['sitePics' => $sitePics, 'userPhotos' => $userPhotosArr, 'userVideo' => $userVideoArr, 'sliderPics' => $sliderPics];
 }
 
 function deleteReviewPic(){
@@ -950,6 +952,8 @@ function generateRandomString($length = 20) {
 }
 
 function saveViewPerPage($kindPlaceId, $placeId){
+    return;
+
     if(Auth::check())
         $userId = auth()->user()->id;
     else
@@ -978,28 +982,34 @@ function saveViewPerPage($kindPlaceId, $placeId){
 }
 
 function getUserPic($id = 0){
+    $userPicsInArray = config('userPictureArr');
 
-    $user = User::find($id);
-    if($id == 0 || $user == null)
-        $uPic = \URL::asset('images/mainPics/noPicSite.jpg');
-    else{
-        if(strpos($user->picture, 'http') !== false)
-            return $user->picture;
-        else{
-            if($user->uploadPhoto == 0){
-                $deffPic = DefaultPic::find($user->picture);
+    if(!array_key_exists($id, $userPicsInArray)){
+        $user = User::find($id);
+        if ($id == 0 || $user == null)
+            $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+        else {
+            if (strpos($user->picture, 'http') !== false)
+                $uPic = $user->picture;
+            else {
+                if ($user->uploadPhoto == 0) {
+                    $deffPic = DefaultPic::find($user->picture);
 
-                if($deffPic != null)
-                    $uPic = URL::asset('defaultPic/' . $deffPic->name);
+                    if ($deffPic != null)
+                        $uPic = URL::asset("defaultPic/{$deffPic->name}");
+                    else
+                        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+                }
                 else
-                    $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+                    $uPic = URL::asset("userProfile/{$user->picture}");
             }
-            else
-                $uPic = URL::asset('userProfile/' . $user->picture);
         }
+
+        $userPicsInArray[$id] = $uPic;
+        config(['userPictureArr' => $userPicsInArray]);
     }
 
-    return $uPic;
+    return $userPicsInArray[$id];
 }
 
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
@@ -1017,14 +1027,14 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
         }
 
         if($place != null && $place->file != 'none' && $place->file != null){
-            $location = __DIR__ . '/../../../../assets/_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic;
+            $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}";
             if (is_file($location))
-                return URL::asset('_images/' . $kindPlace->fileName . '/' . $place->file . '/' . $kind . '-' . $pic);
+                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}");
         }
 
     }
 
-    return URL::asset('images/mainPics/nopicv01.jpg');
+    return URL::asset("images/mainPics/noPicSite.jpg");
 }
 
 
@@ -1126,7 +1136,7 @@ function getCityPic($cityId){
             if(count($pics) != 0) {
                 foreach ($pics as $pic) {
                     if(is_file($loc . '/' . $pic->pic)) {
-                        $resultPic = \URL::asset('_images/city/' . $city->id . '/' . $pic->pic);
+                        $resultPic = URL::asset('_images/city/' . $city->id . '/' . $pic->pic);
                         break;
                     }
                 }
@@ -1155,7 +1165,7 @@ function getCityPic($cityId){
             }
         }
         else
-            $resultPic = \URL::asset('_images/city/' . $city->id . '/' . $city->image);
+            $resultPic = URL::asset('_images/city/' . $city->id . '/' . $city->image);
 
     }
 
@@ -1447,7 +1457,7 @@ function convertJalaliToText($date){
 }
 
 function createWelcomeMsg($userId){
-    $msg = '<div>مرسی از ثبت نامت دوست من.</div><div>شما بخش مهمی از کوچیتا هستید. ما سعی کردیم تا همه چیز برای شما خوب طراحی بشه. در کوچیتا شما می تونید شهر، روستا، غذای محلی،سوغات، بوم گردی ها، جاذبه ها، طبیعت گردی و هتل ها رو پیدا کنید و عکس و نظر خودتون و دوستانتون را ببینید و بهترین انتخاب رو داشته باشید.</div><a href="https://koochita.com/placeList/11/country" target="_blank" style="display: block; margin: 5px 0px;">لیست غذاهای محلی ایران</a><a href="https://koochita.com/placeList/1/country" target="_blank" style="display: block; margin: 5px 0px;">لیست جاذبه های ایران  </a><a href="https://koochita.com/placeList/12/country" target="_blank" style="display: block; margin: 5px 0px;">لیست بوم‌گردی های ایران</a><a href="https://koochita.com/placeList/6/country" target="_blank" style="display: block; margin: 5px 0px;">لیست طبیعت گردی (کمپینگ) های ایران</a><div>شما همیشه می تونید از صفحه اول سایت و یا دکمه منو، شهر یا مکان مورد نظرتون رو سریع پیدا کنید. هر جایی که رفتید در قسمت ارسال دیدگاه می تونید نظرتون رو به همراه عکس و یا فیلم برای دوستانتون به اشتراک بگذارید.اگر عکاس هستید می تونید در قسمت من عکاس هستم عکس هاتون رو آپلود کنید تا ما با اسم خودتون منتشر کنیم.  شما می تونید از لینک زیر صفحه پروفایلتون رو ببینید. به شما کمک  می‌کنه تا با دوستانتون در تماس باشید ، برنامه ریزی سفر کنید ، سفرنامه بنویسید و با دوستانتون به اشتراک بگذارید.  این امکان از منوی کناری در موبایل و منوی بالا در کامپیوتر هم در دسترسه.</div><a href="https://koochita.com/profile/index" target="_blank" style="display: block; margin: 5px 0px;">صفحه پروفایل من</a><div>هر وقت سوالی داشتید و یا نظرتون رو می خواستید به ما بگید به همین اکانت پیام بدید. ما مشتاق صحبت کردن با شما هستیم.</div>';
+    $msg = '<div>مرسی از ثبت نامت دوست من.</div><div>شما بخش مهمی از کوچیتا هستید. ما سعی کردیم تا همه چیز برای شما خوب طراحی بشه. در کوچیتا شما می تونید شهر، روستا، غذای محلی،سوغات، بوم گردی ها، جاذبه ها، طبیعت گردی و هتل ها رو پیدا کنید و عکس و نظر خودتون و دوستانتون را ببینید و بهترین انتخاب رو داشته باشید.</div><a href="https://koochita.com/placeList/11/country" target="_blank" style="display: block; margin: 5px 0px;">لیست غذاهای محلی ایران</a><a href="https://koochita.com/placeList/1/country" target="_blank" style="display: block; margin: 5px 0px;">لیست جاذبه های ایران  </a><a href="https://koochita.com/placeList/12/country" target="_blank" style="display: block; margin: 5px 0px;">لیست بوم‌گردی های ایران</a><a href="https://koochita.com/placeList/6/country" target="_blank" style="display: block; margin: 5px 0px;">لیست طبیعت گردی (کمپینگ) های ایران</a><div>شما همیشه می تونید از صفحه اول سایت و یا دکمه منو، شهر یا مکان مورد نظرتون رو سریع پیدا کنید. هر جایی که رفتید در قسمت ارسال دیدگاه می تونید نظرتون رو به همراه عکس و یا فیلم برای دوستانتون به اشتراک بگذارید.اگر عکاس هستید می تونید در قسمت من عکاس هستم عکس هاتون رو آپلود کنید تا ما با اسم خودتون منتشر کنیم.  شما می تونید از لینک زیر صفحه پروفایلتون رو ببینید. به شما کمک  می‌کنه تا با دوستانتون در تماس باشید ، برنامه ریزی سفر کنید ، سفرنامه بنویسید و با دوستانتون به اشتراک بگذارید.  این امکان از منوی کناری در موبایل و منوی بالا در کامپیوتر هم در دسترسه.</div><a href="https://koochita.com/profile/index" target="_blank" style="display: block; margin: 5px 0px;">صفحه پروفایل من</a><div>هر وقت سوالی داشتید و یا نظرتون رو می خواستید به ما بگید به همین اکانت پیام بدید. ما مشتاق صحبت کردن با شما هستیم.</div><div>در آخر هم خوشحال میشیم که ما رو در اینستاگرام دنبال کنید تا از خبرهای جدید، فعالیت های تیم کوچیتا و مسابقات اطلاع پیدا کنید. آیدی اینستاگرام <a href="https://www.instagram.com/koochita_com/">@koochita_com</a></div>';
 
     $newMsg = new Message();
     $newMsg->senderId = 0;

@@ -942,6 +942,11 @@
     position: relative;
     direction: rtl;
 }
+.commentsContentMainBox .fullReviewAnsText{
+    white-space: pre-wrap;
+    font-size: .7em;
+    margin-top: 5px;
+}
 .ansCommentTimeAgo{
     font-size: 11px;
     margin-right: 5px;
@@ -1082,6 +1087,15 @@
     margin: 10px 0 5px;
     display: inline-block;
     width: 100%;
+    margin-bottom: 10px;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 20px;
+}
+.usersCommentHeaderText{
+    color: var(--koochita-blue);
+    font-weight: bold;
+    font-size: 23px;
+    margin-bottom: 5px;
 }
 
 .newAnswerPlaceMainDiv{
@@ -1445,6 +1459,13 @@
     padding: 10px;
     margin-bottom: 20px;
 }
+.questionPack .questionContentMainBox{
+    white-space: pre-line;
+    font-size: 17px;
+}
+.questionPack .commentsContentMainBox .fullReviewAnsText{
+    font-size: 1em;
+}
 
 .questionSubMenuBar{
     padding: 8px 0;
@@ -1463,9 +1484,17 @@
 
 
 @media only screen and (max-width: 767px) {
+    .commentsContentMainBox .colInAns{
+        display: flex;
+        flex-direction: column;
+    }
     .commentWriterExperienceParticipation, .userProfileName, .userProfileNameAnswers{
         margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
+
 
     .fullReviewLikeAnsSeeAllSection{
         width: 100%;
@@ -1524,13 +1553,27 @@
     }
 
     .fullReviewAnsText{
-        width: calc(100% + 60px);
-        margin-right: -40px;
-        margin-top: 15px;
+        /*width: calc(100% + 60px);*/
+        /*margin-right: -40px;*/
+        /*margin-top: 15px;*/
+
+        font-size: .7em;
+        width: 100%;
+        margin: 0;
+        margin-top: 5px;
     }
 
     .newCommentPlaceMainDiv, .answerPlaceMainDiv, .newAnswerPlaceMainDiv, .ansTextAreaReview{
         background: #4dc7bc1a;
+    }
+
+    .newAnswerPlaceMainDiv .inputBox{
+        flex-direction: column;
+        background: #edf9f8;
+        width: 100%;
+    }
+    .newAnswerPlaceMainDiv .inputBox .sendQuestionBtn{
+        background-color: #edf9f8;
     }
 
     .commentsContentMainBox{
@@ -1757,9 +1800,9 @@
 }
 
 @media only screen and (max-width: 370px) {
-    .fullReviewLikeAnsSeeAllSection{
-        display: block;
-    }
+    /*.fullReviewLikeAnsSeeAllSection{*/
+    /*    display: flex;*/
+    /*}*/
 
     .fullReviewSeeAnses{
         text-align: left;

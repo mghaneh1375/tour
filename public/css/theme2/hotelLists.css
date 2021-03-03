@@ -523,7 +523,32 @@ div.prw_rup.prw_restaurants_restaurants_coverpage_content .item.name {
 }
 
 .contentImgSection{
-
+    position: relative;
+}
+.contentImgSection .locationIcon{
+    position: absolute;
+    left: 8px;
+    bottom: 12px;
+    font-size: 20px;
+    color: var(--koochita-red);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+.contentImgSection .locationIcon:after{
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: var(--koochita-red);
+    position: absolute;
+    bottom: -10px;
+    transform: rotateX(76deg);
+    border-radius: 50%;
 }
 
 .contentImg{
@@ -765,6 +790,88 @@ div.prw_rup.prw_common_centered_thumbnail .sizing_wrapper{
     display: flex;
     justify-content: space-between;
 }
+
+
+.localShopCategoryFilterSection{
+    padding: 10px;
+    border: solid 2px #0000009c;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+    position: relative;
+    height: 120px;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList{
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    position: absolute;
+    right: 0px;
+    width: 100%;
+    transition: .3s;
+    top: 10px;
+    bottom: 10px;
+    padding: 0px 10px;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList.hideOnBottom{
+    top: 100%;
+    bottom: unset;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList.hideOnTop{
+    bottom: 100%;
+    top: unset;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .header{
+    font-size: 18px;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .header .emptyRightArrowLine{
+    width: 25px;
+    height: 25px;
+    border: solid 2px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections{
+    display: flex;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 5px;
+    padding: 5px 10px;
+    border: solid 1px #545454;
+    border-radius: 10px;
+    font-size: 18px;
+    text-align: center;
+    width: auto;
+    cursor: pointer;
+    transition: .2s;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory:hover{
+    background: var(--koochita-yellow);
+    color: white;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory.selected{
+    background: var(--koochita-yellow);
+    color: white;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory .icon{
+    display: none;
+}
+.localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory .name{
+    font-size: .8em;
+}
+
+
 @media (min-width: 992px) and (max-width: 1189px) {
     .lhr .filterGroupTitle {
         font-size: 18px !important;

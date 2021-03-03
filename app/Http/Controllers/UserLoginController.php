@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ActivityLogEvent;
 use App\models\ActivationCode;
 use App\models\Activity;
+use App\models\Cities;
 use App\models\DefaultPic;
 use App\models\LogModel;
 use App\models\logs\UserSeenLog;
@@ -13,6 +14,8 @@ use App\models\RetrievePas;
 use App\models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class UserLoginController extends Controller
 {
@@ -168,59 +171,66 @@ class UserLoginController extends Controller
         echo "nok";
     }
 
-    public function checkPhoneNum()
+    public function checkPhoneNum(Request $request)
     {
-        if (isset($_POST["phoneNum"])) {
-
-            $phoneNum = makeValidInput($_POST["phoneNum"]);
+        if (isset($request->phoneNum)) {
+            $sendCode = false;
+            $phoneNum = makeValidInput($request->phoneNum);
             $phoneNum = convertNumber('en', $phoneNum);
 
             if(\auth()->check()){
                 if (User::where('phone', $phoneNum)->where('id', '!=', \auth()->user()->id)->count() > 0)
                     echo 'nok';
-                else
-                    echo 'ok';
+                else {
+                    if(isset($request->sendCode) && $request->sendCode == 1 && $phoneNum != \auth()->user()->phone)
+                        $sendCode = true;
+                    else
+                        echo 'ok';
+                }
             }
             else {
                 if (User::where('phone', $phoneNum)->count() > 0)
                     echo json_encode(['status' => 'nok']);
-                else {
-                    $activation = ActivationCode::where('phoneNum', $phoneNum)->first();
-                    if ($activation != null) {
-                        if((90 - time() + $activation->sendTime) < 0)
-                            $this->resendActivationCode();
-                        else
-                            echo json_encode(['status' => 'ok', 'reminder' => (90 - time() + $activation->sendTime)]);
+                else
+                    $sendCode = true;
+            }
 
-                        return;
-                    }
+            if($sendCode){
+                $activation = ActivationCode::where('phoneNum', $phoneNum)->first();
+                if ($activation != null) {
+                    if((90 - time() + $activation->sendTime) < 0)
+                        $this->resendActivationCode();
+                    else
+                        echo json_encode(['status' => 'ok', 'reminder' => (90 - time() + $activation->sendTime)]);
+                    return;
+                }
 
+                $code = createCode();
+                while (ActivationCode::where('code', $code)->count() > 0)
                     $code = createCode();
-                    while (ActivationCode::where('code', $code)->count() > 0)
-                        $code = createCode();
 
-                    if ($activation == null) {
-                        $activation = new ActivationCode();
-                        $activation->phoneNum = $phoneNum;
-                    }
+                if ($activation == null) {
+                    $activation = new ActivationCode();
+                    $activation->phoneNum = $phoneNum;
+                }
 
-                    $msgId = sendSMS($phoneNum, $code, 'sms');
-                    if ($msgId == -1) {
-                        echo json_encode(['status' => 'nok3']);
-                        return;
-                    }
+                $msgId = sendSMS($phoneNum, $code, 'sms');
+                if ($msgId == -1) {
+                    echo json_encode(['status' => 'nok3']);
+                    return;
+                }
 
-                    $activation->sendTime = time();
-                    $activation->code = $code;
-                    try {
-                        $activation->save();
-                        echo json_encode(['status' => 'ok', 'reminder' => 90]);
-                    } catch (Exception $x) {
-                    }
+                $activation->sendTime = time();
+                $activation->code = $code;
+                try {
+                    $activation->save();
+                    echo json_encode(['status' => 'ok', 'reminder' => 90]);
+                } catch (Exception $x) {
                 }
             }
             return;
         }
+
         echo json_encode(['status' => 'nok']);
     }
 
@@ -708,6 +718,126 @@ class UserLoginController extends Controller
 
         return;
     }
+
+    public function editUsernameAccountInfo(Request $request)
+    {
+        if(isset($request->username)){
+            $username = $request->username;
+            $user = auth()->user();
+
+            $check = User::where('username', $username)->where('id', '!=', $user->id)->first();
+            if($check != null)
+                return response()->json(['status' => 'duplicate']);
+            else{
+                $user = User::find($user->id);
+                $user->username = $username;
+                $user->save();
+
+                return response()->json(['status' => 'ok']);
+            }
+        }
+        else
+            return response()->json(['status' => 'error']);
+    }
+
+    public function editPhoneNumberAccountInfo(Request $request)
+    {
+        if(isset($request->code) && isset($request->phoneNum)){
+            $user = User::find(\auth()->user()->id);
+
+            $code = convertNumber('en', makeValidInput($request->code));
+            $phone = convertNumber('en', makeValidInput($request->phoneNum));
+
+            $check = User::where('phone', $phone)->where('id', '!=', $user->id)->first();
+            if($check != null)
+                return response()->json(['status' => 'duplicate']);
+
+            $activation = ActivationCode::where('phoneNum', $phone)->first();
+            if($activation == null || (90 - time() + $activation->sendTime) < 0)
+                return response()->json(['status' => 'expire']);
+
+            if($activation->code != $code)
+                return response()->json(['status' => 'wrong']);
+            else{
+                $activation->delete();
+
+                $user->phone = $phone;
+                $user->save();
+
+                return response()->json(['status' => 'ok']);
+            }
+        }
+        else
+            return response()->json(['status' => 'error']);
+    }
+
+    public function editGeneralAccountInfo(Request $request){
+
+        $user = \auth()->user();
+        $user->first_name = isset($request->firstName) ? $request->firstName : null;
+        $user->last_name = isset($request->lastName) ? $request->lastName : null;
+        $user->age = isset($request->age) ? $request->age : null;
+        $user->sex = isset($request->gender) ? $request->gender : null;
+        $user->introduction = isset($request->introduction) ? $request->introduction : null;
+
+        $cityId = $request->cityId;
+        if(Cities::find($cityId) != null)
+            $user->cityId = $cityId;
+
+        $user->save();
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function editSocialInfo(Request $request)
+    {
+        $status = 'ok';
+        $result = [];
+        $user = User::find(\auth()->user()->id);
+
+        if(User::where('email', $request->email)->where('id', '!=', $user->id)->first() == null)
+            $user->email = $request->email;
+        else{
+            $status = 'error';
+            array_push($result, 'emailDuplicate');
+        }
+
+        if(User::where('instagram', $request->instagram)->where('id', '!=', $user->id)->first() == null)
+            $user->instagram = $request->instagram;
+        else{
+            $status = 'error';
+            array_push($result, 'instagramDuplicate');
+        }
+
+        $user->save();
+
+        return response()->json(['status' => $status, 'result' => $result]);
+    }
+
+    public function editPassword(Request $request) {
+        $user = \auth()->user();
+
+        if(isset($request->password) && isset($request->repPassword)){
+            $password = makeValidInput($request->password);
+            $repPassword = makeValidInput($request->repPassword);
+
+            if(strlen($password) >= 6) {
+                if ($password === $repPassword) {
+                    $user->password = Hash::make($password);
+                    $user->save();
+                    return \redirect()->back()->with(['passStatus' => 'ok']);
+                }
+                else
+                    return \redirect()->back()->with(['passStatus' => 'notSame']);
+            }
+            else
+                return \redirect()->back()->with(['passStatus' => 'min6']);
+        }
+        else
+            return \redirect()->back()->with(['passStatus' => 'error']);
+
+    }
+
 
     private function generatePassword()
     {

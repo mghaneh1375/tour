@@ -51,13 +51,9 @@
                         <div id="reviewShowPics" class="commentPhotosMainDiv"></div>
                     </div>
 
-                    <div class="addParticipantName">
-                        <span class="addParticipantSpan">با</span>
-                        <div class="inputBoxGeneralInfo inputBox addParticipantInputBoxPostModal">
-                            <textarea id="assignedSearch" class="inputBoxInput" placeholder="{{__('چه کسی بودید؟ نام کاربری را وارد کنید')}}" onkeyup="searchUser(this.value)"></textarea>
-                            <div class="assignedResult" id="assignedResultReview"></div>
-                            <div class="participantDivMainDiv" id="participantDivMainDiv"></div>
-                        </div>
+                    <div class="searchYouFriendReviewSectionDiv">
+                        <div class="friendAddedSection results"></div>
+                        <div class="placeHolderText" onclick="openUserSearchForNewReview()">با چه کسانی بودید؟ نام کاربری را وارد نمایید</div>
                     </div>
 
                 </div>
@@ -86,7 +82,7 @@
                         </label>
                     </div>
                     <input type="file" id="video360ReviewInput" accept="video/*" style="display: none" onchange="uploadReviewVideo(this, 1)">
-                    <div class="commentOptionsBoxes">
+                    <div class="commentOptionsBoxes" onclick="openUserSearchForNewReview()">
                         <span class="tagFriendCommentIcon"></span>
                         <span class="commentOptionsText">{{__('افزودن دوست')}}</span>
                     </div>
@@ -126,8 +122,6 @@
                 @endforeach
 
                 <div class="commentQuestionsRatingsBox">
-                    {{--<div class="commentQuestionsRatingsBoxHeader"></div>--}}
-
                     @for($i = 0; $i < count($rateQuestion); $i++)
                         <div class="display-inline-block full-width">
                             <b id="rateName_{{$i}}"
@@ -161,17 +155,13 @@
                     @endfor
                 </div>
 
-                <button id="sendReviewButton" class="postMainDivFooter" type="button" onclick="checkReviewToSend('send');">
-                    {{__('ارسال دیدگاه')}}
-                </button>
+                <button id="sendReviewButton" class="postMainDivFooter" type="button" onclick="checkReviewToSend('send');"> {{__('ارسال دیدگاه')}} </button>
 
                 <div id="sendReviewLoader" class="postMainDivFooter" style="display: none; justify-content: center; align-items: center; color: #cccccc;">
                     <img src="{{URL::asset('images/icons/mGear.svg')}}" style="width: 30px; height: 30px;">
                     {{__('در حال ارسال دیدگاه')}}
                 </div>
-
             </div>
-
         </div>
 
         <div id="editReviewPictures" class="editReviewPicturesSection backDark hidden">
@@ -265,25 +255,10 @@
 </div>
 
 <script>
-    var allReviews;
-    var reviewsCount;
-    var imgCropNumber;
-    var fileUploadNum = 0;
-    var reviewPicNumber = 0;
-
-    var assignedUser = [];
-    var reviewMultiAns = [];
-    var reviewRateAnsId = [];
-    var rateQuestionAns = [];
-    var reviewMultiAnsId = [];
-    var reviewRateAnsQuestionId = [];
-    var reviewMultiAnsQuestionId = [];
-    var uploadedWriteReviewPicture = [];
-
     var rateQuestion = {!! json_encode($rateQuestion) !!} ;
     var textQuestions = {!! json_encode($textQuestion) !!};
-
     var storeReviewURLM = '{{route("storeReview")}}';
 </script>
-<script defer src="{{URL::asset('js/pages/placeDetialsWriteReview.js?v=1')}}"></script>
+
+<script defer src="{{URL::asset('js/pages/placeDetails/placeDetialsWriteReview.js?v='.$fileVersions)}}"></script>
 

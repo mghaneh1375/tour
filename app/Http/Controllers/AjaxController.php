@@ -29,8 +29,7 @@ use App\models\Report;
 use App\models\ReportsType;
 use App\models\places\Restaurant;
 use App\models\LogFeedBack;
-use App\models\ReviewPic;
-use App\models\ReviewUserAssigned;
+use App\models\Reviews\ReviewUserAssigned;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\safarnameh\SafarnamehComments;
@@ -85,20 +84,23 @@ class AjaxController extends Controller {
 
     public function getVideosFromKoochitaTv()
     {
-        $nouns = env('KOOCHITATV_NOUNC_CODE');
-        $time = Carbon::now()->getTimestamp();
-        $hash = Hash::make($nouns.'_'.$time);
+        $nouns = config('app.koochitaTvNouncCode');
+        $KOOCHITATV_URL_API = config('app.KOOCHITATV_URL_API');
 
         $kindPlace = Place::find($_GET['kindPlaceId']);
         $place = \DB::table($kindPlace->tableName)->find($_GET['id']);
+
 
         if($place != null && $kindPlace != null){
             $curl = curl_init();
             $kindPlaceId = $kindPlace->id;
             $placeId = $place->id;
 
+            $time = Carbon::now()->getTimestamp();
+            $hash = Hash::make($nouns.'_'.$time.'_'.$kindPlaceId.'_'.$placeId);
+
             curl_setopt_array($curl, array(
-                CURLOPT_URL => env('KOOCHITATV_URL_API')."/getVideosForPlaces?time=$time&code=$hash&kind=$kindPlaceId&id=$placeId",
+                CURLOPT_URL => "{$KOOCHITATV_URL_API}/getVideosForPlaces?time={$time}&code={$hash}&kind={$kindPlaceId}&id={$placeId}",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -125,6 +127,46 @@ class AjaxController extends Controller {
         else
             return response()->json(['status' => 'error1']);
     }
+
+    public function getNewestVideoFromKoochitaTv()
+    {
+        $nouns = config('app.koochitaTvNouncCode');
+        $KOOCHITATV_URL_API = config('app.KOOCHITATV_URL_API');
+
+        $curl = curl_init();
+
+        $time = Carbon::now()->getTimestamp();
+        $hash = Hash::make($nouns.'_'.$time);
+
+        $getCount = 10;
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "{$KOOCHITATV_URL_API}/getNewestVideos?time={$time}&code={$hash}&count={$getCount}",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+        ]);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        if($response){
+            $response = json_decode($response);
+            if($response->status == 'ok')
+                return response()->json(['status' => 'ok', 'result' => $response->result]);
+            else
+                return response()->json(['status' => 'errorInResult']);
+        }
+        else
+            return response()->json(['status' => 'errorInGet']);
+
+    }
+
 
     public function searchForFoodMaterial()
     {
@@ -255,7 +297,9 @@ class AjaxController extends Controller {
     public function searchPlace() {
         $places = [];
         $value = $_GET['value'];
-        if(isset($_GET['kindPlaceId']))
+        if(isset($_GET['kindPlaceId']) && $_GET['kindPlaceId'] == "all")
+            $kindPlace = Place::whereNotNull('tableName')->where('id', '!=', 13)->get();
+        else if(isset($_GET['kindPlaceId']))
             $kindPlace = Place::whereIn('id', [$_GET['kindPlaceId']])->get();
         else
             $kindPlace = Place::whereIn('id', [1, 3, 4, 6, 12])->get();
@@ -271,6 +315,7 @@ class AjaxController extends Controller {
                 $item->city = $city->name;
                 $item->state = $city->getState->name;
                 $item->kindPlaceId = $kind->id;
+                $item->kindPlaceName = $kind->tableName;
                 array_push($places, $item);
             }
         }
@@ -279,8 +324,8 @@ class AjaxController extends Controller {
     }
 
     public function searchForCity(Request $request) {
-        $key = $_POST["key"];
-        $result = array();
+        $result = [];
+        $key = $request->key;
         if(isset($request->state) && $request->state == 1)
             $result = DB::select("SELECT state.id, state.name as stateName FROM state WHERE state.name LIKE '%$key%' ");
 
@@ -293,10 +338,12 @@ class AjaxController extends Controller {
             array_push($result, $item);
         }
 
-        $village = DB::select("SELECT cities.id, cities.name as cityName, state.name as stateName, cities.isVillage as isVillage FROM cities, state WHERE cities.stateId = state.id AND isVillage != 0 AND cities.name LIKE '%$key%' ");
-        foreach ($village as $item) {
-            $item->kind = 'village';
-            array_push($result, $item);
+        if(isset($request->village) && $request->village == 1) {
+            $village = DB::select("SELECT cities.id, cities.name as cityName, state.name as stateName, cities.isVillage as isVillage FROM cities, state WHERE cities.stateId = state.id AND isVillage != 0 AND cities.name LIKE '%$key%' ");
+            foreach ($village as $item) {
+                $item->kind = 'village';
+                array_push($result, $item);
+            }
         }
         echo json_encode($result);
         return;

@@ -315,6 +315,26 @@
     top: 5px;
 }
 
+
+.notDataForMyLocationMap{
+    display: flex;
+    margin: 15px 0px;
+    filter: grayscale(1);
+    opacity: 0.5;
+    text-align: center;
+    direction: rtl;
+}
+.notDataForMyLocationMap .imageSection{
+    width: 100px;
+}
+.notDataForMyLocationMap .imageSection img{
+    width: 100%;
+}
+.notDataForMyLocationMap .textSection{
+    width: calc(100% - 100px);
+    padding: 0px 15px;
+}
+
 @media (max-width: 767px) {
     .leaflet-control-zoom.leaflet-bar.leaflet-control{
         display: none;

@@ -69,7 +69,7 @@ class Kernel extends HttpKernel
         'nothing' => \App\Http\Middleware\Nothing::class,
         'SafarnamehShareData' => \App\Http\Middleware\SafarnamehShareData::class,
         'shareData' => \App\Http\Middleware\ShareData::class,
-        'BusinessShareData' => \App\Http\Middleware\BusinessShareData::class,
+        'localShopsShareData' => \App\Http\Middleware\LocalShopsShareData::class,
         'shareNews' => \App\Http\Middleware\NewsShareData::class,
 
 

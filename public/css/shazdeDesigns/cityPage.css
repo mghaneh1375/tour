@@ -537,9 +537,9 @@
     min-height: 0px;
 }
 
-.image_wrapper {
-    height: 130px;
-}
+/*.image_wrapper {*/
+/*    height: 130px;*/
+/*}*/
 
 .cpMainSug .swiper-slide {
     margin-top: 15px;
@@ -658,9 +658,9 @@ h3{
     .cpMapCategory {
         width: 10%;
     }
-    .image_wrapper {
-        height: 200px;
-    }
+    /*.image_wrapper {*/
+    /*    height: 200px;*/
+    /*}*/
 
     .image_wrapper.landscape.landscapeWide .image {
         width: 100%;

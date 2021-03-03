@@ -72,32 +72,20 @@
         //     'state': '',
         // }];
 
-        let res = '';
+        var res = '';
         _data.forEach(item => {
-            let text = suggestionPlacePackSample;
-            let fk = Object.keys(item);
-            for (let x of fk) {
-                let re = new RegExp(`##${x}##`, "g");
-                text = text.replace(re, item[x]);
-            }
+            var text = suggestionPlacePackSample;
+            var fk = Object.keys(item);
+            for (var x of fk)
+                text = text.replace(new RegExp(`##${x}##`, "g"), item[x]);
 
             if(item['city']){
-                t = '##articleSetion##';
-                re = new RegExp(t, "g");
-                text = text.replace(re, 'none');
-
-                t = '##citySection##';
-                re = new RegExp(t, "g");
-                text = text.replace(re, 'flex');
+                text = text.replace(new RegExp('##articleSetion##', "g"), 'none');
+                text = text.replace(new RegExp('##citySection##', "g"), 'flex');
             }
             else{
-                t = '##articleSetion##';
-                re = new RegExp(t, "g");
-                text = text.replace(re, 'flex');
-
-                t = '##citySection##';
-                re = new RegExp(t, "g");
-                text = text.replace(re, 'none');
+                text = text.replace(new RegExp('##articleSetion##', "g"), 'flex');
+                text = text.replace(new RegExp('##citySection##', "g"), 'none');
             }
             res += text;
         });

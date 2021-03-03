@@ -3,6 +3,7 @@
 
 namespace App\models;
 
+use App\models\Reviews\ReviewPic;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Notifications\Notifiable;

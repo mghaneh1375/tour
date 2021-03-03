@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $urlGenerator)
     {
+
+        config(['userPictureArr' => []]);
+
         date_default_timezone_set('Asia/Tehran');
 
 //        if(env('APP_ENV') !== 'local')

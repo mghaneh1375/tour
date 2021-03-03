@@ -10780,7 +10780,7 @@ DIV.prw_rup.prw_common_mercury_photo_carousel .xthrough_bad .ui_icon {
 DIV.prw_rup.prw_common_mercury_photo_carousel {
     position: relative;
     height: 100%;
-    background: rgba(0, 0, 0, .75)
+    /*background: rgba(0, 0, 0, .75)*/
 }
 
 DIV.prw_rup.prw_common_mercury_photo_carousel .carousel {

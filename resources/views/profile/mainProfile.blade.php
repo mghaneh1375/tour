@@ -58,8 +58,6 @@
 
 @section('main')
 
-    @include('component.smallShowReview')
-
     @include('component.safarnamehRow')
 
     <div class="userPostsPage">
@@ -523,9 +521,7 @@
                     </div>
 
                     <div class="uploadSection">
-                        <label for="newBannerImage" class="newImageButton">
-                            آپلود عکس
-                        </label>
+                        <label for="newBannerImage" class="newImageButton"> آپلود عکس</label>
                     </div>
                     <div class="orSec">
                         <span>یا</span>
@@ -542,91 +538,6 @@
             </div>
         </div>
 
-        <div id="cropModal" class="editReviewPicturesSection backDark hidden">
-            <span class="ui_modal photoUploadOverlay editSection">
-                <div class="body_text" style="padding-top: 12px">
-                   <div class="headerBar epHeaderBar hideOnPhone"></div>
-                   <div class="row">
-                      <div class="col-md-12">
-                         <div class="img-container" style="position: relative; max-height: 75vh;">
-                            <img class="imgInEditor" id="imgEditReviewPics" alt="Picture" style="max-width: 100%; max-height: 100%">
-                         </div>
-                      </div>
-                   </div>
-                   <div class="row" id="actions" >
-                      <div class="col-md-12 docs-buttons">
-                        <div class="editBtnsGroup">
-                            <div class="editBtns">
-                               <div class="flipHorizontal" data-toggle="tooltip"
-                                    data-placement="top" title="Flip Horizontal"
-                                    onclick="cropper.scaleY(-1)"></div>
-                            </div>
-
-                            <div class="editBtns">
-                               <div class="flipVertical" data-toggle="tooltip" data-placement="top"
-                                    title="Flip Vertical" onclick="cropper.scaleX(-1)"></div>
-                            </div>
-                        </div>
-                        <div class="editBtnsGroup">
-                            <div class="editBtns">
-                               <div class="rotateLeft" data-toggle="tooltip" data-placement="top"
-                                    title="چرخش 45 درجه ای به سمت چپ"
-                                    onclick="cropper.rotate(-45)"></div>
-                            </div>
-
-                            <div class="editBtns">
-                               <div class="rotateRight" data-toggle="tooltip" data-placement="top"
-                                    title="چرخش 45 درجه ای به سمت راست"
-                                    onclick="cropper.rotate(45)"></div>
-                            </div>
-                        </div>
-                        <div class="editBtnsGroup">
-                            <div class="editBtns">
-                               <div class="cropping" data-toggle="tooltip" data-placement="top"
-                                    title="برش" onclick="cropper.crop()"></div>
-                            </div>
-
-                            <div class="editBtns">
-                               <div class="clearing" data-toggle="tooltip" data-placement="top"
-                                    title="بازگشت به اول" onclick="cropper.clear()"></div>
-                            </div>
-                        </div>
-
-                        <div class="upload" style="margin-right: auto; display: flex; align-items: center; margin-top: 10px;">
-                            <div onclick="$('#cropModal').addClass('hidden')" class="uploadBtn backEditReviewPic" style="cursor: pointer">{{__('بازگشت')}}</div>
-                            <div onclick="cropProfileImg()" class="uploadBtn ui_button primary" style="cursor: pointer">{{__('تایید')}}</div>
-                        </div>
-
-                        <div class="modal fade docs-cropped" id="getCroppedCanvasModal"
-                             role="dialog" aria-hidden="true"
-                             aria-labelledby="getCroppedCanvasTitle" tabindex="-1">
-                           <div class="modal-dialog modal-dialog-scrollable">
-                              <div class="modal-content">
-                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
-                                    <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                       <span aria-hidden="true">&times;</span>
-                                    </button>
-                                 </div>
-                                 <div class="modal-body"></div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default"
-                                            data-dismiss="modal">Close</button>
-                                    <a class="btn btn-primary" id="download"
-                                       href="javascript:void(0);"
-                                       download="cropped.jpg">Download</a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div><!-- /.modal -->
-
-                     </div>
-                   </div>
-               </div>
-{{--                <div class="ui_close_x" onclick="$('#cropModal').addClass('hidden');"></div>--}}
-            </span>
-        </div>
     @endif
 
 
@@ -1017,10 +928,8 @@
 
 
         function openCropProfile(){
-            $('#cropModal').removeClass('hidden');
-            $('#imgEditReviewPics').attr('src', mainUploadedPic);
             openLoading();
-            startProfileCropper('circle', 1);
+            startProfileCropper('circle', 1, 'userPic');
         }
 
         function openBannerModal() {
@@ -1074,10 +983,8 @@
         }
 
         function openCropBanner(){
-            $('#cropModal').removeClass('hidden');
-            $('#imgEditReviewPics').attr('src', mainUploadedBanner);
             openLoading();
-            startProfileCropper('req', 6);
+            startProfileCropper('req', 6, 'bannerPic');
         }
 
         function doUpdateBannerPic(){
@@ -1108,257 +1015,29 @@
             })
         }
 
-        function startProfileCropper(_kind, _ratio){
-
-            if(first) {
-                'use strict';
-                Cropper = window.Cropper;
-                URL = window.URL || window.webkitURL;
-
-                // container = document.querySelector('.img-container');
-                download = document.getElementById('download');
-                actions = document.getElementById('actions');
-                dataX = document.getElementById('dataX');
-                dataY = document.getElementById('dataY');
-                dataHeight = document.getElementById('dataHeight');
-                dataWidth = document.getElementById('dataWidth');
-                dataRotate = document.getElementById('dataRotate');
-                dataScaleX = document.getElementById('dataScaleX');
-                dataScaleY = document.getElementById('dataScaleY');
-            }
-            else {
-                cropper.destroy();
-                inputImage.value = null;
-            }
-
-            image = document.getElementById('imgEditReviewPics');
-            cropper = new Cropper(image, {
-                aspectRatio: _ratio,
-                preview: '.img-preview',
-            });
-
-            if(first) {
-                originalImageURL = image.src;
-                uploadedImageType = 'image/jpeg';
-                uploadedImageName = 'cropped.jpg';
-
-                // Tooltip
-                $('[data-toggle="tooltip"]').tooltip();
-
-                // Buttons
-                if (!document.createElement('canvas').getContext)
-                    $('button[data-method="getCroppedCanvas"]').prop('disabled', true);
-
-                if (typeof document.createElement('cropper').style.transition === 'undefined') {
-                    $('button[data-method="rotate"]').prop('disabled', true);
-                    $('button[data-method="scale"]').prop('disabled', true);
-                }
-
-                // Download
-                if (typeof download.download === 'undefined')
-                    download.className += ' disabled';
-
-                // Methods
-                actions.querySelector('.docs-buttons').onclick = function (event) {
-                    e = event || window.event;
-                    target = e.target || e.srcElement;
-
-                    if (!cropper) {
-                        return;
-                    }
-
-                    while (target !== this) {
-                        if (target.getAttribute('data-method')) {
-                            break;
-                        }
-
-                        target = target.parentNode;
-                    }
-
-                    if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
-                        return;
-                    }
-
-                    data = {
-                        method: target.getAttribute('data-method'),
-                        target: target.getAttribute('data-target'),
-                        option: target.getAttribute('data-option') || undefined,
-                        secondOption: target.getAttribute('data-second-option') || undefined
-                    };
-
-                    cropped = cropper.cropped;
-
-                    if (data.method) {
-                        if (typeof data.target !== 'undefined') {
-                            input = document.querySelector(data.target);
-
-                            if (!target.hasAttribute('data-option') && data.target && input) {
-                                try {
-                                    data.option = JSON.parse(input.value);
-                                } catch (e) {
-                                    console.log(e.message);
-                                }
-                            }
-                        }
-
-                        switch (data.method) {
-                            case 'rotate':
-                                if (cropped && options.viewMode > 0)
-                                    cropper.clear();
-                                break;
-                            case 'getCroppedCanvas':
-                                try {
-                                    data.option = JSON.parse(data.option);
-                                } catch (e) {
-                                    console.log(e.message);
-                                }
-
-                                if (uploadedImageType === 'image/jpeg') {
-                                    if (!data.option)
-                                        data.option = {};
-                                    data.option.fillColor = '#fff';
-                                }
-
-                                break;
-                        }
-
-                        result = cropper[data.method](data.option, data.secondOption);
-
-                        switch (data.method) {
-                            case 'rotate':
-                                if (cropped && options.viewMode > 0)
-                                    cropper.crop();
-                                break;
-                            case 'scaleX':
-                            case 'scaleY':
-                                target.setAttribute('data-option', -data.option);
-                                break;
-                        }
-
-                        if (typeof result === 'object' && result !== cropper && input) {
-                            try {
-                                input.value = JSON.stringify(result);
-                            } catch (e) {
-                                console.log(e.message);
-                            }
-                        }
-                    }
-                };
-
-                document.body.onkeydown = function (event) {
-                    var e = event || window.event;
-                    if (!cropper || this.scrollTop > 300)
-                        return;
-                    switch (e.keyCode) {
-                        case 37:
-                            e.preventDefault();
-                            cropper.move(-1, 0);
-                            break;
-
-                        case 38:
-                            e.preventDefault();
-                            cropper.move(0, -1);
-                            break;
-
-                        case 39:
-                            e.preventDefault();
-                            cropper.move(1, 0);
-                            break;
-
-                        case 40:
-                            e.preventDefault();
-                            cropper.move(0, 1);
-                            break;
-                    }
-                };
-                first = false;
-            }
-
-
-            // Import image
-            inputImage = document.getElementById('changePic');
-            if (URL) {
-                inputImage.onchange = function () {
-                    var files = this.files;
-                    var file;
-
-                    if (cropper && files && files.length) {
-                        file = files[0];
-
-                        if (/^image\/\w+/.test(file.type)) {
-                            uploadedImageType = file.type;
-                            uploadedImageName = file.name;
-
-                            if (uploadedImageURL) {
-                                URL.revokeObjectURL(uploadedImageURL);
-                            }
-
-                            image.src = uploadedImageURL = URL.createObjectURL(file);
-                            cropper.destroy();
-                            cropper = new Cropper(image, options);
-                            inputImage.value = null;
-                        } else {
-                            window.alert('Please choose an image file.');
-                        }
-                    }
-                };
-            } else {
-                inputImage.disabled = true;
-                inputImage.parentNode.className += ' disabled';
-            }
-
-
-            setTimeout(() => {
-                if(_kind == 'circle') {
-                    $('.cropper-view-box').css('border-radius', '50%');
-                    cropKind = 'userPic';
-                }
-                else {
-                    $('.cropper-view-box').css('border-radius', '0');
-                    cropKind = 'userBanner';
-                }
-                closeLoading();
-            },1000);
-        }
-
-        function cropProfileImg(){
-            openLoading();
-            $('#cropModal').addClass('hidden');
-
-            if(cropKind == 'userPic') {
-                var canvas1;
-                canvas1 = cropper.getCroppedCanvas({
-                    minWidth: 200,
-                    minHeight: 200,
-                });
-
-                canvas1.toBlob(function (blob) {
-                    uploadedPic = blob;
-                    choosenPic = 'uploaded';
+        function startProfileCropper(_kind, _ratio, _sec){
+            var im = _sec === 'userPic' ? mainUploadedPic : mainUploadedBanner;
+            openCropImgModal(_ratio, im, (_blob, _file) => {
+                if(_sec == 'userPic') {
+                    $('#changePic').attr('src', _file);
                     $('#uploadImgMode').val(0);
-                    $('#changePic').attr('src', canvas1.toDataURL());
-                    closeLoading();
-                });
-            }
-            else{
-                var canvas1;
-                canvas1 = cropper.getCroppedCanvas();
-
-                canvas1.toBlob(function (blob) {
-                    $('#changeBannerPic').attr('src', canvas1.toDataURL());
-
-                    chosenBannerPic = blob;
+                    uploadedPic = _blob;
+                    choosenPic = 'uploaded';
+                }
+                else{
+                    $('#changeBannerPic').attr('src', _file);
+                    chosenBannerPic = _blob;
                     uploadedBanner = true;
-                    closeLoading();
-                });
-            }
+                }
+            }); // in cropImg.js
         }
 
-        var url = new URL(location.href);
-        if(url.hash === '')
-            changePages('review');
-        else if(url.hash != '')
-            changePages(url.hash.replace("#", ""));
-
+        $(document).ready(() => {
+            var url = new URL(location.href);
+            if(url.hash === '')
+                changePages('review');
+            else if(url.hash != '')
+                changePages(url.hash.replace("#", ""));
+        })
     </script>
 @stop

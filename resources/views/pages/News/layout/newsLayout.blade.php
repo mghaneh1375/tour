@@ -5,6 +5,12 @@
 
     <link rel="stylesheet" href="{{URL::asset('css/pages/news.css?v='.$fileVersions)}}">
 
+    <style>
+        .addNewReviewButtonMobileFooter{
+            display: none;
+        }
+    </style>
+
     @yield('head')
 </head>
 <body>
@@ -37,10 +43,58 @@
         @yield('body')
     </div>
 
+    <div class="mobileFiltersButtonTabs hideOnScreen">
+        <div class="tabs">
+            <div class="tab filterIcon" onclick="openMyModal('newCategoryMobileModal')">دسته بندی</div>
+            <div class="tab searchIcon" onclick="openMyModal('newsSearchMobile')">جستجو</div>
+        </div>
+    </div>
+
+    <div id="newCategoryMobileModal" class="modalBlackBack fullCenter hideOnScreen" style="transition: .7s">
+        <div class="gombadi">
+            <div class="mobileFooterFilterPic" style="max-height: 400px">
+                <img src="{{URL::asset('images/mainPics/newsM.jpg')}}" style="width: 100%">
+                <div class="gradientWhite">
+                    <div class="closeThisModal iconClose" onclick="closeMyModal('newCategoryMobileModal')"></div>
+                </div>
+            </div>
+            <div class="newsCategoryListMFooter">
+                <div class="list">
+                    @foreach($newsCategories as $cat)
+                        <a href="{{route('news.list', ['kind' => 'category', 'content' => $cat->name])}}" class="categ">
+                            <div class="title">{{$cat->name}}</div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newsSearchMobile" class="modalBlackBack fullCenter hideOnScreen">
+        <div class="gombadi">
+            <div class="mobileFooterFilterPic" style="max-height: 400px">
+                <img src="{{URL::asset('images/mainPics/newsM.jpg')}}" style="width: 100%">
+                <div class="gradientWhite">
+                    <div class="closeThisModal iconClose" onclick="closeMyModal('newsSearchMobile')"></div>
+                </div>
+            </div>
+            <div class="newsCategoryListMFooter searchInMobileNewsBody" style="height: 100%">
+                <div class="title">جستجو در اخبار</div>
+                <div class="fullyCenterContent">
+                    <input type="text" id="newsSearchInputInMobile" class="searchInput" placeholder="عبارت خود را وارد کنید...">
+                </div>
+                <div class="fullyCenterContent" style="margin-top: 20px">
+                    <button class="searchButton" onclick="searchInNews('newsSearchInputInMobile')">جستجو</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     @yield('script')
 
     <script>
+        var newCategoryMobileModalElement = $('#newCategoryMobileModal');
         function getAdv(){
             var edsNeedType = [];
             var eds = $('.edSections');
@@ -92,6 +146,25 @@
         }
 
         getAdv();
+
+
+        function searchInNews(_inputId){
+            var value = $('#'+_inputId).val();
+
+            if(value.trim().length > 2){
+                openLoading();
+                location.href = `{{url("/news/list/content")}}/${value}`;
+            }
+        }
+
+        function resizeMobileListHeight(){
+            var height = newCategoryMobileModalElement.find('.mobileFooterFilterPic').height() + 5;
+            newCategoryMobileModalElement.find('.newsCategoryListMFooter').css('height', `calc(100% - ${height}px)`);
+        }
+
+        $(window).on('resize', resizeMobileListHeight);
+        $(window).ready(() => resizeMobileListHeight());
+
     </script>
 
     @include('layouts.footer.layoutFooter')

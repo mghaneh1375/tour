@@ -51,6 +51,7 @@
         .safarnamehDescription figure{
             margin: 20px auto;
             display: flex;
+            max-width: 100%;
         }
         .safarnamehDescription h1 span, .safarnamehDescription h1{
             font-size: 28px !important;
@@ -149,15 +150,17 @@
                             <span class="entry-date published updated">{{$safarnameh->date}}</span>
                         </div>
                         <div class="comments-link im-meta-item">
-                            <i class="fa fa-comment-o"></i>{{$safarnameh->msgs}}
+                            <i class="fas fa-comments"></i>
+{{--                            <i class="fa fa-comment-o"></i>--}}
+                            {{$safarnameh->msgs}}
                         </div>
                         <div class="author vcard im-meta-item">
                             <i class="fa fa-user"></i>
                             {{$safarnameh->user->username}}
                         </div>
-                        <div class="post-views im-meta-item">
-                            <i class="fa fa-eye"></i>{{$safarnameh->seen}}
-                        </div>
+{{--                        <div class="post-views im-meta-item">--}}
+{{--                            <i class="fa fa-eye"></i>{{$safarnameh->seen}}--}}
+{{--                        </div>--}}
                     </div>
                 </div>
                 <h1 class="im-entry-title">
@@ -189,13 +192,13 @@
                         </div>
                         <div class="like">
                             <span>{{$safarnameh->msgs}}</span>
-                            <span class="icon EmptyCommentIcon" onclick="$('#safarnamehCommentDiv').toggle();"></span>
+                            <span class="icon EmptyCommentIcon" onclick="$('#safarnamehCommentDiv').toggleClass('hidden');"></span>
                         </div>
                     </div>
                     <div class="left">
                         <div id="share_pic" class="postsActionsChoices postShareChoice col-xs-6 col-md-3">
                             <span class="icon commentsShareIconFeedback"></span>
-                            @include('layouts.shareBox')
+                            @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                         </div>
                         <div class="postsActionsChoices col-xs-6 col-md-3 {{$safarnameh->bookMark ? 'BookMarkIcon' : 'BookMarkIconEmpty'}}"
                              onclick="bookMarkSafarnameh({{$safarnameh->id}}, this)" style="cursor: pointer; font-size: 1.3em;"></div>
@@ -214,7 +217,6 @@
                 </div>
             </div>
             <div>
-                <div id="safarnamehCommentDiv" class="commentsMainBox" style="display: none;"></div>
 
                 <div class="newCommentPlaceMainDiv">
                     <div class="circleBase type2 newCommentWriterProfilePic hideOnPhone" style="width: 50px; height: 50px;">
@@ -237,6 +239,10 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="usersCommentHeaderText"> نظرات کاربران </div>
+                <div id="safarnamehCommentDiv" class="commentsMainBox"></div>
+
             </div>
         </div>
     </div>
@@ -246,42 +252,10 @@
     <script src="{{URL::asset('js/article/articlePage.js')}}"></script>
 
     <script>
+        var safarnamehId = {{$safarnameh->id}};
         var safarnameh = {!! $safarnameh !!};
         var _token= '{{csrf_token()}}';
         var userPic = '{{$uPic}}';
-
-        {{--function bookMarkSafarnameh(_element){--}}
-        {{--    if(!checkLogin())--}}
-        {{--        return;--}}
-
-        {{--    let child = $($(_element).children()[0]);--}}
-        {{--    $.ajax({--}}
-        {{--        type: 'post',--}}
-        {{--        url: '{{route("safarnameh.bookMark")}}',--}}
-        {{--        data: {--}}
-        {{--            _token: '{{csrf_token()}}',--}}
-        {{--            id: safarnameh.id--}}
-        {{--        },--}}
-        {{--        success: function(response){--}}
-        {{--            if(response == 'delete'){--}}
-        {{--                child.addClass('BookMarkIconEmpty');--}}
-        {{--                child.removeClass('BookMarkIcon');--}}
-        {{--                showSuccessNotifi('سفرنامه از نشون کرده حذف شد.', 'left', 'red');--}}
-        {{--            }--}}
-        {{--            else if(response == 'store'){--}}
-        {{--                child.removeClass('BookMarkIconEmpty');--}}
-        {{--                child.addClass('BookMarkIcon');--}}
-        {{--                showSuccessNotifi('سفرنامه به نشون کرده اضافه شد', 'left', 'var(--koochita-blue)');--}}
-        {{--            }--}}
-        {{--            else--}}
-        {{--                showSuccessNotifi('مشکلی در ثبت فرایند پیش امده', 'left', 'red');--}}
-        {{--        },--}}
-        {{--        error: function(err){--}}
-        {{--            console.log(err);--}}
-        {{--            showSuccessNotifi('مشکلی در ثبت فرایند پیش امده', 'left', 'red');--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
 
         function likePost(_like, _id, _element){
             if(!checkLogin())
@@ -296,61 +270,27 @@
                     id: _id
                 },
                 success: function(response){
-                    response = JSON.parse(response);
                     if(response.status == 'ok'){
                         $(_element).parent().find('.full').removeClass('full');
-                        $(_element).find('.icon').addClass('full');
+                        if(response.type === "add")
+                            $(_element).find('.icon').addClass('full');
+
+
                         $('.likeSafarnamehCount').text(response.like);
                         $('.disLikeSafarnamehCount').text(response.disLike);
                     }
                 },
-                error: function (response) {
-                    console.log(response)
-                }
             })
-        }
-
-        function sendComment(_id, _ansTo, _element){
-            if(!checkLogin())
-                return;
-
-            var txt = $(_element).prev().val();
-
-            if(txt.trim().length != 0){
-                $.ajax({
-                    type: 'post',
-                    url: '{{route("safarnameh.comment.store")}}',
-                    data:{
-                        _token: _token,
-                        id: _id,
-                        ansTo: _ansTo,
-                        txt: txt
-                    },
-                    success: function(response){
-                        if(response == 'ok') {
-                            $(_element).prev().val('');
-                            showSuccessNotifi('نظر شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
-                        }
-                    },
-                    error: function(err){
-                        console.log(err)
-                    }
-                })
-            }
         }
 
         function getComments(){
             $.ajax({
-                type: 'post',
-                url: '{{route("safarnameh.comment.get")}}',
-                data: {
-                    _token: '{{csrf_token()}}',
-                    id: {{$safarnameh->id}}
+                type: 'get',
+                url: `{{route("safarnameh.comment.get")}}?id=${safarnamehId}`,
+                success: response => {
+                    if(response.status === "ok")
+                        createComment(response.result);
                 },
-                success: function(resopnse){
-                    createComment(resopnse);
-                },
-                error: err => console.log(err)
             });
         }
 
@@ -362,11 +302,14 @@
                 text += createMainAnswer(item); // in answerPack.blade.php
             }
             $('#safarnamehCommentDiv').html(text);
+
+            autosize($(".inputBoxInputComment"));
+            autosize($(".inputBoxInputAnswer"));
         }
 
         function likeComments(_id, _kind, _elems){
             $.ajax({
-                type: 'post',
+                type: 'POST',
                 url: '{{route("safarnameh.comment.like")}}',
                 data: {
                     _token: '{{csrf_token()}}',
@@ -374,8 +317,7 @@
                     like: _kind
                 },
                 success: function(response){
-                    response = JSON.parse(response);
-                    if(response.status == 'ok'){
+                    if(response.status === 'ok'){
                         _elems.like.text(response.result[0].likeCount);
                         _elems.disLike.text(response.result[0].disLikeCount);
                     }
@@ -398,8 +340,7 @@
                 },
                 success: function(response){
                     closeLoading();
-                    $('#mainBtnAnswer').show();
-                    $('#mainBtnAnswer').next().hide();
+                    $('#mainBtnAnswer').show().next().hide();
                     $('#textareaForAns').val('');
                     if(response == 'ok'){
                         showSuccessNotifi('پاسخ شما با موفقیت ثبت شد.', 'left', 'var(--koochita-blue)');
@@ -407,8 +348,6 @@
                     }
                     else
                         showSuccessNotifi('مشکلی در ثبت پیام پیش امده', 'left', 'red');
-
-                    $('#textareaForAns')
                 },
                 error: (err) => {
                     console.log(err);

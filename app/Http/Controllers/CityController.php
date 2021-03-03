@@ -27,11 +27,13 @@ use Illuminate\Support\Facades\URL;
 
 class CityController extends Controller
 {
+
     public function cityPage($kind, $city, Request $request) {
         $todayFunc = getToday();
         $city = str_replace('+', ' ', $city);
         $today = $todayFunc["date"];
         $nowTime = $todayFunc["time"];
+
         if($kind == 'state')
             $place = State::where('name', $city)->first();
         else
@@ -87,33 +89,52 @@ class CityController extends Controller
         else
             $place->image = URL::asset('images/mainPics/noPicSite.jpg');
 
+//        $pics = [];
+//        $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')
+//                        ->where('placePics.kindPlaceId', 1)
+//                        ->whereIn('placePics.placeId', $allAmakenId)
+//                        ->select(['amaken.id', 'amaken.picNumber AS mainPic', 'amaken.keyword', 'amaken.name', 'amaken.file', 'placePics.alt', 'placePics.picNumber'])
+//                        ->get();
+//
+//        $location = $mainLocation.'/amaken/';
+//        foreach ($DBpic as $item){
+//            $mainPic = null;
+//            $smallPic = null;
+//            if(is_file($location.$item->file.'/s-'.$item->picNumber))
+//                $mainPic= URL::asset("_images/amaken/$item->file/s-$item->picNumber");
+//
+//            if(is_file($location.$item->file.'/l-'.$item->picNumber))
+//                $smallPic = URL::asset("_images/amaken/$item->file/l-$item->picNumber");
+//            else
+//                $smallPic = $mainPic;
+//
+//            if($mainPic != null)
+//                array_push($pics, [
+//                    'mainPic' => $mainPic,
+//                    'smallPic' => $smallPic,
+//                    'alt' => $item->keyword,
+//                    'name' => $item->name,
+//                    'url' => route('placeDetails', ['kindPlaceId' => 1, 'placeId' => $item->id])
+//                ]);
+//        }
+
         $pics = [];
-        $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')
-                        ->where('placePics.kindPlaceId', 1)
-                        ->whereIn('placePics.placeId', $allAmakenId)
-                        ->select(['amaken.id', 'amaken.picNumber AS mainPic', 'amaken.keyword', 'amaken.name', 'amaken.file', 'placePics.alt', 'placePics.picNumber'])
-                        ->get();
-
-        $location = $mainLocation.'/amaken/';
-        foreach ($DBpic as $item){
-            $mainPic = null;
-            $smallPic = null;
-            if(is_file($location.$item->file.'/s-'.$item->picNumber))
-                $mainPic= URL::asset("_images/amaken/$item->file/s-$item->picNumber");
-
-            if(is_file($location.$item->file.'/l-'.$item->picNumber))
-                $smallPic = URL::asset("_images/amaken/$item->file/l-$item->picNumber");
-            else
-                $smallPic = $mainPic;
-
-            if($mainPic != null)
+        if($kind === "city"){
+            $location = __DIR__."/../../../../assets/_images/city/{$place->id}/";
+            if($place->image != null && is_file($location.$place->image))
                 array_push($pics, [
-                    'mainPic' => $mainPic,
-                    'smallPic' => $smallPic,
-                    'alt' => $item->keyword,
-                    'name' => $item->name,
-                    'url' => route('placeDetails', ['kindPlaceId' => 1, 'placeId' => $item->id])
+                    'pic' => URL::asset("_images/city/{$place->id}/{$place->image}"),
+                    'alt' => $place->name
                 ]);
+
+            $picsDB = CityPic::where('cityId', $place->id)->get();
+            foreach($picsDB as $pic){
+                if(is_file($location.$pic->pic))
+                    array_push($pics, [
+                        'pic' => URL::asset("_images/city/{$place->id}/{$pic->pic}"),
+                        'alt' => $pic->alt != null ? $pic->alt : $place->name
+                    ]);
+            }
         }
 
         $place->pic = $pics;

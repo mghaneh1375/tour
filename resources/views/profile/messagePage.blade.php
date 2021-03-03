@@ -14,12 +14,9 @@
     <link rel="stylesheet" href="{{URL::asset('css/pages/messagePage.css?v='.$fileVersions)}}">
 
     <style>
-        body{
-            overflow: hidden;
-        }
         .msgBody{
-            background-image: url("{{URL::asset('images/mainPics/msgBack.jpg')}}");
-            background-image: url("{{URL::asset('images/mainPics/msgBack2.jpg')}}");
+            {{--background-image: url("{{URL::asset('images/mainPics/msgBack.jpg')}}");--}}
+            {{--background-image: url("{{URL::asset('images/mainPics/msgBack2.jpg')}}");--}}
             background-image: url("{{URL::asset('images/mainPics/msgBack3.jpg')}}");
             background-size: auto;
         }
@@ -28,6 +25,10 @@
         }
         .msgContent .myText.corner:before{
             background-image: url("{{URL::asset('images/icons/greenCorner2.png')}}");
+        }
+
+        .addNewReviewButtonMobileFooter{
+            display: none;
         }
 
     </style>
@@ -79,6 +80,7 @@
     </div>
 
     <script>
+        var updateMsgTime = 20000;
         var contacts = {!! json_encode($contacts) !!};
         var uId = {{auth()->user()->id}};
         var showMsgUserId = 0;
@@ -282,6 +284,7 @@
                 })
             }
         }
+
         function createContacts(_contacts){
             $('#contacts').empty();
 
@@ -340,14 +343,11 @@
                         $('#bodyMsg').scrollTop($('#bodyMsg')[0].scrollHeight);
                     }
                 },
-                error: function (err) {
-                    console.log(err);
-                }
             });
-            setTimeout(updateMsg, 4000);
+            setTimeout(updateMsg, updateMsgTime);
         }
 
-        setTimeout(updateMsg, 5000);
+        setTimeout(updateMsg, updateMsgTime);
 
         @if(isset($specUser) && $specUser != null)
             specUser = {!! $specUser !!};

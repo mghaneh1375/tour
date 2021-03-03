@@ -48,8 +48,6 @@
 
 @include('layouts.header1')
 
-@include('component.smallShowReview')
-
 <script type="application/ld+json">
                 {
                     "@context": "https://schema.org",
@@ -120,9 +118,7 @@
 
     <div class="row">
         <div id="commentSection" class="col-md-3 text-align-right mainReviewSection hideOnTablet">
-            <div class="row" style="font-size: 25px; margin: 5px 10px; border-bottom: solid 1px #f3f3f3;">
-                {{__('تازه ترین پست ها')}}
-            </div>
+            <div class="row" style="font-size: 25px; margin: 5px 10px; border-bottom: solid 1px #f3f3f3;">{{__('تازه ترین پست ها')}}</div>
             <div id="reviewSection" class="postsMainDivInSpecificMode cpCommentBox cpBorderBottom" style="display: none; width: 100%"></div>
             <div id="reviewPlaceHolderSection" class="postsMainDivInSpecificMode cpCommentBox cpBorderBottom" style="width: 100%"></div>
         </div>
@@ -135,7 +131,7 @@
                             <div class="swiper-wrapper position-relative"  style="height: 100%">
                                 @for($i = 0; $i < count($place->pic) && $i < 5; $i++)
                                     <div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                        <img src="{{$place->pic[$i]['mainPic']}}" class="resizeImgClass" style="width: 100%;" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
+                                        <img src="{{$place->pic[$i]['pic']}}" class="resizeImgClass" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
                                     </div>
                                 @endfor
                             </div>
@@ -145,16 +141,16 @@
 
                             <div class="hideOnScreen cpShowOnSlider">
                                 @if(isset($place->state))
-                                    <div class="cpStateName">
+                                    <div class="cpStateName" onclick="openMainSearch(0)">
                                         <span class="cpNameLabel">استان :</span>
                                         {{$place->state}}
                                     </div>
-                                    <div class="cpCityName">
+                                    <div class="cpCityName" onclick="openMainSearch(0)">
                                         <span class="cpNameLabel">شهر :</span>
                                         {{$place->name}}
                                     </div>
                                 @else
-                                    <div class="cpStateName">
+                                    <div class="cpStateName" onclick="openMainSearch(0)">
                                         <span class="cpNameLabel">استان :</span>
                                         {{$place->name}}
                                     </div>
@@ -162,43 +158,37 @@
                             </div>
                         </div>
                     @else
-                        <img class="cityPagePics cpPic" src="{{$place->image}}">
+                        <div class="cityPagePics fullyCenterContent">
+                            <img class="cityPagePics cpPic resizeImgClass" src="{{$place->image}}" onload="fitThisImg(this)">
+                        </div>
                     @endif
                     <div class="col-xs-12 underSlider hideOnTablet ">
                         <div class="cpLittleMenu infoLittleMenu">
                             <img src="{{URL::asset('images/icons/info.png')}}">
                         </div>
                         <a class="col-xs-2 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/cinema.png')}}" alt="{{__('سینما')}}">--}}
                             <div class="cityPageIcon fas fa-video"></div>
                             <div class="textCityPageIcon">{{__('سینما')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
                             <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/bakery.png')}}" alt="{{__('قنادی')}}">
                             <div class="textCityPageIcon">{{__('قنادی')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
                             <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/mortarboard(1).png')}}" alt="{{__('آموزش')}}">
                             <div class="textCityPageIcon">{{__('آموزش')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
                             <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/culture.png')}}" alt="{{__('فرهنگ')}}">
                             <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
                             <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/barbershop.png')}}" alt="{{__('آرایشگاه')}}">
                             <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/fuel.png')}}" alt="{{__('سوخت')}}">--}}
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                     </div>
                 </div>
@@ -251,7 +241,6 @@
                         <a class="col-xs-4 cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">
                             <div class="cityPageIcon fullWalletIcon"></div>
                             <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
-                            {{--<img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
                         </a>
                     </div>
@@ -275,57 +264,42 @@
                         <a class="col-xs-4 cpLittleMenu" href="#">
                             <div class="cityPageIcon manSportIcon"></div>
                             <div class="textCityPageIcon">{{__('ورزشی')}}</div>
-                            {{--<img class="cpLittleMenuImg" src="{{URL::asset('images/icons/gym.png')}}" alt="{{__('ورزشی')}}">--}}
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <div class="col-xs-4 cpLittleMenu">
                             <div class="cityPageIcon lebas"></div>
                             <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
                         </div>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hospital(1).png')}}" alt="{{__('پزشکی')}}">--}}
                             <div class="cityPageIcon fas fa-syringe"></div>
                             <div class="textCityPageIcon">{{__('پزشکی')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                     </div>
                     <div class="col-xs-12 zpr showOnTablet">
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/cinema.png')}}" alt="{{__('سینما')}}">--}}
                             <div class="cityPageIcon fas fa-video"></div>
                             <div class="textCityPageIcon">{{__('سینما')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/bakery.png')}}" alt="{{__('قنادی')}}">--}}
                             <div class="cityPageIcon fas fa-birthday-cake"></div>
                             <div class="textCityPageIcon">{{__('قنادی')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/mortarboard(1).png')}}" alt="{{__('آموزش')}}">--}}
                             <div class="cityPageIcon fas fa-user-graduate"></div>
                             <div class="textCityPageIcon">{{__('آموزش')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                     </div>
                     <div class="col-xs-12 zpr showOnTablet">
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/culture.png')}}" alt="{{__('فرهنگ')}}">--}}
                             <div class="cityPageIcon fas fa-theater-masks"></div>
                             <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
                             <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/barbershop.png')}}" alt="{{__('آرایشگاه')}}">
                             <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-{{--                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/fuel.png')}}" alt="{{__('سوخت')}}">--}}
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
-                            {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                         </a>
                     </div>
                 </div>
@@ -358,8 +332,6 @@
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                     </a>
                     <a class="cpLittleMenu" href="{{url('placeList/11/' . $kind . '/' . $place->listName)}}">
-{{--                        <div class="cityPageIcon foodIcon"></div>--}}
-{{--                        <div class="cityPageIcon fas fa-utensils"></div>--}}
                         <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/pan.svg')}}" alt="{{__('غذای محلی')}}" style="width: 44px; margin-bottom: 2px;">
                         <div class="textCityPageIcon">{{__('غذای محلی')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>
@@ -378,10 +350,8 @@
                         <div class="cityPageIcon fullWalletIcon"></div>
                         <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
-                        {{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/tag.png')}}" alt="{{__('فروشگاه')}}">--}}
                     </a>
                     <a href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}" class="cpLittleMenu">
-{{--                        <div class="cityPageIcon safarnameIcon"></div>--}}
                         <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/magazine.svg')}}" alt="{{__('سفر نامه')}}" style="width: 34px; margin-bottom: 9px; margin-top: 10px;">
                         <div class="textCityPageIcon">{{__('سفر نامه')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['safarnameh']}}</div>
@@ -395,51 +365,36 @@
                         <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
                     </div>
                     <a class="cpLittleMenu" href="#">
-                        {{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/gym.png')}}" alt="{{__('ورزشی')}}">--}}
                         <div class="cityPageIcon manSportIcon"></div>
                         <div class="textCityPageIcon">{{__('ورزشی')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hospital(1).png')}}" alt="{{__('پزشکی')}}">--}}
                         <div class="cityPageIcon fas fa-syringe"></div>
                         <div class="textCityPageIcon">{{__('پزشکی')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/cinema.png')}}" alt="{{__('سینما')}}">--}}
                         <div class="cityPageIcon fas fa-video"></div>
                         <div class="textCityPageIcon">{{__('سینما')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/bakery.png')}}" alt="{{__('قنادی')}}">--}}
                         <div class="cityPageIcon fas fa-birthday-cake"></div>
                         <div class="textCityPageIcon">{{__('قنادی')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/mortarboard(1).png')}}" alt="{{__('آموزش')}}">--}}
                         <div class="cityPageIcon fas fa-user-graduate"></div>
                         <div class="textCityPageIcon">{{__('آموزش')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
                         <div class="cityPageIcon fas fa-theater-masks"></div>
                         <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/culture.png')}}" alt="{{__('فرهنگ')}}">--}}
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
                         <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hairCut.svg')}}" alt="{{__('آرایشگاه')}}" style="width: 44px; margin-bottom: 2px;">
                         <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                     <a class="cpLittleMenu" href="#">
-{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/fuel.png')}}" alt="{{__('سوخت')}}">--}}
                         <div class="cityPageIcon fas fa-gas-pump"></div>
                         <div class="textCityPageIcon">{{__('سوخت')}}</div>
-                        {{--<div class="textCityPageIcon" style="color: var(--koochita-blue)">1000</div>--}}
                     </a>
                 </div>
             </div>
@@ -492,10 +447,9 @@
                                 <div class="author vcard im-meta-item withColor">
                                     <i class="fa fa-user"></i>{{$safarnameh[0]->username}}
                                 </div>
-
-                                <div class="post-views im-meta-item withColor">
-                                    <i class="fa fa-eye"></i>{{$safarnameh[0]->seen}}
-                                </div>
+{{--                                <div class="post-views im-meta-item withColor">--}}
+{{--                                    <i class="fa fa-eye"></i>{{$safarnameh[0]->seen}}--}}
+{{--                                </div>--}}
                             </div>
                         </div>
                     </article>
@@ -525,9 +479,9 @@
                                                 <div class="author vcard im-meta-item">
                                                     <i class="fa fa-user"></i>{{$safarnameh[$i]->username}}
                                                 </div>
-                                                <div class="post-views im-meta-item">
-                                                    <i class="fa fa-eye"></i>{{$safarnameh[$i]->seen}}
-                                                </div>
+{{--                                                <div class="post-views im-meta-item">--}}
+{{--                                                    <i class="fa fa-eye"></i>{{$safarnameh[$i]->seen}}--}}
+{{--                                                </div>--}}
                                             </div>
                                         </div>
                                     </li>
@@ -555,142 +509,63 @@
     setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
     setSmallReviewPlaceHolder('reviewPlaceHolderSection'); // in component.smallShowReview.blade.php
 
-    @if(isset($place->pic) && count($place->pic) > 0)
-        var cityPic = {!! json_encode($place->pic) !!};
-
-        function showSliderPic(){
-            var cityPicForAlbum = [];
-            cityPic.map((pic, index) => {
-                cityPicForAlbum[index] = {
-                    'id' : pic['id'],
-                    'alt' : pic['alt'],
-                    'sidePic' : pic['smallPic'],
-                    'mainPic' : pic['mainPic'],
-                    'userPic' : '{{getUserPic(0)}}',
-                    'userName' : 'کوچیتا',
-                    'where' : pic['name'],
-                    'whereUrl' : pic['url'],
-                    'uploadTime' : '',
-                    'showInfo' : false,
-                }
-            });
-
-            createPhotoModal('عکس های شهر '+ cityName1, cityPicForAlbum); // in general.photoAlbumModal.blade.php
-        };
-
-        var picSwiper = new Swiper('.cityPagePics', {
-            slidesPerGroup: 1,
-            loop: true,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
-            loopFillGroupWithBlank: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
-
-        var changeSliderNum = 0;
-        picSwiper.on('slideChange', function () {
-
-            if(showCityPicNumber < cityPic.length) {
-                if (changeSliderNum == 3) {
-                    let nuum = 0;
-                    while (nuum < 5 && showCityPicNumber < cityPic.length) {
-                        slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                    <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
-                                </div>`;
-                        picSwiper.addSlide(showCityPicNumber + 1, slide);
-                        nuum++;
-                        showCityPicNumber++;
-                    }
-                    resizeFitImg('resizeImgClass');
-
-                    changeSliderNum = 0;
-                } else
-                    changeSliderNum++;
-            }
-
-        });
-
-    @endif
+    var cityName1 = '{{ $place->name }}';
+    var topPlacesSections = [
+        {
+            name: '{{__('محبوب‌ترین بوم گردی ها')}}',
+            id: 'topBoomgardyCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 12, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوبترین جاذبه ها')}}',
+            id: 'topAmakenCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 1, 'mode' => $kind, 'city' => $locationName['cityNameUrl'] ])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین رستوران‌ها')}}',
+            id: 'topRestaurantInCity',
+            url: '{{route('place.list', ['kindPlaceId' => 3, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین اقامتگاه ها')}}',
+            id: 'topHotelCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 4, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین طبیعت گردی ها')}}',
+            id: 'topMajaraCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 6, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین صنابع دستی و سوغات')}}',
+            id: 'topSogatCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 10, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+        {
+            name: '{{__('محبوب‌ترین غذاهای محلی')}}',
+            id: 'topFoodCityPage',
+            url: '{{route('place.list', ['kindPlaceId' => 11, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
+        },
+    ];
+    var cityPageKind = '{{$kind}}';
+    var cityPageId = '{{$place->id}}';
+    var getAllPlacesOfCityForMapUrl = '{{route("getCityAllPlaces")}}';
+    var getReviewsForCityPageUrl = '{{route("review.getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}';
 
     var reviews;
     var showCityPicNumber = 5;
-    var cityName1 = '{{ $place->name }}';
-    var topPlacesSections = [
-            {
-                name: '{{__('محبوب‌ترین بوم گردی ها')}}',
-                id: 'topBoomgardyCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 12, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوبترین جاذبه ها')}}',
-                id: 'topAmakenCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 1, 'mode' => $kind, 'city' => $locationName['cityNameUrl'] ])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین رستوران‌ها')}}',
-                id: 'topRestaurantInCity',
-                url: '{{route('place.list', ['kindPlaceId' => 3, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین اقامتگاه ها')}}',
-                id: 'topHotelCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 4, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین طبیعت گردی ها')}}',
-                id: 'topMajaraCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 6, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین صنابع دستی و سوغات')}}',
-                id: 'topSogatCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 10, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-            {
-                name: '{{__('محبوب‌ترین غذاهای محلی')}}',
-                id: 'topFoodCityPage',
-                url: '{{route('place.list', ['kindPlaceId' => 11, 'mode' => $kind, 'city' => $locationName['cityNameUrl']])}}'
-            },
-        ];
 
     initPlaceRowSection(topPlacesSections);
 
     function runMainSwiper(){
         new Swiper('.mainSuggestion', {
             loop: true,
-            updateOnWindowResize: true,
+            // updateOnWindowResize: true,
             navigation: {
                 prevEl: '.swiper-button-next',
                 nextEl: '.swiper-button-prev',
             },
-            on: {
-                init: function(){
-                    this.update();
-                },
-                resize: function () {
-                    resizeFitImg('resizeImgClass');
-                    this.update()
-                },
-            },
             breakpoints: {
-                // 450: {
-                //     slidesPerView: 1,
-                //     spaceBetween: 20,
-                // },
-                // 550: {
-                //     slidesPerView: 2,
-                //     spaceBetween: 10,
-                // },
-                // 768: {
-                //     slidesPerView: 2,
-                //     spaceBetween: 20,
-                // },
-
                 768: {
                     slidesPerView: 'auto',
                     spaceBetween: 10,
@@ -711,7 +586,7 @@
     function getReviews(){
         $.ajax({
             type: 'get',
-            url : '{{route("review.getCityPageReview")}}?placeId={{$place->id}}&kind={{$kind}}',
+            url : getReviewsForCityPageUrl,
             success: response => {
                 reviews = response.result;
                 createReviewSections();
@@ -733,8 +608,8 @@
     }
 
     function getTopPlaces(){
-        var kind = '{{$kind}}';
-        var id = '{{$place->id}}';
+        var kind = cityPageKind;
+        var id = cityPageId;
         $.ajax({
             type: 'GET',
             url : `{{route("cityPage.topPlaces")}}?id=${id}&kind=${kind}&city={{$locationName['cityNameUrl']}}`,
@@ -745,7 +620,7 @@
         let fk = Object.keys(_result);
         for (let x of fk) {
             if(_result[x].length > 4){
-                createSuggestionPack(`${x}Content`, _result[x], function() { // in suggestionPack.blade.php
+                createSuggestionPack(`${x}Content`, _result[x], () => { // in suggestionPack.blade.php
                     $(`#${x}Content`).find('.suggestionPackDiv').addClass('swiper-slide');
                 });
             }
@@ -760,17 +635,16 @@
 
     function getAllPlacesForMap(){
         $.ajax({
-            type: 'post',
-            url: '{{route("getCityAllPlaces")}}',
+            type: 'POST',
+            url: getAllPlacesOfCityForMapUrl,
             data: {
-                _token: '{{csrf_token()}}',
-                kind : '{{$kind}}',
-                id: '{{$place->id}}'
+                _token: csrfTokenGlobal,
+                kind : cityPageKind,
+                id: cityPageId
             },
-            success: function(response){
+            success: response => {
                 let map = response.map;
                 let allPlaces = response.allPlaces;
-
                 let center = {
                     x: map.C,
                     y: map.D
@@ -781,14 +655,83 @@
         })
     }
 
-    $(window).ready(function(){
-        getReviews();
+    $(window).ready(() => {
         getTopPlaces();
-        getAllPlacesForMap();
-    })
+
+        if(cityPageKind === "city") {
+            getAllPlacesForMap();
+        }
+        else{
+            $('#cpMap').addClass('hidden');
+        }
+
+        if(window.innerWidth > 767 ){
+            getReviews();
+        }
+    });
+
+    @if(isset($place->pic) && count($place->pic) > 0)
+        var cityPic = {!! json_encode($place->pic) !!};
+
+        function showSliderPic(){
+            var cityPicForAlbum = [];
+            cityPic.map((pic, index) => {
+                cityPicForAlbum[index] = {
+                    'id' : pic['id'],
+                    'alt' : pic['alt'],
+                    'sidePic' : pic['pic'],
+                    'mainPic' : pic['pic'],
+                    'userPic' : '{{getUserPic(0)}}',
+                    'userName' : 'کوچیتا',
+                    'where' : pic['name'],
+                    'whereUrl' : pic['url'],
+                    'uploadTime' : '',
+                    'showInfo' : false,
+                }
+            });
+
+            createPhotoModal('عکس های شهر '+ cityName1, cityPicForAlbum); // in general.photoAlbumModal.blade.php
+        };
+
+        var changeSliderNum = 0;
+        var picSwiper = new Swiper('.cityPagePics', {
+            slidesPerGroup: 1,
+            loop: true,
+            autoplay: {
+                delay: 10000,
+                disableOnInteraction: false,
+            },
+            loopFillGroupWithBlank: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+        // .on('slideChange', function () {
+        // if(showCityPicNumber < cityPic.length) {
+        //     if (changeSliderNum == 5) {
+        //         let nuum = 0;
+        //         while (nuum < 10 && showCityPicNumber < cityPic.length) {
+        //             slide = `<div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
+        //                         <img src="${cityPic[showCityPicNumber]['mainPic']}" class="resizeImgClass" style="width: 100%;" alt="${cityPic[showCityPicNumber]['alt']}" onload="fitThisImg(this)">
+        //                     </div>`;
+        //             picSwiper.addSlide(showCityPicNumber + 1, slide);
+        //             showCityPicNumber++;
+        //             nuum++;
+        //         }
+        //         resizeFitImg('resizeImgClass');
+        //
+        //         changeSliderNum = 0;
+        //     } else
+        //         changeSliderNum++;
+        // }
+        //
+        // });
+
+    @endif
+
 
 </script>
-
 
 </body>
 

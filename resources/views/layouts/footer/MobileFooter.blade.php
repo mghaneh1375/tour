@@ -2,8 +2,15 @@
     .submitFiltersInMobile{
         display: none;
     }
-
+    .fontAwesomIconMFooter{
+        color: var(--koochita-green);
+        margin-left: 8px !important;
+        width: 20px !important;
+        font-size: 20px !important;
+    }
 </style>
+
+
 <div class="gapForMobileFooter hideOnScreen"></div>
 
 <div class="footerPhoneMenuBar hideOnScreen">
@@ -204,7 +211,7 @@
                             <div class="submitFiltersInMobile" onclick="closeMyModal('placeListMobileFilter')">اعمال فیلتر</div>
                         </div>
                     </div>
-                    <div id="EATERY_FILTERS_CONT" class="eatery_filters">
+                    <div id="EATERY_FILTERS_CONT" class="eatery_filters featureListSection">
                         @if($kindPlace->id == 11)
                             <div class="prw_rup prw_restaurants_restaurant_filters">
                                 <div id="jfy_filter_bar_establishmentTypeFilters" class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">
@@ -213,15 +220,6 @@
                                     <div class="youMaterialSearchResult materialSearchSelected"></div>
                                 </div>
                             </div>
-                            <script>
-                                function openGlobalMaterialSearch(){
-                                    createSearchInput('getGlobalInputMaterialSearchKeyUp', 'ماده اولبه مورد نظر خود را وارد کنید.');
-                                }
-
-                                function getGlobalInputMaterialSearchKeyUp(_element){
-                                    searchForMaterial($(_element).val())
-                                }
-                            </script>
                         @endif
 
                         @if($kindPlace->id == 4)
@@ -240,16 +238,15 @@
                                     </div>
 
                                     <div class="filterContent ui_label_group inline">
-                                        @for($i = 0; $i < count($feature->subFeat); $i++)
+                                        @foreach($feature->subFeat as $sub)
                                             <div class="filterItem lhrFilter filter selected squerRadioInputSec">
-                                                <input onclick="doFilterFeature({{$feature->subFeat[$i]->id}})" type="checkbox" id="p_feat{{$feature->subFeat[$i]->id}}" value="{{$feature->subFeat[$i]->name}}"/>
-                                                <label for="p_feat{{$feature->subFeat[$i]->id}}" class="inputRadionSquer">
+                                                <input id="p_feat{{$sub->id}}" class="featurePlaceListInput_{{$sub->id}}" type="checkbox" value="{{$sub->name}}" onclick="doFilterFeature({{$sub->id}})"/>
+                                                <label for="p_feat{{$sub->id}}" class="inputRadionSquer">
                                                     <span class="labelBox"></span>
-                                                    <span class="name">{{$feature->subFeat[$i]->name}}</span>
+                                                    <span class="name">{{$sub->name}}</span>
                                                 </label>
                                             </div>
-                                        @endfor
-
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -289,12 +286,14 @@
                 </div>
 
                 <div id="calendarRowPage" class="lp_others_content specPages hidden" style="position: relative;">
-                    <div id="showMyCalTourism"></div>
-                    <div id="showMyCalTourism1"></div>
-                    @include('layouts.calendar')
+{{--                    <div id="showMyCalTourism"></div>--}}
+{{--                    <div id="showMyCalTourism1"></div>--}}
+{{--                    @include('layouts.calendar')--}}
                 </div>
 
                 <div id="translateRowsPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
+
+                <div id="koochitaTvMFooterPage" class="lp_others_content specPages hidden" style="position: relative;"></div>
             </div>
 
             <div class="lp_phoneMenuBar">
@@ -311,7 +310,7 @@
                     <div>{{__('ترجمه')}}</div>
                     <span class="newMsgMainFooterCount newAlertNumber hidden" style="left: 0; top: 5px;">0</span>
                 </div>
-                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('translateRowsPage', this)">
+                <div class="lp_eachMenu specTabsFot" onclick="specialMobileFooter('koochitaTvMFooterPage', this)">
                     <div class="lp_icons tvIcon"></div>
                     <div>{{__('ببینیم')}}</div>
                 </div>
@@ -359,6 +358,10 @@
                                class="pSC_cityDetails traditionalFood">
                                 غذاهای محلی {{$locationName['cityNameUrl']}}
                             </a>
+                            <a href="#" class="pSC_cityDetails ">
+                                <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
+                                نوشیدنی های {{$locationName['cityNameUrl']}}
+                            </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}"
                                class="pSC_cityDetails souvenirIcon">
                                 صنایع دستی {{$locationName['cityNameUrl']}}
@@ -367,36 +370,53 @@
                                class="pSC_cityDetails adventureIcon">
                                 طبیعت گردی ‌های {{$locationName['cityNameUrl']}}
                             </a>
+                            <a href="#" class="pSC_cityDetails">
+                                <i class=" fas fa-mug-hot fontAwesomIconMFooter"></i>
+                                کافه های {{$locationName['cityNameUrl']}}
+                            </a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های {{$locationName['cityNameUrl']}}</a>
+
                             <a href="{{route('safarnameh.list', ['type' => $locationName['kindState'], 'search' => $locationName['cityNameUrl'] ])}}" class="pSC_cityDetails safarnameIcon">
                                 سفرنامه های {{$locationName['cityNameUrl']}}
                             </a>
-                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails">
+                                <i class="far fa-newspaper fontAwesomIconMFooter"></i>
+                                اخبار
+                            </a>
+
+                            <a href="https://koochitatv.com" class="pSC_cityDetails">
+                                <i class=" fas fa-tv fontAwesomIconMFooter"></i>
+                                کوچیتا TV
+                            </a>
                         </div>
                     @else
                         <div class="pSC_boxOfCityDetails" style="display: flex; flex-wrap: wrap;">
-                            <a href="{{route('place.list', ['kindPlaceId' => 4, 'mode' => 'country'])}}" class="pSC_cityDetails hotelIcon">
-                                اقامتگاه‌های ایران
+                            <a href="{{route('place.list', ['kindPlaceId' => 4, 'mode' => 'country'])}}" class="pSC_cityDetails hotelIcon">اقامتگاه‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'country'])}}" class="pSC_cityDetails boomIcon">بوم گردی های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">رستوران‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">جاذبه‌‌های ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood"> غذاهای محلی ایران</a>
+                            <a href="#" class="pSC_cityDetails">
+                                <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
+                                نوشیدنی های ایران
                             </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'country'])}}" class="pSC_cityDetails boomIcon">
-                                بوم گردی های ایران
+                            <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => 'country'])}}" class="pSC_cityDetails souvenirIcon"> صنایع دستی ایران</a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">طبیعت گردی های ایران</a>
+                            <a href="#" class="pSC_cityDetails">
+                                <i class=" fas fa-mug-hot fontAwesomIconMFooter"></i>
+                                کافه های ایران
                             </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">
-                                رستوران‌های ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">
-                                جاذبه‌‌های ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood">
-                                غذاهای محلی ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => 'country'])}}" class="pSC_cityDetails souvenirIcon">
-                                صنایع دستی ایران
-                            </a>
-                            <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">
-                                طبیعت گردی های ایران
-                            </a>
+                            <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => 'country'])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های ایران</a>
                             <a href="{{route('safarnameh.index')}}" class="pSC_cityDetails safarnameIcon">سفرنامه</a>
-                            <a href="{{route('news.main')}}" class="pSC_cityDetails safarnameIcon">اخبار</a>
+                            <a href="{{route('news.main')}}" class="pSC_cityDetails">
+                                <i class="far fa-newspaper fontAwesomIconMFooter"></i>
+                                اخبار
+                            </a>
+
+                            <a href="https://koochitatv.com" class="pSC_cityDetails">
+                                <i class=" fas fa-tv fontAwesomIconMFooter"></i>
+                                کوچیتا TV
+                            </a>
                         </div>
                     @endif
                 </div>
@@ -410,11 +430,18 @@
                                     استان {{$locationName['stateNameUrl']}}
                                 </div>
                             </a>
+
+                            <script>
+                                $('.pSC_boxOfDetails').css('height', 'calc(100% - 175px)');
+                            </script>
                         @endif
                         @if(isset($locationName['cityNameUrl']) && $locationName['kindState'] == 'city')
                             <a href="{{route('cityPage', ['kind' => 'city', 'city' => $locationName['cityNameUrl']])}}" class="headerSearchIcon footerSearchBar cityButton">
                                 <div class="icc locationIcon" style="word-spacing: -4px;  color: black;">شهر {{$locationName['cityNameUrl']}}</div>
                             </a>
+                            <script>
+                                $('.pSC_boxOfDetails').css('height', 'calc(100% - 235px)');
+                            </script>
                         @endif
                     </div>
 {{--                    <a href="https://koochitatv.com" class="pSC_cityDetails koochitaTvRowPhoneFooter" style="width: 49%;">--}}
@@ -437,8 +464,82 @@
             </div>
 
             <div class="mainPopUp rightPopUp profileFooterPopUp">
+
+                <div id="profileSideMenu" class="profileSideMenu">
+                    <div class="body">
+                        <div class="iconClose" onclick="openSideMenuInProfileFooter()"></div>
+                        <div class="tabs">
+                            <a href="{{route('profile')}}" class="tab">
+                                <div class="icon far fa-user"></div>
+                                <div class="name">صفحه من</div>
+                            </a>
+                            <a href="{{route('profile.message.page')}}" class="tab">
+                                <div class="icon far fa-envelope"></div>
+                                <div class="name">پیام ها</div>
+                            </a>
+                            <div class="tab" onclick="goToAddPlacePageInFooter()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/koochit.svg')}}" class="pic" alt="koochitaSho">
+                                </div>
+                                <div class="name">افزودن مکان</div>
+                            </div>
+                            <div class="tab" onclick="openModalWriteNewReview()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="pic" alt="addPicture">
+                                </div>
+                                <div class="name">ایجاد پست</div>
+                            </div>
+                            <div class="tab" onclick="writeNewSafaranmeh()">
+                                <div class="icon">
+                                    <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="pic" alt="addSafarnameh">
+                                </div>
+                                <div class="name">نوشتن سفرنامه</div>
+                            </div>
+                            <a href="{{route('profile.accountInfo')}}" class="tab">
+                                <div class="icon settingIcon"></div>
+                                <div class="name">تنظیمات</div>
+                            </a>
+                            <a href="{{route("logout")}}" class="tab">
+                                <div class="icon fas fa-sign-out-alt"></div>
+                                <div class="name">خروج</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profileSearchReviewsMFooter" class="searchReviewMFooter">
+                    <div class="searchBar">
+                        <input id="searchInReviewMFooter" type="text" placeholder="جستجو" onkeyup="searchInReviewSearch(this.value)">
+                        <div class="iconClose" onclick="openSearchModalReviewMFooter()"></div>
+                    </div>
+                    <div class="searchKindTab">
+                        <div class="tab select" onclick="chooseThisSearchTypeReviewMFooter(this, 'user')">افراد</div>
+                        <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'tag')">هشتگ</div>
+                        <div class="tab" onclick="chooseThisSearchTypeReviewMFooter(this, 'place')">مکان</div>
+                    </div>
+                    <div class="searchResultPlaceHolderSec hidden">
+                        <div class="item placeHolder">
+                            <div class="pic placeHolderAnime"></div>
+                            <div class="content" style="width: 50%;">
+                                <div class="rr placeHolderAnime"></div>
+                                <div class="rr placeHolderAnime"></div>
+                            </div>
+                        </div>
+                        <div class="item placeHolder">
+                            <div class="pic placeHolderAnime"></div>
+                            <div class="content" style="width: 50%;">
+                                <div class="rr placeHolderAnime"></div>
+                                <div class="rr placeHolderAnime"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="searchResultSec"></div>
+                </div>
+
                 <div class="userInfoMobileFooterBody">
-                    <div class="row" style="width: 100%; margin: 0px; flex-direction: column;">
+                    <div class="row" style="width: 100%; margin: 0px; flex-direction: column; position: relative;">
+                        <div class="threeDotIconVertical" onclick="openSideMenuInProfileFooter()"></div>
+
                         <div class="firsLine">
                             <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="pic">
                                 <img src="{{isset($authUserInfos->pic) ? $authUserInfos->pic : ''}}" alt="userPic" class="resizeImgClass" onload="fitThisImg(this)"/>
@@ -458,122 +559,143 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
+                        <div>
+                            <a href="{{route('profile', ['username' => $authUserInfos->username])}}" class="secondLine">{{auth()->user()->username}}</a>
+                        </div>
                         <div class="buttonsLine">
                             <div class="mBLine bLine">
-                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">
-                                    <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>
+                                <div class="tabBut selected" onclick="changeMobileFooterReviewExplore(this, 'followers')">
+                                    <div class="name">دوستان</div>
                                 </div>
-                                <div onclick="window.location.href='{{route("profile.message.page")}}'">
-                                    <div class="name" style="font-size: 16px; font-weight: bold; color: {{$authUserInfos->newMsg > 0 ? 'var(--koochita-red)' : ''}};">صندوق پیام</div>
-                                    @if($authUserInfos->newMsg > 0)
-                                        <div class="footerMsgCountNumber">{{$authUserInfos->newMsg}}</div>
-                                    @endif
+                                <div class="tabBut" onclick="changeMobileFooterReviewExplore(this, 'all')">
+                                    <div class="name">همه</div>
                                 </div>
-                            </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('review')">
-                                    <div class="icon EmptyCommentIcon"></div>
-                                    <div class="name">پست ها</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('photo')">
-                                    <div class="icon emptyCameraIcon"></div>
-                                    <div class="name">عکس و فیلم</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('question')">
-                                    <div class="icon questionIcon"></div>
-                                    <div class="name">سوال و جواب</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('safarnameh')">
-                                    <div class="icon safarnameIcon"></div>
-                                    <div class="name">سفرنامه ها</div>
-                                </div>
-                            </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('medal')">
-                                    <div class="icon medalsIcon"></div>
-                                    <div class="name">جایزه و امتیاز</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('follower')">
-                                    <div class="icon twoManIcon"></div>
-                                    <div class="name" >دنبال کنندگان</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('bookMark')">
-                                    <div class="icon BookMarkIconEmpty" style="font-size: 26px;"></div>
-                                    <div class="name">نشان کرده</div>
-                                </div>
-                                <div onclick="mobileFooterProfileButton('setting')">
-                                    <div class="icon settingIcon"></div>
-                                    <div class="name">تنظیمات</div>
-                                </div>
-                            </div>
-                            <div class="mBLine bLine">
-                                <div onclick="mobileFooterProfileButton('festival')">
-                                    <div class="icon festivalIcon"></div>
-                                    <div class="name">فستیوال</div>
-                                </div>
-                                <div onclick="window.location.href = '{{route("myTrips")}}'">
-                                    <div class="icon MyTripsIcon"></div>
-                                    <div class="name">سفرهای من</div>
+                                <div id="searchReviewButton" class="tabBut" style="width: 100px;" onclick="openSearchModalReviewMFooter()">
+                                    <div class="searchIcon" style="font-weight: bold;"></div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="exploreReviewInFooterSection">
+                            <div id="footerExploreReviewSection" class="reviewSec allReviewSec"></div>
+                            <div id="indicatorForNewReview" class="indicatorForNewReview"></div>
+                        </div>
+
+{{--                        <div class="buttonsLine">--}}
+{{--                            <div>--}}
+{{--                                <div onclick="window.location.href='{{route("profile", ['username' => $authUserInfos->username])}}'">--}}
+{{--                                    <div class="name" style="font-size: 16px; font-weight: bold; color: gray">صفحه من</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="window.location.href='{{route("profile.message.page")}}'">--}}
+{{--                                    <div class="name" style="font-size: 16px; font-weight: bold; color: {{$authUserInfos->newMsg > 0 ? 'var(--koochita-red)' : ''}};">صندوق پیام</div>--}}
+{{--                                    @if($authUserInfos->newMsg > 0)--}}
+{{--                                        <div class="footerMsgCountNumber">{{$authUserInfos->newMsg}}</div>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('review')">--}}
+{{--                                    <div class="icon EmptyCommentIcon"></div>--}}
+{{--                                    <div class="name">پست ها</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('photo')">--}}
+{{--                                    <div class="icon emptyCameraIcon"></div>--}}
+{{--                                    <div class="name">عکس و فیلم</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('question')">--}}
+{{--                                    <div class="icon questionIcon"></div>--}}
+{{--                                    <div class="name">سوال و جواب</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('safarnameh')">--}}
+{{--                                    <div class="icon safarnameIcon"></div>--}}
+{{--                                    <div class="name">سفرنامه ها</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('medal')">--}}
+{{--                                    <div class="icon medalsIcon"></div>--}}
+{{--                                    <div class="name">جایزه و امتیاز</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('follower')">--}}
+{{--                                    <div class="icon twoManIcon"></div>--}}
+{{--                                    <div class="name" >دنبال کنندگان</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('bookMark')">--}}
+{{--                                    <div class="icon BookMarkIconEmpty" style="font-size: 26px;"></div>--}}
+{{--                                    <div class="name">نشان کرده</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="mobileFooterProfileButton('setting')">--}}
+{{--                                    <div class="icon settingIcon"></div>--}}
+{{--                                    <div class="name">تنظیمات</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="mBLine bLine">--}}
+{{--                                <div onclick="mobileFooterProfileButton('festival')">--}}
+{{--                                    <div class="icon festivalIcon"></div>--}}
+{{--                                    <div class="name">فستیوال</div>--}}
+{{--                                </div>--}}
+{{--                                <div onclick="window.location.href = '{{route("myTrips")}}'">--}}
+{{--                                    <div class="icon MyTripsIcon"></div>--}}
+{{--                                    <div class="name">سفرهای من</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+
                     </div>
-                    <div class="profileScoreMainDiv">
-                        <div class="memberPointInfo">
-                            <div class="modules-membercenter-level-progress">
-                                <div data-direction="left" id="targetHelp_9" class="targets progress_info tripcollectiveinfo">
-                                    <div>
-                                        <div class="labels">
-                                            <div class="right label">{{__('مرحله فعلی')}}</div>
-                                            <div class="float-leftImp label">{{__('مرحله بعدی')}}</div>
-                                        </div>
-                                        <div class="progress_indicator">
 
-                                            <div class="next_badge myBadge">{{$authUserInfos->userLevel[0]->name}} </div>
-                                            <div class="meter">
-                                                <span id="progressIdPhone" class="progress"></span>
-                                            </div>
-                                            <div class="current_badge myBadge">{{$authUserInfos->userLevel[1]->name}} </div>
-                                        </div>
+{{--                    <div class="profileScoreMainDiv">--}}
+{{--                        <div class="memberPointInfo">--}}
+{{--                            <div class="modules-membercenter-level-progress">--}}
+{{--                                <div data-direction="left" id="targetHelp_9" class="targets progress_info tripcollectiveinfo">--}}
+{{--                                    <div>--}}
+{{--                                        <div class="labels">--}}
+{{--                                            <div class="right label">{{__('مرحله فعلی')}}</div>--}}
+{{--                                            <div class="float-leftImp label">{{__('مرحله بعدی')}}</div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="progress_indicator">--}}
 
-                                        <div class="points_to_go" style="text-align: center; font-size: 10px;">
-                                            <span style="color: var(--koochita-red); font-size: 14px"> {{$authUserInfos->nextLevel}} </span>
-                                            امتیاز
-                                            <span style="color: var(--koochita-red);">کم داری</span>
-                                            تا مرحله
-                                            <span style="color: var(--koochita-red);">بعد</span>
-                                        </div>
+{{--                                            <div class="next_badge myBadge">{{$authUserInfos->userLevel[0]->name}} </div>--}}
+{{--                                            <div class="meter">--}}
+{{--                                                <span id="progressIdPhone" class="progress"></span>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="current_badge myBadge">{{$authUserInfos->userLevel[1]->name}} </div>--}}
+{{--                                        </div>--}}
+
+{{--                                        <div class="points_to_go" style="text-align: center; font-size: 10px;">--}}
+{{--                                            <span style="color: var(--koochita-red); font-size: 14px"> {{$authUserInfos->nextLevel}} </span>--}}
+{{--                                            امتیاز--}}
+{{--                                            <span style="color: var(--koochita-red);">کم داری</span>--}}
+{{--                                            تا مرحله--}}
+{{--                                            <span style="color: var(--koochita-red);">بعد</span>--}}
+{{--                                        </div>--}}
 {{--                                        <div class="text-align-center">--}}
 {{--                                            <a class="cursor-pointer color-black">{{__('مشاهده سیستم سطح بندی')}}</a>--}}
 {{--                                        </div>--}}
-                                        <div class="clear fix"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{--                                        <div class="clear fix"></div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                    <div class="lp_phoneMenuBar">
-                        <div class="lp_eachMenu" onclick="writeNewSafaranmeh()">
-                            <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">
-                            <div>{{__('نوشتن سفرنامه')}}</div>
-                        </div>
-                        <div class="lp_eachMenu"
-{{--                             onclick="openUploadPost()"--}}
-                             onclick="openModalWriteNewReview()">
-                            <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">
-                            <div>{{__('پست گذاشتن')}}</div>
-                        </div>
-                        <div class="lp_eachMenu" onclick="goToAddPlacePageInFooter()">
-                            <img src="{{URL::asset('images/icons/koochit.svg')}}" class="profileMobileFooterImg" alt="koochitaSho">
-                            <div>{{__('کوچیت کن')}}</div>
-                        </div>
-                        <div class="lp_eachMenu" onclick="mobileFooterProfileButton('setting')">
-                            <div class="settingIcon lp_icons"></div>
-                            <div>{{__('تنظیمات')}}</div>
-                        </div>
-                    </div>
+{{--                    <div class="lp_phoneMenuBar">--}}
+{{--                        <div class="lp_eachMenu" onclick="writeNewSafaranmeh()">--}}
+{{--                            <img src="{{URL::asset('images/icons/addSafarnamehIcon.svg')}}" class="profileMobileFooterImg" alt="addSafarnameh">--}}
+{{--                            <div>{{__('نوشتن سفرنامه')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="openModalWriteNewReview()">--}}
+{{--                            <img src="{{URL::asset('images/icons/addPhotoIcon.svg')}}" class="profileMobileFooterImg" alt="addPicture">--}}
+{{--                            <div>{{__('پست گذاشتن')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="goToAddPlacePageInFooter()">--}}
+{{--                            <img src="{{URL::asset('images/icons/koochit.svg')}}" class="profileMobileFooterImg" alt="koochitaSho">--}}
+{{--                            <div>{{__('کوچیت کن')}}</div>--}}
+{{--                        </div>--}}
+{{--                        <div class="lp_eachMenu" onclick="mobileFooterProfileButton('setting')">--}}
+{{--                            <div class="settingIcon lp_icons"></div>--}}
+{{--                            <div>{{__('تنظیمات')}}</div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
 
             </div>
@@ -582,58 +704,9 @@
 </div>
 
 <script>
-    var userSettingPageUrl = "{{route('profile.accountInfo')}}";
-    var addPlaceByUserUrl = "{{route('addPlaceByUser.index')}}";
-    var touchRigthForFooterMobile = 0;
-
-    $('.footerModals').on('touchstart', e => {
-        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-        touchRigthForFooterMobile = touch.pageX;
-    });
-    $('.footerModals').on('touchend', e => {
-        var windowWidth = $(window).width();
-        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-        if((touch.pageX - touchRigthForFooterMobile) > (windowWidth/3) ) {
-            closeMyModalClass('footerModals');
-            opnedMobileFooterId = null;
-        }
-    });
-
-    $('.gombadi').on('click', e => {
-        if($(e.target).hasClass('gombadi')) {
-            closeMyModal($(e.target).parent().attr('id'));
-        }
-    });
-
-    function openListSort(_element){
-        $('.sortListMobileFooter').toggleClass('open');
-        $(_element).toggleClass('selected');
-    }
-
-    function specialMobileFooter(_id, _element){
-        resizeFitImg('resizeImgClass');
-        $('.specPages').addClass('hidden');
-        $(`#${_id}`).removeClass('hidden');
-
-        $('.specTabsFot').removeClass('lp_selectedMenu');
-        $(_element).addClass('lp_selectedMenu');
-    }
-
-    function goToCookFestival(){
-        openLoading();
-        location.href = '{{route("festival.cook")}}';
-    }
-
-    $(window).ready(() => {
-        initMyCalendar('showMyCalTourism', [
-            'ش',
-            'ی',
-            'د',
-            'س',
-            'چ',
-            'پ',
-            'ج',
-        ]);
-    })
-
+    var userProfileUrl = '{{route("profile")}}';
+    var searchInForReviewUrl = '{{route("review.search.reviewContent")}}';
+    var getKoochitaTvNewesUrlMFooter = '{{route("koochitatv.getNewestVideoFromKoochitaTv")}}';
 </script>
+
+<script src="{{URL::asset('js/pages/layout/mobileFooter.js?v='.$fileVersions)}}"></script>

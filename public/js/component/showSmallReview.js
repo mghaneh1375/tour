@@ -1,17 +1,21 @@
 var nowOpenReviewOption = null;
-var allReviewsCreated = [];
+var allReviewsCreated = {};
 var showReviewAnsInOneSee = 4; // this number mean show ans in first time and not click on "showAllReviewCommentsFullReview"
-var devaredReview = 0;
+var deletedReview = 0;
 var globalConfirmText = '<span class="label label-success inConfirmLabel">در انتظار تایید</span>';
 var showFullReview = null;
 var showFullReviewKind = null;
 
-function getReviewPlaceHolder(){
-    return smallReviewPlaceHolder;
+var setSmallReviewPlaceHolder = _id => $(`#${_id}`).append(smallReviewPlaceHolder);
+var getReviewPlaceHolder = () => {return smallReviewPlaceHolder};
+
+function setIntoGlobalReviewInput(_review){
+    allReviewsCreated[_review.id] = _review;
 }
 
 function createSmallReviewHtml(item){
-    allReviewsCreated.push(item);
+
+    allReviewsCreated[item.id] = item;
     var text = reviewSmallSample;
     var fk = Object.keys(item);
 
@@ -20,37 +24,32 @@ function createSmallReviewHtml(item){
 
     text = text.replace(new RegExp('##isVideoClass##', "g"), item.mainPicIsVideo == 1 ? "playIcon" : "");
 
-    var t;
-    var re;
-    if(item.summery != null){
-        text = text.replace(new RegExp('##haveSummery##', "g"), 'block');
-        text = text.replace(new RegExp('##notSummery##', "g"), 'none');
-    }
-    else{
+    if(item.summery == null){
         text = text.replace(new RegExp('##haveSummery##', "g"), 'none');
         text = text.replace(new RegExp('##notSummery##', "g"), 'block');
+    }
+    else{
+        text = text.replace(new RegExp('##haveSummery##', "g"), 'block');
+        text = text.replace(new RegExp('##notSummery##', "g"), 'none');
     }
 
     text = text.replace( new RegExp('##havePic##', "g"), item.hasPic ? 'block' : 'none');
     text = text.replace(new RegExp('##hasMorePic##', "g"),item.morePic ? 'block' : 'none');
     text = text.replace(new RegExp('##isConfrim##', "g"), item.confirm == 0 ? 'block' : 'none');
+    text = text.replace(new RegExp('##showWhere##', "g"), item.where == '' ? 'none' : 'block');
 
     var likeClass = '';
     var disLikeClass = '';
+    console.log(item.userLike);
     if(item.userLike){
-        if(item.userLike.like == 1)
+        if(item.userLike == 1)
             likeClass = 'coloredFullIcon';
-        else if(item.userLike.like == -1)
+        else if(item.userLike == -1)
             disLikeClass = 'coloredFullIcon';
     }
 
-    t = '##likeClass##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, likeClass);
-
-    t = '##disLikeClass##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, disLikeClass);
+    text = text.replace(new RegExp('##likeClass##', "g"), likeClass);
+    text = text.replace(new RegExp("##disLikeClass##", "g"), disLikeClass);
 
     var assignedUser = '';
     if(item["assigned"].length != 0) {
@@ -61,45 +60,89 @@ function createSmallReviewHtml(item){
         }
         assignedUser += '</div>\n';
     }
-    t = '##userAssigned##';
-    re = new RegExp(t, "g");
-    text = text.replace(re, assignedUser);
+    text = text.replace( new RegExp("##userAssigned##", "g"), assignedUser);
 
     return text;
 }
 
-function setSmallReviewPlaceHolder(_id){
-    $('#' + _id).append(smallReviewPlaceHolder);
+function showFullReviews(_input){
+    var _reviews = _input.review;
+    var _kind = _input.kind;
+    // _kind = 'modal' open in modal
+    // _kind = 'append' append to _sectionId
+
+    _reviews.showKind = _kind;
+    _reviews.showSectionId = _input.sectionId;
+
+    var text = `<div id="showReview_${_reviews.id}" class="mainFullReviewDiv"></div>`;
+
+    if(_kind == 'modal') {
+        openMyModal('fullReviewModal');
+        $('#fullReview').html(text).append('<div class="closeFullReview iconClose" onclick="closeFullReview()"></div>');
+        allReviewsCreated[_reviews.id] = _reviews;
+    }
+    else if(_kind == 'append') {
+        $(`#${_input.sectionId}`).append(text);
+        allReviewsCreated[_reviews.id] = _reviews;
+    }
+
+    setFullReviewContent(_reviews);
 }
 
 function showSmallReviewPics(_id){
     var selectReview = 0;
     var reviewPicForAlbum = [];
-    for(i = 0; i < allReviewsCreated.length; i++){
-        if(allReviewsCreated[i]['id'] == _id){
-            selectReview = allReviewsCreated[i];
-            break;
-        }
-    }
-
+    selectReview = allReviewsCreated[_id];
     if(selectReview != 0){
-        revPic = selectReview['pics'];
+        var revPic = selectReview['pics'];
         for(var i = 0; i < revPic.length; i++){
             reviewPicForAlbum[i] = {
-                'id' : 'review_' + revPic[i]['id'],
-                'sidePic' : revPic[i]['picUrl'],
-                'mainPic' : revPic[i]['picUrl'],
-                'video' : revPic[i]['videoUrl'],
-                'userPic' : selectReview['userPic'],
-                'userName' : selectReview['userName'],
-                'uploadTime' : selectReview['timeAgo'],
-                'where' : selectReview['where'],
-                'whereUrl' : selectReview['placeUrl'],
-                'showInfo' : false,
+                id : 'review_' + revPic[i]['id'],
+                sidePic : revPic[i]['picUrl'],
+                mainPic : revPic[i]['picUrl'],
+                video : revPic[i]['videoUrl'],
+                userPic : selectReview['userPic'],
+                userName : selectReview['userName'],
+                uploadTime : selectReview['timeAgo'],
+                where : selectReview['where'],
+                whereUrl : selectReview['placeUrl'],
+                showInfo : false,
+                deleteFunction: doDeleteReviewPic,
             }
         }
         createPhotoModal('عکس های پست', reviewPicForAlbum);// in general.photoAlbumModal.blade.php
     }
+}
+
+function doDeleteReviewPic(_id){
+    openWarning("آیا از حذف عکس خود اطمینان دارید؟ در صورت حذف محتوای مورد نظر قابل بازیابی نمی باشد.", () => {
+        openLoading(false, () => {
+            var sendId = _id.split('_');
+            sendId = sendId[1];
+
+            $.ajax({
+                type: 'POST',
+                url: deleteReviewPicInAlbumUrl,
+                data: {
+                    _token: csrfTokenGlobal,
+                    picId: sendId
+                },
+                success: response =>{
+                    if(response.status === 'ok')
+                        location.reload();
+                    else{
+                        closeLoading();
+                        showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general/alert.blade.php
+                    }
+                },
+                error: err => {
+                    closeLoading();
+                    showSuccessNotifi('در حذف عکس مشکلی پیش آمده لطفا دوباره تلاش نمایید.', 'left', 'red'); // in general/alert.blade.php
+                }
+            })
+        })
+
+    }); // in general/alert.blade.php
 }
 
 function showSmallReviewMoreText(element){
@@ -130,36 +173,17 @@ function getSingleFullDataReview(_id, _callBack){
 }
 
 function getSingleFullReview(_id){
-    getSingleFullDataReview(_id, _review => showFullReviews({ review: _review, kind: 'modal' }));
+    if(allReviewsCreated[_id] == undefined)
+        getSingleFullDataReview(_id, _review => showFullReviews({ review: _review, kind: 'modal' }));
+    else
+        showFullReviews({ review: allReviewsCreated[_id], kind: 'modal' })
 }
 
 function updateFullReview(_id){
-    getSingleFullDataReview(_id, _review => setFullReviewContent(_review));
-}
-
-function showFullReviews(_input){
-    var _reviews = _input.review;
-    var _kind = _input.kind;
-    // _kind = 'modal' open in modal
-    // _kind = 'append' append to _sectionId
-
-    _reviews['showKind'] = _kind;
-    _reviews['showSectionId'] = _input.sectionId;
-
-    var text = '';
-    text += '<div id="showReview_' + _reviews["id"] + '" class="mainFullReviewDiv"></div>';
-
-    if(_kind == 'modal') {
-        openMyModal('fullReviewModal');
-        $('#fullReview').html(text);
-        $('#fullReview').append('<div class="closeFullReview iconClose" onclick="closeFullReview()"></div>');
-    }
-    else if(_kind == 'append') {
-        $('#' + _input.sectionId).append(text);
-        allReviewsCreated.push(_reviews);
-    }
-
-    setFullReviewContent(_reviews);
+    getSingleFullDataReview(_id, _review => {
+        allReviewsCreated[_id] = _review;
+        setFullReviewContent(_review);
+    });
 }
 
 function setFullReviewContent(_reviews){
@@ -177,7 +201,7 @@ function setFullReviewContent(_reviews){
                 <a href="${policiRouteUrl}" target="_blank">صفحه قوانین و مقررات</a>`;
 
     if(isUserLoginCheckInSmall && _reviews.yourReview)
-        text += `<span onclick="devareReviewByUserInReviews(${_reviews.id})" style="color: red">حذف پست</span>\n`;
+        text += `<span onclick="deleteReviewByUserInReviews(${_reviews.id})" style="color: red">حذف پست</span>\n`;
 
     text += `</div>
              <div class="commentWriterDetailsShow">
@@ -216,20 +240,20 @@ function setFullReviewContent(_reviews){
     var secCol = '';
 
     if(reviewPicsCount > 5)
-        picDivClassName = 'quintupvarPhotoDiv';
+        picDivClassName = 'quintupletPhotoDiv';
     else if(reviewPicsCount == 5)
-        picDivClassName = 'quintupvarPhotoDiv';
+        picDivClassName = 'quintupletPhotoDiv';
     else if(reviewPicsCount == 4)
         picDivClassName = 'quadruplePhotoDiv';
     else if(reviewPicsCount == 3)
-        picDivClassName = 'tripvarPhotoDiv';
+        picDivClassName = 'tripletPhotoDiv';
     else if(reviewPicsCount == 2)
         picDivClassName = 'doublePhotoDiv';
     else if(reviewPicsCount == 1)
         picDivClassName = 'singlePhotoDiv';
 
     for(var k = 0; k < reviewPicsCount && k < 5; k++) {
-        var ttt =  `<div class="topMainReviewPic" onclick="showSmallReviewPics(${_reviews["id"]})">
+        var ttt =  `<div class="topMainReviewPic ${_reviews["pics"][k]["isVideo"] == 1 ? 'playIconOnPicSection' : ''}" onclick="showSmallReviewPics(${_reviews.id})">
                         <img src="${_reviews["pics"][k]["picUrl"]}" class="mainReviewPic resizeImgClass" onload="fitThisImg(this)">`;
         if(reviewPicsCount > 5 && k == 4) {
             ttt += `<div class="morePhotoLinkPosts">
@@ -259,7 +283,7 @@ function setFullReviewContent(_reviews){
             </div>
             </div>`;
 
-    if(_reviews["questionAns"].length != 0) {
+    if(_reviews.questionAns && _reviews.questionAns.length != 0) {
         text += `<div class="commentRatingsDetailsBtn" onclick="showRatingDetailsInFullReview(this)">
                        <div class="commentRatingsDetailsBtnIcon">
                             مشاهده جزئیات امتیازدهی
@@ -329,12 +353,12 @@ function setFullReviewContent(_reviews){
     var likeClass = '';
     var disLikeClass = '';
 
-    if(_reviews['userLike'] != null && _reviews['userLike']['like'] == 1)
+    if(_reviews.userLike == 1)
         likeClass = 'coloredFullIcon';
-    else if(_reviews['userLike'] != null && _reviews['userLike']['like'] == -1)
+    else if(_reviews.userLike == -1)
         disLikeClass = 'coloredFullIcon';
 
-    _reviews["bookmark"] = _reviews["bookmark"] ? 'BookMarkIcon' :'BookMarkIconEmpty';
+    _reviews.bookmark = _reviews.bookmark ? 'BookMarkIcon' :'BookMarkIconEmpty';
     text += `<div class="commentFeedbackChoices">
                 <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-start;">
                     <div class="reviewLikeIcon_${_reviews.id} cursor-pointer LikeIconEmpty likedislikeAnsReviews ${likeClass}" onclick="likeReviewInFullReview(${_reviews.id}, 1, this);" style="font-size: 15px; direction: rtl; margin-left: 15px;">
@@ -362,7 +386,7 @@ function setFullReviewContent(_reviews){
 
     var checkAllReviews = true;
 
-    for(j = 0; j < _reviews["answers"].length; j++){
+    for(j = 0; j < _reviews.answers.length; j++){
         var answers = _reviews["answers"][j];
 
         answers.likeFunction = 'likeReviewInFullReview';
@@ -375,7 +399,7 @@ function setFullReviewContent(_reviews){
 
     text += '</div>';
 
-    if(showReviewAnsInOneSee < _reviews["answers"].length) {
+    if(showReviewAnsInOneSee < _reviews.answers.length) {
         var remainnn = _reviews["answers"].length - showReviewAnsInOneSee;
         text += `<div class="dark-blue mg-bt-10">
                    <span class="cursor-pointer" onclick="showAllReviewCommentsFullReview(${_reviews["id"]}, ${remainnn}, this)" style="font-size: 13px;" >مشاهده ${remainnn} نظر باقیمانده </span>
@@ -456,18 +480,14 @@ function likeReviewInFullReview(_logId, _like, _element){
                     }
                 }
 
-                for(var i = 0; i < allReviewsCreated.length; i++){
-                    if(allReviewsCreated[i].id == _logId){
-                        if(allReviewsCreated[i]['userLike'] == null)
-                            allReviewsCreated[i]['userLike'] = [];
-                        allReviewsCreated[i]['userLike']['like'] = response[0] == 'ok' ? _like : 0;
-                        allReviewsCreated[i]['like'] = like;
-                        allReviewsCreated[i]['disLike'] = dislike;
+                if(allReviewsCreated[_logId].userLike == null)
+                    allReviewsCreated[_logId].userLike = 0;
+                allReviewsCreated[_logId].userLike = response[0] == 'ok' ? _like : 0;
 
-                        showFullReview = allReviewsCreated[i];
-                        break;
-                    }
-                }
+                allReviewsCreated[_logId].like = like;
+                allReviewsCreated[_logId].disLike = dislike;
+
+                showFullReview = allReviewsCreated[i];
             }
         }
     })
@@ -522,11 +542,12 @@ function checkFullSubmitFullReview(_element){
         $(_element).next().attr('disabled', 'disabled');
 }
 
-function devareReviewByUserInReviews(_reviewId){
+function deleteReviewByUserInReviews(_reviewId){
     if(_reviewId != 0)
-        devaredReview = _reviewId;
+        deletedReview = _reviewId;
     else
-        devaredReview
+        return;
+        // deletedReview
     text = 'آیا از حذف نقد خود اطمینان دارید؟ در صورت حذف عکس ها و فیلم ها افزوده شده پاک می شوند و قابل بازیابی نمی باشد.';
     openWarning(text, doDeleteReviewByUserInReviews); // in general.alert.blade.php
 }
@@ -538,14 +559,14 @@ function doDeleteReviewByUserInReviews(){
         url: deleteReviewURL,
         data: {
             _token: csrfTokenGlobal,
-            id: devaredReview
+            id: deletedReview
         },
         success: function(response){
             closeLoading();
             if(response == 'ok'){
                 closeFullReview();
-                $('#showReview_' + devaredReview).remove();
-                $('#smallReviewHtml_' + devaredReview).remove();
+                $('#showReview_' + deletedReview).remove();
+                $('#smallReviewHtml_' + deletedReview).remove();
                 showSuccessNotifi('نظر شما با موفقیت حذف شد.', 'left', 'green');
             }
             else
@@ -581,23 +602,17 @@ function showFullReviewOptions(_element, _id) {
             $(_element).next().removeClass('hidden');
             $(_element).addClass("bg-color-darkgrey");
 
-            for(var i = 0; i < allReviewsCreated.length; i++){
-                if(allReviewsCreated[i].id == _id) {
-                    nowOpenReviewOption = allReviewsCreated[i];
-                    $('.profileNameInReviewOptionModal').text('مشاهده صفحه ' + nowOpenReviewOption.userName);
-                    $('.profileNameInReviewOptionModal').attr('href', yourProfileUrlSmallShowReview+'/'+nowOpenReviewOption.userName);
+            nowOpenReviewOption = allReviewsCreated[_id];
+            $('.profileNameInReviewOptionModal').text('مشاهده صفحه ' + nowOpenReviewOption.userName);
+            $('.profileNameInReviewOptionModal').attr('href', yourProfileUrlSmallShowReview+'/'+nowOpenReviewOption.userName);
 
-                    $('.reportReviwInOptionModal').attr('onClick', `showReportPrompt(${nowOpenReviewOption.id}, ${nowOpenReviewOption.kindPlaceId})`);
+            $('.reportReviwInOptionModal').attr('onClick', `showReportPrompt(${nowOpenReviewOption.id}, ${nowOpenReviewOption.kindPlaceId})`);
 
-                if(isUserLoginCheckInSmall) {
-                    if (nowOpenReviewOption.yourReview) {
-                        $('#devareReviewOptionInModal').show();
-                        $('#devareReviewOptionInModal').attr('onClick', `devareReviewByUserInReviews(${nowOpenReviewOption.id})`);
-                    } else
-                        $('#devareReviewOptionInModal').hide();
-                }
-                break;
-                }
+            if(isUserLoginCheckInSmall) {
+                if (nowOpenReviewOption.yourReview)
+                    $('#deleteReviewOptionInModal').show().attr('onClick', `deleteReviewByUserInReviews(${nowOpenReviewOption.id})`);
+                    else
+                    $('#deleteReviewOptionInModal').hide();
             }
         }, 100);
     }
@@ -621,7 +636,7 @@ function addReviewToBookMark(_elem, _id){
                 $(_elem).addClass('BookMarkIcon');
                 showSuccessNotifi('پست به نشان کرده ها اضافه شد.', 'left', 'var(--koochita-blue)');
             }
-            else if(response == 'devare'){
+            else if(response == 'delete'){
                 $(_elem).addClass('BookMarkIconEmpty');
                 $(_elem).removeClass('BookMarkIcon');
                 showSuccessNotifi('پست از نشان کرده ها حذف شد.', 'left', 'red');
@@ -639,6 +654,25 @@ function addReviewToBookMark(_elem, _id){
         }
     });
 
+}
+
+function goToUserPageReview(_element){
+    var username = $(_element).attr('data-username');
+    if(username.trim().length > 0){
+        openLoading();
+        location.href = yourProfileUrlSmallShowReview + `/${username}`;
+    }
+}
+
+function goToTagsPageReview(_element){
+    var tag = $(_element).text();
+    if(tag.trim().length > 0){
+        tag = tag.replace('#', '');
+        if($(window).width() < 767) {
+            openReviewTagSearchFromReview(tag); //  in mobileFooter.js
+            closeFullReview();
+        }
+    }
 }
 
 $(window).on('click', () => closeMyModal('reviewOptionMenuBar'));

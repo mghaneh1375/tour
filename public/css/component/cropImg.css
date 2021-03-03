@@ -1,0 +1,154 @@
+
+.editCropModal{
+    z-index: 99999;
+}
+.editCropModal .modalBody{
+    padding: 0px !important;
+    max-width: 800px;
+    width: 100%;
+}
+.editCropModal .modalBody .closeModal{
+    color: white;
+    z-index: 9;
+}
+.editCropModal .photoUploaderCrop{
+    height: 100%;
+    padding-top: 12px;
+    box-sizing: border-box;
+}
+.editCropModal .photoUploaderCrop .headerBar{
+    position: relative;
+    margin-top: -12px;
+    height: 48px;
+    width: 100%;
+    line-height: 48px;
+    background: var(--koochita-light-green);
+    display: flex;
+    align-items: center;
+    padding: 0px 20px;
+}
+.editCropModal .photoUploaderCrop .photoUploadHeader{
+    color: white !important;
+}
+.editCropModal .photoUploaderCrop .bodyEditFrame{
+    overflow: auto;
+    max-height: 93%;
+}
+.editCropModal .photoUploaderCrop .bodyEditFrame .hasBorder{
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+}
+
+.bodyEditFrame .row {
+    margin: 0;
+}
+
+.editCropModal .uploadPicCropLeftSection{
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.editCropModal .rotateRight {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/rotateRight.png');
+    background-size: contain;
+}
+
+.editCropModal .rotateLeft {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/rotateLeft.png');
+    background-size: contain;
+}
+
+.editCropModal .flipHorizontal {
+    width: 22px;
+    height: 22px;
+    margin: 3px 3px;
+    background: url('../../images/cropImagesIcons/flip.png');
+    background-size: contain;
+}
+
+.editCropModal .flipVertical {
+    width: 22px;
+    height: 24px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/reflect.png');
+    background-size: contain;
+}
+
+.editCropModal .cropping {
+    width: 22px;
+    height: 23px;
+    margin: 3px 3px;
+    background: url('../../images/cropImagesIcons/cropping.png');
+    background-size: contain;
+}
+
+.editCropModal .clearing {
+    width: 23px;
+    height: 23px;
+    margin: 2px 3px;
+    background: url('../../images/cropImagesIcons/clearing.png');
+    background-size: contain;
+}
+
+.editCropModal .uploadBtn {
+    padding: 3px 15px;
+    margin-right: 5px;
+}
+
+.editCropModal .img-container {
+    margin: 5px 15px;
+}
+.editCropModal .docs-buttons {
+    padding: 10px 0;
+    border-top: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+}
+.editCropModal .editBtnsGroup{
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 7px;
+}
+.editCropModal .editBtns {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    display: inline-block;
+    margin: 0 2px;
+}
+.editCropModal .upload {
+    float: left;
+}
+.editCropModal .editSection {
+    padding: 0;
+    width: 50%;
+    right: auto;
+    /*height: 90%;*/
+    top: 5%;
+    position: fixed;
+    left: 25%;
+}
+
+.editCropModal .bodyEditFrame .return {
+    float: left;
+}
+.editCropModal .returnBtnEditPhoto {
+    border-radius: 4px;
+    background-color: #93331f;
+    color: white;
+    padding: 3px 15px;
+    font-size: 14px;
+    border: 1px solid transparent;
+    line-height: 17px;
+    cursor: pointer;
+}

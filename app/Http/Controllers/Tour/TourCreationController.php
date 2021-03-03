@@ -275,7 +275,7 @@ class TourCreationController extends Controller{
                 $sDate = convertDateToString(convertNumber('en', $request->sDateNotSame[$i]), '/');
                 $eDate = convertDateToString(convertNumber('en', $request->eDateNotSame[$i]), '/');
 
-                $check = \DB::select("SELECT * FROM `tourtimes` WHERE `tourId` = {$newTour->id} AND (`sDate` LIKE '{$sDate}' OR `eDate` LIKE '{$eDate}')");
+                $check = \DB::select("SELECT * FROM `tourTimes` WHERE `tourId` = {$newTour->id} AND (`sDate` LIKE '{$sDate}' OR `eDate` LIKE '{$eDate}')");
                 if(count($check) == 0) {
                     $code = rand(10000, 99999);
                     while (TourTimes::where('code', $code)->count() > 0)

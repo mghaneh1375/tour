@@ -418,7 +418,7 @@
 
         function openCitySearch(_index){
             cityFileIndex = _index;
-            createSearchInput('searchInCities', 'نام شهر را وارد کنید.');// in globalInput.blade.php
+            createSearchInput(searchInCities, 'نام شهر را وارد کنید.');// in globalInput.blade.php
         }
         function searchInCities(_element){
             let result = '';
@@ -482,7 +482,7 @@
 
         function openPlaceSearch(_index){
             placeFileIndex = _index;
-            createSearchInput('searchInPlacesInUploadPageFile', 'نام مکان را وارد کنید.');// in globalInput.blade.php
+            createSearchInput(searchInPlacesInUploadPageFile, 'نام مکان را وارد کنید.');// in globalInput.blade.php
         }
         function searchInPlacesInUploadPageFile(_element){
             let result = '';

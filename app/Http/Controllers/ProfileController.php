@@ -25,7 +25,7 @@ use App\models\PhotographersPic;
 use App\models\places\Place;
 use App\models\places\PlaceFeatures;
 use App\models\places\Restaurant;
-use App\models\ReviewPic;
+use App\models\Reviews\ReviewPic;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SafarnamehPlaceRelation;
@@ -307,9 +307,10 @@ class ProfileController extends Controller {
         return;
     }
 
-    public function getUserPicsAndVideo(Request $request)
+    public function getUserPicsAndVideo()
     {
-        $user = User::find($request->userId);
+        $userId = $_GET['userId'];
+        $user = User::find($userId);
         $uId = $user->id;
         $user->picture = getUserPic($uId);
 
@@ -805,57 +806,6 @@ class ProfileController extends Controller {
         echo "nok";
     }
 
-    public function checkAuthCode() {
-
-        if(isset($_POST["phoneNum"]) && isset($_POST["code"])) {
-
-            $phoneNum = makeValidInput($_POST["phoneNum"]);
-            $code = makeValidInput($_POST["code"]);
-
-            $condition = ['phoneNum' => $phoneNum, 'code' => $code, 'userId' => \auth()->user()->id];
-            $activation = ActivationCode::where($condition)->first();
-            if($activation != null) {
-
-                $user = Auth::user();
-                $user->phone = $phoneNum;
-                $user->save();
-
-                $activation->delete();
-
-                return "ok";
-            }
-        }
-
-        return "nok";
-    }
-
-    public function resendAuthCode() {
-
-        if(isset($_POST["phoneNum"])) {
-
-            $phoneNum = makeValidInput($_POST["phoneNum"]);
-
-            $condition = ['phoneNum' => $phoneNum, 'userId' =>  \auth()->user()->id];
-            $activation = ActivationCode::where($condition)->first();
-            if($activation != null) {
-
-                if(time() - $activation->sendTime < 90) {
-                    return json_encode(['msg' => 'err', 'reminder' => 90 - time() + $activation->sendTime]);
-                }
-
-                $activation->code = createCode();
-                $activation->sendTime = time();
-                $activation->save();
-
-                sendSMS($phoneNum, $activation->code, 'sms');
-
-                return json_encode(['msg' => 'ok', 'reminder' => 90]);
-            }
-        }
-
-        return json_encode(['msg' => 'err', 'reminder' => 90]);
-    }
-
     public function accountInfo($msg = "", $mode = 1, $reminder = "", $phoneNum = "") {
         if(session('msg')) {
             $msg = session('msg');
@@ -891,71 +841,10 @@ class ProfileController extends Controller {
             'ages' => Age::all(), 'phoneNum' => $phoneNum, 'isAcitveCode' => $isAcitveCode]);
     }
 
-    public function updateProfile1() {
-
-        if(!isset($_POST['userName']) || strlen($_POST['userName']) < 4){
-            echo json_encode(['status' => 'nok']);
-            return;
-        }
-
-        $user = Auth::user();
-
-        if(User::where('username', $_POST['userName'])->where('id', '!=', $user->id)->count() == 0)
-            $user->username = makeValidInput($_POST["userName"]);
-        if(isset($_POST['firstName']))
-            $user->first_name = $_POST['firstName'];
-        if(isset($_POST['lastName']))
-            $user->last_name = $_POST['lastName'];
-        if(isset($_POST['email']) && strlen($_POST['email']) != 0 && User::where('username', $_POST['email'])->where('id', '!=', $user->id)->count() == 0)
-            $user->email = makeValidInput($_POST["email"]);
-        if(isset($_POST['cityId']) && $_POST['cityId'] != 0)
-            $user->cityId = makeValidInput($_POST['cityId']);
-        $user->save();
-        if($user->first_name != null && $user->last_name != null &&
-           $user->email != null && $user->picture != null && $user->phone != null &&
-           $user->cityId != null && $user->ageId != null && $user->sex != null && $user->birthday != null)
-            event($user->id, $user->id, 'completeUserInfo');
-
-        if (isset($_POST["phone"]) && makeValidInput($_POST["phone"]) != $user->phone && User::where('phone', $_POST['phone'])->count() == 0) {
-            $phoneNum = makeValidInput($_POST["phone"]);
-            $activation = ActivationCode::where('userId', $user->id)->first();
-            if ($activation == null) {
-                $activation = new ActivationCode();
-                $activation->phoneNum = $phoneNum;
-                $activation->code = createCode();
-                $activation->sendTime = time();
-                $activation->userId = $user->id;
-                $activation->save();
-                sendSMS($phoneNum, $activation->code, 'sms');
-
-                echo json_encode(['status' => 'ok', 'time' => 90 , 'phoneNum' => $phoneNum]);
-                return;
-            }
-            if (time() - $activation->sendTime > 90) {
-                $activation->phoneNum = $phoneNum;
-                $activation->code = createCode();
-                $activation->sendTime = time();
-                $activation->userId = $user->id;
-                $activation->save();
-                sendSMS($phoneNum, $activation->code, 'sms');
-                echo json_encode(['status' => 'ok', 'time' => 90 , 'phoneNum' => $phoneNum]);
-                return;
-            }
-
-            echo json_encode(['status' => 'ok', 'time' => 90 - time() + $activation->sendTime, 'phoneNum' => $phoneNum]);
-            return;
-        }
-
-        echo json_encode(['status' => 'ok']);
-        return;
-    }
-
     public function searchInCities() {
         if(isset($_POST["key"])) {
             $key = makeValidInput($_POST["key"]);
-
             echo json_encode(DB::select("select * from cities WHERE name LIKE '%$key%'"));
-
         }
     }
 
@@ -972,37 +861,6 @@ class ProfileController extends Controller {
         else
             echo 'nok';
         return;
-    }
-
-    public function updateProfile3() {
-
-        $uId = Auth::user()->id;
-
-        if(!empty(Auth::user()->link))
-            $msg = "شما اجازه تغییر رمز عبور خود را ندارید";
-
-        else if(isset($_POST["oldPassword"]) && isset($_POST["newPassword"]) && isset($_POST["repeatPassword"])) {
-            if (Hash::check(makeValidInput($_POST["oldPassword"]), User::whereId($uId)->password)) {
-                if (makeValidInput($_POST["newPassword"]) == makeValidInput($_POST["repeatPassword"])) {
-                    $user = User::whereId($uId);
-                    $user->password = Hash::make(makeValidInput($_POST["newPassword"]));
-                    $user->save();
-                    Auth::login($user);
-                    session(['msg' => 'رمز عبور با موفقیت تغییر یافت']);
-
-                    return Redirect::to(route('profile.accountInfo'));
-                } else {
-                    $msg = "پسورد جدید و تکرار آن یکی نیستند";
-                }
-            } else {
-                $msg = "پسورد وارد شده معتبر نمی باشد";
-            }
-        }
-        else {
-            $msg = "اشکالی در برقراری ارتباط با سرور به وجود آمده است";
-        }
-
-        return $this->accountInfo($msg, 3);
     }
 
     public function editPhoto($msg = "") {
