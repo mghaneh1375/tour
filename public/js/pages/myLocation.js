@@ -1,4 +1,5 @@
-var selectedPlaceId = '';
+var selectedPlaceId = 0;
+var selectedKindPlaceId = 0;
 var dontShowfilters = [];
 var nearPlacesMapMarker = [];
 var nearPlaces = [];
@@ -13,14 +14,22 @@ var mobileListScrollIsTop = false;
 var movePositionMobileList = 0;
 var isFullMobileList = true;
 var startTouchY = 0;
-var startMobileListHeight = $('#mobileListSection').height();
+
+var lastLocationGetData = null;
+
+
+var localShopFilterCategory = [0];
+var totalLocalShopCategories = 0;
+var scrollNumber = -170;
+
+var mobileListSectionElement = $('#mobileListSection');
+var startMobileListHeight = mobileListSectionElement.height();
 $('.topSecMobileList').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     startTouchY = touch.pageY;
-    startMobileListHeight = $('#mobileListSection').height();
-});
-$('.topSecMobileList').on('touchend', e => {
-    var height = $('#mobileListSection').height();
+    startMobileListHeight = mobileListSectionElement.height();
+}).on('touchend', e => {
+    var height = mobileListSectionElement.height();
     var windowHeight = $(window).height();
     var resultHeight;
 
@@ -29,34 +38,44 @@ $('.topSecMobileList').on('touchend', e => {
     else
         resultHeight = height > startMobileListHeight ? "middle" : "min";
     toggleMobileListNearPlace(resultHeight);
-});
-$('.topSecMobileList').on('touchmove', e => {
+}).on('touchmove', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     var maxHeight = $(window).height() - 150;
     var height = startMobileListHeight + startTouchY - touch.pageY;
 
     if(height > 75 && height < maxHeight)
-        $('#mobileListSection').height(height);
+        mobileListSectionElement.height(height);
     else if(height <= 75)
-        $('#mobileListSection').height(75);
+        mobileListSectionElement.height(75);
     else if(height >= maxHeight)
-        $('#mobileListSection').height(maxHeight);
+        mobileListSectionElement.height(maxHeight);
     else
-        $('#mobileListSection').height(75);
+        mobileListSectionElement.height(75);
 });
 
 $('.mobileListContent').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     movePositionMobileList = touch.pageY;
     mobileListScrollIsTop = $('.mobileListContent').scrollTop() == 0;
-});
-$('.mobileListContent').on('touchend', e => {
+}).on('touchend', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     if(mobileListIsFull && mobileListScrollIsTop && movePositionMobileList < touch.pageY)
         toggleMobileListNearPlace("middle");
     else if(!mobileListIsFull && movePositionMobileList > touch.pageY)
         toggleMobileListNearPlace("full");
 });
+
+var turnOffSearchThisAreaButton = () => $('#searchThisAreaButton').addClass('hidden');
+
+function searchThisArea(){
+    var bounds = mainMap.getBounds();
+    var center = mainMap.getCenter();
+    var radius = mainMap.distance(bounds._northEast, center);
+    radius = Math.floor(radius/100)/10;
+
+    turnOffSearchThisAreaButton();
+    getPlacesWithLocation(lastLocationGetData, radius);
+}
 
 function toggleMobileListNearPlace(_kind){
     var windowHeight = $(window).height();
@@ -75,23 +94,23 @@ function toggleMobileListNearPlace(_kind){
 
     if(_kind == "full"){
         $('.sideSection').addClass('fullMobileList');
-        $('#mobileListSection').addClass('fullMobileList');
+        mobileListSectionElement.addClass('fullMobileList');
         mobileListIsFull = true;
     }
     else {
         $('.sideSection').removeClass('fullMobileList');
-        $('#mobileListSection').removeClass('fullMobileList');
+        mobileListSectionElement.removeClass('fullMobileList');
         mobileListIsFull = false;
     }
 
-    $('#mobileListSection').animate({ height: resultHeight}, 300);
+    mobileListSectionElement.animate({ height: resultHeight}, 300);
 }
 
 function createFilterHtml(){
     var text = '';
     var mobile = '';
     for(var item in filterButtons){
-        text += `<div class="filKind ${filterButtons[item].enName}" onclick="toggleFilter(${filterButtons[item].id}, this)">
+            text += `<div class="filKind ${filterButtons[item].enName} filterButtonMap_${filterButtons[item].id}" onclick="toggleFilter(${item}, this)">
                             <div class="fullyCenterContent icon ${filterButtons[item].icon}"></div>
                             <div class="name">${filterButtons[item].name}</div>
                         </div>`;
@@ -107,19 +126,24 @@ function createFilterHtml(){
 
 createFilterHtml();
 
-function toggleFilter(_id, _element){
-    $(_element).toggleClass('offFilter');
-    if($(_element).hasClass('offFilter'))
-        dontShowfilters.push(_id);
-    else{
-        var index = dontShowfilters.indexOf(_id);
-        if(index != -1)
-            dontShowfilters.splice(index, 1);
+function toggleFilter(_item, _element){
+    if(typeof filterButtons[_item].onClick === 'function')
+        filterButtons[_item].onClick();
+    else {
+        var id = filterButtons[_item].id;
+        $(_element).toggleClass('offFilter');
+        if ($(_element).hasClass('offFilter'))
+            dontShowfilters.push(id);
+        else {
+            var index = dontShowfilters.indexOf(id);
+            if (index != -1)
+                dontShowfilters.splice(index, 1);
+        }
+        togglePlaces();
     }
-    togglePlaces();
 }
 
-function initMap(){
+function initMapForMyLocation(){
 
     mainMap = L.map("map", {
         minZoom: 1,
@@ -148,6 +172,30 @@ function initMap(){
             }
         ]
     ).addTo(mainMap);
+
+    lastLocationGetData = mainMap.getCenter();
+    mainMap.on('moveend', function(e) {
+        var bounds = mainMap.getBounds();
+        var center = mainMap.getCenter();
+
+        if(lastLocationGetData != null){
+            var changeCenter = mainMap.distance(lastLocationGetData, center);
+            var radius = mainMap.distance(bounds._northEast, center);
+
+            if(changeCenter > 2500 && radius < 5000)
+                $('#searchThisAreaButton').removeClass('hidden');
+            else
+                turnOffSearchThisAreaButton();
+        }
+
+        var zoom = mainMap.getZoom();
+        if(zoom < 13)
+            $('.mapImgIcon').addClass('smallIcon');
+        else
+            $('.mapImgIcon').removeClass('smallIcon');
+
+    });
+
     getMyLocation();
 
     // mainMap = new Mapp({
@@ -181,18 +229,19 @@ function initMap(){
     // });
 }
 
-function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
+function setMarkerToMap(_lat, _lng, _id = 0, _name = '', _kindPlaceId = 0){
     _lat = parseFloat(_lat);
     _lng = parseFloat(_lng);
 
     if(yourPosition != 0)
         mainMap.removeLayer(yourPosition);
-    // yourPosition.setMap(null);
 
     if(_name != '')
         $('.nearName').text(_name);
 
     selectedPlaceId = _id;
+    selectedKindPlaceId = _kindPlaceId;
+
     canChooseFromMap = false;
     markerLocation = {lat: _lat, lng: _lng};
 
@@ -210,7 +259,7 @@ function setMarkerToMap(_lat, _lng, _id = 0, _name = ''){
     // });
     // mainMap.setZoom(16);
 
-    getPlacesWithLocation();
+    getPlacesWithLocation(markerLocation);
 }
 
 function getMyLocation(){
@@ -238,16 +287,17 @@ function chooseFromMap(){
 }
 
 function searchPlace(_element){
+    var searchButtonElement = $('.searchButton');
     var value = _element.value;
     if(value.trim().length > 1){
-        $('.searchButton').find('.searchIcon').addClass('hidden');
-        $('.searchButton').find('.lds-ring').removeClass('hidden');
+        searchButtonElement.find('.searchIcon').addClass('hidden');
+        searchButtonElement.find('.lds-ring').removeClass('hidden');
         if(searchPlaceAjax != null)
             searchPlaceAjax.abort();
 
         searchPlaceAjax = $.ajax({
             type: 'GET',
-            url: `${searchPlaceUrl}?value=${value}`,
+            url: `${searchPlaceUrl}?value=${value}&kindPlaceId=${JSON.stringify([1, 3, 4, 6, 12, 13])}&forWhere=map`,
             success: response => {
                 if(response.status == 'ok')
                     createSearchResult(response.result);
@@ -258,54 +308,57 @@ function searchPlace(_element){
         })
     }
     else{
-        $('.searchButton').find('.searchIcon').removeClass('hidden');
-        $('.searchButton').find('.lds-ring').addClass('hidden');
+        searchButtonElement.find('.searchIcon').removeClass('hidden');
+        searchButtonElement.find('.lds-ring').addClass('hidden');
         $('#resultMapSearch').find('.resSec').empty();
     }
 }
 
 function createSearchResult(_result){
-    searchPlaceResult = _result;
     var text = '';
+    var searchButtonElement = $('.searchButton');
+
+    searchPlaceResult = _result;
+
     _result.map(item => {
-        text += `<div class="res" onclick="choosePlaceForMap(${item.id})">
-                            <div class="icon ${filterButtons[item.kindPlaceId].icon}"></div>
-                            <div class="name">${item.name}</div>
-                        </div>`;
+        text += `<div class="res" onclick="choosePlaceForMap(${item.id}, ${item.kindPlaceId})">
+                    <div class="icon ${filterButtons[item.kindPlaceId].icon}"></div>
+                    <div class="name">${item.name}</div>
+                </div>`;
     });
-    $('.searchButton').find('.searchIcon').removeClass('hidden');
-    $('.searchButton').find('.lds-ring').addClass('hidden');
+    searchButtonElement.find('.searchIcon').removeClass('hidden');
+    searchButtonElement.find('.lds-ring').addClass('hidden');
 
     $('#resultMapSearch').find('.resSec').html(text);
 }
 
-function choosePlaceForMap(_id){
+function choosePlaceForMap(_id, _kindPlaceId){
     $('#resultMapSearch').find('.resSec').empty();
     $('#searchPlaceInput').val('');
     searchPlaceResult.map(item => {
-        if(item.id == _id)
-            setMarkerToMap(item.C, item.D, item.id, item.name);
+        if(item.id == _id && item.kindPlaceId == _kindPlaceId)
+            setMarkerToMap(item.C, item.D, item.id, item.name, _kindPlaceId);
     })
 }
 
-function getPlacesWithLocation(){
+function getPlacesWithLocation(_center = {lat: 0, lng: 0}, _radius = 0){
     $('.placeListLoading').removeClass('hidden');
     $('.bodySec').removeClass('fullMap');
 
+    var specificData = `${selectedKindPlaceId}_${selectedPlaceId}`;
     $.ajax({
         type: 'get',
-        url: `${getPlacesLocationUrl}?lat=${markerLocation.lat}&lng=${markerLocation.lng}`,
+        url: `${getPlacesLocationUrl}?lat=${_center.lat}&lng=${_center.lng}&radius=${_radius}&specific=${specificData}`,
         success: response => {
-            if(response.status == 'ok')
-                createListElement(response.result);
+            lastLocationGetData = _center;
+            turnOffSearchThisAreaButton();
+            if(response.status === "ok")
+                createListElement(response.result, response.selectPlace);
         },
-        error: err => {
-            console.error(err);
-        }
     })
 }
 
-function createListElement(_result){
+function createListElement(_result, _selectPlaceOnMap){
     var elements = '';
 
     nearPlaces.map(place => {
@@ -332,13 +385,33 @@ function createListElement(_result){
         $('#mobileShowList').html(emptyHtml);
     }
     else{
+        if(_selectPlaceOnMap != null){
+            var html = `<div class="placeCard listPlaceCard_${_selectPlaceOnMap.kindPlaceId}_${_selectPlaceOnMap.id}" onclick="setMarkerToMap(${_selectPlaceOnMap.C}, ${_selectPlaceOnMap.D}, ${_selectPlaceOnMap.id}, '${_selectPlaceOnMap.name}', ${_selectPlaceOnMap.kindPlaceId})">
+                            <div class="fullyCenterContent img">
+                                <img src="${_selectPlaceOnMap.pic}" class="resizeImgClass" onload="fitThisImg(this)">
+                            </div>
+                            <div class="info">
+                                <div class="name showOneLineText">${_selectPlaceOnMap.name}</div>
+                                <div class="star">
+                                    <div class="ui_bubble_rating bubble_${_selectPlaceOnMap.rate}0"></div>
+                                    |
+                                    ${_selectPlaceOnMap.review} نقد
+                                </div>
+                                <div class="address">${_selectPlaceOnMap.address}</div>
+                            </div>
+                            <a href="${_selectPlaceOnMap.url}" class="showPlacePage" >اطلاعات بیشتر</a>
+                        </div>`;
+            $('.selectedPlace').html(html);
+        }
+
+
         nearPlaces.map(item => {
-            text = `<div class="placeCard listPlaceCard_${item.kindPlaceId}_${item.id}" onclick="setMarkerToMap(${item.C}, ${item.D}, ${item.id}, '${item.name}')">
+            text = `<div class="placeCard listPlaceCard_${item.kindPlaceId}_${item.id}" onclick="setMarkerToMap(${item.C}, ${item.D}, ${item.id}, '${item.name}', ${item.kindPlaceId})">
                             <div class="fullyCenterContent img">
                                 <img src="${item.pic}" class="resizeImgClass" onload="fitThisImg(this)">
                             </div>
                             <div class="info">
-                                <div class="name">${item.name}</div>
+                                <div class="name showOneLineText">${item.name}</div>
                                 <div class="star">
                                     <div class="ui_bubble_rating bubble_${item.rate}0"></div>
                                     |
@@ -349,44 +422,45 @@ function createListElement(_result){
                             <a href="${item.url}" class="showPlacePage" >اطلاعات بیشتر</a>
                         </div>`;
             elements += text;
-            if(selectedPlaceId == item.id)
-                $('.selectedPlace').html(text);
-            else {
-                item.markerInfo = L.marker([item.C, item.D], {
-                    title: item.name,
-                    icon: L.icon({
-                        iconUrl: filterButtons[item.kindPlaceId].mapIcon,
-                        iconSize: [30, 35], // size of the icon
-                    })
-                }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name));
-                // item.marker = new google.maps.Marker({
-                //     position: new google.maps.LatLng(item.C, item.D),
-                //     map: mainMap,
-                //     lat: item.C,
-                //     lng: item.D,
-                //     title: item.name,
-                //     id: item.id,
-                //     icon: {
-                //         url: filterButtons[item.kindPlaceId].mapIcon,
-                //         scaledSize: new google.maps.Size(30, 35), // scaled size
-                //     },
-                // });
-                // item.marker.addListener('click', function () {
-                //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
-                // });
-            }
+
+            item.markerInfo = L.marker([item.C, item.D], {
+                title: item.name,
+                icon: L.icon({
+                    iconUrl: item.minPic,
+                    iconSize: [35, 35], // size of the icon
+                    classToImg: filterButtons[item.kindPlaceId].classToImg
+                    // iconUrl: filterButtons[item.kindPlaceId].mapIcon,
+                    // iconSize: [30, 35], // size of the icon
+                })
+            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
+            // item.marker = new google.maps.Marker({
+            //     position: new google.maps.LatLng(item.C, item.D),
+            //     map: mainMap,
+            //     lat: item.C,
+            //     lng: item.D,
+            //     title: item.name,
+            //     id: item.id,
+            //     icon: {
+            //         url: filterButtons[item.kindPlaceId].mapIcon,
+            //         scaledSize: new google.maps.Size(30, 35), // scaled size
+            //     },
+            // });
+            // item.marker.addListener('click', function () {
+            //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
+            // });
+
 
             $(`#mobileResultRow_${item.kindPlaceId}`).find('.body').append(text);
         });
         $('.pcPlaceList').html(elements);
     }
 
-
     for(var kindPlaceId in filterButtons){
-        if($(`#mobileResultRow_${kindPlaceId}`).find('.body').html() == '')
-            $(`#mobileResultRow_${kindPlaceId}`).addClass('hidden');
+        var mobileResultRow_ = $(`#mobileResultRow_${kindPlaceId}`);
+        if(mobileResultRow_.find('.body').html() == '')
+            mobileResultRow_.addClass('hidden');
         else
-            $(`#mobileResultRow_${kindPlaceId}`).removeClass('hidden');
+            mobileResultRow_.removeClass('hidden');
     }
 
     $('.placeListLoading').addClass('hidden');
@@ -397,10 +471,24 @@ function createListElement(_result){
 function togglePlaces(){
     nearPlaces.map(item =>{
         if(dontShowfilters.indexOf(item.kindPlaceId) == -1){
-            if(item.markerInfo)
-                item.marker = item.markerInfo.addTo(mainMap);
+            if(item.kindPlaceId === 13){
+                if((localShopFilterCategory.length == 1 && localShopFilterCategory[0] == 0) || localShopFilterCategory.indexOf(`${item.categoryId}`) > -1) {
+                    $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
+                    if (item.markerInfo)
+                        item.marker = item.markerInfo.addTo(mainMap);
+                }
+                else{
+                    if (item.markerInfo)
+                        mainMap.removeLayer(item.marker);
+                    $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).addClass('hidden');
+                }
+            }
+            else {
+                if (item.markerInfo)
+                    item.marker = item.markerInfo.addTo(mainMap);
+                $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
+            }
             $(`#mobileResultRow_${item.kindPlaceId}`).removeClass('hidden');
-            $(`.listPlaceCard_${item.kindPlaceId}_${item.id}`).removeClass('hidden');
         }
         else{
             if(item.marker)
@@ -412,7 +500,80 @@ function togglePlaces(){
 }
 
 
+
+localShopCategories.map(item => item.sub.map(sub => totalLocalShopCategories++));
+
+function showAllLocalShopCategories(_kind, _parent, _element = ''){
+    if(_kind === 1)
+        $('.categoryFilterInput_'+_parent).prop('checked', true);
+    else if(_kind === 0)
+        $('.categoryFilterInput_'+_parent).prop('checked', false);
+    else if(_kind === -1){
+        if($(_element).hasClass('showAll')) {
+            $(_element).removeClass('showAll');
+            $('.showIconCategories').attr('data-type', 'on').addClass('show');
+            showAllLocalShopCategories(0, 0);
+        }
+        else {
+            $(_element).addClass('showAll');
+            $('.showIconCategories').attr('data-type', 'off').removeClass('show');
+            showAllLocalShopCategories(1, 0);
+        }
+    }
+}
+
+function toggleLocalShopCategories(_id, _element){
+    var type = $(_element).attr('data-type');
+    if(type === 'on'){
+        $(_element).attr('data-type', 'off').removeClass('show');
+        showAllLocalShopCategories(1, _id);
+    }
+    else{
+        $(_element).attr('data-type', 'on').addClass('show');
+        showAllLocalShopCategories(0, _id);
+    }
+}
+
+function doLocalShopCategoryFilter(){
+    openLoading(false, () => {
+        localShopFilterCategory = [];
+        var elements = $('.categoryFilterInput_0');
+        for(var i = 0; i < elements.length; i++){
+            if($(elements[i]).prop('checked'))
+                localShopFilterCategory.push($(elements[i]).attr('data-id'))
+        }
+
+        if(totalLocalShopCategories === localShopFilterCategory.length)
+            localShopFilterCategory = [0];
+
+        if(localShopFilterCategory.length == 0){
+            $('.filterButtonMap_13').addClass('offFilter');
+            dontShowfilters.push(13);
+        }
+        else{
+            $('.filterButtonMap_13').removeClass('offFilter');
+            var index = dontShowfilters.indexOf(13);
+            if (index != -1)
+                dontShowfilters.splice(index, 1);
+        }
+
+        closeLoading();
+        closeMyModal('localShopCategoriesModal');
+        togglePlaces();
+    })
+}
+
+function goToMainCategorySection(_id){
+    var element = $('#localShopCategoryFilterSection');
+    element.animate({
+        scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
+    }, 1000).scrollTop();
+}
+
 $(window).ready(() => {
-    initMap();
+    initMapForMyLocation();
     toggleMobileListNearPlace("middle");
+
+    if(selectedPlaceFromBack.lat)
+        setMarkerToMap(selectedPlaceFromBack.lat, selectedPlaceFromBack.lng, selectedPlaceFromBack.id, selectedPlaceFromBack.name, selectedPlaceFromBack.kindPlaceId);
 });

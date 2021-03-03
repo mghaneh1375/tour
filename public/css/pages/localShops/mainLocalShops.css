@@ -25,13 +25,14 @@ body{
 }
 .showHeader{
     border-top: solid 1px lightgrey;
+    padding-bottom: 5px;
     background: white;
-    padding-bottom: 10px;
 }
 
 .mainHeaderButts{
     display: flex;
     justify-content: flex-end;
+    margin-top: 10px;
 }
 .mainHeaderButts > div{
     cursor: pointer;
@@ -68,6 +69,17 @@ body{
 .showHeader .inff .address{
     color: gray;
     font-size: 12px;
+}
+.showHeader .mainHeaderButts .telephoneIcon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    font-size: 18px;
+}
+.showHeader .mainHeaderButts .telephoneIcon:before{
+    color: var(--koochita-blue);
+    margin-left: 10px;
 }
 .showBody{
     padding: 15px 0px;
@@ -252,7 +264,7 @@ body{
     transition: .3s;
     cursor: pointer;
 }
-.infoSec .iWasHere:hover, .iWasHere.selected{
+.iWasHere.selected{
     color: white;
     background: red;
 }
@@ -260,9 +272,6 @@ body{
     font-size: 13px;
 }
 
-.showBody .map{
-    height: 500px;
-}
 .adver.sideMap{
     height: 245px;
 }
@@ -709,6 +718,9 @@ body{
     align-items: flex-start;
     margin-top: 20px;
 }
+.questionBodies .questionInfoText{
+    font-size: 18px;
+}
 .questionBodies .inpQ{
     width: calc(100% - 60px);
     background: #f2f2f2;
@@ -804,6 +816,18 @@ body{
     margin-left: 5px;
 }
 
+.mainSliderOfLocalShop{
+    height: 420px;
+    cursor: pointer;
+}
+
+@media (min-width: 767px) {
+    .infoSec .iWasHere:hover{
+        color: white;
+        background: red;
+    }
+}
+
 @media (max-width: 1200px) {
     .reviewButs .but{
         font-size: 10px;
@@ -815,16 +839,27 @@ body{
     }
 }
 @media (max-width: 767px) {
-    .createPageMainBody .bodd .MainHeader{
+    .questionBodies .questionInfoText {
+        font-size: 13px;
+    }
+
+    .mainSliderOfLocalShop {
+        height: 250px;
+    }
+
+    .createPageMainBody .bodd .MainHeader {
         flex-direction: column;
     }
-    .reviewShowSection{
+
+    .reviewShowSection {
         display: block;
     }
-    .reviewShowSection > div{
+
+    .reviewShowSection > div {
         width: 100%;
     }
-    .openReviewSec{
+
+    .openReviewSec {
         position: fixed;
         top: 0px;
         right: 0px;
@@ -832,48 +867,64 @@ body{
         z-index: 999999;
     }
 
-    .openReviewSec .inputReviewBodies{
+    .openReviewSec .inputReviewBodies {
         height: 100vh;
         overflow: auto;
     }
-    .openReviewSec .bodySec{
+
+    .openReviewSec .bodySec {
         min-height: 50vh;
     }
-    .topInfoFixed .infosSec{
+
+    .topInfoFixed .infosSec {
         padding: 0px 10px;
     }
-    .topInfoFixed .pic{
+
+    .topInfoFixed .pic {
         width: 60px;
         height: 45px;
     }
-    .mainHeaderButts{
+
+    .mainHeaderButts {
         margin-top: 15px;
     }
-    .mainHeaderButts > div{
+
+    .mainHeaderButts > div {
         flex-direction: column-reverse;
     }
-    .mainHeaderButts > div .text{
+
+    .mainHeaderButts > div .text {
         font-size: .7em;
     }
-    .fastAccess{
+
+    .fastAccess {
         justify-content: space-evenly;
     }
-    .fastAccess .tab{
+
+    .fastAccess .tab {
         margin: 0px;
         flex-direction: column;
         font-size: 18px;
     }
-    .fastAccess .tab .text{
+
+    .fastAccess .tab .text {
         font-size: .5em;
     }
-    .topInfoFixed .mainHeaderButts{
+
+    .topInfoFixed .mainHeaderButts {
         display: none;
     }
-    .topInfoFixed .tabRow{
+
+    .topInfoFixed .tabRow {
         width: 100%;
     }
-    .topInfoFixed{
+
+    .topInfoFixed {
         height: 140px;
         top: -140px;
+    }
+
+    .showHeader .mainHeaderButts .telephoneIcon {
+        font-size: 14px;
     }
 }

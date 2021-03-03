@@ -40,7 +40,7 @@ function createSmallReviewHtml(item){
 
     var likeClass = '';
     var disLikeClass = '';
-    console.log(item.userLike);
+
     if(item.userLike){
         if(item.userLike == 1)
             likeClass = 'coloredFullIcon';

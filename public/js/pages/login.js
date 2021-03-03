@@ -124,6 +124,7 @@ function closeRegister() {
 }
 
 function emailRegister() {
+    var loginErrEmailElement = $('#loginErrEmail');
     let email = $('#emailRegisterInput').val();
     if (email.trim().length > 0 && validateEmail(email)) {
         openLoading();
@@ -134,23 +135,22 @@ function emailRegister() {
                 _token: csrfToken,
                 email: email
             },
+            complete: closeLoading,
             success: function (response) {
-                closeLoading();
                 if (response == 'ok')
                     openUserRegisterationPage();
                 else if (response == 'nok')
-                    $('#loginErrEmail').empty().append('ایمیل وارد شده در سامانه موجود است');
+                    loginErrEmailElement.empty().append('ایمیل وارد شده در سامانه موجود است');
             else
-                $('#loginErrEmail').empty().append('در فرایند ثبت نام مشکلی پیش امده لطفا دوباره تلاش کنید');
+                loginErrEmailElement.empty().append('در فرایند ثبت نام مشکلی پیش امده لطفا دوباره تلاش کنید');
             },
             error: function (err) {
-                console.log(err);
-                closeLoading();
-                $('#loginErrEmail').empty().append('در فرایند ثبت نام مشکلی پیش امده لطفا دوباره تلاش کنید');
+                loginErrEmailElement.empty().append('در فرایند ثبت نام مشکلی پیش امده لطفا دوباره تلاش کنید');
             }
         })
-    } else
-        $('#loginErrEmail').empty().append('ایمیل خود را به درستی وارد کنید.');
+    }
+    else
+        loginErrEmailElement.empty().append('ایمیل خود را به درستی وارد کنید.');
 }
 
 function checkInputPhoneRegister() {

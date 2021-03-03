@@ -88,6 +88,12 @@
                 <div class="address">{{$localShop->address}}</div>
             </div>
             <div class="mainHeaderButts" style="position: relative;">
+                <div class="phone telephoneIcon">
+                    @foreach($localShop->telephone as $telephone)
+                        <a href="tel:{{$telephone}}">{{$telephone}}</a>
+                    @endforeach
+                </div>
+
                 <div class="fullyCenterContent emptyCameraIconAfter" onclick="addPictureToLocalShop()">
                     <div class="text">گذاشتن عکس</div>
                 </div>
@@ -107,7 +113,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7 plPc-0">
-                    <div id="mainSlider" class="fullyCenterContent bodySec imgSliderSec swiper-container" style="height: 420px">
+                    <div id="mainSlider" class="mainSliderOfLocalShop fullyCenterContent bodySec imgSliderSec swiper-container">
                         <div class="swiper-wrapper">
                             @foreach($localShop->pics as $pic)
                                 <div class="swiper-slide" style="overflow: hidden">
@@ -121,7 +127,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="bodySec infoSec">
-{{--                        <div class="iWasHere flagIcon">من اینجا بودم</div>--}}
+                        <div class="iWasHere flagIcon {{$localShop->iAmHere == 1 ? 'selected' : ''}}" onclick="imAmHereFunc(this)">من اینجا بودم</div>
                         <div class="boldText">{{$localShop->name}}</div>
                         <div class="normText">{{$localShop->address}}</div>
                         <div class="phone telephoneIconAfter">
@@ -364,14 +370,14 @@
                     <div class="bodySec pad-15">
                         <h2 class="headerSec questionIcon">سوال و جواب</h2>
                         <div id="questionSection" class="questionBodies">
-                            <div>
-                                <div style="font-weight: bold; font-size: 16px;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
-                                <div style="margin-top: 12px; font-size: 15px;">
-                                    در حال حاضر
+                            <div class="questionInfoText">
+                                <div style="font-weight: bold; font-size: 1em;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
+                                <div style="margin-top: 12px; font-size: .85em;">
+                                    <span>در حال حاضر</span>
                                     <span id="questionCount"></span>
-                                    سؤال
+                                    <span>سؤال</span>
                                     <span id="answerCount"></span>
-                                    پاسخ موجود می‌باشد.
+                                    <span>پاسخ موجود می‌باشد.</span>
                                 </div>
                             </div>
                             <div class="inputQuestionSec">
@@ -436,6 +442,7 @@
         var askQuestionUrl = '{{route("askQuestion")}}';
         var getQuestionsUrl = '{{route("getQuestions")}}';
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
+        var iAmHereLocalShopUrl = '{{route("localShop.addIAmHere")}}';
 
         var localShop = {!! $localShop !!};
         var newReview = {

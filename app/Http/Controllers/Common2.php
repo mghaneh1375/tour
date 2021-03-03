@@ -162,12 +162,14 @@ function getReviewContents($item, $authUserId){
 
         $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
             ->where('cities.id', $place->cityId)
-            ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName'])
+            ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName', 'state.isCountry'])
             ->first();
         $item->placeCity = $cityAndState->cityName;
         $item->placeState = $cityAndState->stateName;
 
-        $item->where = "{$place->name} شهر {$cityAndState->cityName}، استان {$cityAndState->stateName}";
+        $stateText = $cityAndState->isCountry == 1 ? ' کشور ' : ' استان ';
+
+        $item->where = "{$place->name} شهر {$cityAndState->cityName}، {$stateText} {$cityAndState->stateName}";
 
         $folderName = "{$kindPlace->fileName}/{$place->file}";
     }

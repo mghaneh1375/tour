@@ -38,7 +38,7 @@ if(url.search.split('?filter=')[1] != undefined){
     };
 }
 
-if(placeMode == 'hotel'){
+if(placeMode == 'hotels'){
     $(window).ready(() => doKindFilter('kind_id', 1))
 }
 
@@ -480,6 +480,9 @@ function createListItemCard(_result){
         item.bookMark = item.bookMark == 1 ? 'BookMarkIcon' : 'BookMarkIconEmpty';
         for (var x of Object.keys(item))
             text = text.replace(new RegExp(`##${x}##`, "g"), item[x]);
+
+        var stateKindText = item.isCountry == 1 ? 'کشور ' : 'استان ';
+        text = text.replace(new RegExp('##stateKindText##', "g"), stateKindText);
 
         cards += text;
     });

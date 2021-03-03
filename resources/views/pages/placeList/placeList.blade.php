@@ -328,7 +328,7 @@
                                             </div>
                                         </div>
                                         <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px">
-                                            <span>{{__('استان')}}:</span>
+                                            <span>##stateKindText##:</span>
                                             <span>##state##</span>
                                         </div>
                                         <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px">
@@ -338,9 +338,7 @@
                                         <div class="booking"></div>
                                     </div>
                                 </div>
-                            </div>
-
-    `;
+                            </div>`;
 
     var cityId = '{{ isset($city->id) ? $city->id : 0}}';
     var cityRel = {!! $cityRel !!};
@@ -367,7 +365,7 @@
     @endif
 </script>
 
-<script src="{{URL::asset('js/pages/placeDetails/placeList.js')}}"></script>
+<script src="{{URL::asset('js/pages/placeDetails/placeList.js?v='.$fileVersions)}}"></script>
 
 </body>
 </html>

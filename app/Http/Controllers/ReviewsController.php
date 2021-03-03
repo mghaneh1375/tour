@@ -748,7 +748,7 @@ class ReviewsController extends Controller
         $ids = [];
         $sqlQuery = '';
 
-        if($kind == 'city' || $kind == 'state') {
+        if($kind == 'city' || $kind == 'state' || $kind === 'country') {
             if ($kind == 'city') {
                 $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
                 $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
@@ -757,7 +757,8 @@ class ReviewsController extends Controller
                 $allMahaliFood = MahaliFood::where('cityId', $id)->pluck('id')->toArray();
                 $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
                 $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
-            } else if ($kind == 'state') {
+            }
+            else if ($kind == 'state' || $kind === 'country') {
                 $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
 
                 $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
@@ -856,7 +857,7 @@ class ReviewsController extends Controller
         foreach($tagIds as $item)
             array_push($revTagIds, ReviewTagRelations::firstOrCreate(['reviewId' => $id, 'tagId' => $item])->id);
 
-        ReviewTagRelations::whereNotIn('id', $revTagIds)->delete();
+        ReviewTagRelations::whereNotIn('id', $revTagIds)->where('reviewId', $id)->delete();
         return true;
     }
 
@@ -901,7 +902,6 @@ class ReviewsController extends Controller
             if(isset($request->id)){
                 $review = LogModel::find($request->id);
                 if($review != null && $review->visitorId == $user->id){
-
                     $placeId = 0;
                     $kindPlaceTableName = null;
                     if($review->kindPlaceId != 0 && $review->placeId != 0) {

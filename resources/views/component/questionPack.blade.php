@@ -61,7 +61,7 @@
     </div>
     <div class="questionContentMainBox"">##text##</div>
     <div class="questionSubMenuBar">
-        <b class="replyBtn replyAnswerBtn" onclick="openReplyQuestionSection(##id##)"> {{__('پاسخ دهید')}} </b>
+        <div class="replyBtn replyAnswerBtn" onclick="openReplyQuestionSection(##id##)"> {{__('پاسخ دهید')}} </div>
         <div class="dark-blue float-right display-inline-black cursor-pointer" onclick="showAllQuestionAnswer(##id##, this)" style="direction: rtl">
             <span class="numberOfCommentsIcon commentsStatisticSpan dark-blue">##answersCount##</span>
             <span class="seeAllText">{{__('مشاهده پاسخ‌ها')}}</span>
@@ -72,7 +72,7 @@
             <img alt="userPic" src="##yourPic##" style="height: 100%; border-radius: 50%;">
         </div>
         <div class="inputBox" style="flex-direction: column">
-            <b class="replyAnswerTitle">{{__("در پاسخ به سوال")}} ##userName##</b>
+            <div class="replyAnswerTitle">{{__("در پاسخ به سوال")}} ##userName##</div>
             <div class="questAnsText" style="width: 100%;">
                 <textarea id="QanswerInputBox##id##" class="inputBoxInput inputBoxInputAnswer" placeholder="{{__("شما چه پاسخی دارید؟")}}"></textarea>
                 <div class="sendQuestionBtn" onclick="sendAnswerOfQuestion(##id##, $('#QanswerInputBox##id##').val())">{{__(("ارسال"))}}</div>

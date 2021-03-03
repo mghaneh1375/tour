@@ -665,9 +665,9 @@ class HomeController extends Controller
             $key2 = str_replace(' ', '', $key2);
 
             if (!empty($key2))
-                $result = DB::select("SELECT name as targetName, id from state WHERE replace(name, ' ', '') LIKE '%$key%' or replace(name, ' ', '') LIKE '%$key2%'");
+                $result = DB::select("SELECT `name` as targetName, id, isCountry from state WHERE replace(`name`, ' ', '') LIKE '%$key%' or replace(`name`, ' ', '') LIKE '%$key2%'");
             else
-                $result = DB::select("SELECT name as targetName, id from state WHERE replace(name, ' ', '') LIKE '%$key%'");
+                $result = DB::select("SELECT `name` as targetName, id, isCountry from state WHERE replace(`name`, ' ', '') LIKE '%$key%'");
 
             foreach ($result as $itr) {
                 $itr->mode = "state";

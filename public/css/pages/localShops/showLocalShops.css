@@ -68,6 +68,11 @@ div[class^="col-"]{
     left: 0 !important;
     right: auto !important;
 }
+
+.showBody .map{
+    height: 500px;
+}
+
 @media (max-width: 991px) {
     div[class^="col-md"]{
         width: 100%;
@@ -89,6 +94,9 @@ div[class^="col-"]{
     }
 }
 @media (max-width: 767px) {
+    .showBody .map{
+        height: 300px;
+    }
     .fastAccess .tab{
         font-size: 18px;
     }

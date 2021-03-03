@@ -1483,18 +1483,46 @@
 }
 
 
+.answerPackDiv{
+    margin-bottom: 15px;
+    direction: rtl;
+}
+.answerPackDiv .userImgAnswerPack{
+    border-radius: 50%;
+}
+.answerPackDiv .userProfileName.userProfileNameFullReview{
+    flex-direction: column;
+    align-items: flex-start;
+}
+.answerPackDiv .userProfileName.userProfileNameFullReview .inOneRow{
+    display: flex;
+    align-items: center;
+}
+
+
 @media only screen and (max-width: 767px) {
+    .fullReviewSeeAnses{
+        font-size: 12px;
+    }
+    .questionPack .questionContentMainBox{
+        font-size: 14px;
+    }
+
+    .questionSubMenuBar{
+        font-size: 11px;
+    }
+
     .commentsContentMainBox .colInAns{
         display: flex;
         flex-direction: column;
     }
+
     .commentWriterExperienceParticipation, .userProfileName, .userProfileNameAnswers{
         margin-top: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-
 
     .fullReviewLikeAnsSeeAllSection{
         width: 100%;
@@ -1572,6 +1600,7 @@
         background: #edf9f8;
         width: 100%;
     }
+
     .newAnswerPlaceMainDiv .inputBox .sendQuestionBtn{
         background-color: #edf9f8;
     }
@@ -1621,6 +1650,7 @@
         align-items: center;
         justify-content: flex-end;
     }
+
     .commentRatingsDetailsBtnIcon{
         position: relative;
         top: auto;

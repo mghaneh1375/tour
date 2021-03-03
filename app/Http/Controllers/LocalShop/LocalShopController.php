@@ -9,6 +9,7 @@ use App\models\localShops\LocalShopFeatures;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
 use App\models\localShops\LocalShopsPictures;
+use App\models\localShops\LocalShopsUserAction;
 use App\models\LogModel;
 use App\models\places\Place;
 use App\models\places\PlaceTag;
@@ -18,6 +19,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use League\Flysystem\Adapter\Local;
 
 class LocalShopController extends Controller
 {
@@ -46,6 +48,7 @@ class LocalShopController extends Controller
         $localShop->bookMark = 0;
         if(auth()->check()) {
             $user = auth()->user();
+            $localShop->iAmHere = LocalShopsUserAction::where(['localShopId' => $localShop->id, 'userId' => $user->id, 'iAmHere' => 1])->count();
             $codeForReview = $user->id . '_' . random_int(100000, 999999);
             $localShop->bookMark = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
                 ->where('bookMarkReferences.tableName', 'localShops')
@@ -111,5 +114,32 @@ class LocalShopController extends Controller
         }
         else
             return response()->json(['status' => 'error1']);
+    }
+
+    public function addImAmHereLocalShop(Request $request)
+    {
+        $localShopId = $request->localShopId;
+        if($localShopId != null){
+            $localShop = LocalShops::find($localShopId);
+            if($localShop != null){
+                $user = auth()->user();
+                $iAmHere = LocalShopsUserAction::where(['localShopId' => $localShop->id, 'userId' => $user->id])->first();
+                if($iAmHere == null){
+                    $iAmHere = new LocalShopsUserAction();
+                    $iAmHere->localShopId = $localShop->id;
+                    $iAmHere->userId = $user->id;
+                    $iAmHere->iAmHere = 1;
+                }
+                else
+                    $iAmHere->iAmHere = $iAmHere->iAmHere == 1 ? 0 : 1;
+
+                $iAmHere->save();
+                return response()->json(['status' => 'ok', 'result' => $iAmHere->iAmHere]);
+            }
+            else
+                return response()->json(['status' => 'error1']);
+        }
+        else
+            return response()->json(['status' => 'error']);
     }
 }

@@ -29,28 +29,30 @@ class CityController extends Controller
 {
 
     public function cityPage($kind, $city, Request $request) {
-        $todayFunc = getToday();
+
         $city = str_replace('+', ' ', $city);
+        $todayFunc = getToday();
         $today = $todayFunc["date"];
         $nowTime = $todayFunc["time"];
 
-        if($kind == 'state')
-            $place = State::where('name', $city)->first();
-        else
-            $place = Cities::where('name', $city)->first();
+        $mainLocation = __DIR__ . '/../../../../assets/_images';
 
-        if($place == null)
-            return redirect(\url('/'));
+        if($kind === 'state' || $kind === 'country')
+            $place = State::where('name', $city)->firstOrFail();
+        else
+            $place = Cities::where('name', $city)->firstOrFail();
+
 
         if($kind == 'city') {
-            $place->state = State::whereId($place->stateId)->name;
+            $cState = State::find($place->stateId);
+            $place->state = $cState->name;
             $place->listName = $place->name;
             $articleUrl = route('safarnameh.list', ['type' => 'city', 'search' => $place->listName]);
             $locationName = [ "name" => $place->name, "state" => $place->state, "stateNameUrl" => $place->state,
                               "cityName" => $place->name, "cityNameUrl" => $place->listName, "articleUrl" => $articleUrl,
-                              "kindState" => 'city'];
+                              "kindState" => 'city', "stateIsCountry" => $cState->isCountry];
 
-            $allAmakenId = Amaken::where('cityId', $place->id)->pluck('id')->toArray();
+//            $allAmakenId = Amaken::where('cityId', $place->id)->pluck('id')->toArray();
             $allAmaken = Amaken::where('cityId', $place->id)->count();
             $allMajara = Majara::where('cityId', $place->id)->count();
             $allHotels = Hotel::where('cityId', $place->id)->count();
@@ -63,15 +65,19 @@ class CityController extends Controller
         }
         else {
             $place->listName = $place->name;
-            $place->name = 'استان ' . $place->name;
+
+            if($place->isCountry == 1) $place->name = 'کشور ' . $place->name;
+            else $place->name = 'استان ' . $place->name;
+
             $articleUrl = route('safarnameh.list', ['type' => 'state', 'search' => $place->listName]);
+
             $locationName = ["name" => $place->name, "cityName" => $place->name, "cityNameUrl" => $place->listName,
-                            "state" => $place->name, "stateNameUrl" => $place->listName,
+                            "state" => $place->name, "stateNameUrl" => $place->listName, "stateIsCountry" => $place->isCountry,
                             "articleUrl" => $articleUrl, "kindState" => 'state'];
 
             $allCities = Cities::where('stateId', $place->id)->where('isVillage',0)->pluck('id')->toArray();
 
-            $allAmakenId = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
+//            $allAmakenId = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
             $allAmaken = Amaken::whereIn('cityId', $allCities)->count();
             $allMajara = Majara::whereIn('cityId', $allCities)->count();
             $allHotels = Hotel::whereIn('cityId', $allCities)->count();
@@ -82,12 +88,18 @@ class CityController extends Controller
             $allLocalShops = LocalShops::whereIn('cityId', $allCities)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('stateId', $place->id)->count();
         }
-        $mainLocation = __DIR__ . '/../../../../assets/_images';
 
-        if($place->image != null && is_file($mainLocation."/city/$place->id/$place->image"))
-            $place->image = URL::asset("_images/city/$place->id/$place->image");
-        else
-            $place->image = URL::asset('images/mainPics/noPicSite.jpg');
+        $placeCounts = [
+            'amaken' => $allAmaken,
+            'majara' => $allMajara,
+            'hotel' => $allHotels,
+            'restaurant' => $allRestaurant,
+            'mahaliFood' => $allMahaliFood,
+            'sogatSanaie' => $allSogatSanaie,
+            'boomgardy' => $allBoomgardy,
+            'safarnameh' => $allSafarnamehCount,
+            'localShops' => $allLocalShops,
+        ];
 
 //        $pics = [];
 //        $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')
@@ -120,7 +132,14 @@ class CityController extends Controller
 
         $pics = [];
         if($kind === "city"){
-            $location = __DIR__."/../../../../assets/_images/city/{$place->id}/";
+            $location = "{$mainLocation}/city/{$place->id}/";
+
+            if($place->image != null && is_file("{$location}/{$place->image}"))
+                $place->image = URL::asset("_images/city/{$place->id}/{$place->image}");
+            else
+                $place->image = URL::asset('images/mainPics/noPicSite.jpg');
+
+
             if($place->image != null && is_file($location.$place->image))
                 array_push($pics, [
                     'pic' => URL::asset("_images/city/{$place->id}/{$place->image}"),
@@ -136,57 +155,66 @@ class CityController extends Controller
                     ]);
             }
         }
+        else if($kind === "state" || $kind === "country"){
+            $location = "{$mainLocation}/city/{$place->folder}/";
+            if($place->image != null && is_file("{$location}/{$place->image}"))
+                $place->image = URL::asset("_images/city/{$place->folder}/{$place->image}");
+            else
+                $place->image = URL::asset('images/mainPics/noPicSite.jpg');
+
+//            if($place->image != null && is_file($location.$place->image))
+//                array_push($pics, [
+//                    'pic' => URL::asset("_images/city/{$place->folder}/{$place->image}"),
+//                    'alt' => $place->name
+//                ]);
+        }
 
         $place->pic = $pics;
 
-        $placeCounts = [
-            'amaken' => $allAmaken,
-            'majara' => $allMajara,
-            'hotel' => $allHotels,
-            'restaurant' => $allRestaurant,
-            'mahaliFood' => $allMahaliFood,
-            'sogatSanaie' => $allSogatSanaie,
-            'boomgardy' => $allBoomgardy,
-            'safarnameh' => $allSafarnamehCount,
-            'localShops' => $allLocalShops,
-        ];
-
         $safarnameh = [];
-        $safarnamehId = [];
         $postTake = 7;
-        if($kind == 'state')
+        if($kind == "state" || $kind === "country")
             $safarnamehId = SafarnamehCityRelations::where('stateId', $place->id)->pluck('safarnamehId')->toArray();
         else{
             $safarnamehId = SafarnamehCityRelations::where('cityId', $place->id)->pluck('safarnamehId')->toArray();
             if(count($safarnamehId) < $postTake){
                 $less = $postTake - count($safarnamehId);
-                $pId = SafarnamehCityRelations::where('stateId', $place->stateId)->take($less)->pluck('safarnamehId')->toArray();
+                $pId = SafarnamehCityRelations::where('stateId', $place->stateId)->whereNotIn('safarnamehId', $safarnamehId)->take($less)->pluck('safarnamehId')->toArray();
                 $safarnamehId = array_merge($safarnamehId, $pId);
             }
         }
+
         if(count($safarnamehId) != 0){
-            $pt = Safarnameh::whereIn('id', $safarnamehId)->where('release', '!=', 'draft')->whereRaw('date < ' .$today. ' OR (date = ' . $today . ' AND time < ' . $nowTime . ' )')->take($postTake)->orderBy('date', 'DESC')->get();
+            $pt = Safarnameh::youCanSee()
+                    ->whereIn('id', $safarnamehId)
+                    ->take($postTake)
+                    ->orderBy('date', 'DESC')
+                    ->get();
+
             foreach ($pt as $item)
                 array_push($safarnameh, $item);
 
             if(count($pt) < $postTake){
-
                 $less = $postTake - count($pt);
                 $postInRel = SafarnamehCityRelations::all()->pluck('safarnamehId')->toArray();
-                $p = Safarnameh::whereNotIn('id', $safarnamehId)->whereNotIn('id', $postInRel)->where('release', '!=', 'draft')->whereRaw('date < ' .$today. ' OR (date = ' . $today . ' AND time < ' . $nowTime . ' )')->take($less)->orderBy('date', 'DESC')->get();
+                $p = Safarnameh::youCanSee()->whereNotIn('id', $safarnamehId)->whereNotIn('id', $postInRel)->take($less)->orderBy('date', 'DESC')->get();
                 foreach ($p as $item)
                     array_push($safarnameh, $item);
             }
         }
         else
-            $safarnameh = Safarnameh::where('release', '!=', 'draft')->whereRaw('date < ' .$today. ' OR (date = ' . $today . ' AND time < ' . $nowTime . ' )')->take($postTake)->orderBy('date', 'DESC')->get();
+            $safarnameh = Safarnameh::youCanSee()->take($postTake)->orderBy('date', 'DESC')->get();
+
         foreach ($safarnameh as $item)
             $item = SafarnamehMinimalData($item);
 
         $mainWebSiteUrl = \url('/');
-        $mainWebSiteUrl .= '/' . $request->path();
+        $mainWebSiteUrl = "{$mainWebSiteUrl}/{$request->path()}";
+
         if($kind == 'state')
             $localStorageData = ['kind' => 'state', 'name' => $place->name , 'city' => '', 'state' => $place->listName, 'mainPic' => $place->image, 'redirect' => $mainWebSiteUrl];
+        else if($kind == 'country')
+            $localStorageData = ['kind' => 'country', 'name' => $place->name , 'city' => '', 'state' => $place->listName, 'mainPic' => $place->image, 'redirect' => $mainWebSiteUrl];
         else
             $localStorageData = ['kind' => 'city', 'name' => $place->name , 'city' => $place->listName, 'state' => $place->state, 'mainPic' => $place->image, 'redirect' => $mainWebSiteUrl];
 
@@ -263,16 +291,11 @@ class CityController extends Controller
                     break;
             }
             foreach ($plac as $item){
-                if($item->C > 39.817043976810254 || $item->D > 62.148940583173776 || $item->C < 24.337168697512585 || $item->D < 43.75341666481935){
-                    $item->C = 37.404470200738906;
-                    $item->D = 51.81568255996895;
-                    $item->save();
-                }
 
-                $location = __DIR__ .'/../../../../assets/_images/' . $kindPlace->fileName . '/' . $item->file;
+                $location = __DIR__ ."/../../../../assets/_images/{$kindPlace->fileName}/{$item->file}";
                 $item->pic = null;
                 if(is_file($location . '/f-' . $item->picNumber))
-                    $item->pic = URL::asset('_images/' . $kindPlace->fileName . '/' . $item->file . '/f-' . $item->picNumber);
+                    $item->pic = URL::asset("_images/{$kindPlace->fileName}/{$item->file}/f-{$item->picNumber}");
                 if($item->pic == null)
                     $item->pic = URL::asset('images/mainPics/nopicv01.jpg');
 

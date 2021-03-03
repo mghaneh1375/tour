@@ -8,6 +8,13 @@
 
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/mapp.min.css')}}">--}}
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/fa/style.css')}}">--}}
+
+    <style>
+        footer .addNewReviewButtonMobileFooter{
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
     @include('general.forAllPages')
@@ -42,6 +49,8 @@
             <div class="filtersSec"></div>
         </div>
 
+        <div id="searchThisAreaButton" class="searchThisAreaButton hidden" onclick="searchThisArea()">جستجوی این بخش</div>
+
         <div class="listSection">
             <div class="leftArrowIcon" onclick="$('.bodySec').toggleClass('fullMap');"></div>
             <div class="content">
@@ -69,6 +78,62 @@
         </div>
     </div>
 
+    <div id="localShopCategoriesModal" class="modalBlackBack fullCenter localShopCategoriesModal">
+        <div class="modalBody">
+            <div onclick="closeMyModal('localShopCategoriesModal')" class="iconClose closeModal"></div>
+            <div class="mainFullBody">
+                <div class="header">دسته بندی کسب و کارها</div>
+                <div id="mapLocationShortcutDiv" class="swiper-container shortcutSec">
+                    <div class="swiper-wrapper">
+                        @foreach($localShopCategories as $category)
+                            <div class="swiper-slide shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
+    {{--                            <div class="icon manSportIcon"></div>--}}
+                                <div>{{$category->name}}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="rowButton">
+                    <div class="butts showAll" onclick="showAllLocalShopCategories(-1, 0, this)">
+                        <span class="text">تمامی دسته بندی ها</span>
+                        <span class="icon">
+                            <i class="far fa-eye"></i>
+                            <i class="fas fa-slash slash"></i>
+                        </span>
+                    </div>
+                </div>
+                <div id="localShopCategoryFilterSection" class="filterSection">
+                    @foreach($localShopCategories as $category)
+                        <div id="localShopMainCategorySection_{{$category->id}}" class="rowFilter">
+                            <div class="head">
+                                <div>
+{{--                                    <span class="icon manSportIcon"></span>--}}
+                                    <span>{{$category->name}}</span>
+                                </div>
+                                <div class="showIcon showIconCategories" data-type="off" onclick="toggleLocalShopCategories({{$category->id}}, this)">
+                                    <i class="far fa-eye"></i>
+                                    <i class="fas fa-slash slash"></i>
+                                </div>
+                            </div>
+                            <div class="body">
+                                @foreach($category->sub as $sub)
+                                    <div class="filter">
+                                        <input id="localShopCategories_{{$sub->id}}" data-id="{{$sub->id}}" class="categoryFilterInput_0 categoryFilterInput_{{$category->id}}" type="checkbox" checked>
+                                        <label for="localShopCategories_{{$sub->id}}" class="name checked">
+{{--                                            <div class="icon manSportIcon"></div>--}}
+                                            <div class="showOneLineText">{{$sub->name}}</div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="submitFilter" onclick="doLocalShopCategoryFilter()">اعمال فیلتر</div>
+        </div>
+    </div>
+
     @include('layouts.footer.layoutFooter')
     {{--    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCdVEd4L2687AfirfAnUY1yXkx-7IsCER0"></script>--}}
 
@@ -77,10 +142,12 @@
 
 
     <script>
+        var localShopCategories = {!! $localShopCategories !!};
+        var selectedPlaceFromBack = {!! json_encode($selectedPlaceName) !!};
         var searchPlaceUrl = "{{route('search.place')}}";
         var getPlacesLocationUrl = "{{route("getPlaces.location")}}";
         var noDataPicUrl = "{{URL::asset('images/mainPics/noData.png')}}";
-        let filterButtons = {
+        var filterButtons = {
             1: {
                 id: 1,
                 enName: 'amakenFilter',
@@ -88,6 +155,8 @@
                 mapIcon: '{{URL::asset('images/mapIcon/att.png')}}',
                 name: 'جاذبه',
                 nameTitle: 'جاهای دیدنی نزدیک',
+                classToImg: 'amakenImgIcon mapImgIcon',
+                onClick: '',
             },
             3: {
                 id: 3,
@@ -96,6 +165,8 @@
                 mapIcon: '{{URL::asset('images/mapIcon/res.png')}}',
                 name: 'رستوران',
                 nameTitle: 'رستوران های نزدیک',
+                classToImg: 'restaurantImgIcon mapImgIcon',
+                onClick: '',
             },
             4: {
                 id: 4,
@@ -104,6 +175,8 @@
                 mapIcon: '{{URL::asset('images/mapIcon/hotel.png')}}',
                 name: 'اقامتگاه',
                 nameTitle: 'اقامتگاه های نزدیک',
+                classToImg: 'hotelImgIcon mapImgIcon',
+                onClick: '',
             },
             6: {
                 id: 6,
@@ -112,6 +185,8 @@
                 mapIcon: '{{URL::asset('images/mapIcon/adv.png')}}',
                 name: 'طبیعت گردی',
                 nameTitle: 'طبیعت گردی های نزدیک',
+                classToImg: 'majaraImgIcon mapImgIcon',
+                onClick: '',
             },
             12: {
                 id: 12,
@@ -120,6 +195,8 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'بوم گردی',
                 nameTitle: 'بوم گردی های نزدیک',
+                classToImg: 'boomgardyImgIcon mapImgIcon',
+                onClick: '',
             },
             13: {
                 id: 13,
@@ -128,14 +205,26 @@
                 mapIcon: '{{URL::asset('images/mapIcon/boom.png')}}',
                 name: 'فروشگاه',
                 nameTitle: 'فروشگاه های نزدیک',
+                classToImg: 'localShopImgIcon mapImgIcon',
+                onClick: openLocalShopCategoriesFilter
             },
         };
+
+        function openLocalShopCategoriesFilter(){
+            openMyModal('localShopCategoriesModal');
+
+            new Swiper('#mapLocationShortcutDiv', {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                freeMode: true,
+            });
+        }
+
     </script>
 
-    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-src.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
 
     <script src="{{URL::asset('js/pages/myLocation.js?v='.$fileVersions)}}"></script>
-
 </body>
 </html>

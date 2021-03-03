@@ -188,10 +188,12 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
 
-    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
     Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
-    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
+
+    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
     Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
+
+    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
 
 });
@@ -209,9 +211,12 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
             Route::get('/localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
         });
-        Route::post('/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
-        Route::post('/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
-        Route::delete('/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+        Route::post('/localShops/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
+        Route::post('/localShops/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
+        Route::delete('/localShops/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+
+        Route::post('/localShops/addIAmHere', 'LocalShop\LocalShopController@addImAmHereLocalShop')->name('localShop.addIAmHere');
+
     });
 });
 
@@ -856,11 +861,6 @@ Route::group(array('middleware' => ['nothing']), function () {
 
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 
-Route::get('seenLogExport/{num}', 'MainController@seenLogExport');
+Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
 
-
-//<Directory /var/www/tvKoochita/public>
-//        Options Indexes FollowSymLinks
-//        AllowOverride All
-//        Require all granted
-//</Directory>
+Route::get('exportDistanceFromCityCenter/alakiii', 'MainController@exportDistanceFromCityCenter')->middleware(['auth']);

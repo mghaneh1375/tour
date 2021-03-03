@@ -109,7 +109,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                         <a href="https://twitter.com/home?status={{Request::url()}}" target="_blank" class="share">
                             <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}">
                         </a>
-                        <a href="#" class="share whatsappLink">
+                        <a href="#" class="share whatsappLink whatsappLinkMobilePlaceDetails">
                             <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}">
                         </a>
                         <a href="https://telegram.me/share/url?url={{Request::url()}}" target="_blank" class="share">
@@ -926,6 +926,14 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
         var addPhotoToPlaceUrl = '{{route("photographer.uploadFile")}}';
+
+
+        $(window).ready(() => {
+            var encodeurlShareBox = encodeURIComponent('{{Request::url()}}');
+            var textShareBox = 'whatsapp://send?text=';
+            textShareBox += 'در کوچیتا ببینید:' + ' %0a ' + encodeurlShareBox;
+            $('.whatsappLinkMobilePlaceDetails').attr('href', textShareBox);
+        })
     </script>
 
     <script src="{{URL::asset('js/pages/placeDetails/placeDetails.js?v='.$fileVersions)}}"></script>

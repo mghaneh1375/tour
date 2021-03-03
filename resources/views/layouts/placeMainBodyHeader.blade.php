@@ -209,7 +209,7 @@
                     <a href="https://twitter.com/home?status={{Request::url()}}" target="_blank" class="share">
                         <img src="{{URL::asset("images/shareBoxImg/twitter.png")}}">
                     </a>
-                    <a href="#" class="share whatsappLink">
+                    <a href="#" class="share whatsappLink whatsappLinkMobilePlaceDetails">
                         <img src="{{URL::asset("images/shareBoxImg/whatsapp.png")}}">
                     </a>
                     <a href="https://telegram.me/share/url?url={{Request::url()}}" target="_blank" class="share">
@@ -229,19 +229,21 @@
 <script>
 
     function changeBookmarkIcon() {
-        var icon = $('.saveAsBookmarkIcon').hasClass('BookMarkIcon');
+        var element = $('.saveAsBookmarkIcon');
+        var icon = element.hasClass('BookMarkIcon');
 
         if(icon)
-            $('.saveAsBookmarkIcon').addClass('BookMarkIconEmpty').removeClass('BookMarkIcon');
+            element.addClass('BookMarkIconEmpty').removeClass('BookMarkIcon');
         else
-            $('.saveAsBookmarkIcon').addClass('BookMarkIcon').removeClass('BookMarkIconEmpty');
+            element.removeClass('BookMarkIconEmpty').addClass('BookMarkIcon');
     }
 
     $('#share_pic_mobile').click(function () {
-        if ($('#share_box_mobile').is(":hidden")) {
-            $('#share_box_mobile').show();
-        } else {
-            $('#share_box_mobile').hide();
-        }
+        var element = $('#share_box_mobile');
+        if (element.is(":hidden"))
+            element.show();
+        else
+            element.hide();
+
     });
 </script>
