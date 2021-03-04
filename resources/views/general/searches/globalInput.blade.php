@@ -63,4 +63,5 @@
     var setResultToGlobalSearch = _txt => $('#globalSearchResult').show().html(_txt);
     var clearGlobalResult = () => $('#globalSearchResult').hide().html('');
     var closeSearchInput = () => $('#globalSearch').css('display', 'none');
+
 </script>

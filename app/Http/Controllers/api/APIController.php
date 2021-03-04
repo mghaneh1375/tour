@@ -1593,7 +1593,7 @@ class APIController extends Controller {
                     $tmp = Amaken::whereId($place2[$i]->placeId);
                     if($tmp == null) {
                         $place2[$i]->delete();
-                        continue;
+                        break;
                     }
                     $place2[$i] = $tmp;
                     if(file_exists((__DIR__ . '/../../../../assets/_images/amaken/' . $place2[$i]->file . '/f-1.jpg')))
@@ -1607,7 +1607,7 @@ class APIController extends Controller {
                     $tmp = Restaurant::whereId($place2[$i]->placeId);
                     if($tmp == null) {
                         $place2[$i]->delete();
-                        continue;
+                        break;
                     }
                     $place2[$i] = $tmp;
                     if(file_exists((__DIR__ . '/../../../../assets/_images/restaurant/' . $place2[$i]->file . '/f-1.jpg')))
@@ -1621,7 +1621,7 @@ class APIController extends Controller {
                     $tmp = Hotel::whereId($place2[$i]->placeId);
                     if($tmp == null) {
                         $place2[$i]->delete();
-                        continue;
+                        break;
                     }
                     $place2[$i] = $tmp;
                     if(file_exists((__DIR__ . '/../../../../assets/_images/hotels/' . $place2[$i]->file . '/f-1.jpg')))
@@ -1635,7 +1635,7 @@ class APIController extends Controller {
                     $tmp = Majara::whereId($place2[$i]->placeId);
                     if($tmp == null) {
                         $place2[$i]->delete();
-                        continue;
+                        break;
                     }
                     $place2[$i] = $tmp;
                     if(file_exists((__DIR__ . '/../../../../assets/_images/majara/' . $place2[$i]->file . '/f-1.jpg')))
@@ -1649,7 +1649,7 @@ class APIController extends Controller {
                     $tmp = Adab::whereId($place2[$i]->placeId);
                     if($tmp == null) {
                         $place2[$i]->delete();
-                        continue;
+                        break;
                     }
                     $place2[$i] = $tmp;
                     if($place2[$i]->category == 3) {

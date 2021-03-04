@@ -1,5 +1,5 @@
 body{
-    font-family: 'IranSans' !important;
+    font-family: 'IRANSansWeb' !important;
     direction: rtl;
     text-align: right;
     background: #eaeaea;
@@ -61,7 +61,7 @@ body{
     z-index: 1;
 }
 .loaderDiv .processBar .bar{
-    right: 0px;
+    right: 0;
     height: 100%;
     background: var(--koochita-yellow);
     position: absolute;
@@ -86,13 +86,13 @@ body{
     background: white;
     width: 100%;
     height: 60px;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     border-bottom: solid 1px var(--lightBordreGray);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 20px;
+    padding: 0 20px;
 }
 .mainHeader .mainLogo{
     height: 75%;
@@ -139,14 +139,14 @@ body{
     flex-direction: column;
     background: white;
     top: 100%;
-    right: 0px;
+    right: 0;
     transition: .3s;
-    max-height: 0px;
+    max-height: 0;
     overflow: hidden;
     z-index: 1;
 }
 .mainHeader .userInfoSec .topDropDown .dropDownMenu .item{
-    padding: 0px 14px;
+    padding: 0 14px;
     margin-bottom: 5px;
     font-size: 17px;
     color: black;
@@ -154,13 +154,13 @@ body{
 }
 .mainHeader .userInfoSec .topDropDown .dropDownMenu.open{
     max-height: 1000px;
-    box-shadow: 0px 3px 3px 1px #00000063;
+    box-shadow: 0 3px 3px 1px #00000063;
 }
 
 .mainSidebar{
     background-color: white;
     position: fixed;
-    right: 0px;
+    right: 0;
     top: 60px;
     width: 300px;
     height: 100%;
@@ -191,7 +191,7 @@ body{
 }
 .mainSidebar .progressBarSection .progressBarDiv .full{
     position: absolute;
-    right: 0px;
+    right: 0;
     background: var(--koochita-blue);
     height: 100%;
     width: 0%;
@@ -251,19 +251,23 @@ body{
 .mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody{
     display: flex;
     flex-direction: column;
-    padding: 0px;
+    padding: 0;
 }
 
 
-label{
-    margin-bottom: 0px;
+label {
+    margin-bottom: 0;
 }
-.mainBackWhiteBody{
+.mainBackWhiteBody {
     background: white;
     border: solid 1px var(--lightBordreGray);
-    box-shadow: 0px 0px 4px 1px #cccccc;
+    box-shadow: 0 0 4px 1px #cccccc;
     padding: 10px;
+    overflow: auto;
+    max-height: 100vh;
+    margin-bottom: 100px;
 }
+
 .mainBackWhiteBody .head{
     font-weight: bold;
     font-size: 21px;
@@ -312,7 +316,7 @@ label{
     direction: rtl;
     z-index: 10000;
     border-radius: 10px 10px 0 0;
-    box-shadow: 0px 0px 12px 3px grey;
+    box-shadow: 0 0 12px 3px grey;
     background-color: #0076ac;
 
     padding: 10px;
@@ -327,7 +331,7 @@ label{
     background-color: #8b0000;
 }
 .topAlertBP{
-    bottom: 0px;
+    bottom: 0;
 }
 .rightAlertBP{
     right: 1%;

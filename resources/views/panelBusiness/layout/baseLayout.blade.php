@@ -27,11 +27,14 @@
     <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
 
     <script async src="{{URL::asset('js/bootstrap/bootstrap-rtl.min.js')}}"></script>
-    <script async src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js')}}"></script>
+    <script src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js')}}"></script>
 
     <script>
         $.ajaxSetup({
             xhrFields: { withCredentials: true },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         })
     </script>
 

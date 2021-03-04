@@ -18,13 +18,6 @@
         }
 
         .calendar2 {
-             top: 113% !important;
-             left: 27% !important;
-         }
-    </style>
-
-    <style>
-        .calendar2 {
             top: 113% !important;
             left: 27% !important;
         }
@@ -277,7 +270,6 @@
     </center>
 
     <script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
-
     <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">
 
 
@@ -299,6 +291,7 @@
                 dateFormat: "yy/mm/dd"
             });
         }
+
         function editDateTripEnd() {
 
             $("#date_input_end_edit_2").datepicker({
