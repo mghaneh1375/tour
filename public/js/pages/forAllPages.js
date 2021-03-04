@@ -369,7 +369,8 @@ function getBookMarkForHeaderAndFooter(){
                 if(item.kind == 'place'){
                     name = item.name;
                     pic = item.pic;
-                    state = item.city + ' در ' + item.state;
+
+                    state = (item.city && item.state) ? item.city + ' در ' + item.state : '';
                     kindIcon = window.mainIconsPlaces[item.kindPlaceName].icon;
                     kind = window.mainIconsPlaces[item.kindPlaceName].nameFa;
                     add = true;
@@ -388,7 +389,10 @@ function getBookMarkForHeaderAndFooter(){
                                         <img src="${pic}" class="resizeImgClass" alt="${name}" onload="fitThisImg(this)">
                                     </div>
                                     <div class="infoSec" onclick="goToBookMarkSelected('${item.url}')">
-                                        <div class="type ${kindIcon}">${kind}</div>
+                                        <div class="type">
+                                            <span class="${kindIcon}"></span>
+                                            <span>${kind}</span>
+                                        </div>
                                         <div class="name">${name}</div>
                                         <div class="state">${state}</div>
                                     </div>

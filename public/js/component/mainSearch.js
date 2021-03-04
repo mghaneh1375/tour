@@ -225,9 +225,10 @@ function createSearchResponse(response){
     let newElement = "";
     let searchText = $('#mainSearchInput').val();
     var kindPlaceId = $('#kindPlaceIdForMainSearch').val();
+    var resultElement = $('#result');
 
     if(searchText.trim().length < 3){
-        $('#result').addClass('hidden');
+        resultElement.addClass('hidden');
         $('#placeHolderResult').hide();
         $('#mainSearchResult').hide();
         return;
@@ -255,7 +256,6 @@ function createSearchResponse(response){
             var name2 = '';
 
             if (item.mode == "state") {
-
                 if(item.isCountry == 1) {
                     url = kindPlaceId == 0 ? item.url : `${placeListUrlMainSearch}/${kindPlaceId}/country/${item.targetName}`;
                     name1 = 'کشور ' + item.targetName;
@@ -273,17 +273,21 @@ function createSearchResponse(response){
             else {
                 url = item.url;
                 name1 = item.targetName;
-                name2 = item.cityName+' در '+item.stateName;
+                if(item.cityName && item.stateName)
+                    name2 = item.cityName+' در '+item.stateName;
+                else name2 = '';
             }
-
+            // style="${window.mainIconsPlaces[item.mode].isAwesome ? 'font-size: 20px' : ''}"
             newElement += `<a href="${url}" class="mainSearchResultRow">
-                                        <div class="icons ${window.mainIconsPlaces[item.mode].icon  } spIcons"></div>
-                                        <p class='suggest cursor-pointer' style='margin: 0px'>${name1}</p>
-                                        <p class='suggest cursor-pointer stateName'>${name2}</p>
-                                    </a>`;
+                                <div class="firstRow">
+                                    <div class="icons ${window.mainIconsPlaces[item.mode].icon} spIcons"></div>
+                                    <div class='suggest cursor-pointer text''>${name1}</div>
+                                </div>
+                                <div class='suggest cursor-pointer stateName'>${name2}</div>
+                            </a>`;
         });
 
-        response.length != 0 ? $('#result').removeClass('hidden') : $('#result').addClass('hidden');
+        response.length != 0 ? resultElement.removeClass('hidden') : resultElement.addClass('hidden');
 
         $("#mainSearchResult").empty().append(newElement);
         $('#placeHolderResult').hide();

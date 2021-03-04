@@ -211,8 +211,12 @@
                             <div class="submitFiltersInMobile" onclick="closeMyModal('placeListMobileFilter')">اعمال فیلتر</div>
                         </div>
                     </div>
-                    <div id="EATERY_FILTERS_CONT" class="eatery_filters featureListSection">
-                        @if($kindPlace->id == 11)
+                    <div id="EATERY_FILTERS_CONT" class="eatery_filters">
+                        @if($kindPlace->id == 4)
+                            @include('pages.placeList.filters.hotelFilters')
+                        @elseif($kindPlace->id == 10)
+                            @include('pages.placeList.filters.sogatSanaieFilters')
+                        @elseif($kindPlace->id == 11)
                             <div class="prw_rup prw_restaurants_restaurant_filters">
                                 <div id="jfy_filter_bar_establishmentTypeFilters" class="lhrFilterBlock jfy_filter_bar_establishmentTypeFilters collapsible">
                                     <div class="filterGroupTitle">{{__('جستجو براساس مواد اولیه')}}</div>
@@ -220,14 +224,9 @@
                                     <div class="youMaterialSearchResult materialSearchSelected"></div>
                                 </div>
                             </div>
-                        @endif
-
-                        @if($kindPlace->id == 4)
-                            @include('pages.placeList.filters.hotelFilters')
-                        @elseif($kindPlace->id == 10)
-                            @include('pages.placeList.filters.sogatSanaieFilters')
-                        @elseif($kindPlace->id == 11)
                             @include('pages.placeList.filters.mahaliFoodFilters')
+                        @elseif($kindPlace->id == 13)
+                            @include('pages.placeList.filters.localShopFilters')
                         @endif
 
                         @foreach($features as $feature)
@@ -252,7 +251,10 @@
                             </div>
                         @endforeach
 
+                        <div class="featureListSection"></div>
+
                     </div>
+
                 </div>
             </div>
         </div>
@@ -358,9 +360,9 @@
                                class="pSC_cityDetails traditionalFood">
                                 غذاهای محلی {{$locationName['cityNameUrl']}}
                             </a>
-                            <a href="#" class="pSC_cityDetails ">
+                            <a href="{{route('place.list', ['kindPlaceId' => 14, 'mode' => 'country'])}}" class="pSC_cityDetails">
                                 <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
-                                نوشیدنی های {{$locationName['cityNameUrl']}}
+                                نوشیدنی ها
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}"
                                class="pSC_cityDetails souvenirIcon">
@@ -396,9 +398,9 @@
                             <a href="{{route('place.list', ['kindPlaceId' => 3, 'mode' => 'country'])}}" class="pSC_cityDetails restaurantIcon">رستوران‌های ایران</a>
                             <a href="{{route('place.list', ['kindPlaceId' => 1, 'mode' => 'country'])}}" class="pSC_cityDetails touristAttractions">جاذبه‌‌های ایران</a>
                             <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'country'])}}" class="pSC_cityDetails traditionalFood"> غذاهای محلی ایران</a>
-                            <a href="#" class="pSC_cityDetails">
+                            <a href="{{route('place.list', ['kindPlaceId' => 14, 'mode' => 'country'])}}" class="pSC_cityDetails">
                                 <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
-                                نوشیدنی های ایران
+                                نوشیدنی ها
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => 'country'])}}" class="pSC_cityDetails souvenirIcon"> صنایع دستی ایران</a>
                             <a href="{{route('place.list', ['kindPlaceId' => 6, 'mode' => 'country'])}}" class="pSC_cityDetails adventureIcon">طبیعت گردی های ایران</a>

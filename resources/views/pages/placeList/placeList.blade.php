@@ -23,6 +23,11 @@
         .addNewReviewButtonMobileFooter{
             display: none !important;
         }
+        .shareBoxSection.share_boxDiv{
+            bottom: unset !important;
+            top: calc(100% + 10px) !important;
+            left: 0 !important;
+        }
     </style>
 
 </head>
@@ -47,7 +52,7 @@
 
     <div class="hideOnScreen placeListMobileTopPic">
         <div class="topListImg">
-            <img src="{{URL::asset('images/mainPics/placeList/'.$topPic)}}" alt="listPic" style="width: 100%">
+            <img src="{{URL::asset("images/mainPics/placeList/{$topPic}")}}" alt="listPic" style="width: 100%">
         </div>
         <div class="listTitle">
             <div>{{$kindPlace->title}}</div>
@@ -59,21 +64,12 @@
     <div class="container listContainer">
 
         <div class="placeListHeader hideOnPhone">
-            <div class="placeListTitle">
-                @if($locationName['kindState'] == 'country')
-                    لیست {{$kindPlace->title}} ایران
-                @else
-                    {{$kindPlace->title}}
-                    {{$locationName['name']}}
-                @endif
-            </div>
+            <div class="placeListTitle">{{$kindPlace->listTitle}}</div>
 
             <div class="shareSection">
                 <div id="share_pic" class="btn sharePageMainDiv" onclick="toggleShareIcon(this)">
                     <div class="emptyShareIcon listShareIconPc"></div>
-                    <div class="sharePageLabel">
-                        {{__('اشتراک گذاری صفحه')}}
-                    </div>
+                    <div class="sharePageLabel">{{__('اشتراک گذاری صفحه')}}</div>
                     @include('layouts.shareBox', ['urlInThisShareBox' => Request::url()])
                 </div>
             </div>
@@ -239,7 +235,7 @@
                         </div>
                     </div>
 
-                    <div class="featureListSection">
+                    <div>
                         @if($kindPlace->id == 4)
                             @include('pages.placeList.filters.hotelFilters')
                         @elseif($kindPlace->id == 10)
@@ -279,10 +275,13 @@
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-                </div>
-                <div id="pos-article-display-sticky-16137"></div>
 
+                        <div class="featureListSection"></div>
+                    </div>
+
+                </div>
+
+                <div id="pos-article-display-sticky-16137"></div>
             </div>
         </div>
 
@@ -327,11 +326,11 @@
                                                 <span>{{__('نقد')}}</span>
                                             </div>
                                         </div>
-                                        <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px">
+                                        <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 5px; display: ##hasState##;">
                                             <span>##stateKindText##:</span>
                                             <span>##state##</span>
                                         </div>
-                                        <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px">
+                                        <div class="item col-md-12 col-xs-6 itemState" style="margin-top: 3px; display: ##hasState##;">
                                             <span>{{__('شهر')}}:</span>
                                             <span>##city##</span>
                                         </div>
@@ -352,7 +351,7 @@
     var setBookMarkInPlaceListUrl = '{{route("setBookMark")}}';
     var foodMaterialSearchUrl = '{{route("search.foodMaterial")}}';
     var addPlaceByUserInListUrl = '{{route('addPlaceByUser.index')}}';
-    var getLocalShopFeatureListUrl = '{{route("localShop.getFeatureList")}}}';
+    var getLocalShopFeatureListUrl = '{{route("localShop.getFeatureList")}}';
 
     @if($kindPlaceId == 4 || $kindPlaceId == 1 || $kindPlaceId == 12 || $kindPlaceId == 3)
         var sort = "seen";

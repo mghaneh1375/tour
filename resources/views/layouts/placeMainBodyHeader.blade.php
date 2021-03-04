@@ -1,4 +1,24 @@
+<style>
+    .fitForSection{
 
+    }
+    .fitForSection .title{
+        color: green;
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    .fitForSection .fitFor{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .fitForSection .fitFor .item{
+        margin: 5px;
+        border: solid 1px green;
+        padding: 5px;
+        border-radius: 10px;
+    }
+</style>
 <div class="atf_header_wrapper">
     <div class="atf_header container is-mobile full_width" style="padding-top: 0px; position: relative">
 
@@ -13,10 +33,11 @@
                        </div>
                        <div class="more" id="moreTaLnkReviewHeader" href="#REVIEWS">
                            <span property="v:count" id="commentCount"></span>
-                           امتیاز کاربران
+                           <span>امتیاز کاربران</span>
                        </div>
                    </div>
                 </span>
+
 {{--                <span class="header_popularity popIndexValidation" id="scoreSpanHeader">--}}
 {{--                    <span>--}}
 {{--                        {{$place->reviewCount}}--}}
@@ -83,38 +104,33 @@
                     <div id="share_pic_mobile" class="targets float-left col-xs-6 pd-0">
                         <span class="ui_button save-location-7306673 sharePageMainDiv" onclick="toggleShareIcon(this)">
                             <div class="sharePageIcon first"></div>
-                            <div class="sharePageLabel">
-                                {{__('اشتراک‌گذاری صفحه')}}
-                            </div>
+                            <div class="sharePageLabel">{{__('اشتراک‌گذاری صفحه')}}</div>
                         </span>
                     </div>
 
                     <span class="btnoverlay loading">
                         <span class="bubbles small">
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                            <span></span><span></span><span></span>
                         </span>
                     </span>
                 </span>
 
                 <div class="prw_rup prw_common_atf_header_bl headerBL">
                     <div class="blRow">
-                        @if($placeMode != 'mahaliFood' && $placeMode != 'sogatSanaies')
+                        @if(isset($place->dastresi) || isset($place->address))
                             <div class="blEntry blEn address  clickable colCnt3" onclick="showExtendedMap({{$place->C}}, {{$place->D}})" style="min-height: 20px">
                                 <span class="ui_icon map-pin"></span>
-                                <span class="street-address">{{__('آدرس')}} : </span>
-                                @if($placeMode == 'majara')
-                                    <span class="placeDetailAddressHeader">
-                                        {{$place->dastresi}}
-                                    </span>
+                                <span class="street-address">
+                                    {{__('آدرس')}} :
+                                </span>
+                                @if(isset($place->dastresi))
+                                    <span class="placeDetailAddressHeader">{{$place->dastresi}}</span>
                                 @else
-                                    <span class="placeDetailAddressHeader">
-                                        {{$place->address}}
-                                    </span>
+                                    <span class="placeDetailAddressHeader">{{$place->address}}</span>
                                 @endif
                             </div>
                         @endif
+
                         @if($placeMode == 'mahaliFood')
                             <div class="hideOnScreen">
                                 <div class="goodForSec">
@@ -145,6 +161,15 @@
                                     <span class="caleryInMobileHeader"> {{$place->source}} </span>
                                 </div>
                             </div>
+                        @elseif($placeMode == 'drinks')
+                            <div class="fitForSection hideOnScreen">
+                                <div class="title">مناسب برای :</div>
+                                <div class="fitFor">
+                                    @foreach($place->goodFor as $goodFor)
+                                        <div class="item">{{$goodFor}}</div>
+                                    @endforeach
+                                </div>
+                            </div>
                         @elseif($placeMode == 'sogatSanaies')
                             <div class="sogatFeature hideOnScreen">
                                 <div class="feat">
@@ -167,24 +192,18 @@
 {{--                                    <img src="{{URL::asset('images/icons/phoneIcon.svg')}}" style="width: 30px">--}}
 {{--                                </span>--}}
                                 @foreach($place->phone as $key => $phone)
-                                    <a href="tel:{{$phone}}">
-                                        {{$phone}}
-                                    </a>
+                                    <a href="tel:{{$phone}}"> {{$phone}} </a>
                                     @if($key != count($place->phone)-1)
                                         -
                                     @endif
                                 @endforeach
                                 <span class="ui_icon phone"></span>
-
                             </div>
                         @endif
+
                         @if(!empty($place->site))
                             <div class="blEntry blEn website">
                                 <span class="ui_icon laptop"></span>
-                                <?php
-                                if (strpos($place->site, 'http') === false)
-                                    $place->site = 'http://' . $place->site;
-                                ?>
                                 <a target="_blank" href="{{$place->site}}" {{($config->externalSiteNoFollow) ? 'rel="nofollow"' : ''}}>
                                     <span>{{$place->site}}</span>
                                 </a>
@@ -194,6 +213,7 @@
                 </div>
             </div>
         </div>
+
         <div class="hideOnScreen topHeaderPlaceDetailMobileButtons">
             <div class="circlePlaceDetailButtons" onclick="addPlaceToBookMark();">
                 <div class="icon saveAsBookmarkIcon {{auth()->check() && $bookMark ? "BookMarkIcon" : "BookMarkIconEmpty"}}"></div>

@@ -20,6 +20,9 @@ use App\models\Comment;
 use App\models\ConfigModel;
 use App\models\DefaultPic;
 use App\models\FoodMaterial;
+use App\models\places\drinks\DrinkCategories;
+use App\models\places\drinks\DrinkGoodForRelations;
+use App\models\places\drinks\DrinkMaterialRelations;
 use App\models\places\Hotel;
 use App\models\LogFeedBack;
 use App\models\LogModel;
@@ -54,6 +57,7 @@ use App\models\User;
 use App\models\UserOpinion;
 use Carbon\Carbon;
 use Exception;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
@@ -164,16 +168,41 @@ class PlaceController extends Controller {
                 $place->phone = explode(',', $place->phone);
         }
 
-        $city = Cities::whereId($place->cityId);
-        $state = State::whereId($city->stateId);
+        if(isset($place->site)) {
+            if (strpos($place->site, 'http') === false)
+                $place->site = 'http://' . $place->site;
+        }
 
-        $result = commonInPlaceDetails($kindPlaceId, $place->id, $city, $state, $place);  // common.php
-        $reviewCount = $result[0];
-        $ansReviewCount = $result[1];
-        $userReviewCount = $result[2];
-        $multiQuestion = $result[3];
-        $textQuestion = $result[4];
-        $rateQuestion = $result[5];
+        $place->needMap = true;
+        $place->similarPlace = true;
+        if($kindPlaceId == 14 || $kindPlaceId == 11 || $kindPlaceId == 10) {
+            $place->needMap = false;
+            $place->similarPlace = false;
+        }
+
+        if($kindPlaceId != 14) {
+            $city = Cities::whereId($place->cityId);
+            $state = State::whereId($city->stateId);
+
+            $result = commonInPlaceDetails($kindPlaceId, $place->id, $city, $state, $place);  // common.php
+            $reviewCount = $result[0];
+            $ansReviewCount = $result[1];
+            $userReviewCount = $result[2];
+            $multiQuestion = $result[3];
+            $textQuestion = $result[4];
+            $rateQuestion = $result[5];
+        }
+        else{
+            $city = (object)['name' => ''];
+            $state = (object)['name' => '', 'isCountry' => 0];
+
+            $reviewCount = 0;
+            $ansReviewCount = 0;
+            $userReviewCount = 0;
+            $multiQuestion = [];
+            $textQuestion = [];
+            $rateQuestion = [];
+        }
 
         $featId = [];
         $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
@@ -189,10 +218,39 @@ class PlaceController extends Controller {
         else if($kindPlace->tableName == 'mahaliFood')
             $place = $this->mahaliFoodDet($place);
 
+
         $articleUrl = route('safarnameh.list', ['type' => 'place', 'search' => "{$kindPlaceId}_{$place->id}"]);
         $locationName = ['name' => $place->name, 'state' => $state->name, 'stateNameUrl' => $state->name, 'stateIsCountry' => $state->isCountry,
                         'cityName' => $city->name, 'cityNameUrl' => $city->name, 'articleUrl' => $articleUrl,
                         'kindState' => 'city', 'kindPage' => 'place'];
+
+        if($kindPlaceId == 14){
+            $locationName['kindState'] = 'country';
+            $locationName['cityNameUrl'] = 'ایران';
+            $locationName['cityName'] = 'ایران';
+            $locationName['stateNameUrl'] = 'ایران';
+            $kindPlace->title = 'نوشیدنی ها';
+
+
+            $place->categoryName = DrinkCategories::find($place->categoryId)->name;
+            $place->material = DrinkMaterialRelations::join('foodMaterials', 'foodMaterials.id', 'drink_material_relations.foodMaterialId')
+                ->where('drink_material_relations.drinkId', $place->id)
+                ->select(['foodMaterials.name', 'drink_material_relations.volume'])
+                ->get();
+
+            $place->goodFor = DrinkGoodForRelations::join('food_good_for', 'food_good_for.id', 'drink_good_for_relations.foodGoodForId')
+                ->where('drink_good_for_relations.drinkId', $place->id)
+                ->pluck('food_good_for.name')
+                ->toArray();
+
+            array_multisort(array_map('strlen', $place->goodFor), $place->goodFor);
+            $goodForArr = [];
+            $total = count($place->goodFor);
+            for($i = $total-1; $i >= 0 ; $i--)
+                array_push($goodForArr, $place->goodFor[$i]);
+
+            $place->goodFor = $goodForArr;
+        }
 
         $place->firstReview = \DB::table('log')->join('activity', 'activity.id', 'log.activityId')
                                 ->where('activity.name', 'نظر')
@@ -2261,10 +2319,14 @@ class PlaceController extends Controller {
         if($kindPlace != null){
             $meta = [];
             $mode = strtolower($mode);
+            $kind = $mode;
 
             $showOther = false;
             $notItemToShow = false;
             $cityRel = 0;
+
+            if($kindPlace->id == 14 && $mode !== 'country')
+                return \redirect(route('place.list', ['kindPlaceId' => 14, 'mode' => 'country']));
 
             if($mode == 'country'){
                 $state = '';
@@ -2457,12 +2519,34 @@ class PlaceController extends Controller {
                     $meta['keyword'] = 'کسب و کار های '.$inHeaderName;
                     $meta['description'] = 'معرفی کسب و کار های '.$inHeaderName.' با کوچیتا. تلفن کسب و کار '.$inHeaderName;
                     break;
+                case 14:
+                    $topPic = 'food.webp';
+                    $errorTxt = [];
+                    $errorTxt[0] = 'نوشیدنی برای نمایش موجود نمی باشد.';
+                    $errorTxt[1] = '';
+                    $errorTxt[2] = '';
+
+                    $placeMode = 'drinks';
+                    $kindPlace->title = 'لیست نوشیدنی ها';
+                    $kindPlace->listTitle = 'لیست نوشیدنی ها';
+                    $meta['title'] = 'معرفی';
+                    $meta['keyword'] = '';
+                    $meta['description'] = '';
+                    break;
+            }
+
+            if($kindPlace->id != 14){
+                if($locationName['kindState'] == 'country')
+                    $kindPlace->listTitle = "لیست {$kindPlace->title} ایران";
+                else
+                    $kindPlace->listTitle =  "{$kindPlace->title} {$locationName['name']}";
             }
 
             $features = PlaceFeatures::where('kindPlaceId', $kindPlaceId)->where('parent', 0)->get();
             foreach ($features as $feature)
-                $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->where('type', 'YN')->get();
-            $kind = $mode;
+                $feature->subFeat = PlaceFeatures::where('parent', $feature->id)
+                                                    ->whereIn('type', ['YN', 'radio'])
+                                                    ->get();
 
             $localShopCategories = [];
             if($kindPlace->id == 13){
@@ -2474,8 +2558,7 @@ class PlaceController extends Controller {
             return view('pages.placeList.placeList',
                 compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
                         'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
-                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategories'])
-            );
+                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategories']));
         }
         else
             return \redirect(\url('/'));
@@ -2562,17 +2645,40 @@ class PlaceController extends Controller {
                         if ($index === false) {
                             array_push($kindName, $item['kind']);
                             array_push($kindValues, [$item['value']]);
-                        } else
+                        }
+                        else
                             array_push($kindValues[$index], $item['value']);
                     }
                 }
 
-                foreach ($kindName as $index => $value) {
-                    $placeIds = DB::table($kindPlace->tableName)
-                        ->whereIn($value, $kindValues[$index])
-                        ->whereIn('id', $placeIds)
-                        ->pluck('id')
-                        ->toArray();
+                if($kindPlace->id == 13) {
+                    foreach ($kindName as $index => $value) {
+                        if($value === 'nowOpen'){
+//                            $time = $kindValues[$index][0];
+//                            $time = explode('_', $time);
+//                            $nowTimeStamp = $time[0];
+//                            $time = $time[1];
+//
+//                            $nowTimeStamp = (int)floor($nowTimeStamp/1000);
+//                            $verta = new Verta($nowTimeStamp);
+//                            dd($verta->dayOfWeek, $time);
+                        }
+                        else{
+                            $placeIds = LocalShops::whereIn($value, $kindValues[$index])
+                                                    ->whereIn('id', $placeIds)
+                                                    ->pluck('id')
+                                                    ->toArray();
+                        }
+                    }
+                }
+                else{
+                    foreach ($kindName as $index => $value) {
+                        $placeIds = DB::table($kindPlace->tableName)
+                            ->whereIn($value, $kindValues[$index])
+                            ->whereIn('id', $placeIds)
+                            ->pluck('id')
+                            ->toArray();
+                    }
                 }
             }
 

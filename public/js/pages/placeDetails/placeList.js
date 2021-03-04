@@ -244,12 +244,27 @@ function createFilter(){
     }
 
     for(i = 0; i < specialFilters.length; i++){
+
         if(specialFilters[i] != 0) {
             var name = '';
             if(specialFilters[i].name === '')
                 name = document.getElementById(specialFilters[i]['kind'] + specialFilters[i]['value']).value;
             else
                 name = specialFilters[i].name;
+
+            // if(specialFilters[i]['kind'] === 'nowOpen'){
+            //     var nowDate = new Date();
+            //     var hours = nowDate.getHours();
+            //     var minutes = nowDate.getMinutes();
+            //     if(hours < 10)
+            //         hours = '0'+hours;
+            //
+            //     if(minutes < 10)
+            //         minutes = '0'+minutes;
+            //
+            //     var time = hours + ':' + minutes;
+            //     specialFilters[i]['value'] = nowDate.getTime() + '_' + time;
+            // }
 
             filtersToShow.push({name: name, onClick: `cancelKindFilter('${specialFilters[i]['kind']}', '${specialFilters[i]['value']}')`});
         }
@@ -484,6 +499,9 @@ function createListItemCard(_result){
         var stateKindText = item.isCountry == 1 ? 'کشور ' : 'استان ';
         text = text.replace(new RegExp('##stateKindText##', "g"), stateKindText);
 
+        var showStateAndCity = (item.state && item.city) ? 'block' : 'none';
+        text = text.replace(new RegExp('##hasState##', 'g'), showStateAndCity);
+
         cards += text;
     });
 
@@ -618,6 +636,7 @@ function createLocalShopFeatureFiler(_features){
                         <div class="filterContent ui_label_group inline">${featuresCheckBox}</div>
                     </div>`;
     });
+
     $('.featureListSection').html(html);
 }
 

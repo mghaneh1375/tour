@@ -102,7 +102,7 @@
                 </label>
             </div>
             <div class="filterItem lhrFilter filter selected squerRadioInputSec">
-                <input  class="vegan1" onclick="doKindFilter('vegan', 1)" type="checkbox" id="vegan1" value="وگان"/>
+                <input class="vegan1" onclick="doKindFilter('vegan', 1)" type="checkbox" id="vegan1" value="وگان"/>
                 <label for="vegan1" class="inputRadionSquer">
                     <span class="labelBox"></span>
                     <span class="name">وگان</span>

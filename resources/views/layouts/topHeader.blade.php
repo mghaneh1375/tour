@@ -140,6 +140,11 @@
             icon: 'fullWalletIcon',
             nameFa: 'فروشگاه'
         },
+        drinks: {
+            icon: 'fas fa-wine-glass-alt',
+            nameFa: 'نوشیدنی',
+            isAwesome: true,
+        },
         state: {
             icon: 'location',
             nameFa: 'استان'
@@ -443,23 +448,22 @@
     })
 </script>
 <script type="text/javascript">
-    (function(){
-        var now = new Date();
-        var head = document.getElementsByTagName('head')[0];
-        var script = document.createElement('script');
-        script.async = true;
-        var script_address = 'https://cdn.yektanet.com/js/koochita.com/native-koochita.com-14383.js';
-        script.src = script_address + '?v=' + now.getFullYear().toString() + '0' + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
-        head.appendChild(script);
-    })();
-</script>
-<script type="text/javascript">
-    var head = document.getElementsByTagName("head")[0];
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async=1;
-    script.src = "https://s1.mediaad.org/serve/koochita.com/loader.js" ;
-    head.appendChild(script);
+    // (function(){
+    //     var now = new Date();
+    //     var head = document.getElementsByTagName('head')[0];
+    //     var script = document.createElement('script');
+    //     script.async = true;
+    //     var script_address = 'https://cdn.yektanet.com/js/koochita.com/native-koochita.com-14383.js';
+    //     script.src = script_address + '?v=' + now.getFullYear().toString() + '0' + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
+    //     head.appendChild(script);
+    // })();
+    //
+    // var head = document.getElementsByTagName("head")[0];
+    // var script = document.createElement("script");
+    // script.type = "text/javascript";
+    // script.async=1;
+    // script.src = "https://s1.mediaad.org/serve/koochita.com/loader.js" ;
+    // head.appendChild(script);
 </script>
 
 

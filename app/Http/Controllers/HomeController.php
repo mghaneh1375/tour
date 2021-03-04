@@ -698,23 +698,37 @@ class HomeController extends Controller
 
             $result = array_merge($result, $tmp);
 
-            $acitivityId = Activity::where('name', 'مشاهده')->first();
             $kinPlace = Place::whereNotNull('tableName')->where('mainSearch', 1)->get();
+
             foreach ($kinPlace as $kplace){
                 if($kindPlaceId == 0 || $kplace->id == $kindPlaceId) {
+
+                        //                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and (replace(tableName.name, ' ', '') LIKE '%$key%' or replace(tableName.name, ' ', '') LIKE '%$key2%')");
+//                    else{
+//                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and replace(tableName.name, ' ', '') LIKE '%$key%'");
+//                    }
+
+                    $selector = " tableName.id, tableName.name as targetName";
+                    $tableQuery = '';
+                    $sqlQuery = '';
+                    if($kplace->id != 14){
+                        $selector .= " , cities.name as cityName, state.name as stateName, cities.id as cityId";
+                        $sqlQuery = "cityId = cities.id and state.id = cities.stateId AND ";
+                        $tableQuery = ', cities, state';
+                    }
+
+                    $sqlQuery .= "replace(tableName.name, ' ', '') LIKE '%{$key}%'";
                     if (!empty($key2))
-                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and (replace(tableName.name, ' ', '') LIKE '%$key%' or replace(tableName.name, ' ', '') LIKE '%$key2%')");
-                    else
-                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and replace(tableName.name, ' ', '') LIKE '%$key%'");
+                        $sqlQuery .= " OR replace(tableName.name, ' ', '') LIKE '%{$key}%'";
+
+                    $tmp = DB::select("SELECT {$selector} from {$kplace->tableName} as tableName {$tableQuery} WHERE {$sqlQuery}");
+
                     foreach ($tmp as $itr) {
-//                        $condition = ['activityId' => $acitivityId->id, 'placeId' => $itr->id, 'kindPlaceId' => $kplace->id];
-//                        $itr->see = LogModel::where($condition)->count();
                         $itr->see = 0;
                         $itr->mode = $kplace->tableName;
                         $itr->kindPlaceId = $kplace->id;
                         $itr->url = createUrl($kplace->id, $itr->id, 0, 0, 0);
                     }
-//                    $tmp = $this->sortSearchBySee($tmp);
                     $result = array_merge($result, $tmp);
                 }
             }
@@ -723,90 +737,6 @@ class HomeController extends Controller
         }
     }
 
-    private function sortSearchBySee($tmp){
-
-        for($i = 0; $i < count($tmp); $i++){
-            for($j = 1; $j < count($tmp); $j++){
-                if($tmp[$i]->see < $tmp[$j]->see){
-                    $t = $tmp[$i];
-                    $tmp[$i] = $tmp[$j];
-                    $tmp[$j] = $t;
-                }
-            }
-        }
-
-        return $tmp;
-    }
-
-    public function findPlace()
-    {
-
-        if (isset($_POST["kindPlaceId"]) && isset($_POST["key"])) {
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-            $key = makeValidInput($_POST["key"]);
-            switch ($kindPlaceId) {
-                case 1:
-                default:
-                    echo json_encode(DB::select("select id, name from amaken WHERE name LIKE '%$key%'"));
-                    break;
-                case 3:
-                    echo json_encode(DB::select("select id, name from restaurant WHERE name LIKE '%$key%'"));
-                    break;
-                case 4:
-                    echo json_encode(DB::select("select id, name from hotels WHERE name LIKE '%$key%'"));
-                    break;
-            }
-        }
-    }
-
-    public function alaki($tripId)
-    {
-
-        require_once __DIR__ . '/../../../vendor/autoload.php';
-
-        $mail = new PHPMailer(true);                            // Passing `true` enables exceptions
-        try {
-            //Server settings
-            $mail->SMTPDebug = 2;                                 // Enable verbose debug output
-
-//            $mail->IsSMTP();
-//            $mail->Host = "https://shazdemosafer.com";
-//            $mail->SMTPAuth = true;
-//
-//            $mail->Username = "support@shazdemosafer.com";
-//            $mail->Password = " H+usZp5yVToI5xPb6yPDEfD3EwI=";
-//            $mail->Port = 25;
-//            $mail->SMTPSecure = "ssl";
-
-            //Recipients
-            $mail->setFrom('info@shazdemosafer.com', 'Mailer');
-//    $mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-            $mail->addAddress('mghaneh1375@yahoo.com');               // Name is optional
-            $mail->addReplyTo('mghaneh1375@shazdemosafer.com', 'Information');
-//    $mail->addCC('cc@example.com');
-//    $mail->addBCC('bcc@example.com');
-
-            //Attachments
-//    $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-//    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-
-            //Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Here is the subject';
-            $mail->Body = 'This is the HTML message body <b>in bold!</b>';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            $mail->send();
-            echo 'Message has been sent';
-        } catch (Exception $e) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        }
-
-        return "Message has been sent";
-
-        return view('alaki', array('tripId' => $tripId));
-    }
 
     public function getAlerts()
     {
