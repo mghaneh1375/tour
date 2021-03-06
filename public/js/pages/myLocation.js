@@ -143,7 +143,7 @@ function toggleFilter(_item, _element){
     }
 }
 
-function initMapForMyLocation(){
+function initMapForMyLocation(_hasMyLocation = true){
 
     mainMap = L.map("map", {
         minZoom: 1,
@@ -196,7 +196,8 @@ function initMapForMyLocation(){
 
     });
 
-    getMyLocation();
+    if(_hasMyLocation)
+        getMyLocation();
 
     // mainMap = new Mapp({
     //     element: '#map',
@@ -571,9 +572,13 @@ function goToMainCategorySection(_id){
 }
 
 $(window).ready(() => {
-    initMapForMyLocation();
     toggleMobileListNearPlace("middle");
 
-    if(selectedPlaceFromBack.lat)
+    if(selectedPlaceFromBack.lat){
+        initMapForMyLocation(false);
         setMarkerToMap(selectedPlaceFromBack.lat, selectedPlaceFromBack.lng, selectedPlaceFromBack.id, selectedPlaceFromBack.name, selectedPlaceFromBack.kindPlaceId);
+    }
+    else
+        initMapForMyLocation(true);
+
 });

@@ -32,6 +32,11 @@ class TourController extends Controller{
         'جمعه',
     ];
 
+    public function tourMainPage()
+    {
+        return view('pages.tour.mainPageTourF.mainPageTour');
+    }
+
     public function showTour($code){
         $this->defaultActions();
 

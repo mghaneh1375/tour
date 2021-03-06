@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('tour')->group(function (){
     Route::middleware(['shareData'])->group(function(){
-        Route::get('main', function(){ dd('tour main page'); })->name('tour.main');
+        Route::get('main', 'TourController@tourMainPage')->name('tour.main');
 
         Route::get('/show/{code}', 'TourController@showTour')->name('tour.show');
 

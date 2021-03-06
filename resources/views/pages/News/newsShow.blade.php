@@ -81,7 +81,7 @@
             <div class="newsTitleShow hideOnScreen">
                 <h1 style="font-weight: bold">{{$news->title}}</h1>
             </div>
-            <div class="mainPic" style="max-width: 100%; width: 100%; max-height: 300px; overflow: hidden">
+            <div class="mainPic" style="max-width: 100%; width: 100%; max-height: 500px; overflow: hidden">
                 @if($news->video == null)
                     <img src="{{$news->pic}}" alt="{{$news->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
                 @else
