@@ -33,6 +33,7 @@
         }
     </style>
 
+    <link rel="stylesheet" href="{{URL::asset('css/pages/localShops/mainLocalShops.css?v='.$fileVersions)}}">
     <link rel="stylesheet" href="{{URL::asset('css/pages/business.css')}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/bootstrap-clockpicker.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/jquery-clockpicker.min.css')}}">
@@ -44,22 +45,23 @@
         var uploadPicBusinessBaseUrl = '{{url("uploadBusinessPic")}}';
         var deleteBusinessPicBaseUrl =  '{{url('deleteBusinessPic')}}';
         var doCreatePath = '{{route('businessPanel.doCreate')}}';
+        var editPath = '{{url('businessEdit')}}';
         var updateBusinessInfo1BaseUrl = '{{url('updateBusinessInfo1')}}';
         var updateBusinessInfo2BaseUrl = '{{url('updateBusinessInfo2')}}';
-        var updateBusinessInfo3BaseUrl = '{{url('updateBusinessInfo3')}}';
         var updateBusinessInfo4BaseUrl = '{{url('updateBusinessInfo4')}}';
         var updateBusinessInfo5BaseUrl = '{{url('updateBusinessInfo5')}}';
         var getContractPath = '{{route('businessPanel.getContract')}}';
         var finalizeBusinessInfoBaeUrl = '{{url('finalizeBusinessInfo')}}';
         var myBusinessesPath = '{{route('businessPanel.myBusinesses')}}';
         var searchForCityPath = "{{route('searchForCity')}}";
-        var deleteMadrakBaseUrl = "{{url('deleteBusinessMadrak')}}";
+        var deleteMadarekBaseUrl = "{{url('deleteBusinessMadarek')}}";
         var arr_nums = ["اول", "دوم", "سوم", "چهارم", "پنجم", "ششم", "هفتم", "هشتم", "نهم", "دهم"];
         var busy_idx = [false, false, false, false, false, false, false, false, false, false];
         var id_idx = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
         var data = { "type": "None", "additionalValue": false };
         var currentPage = 1;
         var currProgress = 10;
+        var created = false;
         var mode = "create";
     </script>
 @endsection
@@ -197,7 +199,7 @@
 
                 <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
 
-                    <button onclick="goToPage(6, 10)" class="btn btn-success">مرحله بعد</button>
+                    <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
 
                     <button onclick="goToPage(-1, -10)" class="btn btn-danger">مرحله قبل</button>
 
@@ -651,11 +653,13 @@
 
         @if(isset($business))
             openLoading();
-            currentPage = 3;
+            currentPage = parseInt('{{$step}}');
             $("#step3Back").remove();
             mode = "edit";
-            currProgress = 30;
+            created = true;
+            currProgress = currentPage * 10;
             fillDataArr({!! json_encode($business) !!});
+
         @else
             $("#step1").removeClass('hidden');
             render_a_form(0);
@@ -676,6 +680,11 @@
                 $("#economyCode").val(data.economyCode);
                 $("#businessNID").val(data.nid);
             }
+
+            if(data.type == "tour")
+                $("#workHour").addClass('hidden');
+            else
+                $("#workHour").removeClass('hidden');
 
             $("#site").val(data.site);
             $("#mail").val(data.mail);
@@ -810,7 +819,7 @@
                 busy_idx[0] = true;
             }
 
-            $("#step3").removeClass('hidden');
+            $("#step" + currentPage).removeClass('hidden');
             closeLoading();
         }
 
@@ -820,7 +829,9 @@
             var lng = 54.00537109375;
             var zoom = 5;
 
-            if("lat" in data && "lng" in data) {
+            if("lat" in data && data.lat != null && data.lat != "null" &&
+                data.lat.length > 0 && "lng" in data && data.lng != null &&
+                data.lng != "null" && data.lng.length > 0) {
                 lat = data.lat;
                 lng = data.lng;
                 zoom = 10;

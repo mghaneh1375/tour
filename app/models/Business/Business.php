@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $shaba
  * @property integer $cityId
  * @property integer $userId
+ * @property integer $assignUserId
  * @property double $lat
  * @property double $lng
  * @property boolean $hasCertificate
@@ -66,6 +67,7 @@ use Illuminate\Support\Facades\Auth;
  * @property boolean $afterClosedDayIsOpen_status
  * @property boolean $closedDayIsOpen
  * @property boolean $closedDayIsOpen_status
+ * @property boolean $problem
  * @property string $inWeekOpenTime
  * @property boolean $inWeekOpenTime_status
  * @property string $inWeekCloseTime
@@ -82,6 +84,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Query\Builder|\App\models\Business\Business whereReadyForCheck($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\Business\Business whereFinalStatus($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\Business\Business whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\Business\Business whereAssignUserId($value)
  */
 
 class Business extends Model {
@@ -116,6 +119,21 @@ class Business extends Model {
             array_push($access, "content");
 
         return $access;
+    }
+
+    public static function deleteBusiness(Business $business) {
+
+        $madareks = BusinessMadarek::whereBusinessId($business->id)->get();
+        foreach ($madareks as $madarek) {
+            BusinessMadarek::deleteMadarek($madarek);
+        }
+
+        $pics = BusinessPic::whereBusinessId($business->id)->get();
+        foreach ($pics as $pic) {
+            BusinessPic::deletePic($pic);
+        }
+
+        $business->delete();
     }
 }
 

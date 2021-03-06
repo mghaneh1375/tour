@@ -22,5 +22,14 @@ class BusinessPic extends Model {
     public static function whereId($value) {
         return BusinessPic::find($value);
     }
+
+    public static function deletePic($pic) {
+
+        if($pic->pic != null && !empty($pic->pic) &&
+            file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic->pic))
+            unlink(__DIR__ . '/../../../../storage/app/public/' . $pic->pic);
+
+        $pic->delete();
+    }
 }
 

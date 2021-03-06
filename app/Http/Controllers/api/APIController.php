@@ -45,6 +45,25 @@ use URL;
 class APIController extends Controller {
 
     private $content;
+    private static $sharedKey = "myTokenSharedKeyMammadKia";
+
+    private static function createToken() {
+        $time = time();
+        return [hash("sha256", self::$sharedKey . $time), $time];
+    }
+
+    private static function checkToken($token, $time) {
+
+        if(time() - $time > 180)
+            return false;
+
+        $hash = hash("sha256", self::$sharedKey . $time);
+
+        if($hash != $token)
+            return false;
+
+        return true;
+    }
 
     public function __construct(){
         $this->content = array();
@@ -2328,4 +2347,80 @@ class APIController extends Controller {
 
     }
 
+    public function checkPhone(Request $request) {
+
+        $request->validate([
+            "token" => "required",
+            "time" => "required",
+            "phone" => "required|regex:/(09)[0-9]{9}/"
+        ]);
+
+        if(!self::checkToken($request["token"], $request["time"]))
+            return response()->json(["status" => "nok2"]);
+
+        $u = User::wherePhone($request["phone"])->first();
+        if($u == null) {
+            return response()->json([
+                "status" => "1"
+            ]);
+        }
+
+        return response()->json([
+            "status" => "0",
+            "username" => $u->username
+        ]);
+    }
+
+    public function addUser(Request $request) {
+
+        $request->validate([
+            "data" => "required|unique:users,username",
+            "parentUsername" => "nullable|exists:users,username",
+            "phone" => "nullable|regex:/(09)[0-9]{9}/",
+            "token" => "required",
+            "time" => "required"
+        ]);
+
+        if(!self::checkToken($request["token"], $request["time"]))
+            return response()->json(["status" => "nok2"]);
+
+        if($request->has("phone") && $request["phone"] != null &&
+            !empty($request["phone"])) {
+            self::checkUsernameStatic($request["data"], true, $request["phone"]);
+        }
+        else if($request->has("parentUsername") && $request["parentUsername"] != null &&
+            !empty($request["parentUsername"])) {
+            $parentId = User::whereUserName($request["parentUsername"])->first()->id;
+            self::checkUsernameStatic($request["data"], true, $parentId);
+        }
+        else
+            return response()->json([
+                "status" => "-1"
+            ]);
+
+        return response()->json([
+            "status" => "0"
+        ]);
+    }
+
+    public function updateUser(Request $request) {
+
+        $request->validate([
+            "newUsername" => "required|unique:users,username",
+            "oldUsername" => "required|exists:users,username",
+            "token" => "required",
+            "time" => "required"
+        ]);
+
+        if(!self::checkToken($request["token"], $request["time"]))
+            return response()->json(["status" => "nok2"]);
+
+        $u = User::whereUserName($request["oldUsername"])->first();
+        $u->username = $request["newUsername"];
+        $u->save();
+
+        return response()->json([
+            "status" => "0"
+        ]);
+    }
 }

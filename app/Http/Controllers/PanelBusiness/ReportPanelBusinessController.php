@@ -345,8 +345,10 @@ class ReportPanelBusinessController extends Controller {
 
         if(count($rejected_attrs) == 0)
             $business->finalStatus = true;
-        else
+        else {
             $business->finalStatus = false;
+            $business->problem = true;
+        }
 
         $business->readyForCheck = false;
         $business->save();
@@ -356,4 +358,5 @@ class ReportPanelBusinessController extends Controller {
         ]);
 
     }
+
 }

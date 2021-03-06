@@ -3,210 +3,208 @@
 namespace App\Http\Controllers\PanelBusiness;
 
 use App\Http\Controllers\Controller;
+use App\models\ActivationCode;
 use App\models\Business\Business;
 use App\models\Business\BusinessACL;
 use App\models\Business\BusinessMadarek;
 use App\models\Business\BusinessPic;
+use App\models\DefaultPic;
+use App\models\RetrievePas;
 use App\models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+
+require_once(__DIR__.'/../glogin/libraries/Google/autoload.php');
 
 class MainPanelBusinessController extends Controller {
 
-    public function mainPage() {
-        return view('panelBusiness.pages.empty');
+    public function loginPage() {
+
+        $googleClient_id = '774684902659-1tdvb7r1v765b3dh7k5n7bu4gpilaepe.apps.googleusercontent.com';
+        $googleClient_secret = 'ARyU8-RXFJZD5jl5QawhpHne';
+        $redirect_uri = route('businessPanel.loginWithGoogle');
+        $redirect_uri = str_replace('http://', 'https://', $redirect_uri);
+
+        $client = new \Google_Client();
+        $client->setClientId($googleClient_id);
+        $client->setClientSecret($googleClient_secret);
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("email");
+        $client->addScope("profile");
+
+        $service = new \Google_Service_Oauth2($client);
+        $authUrl = $client->createAuthUrl();
+
+        $url = $_SERVER['REQUEST_URI'];
+
+        return view('panelBusiness.pages.auth.login', compact(['authUrl']));
     }
 
-    public function uploadPic(Request $request, Business $business) {
-
-        $request->validate([
-            "field" => ["required", Rule::in(["additionalValue", "pic", "logo", "madarek"])],
-            "pic" => "image"
-        ]);
-
-        $path = $request->pic->store('public');
-        $path = str_replace('public/', '', $path);
-
-        if($request["field"] == "pic") {
-
-            if(BusinessPic::whereBusinessId($business->id)->count() >= 4) {
-                return response()->json([
-                    "status" => "nok",
-                    "msg" => "تعداد تصاویر آپلود شده بیش از حد مجاز است."
-                ]);
-            }
-
-            $businessPic = new BusinessPic();
-            $businessPic->businessId = $business->id;
-            $businessPic->pic = $path;
-            $businessPic->save();
-
-            return response()->json([
-                "status" => "ok",
-                "id" => $businessPic->id
-            ]);
+    private function sendVerifyCodeForPhone($_phone){
+        $activation = ActivationCode::where('phoneNum', $_phone)->first();
+        if ($activation != null) {
+            if((90 - time() + $activation->sendTime) > 0)
+                return 90 - time() + $activation->sendTime;
         }
 
-        else if($request["field"] == "madarek") {
+        $code = createCode();
 
-            if(!$request->has("idx")) {
-                return response()->json([
-                    "status" => "nok",
-                    "msg" => "لطفا مشخص کنید درباره کدام عضو تصمیم گیری می کنید."
-                ]);
-            }
+        if ($activation == null) {
+            $activation = new ActivationCode();
+            $activation->phoneNum = $_phone;
+        }
 
-            $idx = $request["idx"];
-            $businessMadarek = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
-            if($businessMadarek == null) {
-                $businessMadarek = new BusinessMadarek();
-                $businessMadarek->businessId = $business->id;
-                $businessMadarek->idx = $idx;
-            }
+//        $msgId = sendSMS($_phone, $code, 'sms');
+//        if ($msgId == -1)
+//            return 'error';
 
-            $selected = 1;
+        $activation->sendTime = time();
+        $activation->code = $code;
+        try {
+            $activation->save();
+            return 90;
+        } catch (\Exception $x) {
+            return 'error';
+        }
+    }
 
-            if($businessMadarek->pic1 == null || empty($businessMadarek->pic1))
-                $businessMadarek->pic1 = $path;
-            else if($businessMadarek->pic2 == null || empty($businessMadarek->pic2)) {
-                $businessMadarek->pic2 = $path;
-                $selected = 2;
+    public function checkRegisterInputs(Request $request){
+        if(isset($request->username) && isset($request->phone)){
+            $username = makeValidInput($request->username);
+            $phone = convertNumber('en', makeValidInput($request->phone));
+            if(strlen($phone) == 11 && $phone[0] == 0 && $phone[1] == 9){
+                $checkUsername = User::where('username', $username)->first();
+                $checkPhone = User::where('phone', $phone)->first();
+
+                if($checkPhone != null)
+                    return response()->json(['status' => 'error3']);
+                if($checkUsername != null)
+                    return response()->json(['status' => 'error4']);
+
+
+                $remainingTime = $this->sendVerifyCodeForPhone($phone);
+                if($remainingTime == 'error')
+                    return response()->json(['status' => 'error5']);
+                else
+                    return response()->json(['status' => 'ok', 'result' => $remainingTime]);
             }
             else
-                return response()->json([
-                    "status" => "nok",
-                    "msg" => "برای این عضو دیگر نمی توان عکسی آپلود کرد."
-                ]);
-
-            $businessMadarek->save();
-            return response()->json([
-                "status" => "ok",
-                "id" => $selected
-            ]);
+                return response()->json(['status' => 'error2']);
         }
-        $business[$request["field"]] = $path;
-        $business->save();
-
-        return response()->json(["status" => "ok", "id" => -1]);
+        else
+            return response()->json(['status' => 'error1']);
     }
 
-    public function deleteMadrak(Request $request, Business $business) {
+    public function doSendVerificationPhoneCode(Request $request){
+        if(isset($request->phone)){
+            $phone = convertNumber('en', makeValidInput($request->phone));
+            if(strlen($phone) == 11 && $phone[0] == 0 && $phone[1] == 9){
 
-        $request->validate([
-            "idx" => "required|integer"
-        ], $messages=[
-            "idx.required" => "لطفا آی دی مورد نظر را وارد کنید.",
-            "idx.integer" => "آی دی مورد نظر نامعتبر است."
-        ]);
-
-        $idx = $request["idx"];
-        $businessPic = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
-
-        if($businessPic->pic1 != null && !empty($businessPic->pic1)) {
-            $pic = $businessPic->pic1;
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
+                $remainingTime = $this->sendVerifyCodeForPhone($phone);
+                if($remainingTime == 'error')
+                    return response()->json(['status' => 'error5']);
+                else
+                    return response()->json(['status' => 'ok', 'result' => $remainingTime]);
+            }
+            else
+                return response()->json(['status' => 'error2']);
         }
-
-        if($businessPic->pic2 != null && !empty($businessPic->pic2)) {
-            $pic = $businessPic->pic2;
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
-        }
-
-        $businessPic->delete();
-        return response()->json([
-            "status" => "ok"
-        ]);
+        else
+            return response()->json(['status' => 'error1']);
     }
 
-    public function deletePic(Request $request, Business $business) {
+    public function doLogin(Request $request){
 
-        $request->validate([
-            "field" => ["required", Rule::in(["additionalValue", "pic", "logo", "madarek"])]
-        ]);
+        if(isset($request->username) && isset($request->password)){
+            $username = makeValidInput($request->username);
+            $password = makeValidInput($request->password);
 
-        if($request["field"] == "additionalValue" || $request["field"] == "logo") {
+            $credentials  = ['username' => $username, 'password' => $password];
+            $credentialsPhone  = ['phone' => $username, 'password' => $password];
+            $credentialsEmail  = ['email' => $username, 'password' => $password];
 
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $business[$request["field"]])) {
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $business[$request["field"]]);
+            if (Auth::attempt($credentials, true) ||
+                Auth::attempt($credentialsPhone, true) ||
+                Auth::attempt($credentialsEmail, true))
+            {
+                $user = Auth::user();
+                if ($user->status != 0) {
+                    RetrievePas::where('uId', $user->id)->delete();
+                    return redirect(route('businessPanel.mainPage'));
+                }
+                else {
+                    auth()->logout();
+                    return redirect(route('businessPanel.loginPage'))->with(['error' => 'blocked']);
+                }
             }
-
-            $business[$request["field"]] = null;
-            $business->save();
         }
 
-        else if($request["field"] == "pic") {
+        return redirect(route('businessPanel.loginPage'))->with(['error' => 'wrongInput']);
+    }
 
-            if(!$request->has("id"))
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'لطفا آی دی تصویر را بدهید.'
-                ]);
+    public function doRegister(Request $request) {
 
-            $businessPic = BusinessPic::whereId($request["id"]);
+        if(isset($request->username) && isset($request->phone) && isset($request->password)){
+            $username = makeValidInput($request->username);
+            $phone = convertNumber('en', makeValidInput($request->phone));
+            $password = makeValidInput($request->password);
+            $verifyCode = makeValidInput($request->verifyCode);
 
-            if($businessPic == null || $businessPic->businessId != $business->id) {
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'شما اجازه دسترسی به این عکس را ندارید.'
-                ]);
+            if(strlen($phone) == 11 && $phone[0] == 0 && $phone[1] == 9){
+                $checkUsername = User::where('username', $username)->first();
+                $checkPhone = User::where('phone', $phone)->first();
+
+                if($checkPhone != null)
+                    return response()->json(['status' => 'error3']);
+                if($checkUsername != null)
+                    return response()->json(['status' => 'error4']);
+
+
+                $activation = ActivationCode::where('phoneNum', $phone)->first();
+                if($activation == null)
+                    return response()->json(['status' => 'doResendCode']);
+
+                if($activation->code != $verifyCode)
+                    return response()->json(['status' => 'notSame']);
+
+                if((90 - time() + $activation->sendTime) <= 0)
+                    return response()->json(['status' => 'notTime']);
+
+
+                $inviteCode = generateRandomString(6);
+                while(User::where('invitationCode', $inviteCode)->count() > 0)
+                    $inviteCode = generateRandomString(6);
+
+                $user = new User();
+                $user->username = $username;
+                $user->password = Hash::make($password);
+                $user->phone = $phone;
+                $user->invitationCode = $inviteCode;
+                $user->picture = DefaultPic::all()->random(1)[0]->id;
+                $user->save();
+
+                $activation->delete();
+
+                Auth::loginUsingId($user->id);
+                return response()->json(['status' => 'ok']);
             }
-
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $businessPic->pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $businessPic->pic);
-
-            $businessPic->delete();
+            else
+                return response()->json(['status' => 'error2']);
         }
+        else
+            return response()->json(['status' => 'error1']);
+    }
 
-        else if($request["field"] == "madarek") {
+    public function doLogOut()
+    {
+        Auth::logout();
+        return redirect(route("businessPanel.loginPage"));
+    }
 
-            if(!$request->has("id"))
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'لطفا مشخص کنید تصویر رو یا پشت کارت ملی را می خواهید حذف کنید.'
-                ]);
-
-            $id = $request["id"];
-            if($id != 1 && $id != 2)
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'idx وارد شده نامعتبر است.'
-                ]);
-
-            if(!$request->has("idx"))
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'لطفا آی دی تصویر را بدهید.'
-                ]);
-
-            $idx = $request["idx"];
-            $businessPic = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
-
-            if($businessPic == null) {
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'آی دی مورد نظر نامعتبر است.'
-                ]);
-            }
-
-            if($id == 1) {
-                $pic = $businessPic->pic1;
-                $businessPic->pic1 = null;
-            }
-            else {
-                $pic = $businessPic->pic2;
-                $businessPic->pic2 = null;
-            }
-
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
-
-            $businessPic->save();
-        }
-
-        return response()->json(["status" => "ok"]);
+    public function mainPage() {
+        return view('panelBusiness.pages.empty');
     }
 
     public function completeUserInfo() {
@@ -295,15 +293,6 @@ class MainPanelBusinessController extends Controller {
         return view('panelBusiness.pages.viewInvitation', ['aclId' => $acl->id]);
     }
 
-    public function myBusiness(Business $business) {
-
-        $acl = $business->hasAccess();
-        if($acl == null)
-            return view('general.noAccess');
-
-        return view('panelBusiness.pages.myBusiness', ['acl' => $acl]);
-    }
-
     public function acceptInvitation(BusinessACL $businessACL) {
 
         if($businessACL->userId != Auth::user()->id)
@@ -321,215 +310,4 @@ class MainPanelBusinessController extends Controller {
         return view('panelBusiness.pages.create');
     }
 
-    public function doCreate(Request $request) {
-
-        $request->validate([
-            "type" => ["required", Rule::in(["tour", "agency", "restaurant", "hotel"])],
-            "haghighi" => ["required", Rule::in(["true", "false"])],
-            "hoghoghi" => ["required", Rule::in(["true", "false"])]
-        ], $messages=[
-            "type.in" => "لطفا نوع خدمت قابل ارائه خود را مشخص کنید."
-        ]);
-
-        $haghighi = ($request["haghighi"] == "true");
-        $hoghoghi = ($request["hoghoghi"] == "true");
-
-        if(($haghighi && $hoghoghi) || (!$haghighi && !$hoghoghi)) {
-            return response()->json([
-                "status" => "nok",
-                "msg" => "لطفا نوع ارائه دهنده را مشخص کنید."
-            ]);
-        }
-
-        $business = new Business();
-        $business->type = $request["type"];
-        $business->haghighi = $haghighi;
-        $business->userId = Auth::user()->id;
-        $business->save();
-
-        return response()->json([
-            "status" => "ok",
-            "id" => $business->id
-        ]);
-    }
-
-    public function updateBusinessInfo1(Request $request, Business $business) {
-
-        $request->validate([
-            "name" => "required",
-            "nid" => "required",
-            "tel" => "required|integer|min:7",
-            "mail" => "required",
-            "introduction" => "required",
-            "economyCode" => "nullable|integer",
-        ]);
-
-        if(!$business->haghighi &&
-            (!$request->has('economyCode') || empty($request["economyCode"]))) {
-            return response()->json([
-                "status" => "nok",
-                "msg" => "لطفا کد اقتصادی را وارد نمایید."
-            ]);
-        }
-
-        if(!$business->haghighi)
-            $business->economyCode = $request["economyCode"];
-        else if(!_custom_check_national_code($request["nid"])) {
-            return response()->json([
-                "status" => "nok",
-                "msg" => "شماره ملی وارد شده نامعبتر است."
-            ]);
-        }
-
-        $business->mail = $request["mail"];
-        $business->introduction = $request["introduction"];
-        $business->nid = $request["nid"];
-        $business->name = $request["name"];
-        $business->tel = $request["tel"];
-
-        if($request->has("telegram"))
-            $business->telegram = $request["telegram"];
-
-        if($request->has("insta"))
-            $business->insta = $request["insta"];
-
-        if($request->has("site"))
-            $business->site = $request["site"];
-
-        $business->save();
-
-        return response()->json([
-            "status" => "ok"
-        ]);
-    }
-
-    public function updateBusinessInfo2(Request $request, Business $business) {
-
-        $request->validate([
-            "fullOpen" => ["required", Rule::in(["true", "false"])],
-            "afterClosedDayButton" => ["required", Rule::in(["true", "false"])],
-            "closedDayButton" => ["required", Rule::in(["true", "false"])],
-            "inWeekDayStart" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "inWeekDayEnd" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "afterClosedDayStart" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "afterClosedDayEnd" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "closedDayStart" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "closedDayEnd" => ["required", "regex:/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/"],
-            "cityId" => "required|exists:cities,id",
-            "coordinate" => ["required", "regex:/^[-]?((([0-8]?[0-9])(\.(\d{1,15}))?)|(90(\.0+)?)),\s?[-]?((((1[0-7][0-9])|([0-9]?[0-9]))(\.(\d{1,15}))?)|180(\.0+)?)$/"],
-            "address" => ["required"]
-        ], $messages=[
-            "cityId.exists" => "شهر مورد نظر وجود ندارد.",
-            "coordinate.regex" => "لطفا مختصات جغرافیایی خود را مشخص کنید.",
-            "fullOpen.in" => "لطفا مشخص کنید 24 ساعته هستید یا نه.",
-            "afterClosedDayButton.in" => "لطفا مشخص کنید روز های بعد از تعطیلی باز هستید یا نه.",
-            "closedDayButton.in" => "لطفا مشخص کنید روز های تعطیلی باز هستید یا نه.",
-            "address.required" => "لطفا آدرس خود را مشخص کنید.",
-            "inWeekDayStart.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد.",
-            "inWeekDayEnd.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد.",
-            "afterClosedDayStart.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد.",
-            "afterClosedDayEnd.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد.",
-            "closedDayStart.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد.",
-            "closedDayEnd.regex" => "فرمت ساعت ها باید به شکل hh:mm باشد."
-        ]);
-
-        $business->fullOpen = $request["fullOpen"] === 'true' ? 1 : 0;
-        $business->afterClosedDayIsOpen = $request['afterClosedDayButton'] === 'false' ? 1 : 0;
-        $business->closedDayIsOpen = $request['closedDayButton'] === 'false' ? 1 : 0;
-
-        $business->inWeekOpenTime = $request['inWeekDayStart'];
-        $business->inWeekCloseTime = $request['inWeekDayEnd'];
-        $business->afterClosedDayOpenTime = $request['afterClosedDayStart'];
-        $business->afterClosedDayCloseTime = $request['afterClosedDayEnd'];
-        $business->closedDayOpenTime = $request['closedDayStart'];
-        $business->closedDayCloseTime = $request['closedDayEnd'];
-
-        $business->cityId = $request["cityId"];
-        $coordinate = str_replace(', ', ',', $request['coordinate']);
-        $coordinate = explode(',', $coordinate);
-
-        $business->lat = $coordinate[0];
-        $business->lng = $coordinate[1];
-        $business->address = $request["address"];
-
-        $business->save();
-        return response()->json([
-            "status" => "ok"
-        ]);
-    }
-
-    public function updateBusinessInfo3(Request $request, Business $business) {
-
-    }
-
-    public function updateBusinessInfo4(Request $request, Business $business) {
-
-        $request->validate([
-            "additionalValue" => ["required", Rule::in(["true", "false"])],
-            "shaba" => "required|numeric|digits:24",
-            "expire" => "required_if:additionalValue,true"
-        ], $messages=[
-            "additionalValue.in" => "لطفا مشخص کنید که آیا شما مشمول مالیات بر ارزش افزوده هستید یا خیر.",
-            "shaba.numeric" => "شماره شبا وارد شده نامعتبر است.",
-            "shaba.digits" => "شماره شبا وارد شده نامعتبر است.",
-            "expire.required_if" => "لطفا تاریخ انقضا گواهی ارزش افزوده خود را وارد نمایید.",
-        ]);
-
-        if($request["additionalValue"] == "true" && $business->additionalValue == null) {
-            return response()->json([
-                "status" => "nok",
-                "msg" => "لطفا تصویر گواهی ارزش افزوده خود را آپلود نمایید."
-            ]);
-        }
-
-        $business->hasAdditionalValue = ($request["additionalValue"] == "true");
-        $business->expireAdditionalValue = $request["expire"];
-        $business->shaba = $request["shaba"];
-        $business->save();
-
-        return response()->json(["status" => "ok"]);
-    }
-
-    public function updateBusinessInfo5(Request $request, Business $business) {
-
-        $businessMadarek = BusinessMadarek::whereBusinessId($business->id)->orderBy('id', 'asc')->get();
-
-        $request->validate([
-            "names" => "required|array|min:" . count($businessMadarek) . '|max:' . count($businessMadarek),
-            "roles" => "required|array|min:" . count($businessMadarek) . '|max:' . count($businessMadarek),
-            "roles.*"  => ["required", "numeric", Rule::in([1, 2, 3, 4, 5])],
-            "names.*" => "required|string"
-        ], $messages=[
-            "names.required" => "آرایه مورد نظر معتبر نمی باشد",
-            "names.array" => "آرایه مورد نظر معتبر نمی باشد",
-            "names.min" => "آرایه مورد نظر معتبر نمی باشد",
-            "names.max" => "آرایه مورد نظر معتبر نمی باشد",
-            "roles.required" => "آرایه مورد نظر معتبر نمی باشد",
-            "roles.array" => "آرایه مورد نظر معتبر نمی باشد",
-            "roles.min" => "آرایه مورد نظر معتبر نمی باشد",
-            "roles.max" => "آرایه مورد نظر معتبر نمی باشد",
-        ]);
-
-        $names = $request["names"];
-        $roles = $request["roles"];
-
-        for($i = 0; $i < count($businessMadarek); $i++) {
-            $businessMadarek[$i]->name = $names[$i];
-            $businessMadarek[$i]->role = $roles[$i];
-            $businessMadarek[$i]->save();
-        }
-
-        return response()->json(["status" => "ok"]);
-    }
-
-    public function finalizeBusinessInfo(Business $business) {
-
-        $business->readyForCheck = true;
-        $business->save();
-
-        return response()->json([
-            "status" => "ok"
-        ]);
-
-    }
 }

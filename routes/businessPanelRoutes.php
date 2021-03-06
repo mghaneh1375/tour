@@ -3,28 +3,28 @@
 use App\Http\Controllers\PanelBusiness\ContractController;
 use App\Http\Controllers\PanelBusiness\MainPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
+use App\Http\Controllers\PanelBusiness\TicketController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
 use Illuminate\Support\Facades\Route;
-
 
 
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 
     Route::middleware(['BusinessPanelShareData'])->group(function(){
-        Route::get('/loginPage', 'UserPanelBusinessController@loginPage')->name('businessPanel.loginPage');
 
-        Route::get('/loginWithGoogle', 'UserPanelBusinessController@loginWithGoogle')->name('businessPanel.loginWithGoogle');
+        Route::get('/loginPage', [MainPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
+
+        Route::get('/loginWithGoogle', [MainPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
     });
 
-    Route::post('/user/checkRegisterInputs', 'UserPanelBusinessController@checkRegisterInputs')->name('businessPanel.checkRegisterInputs');
+    Route::post('/user/checkRegisterInputs', [MainPanelBusinessController::class, 'checkRegisterInputs'])->name('businessPanel.checkRegisterInputs');
 
-    Route::post('/user/doSendVerificationPhoneCode', 'UserPanelBusinessController@doSendVerificationPhoneCode')->name('businessPanel.doSendVerificationPhoneCode');
+    Route::post('/user/doSendVerificationPhoneCode', [MainPanelBusinessController::class, 'doSendVerificationPhoneCode'])->name('businessPanel.doSendVerificationPhoneCode');
 
-    Route::post('/user/doRegister', 'UserPanelBusinessController@doRegister')->name('businessPanel.user.doRegister');
+    Route::post('/user/doRegister', [MainPanelBusinessController::class, 'doRegister'])->name('businessPanel.user.doRegister');
 
-    Route::post('/doLogin', 'UserPanelBusinessController@doLogin')->name('businessPanel.doLogin');
+    Route::post('/doLogin', [MainPanelBusinessController::class, 'doLogin'])->name('businessPanel.doLogin');
 });
-
 
 Route::middleware(['BusinessPanelAuth', 'adminAccess', 'csrfVeri'])->group( function (){
 
@@ -44,23 +44,35 @@ Route::middleware(['BusinessPanelAuth', 'adminAccess', 'csrfVeri'])->group( func
 
 });
 
-Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function (){
+Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
     Route::middleware(['BusinessPanelShareData'])->group( function () {
 
-        Route::get('/', 'MainPanelBusinessController@mainPage')->name('businessPanel.mainPage');
+        Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
 
-        Route::get('/create', 'MainPanelBusinessController@create')->name('businessPanel.create');
+        Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
 
         Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');
 
-        Route::get('/myBusiness/{business}', [MainPanelBusinessController::class, 'myBusiness'])->name('businessPanel.myBusiness');
-
         Route::get('/completeUserInfo', [MainPanelBusinessController::class, 'completeUserInfo'])->name('businessPanel.completeUserInfo');
+
+        Route::middleware(['businessAccess'])->group(function () {
+
+            Route::get('/myBusiness/{business}', [MainPanelBusinessController::class, 'myBusiness'])->name('businessPanel.myBusiness');
+
+            Route::get('businessMsgs/{business}', [TicketController::class, "msgs"])->name("ticket.msgs");
+
+        });
+
+        Route::group(['middleware' => ['ticketAccess']], function () {
+
+            Route::get('/businessSpecificMsgs/{ticket}', [TicketController::class, 'specificMsgs'])->name('ticket.specificMsgs');
+
+        });
 
         Route::middleware(['businessModify'])->group(function () {
 
-            Route::get('/edit/{business}', [UserPanelBusinessController::class, 'edit'])->name('businessPanel.edit');
+            Route::get('businessEdit/{business}/{step?}', [UserPanelBusinessController::class, 'edit'])->name('businessPanel.edit');
 
         });
     });
@@ -77,44 +89,58 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function (){
 
         Route::post('contract/{contract}', [ContractController::class, 'update'])->name('businessPanel.editContract');
 
+        Route::post('/ticketClose/{ticket}', [TicketController::class, 'close'])->name('businessPanel.ticketClose');
+
+        Route::post('/ticketOpen/{ticket}', [TicketController::class, 'open'])->name('businessPanel.ticketOpen');
     });
 
-    Route::post('/doCreate', 'MainPanelBusinessController@doCreate')->name('businessPanel.doCreate');
+    Route::post('/doCreate', [UserPanelBusinessController::class, 'doCreate'])->name('businessPanel.doCreate');
 
     Route::group(['middleware' => ['businessAccess']], function () {
 
         Route::delete('/deleteBusiness/{business}', [UserPanelBusinessController::class, 'delete'])->name('businessPanel.deleteBusiness');
 
+        Route::post('/businessGeneralMsgs/{business}', [TicketController::class, 'generalMsgs'])->name('businessPanel.generalMsgs');
+
+        Route::post('/businessAddTicket/{business}', [TicketController::class, 'addTicket'])->name('businessPanel.addTicket');
+
+    });
+
+    Route::group(['middleware' => ['ticketAccess']], function () {
+
+        Route::post('/ticketAddMsg/{ticket}', [TicketController::class, 'addMsg'])->name('businessPanel.ticketAddMsg');
+
+        Route::delete('/deleteTicket/{ticket}', [TicketController::class, 'delete'])->name('businessPanel.deleteTicket');
+
+        Route::post('/ticketMsgs/{ticket}', [TicketController::class, 'ticketMsgs'])->name('businessPanel.ticketMsgs');
+
     });
 
     Route::group(['middleware' => ['businessModify']], function () {
 
-        Route::post('/updateBusinessInfo1/{business}', 'MainPanelBusinessController@updateBusinessInfo1')->name('businessPanel.updateBusinessInfo1');
+        Route::post('/updateBusinessInfo1/{business}', [UserPanelBusinessController::class, 'updateBusinessInfo1'])->name('businessPanel.updateBusinessInfo1');
 
-        Route::post('/updateBusinessInfo2/{business}', 'MainPanelBusinessController@updateBusinessInfo2')->name('businessPanel.updateBusinessInfo2');
+        Route::post('/updateBusinessInfo2/{business}', [UserPanelBusinessController::class, 'updateBusinessInfo2'])->name('businessPanel.updateBusinessInfo2');
 
-        Route::post('/updateBusinessInfo3/{business}', 'MainPanelBusinessController@updateBusinessInfo3')->name('businessPanel.updateBusinessInfo3');
+        Route::post('/updateBusinessInfo4/{business}', [UserPanelBusinessController::class, 'updateBusinessInfo4'])->name('businessPanel.updateBusinessInfo4');
 
-        Route::post('/updateBusinessInfo4/{business}', 'MainPanelBusinessController@updateBusinessInfo4')->name('businessPanel.updateBusinessInfo4');
+        Route::post('/updateBusinessInfo5/{business}', [UserPanelBusinessController::class, 'updateBusinessInfo5'])->name('businessPanel.updateBusinessInfo5');
 
-        Route::post('/updateBusinessInfo5/{business}', 'MainPanelBusinessController@updateBusinessInfo5')->name('businessPanel.updateBusinessInfo5');
+        Route::post('/uploadBusinessPic/{business}', [UserPanelBusinessController::class, 'uploadPic'])->name('businessPanel.uploadPic');
 
-        Route::post('/uploadBusinessPic/{business}', 'MainPanelBusinessController@uploadPic')->name('businessPanel.uploadPic');
+        Route::delete('/deleteBusinessPic/{business}', [UserPanelBusinessController::class, 'deletePic'])->name('businessPanel.deletePic');
 
-        Route::delete('/deleteBusinessPic/{business}', 'MainPanelBusinessController@deletePic')->name('businessPanel.deletePic');
+        Route::delete('/deleteBusinessMadarek/{business}', [UserPanelBusinessController::class, 'deleteMadarek'])->name('businessPanel.deleteMadarek');
 
-        Route::delete('/deleteBusinessMadrak/{business}', 'MainPanelBusinessController@deleteMadrak')->name('businessPanel.deleteMadrak');
-
-        Route::post('/finalizeBusinessInfo/{business}', 'MainPanelBusinessController@finalizeBusinessInfo')->name('businessPanel.finalizeBusinessInfo');
+        Route::post('/finalizeBusinessInfo/{business}', [UserPanelBusinessController::class, 'finalizeBusinessInfo'])->name('businessPanel.finalizeBusinessInfo');
 
     });
 
-
     Route::post('/getContract', [ContractController::class, 'getContract'])->name('businessPanel.getContract');
 
-    Route::post('/completeUserInfo', 'MainPanelBusinessController@editUserInfo')->name('businessPanel.editUserInfo');
+    Route::post('/completeUserInfo', [MainPanelBusinessController::class, 'editUserInfo'])->name('businessPanel.editUserInfo');
 
-    Route::get('/doLogOut', 'UserPanelBusinessController@doLogOut')->name('businessPanel.doLogOut');
+    Route::get('/doLogOut', [MainPanelBusinessController::class, 'doLogOut'])->name('businessPanel.doLogOut');
 });
 
 

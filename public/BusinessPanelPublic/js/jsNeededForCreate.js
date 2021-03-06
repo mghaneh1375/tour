@@ -3,7 +3,6 @@ isNeedSideProgressBar(true);
 updateSideProgressBar(10);
 
 var citySearchAjax = null;
-var created = false;
 var map;
 var marker = 0;
 var uploaders = [];
@@ -166,51 +165,10 @@ function checkStepOne() {
     return true;
 }
 
-function checkStepTwo(progress) {
+function checkStepTwo() {
 
     if(data.type === "None") {
         showSuccessNotifiBP("لطفا نوع خدمت قابل ارائه خود را مشخص کنید.", 'right', '#ac0020');
-        return false;
-    }
-
-    openLoading();
-
-    if(!created) {
-        $.ajax({
-            type: 'post',
-            url: doCreatePath,
-            data: data,
-            success: function (res) {
-
-                closeLoading();
-
-                if (res.status === "nok")
-                    showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                else if (res.status === "ok") {
-                    currProgress += progress;
-                    data.id = res.id;
-                    updateSideProgressBar(currProgress);
-                    $('.indicator_step').addClass('hidden');
-
-                    currentPage++;
-
-                    // currentPage = 6;
-
-                    // if(data.type == "hotel" || data.type == "restaurant")
-                    //     currentPage = 7;
-                    // else
-                    //     currentPage = 6;
-
-                    created = true;
-                    $("#step" + currentPage).removeClass('hidden');
-                }
-
-            },
-            error: function (reject) {
-                errorAjax(reject);
-            }
-        });
-
         return false;
     }
 
@@ -245,9 +203,13 @@ function checkStepThree(progress) {
 
     openLoading();
 
+    var requestUrl = doCreatePath;
+    if(created)
+        requestUrl = updateBusinessInfo1BaseUrl + "/" + data.id;
+
     $.ajax({
         type: 'post',
-        url: updateBusinessInfo1BaseUrl + "/" + data.id,
+        url: requestUrl,
         data: data,
         success: function (res) {
 
@@ -256,16 +218,17 @@ function checkStepThree(progress) {
             if (res.status === "nok")
                 showSuccessNotifiBP(res.msg, 'right', '#ac0020');
             else if (res.status === "ok") {
+
+                if(!created) {
+                    window.location.href = editPath + "/" + res.id + "/4";
+                    return;
+                }
+
                 currProgress += progress;
                 updateSideProgressBar(currProgress);
                 $('.indicator_step').addClass('hidden');
                 currentPage++;
                 $("#step" + currentPage).removeClass('hidden');
-
-                if(data.type == "tour")
-                    $("#workHour").addClass('hidden');
-                else
-                    $("#workHour").removeClass('hidden');
             }
 
         },
@@ -535,7 +498,7 @@ function goToPage(_step, progress) {
     else if(currentPage == 1 && !checkStepOne())
         return;
 
-    else if(currentPage == 2 && _step > 0 && !checkStepTwo(progress))
+    else if(currentPage == 2 && _step > 0 && !checkStepTwo())
         return;
 
     else if(currentPage == 3 && _step > 0 && !checkStepThree(progress))
