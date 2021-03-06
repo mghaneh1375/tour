@@ -97,7 +97,7 @@ function removeUser(idx) {
     if(id_idx[idx] !== -1) {
         $.ajax({
             type: 'delete',
-            url: deleteMadrakBaseUrl + "/" + data.id,
+            url: deleteMadarekBaseUrl + "/" + data.id,
             data: {
                 'idx': idx
             },

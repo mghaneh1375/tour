@@ -5,6 +5,7 @@
     <style>
         td {
             padding: 7px;
+            min-width: 150px;
         }
     </style>
 @endsection
@@ -36,31 +37,33 @@
                                     <td><center>{{$business->name}}</center></td>
                                     <td><center>{{$business->type}}</center></td>
                                     <td><center>{{$business->created_at}}</center></td>
-                                    @if(!$business->readyForCheck)
+                                    @if(!$business->readyForCheck && !$business->problem)
                                         <td><center>در حال ویرایش/تکمیل توسط کاربر</center></td>
                                         <td>
                                             <center>
                                                 <a href="{{route('businessPanel.edit', ['business' => $business])}}" class="btn btn-info">رفتن برای تکمیل اطلاعات</a>
                                                 <a class="btn btn-danger" onclick="deleteBusiness('{{$business->id}}')">حذف</a>
+                                                <a class="btn btn-info" href="{{route('ticket.msgs', ['business' => $business->id])}}">پیام ها</a>
                                             </center>
                                         </td>
                                     @elseif($business->readyForCheck)
                                         <td><center>در حال بررسی</center></td>
-                                        <td><center></center></td>
                                     @elseif($business->finalStatus)
                                         <td><center>تایید شده</center></td>
                                         <td>
                                             <center>
                                                 <a href="{{route('businessManagement.panel')}}" class="btn btn-success">رفتن به پنل مدیریت</a>
                                                 <a class="btn btn-danger" onclick="deleteBusiness('{{$business->id}}')">حذف</a>
+                                                <a class="btn btn-info" href="{{route('ticket.msgs', ['business' => $business->id])}}">پیام ها</a>
                                             </center>
                                         </td>
-                                    @else
+                                    @elseif(!$business->readyForCheck && $business->problem)
                                         <td><center>اعلام نقص شده</center></td>
                                         <td>
                                             <center>
                                                 <a href="{{route('businessPanel.edit', ['business' => $business])}}" class="btn btn-warning">رفتن برای اصلاح نواقص</a>
                                                 <a class="btn btn-danger" onclick="deleteBusiness('{{$business->id}}')">حذف</a>
+                                                <a class="btn btn-info" href="{{route('ticket.msgs', ['business' => $business->id])}}">پیام ها</a>
                                             </center>
                                         </td>
                                     @endif
@@ -79,10 +82,16 @@
     <script>
 
         function deleteBusiness(id) {
+
+            openLoading();
+
             $.ajax({
                 type: "delete",
                 url: '{{url('deleteBusiness')}}' + "/" + id,
                 success: function (res) {
+
+                    closeLoading();
+
                     if(res.status === "0")
                         $("#tr_" + id).remove();
                 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\APIController;
 use App\models\ConfigModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
@@ -864,3 +865,9 @@ Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.
 Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
 
 Route::get('exportDistanceFromCityCenter/alakiii', 'MainController@exportDistanceFromCityCenter')->middleware(['auth']);
+
+Route::post('updateUserName', [APIController::class, 'updateUser']);
+
+Route::post('addUser', [APIController::class, 'addUser']);
+
+Route::post('checkPhone', [APIController::class, 'checkPhone']);

@@ -47,8 +47,6 @@
 
 @section('main')
 
-    <link rel="stylesheet" href="{{URL::asset('css/shazdeDesigns/business.css?v=1')}}">
-
     <div id="MAIN" class="MemberProfile prodp13n_jfy_overflow_visible" style="height: 100vh">
         <div id="BODYCON" class="col easyClear poolB adjust_padding new_meta_chevron_v2">
             <div class="business_welcomeBox">سلام!! به پنل مدیریت کسب و کار کوچیتا خوش آمدید</div>

@@ -3,6 +3,9 @@
 
 namespace App\models;
 
+use App\Http\Controllers\PanelBusiness\MainPanelBusinessController;
+use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
+use App\models\Business\Business;
 use App\models\Reviews\ReviewPic;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,10 +32,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property boolean $uploadPhoto
  * @property boolean $status
  * @property boolean $isForeign
+ * @property integer|null $parent
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereUserName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereEmail($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereCodeMeli($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereLevel($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\models\User whereParent($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User whereInvitationCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\models\User wherePhone($value)
  */
@@ -180,7 +185,18 @@ class User extends Authenticatable{
 //        return $points[0]->total;
     }
 
-    public function deleteUser(){
+    public static function deleteUser($id, $parentId) {
+
+        $user = User::whereId($id);
+        if($user == null || $user->parent == -1)
+            return;
+
+        $businesses = Business::whereUserId($parentId)->get();
+        foreach ($businesses as $business)
+            Business::deleteBusiness($business);
+
+        $user->delete();
+
 //        $uId = \Auth::user()->id;
 //        ActivationCode::where('userId', $uId)->delete();
 //        BannerPics::where('userId', $uId)->update(['userId' => 0]);

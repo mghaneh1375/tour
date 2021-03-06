@@ -163,3 +163,40 @@ ALTER TABLE `businessMadareks`
 ALTER TABLE `businessMadareks` ADD `status` BOOLEAN NOT NULL DEFAULT FALSE AFTER `pic2`;
 ALTER TABLE `businessMadareks` ADD `idx` INT(2) UNSIGNED NOT NULL AFTER `status`;
 ALTER TABLE `business` ADD `closedDayCloseTime_status` BOOLEAN NOT NULL DEFAULT FALSE AFTER `updated_at`;
+
+CREATE TABLE `tickets` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `from_` int(10) UNSIGNED NOT NULL,
+  `to_` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `msg` text,
+  `file` varchar(300) DEFAULT NULL,
+  `subject` varchar(500) DEFAULT NULL,
+  `parentId` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `tickets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `from_` (`from_`),
+  ADD KEY `to_` (`to_`),
+  ADD KEY `parentId` (`parentId`);
+
+ALTER TABLE `tickets`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tickets`
+  ADD CONSTRAINT `parentForeignInTicket` FOREIGN KEY (`parentId`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `tickets` ADD `seen` BOOLEAN NOT NULL DEFAULT FALSE AFTER `parentId`;
+ALTER TABLE `business` CHANGE `userId` `userId` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `business` ADD CONSTRAINT `userForeignInBusiness` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `business` ADD `assignUserId` INT(10) UNSIGNED NOT NULL AFTER `userId`, ADD INDEX (`assignUserId`);
+ALTER TABLE `business` ADD CONSTRAINT `assignUserForeignInBusiness` FOREIGN KEY (`assignUserId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `users` ADD `parent` INT(10) NULL DEFAULT NULL AFTER `isForeign`, ADD INDEX (`parent`);
+ALTER TABLE `users` CHANGE `parent` `parent` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `tickets` ADD `close` BOOLEAN NOT NULL DEFAULT FALSE AFTER `seen`;
+ALTER TABLE `tickets` CHANGE `from_` `from_` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `tickets` CHANGE `to_` `to_` INT(10) UNSIGNED NULL DEFAULT NULL;
+
+ALTER TABLE `business` ADD `problem` BOOLEAN NOT NULL DEFAULT FALSE AFTER `closedDayCloseTime_status`;

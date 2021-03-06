@@ -17,17 +17,21 @@ class TicketAccess
     public function handle($request, Closure $next)
     {
 
-        $business = $request->route("business");
-        if($business == null)
+        $ticket = $request->route("ticket");
+        if($ticket == null)
             return response()->json([
                 "status" => "nok",
-                "msg" => "لطفا کسب و کار خود را ارسال کنید."
+                "msg" => "لطفا تیکت خود را ارسال کنید."
             ]);
 
-        if($business->userId != Auth::user()->id && Auth::user()->level != 1)
+        $u = Auth::user();
+
+        if($ticket->from_ != $u->id &&
+            $ticket->to_ != $u->id &&
+            $u->level != 1)
             return response()->json([
                 "status" => "nok",
-                "msg" => "شما اجازه دسترسی به این کسب و کار را ندارید."
+                "msg" => "شما اجازه دسترسی به این تیکت را ندارید."
             ]);
 
         return $next($request);

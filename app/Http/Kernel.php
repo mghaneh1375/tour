@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adminAccess' => \App\Http\Middleware\AdminAccess::class,
         'businessAccess' => \App\Http\Middleware\BusinessAccess::class,
+        'ticketAccess' => \App\Http\Middleware\TicketAccess::class,
         'businessModify' => \App\Http\Middleware\BusinessModify::class,
         'nothing' => \App\Http\Middleware\Nothing::class,
         'SafarnamehShareData' => \App\Http\Middleware\SafarnamehShareData::class,
