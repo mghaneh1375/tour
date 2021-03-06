@@ -63,7 +63,6 @@
             text-align: center;
             width: 100%;
             height: 100%;
-            background: var(--koochita-blue);
             border-radius: 10px 40px 40px 10px;
             display: flex;
             flex-direction: column;
@@ -95,6 +94,15 @@
         .mainSectionTourMainPage .sideMenuSection .sideMenuTabs .item{
             margin-bottom: 35px;
             cursor: pointer;
+            opacity: .4;
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            transition: .3s;
+        }
+        .mainSectionTourMainPage .sideMenuSection .sideMenuTabs .item.select{
+            opacity: 1;
+            background: white;
         }
 
 
@@ -168,7 +176,6 @@
             align-items: center;
             width: 50px;
             border-radius: 20px;
-            background: var(--koochita-blue);
             color: white;
             font-size: 27px;
             cursor: pointer;
@@ -283,14 +290,13 @@
             background: #ffffffad;
             border-radius: 20px;
             overflow: hidden;
-            padding: 10px 5px;
             display: flex;
             align-items: center;
         }
         .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .destinationCard{
-            width: 100px;
-            height: 100px;
-            margin: 0px 5px;
+            width: 120px;
+            height: 120px;
+            padding: 10px;
         }
         .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .destinationCard .destImg{
             width: 100%;
@@ -301,17 +307,30 @@
             align-items: center;
             border-radius: 20px;
         }
+        .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .destinationCard .destImg > img{
+            transition: .3s;
+        }
+        .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .destinationCard:hover .destImg > img{
+            transform: scale(1.1);
+        }
         .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .navSec{
-
+            padding-left: 10px;
+            font-size: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .navSec > div{
+            font-weight: bold;
+            cursor: pointer;
+            width: 25px;
         }
         .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .navSec .nextButton{
-            font-weight: bold;
             transform: rotate(180deg);
-            cursor: pointer;
         }
         .mainSectionTourMainPage .imageSection .contentSec .bottomSection .destinationsSection .navSec .prevButton{
-            font-weight: bold;
-            cursor: pointer;
+
         }
 
 
@@ -408,50 +427,7 @@
                             <div class="normalText">کوچیتا</div>
                         </div>
                         <div class="destinationsSection">
-                            <div id="destinationResult" class="destResult">
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/1914659/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/3240714/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/8883015/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/sangtarashan/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-
-
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/1914659/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/3240714/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/8883015/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                                <a href="#" class="destinationCard">
-                                    <div class="destImg">
-                                        <img src="https://static.koochita.com/_images/majara/sangtarashan/f-1.jpg" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                                    </div>
-                                </a>
-                            </div>
+                            <div id="destinationResult" class="destResult"></div>
 
                             <div class="navSec">
                                 <div class="nextButton leftArrowIcon"></div>
@@ -522,10 +498,8 @@
                     <div>خوب</div>
                 </div>
                 <div class="sideMenuTabs">
-                    <div class="item sunIcon" onclick="changeTourType()"></div>
-                    <div class="item moonIcon" onclick="changeTourType()"></div>
-                    <div class="item studentIcon" onclick="changeTourType()"></div>
-                    <div class="item manSportIcon" onclick="changeTourType()"></div>
+                    <div class="item road_sideItem sideItem sunIcon" onclick="showTourTypeShow('road')"></div>
+                    <div class="item iranTour_sideItem sideItem moonIcon" onclick="showTourTypeShow('iranTour')"></div>
                 </div>
             </div>
         </div>
@@ -537,7 +511,7 @@
 
 <script>
     var isShowFullSearchPanel = true;
-    var nowTourTypeShow = 0;
+    var nowTourTypeShow = 'road';
     var tourTypeMenu = [
         {
             id: 'road',
@@ -573,7 +547,24 @@
         }
     ];
 
-    var destinationSmaple
+    var destinationSample = [
+        {
+            url: '#',
+            pic: 'https://static.koochita.com/_images/majara/1914659/f-1.jpg'
+        },
+        {
+            url: '#',
+            pic: 'https://static.koochita.com/_images/majara/3240714/f-1.jpg'
+        },
+        {
+            url: '#',
+            pic: 'https://static.koochita.com/_images/majara/8883015/f-1.jpg'
+        },
+        {
+            url: '#',
+            pic: 'https://static.koochita.com/_images/majara/sangtarashan/f-1.jpg'
+        },
+    ];
 
 
     function updatePageElementsSizes(){
@@ -591,36 +582,45 @@
     }
 
     function showTourTypeShow(_show){
-        if(_show >= tourTypeMenu.length) {
-            nowTourTypeShow = 0;
-            _show = 0;
+        for(var i = 0; i < tourTypeMenu.length; i++) {
+            if(tourTypeMenu[i].id === _show){
+                nowTourTypeShow = tourTypeMenu[i];
+                break;
+            }
         }
-        else if(_show < 0){
-            nowTourTypeShow = tourTypeMenu.length-1;
-            _show = tourTypeMenu.length-1;
-        }
-        var showType = tourTypeMenu[_show];
-        var backgroundColor = showType.color;
+
+
+        var backgroundColor = nowTourTypeShow.color;
 
         getTourSuggestions();
 
-        hideBackgroundPic(showType.backPic);
+        hideBackgroundPic(nowTourTypeShow.backPic);
 
         [...document.querySelectorAll('.searchPanelBodies')].map(item => item.classList.remove("show"));
 
+        [...document.querySelectorAll('.sideItem')].map(item => {
+            item.classList.remove('select');
+            item.style.color = 'white';
+
+            if(item.classList.contains(`${nowTourTypeShow.id}_sideItem`)){
+                item.classList.add('select');
+                item.style.color = backgroundColor;
+            }
+        });
+
+        [...document.querySelectorAll('.backgroundColorChanges')].map(item => item.style.background = backgroundColor);
+        [...document.querySelectorAll('.changeableIconColor')].map(item => {
+            item.style.background = backgroundColor + '33';
+            item.style.color = backgroundColor;
+        });
+
         setTimeout(() => {
 
-            [...document.querySelectorAll('.backgroundColorChanges')].map(item => item.style.background = backgroundColor);
-            [...document.querySelectorAll('.changeableIconColor')].map(item => {
-                item.style.background = backgroundColor + '33';
-                item.style.color = backgroundColor;
-            });
+            document.getElementById('topTourKindText').innerText = nowTourTypeShow.picText['top'];
+            document.getElementById('mainTourKindText').innerText = nowTourTypeShow.picText['main'];
+            document.getElementById('bottomTourKindText').innerText = nowTourTypeShow.picText['bottom'];
 
-            document.getElementById('topTourKindText').innerText = showType.picText['top'];
-            document.getElementById('mainTourKindText').innerText = showType.picText['main'];
-            document.getElementById('bottomTourKindText').innerText = showType.picText['bottom'];
-
-            document.getElementById(`${showType.id}_searchPanel`).classList.add('show');
+            document.getElementById(`${nowTourTypeShow.id}_searchPanel`).classList.add('show');
 
             updatePageElementsSizes();
         }, 500);
@@ -639,12 +639,6 @@
         });
     }
 
-    function changeTourType(){
-        document.getElementById('destinationResult').innerHTML = '';
-
-        showTourTypeShow(++nowTourTypeShow);
-    }
-
     function doSearchFromPanel(){
         if(isShowFullSearchPanel){
 
@@ -655,26 +649,23 @@
     }
 
     function showSearchPanel(){
-        var showType = tourTypeMenu[nowTourTypeShow];
-        document.getElementById(`${showType.id}_searchPanel`).classList.add('show');
+        document.getElementById(`${nowTourTypeShow.id}_searchPanel`).classList.add('show');
         setTimeout(() => isShowFullSearchPanel = true, 400);
-
         updatePageElementsSizes();
     }
-
     function hideSearchPanel(){
         [...document.querySelectorAll('.searchPanelBodies')].map(item => item.classList.remove("show"));
-
         setTimeout(() => isShowFullSearchPanel = false, 400);
         updatePageElementsSizes();
     }
 
     function getTourSuggestions(){
-        createTourSuggestionPlaceHolderCard(3);
-        createDestinationCardsPlaceHolder(5);
+        createTourSuggestionPlaceHolderCard(2);
+        createDestinationCardsPlaceHolder(4);
 
         setTimeout(() => {
             createTourSuggestionCards(tourSample);
+            createDestinationCards(destinationSample);
         }, 2000);
     }
 
@@ -714,10 +705,25 @@
     }
 
     function createDestinationCardsPlaceHolder(_count){
-
+        var html = '';
+        for(var i = 0; i < _count; i++){
+            html += `<div class="destinationCard">
+                        <div class="destImg placeHolderAnime"></div>
+                    </div>`;
+        }
+        document.getElementById('destinationResult').innerHTML = html;
     }
     function createDestinationCards(_result){
+        var html = '';
+        _result.map(item => {
+            html += `<a href="${item.url}" class="destinationCard">
+                        <div class="destImg">
+                            <img src="${item.pic}" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
+                        </div>
+                    </a>`;
+        });
 
+        document.getElementById('destinationResult').innerHTML = html;
     }
 
     document.getElementById('listResult').onscroll = e => {
@@ -729,7 +735,7 @@
 
     $(window).ready(() => {
         updatePageElementsSizes();
-        showTourTypeShow(0);
+        showTourTypeShow('road');
     }).on('resize', () => {
         updatePageElementsSizes();
     });

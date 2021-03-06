@@ -702,12 +702,6 @@ class HomeController extends Controller
 
             foreach ($kinPlace as $kplace){
                 if($kindPlaceId == 0 || $kplace->id == $kindPlaceId) {
-
-                        //                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and (replace(tableName.name, ' ', '') LIKE '%$key%' or replace(tableName.name, ' ', '') LIKE '%$key2%')");
-//                    else{
-//                        $tmp = DB::select("SELECT tableName.id, tableName.name as targetName, cities.name as cityName, state.name as stateName, cities.id as cityId from " . $kplace->tableName . " as tableName, cities, state WHERE cityId = cities.id and state.id = cities.stateId and replace(tableName.name, ' ', '') LIKE '%$key%'");
-//                    }
-
                     $selector = " tableName.id, tableName.name as targetName";
                     $tableQuery = '';
                     $sqlQuery = '';
@@ -717,12 +711,12 @@ class HomeController extends Controller
                         $tableQuery = ', cities, state';
                     }
 
-                    $sqlQuery .= "replace(tableName.name, ' ', '') LIKE '%{$key}%'";
+                    $sqlQuery .= " ( replace(tableName.name, ' ', '') LIKE '%{$key}%'";
                     if (!empty($key2))
-                        $sqlQuery .= " OR replace(tableName.name, ' ', '') LIKE '%{$key}%'";
+                        $sqlQuery .= " OR replace(tableName.name, ' ', '') LIKE '%{$key2}%'";
+                    $sqlQuery .= ')';
 
                     $tmp = DB::select("SELECT {$selector} from {$kplace->tableName} as tableName {$tableQuery} WHERE {$sqlQuery}");
-
                     foreach ($tmp as $itr) {
                         $itr->see = 0;
                         $itr->mode = $kplace->tableName;
