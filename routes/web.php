@@ -75,7 +75,6 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
     Route::get('/landingPage', 'MainController@landingPage')->name('landingPage')->middleware('shareData');
 
     //PDF creator
-    Route::get('alaki/{tripId}', array('as' => 'alaki', 'uses' => 'HomeController@alaki'));
 
     Route::get('printPage/{tripId}', 'HomeController@printPage')->name('printPage');
 
@@ -185,10 +184,6 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::get('cityPage/{kind}/{city}', 'CityController@cityPage')->name('cityPage');
     });
 
-    Route::middleware(['auth'])->group(function(){
-        Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
-    });
-
     Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
 
     Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
@@ -196,6 +191,11 @@ Route::middleware(['throttle:60'])->group(function (){
 
     Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
+
+
+    Route::middleware(['auth'])->group(function(){
+        Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
+    });
 
 });
 
@@ -206,17 +206,18 @@ Route::middleware(['throttle:60'])->group(function (){
         Route::get('/localShops/show/{id?}', 'LocalShop\LocalShopController@showLocalShops')->name('localShops.show');
     });
 
-    Route::get('/localShop/getFeatures', 'LocalShop\LocalShopController@getFeatures')->name('localShop.getFeatureList');
+    Route::get('localShops/getFeatures', 'LocalShop\LocalShopController@getFeatures')->name('localShop.getFeatureList');
 
     Route::middleware(['auth'])->group(function(){
         Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
-            Route::get('/localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
+            Route::get('localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
         });
-        Route::post('/localShops/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
-        Route::post('/localShops/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
-        Route::delete('/localShops/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
 
-        Route::post('/localShops/addIAmHere', 'LocalShop\LocalShopController@addImAmHereLocalShop')->name('localShop.addIAmHere');
+        Route::post('localShops/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
+        Route::post('localShops/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
+        Route::delete('localShops/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+
+        Route::post('localShops/addIAmHere', 'LocalShop\LocalShopController@addImAmHereLocalShop')->name('localShop.addIAmHere');
 
     });
 });
@@ -857,6 +858,10 @@ Route::group(array('middleware' => ['nothing']), function () {
 
     Route::post('checkAuthCode', 'NotUseController@checkAuthCode')->name('checkAuthCode');
     Route::post('resendAuthCode', 'NotUseController@resendAuthCode')->name('resendAuthCode');
+
+    Route::post('findPlace', 'NotUseController@findPlace')->name('findPlace');
+
+    Route::get('alaki/{tripId}', 'HomeController@alaki')->name('alaki');
 
 });
 

@@ -6,9 +6,24 @@
     .mainSearchResultRow{
         color: black;
         display: block;
-        padding: 1px 5px;
         cursor: pointer;
         transition: .3s;
+        padding: 10px 5px;
+        border-bottom: solid 1px #d3d3d34d;
+    }
+    .mainSearchResultRow .firstRow{
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+    .mainSearchResultRow .firstRow .spIcons{
+        padding-top: 0px;
+        font-size: 16px;
+        margin-left: 4px;
+    }
+    .mainSearchResultRow .firstRow .text{
+        margin: 0px;
+        font-size: 16px;
     }
     .mainSearchResultRow:hover{
         color: black;

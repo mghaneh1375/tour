@@ -29,7 +29,9 @@ use App\models\User;
 use App\models\UserOpinion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class NotUseController extends Controller
 {
@@ -489,7 +491,6 @@ class NotUseController extends Controller
             'reviews' => $reviews, 'question' => $question, 'placeMode' => $placeMode));
     }
 
-
     function opOnComment()
     {
 
@@ -578,14 +579,12 @@ class NotUseController extends Controller
         echo $out;
     }
 
-
     public function getPhotoFilter()
     {
         if (isset($_POST["kindPlaceId"])) {
             echo json_encode(PicItem::where('kindPlaceId', '=', makeValidInput($_POST["kindPlaceId"]))->get());
         }
     }
-
 
     public function checkAuthCode() {
         return;
@@ -639,4 +638,74 @@ class NotUseController extends Controller
 
         return json_encode(['msg' => 'err', 'reminder' => 90]);
     }
+
+    public function findPlace()
+    {
+        if (isset($_POST["kindPlaceId"]) && isset($_POST["key"])) {
+            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
+            $key = makeValidInput($_POST["key"]);
+            switch ($kindPlaceId) {
+                case 1:
+                default:
+                    echo json_encode(DB::select("select id, name from amaken WHERE name LIKE '%$key%'"));
+                    break;
+                case 3:
+                    echo json_encode(DB::select("select id, name from restaurant WHERE name LIKE '%$key%'"));
+                    break;
+                case 4:
+                    echo json_encode(DB::select("select id, name from hotels WHERE name LIKE '%$key%'"));
+                    break;
+            }
+        }
+    }
+
+    public function alaki($tripId)
+    {
+
+        require_once __DIR__ . '/../../../vendor/autoload.php';
+
+        $mail = new PHPMailer(true);                            // Passing `true` enables exceptions
+        try {
+            //Server settings
+            $mail->SMTPDebug = 2;                                 // Enable verbose debug output
+
+//            $mail->IsSMTP();
+//            $mail->Host = "https://shazdemosafer.com";
+//            $mail->SMTPAuth = true;
+//
+//            $mail->Username = "support@shazdemosafer.com";
+//            $mail->Password = " H+usZp5yVToI5xPb6yPDEfD3EwI=";
+//            $mail->Port = 25;
+//            $mail->SMTPSecure = "ssl";
+
+            //Recipients
+            $mail->setFrom('info@shazdemosafer.com', 'Mailer');
+//    $mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
+            $mail->addAddress('mghaneh1375@yahoo.com');               // Name is optional
+            $mail->addReplyTo('mghaneh1375@shazdemosafer.com', 'Information');
+//    $mail->addCC('cc@example.com');
+//    $mail->addBCC('bcc@example.com');
+
+            //Attachments
+//    $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+//    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+
+            //Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = 'Here is the subject';
+            $mail->Body = 'This is the HTML message body <b>in bold!</b>';
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+
+        return "Message has been sent";
+
+        return view('alaki', array('tripId' => $tripId));
+    }
+
 }

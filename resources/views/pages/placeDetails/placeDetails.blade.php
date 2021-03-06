@@ -89,7 +89,9 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         @include('pages.secondHeader')
     </div>
 
-    @include('component.mapMenu')
+    @if($place->needMap)
+        @include('component.mapMenu')
+    @endif
 
     <div id="comeDownHeader" class="topHeaderShowDown hideOnScreen">
         <div class="inOneRow">
@@ -123,10 +125,14 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 </div>
             </div>
         </div>
+
         <div class="tabs">
             @if($placeMode == 'mahaliFood')
                 <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
                 <div class="tabLinkMainWrap recipeDescBtnTopBar" onclick="changeTabBarColor(this, 'recepieForFood')">دستور پخت</div>
+            @elseif($placeMode == 'drinks')
+                <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
+                <div class="tabLinkMainWrap recipeDescBtnTopBar" onclick="changeTabBarColor(this, 'recepieForFood')">دستور تهیه</div>
             @else
                 <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">معرفی کلی</div>
                 @if($placeMode != 'sogatSanaies')
@@ -137,7 +143,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
             @endif
             <div class="tabLinkMainWrap postsBtnTopBar" onclick="changeTabBarColor(this, 'mainDivPlacePost')">نظرات</div>
             <div class="tabLinkMainWrap QAndAsBtnTopBar" onclick="changeTabBarColor(this,'QAndAMainDivId')">سوالات</div>
-            @if($placeMode != 'mahaliFood' && $placeMode != 'sogatSanaies')
+            @if($place->similarPlace)
                 <div class="tabLinkMainWrap similarLocationsBtnTopBar" onclick="changeTabBarColor(this,'topPlacesSection')">مکان های مشابه</div>
             @endif
         </div>
@@ -326,6 +332,9 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                     @if($placeMode == 'mahaliFood')
                         <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
                         <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'recepieForFood')">دستور پخت</div>
+                    @elseif($placeMode == 'drinks')
+                        <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
+                        <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'recepieForFood')">دستور تهیه</div>
                     @else
                         <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">معرفی کلی</div>
                         @if($placeMode != 'sogatSanaies')
@@ -336,7 +345,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                     @endif
                         <div class="tabLinkMainWrap postsBtnTopBar tab" onclick="changeTabBarColor(this, 'mainDivPlacePost')">نظرات</div>
                         <div class="tabLinkMainWrap QAndAsBtnTopBar tab" onclick="changeTabBarColor(this, 'QAndAMainDivId')">سوالات</div>
-                    @if($placeMode != 'mahaliFood' && $placeMode != 'sogatSanaies')
+                    @if($place->similarPlace)
                         <div class="tabLinkMainWrap similarLocationsBtnTopBar tab" onclick="changeTabBarColor(this, 'topPlacesSection')">مکان های مشابه</div>
                     @endif
                     </div>
@@ -410,8 +419,8 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
     <div id="MAINWRAP" class="full_meta_photos_v3  full_meta_photos_v4  big_pic_mainwrap_tweaks horizontal_xsell ui_container is-mobile position-relative">
         <div id="MAIN" class="Hotel_Review prodp13n_jfy_overflow_visible position-relative">
             <div id="BODYCON" class="col easyClear bodLHN poolB adjust_padding new_meta_chevron new_meta_chevron_v2 position-relative">
-                @if($placeMode == 'mahaliFood')
-                    <nav id="sticky" class="tabLinkMainWrapMainDIV navbar navbar-inverse hideOnPhone"   >
+                @if($placeMode == 'mahaliFood' || $placeMode == 'drinks')
+                    <nav id="sticky" class="tabLinkMainWrapMainDIV navbar navbar-inverse hideOnPhone">
                         <div class="container-fluid tabLinkMainWrapMainDiv tabLinkMainWrapMainDiv_Food">
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
@@ -422,7 +431,10 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                         <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)"> دستور پخت </a>
+                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
+                                            دستور
+                                            {{$placeMode == 'drinks' ? 'تهیه' : 'پخت'}}
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -460,33 +472,29 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                         @if($placeMode == 'mahaliFood')
                                             <div class="tabLinkMainDiv hideOnPhone">
                                                 <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    دستور پخت
+                                                    دستور
+                                                    {{$placeMode == 'drinks' ? 'تهیه' : 'پخت'}}
                                                 </button><!--
                                      -->
-                                                <button class="tabLink"
-                                                        onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
+                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
                                                     کالری
                                                 </button><!--
                                      -->
-                                                <button class="tabLink"
-                                                        onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')"
-                                                        id="defaultOpen">
+                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')">
                                                     مواد لازم
                                                 </button>
                                             </div>
                                         @else
                                             <div class="tabLinkMainDiv hideOnPhone">
-                                                <button class="tabLink"
-                                                        onclick="openCity('commentsAndAddressMobile', this, 'white', 'var(--koochita-light-green)')">
+                                                <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this, 'white', 'var(--koochita-light-green)')">
                                                     نظرات و آدرس
                                                 </button><!--
                                      -->
-                                                <button class="tabLink"
-                                                        onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
+                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
                                                     امکانات و ویژگی‌ها
                                                 </button><!--
                                      -->
-                                                <button class="tabLink" onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')" id="defaultOpen">
+                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')">
                                                     معرفی کلی
                                                 </button>
                                             </div>
@@ -507,101 +515,21 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                         ?>
 
                                         @if($placeMode == 'mahaliFood')
-                                            <div class="ui_columns is-multiline is-mobile reviewsAndDetails direction-rtlImp">
-
-                                                <div id="generalDescriptionMobile" class="ui_column is-8 generalDescription tabContent">
-                                                    <div class="block_header">
-                                                        <div class="titlesPlaceDetail">
-                                                            <h3 class="block_title">مواد لازم</h3>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row materSection">
-                                                        @if(isset($place->material))
-                                                            <div class="col-sm-6">
-                                                                @foreach($place->material as $key => $item)
-                                                                    @if($key%2 == 0)
-                                                                        <div class="row font-size-20 materialRows">
-                                                                            <div class="col-sm-6 col-xs-12 float-right materialName">{{$item->name}}</div>
-                                                                            <div class="col-sm-6 col-xs-12 color-green materialVolume">{{$item->volume}}</div>
-                                                                        </div>
-                                                                        <hr>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="col-sm-6" style="border-left: 1px solid #eee;">
-                                                                @foreach($place->material as $key => $item)
-                                                                    @if($key%2 != 0)
-                                                                        <div class="row font-size-20 materialRows">
-                                                                            <div class="col-sm-6 col-xs-12 float-right materialName">{{$item->name}}</div>
-                                                                            <div class="col-sm-6 col-xs-12 color-green materialVolume">{{$item->volume}}</div>
-                                                                        </div>
-                                                                        <hr>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
-                                                        <div class="hideOnScreen" style="display: flex; justify-content: space-between; margin-top: 14px; text-align: center;">
-                                                            <div class="foodKindMob" style="box-shadow: -2px 2px 4px 0px #333;">
-                                                                <div class="title">نوع غذا</div>
-                                                                <div class="val">{{$place->kindName}}</div>
-                                                            </div>
-                                                            <div class="foodKindMob">
-                                                                <div class="title">نوع سرو</div>
-                                                                <div class="val">{{$place->hotOrCold}}</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="seperatorSections"></div>
-
-                                                <div id="detailsAndFeaturesMobile" class="ui_column is-4 details tabContent mahaliFoodSeperator topAndBottomBorderAndMargin {{$mainInfoClass}} hideOnPhone">
-                                                    <div class="direction-rtl featureOfPlaceMiddleContent row " style="margin: 0px">
-                                                        @include('pages.placeDetails.tables.mahalifood-details-table')
-                                                    </div>
-                                                </div>
-
-                                                <div id="recepieForFood" class="ui_column is-8 generalDescription tabContent">
-                                                    <div class="block_header">
-                                                        <div class="titlesPlaceDetail">
-                                                            <h3 class="block_title">دستور پخت:</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="toggleDescription" style="position: relative">
-                                                        <div class="unselectedText overviewContent descriptionOfPlaceMiddleContent"
-                                                             id="introductionText">
-                                                            {!! $place->recipes !!}
-                                                        </div>
-{{--                                                            <span class="showMoreDescriptionInDetails"></span>--}}
-                                                    </div>
-                                                </div>
-                                                <div class="ui_column is-4 reviews tabContent hideOnPhone">
-                                                    <div class="rateOfPlaceMiddleContent">
-                                                        @include('pages.placeDetails.component.PlaceDetailRateSection')
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @include('pages.placeDetails.tables.mahalifood-details-table')
+                                        @elseif($placeMode === 'drinks')
+                                            @include('pages.placeDetails.tables.drinks-details-table')
                                         @else
                                             <div class="ui_columns is-multiline is-mobile reviewsAndDetails direction-rtlImp">
                                                 <div id="generalDescriptionMobile"
                                                      class="ui_column is-{{$showInfo}} generalDescription tabContent">
                                                     <div class="block_header">
                                                         <div class="titlesPlaceDetail">
-{{--                                                            <div class="seperatorSections"></div>--}}
-
                                                             <h3 class="block_title">{{__('معرفی کلی')}} </h3>
                                                         </div>
                                                     </div>
                                                     <div class="toggleDescription" style="position: relative">
-                                                        <div class="unselectedText overviewContent descriptionOfPlaceMiddleContent"
-                                                             id="introductionText">
+                                                        <div id="introductionText" class="unselectedText overviewContent descriptionOfPlaceMiddleContent">
                                                             {!! $place->description !!}
-{{--                                                            @if($kindPlaceId != 4)--}}
-{{--                                                                <span class="introductionShowMore">--}}
-{{--                                                                    بیشتر--}}
-{{--                                                                </span>--}}
-{{--                                                            @endif--}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -649,7 +577,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
                     <div class="seperatorSections"></div>
 
-                    @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood')
+                    @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood' && $placeMode != 'drinks')
 
                         <div class="topAndBottomBorderAndMargin" style="margin-top: 15px">
                             <div id='mediaad-Rvtf' class="importantFullyCenterContent marginBetweenMainPageMobileElements"></div>
@@ -750,7 +678,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                     @include('pages.placeDetails.questionSection')
                 </div>
 
-                @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood')
+                @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood' && $placeMode != 'drinks')
                     <div id="topPlacesSection">
                         @include('component.rowSuggestion')
                     </div>
@@ -801,7 +729,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         </script>
     @endif
 
-    @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood')
+    @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood' && $placeMode != 'drinks')
         <script>
             var topPlacesSections = [
                 {

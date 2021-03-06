@@ -160,17 +160,21 @@ function getReviewContents($item, $authUserId){
         $item->kindPlace = $kindPlace->name;
         $item->placeUrl = createUrl($kindPlace->id, $place->id, 0, 0);
 
-        $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
-            ->where('cities.id', $place->cityId)
-            ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName', 'state.isCountry'])
-            ->first();
-        $item->placeCity = $cityAndState->cityName;
-        $item->placeState = $cityAndState->stateName;
-
-        $stateText = $cityAndState->isCountry == 1 ? ' کشور ' : ' استان ';
-
-        $item->where = "{$place->name} شهر {$cityAndState->cityName}، {$stateText} {$cityAndState->stateName}";
-
+        if($item->cityId != 0) {
+            $cityAndState = Cities::join('state', 'state.id', 'cities.stateId')
+                ->where('cities.id', $place->cityId)
+                ->select(['cities.id AS cityId', 'state.id AS stateId', 'cities.name AS cityName', 'state.name AS stateName', 'state.isCountry'])
+                ->first();
+            $item->placeCity = $cityAndState->cityName;
+            $item->placeState = $cityAndState->stateName;
+            $stateText = $cityAndState->isCountry == 1 ? ' کشور ' : ' استان ';
+            $item->where = "{$place->name} شهر {$cityAndState->cityName}، {$stateText} {$cityAndState->stateName}";
+        }
+        else{
+            $item->placeCity = '';
+            $item->placeState = '';
+            $item->where = $place->name;
+        }
         $folderName = "{$kindPlace->fileName}/{$place->file}";
     }
     else{

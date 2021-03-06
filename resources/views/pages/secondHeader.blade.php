@@ -7,26 +7,30 @@
 <div class="container-fluid secHeadMain hideOnPhone">
     <div class="container secHeadNavs">
         <div class="secHeadTabs arrowAfter">
-            <span>
-                {{$locationName['cityName']}}
-            </span>
-            <div class="secHeadTabsSubList">
-                <a href="{{route('cityPage', ['kind' => $locationName['kindState'], 'city' => $locationName['cityNameUrl'] ])}}" target="_blank" >
-                    {{$locationName['cityName']}}
-                </a>
-                @if(isset($locationName['state']) && $locationName['kindState'] == 'city')
-                    <a href="{{route('cityPage', ['kind' => 'state', 'city' => $locationName['state'] ])}}" target="_blank" >
-                        {{$stateOrCountryText}}
-                        {{$locationName['state']}}
+            @if(isset($locationName['drinkSecondHeader']))
+                <span> لیست نوشیدنی ها </span>
+                <div class="secHeadTabsSubList">
+                    <a href="{{route('place.list', ['kindPlaceId' => 14, 'mode' => 'country'])}}" target="_blank" >لیست نوشیدنی ها </a>
+                    <a href="{{url('/main')}}">{{__('صفحه اصلی')}}</a>
+                </div>
+            @else
+                <span> {{$locationName['cityName']}} </span>
+                <div class="secHeadTabsSubList">
+                    <a href="{{route('cityPage', ['kind' => $locationName['kindState'], 'city' => $locationName['cityNameUrl'] ])}}" target="_blank" >
+                        {{$locationName['cityName']}}
                     </a>
-                @endif
-                <a href="{{url('/main')}}">{{__('صفحه اصلی')}}</a>
-            </div>
+                    @if(isset($locationName['state']) && $locationName['kindState'] == 'city')
+                        <a href="{{route('cityPage', ['kind' => 'state', 'city' => $locationName['state'] ])}}" target="_blank" >
+                            {{$stateOrCountryText}}
+                            {{$locationName['state']}}
+                        </a>
+                    @endif
+                    <a href="{{url('/main')}}">{{__('صفحه اصلی')}}</a>
+                </div>
+            @endif
         </div>
         <div class="secHeadTabs arrowAfter">
-            <span>
-                {{__('اقامتگاه')}}
-            </span>
+            <span>{{__('اقامتگاه')}}</span>
             <div class="secHeadTabsSubList">
                 <a href="{{route('place.list', ['kindPlaceId' => 4, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']])}}">
                     {{__('اقامتگاه‌های')}}
@@ -152,6 +156,7 @@
         </div>
     </div>
 </div>
+
 
 @if(isset($kindPlace))
     <div class="container-fluid fluidPlacePath secHeadMain">
