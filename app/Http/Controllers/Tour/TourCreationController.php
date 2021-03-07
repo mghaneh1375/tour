@@ -136,26 +136,42 @@ class TourCreationController extends Controller{
     }
     public function stageThreeTour($id){
         $tour = Tour::find($id);
-        if(auth()->user()->id == $tour->userId){
-            if($tour != null){
-                $tour->lastUpdate = convertDate($tour->updated_at);
-                $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
-                $transport = TransportKind::all();
+        if($tour != null && auth()->user()->id == $tour->userId){
+            $tourStartCity = Cities::find($tour->srcId);
+            if($tourStartCity != null)
+                $tour->srcCityLocation = ['lat' => $tourStartCity->x, 'lng' => $tourStartCity->y];
 
-                $tour->transports = Transport_Tour::where('tourId', $tour->id)->first();
-                $tour->hasTransport = $tour->transports == null ? false : true;
-                if($tour->hasTransport){
-                    $tour->transports->sLatLng = json_decode($tour->transports->sLatLng);
-                    $tour->transports->eLatLng = json_decode($tour->transports->eLatLng);
-                }
-                $tour->language = json_decode($tour->language);
-                $tour->sideTransport = json_decode($tour->sideTransport);
-                $tour->meals = json_decode($tour->meals);
-
-                return view('pages.tour.create.createTour_3_Options', compact(['tour', 'transport']));
+            if($tour->kindDest === 'city'){
+                $tourDestination = Cities::find($tour->destId);
+                if($tourDestination != null)
+                    $tour->destCityLocation = ['lat' => $tourDestination->x, 'lng' => $tourDestination->y];
             }
+            else{
+                $tourDestination = Majara::find($tour->destId);
+                if($tourDestination != null)
+                    $tour->destCityLocation = ['lat' => $tourDestination->C, 'lng' => $tourDestination->D];
+            }
+
+            $tour->lastUpdate = convertDate($tour->updated_at);
+            $tour->lastUpdateTime = $tour->updated_at->hour . ':' . $tour->updated_at->minute;
+            $transport = TransportKind::all();
+
+            $tour->transports = Transport_Tour::where('tourId', $tour->id)->first();
+            $tour->hasTransport = $tour->transports == null ? false : true;
+            if($tour->hasTransport){
+                $tour->transports->sLatLng = json_decode($tour->transports->sLatLng);
+                $tour->transports->eLatLng = json_decode($tour->transports->eLatLng);
+            }
+            $tour->language = json_decode($tour->language);
+            $tour->sideTransport = json_decode($tour->sideTransport);
+            $tour->meals = json_decode($tour->meals);
+
+            return view('pages.tour.create.createTour_3_Options', compact(['tour', 'transport']));
         }
+        else
+            abort(404);
     }
+
     public function stageFourTour($id){
         $tour = Tour::find($id);
         if(auth()->user()->id == $tour->userId){
@@ -378,22 +394,12 @@ class TourCreationController extends Controller{
                 Transport_Tour::where('tourId', $tour->id)->delete();
             }
 
-//            $tour->sideTransportCost = $data->isSideTransportCost;
-//            if($data->isSideTransportCost == 1)
-//                $tour->sideTransportCost = (int)$data->sideTransportCost;
-//            else
-                $tour->sideTransportCost = null;
-
+            $tour->sideTransportCost = null;
             $tour->sideTransport = json_encode($data->sideTransport);
 
             if($data->isMeal == 1){
                 $tour->isMeal = 1;
                 $tour->isMealAllDay = $data->isMealsAllDay;
-//                $tour->isMealCost = $data->isMealCost;
-
-//                if($data->isMealCost == 1)
-//                    $tour->mealMoreCost = (int)$data->mealMoreCost;
-
                 if($data->isMealsAllDay == 1)
                     $tour->meals = json_encode($data->allDayMeals);
                 else

@@ -15648,7 +15648,8 @@ DIV.prw_rup.prw_common_ratings_histogram_overview .fill {
     display: inline-block;
     background: var(--koochita-light-green);
     height: 12px;
-    position: absolute
+    position: absolute;
+    right: 0px;
 }
 
 DIV.prw_rup.prw_common_ratings_histogram_overview .row_count {

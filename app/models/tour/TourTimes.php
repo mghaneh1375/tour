@@ -18,7 +18,7 @@ class TourTimes extends Model
         date_default_timezone_set('Asia/Tehran');
 
         $time = verta()->format('Y/m/d');
-        return $query->where('sDate', '>', $time)->where('isPublished', 1)->where('canRegister', 1);
+        return $query->where('tourTimes.sDate', '>', $time)->where('tourTimes.isPublished', 1)->where('tourTimes.canRegister', 1);
     }
 
     public function getDailyDiscount(){

@@ -186,11 +186,8 @@
                                 </div>
                             </div>
                         @endif
-                        @if(isset($place->phone) && is_array($place->phone) && count($place->phone) > 0)
+                        @if(isset($place->phone) && is_array($place->phone) && count($place->phone) > 0 && $kindPlaceId != 12)
                             <div class="blEntry blEn phone truePhone">
-{{--                                <span>--}}
-{{--                                    <img src="{{URL::asset('images/icons/phoneIcon.svg')}}" style="width: 30px">--}}
-{{--                                </span>--}}
                                 @foreach($place->phone as $key => $phone)
                                     <a href="tel:{{$phone}}"> {{$phone}} </a>
                                     @if($key != count($place->phone)-1)

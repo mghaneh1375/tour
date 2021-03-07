@@ -7,7 +7,7 @@
         $schemaAddress = false;
 
     $schemaPhone = false;
-    if(isset($place->phone) && is_array($place->phone) && count($place->phone) > 0)
+    if(isset($place->phone) && is_array($place->phone) && count($place->phone) > 0 && $kindPlaceId != 12)
             $schemaPhone = true;
 ?>
 

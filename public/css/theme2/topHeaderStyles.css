@@ -197,9 +197,6 @@ input[type="checkbox"] + label, input[type="radio"] + label{
     white-space: nowrap;
 }
 
-.showOnTablet{
-    display: none;
-}
 
 .modalBlackBack{
     position: fixed;
@@ -442,12 +439,15 @@ input[type="checkbox"] + label, input[type="radio"] + label{
 }
 
 
+@media (min-width: 991px){
+    .showOnTablet{
+        display: none;
+    }
+}
+
 @media (max-width: 991px) {
     .hideOnTablet{
         display: none !important;
-    }
-    .showOnTablet{
-        display: inherit;
     }
     .listContainer{
         position: relative;

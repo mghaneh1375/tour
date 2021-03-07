@@ -131,7 +131,7 @@ function isPhotographer() {
     openUploadPhotoModal(_title, addPhotoToPlaceUrl, placeId, kindPlaceId);
 }
 
-function openCity(cityName, elmnt, color, fontColor) {
+function openCity(cityName, elmnt, color = 'white', fontColor = 'var(--koochita-light-green)') {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabContent");
     for (i = 0; i < tabcontent.length; i++) {

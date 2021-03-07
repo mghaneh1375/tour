@@ -551,7 +551,7 @@ class AjaxController extends Controller {
         if($_GET['kindPlaceId'] == 0){
             $kindPlaceses = Place::whereNotNull('tableName')->where('mainSearch', 1)->get();
             foreach ($kindPlaceses as $kindPlace){
-                if($kindPlace->id == 10 || $kindPlace->id == 11)
+                if($kindPlace->id == 10 || $kindPlace->id == 11 || $kindPlace->id == 14)
                     $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
                 else
                     $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];

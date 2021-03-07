@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<div class="row hideOnPhone" style="font-size: 15px">
+<div class="row hideOnPhone" style="font-size: 15px; width: 100%; margin: 0;">
 
     @if($place->eatable == 0)
         <div class="descriptionSections">

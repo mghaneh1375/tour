@@ -1989,6 +1989,7 @@ p {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    max-width: 150px;
 }
 
 .postalLastRow{
@@ -2519,7 +2520,45 @@ p {
     bottom: -10px;
     transform: rotate(-45deg);
 }
-
+.tourGuidAjansSection .ajansInfoSection {
+    border: dashed 1px gray;
+    width: 20%;
+}
+.tourGuidAjansSection .ajansInfoSection .ajasLogo{
+    height: 80px;
+    max-width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tourGuidAjansSection .ajansInfoSection .ajasLogo img{
+    width: 100%;
+}
+.tourGuidAjansSection .ajansInfoSection .name{
+    font-size: 20px;
+    margin-bottom: 0;
+    margin-top: 11px;
+}
+.tourGuidAjansSection .ajansInfoSection .rateAndPage{
+    position: relative;
+    flex-direction: column;
+    display: flex;
+}
+.tourGuidAjansSection .backupAgency{
+    width: 40%;
+    direction: ltr;
+}
+.tourGuidAjansSection .backupAgency .iconDiv{
+    text-align: center;
+    font-size: 180px;
+    color: var(--koochita-red);
+    margin-right: 16px;
+    height: 200px;
+}
+.tourGuidAjansSection .backupAgency .phones{
+    text-align: center;
+    font-size: 24px;
+}
 .tourGuidSection .butse{
     margin-top: 15px;
     padding: 3px 6px;

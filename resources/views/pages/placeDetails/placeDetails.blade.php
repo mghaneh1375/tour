@@ -131,8 +131,8 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
                 <div class="tabLinkMainWrap recipeDescBtnTopBar" onclick="changeTabBarColor(this, 'recepieForFood')">دستور پخت</div>
             @elseif($placeMode == 'drinks')
-                <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
-                <div class="tabLinkMainWrap recipeDescBtnTopBar" onclick="changeTabBarColor(this, 'recepieForFood')">دستور تهیه</div>
+                <div class="tabLinkMainWrap recipeDescBtnTopBar" onclick="changeTabBarColor(this, 'drinkRecipes')">طرز تهیه</div>
+                <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'materialNeededSection')">مواد لازم</div>
             @else
                 <div class="tabLinkMainWrap generalDescBtnTopBar" onclick="changeTabBarColor(this, 'generalDescLinkRel')">معرفی کلی</div>
                 @if($placeMode != 'sogatSanaies')
@@ -329,25 +329,27 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
 
                     <div class="hSectionInPlaceDetail hideOnScreen">
-                    @if($placeMode == 'mahaliFood')
-                        <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
-                        <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'recepieForFood')">دستور پخت</div>
-                    @elseif($placeMode == 'drinks')
-                        <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
-                        <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'recepieForFood')">دستور تهیه</div>
-                    @else
-                        <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">معرفی کلی</div>
-                        @if($placeMode != 'sogatSanaies')
-                            <div class="tabLinkMainWrap mapBtnTopBar tab" onclick="changeTabBarColor(this, 'goToMapSection')">نقشه</div>
+                        @if($placeMode == 'mahaliFood')
+                            <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">مواد لازم</div>
+                            <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'recepieForFood')">دستور پخت</div>
+                        @elseif($placeMode == 'drinks')
+                            <div class="tabLinkMainWrap recipeDescBtnTopBar tab" onclick="changeTabBarColor(this, 'drinkRecipes')">طرز تهیه</div>
+                                <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'materialNeededSection')">مواد لازم</div>
                         @else
-                            <div class="tabLinkMainWrap mapBtnTopBar tab" onclick="changeTabBarColor(this, 'goToMapSection')">ویژگی ها</div>
+                            <div class="tabLinkMainWrap generalDescBtnTopBar tab" onclick="changeTabBarColor(this, 'generalDescLinkRel')">معرفی کلی</div>
+                            @if($placeMode != 'sogatSanaies')
+                                <div class="tabLinkMainWrap mapBtnTopBar tab" onclick="changeTabBarColor(this, 'goToMapSection')">نقشه</div>
+                            @else
+                                <div class="tabLinkMainWrap mapBtnTopBar tab" onclick="changeTabBarColor(this, 'goToMapSection')">ویژگی ها</div>
+                            @endif
                         @endif
-                    @endif
+
                         <div class="tabLinkMainWrap postsBtnTopBar tab" onclick="changeTabBarColor(this, 'mainDivPlacePost')">نظرات</div>
                         <div class="tabLinkMainWrap QAndAsBtnTopBar tab" onclick="changeTabBarColor(this, 'QAndAMainDivId')">سوالات</div>
-                    @if($place->similarPlace)
-                        <div class="tabLinkMainWrap similarLocationsBtnTopBar tab" onclick="changeTabBarColor(this, 'topPlacesSection')">مکان های مشابه</div>
-                    @endif
+
+                        @if($place->similarPlace)
+                            <div class="tabLinkMainWrap similarLocationsBtnTopBar tab" onclick="changeTabBarColor(this, 'topPlacesSection')">مکان های مشابه</div>
+                        @endif
                     </div>
 
                     <div id="indicForShowDown" class="hideOnScreen">
@@ -431,10 +433,11 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                         <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">
-                                            دستور
-                                            {{$placeMode == 'drinks' ? 'تهیه' : 'پخت'}}
-                                        </a>
+                                        @if($placeMode == 'drinks')
+                                            <a class="tabLinkMainWrap generalDescBtnTopBar" href="#drinkRecipes" onclick="changeTabBarColor(this)">طرز تهیه</a>
+                                        @else
+                                            <a class="tabLinkMainWrap generalDescBtnTopBar" href="#generalDescLinkRel" onclick="changeTabBarColor(this)">دستور پخت</a>
+                                        @endif
                                     </li>
                                 </ul>
                             </div>
@@ -469,36 +472,19 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="block_wrap" data-tab="TABS_OVERVIEW">
                                 <div class="overviewContent">
                                     <div id="mobileIntroductionMainDivId" class="mobileIntroductionMainDiv tabContentMainWrap ">
-                                        @if($placeMode == 'mahaliFood')
-                                            <div class="tabLinkMainDiv hideOnPhone">
-                                                <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    دستور
-                                                    {{$placeMode == 'drinks' ? 'تهیه' : 'پخت'}}
-                                                </button><!--
-                                     -->
-                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    کالری
-                                                </button><!--
-                                     -->
-                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    مواد لازم
-                                                </button>
-                                            </div>
-                                        @else
-                                            <div class="tabLinkMainDiv hideOnPhone">
-                                                <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    نظرات و آدرس
-                                                </button><!--
-                                     -->
-                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    امکانات و ویژگی‌ها
-                                                </button><!--
-                                     -->
-                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this, 'white', 'var(--koochita-light-green)')">
-                                                    معرفی کلی
-                                                </button>
-                                            </div>
-                                        @endif
+{{--                                        @if($placeMode == 'mahaliFood')--}}
+{{--                                            <div class="tabLinkMainDiv hideOnPhone">--}}
+{{--                                                <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this)">دستور پخت</button>--}}
+{{--                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this)">کالری</button>--}}
+{{--                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this)"> مواد لازم </button>--}}
+{{--                                            </div>--}}
+{{--                                        @elseif($placeMode !== 'drinks')--}}
+{{--                                            <div class="tabLinkMainDiv hideOnPhone">--}}
+{{--                                                <button class="tabLink" onclick="openCity('commentsAndAddressMobile', this)"> نظرات و آدرس</button>--}}
+{{--                                                <button class="tabLink" onclick="openCity('detailsAndFeaturesMobile', this)"> امکانات و ویژگی‌ها </button>--}}
+{{--                                                <button id="defaultOpen" class="tabLink" onclick="openCity('generalDescriptionMobile', this)"> معرفی کلی</button>--}}
+{{--                                            </div>--}}
+{{--                                        @endif--}}
 
                                         <?php
                                         if ($kindPlaceId == 4 ||$kindPlaceId == 12) {
@@ -554,7 +540,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                         @endif
                                                     </div>
                                                 </div>
-                                                <div id="commentsAndAddressMobile" class="ui_column is-{{$showReviewRate}} reviews tabContent hideOnPhone rateOfPlaceMiddle">
+                                                <div id="commentsAndAddressMobile" class="ui_column is-{{$showReviewRate}} reviews tabContent hideOnTablet rateOfPlaceMiddle">
                                                     <div class="rateOfPlaceMiddleContent row" style="margin: 0px;">
                                                         @include('pages.placeDetails.component.PlaceDetailRateSection')
                                                     </div>
@@ -571,19 +557,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
                     <div class="seperatorSections"></div>
 
-                    <div class="rateOfPlaceMiddleContent topAndBottomBorderAndMargin seperateRates hideOnScreen">
+                    <div class="rateOfPlaceMiddleContent topAndBottomBorderAndMargin seperateRates showOnTablet">
                         @include('pages.placeDetails.component.PlaceDetailRateSection')
                     </div>
 
                     <div class="seperatorSections"></div>
 
                     @if($placeMode != 'sogatSanaies' && $placeMode != 'mahaliFood' && $placeMode != 'drinks')
-
-                        <div class="topAndBottomBorderAndMargin" style="margin-top: 15px">
-                            <div id='mediaad-Rvtf' class="importantFullyCenterContent marginBetweenMainPageMobileElements"></div>
-                        </div>
-
-                        <div class="seperatorSections"></div>
 
                         <div id="goToMapSection" class="topMainMapDiv topAndBottomBorderAndMargin">
                             <div id="mainMap" class="mainMap placeHolderAnime"></div>

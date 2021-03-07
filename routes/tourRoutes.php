@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
 Route::prefix('tour')->group(function (){
     Route::middleware(['shareData'])->group(function(){
         Route::get('main', 'TourController@tourMainPage')->name('tour.main');
@@ -24,8 +23,7 @@ Route::prefix('tour')->group(function (){
 
     Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
 
-
-
+    Route::get('/mainPage/search','TourController@getMainPageTours')->name('tour.getMainPageTours');
 
     Route::middleware(['shareData'])->group(function(){
         Route::get('/index', function (){

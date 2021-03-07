@@ -10,7 +10,7 @@
     <div class="prw_rup prw_common_bubble_rating overallBubbleRating" onclick="openRateBoxForPlace()" style="cursor: pointer; text-align: center">
         <span class="ui_bubble_rating bubble_{{$avgRate}}0 font-size-28 placeRateStars" property="ratingValue" content="{{$avgRate}}"></span>
     </div>
-    <div class="prw_rup prw_common_ratings_histogram_overview overviewHistogram" style="width: 80%; direction: rtl; margin-top: 15px;">
+    <div class="prw_rup prw_common_ratings_histogram_overview overviewHistogram" style="width: 80%; direction: rtl; margin: 0px auto; margin-top: 15px;">
         <ul class="ratings_chart">
             <li class="chart_row highlighted ">
                 <span class="row_label row_cell">عالی</span>

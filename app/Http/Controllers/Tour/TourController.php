@@ -37,18 +37,82 @@ class TourController extends Controller{
         return view('pages.tour.mainPageTourF.mainPageTour');
     }
 
+    public function getMainPageTours(){
+        $type = $_GET['type'];
+
+        if($type === 'cityTour'){
+            $destinations = [];
+            $tours = TourTimes::YouCanSee()
+                ->join('tour', 'tour.id', 'tourTimes.tourId')
+                ->join('tourPics', 'tourPics.tourId', 'tour.id')
+                ->join('cities', 'cities.id', 'tour.srcId')
+                ->join('state', 'state.id', 'cities.stateId')
+                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 1])
+                ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
+                    'tourTimes.sDate',
+                    'tourPics.pic',
+                    'cities.id AS cityId', 'cities.name AS cityName',
+                    'state.name AS stateName'])
+                ->orderBy('tourTimes.sDate')
+                ->groupBy('tour.code')
+                ->get();
+            foreach($tours as $tour) {
+                $tour->categoryName = 'شهر گردی';
+            }
+        }
+        else if($type === 'iranTour'){
+            $destinations = [];
+            $tours = TourTimes::YouCanSee()
+                ->join('tour', 'tour.id', 'tourTimes.tourId')
+                ->join('tourPics', 'tourPics.tourId', 'tour.id')
+                ->join('cities', 'cities.id', 'tour.srcId')
+                ->join('state', 'state.id', 'cities.stateId')
+                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 0])
+                ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
+                    'tourTimes.sDate',
+                    'tourPics.pic',
+                    'cities.id AS cityId', 'cities.name AS cityName',
+                    'state.name AS stateName'])
+                ->orderBy('tourTimes.sDate')
+                ->groupBy('tour.code')
+                ->get();
+            foreach($tours as $tour) {
+                $tour->categoryName = 'ایران گردی';
+            }
+        }
+        else if($type === 'road'){
+            $destinations = [];
+            $tours = [];
+        }
+
+        foreach($tours as $tour){
+            $tour->pic = \URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
+            $tour->url = route('tour.show', ['code' => $tour->code]);
+            $tour->minCost = number_format($tour->minCost);
+        }
+
+        return response()->json(['status' => 'ok', 'result' => ['tour' => $tours, 'destinations' => $destinations]]);
+
+    }
+
     public function showTour($code){
         $this->defaultActions();
 
-
         $tour = Tour::where('code', $code)->first();
+
         if($tour == null)
             abort(404);
 
-        $tour->timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : TourTimes::where('tourId', $tour->id)->orderBy('sDate')->first()->code;
+        if($tour->isPublish === 0 || $tour->confirm === 0){
+            $you = auth()->check() ? auth()->user() : null;
+            if($you === null || $you->id != $tour->userId)
+                return redirect(route("tour.main"));
+        }
 
         $owner = User::find($tour->userId);
         $ownerPic = getUserPic($owner->id);
+
+        $tour->timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : TourTimes::where('tourId', $tour->id)->orderBy('sDate')->first()->code;
 
         $tour->src = Cities::find($tour->srcId);
         if($tour->isLocal == 0){
@@ -61,7 +125,7 @@ class TourController extends Controller{
 
         $tour->pics = TourPic::where(['tourId' => $tour->id])->get();
         foreach ($tour->pics as $pic) {
-            $pic->pic = \URL::asset("_images/tour/{$tour->id}/$pic->pic");
+            $pic->pic = $pic->getPicUrl();
             $pic->userPic = $ownerPic;
         }
 
@@ -98,7 +162,10 @@ class TourController extends Controller{
         if($tour->isTransport == 1){
             $tour->mainTransport = Transport_Tour::where($thisTour)->first();
             $tour->mainTransport->sTransportName = TransportKind::find($tour->mainTransport->sTransportId)->name;
-            $tour->mainTransport->eTransportName = TransportKind::find($tour->mainTransport->eTransportId)->name;
+            if($tour->mainTransport->eTransportId != 0)
+                $tour->mainTransport->eTransportName = TransportKind::find($tour->mainTransport->eTransportId)->name;
+            else
+                $tour->mainTransport->eTransportName = $tour->mainTransport->sTransportName;
         }
 
         $tour->features = $tour->GetFeatures;

@@ -67,25 +67,32 @@
                     <div class="postalFirstRow">
                         <div class="tourName">{{$tour->name}}</div>
                         <div class="ajansPic">
-                            <img src="{{URL::asset('images/test/tourAjansSample.png')}}" class="resizeImgClass" alt="نام آژانس" onload="fitThisImg(this)">
+                            <img src="{{URL::asset('images/icons/mainLogo.png')}}" class="resizeImgClass" alt="نام آژانس" onload="fitThisImg(this)">
                         </div>
                     </div>
+                    @if($tour->isLocal == 0)
+                        <div class="detailRowPost">
+                            از
+                            <span class="boldPostal">{{$tour->src->name}}</span>
+                            به
+                            <span class="boldPostal">{{$tour->dest->name}}</span>
+                        </div>
+                    @endif
                     <div class="detailRowPost">
-                        از
-                        <span class="boldPostal">{{$tour->src->name}}</span>
-                        به
-                        <span class="boldPostal">{{$tour->dest->name}}</span>
-                    </div>
-                    <div class="detailRowPost">
-                        از
-                        <span class="boldPostal">
-                            <span class="sDateName">{{$tour->sDateName}}</span>
-                        </span>
-                        تا
-                        <span class="boldPostal">
-                            <span class="eDateName">{{$tour->eDateName}}</span>
-                        </span>
-
+                        @if($tour->sDateName === $tour->eDateName)
+                            <span class="boldPostal">
+                                <span class="sDateName">{{$tour->sDateName}}</span>
+                            </span>
+                        @else
+                            از
+                            <span class="boldPostal">
+                                <span class="sDateName">{{$tour->sDateName}}</span>
+                            </span>
+                            تا
+                            <span class="boldPostal">
+                                <span class="eDateName">{{$tour->eDateName}}</span>
+                            </span>
+                        @endif
                     </div>
 
                     <div class="detailRowPost">
@@ -106,7 +113,7 @@
                             <div class="hasInsurance"> بیمه دارد</div>
                         @endif
                     </div>
-                    <div class="postalLastRow"> .این تور توسط "ستاره ونک" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
+                    <div class="postalLastRow"> .این تور توسط "کوچیتا" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
                 </div>
                 <div class="mainSliderSection col-xs-5">
                     <div class="posRelWH100">
@@ -271,28 +278,26 @@
                         </div>
                     </div>
 
-                    <div class="fullyCenterContent" style="border: dashed 1px gray; width: 20%">
+                    <div class="fullyCenterContent ajansInfoSection">
                         <div class="infoSec">
-                            <div class="ajasLogo" style="height: 80px">
-                                <img src="https://localhost/kouchita/public/images/test/tourAjansSample.png">
+                            <div class="ajasLogo">
+                                <img src="{{URL::asset('images/icons/mainLogo.png')}}">
                             </div>
-                            <div class="name" style="font-size: 20px; margin-bottom: 0; margin-top: 11px;">آژانس ستاره ونک</div>
-                            <div style="position: relative;flex-direction: column; display: flex;">
+                            <div class="name">آژانس کوچیتا</div>
+                            <div class="rateAndPage">
                                 <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_10"></div></div>
                                 <a href="#" class="butse" style="background: var(--koochita-red);">صفحه آژانس</a>
                             </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; width: 40%; align-items: center;justify-content: center; direction: ltr;">
-                        <div style=" text-align: center; font-size: 180px; color: var(--koochita-red); margin-right: 16px; height: 200px;">
+                    <div class="fullyCenterContent backupAgency">
+                        <div class="iconDiv">
                             <i class="fad fa-user-headset"></i>
                         </div>
-                        <div style="text-align: center; font-size: 24px;">
+                        <div class="phones">
                             <div class="backupPhones">
-                                <a href="tel:021-88492744">021-88492744</a>
-                                <a href="tel:021-88492744">021-88492744</a>
-                                <a href="tel:021-88492744">021-88492744</a>
+                                <a href="tel:021-xxxxxxxx">021-xxxxxxxx</a>
                             </div>
                             <div> تماس با پشتیبانی تور</div>
                             <div>کدشناسایی تور</div>
@@ -307,37 +312,12 @@
             <div class="bodiesHeader">برنامه روزانه تور</div>
             <div class="dayInfoSectionRow">
                 <div class="selectDaySec" style="width: 30%">
-                    <div id="listOfDays" class="daysChoose">
-                        @for($i = 1; $i < 11; $i++)
-                            <div class="dayRow {{$i == 1 ? 'selected' : ''}}" data-day="{{$i}}" onclick="selectDay(this)">
-                                <div class="dayCircle"></div>
-                                <div class="dayName">روز {{$i}} :</div>
-                                <div class="dayTitle">برنامه روز {{$i}}</div>
-                            </div>
-                        @endfor
-                    </div>
+                    <div id="listOfDays" class="daysChoose"></div>
                 </div>
 
                 <div class="dayDetails" style="width: 70%;">
                     <div id="fullDayDetailSection" class="minDatail">
-                        <div id="detailInfSec" class="detailInfSec">
-                            <div class="dayInfoRow">
-                                <div class="title">
-                                    <div class="iconSec trainIcon"></div>
-                                    شروع تور
-                                    <div class="time">13:00 - 14:43</div>
-                                </div>
-                                <div class="text">
-                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
-                                    چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد
-                                    نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته
-                                    حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان
-                                    رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید د
-                                    اشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز
-                                    شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                </div>
-                            </div>
-                        </div>
+                        <div id="detailInfSec" class="detailInfSec"></div>
                         <div class="dayIndicator">
                             <div class="indiMainLineSection">
                                 <div class="mainLine"></div>
@@ -353,42 +333,7 @@
                         </div>
                     </div>
 
-                    <div id="showBigDays" class="BigDetail">
-                        @for($i = 1; $i < 11; $i++)
-                            <div id="mainDayShow_{{$i}}" class="bigDetailRow borderBotDashed">
-                                <div class="title">
-                                    <div class="dayCount">روز {{$i}}</div>
-                                    <div class="name">برنامه روز {{$i}}</div>
-                                </div>
-                                <div class="text">
-                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
-                                    چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد
-                                    نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته
-                                    حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان
-                                    رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید د
-                                    اشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز
-                                    شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                </div>
-                                <div class="sideInfos">
-                                    <div class="title">
-                                        <div class="iconSec hotelIcon"></div>
-                                        <div class="name">محل اقامت :</div>
-                                    </div>
-                                    <div class="content">
-                                        <a href="#">هتل عباسی شیراز در فارس</a>
-                                    </div>
-                                </div>
-                                <div class="sideInfos">
-                                    <div class="title">
-                                        <div class="iconSec restaurantIcon"></div>
-                                        <div class="name">وعده غذایی تور :</div>
-                                    </div>
-                                    <div class="content">صبحانه - شام</div>
-                                </div>
-                                <div class="showAllDetail leftArrowIconAfter" onclick="openDayDetails({{$i}})">مشاهده جزئیات روز</div>
-                            </div>
-                        @endfor
-                    </div>
+                    <div id="showBigDays" class="BigDetail"></div>
                 </div>
             </div>
         </div>

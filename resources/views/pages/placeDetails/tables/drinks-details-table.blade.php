@@ -34,7 +34,7 @@
     .brrMH{
         border-right: 1px solid #e5e5e5;
     }
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
         .brlMH{
             border-left: none;
         }
@@ -50,20 +50,18 @@
 
 <div id="generalDescriptionMobile" class="row reviewsAndDetails generalDescription drinkTableSection">
 
-    <div class="col-md-4 hideOnPhone">
+    <div class="col-md-4 hideOnTablet">
         <div class="tabContent">
             <div class="rateOfPlaceMiddleContent">
                 @include('pages.placeDetails.component.PlaceDetailRateSection')
             </div>
         </div>
-
     </div>
 
     <div class="col-md-8 brlMH">
-        <div class="row wm0">
+        <div id="drinkRecipes" class="row wm0">
             <div class="col-md-6 brrMH">
                 <div class="tabContent">
-
                     <div class="block_header">
                         <div class="titlesPlaceDetail">
                             <h3 class="block_title">طرز تهیه</h3>
@@ -81,10 +79,10 @@
                     </div>
                     <div class="foodKindMob">
                         <div class="title">نوع سرو</div>
-                        <div class="val">{{$place->hotOrCold ?? 'سرد'}}</div>
+                        <div class="val">{{isset($place->isHot) ? ($place->isHot == 1 ? 'گرم' : 'سرد') : ''}}</div>
                     </div>
                 </div>
-                <div class="tabContent">
+                <div id="materialNeededSection" class="tabContent">
                     <div class="block_header">
                         <div class="titlesPlaceDetail">
                             <h3 class="block_title">مواد لازم</h3>
