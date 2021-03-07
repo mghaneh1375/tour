@@ -145,6 +145,31 @@ function createDestinationCards(_result){
     document.getElementById('destinationResult').innerHTML = html;
 }
 
+function getTourSuggestions(){
+    createTourSuggestionPlaceHolderCard(2);
+    createDestinationCardsPlaceHolder(4);
+
+    if(!nowTourTypeShow['isGet']) {
+        $.ajax({
+            type: 'GET',
+            url: `${getMainPageToursUrl}?type=${nowTourTypeShow['id']}`,
+            success: response => {
+                if (response.status === 'ok') {
+                    nowTourTypeShow['isGet'] = true;
+                    nowTourTypeShow['tours'] = response.result.tour;
+                    nowTourTypeShow['destinations'] = response.result.destinations;
+
+                    createTourSuggestionCards(nowTourTypeShow['tours']);
+                    createDestinationCards(nowTourTypeShow['destinations']);
+                }
+            },
+        })
+    }
+    else{
+        createTourSuggestionCards(nowTourTypeShow['tours']);
+        createDestinationCards(nowTourTypeShow['destinations']);
+    }
+}
 
 document.getElementById('listResult').onscroll = e => {
     if(e.target.scrollTop > 0 && isShowFullSearchPanel)

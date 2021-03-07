@@ -19,6 +19,7 @@ use ClassesWithParents\CInterface;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Transport\Transport;
+use Illuminate\Support\Facades\URL;
 
 class TourController extends Controller{
 
@@ -39,9 +40,10 @@ class TourController extends Controller{
 
     public function getMainPageTours(){
         $type = $_GET['type'];
+        $destinationIds = [];
+        $destinations = [];
 
         if($type === 'cityTour'){
-            $destinations = [];
             $tours = TourTimes::YouCanSee()
                 ->join('tour', 'tour.id', 'tourTimes.tourId')
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
@@ -56,12 +58,28 @@ class TourController extends Controller{
                 ->orderBy('tourTimes.sDate')
                 ->groupBy('tour.code')
                 ->get();
+
+            $destinations = TourTimes::YouCanSee()
+                ->join('tour', 'tour.id', 'tourTimes.tourId')
+                ->join('cities', 'cities.id', 'tour.srcId')
+                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 1])
+                ->select(['cities.*'])
+                ->groupBy('tour.srcId')
+                ->get();
             foreach($tours as $tour) {
                 $tour->categoryName = 'شهر گردی';
+                array_push($destinationIds, [
+                    'type' => 'city',
+                    'id' => $tour->cityId
+                ]);
+            }
+
+            foreach ($destinations as $item){
+                $item->url = '#';
+                $item->pic = URL::asset("_images/city/{$item->id}/{$item->image}");
             }
         }
         else if($type === 'iranTour'){
-            $destinations = [];
             $tours = TourTimes::YouCanSee()
                 ->join('tour', 'tour.id', 'tourTimes.tourId')
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
@@ -76,20 +94,37 @@ class TourController extends Controller{
                 ->orderBy('tourTimes.sDate')
                 ->groupBy('tour.code')
                 ->get();
+
+            $destinations = TourTimes::YouCanSee()
+                ->join('tour', 'tour.id', 'tourTimes.tourId')
+                ->join('cities', 'cities.id', 'tour.destId')
+                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 0, 'tour.kindDest' => 'city'])
+                ->select(['cities.*'])
+                ->groupBy('tour.srcId')
+                ->get();
+
             foreach($tours as $tour) {
                 $tour->categoryName = 'ایران گردی';
             }
+
+            foreach ($destinations as $item){
+                $item->url = '#';
+                $item->pic = URL::asset("_images/city/{$item->id}/{$item->image}");
+            }
         }
         else if($type === 'road'){
-            $destinations = [];
             $tours = [];
         }
 
         foreach($tours as $tour){
-            $tour->pic = \URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
+            $tour->pic = URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
             $tour->url = route('tour.show', ['code' => $tour->code]);
             $tour->minCost = number_format($tour->minCost);
         }
+
+//        foreach ($destinationIds as $index => $dest){
+//            array_push($destinations, $);
+//        }
 
         return response()->json(['status' => 'ok', 'result' => ['tour' => $tours, 'destinations' => $destinations]]);
 
