@@ -400,9 +400,13 @@ class TourReservationController extends Controller
                 $newPassenger = null;
                 if($pass['saveInformation'] == 1){
                     $saveInfo = 1;
+                    $passportNumberForSearch = $pass['passport'];
+                    if($passportNumberForSearch == null)
+                        $passportNumberForSearch = 0;
+
                     $findPassLastInfoId = \DB::table('passengerInfos')
                         ->where('userId', auth()->user()->id)
-                        ->whereRaw("meliCode = '{$pass['codeMeli']}' OR (passportNum IS NOT NULL AND passportNum = '{$pass['passport']}')")
+                        ->whereRaw("meliCode = '{$pass['codeMeli']}' OR (passportNum IS NOT NULL AND passportNum = '{$passportNumberForSearch}')")
                         ->select('id')
                         ->first();
                     if($findPassLastInfoId != null && $findPassLastInfoId->id != 0)
