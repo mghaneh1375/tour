@@ -496,6 +496,7 @@
     margin: 5px 10px;
     color: gray;
     display: inline-flex;
+    align-items: center;
     cursor: pointer;
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter .name > div{
@@ -508,7 +509,7 @@
 /*}*/
 
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter .icon{
-
+    margin-left: 10px;
 }
 .localShopCategoriesModal .mainFullBody .filterSection .rowFilter .body .filter input{
     margin: 0;

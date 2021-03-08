@@ -865,7 +865,7 @@ div.prw_rup.prw_common_centered_thumbnail .sizing_wrapper{
     color: white;
 }
 .localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory .icon{
-    display: none;
+    /*display: none;*/
 }
 .localShopCategoryFilterSection .mainLocalShopCategoryList .categorySections .locCategory .name{
     font-size: .8em;

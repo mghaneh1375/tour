@@ -28,11 +28,14 @@
 <link rel="stylesheet" href="{{URL::asset('css/common/header1.css?v='.$fileVersions)}}">
 <link rel="stylesheet" href="{{URL::asset('css/common/DA.css?v='.$fileVersions)}}">
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/footer.css?v='.$fileVersions)}}' />
-<link rel='stylesheet' type='text/css' href='{{URL::asset('packages/fontAwesom/css/all.min.css')}}' />
+
+<link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
+<script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
+
+{{--<link rel='stylesheet' type='text/css' href='{{URL::asset('packages/fontAwesom/css/all.min.css')}}' />--}}
+{{--<script async src="{{URL::asset('packages/fontAwesom/js/all.min.js')}}"></script>--}}
 
 {{--<link rel="manifest" href="{{URL::asset('manifest.json')}}">--}}
-
-<script async src="{{URL::asset('packages/fontAwesom/js/all.min.js')}}"></script>
 
 @if(\App::getLocale() == 'en')
     <link rel="stylesheet" href="{{URL::asset('css/ltr/mainPageHeader.css?v='.$fileVersions)}}">

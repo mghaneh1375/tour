@@ -9,6 +9,9 @@
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/mapp.min.css')}}">--}}
     {{--    <link rel="stylesheet" href="{{URL::asset('packages/map.ir/css/fa/style.css')}}">--}}
 
+{{--    <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">--}}
+{{--    <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>--}}
+
     <style>
         footer .addNewReviewButtonMobileFooter{
             display: none;
@@ -87,7 +90,7 @@
                     <div class="swiper-wrapper">
                         @foreach($localShopCategories as $category)
                             <div class="swiper-slide shortcutButton" onclick="goToMainCategorySection({{$category->id}})">
-    {{--                            <div class="icon manSportIcon"></div>--}}
+                                <i class="icon {{$category->icon}}"></i>
                                 <div>{{$category->name}}</div>
                             </div>
                         @endforeach
@@ -107,7 +110,7 @@
                         <div id="localShopMainCategorySection_{{$category->id}}" class="rowFilter">
                             <div class="head">
                                 <div>
-{{--                                    <span class="icon manSportIcon"></span>--}}
+                                    <i class="icon {{$category->icon}}"></i>
                                     <span>{{$category->name}}</span>
                                 </div>
                                 <div class="showIcon showIconCategories" data-type="off" onclick="toggleLocalShopCategories({{$category->id}}, this)">
@@ -120,7 +123,7 @@
                                     <div class="filter">
                                         <input id="localShopCategories_{{$sub->id}}" data-id="{{$sub->id}}" class="categoryFilterInput_0 categoryFilterInput_{{$category->id}}" type="checkbox" checked>
                                         <label for="localShopCategories_{{$sub->id}}" class="name checked">
-{{--                                            <div class="icon manSportIcon"></div>--}}
+                                            <i class="icon {{$sub->icon}}"></i>
                                             <div class="showOneLineText">{{$sub->name}}</div>
                                         </label>
                                     </div>

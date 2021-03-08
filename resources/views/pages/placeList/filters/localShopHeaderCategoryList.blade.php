@@ -12,7 +12,7 @@
             <div class="swiper-wrapper categorySections">
                 @foreach($localShopCategories as $category)
                     <div class="swiper-slide locCategory" data-id="{{$category->id}}" data-name="{{$category->name}}" onclick="showSubCategoryOfLocalShop(this, 'main')">
-                        <div class="icon locationIcon"></div>
+                        <i class="icon {{$category->icon}}"></i>
                         <div class="name">{{$category->name}}</div>
                     </div>
                 @endforeach
@@ -30,7 +30,7 @@
                 <div class="swiper-wrapper categorySections">
                     @foreach($category->subs as $sub)
                         <div class="swiper-slide locCategory" data-id="{{$sub->id}}" data-name="{{$sub->name}}" onclick="showSubCategoryOfLocalShop(this, 'sub')">
-                            <div class="icon locationIcon"></div>
+                            <i class="icon {{$sub->icon}}"></i>
                             <div class="name">{{$sub->name}}</div>
                         </div>
                     @endforeach
