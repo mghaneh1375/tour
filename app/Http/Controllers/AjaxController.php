@@ -65,9 +65,9 @@ class AjaxController extends Controller {
                     $item->name .= $item->firstNameEn;
 
                 if($item->lastNameFa != null)
-                    $item->name .= $item->lastNameFa;
+                    $item->name .= ' '.$item->lastNameFa;
                 else if($item->lastNameEn != null)
-                    $item->name .= $item->lastNameEn;
+                    $item->name .= ' '. $item->lastNameEn;
             }
             return response()->json(['status' => 'ok', 'result' => $passengers]);
         }

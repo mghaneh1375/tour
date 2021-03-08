@@ -106,7 +106,7 @@
                     <div class="postalFirstRow">
                         <div class="tourName">{{$tour->name}}</div>
                         <div class="ajansPic">
-                            <img src="{{URL::asset('images/icons/mainLogo.png')}}" class="resizeImgClass" alt="نام آژانس" onload="fitThisImg(this)">
+                            <img src="{{URL::asset('images/test/itoLogo.png')}}" class="resizeImgClass" alt="نام آژانس" onload="fitThisImg(this)">
                         </div>
                     </div>
                     @if($tour->isLocal == 0)
@@ -152,7 +152,7 @@
                             <div class="hasInsurance"> بیمه دارد</div>
                         @endif
                     </div>
-                    <div class="postalLastRow"> .این تور توسط "کوچیتا" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
+                    <div class="postalLastRow"> .این تور توسط "آزانس آیتو" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
                 </div>
                 <div class="mainSliderSection col-xs-5">
                     <div class="posRelWH100">
@@ -320,9 +320,9 @@
                     <div class="fullyCenterContent ajansInfoSection">
                         <div class="infoSec">
                             <div class="ajasLogo">
-                                <img src="{{URL::asset('images/icons/mainLogo.png')}}">
+                                <img src="{{URL::asset('images/test/itoLogo.png')}}">
                             </div>
-                            <div class="name">آژانس کوچیتا</div>
+                            <div class="name">آژانس آیتو</div>
                             <div class="rateAndPage">
                                 <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_10"></div></div>
                                 <a href="#" class="butse" style="background: var(--koochita-red);">صفحه آژانس</a>
@@ -336,7 +336,7 @@
                         </div>
                         <div class="phones">
                             <div class="backupPhones">
-                                <a href="tel:021-xxxxxxxx">021-xxxxxxxx</a>
+                                <a href="tel:02188539300">021-88539300</a>
                             </div>
                             <div> تماس با پشتیبانی تور</div>
                             <div>کدشناسایی تور</div>

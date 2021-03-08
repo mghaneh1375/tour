@@ -33,7 +33,7 @@ var tourSideFeatureList = {
         content: ''
     },
     tourLanguage: {
-        name: 'زبان تور',
+        name: 'زبان دیگر تور',
         icon: 'fad fa-globe',
         color: '#70005d',
         background: '#fcebf9',

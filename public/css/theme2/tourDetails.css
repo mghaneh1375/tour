@@ -2880,7 +2880,7 @@ p {
     font-size: 20px;
 }
 .detailsCostSec .cost:after{
-    content: 'ریال';
+    content: 'تومان';
     font-size: .6em;
 }
 .detailsCostSec .totalRow{
@@ -2984,7 +2984,7 @@ p {
     display: inline-flex;
 }
 .showCostSection:after{
-    content: 'ریال';
+    content: 'تومان';
     font-size: 14px;
     margin-top: auto;
     margin-bottom: 5px;
