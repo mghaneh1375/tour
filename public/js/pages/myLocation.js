@@ -424,7 +424,7 @@ function createListElement(_result, _selectPlaceOnMap){
                         </div>`;
             elements += text;
 
-            item.markerInfo = L.marker([item.C, item.D], {
+            item.markerInfo = L.marker([parseFloat(item.C), parseFloat(item.D)], {
                 title: item.name,
                 icon: L.icon({
                     iconUrl: item.minPic,

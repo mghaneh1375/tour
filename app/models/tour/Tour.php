@@ -61,13 +61,14 @@ class Tour extends Model {
                         $kindPlace = Place::find($item->kindPlaceId);
                         $tabNaPl = $kindPlace->tableName;
                         $place = \DB::table($tabNaPl)
-                            ->join('cities', 'cities.id', "$tabNaPl.cityId")
-                            ->join('state', 'state.id', "cities.stateId")
-                            ->where("$tabNaPl.id", $item->placeId)
-                            ->select(["$tabNaPl.id", "$tabNaPl.name", "$tabNaPl.cityId", "state.name AS stateName", "cities.name AS cityName"])
-                            ->first();
+                                    ->join('cities', 'cities.id', "$tabNaPl.cityId")
+                                    ->join('state', 'state.id', "cities.stateId")
+                                    ->where("$tabNaPl.id", $item->placeId)
+                                    ->select(["$tabNaPl.id", "$tabNaPl.name", "$tabNaPl.cityId", "state.name AS stateName", "cities.name AS cityName"])
+                                    ->first();
 
                         if($place != null){
+                            $place->url = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $place->id]);
                             $place->pic = getPlacePic($place->id, $kindPlace->id);
                             $place->stateAndCity = ' در شهر '.$place->cityName.' ، استان '.$place->stateName;
                             $place->kindPlaceId = $kindPlace->id;

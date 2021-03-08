@@ -41,6 +41,11 @@
             background: var(--koochita-light-green);
         }
 
+        .goToPrevStep{
+            margin-left: 10px;
+            background: none;
+            color: var(--koochita-red);
+        }
     </style>
 
     @yield('head')

@@ -565,7 +565,7 @@ class AjaxController extends Controller {
         }
         else {
             $kindPlace = Place::find($_GET['kindPlaceId']);
-            if($kindPlace->id == 10 || $kindPlace->id == 11)
+            if($kindPlace->id == 10 || $kindPlace->id == 11 || $kindPlace->id == 14)
                 $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
             else
                 $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];

@@ -43,4 +43,11 @@ class Controller extends BaseController
         return 0;
     }
 
+    public static function checkCoronaVirus($_codeMeli){
+        if($_codeMeli == '0440565960' || $_codeMeli === '0440565961')
+            return 'sick';
+        else
+            return 'ok';
+    }
+
 }

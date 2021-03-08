@@ -1,20 +1,9 @@
 var rateStar= [
-    '<span class="ui_bubble_rating bubble_10 font-size-16"\n' +
-    '                                                          property="ratingValue" content="1"\n' +
-    '                                                          alt="1 of 5 bubbles"></span>',
-
-    '<span class="ui_bubble_rating bubble_20 font-size-16"\n' +
-    '                                                          property="ratingValue" content="2"\n' +
-    '                                                          alt="2 of 5 bubbles"></span>',
-    '<span class="ui_bubble_rating bubble_30 font-size-16"\n' +
-    '                                                          property="ratingValue" content="3"\n' +
-    '                                                          alt="3 of 5 bubbles"></span>',
-    '<span class="ui_bubble_rating bubble_40 font-size-16"\n' +
-    '                                                          property="ratingValue" content="4"\n' +
-    '                                                          alt=\'4 of 5 bubbles\'></span>',
-    '<span class="ui_bubble_rating bubble_50 font-size-16"\n' +
-    '                                                          property="ratingValue" content="5"\n' +
-    '                                                          alt=\'5 of 5 bubbles\'></span>'
+    '<span class="ui_bubble_rating bubble_10 font-size-16" property="ratingValue" content="1" alt="1 of 5 bubbles"></span>',
+    '<span class="ui_bubble_rating bubble_20 font-size-16" property="ratingValue" content="2" alt="2 of 5 bubbles"></span>',
+    '<span class="ui_bubble_rating bubble_30 font-size-16" property="ratingValue" content="3" alt="3 of 5 bubbles"></span>',
+    '<span class="ui_bubble_rating bubble_40 font-size-16" property="ratingValue" content="4" alt=\'4 of 5 bubbles\'></span>',
+    '<span class="ui_bubble_rating bubble_50 font-size-16" property="ratingValue" content="5" alt=\'5 of 5 bubbles\'></span>'
 ];
 var isMeal = 1;
 

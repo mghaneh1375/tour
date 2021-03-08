@@ -40,10 +40,11 @@ class TourController extends Controller{
 
     public function getMainPageTours(){
         $type = $_GET['type'];
-        $destinationIds = [];
+        $categoryName = '';
         $destinations = [];
 
         if($type === 'cityTour'){
+            $categoryName = 'شهر گردی';
             $tours = TourTimes::YouCanSee()
                 ->join('tour', 'tour.id', 'tourTimes.tourId')
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
@@ -66,13 +67,6 @@ class TourController extends Controller{
                 ->select(['cities.*'])
                 ->groupBy('tour.srcId')
                 ->get();
-            foreach($tours as $tour) {
-                $tour->categoryName = 'شهر گردی';
-                array_push($destinationIds, [
-                    'type' => 'city',
-                    'id' => $tour->cityId
-                ]);
-            }
 
             foreach ($destinations as $item){
                 $item->url = '#';
@@ -80,6 +74,7 @@ class TourController extends Controller{
             }
         }
         else if($type === 'iranTour'){
+            $categoryName = 'ایران گردی';
             $tours = TourTimes::YouCanSee()
                 ->join('tour', 'tour.id', 'tourTimes.tourId')
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
@@ -113,18 +108,17 @@ class TourController extends Controller{
             }
         }
         else if($type === 'road'){
+            $categoryName = 'مسیرگردی';
             $tours = [];
         }
 
         foreach($tours as $tour){
+            $tour->categoryName = $categoryName;
             $tour->pic = URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
             $tour->url = route('tour.show', ['code' => $tour->code]);
             $tour->minCost = number_format($tour->minCost);
         }
 
-//        foreach ($destinationIds as $index => $dest){
-//            array_push($destinations, $);
-//        }
 
         return response()->json(['status' => 'ok', 'result' => ['tour' => $tours, 'destinations' => $destinations]]);
 

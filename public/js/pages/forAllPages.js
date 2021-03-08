@@ -6,7 +6,7 @@ function openLoading(_process = false, _callBack = ''){
     fullPageLoaderElement.find('.percentBar').text(`0%`);
     fullPageLoaderElement.find('.bar').css('width', `0%`);
 
-    if(_process)
+    if(_process && typeof _process !== 'function')
         fullPageLoaderElement.find('.processBar').removeClass('hidden');
 
     try{

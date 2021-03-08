@@ -186,7 +186,7 @@ class TourCreationController extends Controller{
                     $item->max = $item->maxCount;
                 }
 
-                $tour->lastDays = TourDiscount::whereNotNull('remainingDay')->orderBy('remainingDay')->get();
+                $tour->lastDays = TourDiscount::where('tourId', $tour->id)->whereNotNull('remainingDay')->orderBy('remainingDay')->get();
 
                 $tour->prices = TourPrices::where('tourId', $tour->id)->orderBy('ageFrom')->get();
 
@@ -372,13 +372,16 @@ class TourCreationController extends Controller{
         $tour = Tour::find($request->tourId);
 
         if($tour->userId == auth()->user()->id){
+            $transport = Transport_Tour::where('tourId', $tour->id)->first();
+
             if($data->isTransportTour == 1){
                 $tour->isTransport = 1;
 
-                $transport = new Transport_Tour();
+                if($transport == null)
+                    $transport = new Transport_Tour();
                 $transport->tourId = $tour->id;
                 $transport->sTransportId = $data->sTransportKind;
-                $transport->eTransportId = $data->eTransportKind;
+                $transport->eTransportId = $tour->isLocal == 0 ? $data->eTransportKind : $data->sTransportKind;
                 $transport->sTime = $data->sTime;
                 $transport->eTime = $data->eTime;
                 $transport->sDescription = $data->sDescription;
@@ -391,7 +394,8 @@ class TourCreationController extends Controller{
             }
             else {
                 $tour->isTransport = 0;
-                Transport_Tour::where('tourId', $tour->id)->delete();
+                if($transport != null)
+                    $transport->delete();
             }
 
             $tour->sideTransportCost = null;

@@ -463,6 +463,15 @@ function submitDatas(){
                 showSuccessNotifi('در حال انتقال به صفحه پرداخت', 'left', 'var(--koochita-blue)');
                 location.href = response.result;
             }
+            else if(response.status === 'sick'){
+                closeLoading();
+                var sickNid = response.result;
+                var html = 'مسافرین با کد ملی زیر به علت داشتن سابقه ویروس کرونا ، نمی توانند در تور شرکت کنند.';
+                html += '<ul>';
+                sickNid.map(item => html += `<li>${item}</li>`);
+                html += '</ul>';
+                openErrorAlert(html);
+            }
             else{
                 showSuccessNotifi('خطا در ثبت اطلاعات', 'left', 'red');
                 closeLoading();

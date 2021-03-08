@@ -13,22 +13,6 @@
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-    <link rel="icon" href="{{URL::asset('images/icons/KOFAV0.svg')}}" sizes="any" type="image/svg+xml">
-    <link rel="apple-touch-icon-precomposed" href="{{URL::asset('images/icons/KOFAV0.svg')}}" sizes="any" type="image/svg+xml">
-    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/fonts.css?v='.$fileVersions)}}' media="all"/>
-    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/bootstrap/bootstrap-rtl.min.css?v='.$fileVersions)}}'  media="all"/>
-    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/icons.css?v='.$fileVersions)}}' media="all"/>
-
-    <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
-
-    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/allBusinessPanel.css')}}">
-
-    <script src="{{URL::asset('js/jquery-3.4.1.min.js')}}"></script>
-    <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
-
-    <script async src="{{URL::asset('js/bootstrap/bootstrap-rtl.min.js')}}"></script>
-    <script src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js')}}"></script>
-
     <style>
         @font-face {
             font-family: 'IRANSansWeb';
@@ -95,6 +79,21 @@
         }
     </style>
 
+    <link rel="icon" href="{{URL::asset('images/icons/KOFAV0.svg')}}" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon-precomposed" href="{{URL::asset('images/icons/KOFAV0.svg')}}" sizes="any" type="image/svg+xml">
+{{--    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/fonts.css?v='.$fileVersions)}}' media="all"/>--}}
+    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/bootstrap/bootstrap-rtl.min.css?v='.$fileVersions)}}'  media="all"/>
+    <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/icons.css?v='.$fileVersions)}}' media="all"/>
+
+    <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
+
+    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/allBusinessPanel.css')}}">
+
+    <script src="{{URL::asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
+
+    <script async src="{{URL::asset('js/bootstrap/bootstrap-rtl.min.js')}}"></script>
+    <script src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js')}}"></script>
     <script>
         $.ajaxSetup({
             xhrFields: { withCredentials: true },

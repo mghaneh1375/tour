@@ -207,7 +207,7 @@
                                         <div class="inputBoxText">
                                             <div class="redStar">کد ملی</div>
                                         </div>
-                                        <input name="NID[]" id="NID_##index##" class="inputBoxInput mustBeFull width-50per" type="text" placeholder="000000000">
+                                        <input name="NID[]" id="NID_##index##" data-index="##index##" class="inputBoxInput nidInputs mustBeFull width-50per" type="text" placeholder="000000000">
                                     </div>
                                 </div>
                             @endif
@@ -288,7 +288,7 @@
 
         </form>
 
-        <div class="mg-tp-20">
+        <div class="mg-tp-20 mg-bt-20 ">
             <div class="display-inline-block"> با انتخاب دکمه تأیید و پرداخت شما به صفحه پرداخت فروشنده خدمت متصل می شوید و تنها کافی است مبلغ بلیط را تأیید و پرداخت نمایید </div>
             <div class="color-5-12-147" id="msgErr"></div>
             <div class="text-align-left">
@@ -374,7 +374,7 @@
                                     @endif`;
 </script>
 
-<script src="{{URL::asset('js/pages/tour/tourGetInfos.js')}}"></script>
+<script src="{{URL::asset('js/pages/tour/tourGetInfos.js?v='.$fileVersions)}}"></script>
 
 </body>
 </html>

@@ -11,7 +11,7 @@
 
 @section('header')
     @parent
-    <link rel="stylesheet" href="{{URL::asset('css/theme2/tourDetails.css?v=1')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/theme2/tourDetails.css?v='.$fileVersions)}}">
     <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
 
     <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
@@ -53,6 +53,45 @@
             margin-bottom: 20px;
             margin-right: 10px;
             color: red;
+        }
+        .schedulePlaceSection {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .schedulePlaceSection .placeCardInShowTour{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 16px;
+            text-align: center;
+            color: black;
+            font-size: 12px;
+        }
+        .schedulePlaceSection .placeCardInShowTour .picSection{
+            border: solid 1px lightgray;
+            border-radius: 5px;
+            padding: 3px;
+        }
+        .schedulePlaceSection .placeCardInShowTour .picSection .backPic{
+            width: 150px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        .schedulePlaceSection .placeCardInShowTour .content{
+            margin-top: 5px;
+        }
+        .schedulePlaceSection .placeCardInShowTour .content .boldText{
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .schedulePlaceSection .placeCardInShowTour .content .smallText{
+            color: gray;
+            font-size: .8em;
         }
     </style>
 @stop
@@ -318,7 +357,7 @@
                 <div class="dayDetails" style="width: 70%;">
                     <div id="fullDayDetailSection" class="minDatail">
                         <div id="detailInfSec" class="detailInfSec"></div>
-                        <div class="dayIndicator">
+                        <div class="dayIndicator" style="display: none;">
                             <div class="indiMainLineSection">
                                 <div class="mainLine"></div>
                                 <div class="linesSec">
@@ -402,7 +441,7 @@
         var dayEvents = [];
         var tourCode = '{{$tour->code}}';
         var tourTimeCode = '{{$tour->timeCode}}';
-        var tourInformationUrl = '{{route("tour.getInformation")}}?code='+tourCode;
+        var tourInformationUrl = `{{route("tour.getInformation")}}?code=${tourCode}`;
         var checkCapacityUrl = '{{route("tour.reservation.checkCapacity")}}';
         var getPassengerInfoUrl = '{{route("tour.reservation.getPassengerInfo")}}';
 

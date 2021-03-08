@@ -61,6 +61,7 @@
             border-radius: 5px;
             text-align: center;
         }
+
     </style>
 @endsection
 
@@ -158,6 +159,7 @@
 
         <div class="row" style="padding: 15px;">
             <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
+            <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()">بازگشت به مرحله قبل</button>
         </div>
     </div>
 
@@ -214,6 +216,11 @@
 
     <script>
         var tour = {!! $tour !!};
+        var prevStageUrl = "{{route('tour.create.stage.three', ['id' => $tour->id])}}";
+        var nextStageUrl = "{{route('tour.create.stage.five', ['id' => $tour->id])}}";
+        var storeStageThreeURL = '{{route("tour.create.stage.four.store")}}';
+
+
         var priceIndex = 0;
         var lastDayDiscoutnIndex = 0;
         var featuresCount = 0;
@@ -253,6 +260,12 @@
 
             fillInputs();
         });
+
+        function goToPrevStep(){
+            openLoading(false, () => {
+                location.href = prevStageUrl;
+            })
+        }
 
         function fillInputs(){
             $('#tourCost').val(numberWithCommas(storeData.cost));
@@ -722,4 +735,6 @@
             openWarning('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
         setInterval(() => checkInput(false), 5000);
     </script>
+
+    <script src="{{URL::asset('js/pages/tour/create/tourCreateStageFour.js?v='.$fileVersions)}}"></script>
 @endsection

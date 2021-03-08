@@ -390,12 +390,29 @@ function createScheduleHtml(_schedule) {
         });
 
         item.events.map(event => {
+            var placesHtml = '';
             var sTime = event.sTime.split(':');
             var eTime = event.eTime.split(':');
             var sMinutes = parseInt(sTime[0])*60 + parseInt(sTime[1]);
             var eMinutes = parseInt(eTime[0])*60 + parseInt(eTime[1]);
             var height = ((eMinutes - sMinutes)/allDay) * 100;
             var startPos = (sMinutes/allDay) * 100;
+
+            if(event.places.length > 0){
+                event.places.map(place => {
+                    placesHtml += `<a href="${place.url}" class="placeCardInShowTour" target="_blank">
+                                    <div class="picSection">
+                                        <div class="backPic">
+                                            <img src="${place.pic}" alt="${place.name}" class="resizeImgClass" onload="fitThisImg(this)">
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <div class="boldText">${place.name}</div>
+                                        <div class="smallText">${place.stateAndCity}</div>
+                                    </div>
+                                </a>`
+                });
+            }
 
             dayEvents[index].indicatorHtml += `<div class="dayEvent" style="background: ${event.color}; top: ${startPos}%; height: ${height}%;">
                                                    <div class="dayEventName">${event.kindName}</div>
@@ -409,13 +426,20 @@ function createScheduleHtml(_schedule) {
                                                     ${event.text == null ? event.kindName : event.text}
                                                     <div class="time">${event.sTime} - ${event.eTime}</div>
                                                 </div>
-                                                <div class="text">${event.description}</div>
+                                                <div class="text">
+                                                    <div>${event.description}</div>
+                                                    <div class="schedulePlaceSection">${placesHtml}</div>
+                                                </div>
                                             </div>`;
         });
     });
 
     $('#listOfDays').html(dayListHtml);
     $('#showBigDays').html(dayBigInfoHtml);
+
+
+    if(_schedule.length == 1)
+        openDayDetails(1);
 }
 
 function showTransportInMap(_kind){

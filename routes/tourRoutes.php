@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('tour')->group(function (){
     Route::middleware(['shareData'])->group(function(){
         Route::get('main', 'TourController@tourMainPage')->name('tour.main');
-
         Route::get('/show/{code}', 'TourController@showTour')->name('tour.show');
 
         Route::prefix('reserve')->group(function(){
@@ -19,13 +18,7 @@ Route::prefix('tour')->group(function (){
             Route::post('/submitReservation', 'TourReservationController@submitReservation')->name('tour.reservation.submitReservation');
             Route::post('/checkDiscountCode', 'TourReservationController@checkDiscountCode')->name('tour.reservation.checkDiscountCode');
         });
-    });
 
-    Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
-
-    Route::get('/mainPage/search','TourController@getMainPageTours')->name('tour.getMainPageTours');
-
-    Route::middleware(['shareData'])->group(function(){
         Route::get('/index', function (){
             $placeMode = 'tour';
             $state = 'تهران';
@@ -37,6 +30,10 @@ Route::prefix('tour')->group(function (){
             return view('pages.tour.tour-lists', compact(['placeMode', 'state']));
         });
     });
+
+    Route::get('/getFullTourInformation', 'TourController@getFullTourInformation')->name('tour.getInformation');
+    Route::get('/mainPage/search','TourController@getMainPageTours')->name('tour.getMainPageTours');
+
 
     Route::middleware(['auth'])->group(function(){
         Route::middleware(['shareData'])->group(function(){

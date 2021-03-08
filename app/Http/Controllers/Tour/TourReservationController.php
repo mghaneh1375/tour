@@ -300,6 +300,20 @@ class TourReservationController extends Controller
         $reservationCode = $request->reservationCode;
         $passengers = $request->passengers;
 
+        $sick = [];
+        foreach($passengers as $pass){
+            if(isset($pass['codeMeli'])){
+                $code = convertNumber('en', $pass['codeMeli']);
+                $isSick = self::checkCoronaVirus($code);
+                if($isSick === 'sick')
+                    array_push($sick, $code);
+            }
+        }
+
+        if(count($sick) != 0)
+            return \response()->json(['status' => 'sick', 'result' => $sick]);
+
+
         \DB::beginTransaction();
 
         $userReservation = TourUserReservation::join('tourTimes', 'tourTimes.id', 'tourUserReservations.tourTimeId')

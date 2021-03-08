@@ -509,8 +509,7 @@
         $(window).ready(() => {
             $('.observer-example').datepicker(datePickerOptions);
 
-            $('.tourBasicKindsCheckbox').mouseenter(() => $(this).addClass('green-border'));
-            $('.tourBasicKindsCheckbox').mouseleave(() => $(this).removeClass('green-border'));
+            $('.tourBasicKindsCheckbox').mouseenter(() => $(this).addClass('green-border')).mouseleave(() => $(this).removeClass('green-border'));
 
             if(tour != null)
                 fullDataInFields();
