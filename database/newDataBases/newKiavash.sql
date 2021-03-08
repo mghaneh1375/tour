@@ -3,3 +3,4 @@ ALTER TABLE `drinks` ADD `hotOrCold` TINYINT(1) NULL DEFAULT NULL AFTER `categor
 
 
 ALTER TABLE `drinks` CHANGE `hotOrCold` `isHot` TINYINT(1) NULL DEFAULT NULL;
+ALTER TABLE `newsCategories` ADD `icon` VARCHAR(50) NULL AFTER `parentId`;

@@ -130,6 +130,7 @@
 @include('layouts.footer.layoutFooter')
 
 <script>
+    var itoPic = '{{URL::asset("images/test/itoLogo.png")}}';
     var getMainPageToursUrl = '{{route("tour.getMainPageTours")}}';
     var isShowFullSearchPanel = true;
     var nowTourTypeShow;

@@ -748,7 +748,8 @@
     }
     .mobileListContent .typesList .typeRow .body{
         white-space: nowrap;
-        display: block;
+        display: flex;
+        align-items: center;
         width: 100%;
         overflow-x: auto;
         overflow-y: hidden;

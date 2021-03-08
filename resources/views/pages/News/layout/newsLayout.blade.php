@@ -53,7 +53,7 @@
     <div id="newCategoryMobileModal" class="modalBlackBack fullCenter hideOnScreen" style="transition: .7s">
         <div class="gombadi">
             <div class="mobileFooterFilterPic" style="max-height: 400px">
-                <img src="{{URL::asset('images/mainPics/newsM.jpg')}}" style="width: 100%">
+                <img src="{{URL::asset('images/mainPics/news/news.jpg')}}" style="width: 100%">
                 <div class="gradientWhite">
                     <div class="closeThisModal iconClose" onclick="closeMyModal('newCategoryMobileModal')"></div>
                 </div>
@@ -62,6 +62,9 @@
                 <div class="list">
                     @foreach($newsCategories as $cat)
                         <a href="{{route('news.list', ['kind' => 'category', 'content' => $cat->name])}}" class="categ">
+                            <div class="categIcon" style="{{$cat->icon == 'sogatsanaie.svg' ? 'margin: 0px;' : ''}}">
+                                <img src="{{URL::asset('images/mainPics/news/icons/'.$cat->icon)}}" alt="{{$cat->name}}">
+                            </div>
                             <div class="title">{{$cat->name}}</div>
                         </a>
                     @endforeach
@@ -73,7 +76,7 @@
     <div id="newsSearchMobile" class="modalBlackBack fullCenter hideOnScreen">
         <div class="gombadi">
             <div class="mobileFooterFilterPic" style="max-height: 400px">
-                <img src="{{URL::asset('images/mainPics/newsM.jpg')}}" style="width: 100%">
+                <img src="{{URL::asset('images/mainPics/news/news.jpg')}}" style="width: 100%">
                 <div class="gradientWhite">
                     <div class="closeThisModal iconClose" onclick="closeMyModal('newsSearchMobile')"></div>
                 </div>
@@ -145,9 +148,6 @@
             }
         }
 
-        getAdv();
-
-
         function searchInNews(_inputId){
             var value = $('#'+_inputId).val();
 
@@ -164,6 +164,7 @@
 
         $(window).on('resize', resizeMobileListHeight);
         $(window).ready(() => resizeMobileListHeight());
+        getAdv();
 
     </script>
 

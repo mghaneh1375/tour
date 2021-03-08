@@ -14,6 +14,7 @@ var mobileListScrollIsTop = false;
 var movePositionMobileList = 0;
 var isFullMobileList = true;
 var startTouchY = 0;
+var startTouchX = 0;
 
 var lastLocationGetData = null;
 
@@ -24,34 +25,36 @@ var scrollNumber = -170;
 
 var mobileListSectionElement = $('#mobileListSection');
 var startMobileListHeight = mobileListSectionElement.height();
+
 $('.topSecMobileList').on('touchstart', e => {
-    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    startTouchY = touch.pageY;
-    startMobileListHeight = mobileListSectionElement.height();
-}).on('touchend', e => {
-    var height = mobileListSectionElement.height();
-    var windowHeight = $(window).height();
-    var resultHeight;
+                            var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                            startTouchY = touch.pageY;
+                            startTouchX = touch.pageX;
+                            startMobileListHeight = mobileListSectionElement.height();
+                        }).on('touchend', e => {
+                            var height = mobileListSectionElement.height();
+                            var windowHeight = $(window).height();
+                            var resultHeight;
 
-    if(height > windowHeight/2)
-        resultHeight = height > startMobileListHeight ? "full" : "middle";
-    else
-        resultHeight = height > startMobileListHeight ? "middle" : "min";
-    toggleMobileListNearPlace(resultHeight);
-}).on('touchmove', e => {
-    var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    var maxHeight = $(window).height() - 150;
-    var height = startMobileListHeight + startTouchY - touch.pageY;
+                            if(height > windowHeight/2)
+                                resultHeight = height > startMobileListHeight ? "full" : "middle";
+                            else
+                                resultHeight = height > startMobileListHeight ? "middle" : "min";
+                            toggleMobileListNearPlace(resultHeight);
+                        }).on('touchmove', e => {
+                            var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                            var maxHeight = $(window).height() - 150;
+                            var height = startMobileListHeight + startTouchY - touch.pageY;
 
-    if(height > 75 && height < maxHeight)
-        mobileListSectionElement.height(height);
-    else if(height <= 75)
-        mobileListSectionElement.height(75);
-    else if(height >= maxHeight)
-        mobileListSectionElement.height(maxHeight);
-    else
-        mobileListSectionElement.height(75);
-});
+                            if(height > 75 && height < maxHeight)
+                                mobileListSectionElement.height(height);
+                            else if(height <= 75)
+                                mobileListSectionElement.height(75);
+                            else if(height >= maxHeight)
+                                mobileListSectionElement.height(maxHeight);
+                            else
+                                mobileListSectionElement.height(75);
+                        });
 
 $('.mobileListContent').on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
@@ -59,9 +62,11 @@ $('.mobileListContent').on('touchstart', e => {
     mobileListScrollIsTop = $('.mobileListContent').scrollTop() == 0;
 }).on('touchend', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    if(mobileListIsFull && mobileListScrollIsTop && movePositionMobileList < touch.pageY)
+    var diff = Math.abs(touch.pageY - movePositionMobileList);
+
+    if(mobileListIsFull && mobileListScrollIsTop && movePositionMobileList < touch.pageY && diff > 75)
         toggleMobileListNearPlace("middle");
-    else if(!mobileListIsFull && movePositionMobileList > touch.pageY)
+    else if(!mobileListIsFull && movePositionMobileList > touch.pageY && diff > 75)
         toggleMobileListNearPlace("full");
 });
 

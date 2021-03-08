@@ -383,3 +383,10 @@
     font-size: 1em;
     font-weight: bold;
 }
+.mainSectionTourMainPage .listSection .list .tourSmallCard .agencyPic{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    padding-left: 10px;
+}

@@ -67,6 +67,7 @@
 
         function createListElements(_news){
             var html = '';
+            mustBeTaken = false;
 
             if(_news.length != take)
                 isFinish = true;
@@ -84,8 +85,12 @@
                         </div>`;
             });
 
-            $('#listBody').html(html);
             closeLoading();
+
+            $('#listBody').append(html);
+            page++;
+
+            inTake = false;
         }
 
 

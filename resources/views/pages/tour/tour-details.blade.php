@@ -152,7 +152,7 @@
                             <div class="hasInsurance"> بیمه دارد</div>
                         @endif
                     </div>
-                    <div class="postalLastRow"> .این تور توسط "آزانس آیتو" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
+                    <div class="postalLastRow"> .این تور توسط "آژانس آیتو" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
                 </div>
                 <div class="mainSliderSection col-xs-5">
                     <div class="posRelWH100">
