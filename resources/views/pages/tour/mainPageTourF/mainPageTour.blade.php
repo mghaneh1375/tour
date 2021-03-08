@@ -61,7 +61,7 @@
                         </div>
                     </div>
 
-                    <div class="findTourSection">
+                    <div class="findTourSection" style="display: none;">
                         <div class="searchButton backgroundColorChanges searchIcon" onclick="doSearchFromPanel()"></div>
 
                         <div class="findTourBody">
@@ -136,7 +136,7 @@
     var tourTypeMenu = [
         {
             id: 'cityTour',
-            backPic: '{{URL::asset("images/test/roadPic.jpg")}}',
+            backPic: '{{URL::asset("images/test/tehran.jpg")}}',
             color: '#522d2d',
             picText: {
                 top: 'ماجراجویی در',
@@ -162,25 +162,6 @@
         }
     ];
 
-
-    var destinationSample = [
-        {
-            url: '#',
-            pic: 'https://static.koochita.com/_images/majara/1914659/f-1.jpg'
-        },
-        {
-            url: '#',
-            pic: 'https://static.koochita.com/_images/majara/3240714/f-1.jpg'
-        },
-        {
-            url: '#',
-            pic: 'https://static.koochita.com/_images/majara/8883015/f-1.jpg'
-        },
-        {
-            url: '#',
-            pic: 'https://static.koochita.com/_images/majara/sangtarashan/f-1.jpg'
-        },
-    ];
     function doSearchFromPanel(){
         if(isShowFullSearchPanel){
 
@@ -198,7 +179,7 @@
     });
 </script>
 
-<script src="{{URL::asset('js/pages/tour/tourMainPage.js')}}"></script>
+<script src="{{URL::asset('js/pages/tour/tourMainPage.js?v='.$fileVersions)}}"></script>
 </body>
 
 </html>
