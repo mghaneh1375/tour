@@ -50,7 +50,7 @@ class TicketController extends Controller {
         $date = verta($ticket->created_at)->format('Y-m-d');
         $ticket->create = $date . ' - ' . $time;
 
-        $others = Ticket::whereParentId($ticket->id)->get();
+        $others = Ticket::where('parentId', $ticket->id)->get();
         foreach ($others as $other) {
             $time = $other->created_at->format('H:i:s');
             $date = verta($other->created_at)->format('Y-m-d');

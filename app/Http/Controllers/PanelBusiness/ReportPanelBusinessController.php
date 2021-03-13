@@ -154,7 +154,7 @@ class ReportPanelBusinessController extends Controller {
 
     public function getUnChecked() {
 
-        $requests = Business::whereReadyForCheck(true)
+        $requests = Business::where('readyForCheck', true)
                             ->select(['id', 'name', 'created_at', 'updated_at', 'type', 'userId'])
                             ->orderBy('id', 'desc')
                             ->get();
@@ -192,7 +192,7 @@ class ReportPanelBusinessController extends Controller {
             }
         }
 
-        $madareks = BusinessMadarek::whereBusinessId($business->id)->get();
+        $madareks = BusinessMadarek::where('businessId', $business->id)->get();
         foreach ($madareks as $madarek) {
             switch ($madarek->role) {
                 case 1:
@@ -215,7 +215,7 @@ class ReportPanelBusinessController extends Controller {
             $madarek->pic2 = URL::asset('storage/' . $madarek->pic2);
         }
 
-        $pics = BusinessPic::whereBusinessId($business->id)->get();
+        $pics = BusinessPic::where('businessId', $business->id)->get();
         foreach ($pics as $pic)
             $pic->pic = URL::asset('storage/' . $pic->pic);
 

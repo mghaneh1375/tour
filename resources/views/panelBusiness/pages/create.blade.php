@@ -39,7 +39,7 @@
 @endsection
 
 @section('body')
-<div class="createBusinessPage">
+<div class="createBusinessPage height100">
     <div class="row indicator_step hidden" id="step1">
         <div class="col-md-12">
 

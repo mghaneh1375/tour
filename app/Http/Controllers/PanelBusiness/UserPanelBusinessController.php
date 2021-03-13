@@ -29,7 +29,7 @@ class UserPanelBusinessController extends Controller {
 
         if($request["field"] == "pic") {
 
-            if(BusinessPic::whereBusinessId($business->id)->count() >= 4) {
+            if(BusinessPic::where('businessId', $business->id)->count() >= 4) {
                 return response()->json([
                     "status" => "nok",
                     "msg" => "تعداد تصاویر آپلود شده بیش از حد مجاز است."
@@ -57,7 +57,7 @@ class UserPanelBusinessController extends Controller {
             }
 
             $idx = $request["idx"];
-            $businessMadarek = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
+            $businessMadarek = BusinessMadarek::where('businessId', $business->id)->where('idx', $idx)->first();
             if($businessMadarek == null) {
                 $businessMadarek = new BusinessMadarek();
                 $businessMadarek->businessId = $business->id;
@@ -100,7 +100,7 @@ class UserPanelBusinessController extends Controller {
         ]);
 
         $idx = $request["idx"];
-        $businessPic = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
+        $businessPic = BusinessMadarek::where('businessId', $business->id)->where('idx', $idx)->first();
 
         if($businessPic->pic1 != null && !empty($businessPic->pic1)) {
             $pic = $businessPic->pic1;
@@ -177,7 +177,7 @@ class UserPanelBusinessController extends Controller {
                 ]);
 
             $idx = $request["idx"];
-            $businessPic = BusinessMadarek::whereBusinessId($business->id)->whereIdx($idx)->first();
+            $businessPic = BusinessMadarek::where('businessId', $business->id)->where('idx', $idx)->first();
 
             if($businessPic == null) {
                 return response()->json([
@@ -206,7 +206,7 @@ class UserPanelBusinessController extends Controller {
 
     public function myBusinesses() {
 
-        $businesses = Business::whereUserId(Auth::user()->id)->get();
+        $businesses = Business::where('userId', Auth::user()->id)->get();
         foreach ($businesses as $business) {
             switch ($business->type) {
                 case "agency":
@@ -327,8 +327,8 @@ class UserPanelBusinessController extends Controller {
             if($city != null)
                 $business->city = $city->name;
         }
-        $business->pics = BusinessPic::whereBusinessId($business->id)->get();
-        $business->madareks = BusinessMadarek::whereBusinessId($business->id)->get();
+        $business->pics = BusinessPic::where('businessId', $business->id)->get();
+        $business->madareks = BusinessMadarek::where('businessId', $business->id)->get();
         return view('panelBusiness.pages.create', ['business' => $business, 'step' => $step]);
     }
 
@@ -383,7 +383,7 @@ class UserPanelBusinessController extends Controller {
                 ]);
             }
 
-            $u = User::whereUserName($business->name)->first();
+            $u = User::where('username', $business->name)->first();
             $u->username = $name;
             $u->save();
         }
@@ -498,7 +498,7 @@ class UserPanelBusinessController extends Controller {
 
     public function updateBusinessInfo5(Request $request, Business $business) {
 
-        $businessMadarek = BusinessMadarek::whereBusinessId($business->id)->orderBy('id', 'asc')->get();
+        $businessMadarek = BusinessMadarek::where('businessId', $business->id)->orderBy('id', 'asc')->get();
 
         $request->validate([
             "names" => "required|array|min:" . count($businessMadarek) . '|max:' . count($businessMadarek),

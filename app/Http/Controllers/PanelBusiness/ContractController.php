@@ -61,7 +61,7 @@ class ContractController extends Controller
 
         return response()->json([
             "status" => "ok",
-            "contract" => Contract::whereType($request["type"])->first()->description
+            "contract" => Contract::where('type', $request["type"])->first()->description
         ]);
 
     }

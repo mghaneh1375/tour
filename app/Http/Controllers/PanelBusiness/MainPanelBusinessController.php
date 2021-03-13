@@ -236,7 +236,7 @@ class MainPanelBusinessController extends Controller {
         }
 
         if($request["nid"] != Auth::user()->codeMeli &&
-            User::whereCodeMeli($request["nid"])->count() > 0) {
+            User::where('codeMeli', $request["nid"])->count() > 0) {
             return response()->json([
                 "status" => "nok",
                 "msg" => ($request["isForeign"] == "false") ? "شماره ملی وارد شده در سامانه موجود است." :
@@ -245,7 +245,7 @@ class MainPanelBusinessController extends Controller {
         }
 
         if($request["phone"] != Auth::user()->phone &&
-            User::wherePhone($request["phone"])->count() > 0) {
+            User::where('Phone', $request["phone"])->count() > 0) {
             return response()->json([
                 "status" => "nok",
                 "msg" => "شماره همراه وارد شده در سامانه موجود است."
@@ -253,7 +253,7 @@ class MainPanelBusinessController extends Controller {
         }
 
         if($request["email"] != Auth::user()->email &&
-            User::whereEmail($request["email"])->count() > 0) {
+            User::where('email', $request["email"])->count() > 0) {
             return response()->json([
                 "status" => "nok",
                 "msg" => "ایمیل وارد شده در سامانه موجود است."
@@ -282,7 +282,7 @@ class MainPanelBusinessController extends Controller {
 
     public function viewInvitation($business) {
 
-        $acl = BusinessACL::whereUserId(Auth::user()->id)->whereBusinessId($business)->first();
+        $acl = BusinessACL::where('userId', Auth::user()->id)->where('businessId', $business)->first();
 
         if($acl == null)
             return view('general.noAccess');
