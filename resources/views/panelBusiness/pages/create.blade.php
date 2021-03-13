@@ -4,114 +4,14 @@
 
     <title>عنوان</title>
 
-    <style>
-
-        .selected {
-            background-color: #fcc15691;
-        }
-
-        .spIcons {
-            display: inline-block;
-        }
-
-        .suggest {
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .globalSearchWithBox {
-            width: 40%;
-        }
-
-        #globalSearchResult {
-            width: 100%;
-        }
-
-        .resizeImgClass {
-            width: 100% !important;
-            height: auto !important;
-        }
-    </style>
-
     <link rel="stylesheet" href="{{URL::asset('css/pages/localShops/mainLocalShops.css?v='.$fileVersions)}}">
     <link rel="stylesheet" href="{{URL::asset('css/pages/business.css?v='.$fileVersions)}}">
+    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/business.css?v='.$fileVersions)}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/bootstrap-clockpicker.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/jquery-clockpicker.min.css')}}">
 
     <script defer src="{{URL::asset('packages/clockPicker/jquery-clockpicker.min.js')}}"></script>
     <script defer src="{{URL::asset('packages/clockPicker/bootstrap-clockpicker.min.js')}}"></script>
-
-
-    <style>
-
-        .createBusinessPage .kindOfBusinessOwnerSection{
-            width: 100%;
-            height: 50px;
-            border: 2px solid #7d7d7d;
-            padding: 5px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        .createBusinessPage .kindOfBusinessOwnerSection .inputSec{
-            width: 40px;
-            border-left: 2px dashed black;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .createBusinessPage .kindOfBusinessOwnerSection .content{
-            display: flex;
-            align-items: center;
-            height: 100%;
-            justify-content: center;
-            margin-right: 10px;
-        }
-        .createBusinessPage .kindOfBusinessOwnerSection .content > i{
-
-        }
-        .createBusinessPage .kindOfBusinessOwnerSection .content > p{
-            margin: 0;
-            margin-right: 10px;
-        }
-
-        .createBusinessPage .businessType{
-            width: 100%;
-            cursor: pointer;
-            border: 2px solid #7d7d7d;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-        }
-        .createBusinessPage .businessType .picSection{
-            float: right;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-        .createBusinessPage .businessType .textSec{
-            width: calc(100% - 100px);
-            padding-right: 20px;
-        }
-        .createBusinessPage .businessType .textSec h5{
-            font-weight: bold;
-            margin: 0px;
-        }
-        .createBusinessPage .businessType .textSec p{
-            margin: 0px;
-            color: gray;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-    </style>
 
     <script>
         var uploadPicBusinessBaseUrl = '{{url("uploadBusinessPic")}}';
@@ -152,7 +52,7 @@
                     <div class="col-xs-12 col-md-6">
                         <label for="hoghoghi" class="kindOfBusinessOwnerSection">
                             <div class="inputSec">
-                                <input id="hoghoghi" type="radio" name="haghHogh">
+                                <input id="hoghoghi" type="radio" name="haghHogh" style="display: block;">
                             </div>
                             <div class="content">
                                 <i class="fa fa-users"></i>
@@ -165,7 +65,7 @@
 
                         <label for="haghighi" class="kindOfBusinessOwnerSection">
                             <div class="inputSec">
-                                <input id="haghighi" type="radio" name="haghHogh">
+                                <input id="haghighi" type="radio" name="haghHogh" style="display: block;">
                             </div>
                             <div class="content">
                                 <i class="fa fa-user"></i>
@@ -184,9 +84,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step2">
+    <div class="row indicator_step height100 hidden" id="step2">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
                 <div class="head">نوع خدمت قابل ارائه</div>
@@ -250,7 +150,7 @@
 
                 </div>
 
-                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px; margin-bottom: 100px">
+                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px;">
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
                     <button onclick="goToPage(-1, -10)" class="btn btn-danger">مرحله قبل</button>
                 </div>
@@ -260,9 +160,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step3">
+    <div class="row indicator_step height100 hidden" id="step3">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
 
@@ -353,7 +253,7 @@
 
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
+                <center class="col-xs-12" style="margin-top: 20px;">
 
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
 
@@ -366,9 +266,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step4">
+    <div class="row indicator_step height100 hidden" id="step4">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
                 <div class="head">اطلاعات محل کسب و کار</div>
@@ -473,7 +373,7 @@
                     </div>
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
+                <center class="col-xs-12" style="margin-top: 20px;">
 
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
 
@@ -486,18 +386,12 @@
         </div>
     </div>
 
-    <div class="row indicator_step createBusinessStep5 hidden" id="step5">
+    <div class="row indicator_step height100 createBusinessStep5 hidden" id="step5">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
             <div class="mainBackWhiteBody">
                 <div class="head">مدارک مورد نیاز</div>
-                <style>
-                    .createBusinessPage .createBusinessStep5 .numOfUserInBusiness{
-                        padding: 3px 0 10px 30px;
-                        font-size: 15px;
-                        width: 50%;
-                    }
-                </style>
+
                 <div class="col-md-12">
                     <div class="numOfUserInBusiness form-group">
                         <label for="numOfMembers">تعداد سهام داران</label>
@@ -511,7 +405,7 @@
 
                 <div class="col-md-12" id="usersDiv"></div>
 
-                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px; margin-bottom: 100px">
+                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px;">
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
                     <button onclick="goToPage(-1, -10)" class="btn btn-danger">مرحله قبل</button>
                 </div>
@@ -521,9 +415,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step6">
+    <div class="row indicator_step height100 hidden" id="step6">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
 
@@ -564,7 +458,7 @@
                     </div>
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
+                <center class="col-xs-12" style="margin-top: 20px;">
 
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
 
@@ -577,9 +471,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step7">
+    <div class="row indicator_step height100 hidden" id="step7">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
 
@@ -616,7 +510,7 @@
                     <input type="file" accept="image/*" id="logoPics" style="display: none" onchange="var tmpIdx = initUploader('logo', 'showUploadPicsSection3', 'uploadPicInfoText3', 1); if(tmpIdx != -1) uploadPicClickHandler(this, tmpIdx)">
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
+                <center class="col-xs-12" style="margin-top: 20px;">
 
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
 
@@ -629,9 +523,9 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step8">
+    <div class="row indicator_step height100 hidden" id="step8">
 
-        <div class="col-md-12">
+        <div class="col-md-12 height100">
 
             <div class="mainBackWhiteBody">
                 <div class="head">قرارداد همکاری</div>
@@ -653,7 +547,7 @@
 
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
+                <center class="col-xs-12" style="margin-top: 20px;">
 
                     <button onclick="goToPage(1, 10)" class="btn btn-success">تایید نهایی</button>
 
@@ -665,88 +559,6 @@
 
         </div>
     </div>
-
-
-    <style>
-        .shareHolderCard{
-            background-color: #fcc1560f;
-            padding: 10px;
-            border-radius: 5px;
-            border: solid 1px var(--koochita-yellow);
-            margin-bottom: 30px;
-        }
-        .shareHolderCard > .title{
-            font-size: 19px;
-            width: 100%;
-            color: #aa0800;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .shareHolderCard > .content{
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .shareHolderCard .deleteButton{
-            cursor: pointer;
-            background: var(--koochita-red);
-            color: white;
-            padding: 2px 5px;
-            border-radius: 3px;
-            border: none;
-            margin-right: auto;
-            display: flex;
-            margin-top: 10px;
-        }
-        .shareHolderCard .content .inputRow{
-            width: 49%;
-        }
-        .shareHolderCard .content .picSec{
-            width: 49%;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-        }
-        .shareHolderCard .picSec .uploadPicSection{
-            height: 200px;
-            width: 100%;
-            border: solid 1px #c7c7c7;
-            flex-wrap: wrap;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            cursor: pointer;
-            background-color: white;
-        }
-        .shareHolderCard .picSec > .title{
-            color: var(--koochita-green);
-            font-size: 12px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .shareHolderCard .uploadPicSection .labelForClick{
-            cursor: pointer;
-            z-index: 99;
-            font-weight: bold;
-            font-size: 24px;
-            text-align: center;
-            width: 100%;
-            color: black;
-        }
-        .shareHolderCard .uploadPicSection .uploadPic{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0px auto;
-            flex-direction: column;
-            font-size: 18px;
-            color: black;
-            opacity: 1;
-        }
-    </style>
 
     <div id="userShareHolderCardHtmlSample" class="hidden">
         <div class="cards shareHolderCard" data-val="##idx##" id="user_##idx##">
