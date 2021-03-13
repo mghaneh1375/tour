@@ -154,16 +154,27 @@ class ReportPanelBusinessController extends Controller {
 
     public function getUnChecked() {
 
-        $requests = Business::whereReadyForCheck(true)->select(['id', 'name', 'created_at', 'updated_at', 'type', 'userId'])->orderBy('id', 'desc')->get();
+        $requests = Business::whereReadyForCheck(true)
+                            ->select(['id', 'name', 'created_at', 'updated_at', 'type', 'userId'])
+                            ->orderBy('id', 'desc')
+                            ->get();
 
-        foreach ($requests as $request)
+        foreach ($requests as $request) {
             $request->user = User::whereId($request->userId);
 
+            $cTime = $request->created_at->format('H:i:s');
+            $cDate = verta($request->created_at)->format('Y-m-d');
+
+            $uTime = $request->updated_at->format('H:i:s');
+            $uDate = verta($request->updated_at)->format('Y-m-d');
+
+            $request->createBusinessDate = "{$cTime}  {$cDate}";
+            $request->updateBusinessDate = "{$uTime}  {$uDate}";
+        }
         return view('panelBusiness.pages.report.unChecked', ['requests' => $requests]);
     }
 
     public function getSpecificUnChecked(Business $business) {
-
         if(!$business->readyForCheck || $business->finalStatus) {
             return response()->json([
                 "status" => "nok"

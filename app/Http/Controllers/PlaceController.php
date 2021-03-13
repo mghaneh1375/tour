@@ -58,6 +58,7 @@ use App\models\UserOpinion;
 use Carbon\Carbon;
 use Exception;
 use Hekmatinasser\Verta\Verta;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
@@ -205,13 +206,29 @@ class PlaceController extends Controller {
         }
 
         $featId = [];
-        $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
-        foreach ($features as $item) {
-            $item->subFeat = PlaceFeatures::where('parent', $item->id)->get();
-            $fId = $item->subFeat->pluck('id')->toArray();
-            $featId = array_merge($featId, $fId);
+
+//        $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
+//        foreach ($features as $item) {
+//            $item->subFeat = PlaceFeatures::where('parent', $item->id)->get();
+//            $fId = $item->subFeat->pluck('id')->toArray();
+//            $featId = array_merge($featId, $fId);
+//        }
+//        $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
+
+        $allFeatures = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->get()->groupBy('parent');
+        if(isset($allFeatures[0])) {
+            foreach ($allFeatures[0] as $feat) {
+                $feat->subFeat = $allFeatures[$feat->id];
+                $fId = $feat->subFeat->pluck('id')->toArray();
+                $featId = array_merge($featId, $fId);
+            }
+            $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
+            $features = $allFeatures[0];
         }
-        $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
+        else{
+            $place->features = [];
+            $features = [];
+        }
 
         if($kindPlace->tableName == 'sogatSanaies')
             $place = $this->sogatSanaieDet($place);

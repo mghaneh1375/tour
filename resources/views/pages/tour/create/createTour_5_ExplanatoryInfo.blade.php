@@ -626,9 +626,10 @@
 
     <script>
         var uploadedPics = {!! json_encode($tour->pics) !!};
+        var tourPicUrl = '{{route("tour.ceate.store.pics")}}';
+
         var uploadProcess = false;
         var uploadProcessId = null;
-        var tourPicUrl = '{{route("tour.create.store.pics")}}';
         var picQueue = [];
         var picInput = 1;
         var picCardSample = $('#picCardSample').html();

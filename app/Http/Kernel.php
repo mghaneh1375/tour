@@ -78,5 +78,6 @@ class Kernel extends HttpKernel
         'BusinessPanelShareData' => \App\Http\Middleware\BusinessPanel\BusinessPanelShareData::class,
         'BusinessPanelAuth' => \App\Http\Middleware\BusinessPanel\BusinessPanelAuth::class,
         'BusinessPanelGuest' => \App\Http\Middleware\BusinessPanel\BusinessPanelGuest::class,
+        'BusinessPanelTypeManager' => \App\Http\Middleware\BusinessPanel\BusinessPanelTypeManager::class,
     ];
 }

@@ -6,6 +6,10 @@
         td {
             padding: 5px;
         }
+
+        thead th{
+            font-size: 11px;
+        }
     </style>
 @endsection
 
@@ -20,32 +24,35 @@
                     <p>درخواستی موجود نیست</p>
                 @else
                     <div>
-                        <table>
-                            <tr>
-                                <td>ردیف</td>
-                                <td>نام کسب و کار</td>
-                                <td>نوع کسب و کار</td>
-                                <td>نام درخواست دهنده</td>
-                                <td>نام کاربری درخواست دهنده</td>
-                                <td>شماره همراه درخواست دهنده</td>
-                                <td>تاریخ ثبت مدارک</td>
-                                <td>تاریخ تکمیل/اصلاح مدارک</td>
-                            </tr>
+                        <table class="table table-striped">
+                            <thead style="background: var(--koochita-yellow);">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام کسب و کار</th>
+                                    <th>نوع کسب و کار</th>
+                                    <th>نام درخواست دهنده</th>
+                                    <th>نام کاربری درخواست دهنده</th>
+                                    <th>شماره همراه درخواست دهنده</th>
+                                    <th>تاریخ ثبت مدارک</th>
+                                    <th>تاریخ تکمیل/اصلاح مدارک</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             <?php $i = 1; ?>
                             @foreach($requests as $request)
                                 <tr style="cursor: pointer" onclick="document.location.href = '{{route('businessPanel.getSpecificUnChecked', ['business' => $request->id])}}'">
-                                    <td><center>{{$i}}</center></td>
-                                    <td><center>{{$request->name}}</center></td>
-                                    <td><center>{{$request->type}}</center></td>
-                                    <td><center>{{$request->user->first_name . ' ' . $request->user->last_name}}</center></td>
-                                    <td><center>{{$request->user->username}}</center></td>
-                                    <td><center>{{$request->user->phone}}</center></td>
-                                    <td><center>{{$request->created_at}}</center></td>
-                                    <td><center>{{$request->updated_at}}</center></td>
+                                    <td>{{$i}}</td>
+                                    <td>{{$request->name}}</td>
+                                    <td>{{$request->type}}</td>
+                                    <td>{{$request->user->first_name . ' ' . $request->user->last_name}}</td>
+                                    <td>{{$request->user->username}}</td>
+                                    <td>{{$request->user->phone}}</td>
+                                    <td>{{$request->createBusinessDate}}</td>
+                                    <td>{{$request->updateBusinessDate}}</td>
                                 </tr>
                                 <?php $i++; ?>
                             @endforeach
-
+                            </tbody>
                         </table>
                     </div>
                 @endif

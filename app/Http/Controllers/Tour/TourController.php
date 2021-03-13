@@ -52,7 +52,7 @@ class TourController extends Controller{
                 ->join('state', 'state.id', 'cities.stateId')
                 ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 1])
                 ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
-                    'tourTimes.sDate',
+                    'tourTimes.sDate', 'tourTimes.id AS timeId',
                     'tourPics.pic',
                     'cities.id AS cityId', 'cities.name AS cityName',
                     'state.name AS stateName'])

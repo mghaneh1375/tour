@@ -314,9 +314,7 @@ function checkStepFour(progress) {
         url: updateBusinessInfo2BaseUrl + "/" + data.id,
         data: data,
         success: function (res) {
-
             closeLoading();
-
             if (res.status === "nok")
                 showSuccessNotifiBP("خطایی در انجام عملیات رخ داده است.", 'right', '#ac0020');
             else if (res.status === "ok") {
@@ -665,21 +663,19 @@ function createNewImgUploadCard(_index, idx) {
 
     var file = uploaders[idx][4][_index];
     var text = `<div id="uplaodedImg_${file.code}" class="uploadFileCard">
-                            <div class="img">
-                                <img src="${file.image}" class="resizeImgClass" onload="fitThisImg(this)">
-                            </div>
-                            <div class="absoluteBackground tickIcon"></div>
-                            <div id="warningUpload_${file.code}" class="absoluteBackground warningIcon"> اشکال در بارگذاری</div>
-                            <div class="absoluteBackground process">
-                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                <div class="processCounter">0%</div>
-                            </div>
-                            <div class="hoverInfos" style="cursor: pointer">
-                                <div class="cancelButton closeIconWithCircle" onclick="deleteThisUploadedImage(${file.code}, '` + getIdxInFitImages(uploaders[idx][0]) + `')" >
-                                     حذف عکس
-                                </div>
-                            </div>
-                        </div>`;
+                    <div class="img">
+                        <img src="${file.image}" class="resizeImgClass" onload="fitThisImg(this)">
+                    </div>
+                    <div class="absoluteBackground tickIcon"></div>
+                    <div id="warningUpload_${file.code}" class="absoluteBackground warningIcon">اشکال در بارگذاری</div>
+                    <div class="absoluteBackground process">
+                        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                        <div class="processCounter">0%</div>
+                    </div>
+                    <div class="hoverInfos" style="cursor: pointer">
+                        <div onclick="deleteThisUploadedImage(${file.code},'${getIdxInFitImages(uploaders[idx][0])}')" class="cancelButton closeIconWithCircle"> حذف عکس </div>
+                    </div>
+                </div>`;
 
     $('#' + uploaders[idx][1]).append(text);
 }

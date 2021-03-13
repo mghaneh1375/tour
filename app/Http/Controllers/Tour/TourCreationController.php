@@ -55,6 +55,7 @@ class TourCreationController extends Controller{
     {
         return view('pages.tour.create.createTour_0_BeforeStart');
     }
+
     public function stageOneTour($id = 0)
     {
         $tour = Tour::find($id);

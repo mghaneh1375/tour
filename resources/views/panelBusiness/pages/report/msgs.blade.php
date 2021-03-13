@@ -22,19 +22,18 @@
 
                     <button onclick="addTicket()" class="btn btn-success">افزودن تیکت جدید</button>
 
-                    <table style="margin-top: 20px">
+                    <table  class="table table-striped" style="margin-top: 20px">
                         <thead>
-                            <tr>
-                                <td><center>ردیف</center></td>
-                                <td><center>عنوان</center></td>
-                                <td><center>تاریخ ایجاد</center></td>
-                                <td><center>آخرین بروز رسانی</center></td>
-                                <td><center>وضعیت</center></td>
-                                <td><center>عملیات</center></td>
+                            <tr STYLE="background: var(--koochita-yellow)">
+                                <td>ردیف</td>
+                                <td>عنوان</td>
+                                <td>تاریخ ایجاد</td>
+                                <td>آخرین بروز رسانی</td>
+                                <td>وضعیت</td>
+                                <td>عملیات</td>
                             </tr>
                         </thead>
                         <tbody id="tbody"></tbody>
-
                     </table>
                 </center>
             </div>
@@ -87,47 +86,47 @@
     </div>
 
     <script>
+        var businessSpecificMsgsUrl = '{{url("businessSpecificMsgs")}}';
+        var isAdminUserInMsgs = '{{\Illuminate\Support\Facades\Auth::user()->level}}';
 
         $(document).ready(function () {
 
             $.ajax({
                 type: 'post',
                 url: '{{route('businessPanel.generalMsgs', ['business' => $id])}}',
-                success: function (res) {
-                    msgs = res.msgs;
-                    var newElem = "";
-                    var isAdmin = '{{\Illuminate\Support\Facades\Auth::user()->level}}'
-
-                    for(var i = 0; i < msgs.length; i++) {
-                        newElem += "<tr>";
-                        newElem += "<td><center>" + (i + 1) + "</center></td>";
-                        newElem += "<td><center>" + msgs[i].subject + "</center></td>";
-                        newElem += "<td><center>" + msgs[i].create + "</center></td>";
-                        newElem += "<td><center>" + msgs[i].update + "</center></td>";
-                        if(msgs[i].close == "1")
-                            newElem += "<td id='status_" + msgs[i].id + "'><center>مختوم</center></td>";
-                        else
-                            newElem += "<td id='status_" + msgs[i].id + "'><center>باز</center></td>";
-
-                        newElem += "<td>";
-                        newElem += "<a href='" + "{{url("businessSpecificMsgs")}}" + "/" + msgs[i].id + "' style='margin: 5px' class='btn btn-success'>مشاهده پیام ها</a>";
-
-                        if(isAdmin == "1" && msgs[i].close != "1")
-                            newElem += "<button onclick='finishMsg(" + msgs[i].id + ")' style='margin: 5px' class='btn btn-warning'>مختومه کردن</button>";
-                        else if(isAdmin == "1" && msgs[i].close == "1")
-                            newElem += "<button onclick='reOpenMsg(" + msgs[i].id + ")' style='margin: 5px' class='btn btn-primary'>باز کردن</button>";
-
-                        newElem += "<button onclick='deleteTicket(" + msgs[i].id + ")' style='margin: 5px' class='btn btn-danger'>حذف</button>";
-
-                        newElem += "</td>";
-                        newElem += "</tr>";
-                    }
-
-                    $("#tbody").empty().append(newElem);
-                }
+                success: res => createTabelMsgsRow(res.msgs)
             });
 
         });
+
+        function createTabelMsgsRow(msgs){
+            var newElem = "";
+
+
+            for(var i = 0; i < msgs.length; i++) {
+                newElem += `<tr>
+                                <td>${(i + 1)}</td>
+                                <td>${msgs[i].subject}</td>
+                                <td>${msgs[i].create}</td>
+                                <td>${msgs[i].update}</td>
+                                <td id='status_${msgs[i].id}'>${msgs[i].close == "1" ? "مختوم" : "باز"}</td>
+                                <td>
+                                    <a href='${businessSpecificMsgsUrl}/${msgs[i].id}' style='margin: 5px' class='btn btn-success'>مشاهده پیام ها</a>`;
+
+                if(isAdminUserInMsgs == "1" && msgs[i].close != "1")
+                    newElem += `<button onclick='finishMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-warning'>مختومه کردن</button>`;
+                else if(isAdminUserInMsgs == "1" && msgs[i].close == "1")
+                    newElem += `<button onclick='reOpenMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-primary'>باز کردن</button>`;
+
+                newElem += `<button onclick='deleteTicket(${msgs[i].id})' style='margin: 5px' class='btn btn-danger circleButton'>
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            </td>
+                        </tr>`;
+            }
+
+            $("#tbody").empty().append(newElem);
+        }
 
         function deleteTicket(id) {
 
@@ -137,9 +136,7 @@
                 type: 'delete',
                 url: "{{url("deleteTicket")}}" + "/" + id,
                 success: function (res) {
-
                     closeLoading();
-
                     if(res.status === "0")
                         $("#tr_" + id).remove();
                 }

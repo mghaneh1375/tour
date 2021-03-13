@@ -28,3 +28,5 @@
 </div>
 
 <div id="successNotifiAlert" class="notifAlert"></div>
+
+<script src="{{URL::asset('js/component/alert.js?v='.$fileVersions)}}"></script>

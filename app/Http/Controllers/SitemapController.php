@@ -24,7 +24,7 @@ class SitemapController extends Controller
         $pl = [];
         $lists = [];
         $count = 0;
-        $kindPlaces = Place::whereIn('id', [1, 3, 4, 6, 10, 11, 12])->get();
+        $kindPlaces = Place::whereIn('id', [1, 3, 4, 6, 10, 11, 12, 13, 14])->get();
         foreach ($kindPlaces as $kindPlace) {
             if ($kindPlace->tableName != null) {
                 $places = \DB::table($kindPlace->tableName)->select(['id', 'slug', 'name'])->get();

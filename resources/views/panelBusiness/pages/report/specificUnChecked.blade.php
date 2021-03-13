@@ -24,26 +24,28 @@
                     <button class="btn btn-success" style="margin-top: 20px" onclick="finalize()">اتمام ارزیابی درخواست</button>
                     <a class="btn btn-primary" style="margin-top: 20px" href="{{route('ticket.msgs', ['business' => $id])}}">پیام به درخواست دهنده</a>
 
-                    <table style="margin-top: 10px">
-                        <tr>
-                            <td><center>ردیف</center></td>
-                            <td><center>نام فیلد</center></td>
-                            <td><center>جواب کاربر</center></td>
-                            <td><center>وضعیت کنونی</center></td>
-                            <td><center>عملیات</center></td>
+                    <table style="margin-top: 10px" class="table table-striped">
+                        <tr style="background: var(--koochita-yellow);">
+                            <td>ردیف</td>
+                            <td>نام فیلد</td>
+                            <td>جواب کاربر</td>
+                            <td>وضعیت کنونی</td>
+                            <td>عملیات</td>
                         </tr>
                         <?php $i = 1; ?>
                         @foreach($attrs as $attr)
-                            <tr>
-                                <td><center>{{$i}}</center></td>
-                                <td><center>{{$attr[0][0]}}</center></td>
+                            <tr style="background: {{$attr[1] ? '#0080003d' : '#ff00001f'}}">
+                                <td>{{$i}}</td>
+                                <td>{{$attr[0][0]}}</td>
                                 @if(strpos($attr[0][1], "storage/") !== false)
-                                    <td><center><img width="50px" src="{{$attr[0][1]}}"></center></td>
+                                    <td>
+                                        <img width="50px" src="{{$attr[0][1]}}">
+                                    </td>
                                 @else
-                                    <td><center>{{$attr[0][1]}}</center></td>
+                                    <td>{{$attr[0][1]}}</td>
                                 @endif
-                                <td><center id="{{$attr[2]}}_status">{{($attr[1]) ? "تایید شده" : "رد شده"}}</center></td>
-                                <td><center><button class="btn btn-info" onclick="toggleStatus('{{$attr[2]}}')">تغییر وضعیت</button></center></td>
+                                <td id="{{$attr[2]}}_status">{{($attr[1]) ? "تایید شده" : "رد شده"}}</td>
+                                <td><button class="btn btn-info" onclick="toggleStatus('{{$attr[2]}}')">تغییر وضعیت</button></td>
                             </tr>
                             <?php $i++; ?>
                         @endforeach
@@ -134,8 +136,13 @@
                 },
                 success: function (res) {
 
-                    if(res.status === "ok")
-                        $("#" + field + "_status").empty().append(res.newStatus);
+                    if(res.status === "ok") {
+                        var backColor = '';
+                        var element = $(`#${field}_status`);
+                        element.empty().append(res.newStatus);
+                        backColor = res.newStatus === 'تایید شده' ? '#0080003d' : '#ff00001f';
+                        element.parent().css('background', backColor);
+                    }
                     else
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                 },

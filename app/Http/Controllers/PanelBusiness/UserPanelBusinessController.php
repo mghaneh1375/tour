@@ -15,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class UserPanelBusinessController extends Controller {
 
+    public $storagePublic = __DIR__ . '/../../../../storage/app/public';
+
     public function uploadPic(Request $request, Business $business) {
 
         $request->validate([
@@ -102,14 +104,14 @@ class UserPanelBusinessController extends Controller {
 
         if($businessPic->pic1 != null && !empty($businessPic->pic1)) {
             $pic = $businessPic->pic1;
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
+            if (is_file("{$this->storagePublic}/{$pic}"))
+                unlink("{$this->storagePublic}/{$pic}");
         }
 
         if($businessPic->pic2 != null && !empty($businessPic->pic2)) {
             $pic = $businessPic->pic2;
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
+            if (is_file("{$this->storagePublic}/{$pic}"))
+                unlink("{$this->storagePublic}/{$pic}");
         }
 
         $businessPic->delete();
@@ -126,9 +128,8 @@ class UserPanelBusinessController extends Controller {
 
         if($request["field"] == "additionalValue" || $request["field"] == "logo") {
 
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $business[$request["field"]])) {
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $business[$request["field"]]);
-            }
+            if (is_file("{$this->storagePublic}/{$business[$request["field"]]}"))
+                unlink("{$this->storagePublic}/{$business[$request["field"]]}");
 
             $business[$request["field"]] = null;
             $business->save();
@@ -145,14 +146,11 @@ class UserPanelBusinessController extends Controller {
             $businessPic = BusinessPic::whereId($request["id"]);
 
             if($businessPic == null || $businessPic->businessId != $business->id) {
-                return response()->json([
-                    'status' => 'nok',
-                    'msg' => 'شما اجازه دسترسی به این عکس را ندارید.'
-                ]);
+                return response()->json(['status' => 'nok', 'msg' => 'شما اجازه دسترسی به این عکس را ندارید.']);
             }
 
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $businessPic->pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $businessPic->pic);
+            if (is_file("{$this->storagePublic}/{$businessPic->pic}"))
+                unlink("{$this->storagePublic}/{$businessPic->pic}");
 
             $businessPic->delete();
         }
@@ -197,8 +195,8 @@ class UserPanelBusinessController extends Controller {
                 $businessPic->pic2 = null;
             }
 
-            if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
-                unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
+            if (is_file("{$this->storagePublic}/{$pic}"))
+                unlink("{$this->storagePublic}/{$pic}");
 
             $businessPic->save();
         }
@@ -224,6 +222,11 @@ class UserPanelBusinessController extends Controller {
                     $business->type = "رستوران";
                     break;
             }
+
+            $cTime = $business->updated_at->format('H:i:s');
+            $cDate = verta($business->updated_at)->format('Y-m-d');
+
+            $business->createBusinessDate = "{$cTime}  {$cDate}";
         }
 
         return view('panelBusiness.pages.myBusinesses', ['businesses' => $businesses]);
@@ -318,6 +321,7 @@ class UserPanelBusinessController extends Controller {
     }
 
     public function edit(Business $business, $step=3) {
+
         if($business->cityId != null) {
             $city = Cities::whereId($business->cityId);
             if($city != null)
@@ -522,5 +526,10 @@ class UserPanelBusinessController extends Controller {
         }
 
         return response()->json(["status" => "ok"]);
+    }
+
+
+    public function redirectToBusinessManagementAccount(){
+
     }
 }

@@ -53,7 +53,6 @@ Route::group(array(), function(){
     Route::get('/sitemap.xml/village', 'SitemapController@village');
 
     Route::get('/sitemap.xml/news', 'SitemapController@news');
-
 });
 
 Route::post('log/storeSeen', 'LogController@storeUserSeenLog')->name('log.storeSeen');

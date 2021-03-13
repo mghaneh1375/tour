@@ -310,4 +310,8 @@ class MainPanelBusinessController extends Controller {
         return view('panelBusiness.pages.create');
     }
 
+    public function getToBusinessManagementPage(){
+        return view('panelBusiness.pages.Agency.agencyMainPage');
+    }
+
 }

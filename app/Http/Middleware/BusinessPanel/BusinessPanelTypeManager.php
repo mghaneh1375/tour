@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Middleware\BusinessPanel;
+
+use App\models\Business\Business;
+use Closure;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+
+class BusinessPanelTypeManager
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $businessId = $request->route("business");
+        $business = Business::find($businessId);
+        if($business == null || $business->userId != \auth()->user()->id)
+            return redirect(route("businessPanel.myBusinesses"));
+
+        $businessList = Business::where(['finalStatus' => 1, 'userId' => \auth()->user()->id])->select(['name', 'id'])->get();
+
+        View::share(['businessType' => $business->type, 'businessIdForUrl' => $business->id,
+                     'businessName' => $business->name, 'allOtherYourBusinessForHeader' => $businessList]);
+
+        return $next($request);
+    }
+}

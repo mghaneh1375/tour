@@ -3,7 +3,6 @@
 @section('head')
     <title>تکمیل اطلاعات فردی</title>
     <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css?v=1')}}">
-
 @endsection
 
 
@@ -31,12 +30,8 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="foreign">من تبعه نیستم</label>
-                                @if($userInfo->isForeign)
-                                    <input type="checkbox" id="foreign">
-                                @else
-                                    <input type="checkbox" checked id="foreign">
-                                @endif
+                                <label for="foreign">من تبعه هستم</label>
+                                <input type="checkbox" id="foreign" {{$userInfo->isForeign ? 'checked' : ''}}>
                             </div>
                         </div>
 
@@ -94,7 +89,6 @@
             var birthDay = $("#birthDay").val();
             var email = $("#mail").val();
 
-
             if(firstName.length == 0 || lastName.length == 0 || nid.length == 0 ||
                 phone.length == 0 || birthDay.length == 0 || email.length == 0
             ) {
@@ -102,31 +96,28 @@
                 return;
             }
 
-            var isForeign = ($("#foreign").prop("checked")) ? "false" : "true";
+            var isForeign = ($("#foreign").prop("checked")) ? "true" : "false";
             openLoading();
 
             $.ajax({
                 type: 'post',
                 url: '{{route('businessPanel.editUserInfo')}}',
                 data: {
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'birthDay': birthDay.replace(/\s/g, ''),
-                    'phone': phone,
-                    'nid': nid,
-                    'isForeign': isForeign,
-                    "email": email
+                    firstName,
+                    lastName,
+                    birthDay: birthDay.replace(/\s/g, ''),
+                    phone,
+                    nid,
+                    isForeign,
+                    email
                 },
                 success: function (res) {
-
-                    closeLoading();
-
                     if(res.status == "ok") {
                         document.location.href = "{{route('businessPanel.mainPage')}}";
                         return;
                     }
-
-                    showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    closeLoading();
+                    showSuccessNotifiBP(res.msg, 'left', '#ac0020');
                 },
                 error: function (reject) {
                     errorAjax(reject);
@@ -137,11 +128,8 @@
         $(document).ready(function () {
 
             $("#foreign").on("change", function () {
-
-                if($(this).prop("checked"))
-                    $("#nidLabel").text("شماره ملی");
-                else
-                    $("#nidLabel").text("شماره پاسپورت");
+                var text = $(this).prop("checked") ? "شماره پاسپورت" : "شماره ملی";
+                $("#nidLabel").text(text);
             });
 
         });

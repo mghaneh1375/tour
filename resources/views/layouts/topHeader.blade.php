@@ -1,4 +1,11 @@
-
+<?php
+    if(isset($_GET['showDBConnectionCounts']) && $_GET['showDBConnectionCounts'] == 1){
+        dd([
+            'eloquent connection' => Illuminate\Database\Eloquent\Model::showHowManyCounter(),
+            'DB connection' => Illuminate\Support\Facades\DB::showConnectionCounter()
+        ]);
+    }
+?>
 <meta content="43970F70216852DDFADD70BBB51A6A8D" name="jetseo-site-verification" rel="verify" />
 
 <meta charset="UTF-8">

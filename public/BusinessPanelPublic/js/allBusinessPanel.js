@@ -204,6 +204,31 @@ function closeErrorAlertBP(){
 }
 
 
+
+function openMyModalBP(_id){
+    $('#'+_id).addClass('showModal');
+}
+
+function closeMyModalBP(_id){
+    $('#'+_id).removeClass('showModal');
+}
+
+function closeMyModalClassBP(_class){
+    $('.'+_class).removeClass('showModal');
+}
+
+function numberWithCommas(_x) {
+    if(_x != undefined && _x != null) {
+        _x = _x.toString().replace(new RegExp(',', 'g'), '');
+        var parts = _x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+    else
+        return '';
+}
+
+
 $(document, window).ready(() => {
     resizeFitImg('resizeImgClass');
 

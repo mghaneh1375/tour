@@ -29,3 +29,5 @@
     var noDataKoochitaPicUrl_userKoochitaSearch = "{{URL::asset('images/mainPics/noData.png')}}";
     // openKoochitaUserSearchModal() in forAllPages.js
 </script>
+
+<script src="{{URL::asset('js/component/userKoochitaSearch.js?v='.$fileVersions)}}"></script>

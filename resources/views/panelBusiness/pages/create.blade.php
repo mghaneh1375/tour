@@ -7,7 +7,7 @@
     <style>
 
         .selected {
-            background-color: #ccc;
+            background-color: #fcc15691;
         }
 
         .spIcons {
@@ -34,12 +34,84 @@
     </style>
 
     <link rel="stylesheet" href="{{URL::asset('css/pages/localShops/mainLocalShops.css?v='.$fileVersions)}}">
-    <link rel="stylesheet" href="{{URL::asset('css/pages/business.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/pages/business.css?v='.$fileVersions)}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/bootstrap-clockpicker.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('packages/clockPicker/jquery-clockpicker.min.css')}}">
 
     <script defer src="{{URL::asset('packages/clockPicker/jquery-clockpicker.min.js')}}"></script>
     <script defer src="{{URL::asset('packages/clockPicker/bootstrap-clockpicker.min.js')}}"></script>
+
+
+    <style>
+
+        .createBusinessPage .kindOfBusinessOwnerSection{
+            width: 100%;
+            height: 50px;
+            border: 2px solid #7d7d7d;
+            padding: 5px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .createBusinessPage .kindOfBusinessOwnerSection .inputSec{
+            width: 40px;
+            border-left: 2px dashed black;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .createBusinessPage .kindOfBusinessOwnerSection .content{
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .createBusinessPage .kindOfBusinessOwnerSection .content > i{
+
+        }
+        .createBusinessPage .kindOfBusinessOwnerSection .content > p{
+            margin: 0;
+            margin-right: 10px;
+        }
+
+        .createBusinessPage .businessType{
+            width: 100%;
+            cursor: pointer;
+            border: 2px solid #7d7d7d;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+        .createBusinessPage .businessType .picSection{
+            float: right;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .createBusinessPage .businessType .textSec{
+            width: calc(100% - 100px);
+            padding-right: 20px;
+        }
+        .createBusinessPage .businessType .textSec h5{
+            font-weight: bold;
+            margin: 0px;
+        }
+        .createBusinessPage .businessType .textSec p{
+            margin: 0px;
+            color: gray;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+    </style>
 
     <script>
         var uploadPicBusinessBaseUrl = '{{url("uploadBusinessPic")}}';
@@ -67,7 +139,7 @@
 @endsection
 
 @section('body')
-
+<div class="createBusinessPage">
     <div class="row indicator_step hidden" id="step1">
         <div class="col-md-12">
 
@@ -78,34 +150,33 @@
                     <p>با استفاده از این اطلاعات، ما دسترسی های مناسب تری برای شما ایجاد می کنیم.</p>
 
                     <div class="col-xs-12 col-md-6">
-                        <div style="width: 100%; height: 50px; border: 2px solid #7d7d7d; padding: 5px; position: relative">
-
-                            <div style="display: inline-block; width: 40px; border-left: 2px dashed black; padding-left: 20px; height: 75%; position: absolute; right: 20px;">
-                                <input id="hoghoghi" type="radio" name="haghHogh" style="margin-top: 10px;">
+                        <label for="hoghoghi" class="kindOfBusinessOwnerSection">
+                            <div class="inputSec">
+                                <input id="hoghoghi" type="radio" name="haghHogh">
                             </div>
-
-                            <i style="position: absolute; right: 80px; margin-top: 10px;" class="fa fa-users"></i>
-                            <p style="position: absolute; right: 110px; margin-top: 5px">ما یک کسب و کار هستیم. (شخصیت حقوقی)</p>
-
-                        </div>
+                            <div class="content">
+                                <i class="fa fa-users"></i>
+                                <p>ما یک کسب و کار هستیم. (شخصیت حقوقی)</p>
+                            </div>
+                        </label>
                     </div>
 
                     <div class="col-xs-12 col-md-6" style="margin-top: 10px">
-                        <div style="width: 100%; height: 50px; border: 2px solid #7d7d7d; padding: 5px; position: relative">
 
-                            <div style="display: inline-block; width: 40px; border-left: 2px dashed black; padding-left: 20px; height: 75%; position: absolute; right: 20px;">
-                                <input id="haghighi" type="radio" name="haghHogh" style="margin-top: 10px;">
+                        <label for="haghighi" class="kindOfBusinessOwnerSection">
+                            <div class="inputSec">
+                                <input id="haghighi" type="radio" name="haghHogh">
                             </div>
-
-                            <i style="position: absolute; right: 80px; margin-top: 10px;" class="fa fa-user"></i>
-                            <p style="position: absolute; right: 110px; margin-top: 5px">من یک شخص و یا گروه هستم. (شخصیت حقیقی)</p>
-
-                        </div>
+                            <div class="content">
+                                <i class="fa fa-user"></i>
+                                <p>من یک شخص و یا گروه هستم. (شخصیت حقیقی)</p>
+                            </div>
+                        </label>
                     </div>
 
-                    <center class="col-xs-12" style="margin-top: 20px">
+                    <div class="col-xs-12 fullyCenterContent" style="margin-top: 10px;">
                         <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
-                    </center>
+                    </div>
 
                 </div>
             </div>
@@ -121,89 +192,68 @@
                 <div class="head">نوع خدمت قابل ارائه</div>
                 <div style="margin-top: 20px">
                     <h4>مایل به ارائه چه نوع خدمتی هستید؟</h4>
-                    <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>
-                    <p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم.</p>
+                    <div>
+                        <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>
+                        <p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم.</p>
+                    </div>
 
-                    <div class="col-xs-12">
-                        <div class="col-xs-12 col-md-8">
-                        <div data-type="agency" class="businessType" style="width: 100%; cursor: pointer; border: 2px solid #7d7d7d; padding: 5px">
+                    <div class="col-xs-12 col-md-8">
+                        <div data-type="agency" class="businessType">
 
-                            <div style="display: inline-block; float: right; width: 100px; height: 100px; margin-right: 5px;">
-                                <img width="100%" src="{{\Illuminate\Support\Facades\URL::asset('defaultPic/4.jpg')}}">
+                            <div class="picSection">
+                                <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
                             </div>
 
-                            <div style="margin-right: 120px; margin-top: 5px">
+                            <div class="textSec">
                                 <h5>آژانس مسافرتی</h5>
                                 <p>شما می توانید برای فروش تورهای خود از امکانات ما استفاده کنید.</p>
                             </div>
-
                         </div>
                     </div>
-                    </div>
 
-                    <div class="col-xs-12" style="margin-top: 10px">
-                        <div class="col-xs-12 col-md-8">
+                    <div class="col-xs-12 col-md-8" style="margin-top: 10px">
+                        <div data-type="tour" class="businessType">
+                            <div class="picSection">
+                                <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
+                            </div>
 
-                            <div data-type="tour" class="businessType" style="width: 100%; cursor: pointer; border: 2px solid #7d7d7d; padding: 5px">
-
-                                <div style="display: inline-block; float: right; width: 100px; height: 100px; margin-right: 5px;">
-                                    <img width="100%" src="{{\Illuminate\Support\Facades\URL::asset('defaultPic/4.jpg')}}">
-                                </div>
-
-                                <div style="margin-right: 120px; margin-top: 5px">
-                                    <h5>تور لیدر</h5>
-                                    <p>شما می توانید برای معرفی خود به گردشگران از امکانات ما استفاده کنید.</p>
-                                </div>
-
+                            <div class="textSec">
+                                <h5>تور لیدر</h5>
+                                <p>شما می توانید برای معرفی خود به گردشگران از امکانات ما استفاده کنید.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-12" style="margin-top: 10px">
-                        <div class="col-xs-12 col-md-8">
-
-                            <div data-type="hotel" class="businessType" style="width: 100%; cursor: pointer; border: 2px solid #7d7d7d; padding: 5px">
-
-                                <div style="display: inline-block; float: right; width: 100px; height: 100px; margin-right: 5px;">
-                                    <img width="100%" src="{{\Illuminate\Support\Facades\URL::asset('defaultPic/4.jpg')}}">
-                                </div>
-
-                                <div style="margin-right: 120px; margin-top: 5px">
-                                    <h5>صاحب هتل</h5>
-                                    <p>شما می توانید کنترل صفحه خود را در دست گرفته و به صورت رسمی به کاربران پاسخ دهید.</p>
-                                </div>
-
+                    <div class="col-xs-12 col-md-8" style="margin-top: 10px">
+                        <div data-type="hotel" class="businessType">
+                            <div class="picSection">
+                                <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
+                            </div>
+                            <div class="textSec">
+                                <h5>صاحب هتل</h5>
+                                <p>شما می توانید کنترل صفحه خود را در دست گرفته و به صورت رسمی به کاربران پاسخ دهید.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xs-12" style="margin-top: 10px">
-                        <div class="col-xs-12 col-md-8">
-
-                            <div data-type="restaurant" class="businessType" style="width: 100%; cursor: pointer; border: 2px solid #7d7d7d; padding: 5px">
-
-                                <div style="display: inline-block; float: right; width: 100px; height: 100px; margin-right: 5px;">
-                                    <img width="100%" src="{{\Illuminate\Support\Facades\URL::asset('defaultPic/4.jpg')}}">
-                                </div>
-
-                                <div style="margin-right: 120px; margin-top: 5px">
-                                    <h5>صاحب رستوران، فست فود و ...</h5>
-                                    <p>شما می توانید کنترل صفحه خود را در دست گرفته و به صورت رسمی به کاربران پاسخ دهید.</p>
-                                </div>
-
+                    <div class="col-xs-12 col-md-8" style="margin-top: 10px">
+                        <div data-type="restaurant" class="businessType">
+                            <div class="picSection">
+                                <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
+                            </div>
+                            <div class="textSec">
+                                <h5>صاحب رستوران، فست فود و ...</h5>
+                                <p>شما می توانید کنترل صفحه خود را در دست گرفته و به صورت رسمی به کاربران پاسخ دهید.</p>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
-
+                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px; margin-bottom: 100px">
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
-
                     <button onclick="goToPage(-1, -10)" class="btn btn-danger">مرحله قبل</button>
-
-                </center>
+                </div>
 
             </div>
 
@@ -321,25 +371,26 @@
         <div class="col-md-12">
 
             <div class="mainBackWhiteBody">
-
                 <div class="head">اطلاعات محل کسب و کار</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12 form-group importantInput">
+                                <label for="city" style="padding-top: 27px;">شهر</label>
+                                <input type="text" class="form-control mustFull" id="city" placeholder="نام شهر خود را وارد نمایید..." onclick="openSearchFindCity()" readonly>
+                                <input type="hidden" id="cityId" value="0">
+                            </div>
 
-                <div class="col-sm-6 form-group importantInput">
-                    <label for="city" style="padding-top: 27px;">شهر</label>
-                    <input type="text" class="form-control mustFull" id="city" placeholder="نام شهر خود را وارد نمایید..." onclick="openSearchFindCity()" readonly>
-                    <input type="hidden" id="cityId" value="0">
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="address">آدرس دقیق</label>
-                        <textarea id="address" style="width: 100%; height: 150px" placeholder="آدرس"></textarea>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="address">آدرس دقیق</label>
+                                    <textarea id="address" style="width: 100%; height: 150px" placeholder="آدرس"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-xs-12 col-md-6">
-
-                    <div class="col-sm-12 form-group importantInput">
+                    <div class="col-sm-6 form-group importantInput" style="padding-top: 25px;">
                         <label for="shopMap">انتخاب از روی نقشه</label>
                         <div class="descriptionText">شما می توانید با کلیک روی نقشه محل مورد نظر را ثبت نمایید .</div>
                         <div class="shopMapInput">
@@ -351,7 +402,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="col-md-12" id="workHour">
@@ -436,40 +486,35 @@
         </div>
     </div>
 
-    <div class="row indicator_step hidden" id="step5">
+    <div class="row indicator_step createBusinessStep5 hidden" id="step5">
 
         <div class="col-md-12">
-
             <div class="mainBackWhiteBody">
-
                 <div class="head">مدارک مورد نیاز</div>
-
-                <div class="col-md-6">
-                    <div style="padding: 3px 0 10px 30px; font-size: 15px; width: 100%;">
-
-                        <span style="padding: 3px 0 0 30px; font-size: 15px; width: 100%;">تعداد سهام داران</span>
-
-                        <div style=" width: 100%;">
-
-                            <select id="numOfMembers" class="signInInput form-control" name='numOfMembers' style="width: 80%; display: inline-block">
-                                @for($i = 1; $i < 11; $i++)
-                                    <option value="{{$i}}">{{$i}}</option>
-                                @endfor
-                            </select>
-                        </div>
-
+                <style>
+                    .createBusinessPage .createBusinessStep5 .numOfUserInBusiness{
+                        padding: 3px 0 10px 30px;
+                        font-size: 15px;
+                        width: 50%;
+                    }
+                </style>
+                <div class="col-md-12">
+                    <div class="numOfUserInBusiness form-group">
+                        <label for="numOfMembers">تعداد سهام داران</label>
+                        <select id="numOfMembers" class="signInInput form-control" name="numOfMembers">
+                            @for($i = 1; $i < 11; $i++)
+                                <option value="{{$i}}">{{$i}}</option>
+                            @endfor
+                        </select>
                     </div>
                 </div>
 
-                <div class="col-md-6" id="usersDiv"></div>
+                <div class="col-md-12" id="usersDiv"></div>
 
-                <center class="col-xs-12" style="margin-top: 20px; margin-bottom: 100px">
-
+                <div class="col-xs-12 fullyCenterContent" style="margin-top: 20px; margin-bottom: 100px">
                     <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
-
                     <button onclick="goToPage(-1, -10)" class="btn btn-danger">مرحله قبل</button>
-
-                </center>
+                </div>
 
             </div>
 
@@ -486,7 +531,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="additionalValue">آیا شما مشمول مالیات بر ارزش افزوده هستید؟</label>
+                        <label for="additionalValue" style="cursor: pointer;">آیا شما مشمول مالیات بر ارزش افزوده هستید؟</label>
                         <input type="checkbox" id="additionalValue" onchange="changeAdditionalValue()">
                     </div>
                 </div>
@@ -599,7 +644,7 @@
                             <div onscroll="scrolled(event)" style="width: 100%; height: 200px; overflow: auto; border: 2px solid #7d7d7d; padding: 5px" id="contract"></div>
 
                             <div style="width: 100%; margin-top: 20px">
-                                <label for="confirmContract">تمامی مطالب را با دقت مطالعه کردم و همگی را قبول دارم.</label>
+                                <label for="confirmContract" style="cursor: pointer;">تمامی مطالب را با دقت مطالعه کردم و همگی را قبول دارم.</label>
                                 <input type="checkbox" id="confirmContract" disabled>
                             </div>
 
@@ -621,6 +666,125 @@
         </div>
     </div>
 
+
+    <style>
+        .shareHolderCard{
+            background-color: #fcc1560f;
+            padding: 10px;
+            border-radius: 5px;
+            border: solid 1px var(--koochita-yellow);
+            margin-bottom: 30px;
+        }
+        .shareHolderCard > .title{
+            font-size: 19px;
+            width: 100%;
+            color: #aa0800;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .shareHolderCard > .content{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .shareHolderCard .deleteButton{
+            cursor: pointer;
+            background: var(--koochita-red);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            border: none;
+            margin-right: auto;
+            display: flex;
+            margin-top: 10px;
+        }
+        .shareHolderCard .content .inputRow{
+            width: 49%;
+        }
+        .shareHolderCard .content .picSec{
+            width: 49%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .shareHolderCard .picSec .uploadPicSection{
+            height: 200px;
+            width: 100%;
+            border: solid 1px #c7c7c7;
+            flex-wrap: wrap;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: white;
+        }
+        .shareHolderCard .picSec > .title{
+            color: var(--koochita-green);
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .shareHolderCard .uploadPicSection .labelForClick{
+            cursor: pointer;
+            z-index: 99;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+            width: 100%;
+            color: black;
+        }
+        .shareHolderCard .uploadPicSection .uploadPic{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0px auto;
+            flex-direction: column;
+            font-size: 18px;
+            color: black;
+            opacity: 1;
+        }
+    </style>
+
+    <div id="userShareHolderCardHtmlSample" class="hidden">
+        <div class="cards shareHolderCard" data-val="##idx##" id="user_##idx##">
+            <div id="title_##idx##" class="title">عضو ##arr_nums##</div>
+            <div class="content">
+                <div class="inputLabel inputRow" id="inputLabel_title_##idx##">
+                    <input type="hidden" name="id_##idx##" value="-1">
+                    <div class="form-group">
+                        <label for="name_##idx##">نام و نام خانوادگی</label>
+                        <input id="name_##idx##" class="signInInput form-control" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="role_##idx##">سمت</label>
+                        <select id="role_##idx##" class="signInInput form-control">
+                            <option value="1">رئیس هیئت مدیره</option>
+                            <option value="2">مدیر عامل</option>
+                            <option value="3">عضو هیئت مدیره</option>
+                            <option value="4">نایب رئیس هیئت مدیره</option>
+                            <option value="5">سایر</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="inputLabel_nid_##idx##" class="inputLabel picSec">
+                    <div class="boldDescriptionText title">تصویر رو و پشت کارت ملی را در این قسمت آپلود نمایید.</div>
+                    <div id="uploadedSectionMadarek_##idx##" class="uploadPicSection">
+                        <div id="showUploadPicsSectionMadarek_##idx##" class="showUploadedFiles"></div>
+                        <div id="uploadPicInfoTextMadarek_##idx##" class="uploadPic">
+                            <label class="labelForClick" for="madarekPics_##idx##">کلیک کنید</label>
+                        </div>
+                        <input type="file" accept="image/*" id="madarekPics_##idx##" style="display: none" onchange="var tmpIdx = initUploader('madarek_##idx##', 'showUploadPicsSectionMadarek_##idx##', 'uploadPicInfoTextMadarek_##idx##', 2); if(tmpIdx != -1) uploadPicClickHandler(this, tmpIdx)">
+                    </div>
+                </div>
+            </div>
+
+            <button data-val="##idx##" class="delete deleteButton">حذف عضو</button>
+        </div>
+    </div>
 @endsection
 
 @section('modals')
@@ -726,7 +890,7 @@
                 $("#closedDayEnd").val(data.closedDayCloseTime);
             }
 
-            iAm24Hour()
+            iAm24Hour();
             $("#address").val(data.address);
 
             if(data.hasAdditionalValue) {
@@ -810,9 +974,7 @@
                     });
                     createNewImgUploadCard(index - 1, tmpIdx);
                     $('#uplaodedImg_' + code).find('.processCounter').text('100%');
-
                 }
-
             }
             else {
                 render_a_form(0);
@@ -823,21 +985,49 @@
             closeLoading();
         }
 
+        function getLat(_lat, _lng){
+            _lat = parseFloat(_lat);
+            _lng = parseFloat(_lng);
+
+            if(marker != 0)
+                marker.setMap(null);
+            marker = new google.maps.Marker({
+                position:  new google.maps.LatLng(_lat, _lng),
+                map: map,
+            });
+
+            $('#lat').val(_lat);
+            $('#lng').val(_lng);
+        }
+
+        function findMyLocation() {
+            if (navigator.geolocation)
+                navigator.geolocation.getCurrentPosition((position) => {
+                    var coordination = position.coords;
+                    if(marker != 0)
+                        marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        position:  new google.maps.LatLng(coordination.latitude, coordination.longitude),
+                        map: map,
+                    });
+                    map.setCenter({
+                        lat : coordination.latitude,
+                        lng : coordination.longitude
+                    });
+                    map.setZoom(16);
+
+                    $('#lat').val(coordination.latitude);
+                    $('#lng').val(coordination.longitude);
+                });
+            else
+                console.log("Geolocation is not supported by this browser.");
+        }
+
         function initMap() {
 
             var lat = 32.42056639964595;
             var lng = 54.00537109375;
             var zoom = 5;
-
-            if("lat" in data && data.lat != null && data.lat != "null" &&
-                data.lat.length > 0 && "lng" in data && data.lng != null &&
-                data.lng != "null" && data.lng.length > 0) {
-                lat = data.lat;
-                lng = data.lng;
-                zoom = 10;
-                $("#lat").val(data.lat);
-                $("#lng").val(data.lng);
-            }
 
             var mapOptions = {
                 zoom: zoom,
@@ -881,43 +1071,17 @@
                     marker.setMap(null);
                     marker = null;
                 }
-                getLat(event.latLng);
+                getLat(event.latLng.lat(), event.latLng.lng());
             });
+
+            if("lat" in data && data.lat != null && data.lat != "null" &&
+                parseFloat(data.lat) > 0 && "lng" in data && data.lng != null &&
+                data.lng != "null" && parseFloat(data.lng) > 0) {
+                getLat(data.lat, data.lng);
+                zoom = 10;
+            }
         }
 
-        function getLat(location){
-            if(marker != 0)
-                marker.setMap(null);
-            marker = new google.maps.Marker({
-                position: location,
-                map: map,
-            });
-            $('#lat').val(location.lat());
-            $('#lng').val(location.lng());
-        }
-
-        function findMyLocation() {
-            if (navigator.geolocation)
-                navigator.geolocation.getCurrentPosition((position) => {
-                    var coordination = position.coords;
-                    if(marker != 0)
-                        marker.setMap(null);
-                    marker = new google.maps.Marker({
-                        position:  new google.maps.LatLng(coordination.latitude, coordination.longitude),
-                        map: map,
-                    });
-                    map.setCenter({
-                        lat : coordination.latitude,
-                        lng : coordination.longitude
-                    });
-                    map.setZoom(16);
-
-                    $('#lat').val(coordination.latitude);
-                    $('#lng').val(coordination.longitude);
-                });
-            else
-                console.log("Geolocation is not supported by this browser.");
-        }
 
     </script>
 
