@@ -11,94 +11,87 @@
 
 
 @section('body')
-    <div class="row">
-        <div class="col-md-12">
 
-            <div class="mainBackWhiteBody">
+    <div class="mainBackWhiteBody">
+        <div style=" margin-top: 20px">
 
-                <div style="margin-bottom: 200px; margin-top: 20px">
+            <div class="head">درخواست های تعیین تکلیف نشده</div>
+            <center>
 
-                <div class="head">درخواست های تعیین تکلیف نشده</div>
-                <center>
+                <button class="btn btn-success" style="margin-top: 20px" onclick="finalize()">اتمام ارزیابی درخواست</button>
+                <a class="btn btn-primary" style="margin-top: 20px" href="{{route('ticket.msgs', ['business' => $id])}}">پیام به درخواست دهنده</a>
 
-                    <button class="btn btn-success" style="margin-top: 20px" onclick="finalize()">اتمام ارزیابی درخواست</button>
-                    <a class="btn btn-primary" style="margin-top: 20px" href="{{route('ticket.msgs', ['business' => $id])}}">پیام به درخواست دهنده</a>
-
-                    <table style="margin-top: 10px" class="table table-striped">
-                        <tr style="background: var(--koochita-yellow);">
-                            <td>ردیف</td>
-                            <td>نام فیلد</td>
-                            <td>جواب کاربر</td>
-                            <td>وضعیت کنونی</td>
-                            <td>عملیات</td>
+                <table style="margin-top: 10px" class="table table-striped">
+                    <tr style="background: var(--koochita-yellow);">
+                        <td>ردیف</td>
+                        <td>نام فیلد</td>
+                        <td>جواب کاربر</td>
+                        <td>وضعیت کنونی</td>
+                        <td>عملیات</td>
+                    </tr>
+                    <?php $i = 1; ?>
+                    @foreach($attrs as $attr)
+                        <tr style="background: {{$attr[1] ? '#0080003d' : '#ff00001f'}}">
+                            <td>{{$i}}</td>
+                            <td>{{$attr[0][0]}}</td>
+                            @if(strpos($attr[0][1], "storage/") !== false)
+                                <td>
+                                    <img width="50px" src="{{$attr[0][1]}}">
+                                </td>
+                            @else
+                                <td>{{$attr[0][1]}}</td>
+                            @endif
+                            <td id="{{$attr[2]}}_status">{{($attr[1]) ? "تایید شده" : "رد شده"}}</td>
+                            <td><button class="btn btn-info" onclick="toggleStatus('{{$attr[2]}}')">تغییر وضعیت</button></td>
                         </tr>
-                        <?php $i = 1; ?>
-                        @foreach($attrs as $attr)
-                            <tr style="background: {{$attr[1] ? '#0080003d' : '#ff00001f'}}">
-                                <td>{{$i}}</td>
-                                <td>{{$attr[0][0]}}</td>
-                                @if(strpos($attr[0][1], "storage/") !== false)
-                                    <td>
-                                        <img width="50px" src="{{$attr[0][1]}}">
-                                    </td>
-                                @else
-                                    <td>{{$attr[0][1]}}</td>
-                                @endif
-                                <td id="{{$attr[2]}}_status">{{($attr[1]) ? "تایید شده" : "رد شده"}}</td>
-                                <td><button class="btn btn-info" onclick="toggleStatus('{{$attr[2]}}')">تغییر وضعیت</button></td>
-                            </tr>
-                            <?php $i++; ?>
-                        @endforeach
-
-                    </table>
-
-                </center>
-
-                <div style="margin-top: 20px; border: 1px solid; padding: 10px">
-                    <h3>اطلاعات مدارک</h3>
-                    <?php
-                    $i = 0;
-                    $arr_nums = ["اول", "دوم", "سوم", "چهارم", "پنجم", "ششم", "هفتم", "هشتم", "نهم", "دهم"];
-                    ?>
-
-                    @foreach($madareks as $madarek)
-                        <div style="margin-top: 20px; background-color: #ccc">
-                            <h3 style="color: #3998a4">
-                                عضو {{$arr_nums[$i]}}
-                                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span>وضعیت: </span>
-                                <span id="madareks_status_{{$madarek->id}}">{{($madarek->status) ? "تایید شده" : "تایید نشده"}}</span>
-                                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <button onclick="toggleStatusWithId('madareks', '{{$madarek->id}}')" class="btn btn-info">تغییر وضعیت</button>
-                            </h3>
-                            <p>نام: {{$madarek->name}}</p>
-                            <p>نقش: {{$madarek->role}}</p>
-                            <p>تصاویر کارت ملی</p>
-                            <img width="300px" src="{{$madarek->pic1}}">
-                            <img width="300px" src="{{$madarek->pic2}}">
-                        </div>
                         <?php $i++; ?>
                     @endforeach
-                </div>
 
-                <div style="margin-top: 20px; border: 1px solid; padding: 10px">
-                    <h3>تصاویر</h3>
+                </table>
 
-                    @foreach($pics as $pic)
-                        <div style="margin-top: 20px; background-color: #ccc">
-                            <h3>
-                                <span>وضعیت: </span>
-                                <span id="pics_status_{{$pic->id}}">{{($madarek->status) ? "تایید شده" : "تایید نشده"}}</span>
-                                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <button onclick="toggleStatusWithId('pics', '{{$pic->id}}')" class="btn btn-info">تغییر وضعیت</button>
-                            </h3>
-                            <img width="300px" src="{{$pic->pic}}">
-                        </div>
-                    @endforeach
-                </div>
+            </center>
 
+            <div style="margin-top: 20px; border: 1px solid; padding: 10px">
+                <h3>اطلاعات مدارک</h3>
+                <?php
+                $i = 0;
+                $arr_nums = ["اول", "دوم", "سوم", "چهارم", "پنجم", "ششم", "هفتم", "هشتم", "نهم", "دهم"];
+                ?>
+
+                @foreach($madareks as $madarek)
+                    <div style="margin-top: 20px; background-color: #ccc">
+                        <h3 style="color: #3998a4">
+                            عضو {{$arr_nums[$i]}}
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span>وضعیت: </span>
+                            <span id="madareks_status_{{$madarek->id}}">{{($madarek->status) ? "تایید شده" : "تایید نشده"}}</span>
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <button onclick="toggleStatusWithId('madareks', '{{$madarek->id}}')" class="btn btn-info">تغییر وضعیت</button>
+                        </h3>
+                        <p>نام: {{$madarek->name}}</p>
+                        <p>نقش: {{$madarek->role}}</p>
+                        <p>تصاویر کارت ملی</p>
+                        <img width="300px" src="{{$madarek->pic1}}">
+                        <img width="300px" src="{{$madarek->pic2}}">
+                    </div>
+                    <?php $i++; ?>
+                @endforeach
             </div>
 
+            <div style="margin-top: 20px; border: 1px solid; padding: 10px">
+                <h3>تصاویر</h3>
+
+                @foreach($pics as $pic)
+                    <div style="margin-top: 20px; background-color: #ccc">
+                        <h3>
+                            <span>وضعیت: </span>
+                            <span id="pics_status_{{$pic->id}}">{{($madarek->status) ? "تایید شده" : "تایید نشده"}}</span>
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <button onclick="toggleStatusWithId('pics', '{{$pic->id}}')" class="btn btn-info">تغییر وضعیت</button>
+                        </h3>
+                        <img width="300px" src="{{$pic->pic}}">
+                    </div>
+                @endforeach
             </div>
 
         </div>

@@ -78,6 +78,12 @@ body{
     text-align: right;
     padding: 15px;
 }
+.mainBodySection .row{
+    height: 100%;
+}
+.mainBodySection > div {
+    height: 100%;
+}
 .resizeImgClass{
     width: 100%;
 }
