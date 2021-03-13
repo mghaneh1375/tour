@@ -79,12 +79,12 @@ function clearGlobalResult() {
 
 function closeSearchInput() {
     $('#globalSearch').addClass('hidden');
-    $(".mainBodySection").removeClass('hidden');
+    // $(".mainBodySection").removeClass('hidden');
 }
 
 function createSearchInput(_doFuncName, _placeHolderTxt) {
 
-    $(".mainBodySection").addClass('hidden');
+    // $(".mainBodySection").addClass('hidden');
 
     // _doFuncName must be string
     clearGlobalResult();
@@ -125,9 +125,9 @@ function searchCity(_element) {
                 var newElement = "";
                 response.map(item => {
                     newElement += `<div onclick="chooseThisCity('${item.cityName}', ${item.id})"><div class="icons location spIcons"></div>
-                                                                        <p class="suggest cursor-pointer font-weight-700" style="margin: 0px">شهر ${item.cityName}</p>
-                                                                        <p class="suggest cursor-pointer stateName"> در ${item.stateName}</p>
-                                                                    </div>`;
+                                        <p class="suggest cursor-pointer font-weight-700" style="margin: 0px">شهر ${item.cityName}</p>
+                                        <p class="suggest cursor-pointer stateName"> در ${item.stateName}</p>
+                                    </div>`;
                 });
                 setResultToGlobalSearch(newElement);
             }
