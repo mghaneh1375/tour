@@ -539,7 +539,7 @@
 
                             <div style="width: 100%; margin-top: 20px">
                                 <label for="confirmContract" style="cursor: pointer;">تمامی مطالب را با دقت مطالعه کردم و همگی را قبول دارم.</label>
-                                <input type="checkbox" id="confirmContract" disabled>
+                                <input type="checkbox" id="confirmContract" disabled style="display: inline-block;">
                             </div>
 
                         </div>

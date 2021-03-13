@@ -39,6 +39,7 @@
                                     <td>{{$business->createBusinessDate}}</td>
                                     @if($business->readyForCheck)
                                         <td>در حال بررسی</td>
+                                        <td>
                                     @elseif($business->finalStatus)
                                         <td>تایید شده</td>
                                         <td>
@@ -49,34 +50,31 @@
                                             <a class="btn btn-danger circleButton" onclick="deleteBusiness('{{$business->id}}')" title="حذف">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                        </td>
                                     @elseif(!$business->problem)
                                         <td>در حال ویرایش/تکمیل توسط کاربر</td>
                                         <td>
                                             <a href="{{route('businessPanel.edit', ['business' => $business])}}" title="ویرایش اطلاعات" class="btn btn-primary circleButton">
                                                 <i class="fa-solid fa-file-pen"></i>
                                             </a>
-                                            <a class="btn btn-info circleButton" href="{{route('ticket.msgs', ['business' => $business->id])}}" title="پیام ها">
-                                                <i class="fas fa-envelope"></i>
-                                            </a>
                                             <a class="btn btn-danger circleButton" onclick="deleteBusiness('{{$business->id}}')" title="حذف">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                        </td>
                                     @elseif($business->problem)
                                         <td>اعلام نقص شده</td>
                                         <td>
                                             <a href="{{route('businessPanel.edit', ['business' => $business])}}" title="اصلاح نواقص" class="btn btn-warning circleButton">
                                                 <i class="fa-solid fa-file-pen"></i>
                                             </a>
-                                            <a class="btn btn-info circleButton" href="{{route('ticket.msgs', ['business' => $business->id])}}" title="پیام ها">
-                                                <i class="fas fa-envelope"></i>
-                                            </a>
                                             <a class="btn btn-danger circleButton" onclick="deleteBusiness('{{$business->id}}')" title="حذف">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                        </td>
                                     @endif
+
+                                        <a class="btn btn-info circleButton" href="{{route('ticket.msgs', ['business' => $business->id])}}" title="پیام ها">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                    </td>
+
                                 </tr>
                                 <?php $i++; ?>
                             @endforeach
