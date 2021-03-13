@@ -5,6 +5,10 @@ body{
     background: #eaeaea;
 }
 
+input[type="checkbox"], input[type="radio"]{
+    display: inline-block;
+}
+
 .hidden{
     display: none !important;
 }

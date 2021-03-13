@@ -339,7 +339,7 @@ class UserPanelBusinessController extends Controller {
                 "status" => -1
             ]);
 
-        User::destroy($business->assignUserId, $business->userId);
+        User::destroy($business->assignUserId);
 
         return response()->json([
             "status" => "0"

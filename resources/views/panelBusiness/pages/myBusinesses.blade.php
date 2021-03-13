@@ -44,9 +44,6 @@
                                         <td>تایید شده</td>
                                         <td>
                                             <a href="{{route('businessManagement.panel', ['business' => $business->id])}}" class="btn btn-success">رفتن به پنل مدیریت</a>
-                                            <a class="btn btn-info circleButton" href="{{route('ticket.msgs', ['business' => $business->id])}}" title="پیام ها">
-                                                <i class="fas fa-envelope"></i>
-                                            </a>
                                             <a class="btn btn-danger circleButton" onclick="deleteBusiness('{{$business->id}}')" title="حذف">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
