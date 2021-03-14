@@ -85,9 +85,9 @@ input[type="checkbox"], input[type="radio"]{
 .mainBodySection .row{
     height: 100%;
 }
-.mainBodySection > div {
-    height: 100%;
-}
+/*.mainBodySection > div {*/
+/*    height: 100%;*/
+/*}*/
 .resizeImgClass{
     width: 100%;
 }
@@ -264,17 +264,21 @@ input[type="checkbox"], input[type="radio"]{
     display: none;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem{
+    transition: .3s;
     color: #0000007a;
     cursor: pointer;
     padding: 7px 30px 7px 20px;
     font-weight: bold;
+    border-radius: 10px;
+    margin: 3px 5px;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem.selected,
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem:hover{
-    background: #80808047;
-    color: black;
+    background: #0d665033;
+    color: var(--koochita-green);
     font-weight: bold;
     text-decoration: none;
+    border-radius: 10px;
 }
 
 .mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody{

@@ -122,7 +122,7 @@
                             </div>
                             <div class="name">
                                 <div class="stage">قدم سوم</div>
-                                <div class="text">اطلاعات حمل و نقل</div>
+                                <div class="text">اطلاعات برگزاری</div>
                             </div>
                         </div>
                         <div class="editCard card4" onclick="goToEditPage(4)">
@@ -154,13 +154,13 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('script')
     <script>
         var tours = [];
         var openEditIndex = null;
+        var deleteTourIndex = null;
 
         function getTourList(){
             openLoading();
@@ -196,9 +196,9 @@
                             <td>${item.day} روز / ${item.night} شب</td>
                             <td>${item.status}</td>
                             <td>
-                                <div class="circleButton yellowBut" title="اطلاعات کامل تور">
+                                <a href="{{url("businessManagement/{$businessIdForUrl}/tour/getFullyData")}}/${item.id}" class="circleButton yellowBut" title="اطلاعات کامل تور">
                                     <i class="fa-regular fa-info"></i>
-                                </div>
+                                </a>
                                 <button class="circleButton editBut" title="ویرایش" onclick="editTour(${index})">
                                     <i class="fa-light fa-pen-to-square"></i>
                                 </button>
@@ -222,7 +222,43 @@
         }
 
         function deleteTour(_index){
+            deleteTourIndex = _index;
+            openWarningBP('ایا از حذف تور اطمینان دارید؟ در صورت حذف امکان بازگشت تور وجود ندارد', doDeleteTour, 'بله، پاک شود');
+        }
 
+        function doDeleteTour(){
+            openLoading(false, () => {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{route("businessManagement.tour.delete")}}',
+                    data: {
+                        _token: csrfTokenGlobal,
+                        tourId: tours[deleteTourIndex].id
+                    },
+                    success: response => {
+                        if(response.status == 'ok')
+                            getTourList();
+                        else if(response.status == 'registered'){
+                            closeLoading();
+                            openErrorAlertBP('برای تور شما افرادی ثبت نام کرده اند و شما نمی توانید تور خود را حذف کنید.');
+                        }
+                        else if(response.status == 'notAccess'){
+                            closeLoading();
+                            openErrorAlertBP('شما دسترسی لازم برای حذف تور را ندارید.');
+                        }
+                        else{
+                            closeLoading();
+                            console.error(response.status);
+                            showSuccessNotifiBP('Server Error', 'left', 'red')
+                        }
+                    },
+                    error: err => {
+                        closeLoading();
+                        console.error(err);
+                        showSuccessNotifiBP('Connection error', 'left', 'red')
+                    }
+                })
+            })
         }
 
         $(window).ready(() => {

@@ -593,7 +593,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('script')
@@ -622,7 +621,7 @@
                     url: "{{route('businessManagement.tour.create.stage_2', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}",
                 },
                 {
-                    title: 'اطلاعات حمل و نقل',
+                    title: 'اطلاعات برگزاری',
                     icon: '<i class="fa-duotone fa-plane-tail"></i>',
                     url: "{{route('businessManagement.tour.create.stage_3', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}",
                     selected: 1

@@ -210,11 +210,12 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::b
 #termsAndConditionBtn , #goToProfile{
     display: inline-block;
     background-color: var(--koochita-light-green);
-    width: 150px;
+    /*width: 150px;*/
     color: white;
     line-height: 2;
     font-size: 18px;
     margin-top: 3px;
+    margin-right: auto;
 }
 
 footer {

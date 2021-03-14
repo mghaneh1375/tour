@@ -92,6 +92,8 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
             Route::get('businessManagement/{business}/tour/list', [AgencyBusinessPanelController::class, 'tourList'])->name('businessManagement.tour.list');
 
+            Route::get('businessManagement/{business}/tour/getFullyData/{tourId}', [TourCreationAgencyController::class, 'getFullyInfoOfTour'])->name('businessManagement.tour.getFullyInfoOfTour');
+
             Route::get('businessManagement/{business}/tour/create', [TourCreationAgencyController::class, 'tourCreateUrlManager'])->name('businessManagement.tour.create');
             Route::get('businessManagement/{business}/tour/create/stage_1/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageOne'])->name('businessManagement.tour.create.stage_1');
             Route::get('businessManagement/{business}/tour/create/stage_2/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageTwo'])->name('businessManagement.tour.create.stage_2');
@@ -104,14 +106,18 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::get('businessManagement/{business}/tour/getLists', [AgencyBusinessPanelController::class, 'getTourList'])->name('businessManagement.tour.getLists');
     });
 
+
     Route::post('businessManagement/tour/store/stage_1', [TourCreationAgencyController::class, 'tourStoreStageOne'])->name('businessManagement.tour.store.stage_1');
     Route::post('businessManagement/tour/store/stage_2', [TourCreationAgencyController::class, 'tourStoreStageTwo'])->name('businessManagement.tour.store.stage_2');
     Route::post('businessManagement/tour/store/stage_3', [TourCreationAgencyController::class, 'tourStoreStageThree'])->name('businessManagement.tour.store.stage_3');
     Route::post('businessManagement/tour/store/stage_4', [TourCreationAgencyController::class, 'tourStoreStageFour'])->name('businessManagement.tour.store.stage_4');
     Route::post('businessManagement/tour/store/stage_5', [TourCreationAgencyController::class, 'tourStoreStageFive'])->name('businessManagement.tour.store.stage_5');
-
+    Route::delete('businessManagement/tour/delete', [TourCreationAgencyController::class, 'deleteTour'])->name('businessManagement.tour.delete');
     Route::post('businessManagement/tour/store/pic', [TourCreationAgencyController::class, 'tourStorePic'])->name('businessManagement.tour.store.pic');
     Route::post('businessManagement/tour/delete/pic', [TourCreationAgencyController::class, 'tourDeletePic'])->name('businessManagement.tour.delete.pic');
+
+    Route::post('businessManagement/tour/update/timeStatus', [TourCreationAgencyController::class, 'tourUpdateTimeStatus'])->name('businessManagement.tour.update.timeStatus');
+    Route::post('businessManagement/tour/update/tourPublished', [TourCreationAgencyController::class, 'tourUpdateTourPublished'])->name('businessManagement.tour.update.published');
 
 
     Route::middleware(['BusinessPanelShareData'])->group( function () {

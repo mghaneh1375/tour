@@ -15,4 +15,15 @@ class TourSchedule extends Model
 {
     protected $table = 'tourSchedules';
 
+    public function fullyDelete(){
+        $scheduleDetails = TourScheduleDetail::where('tourScheduleId', $this->id)->get();
+        if($scheduleDetails != null) {
+            $scheduleDetailsIds = $scheduleDetails->pluck('id')->toArray();
+            TourPlaceRelation::whereIn('tourScheduleDetailId', $scheduleDetailsIds)->delete();
+            TourScheduleDetail::where('tourScheduleId', $this->id)->delete();
+        }
+        $this->delete();
+
+        return;
+    }
 }

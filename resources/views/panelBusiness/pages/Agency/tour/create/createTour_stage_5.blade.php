@@ -347,32 +347,34 @@
                 <div class="boxTitlesTourCreation">چه همراه داشته باشیم</div>
                 <div class="inboxHelpSubtitle">به مشتریان‌تان کمک کنید تا بدانند چه چیزی همراه داشته باشند. موارد ضروری مواردی است که حتماً باید همراه باشد و موارد پیشنهادی به تجربه‌‌ی بهتر کمک می‌کند.</div>
                 <div class="inboxHelpSubtitle">ما لیست تمام موارد پیش‌بینی شده را در دسته‌بندی‌های مختلف آماده گرده‌ایم و شما تنها می‌بایست گزینه‌ی مورد نظر خود را گرفته و به داخل باکس مورد نظر خود بکشید.</div>
-                <div class="panel-group" id="accordion">
-                    <div class="panel panel-default equipmentSection">
-                        <div class="panel-heading">
+                <div>
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default equipmentSection">
+                            <div class="panel-heading">
+                                @for($i = 0; $i < count($mainEquipment); $i++)
+                                    <div class="panel-title">
+                                        <div id="mainEquipment{{$mainEquipment[$i]->id}}" class="{{$i == 0 ? 'selectTag' : ''}}" onclick="changeEquipment({{$mainEquipment[$i]->id}})">{{$mainEquipment[$i]->name}}</div>
+                                    </div>
+                                @endfor
+                            </div>
                             @for($i = 0; $i < count($mainEquipment); $i++)
-                                <div class="panel-title">
-                                    <div id="mainEquipment{{$mainEquipment[$i]->id}}" class="{{$i == 0 ? 'selectTag' : ''}}" onclick="changeEquipment({{$mainEquipment[$i]->id}})">{{$mainEquipment[$i]->name}}</div>
+                                <div id="equipmentSection_{{$mainEquipment[$i]->id}}" class="panel-collapse collapse in" style="display: {{$i == 0 ? 'inline-block' : 'none' }}; padding-top: 0px;">
+                                    <div class="title" style="text-align: center; font-weight: bold; margin-top: 10px; font-size: 19px;">{{$mainEquipment[$i]->name}}</div>
+                                    <div class="panel-body">
+                                        @foreach($mainEquipment[$i]->side as $item2)
+                                            <div id="equipmentItem_{{$item2->id}}" class="draghere" data-id="{{$item2->id}}" draggable="true" ondragstart="drag(this)">{{$item2->name}}</div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             @endfor
                         </div>
-                        @for($i = 0; $i < count($mainEquipment); $i++)
-                            <div id="equipmentSection_{{$mainEquipment[$i]->id}}" class="panel-collapse collapse in" style="display: {{$i == 0 ? 'inline-block' : 'none' }}; padding-top: 0px;">
-                                <div class="title" style="text-align: center; font-weight: bold; margin-top: 10px; font-size: 19px;">{{$mainEquipment[$i]->name}}</div>
-                                <div class="panel-body">
-                                    @foreach($mainEquipment[$i]->side as $item2)
-                                        <div id="equipmentItem_{{$item2->id}}" class="draghere" data-id="{{$item2->id}}" draggable="true" ondragstart="drag(this)">{{$item2->name}}</div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endfor
                     </div>
-                </div>
-                <div id="necessaryItemsTourCreation" class="tourEquipmentItemsTourCreation essentialItemsTourCreation putDragSec" ondrop="drop('necessary')" ondragover="allowDrop(event)">
-                    <span class="fullwidthDiv mg-bt-10">موارد ضروری</span>
-                </div>
-                <div id="suggestItemsTourCreation" class="tourEquipmentItemsTourCreation suggestionItemsTourCreation putDragSec" ondrop="drop('suggest')" ondragover="allowDrop(event)">
-                    <span class="fullwidthDiv mg-bt-10">موارد پیشنهادی</span>
+                    <div id="necessaryItemsTourCreation" class="tourEquipmentItemsTourCreation essentialItemsTourCreation putDragSec" ondrop="drop('necessary')" ondragover="allowDrop(event)">
+                        <span class="fullwidthDiv mg-bt-10">موارد ضروری</span>
+                    </div>
+                    <div id="suggestItemsTourCreation" class="tourEquipmentItemsTourCreation suggestionItemsTourCreation putDragSec" ondrop="drop('suggest')" ondragover="allowDrop(event)">
+                        <span class="fullwidthDiv mg-bt-10">موارد پیشنهادی</span>
+                    </div>
                 </div>
             </div>
 
@@ -504,7 +506,7 @@
                     url: "{{route('businessManagement.tour.create.stage_2', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}",
                 },
                 {
-                    title: 'اطلاعات حمل و نقل',
+                    title: 'اطلاعات برگزاری',
                     icon: '<i class="fa-duotone fa-plane-tail"></i>',
                     url: "{{route('businessManagement.tour.create.stage_3', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}",
                 },

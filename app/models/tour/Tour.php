@@ -6,6 +6,9 @@ use App\models\Cities;
 use App\models\places\Place;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int isPublished
+ */
 class Tour extends Model {
     protected $table = 'tour';
 
@@ -100,5 +103,55 @@ class Tour extends Model {
         }
 
         return $schedules;
+    }
+
+
+    public function fullyDeleted(){
+        $tour = $this;
+        $condition = ['tourId' => $tour->id];
+        $tourTimeCheck = TourTimes::where($condition)->where('registered', '>', 0)->count();
+        if($tourTimeCheck != 0)
+            return ['status' => 'hasRegistered', 'results' => $tourTimeCheck];
+
+        $tourTimes = TourTimes::where($condition)->get();
+        $tourTimesId = $tourTimes->pluck('id')->toArray();
+
+        $tourReservation = TourUserReservation::whereIn('tourTimeId', $tourTimesId)->count();
+        if($tourReservation != 0)
+            return ['status' => 'hasRegistered'];
+
+        $tourPruchCkeck = TourPurchased::whereIn('tourTimeId', $tourTimesId)->count();
+        if($tourPruchCkeck != 0)
+            return ['status' => 'hasRegistered'];
+
+        TourDifficult_Tour::where($condition)->delete();
+        TourFitFor_Tour::where($condition)->delete();
+        TourFocus_Tour::where($condition)->delete();
+        TourStyle_Tour::where($condition)->delete();
+        TourKind_Tour::where($condition)->delete();
+        TourDiscount::where($condition)->delete();
+        TourEquipment::where($condition)->delete();
+        TourFeature::where($condition)->delete();
+        TourGuid::where($condition)->delete();
+        TourNotice::where($condition)->delete();
+        Transport_Tour::where($condition)->delete();
+
+        TourPrices::where($condition)->delete();
+
+        $schedule = TourSchedule::where($condition)->get();
+        foreach ($schedule as $item)
+            $item->fullyDelete();
+
+
+        $folderLocation = __DIR__."/../../../../assets/_images/tour/{$this->id}";
+        $filesInFolder = scandir($folderLocation);
+        foreach($filesInFolder as $file){
+            if($filesInFolder != '.' && $filesInFolder != '..' && is_file("{$folderLocation}/{$file}"))
+                unlink("{$folderLocation}/{$file}");
+        }
+        $pics = TourPic::where($condition)->delete();
+
+        $this->delete();
+        return ['status' => 'ok'];
     }
 }

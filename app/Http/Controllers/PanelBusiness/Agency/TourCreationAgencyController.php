@@ -48,6 +48,7 @@ use ClassesWithParents\CInterface;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Transport\Transport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -111,6 +112,7 @@ class TourCreationAgencyController extends Controller{
                     $code = generateRandomString('10');
 
                 $newTour->code = $code;
+                $newTour->isPublished = 0;
             }
             else{
                 if($newTour->userId != auth()->user()->id)
@@ -158,7 +160,6 @@ class TourCreationAgencyController extends Controller{
         else
             return response()->json(['status' => 'notBusinessAccess']);
     }
-
 
     public function tourCreateStageTwo($businessId, $tourId){
 
@@ -280,7 +281,6 @@ class TourCreationAgencyController extends Controller{
         else
             return response()->json(['status' => 'notYours']);
     }
-
 
     public function tourCreateStageThree($businessId, $tourId){
         $business = Business::find($businessId);
@@ -405,7 +405,6 @@ class TourCreationAgencyController extends Controller{
             return response()->json(['status' => 'error1']);
     }
 
-
     public function tourCreateStageFour($businessId, $tourId){
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
@@ -518,7 +517,6 @@ class TourCreationAgencyController extends Controller{
             return response()->json(['status' => 'error1']);
     }
 
-
     public function tourCreateStageFive($businessId, $tourId){
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
@@ -553,7 +551,6 @@ class TourCreationAgencyController extends Controller{
             foreach($pics as $pic)
                 $pic->url = URL::asset("_images/tour/{$tour->id}/{$pic->pic}");
             $tour->pics = $pics;
-
 
             $view = "{$this->defaultViewLocation}.tour.create.createTour_stage_5";
             return view($view,  compact(['tour', 'mainEquipment', 'tourKind', 'tourDifficult', 'tourFitFor', 'tourStyle']));
@@ -625,7 +622,6 @@ class TourCreationAgencyController extends Controller{
     }
 
     public function tourCreateStageSix($businessId, $tourId){
-        dd('stage 6');
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
 
@@ -633,12 +629,134 @@ class TourCreationAgencyController extends Controller{
             if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
-            return view('pages.tour.create.createTour_6_Complete', compact(['tour']));
+            $view = "{$this->defaultViewLocation}.tour.create.createTour_stage_6";
+            return view($view, compact(['tour']));
         }
         else
             return redirect()->back();
     }
 
+    public function getFullyInfoOfTour($businessId, $tourId){
+        $business = Business::find($businessId);
+        $tour = Tour::find($tourId);
+        if($tour != null){
+            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+                return redirect(route('businessManagement.tour.list'));
+
+
+            $src = Cities::find($tour->srcId);
+            $destType = $tour->kindDest === 'city' ? 'cities' : 'majara';
+            $dest = \DB::table($destType)->find($tour->destId);
+
+            $tour->srcName = $src->name ?? '';
+            $tour->destName = $dest->name ?? '';
+
+            $userInfoNeedTranslator = ['faName' => 'نام و نام خانوادگی فارسی', 'sex' => 'جنسیت',
+                                        'birthDay' => 'تاریخ تولد', 'meliCode' => 'کدملی',
+                                        'enName' => 'نام و نام خانوادگی انگلیسی', 'country' => 'ملیت',
+                                        'passport' => 'اطلاعات پاسپورت'];
+            $userInfoNeed = json_decode($tour->userInfoNeed);
+            for($i = 0; $i < count($userInfoNeed); $i++)
+                $userInfoNeed[$i] = $userInfoNeedTranslator[$userInfoNeed[$i]];
+            $tour->userInfoNeed = $userInfoNeed;
+
+            $tour->times = TourTimes::where('tourId', $tour->id)->get();
+
+            $transport = Transport_Tour::where('tourId', $tour->id)->first();
+            if($transport != null){
+                $sType = TransportKind::find($transport->sTransportId);
+                $eType = TransportKind::find($transport->eTransportId);
+                $transport->sType = $sType->name ?? '';
+                $transport->eType = $eType->name ?? '';
+
+                $transport->sMap = json_decode($transport->sLatLng);
+                $transport->eMap = json_decode($transport->eLatLng);
+            }
+            $tour->transport = $transport;
+
+
+            $sideTransport = json_decode($tour->sideTransport);
+            $sideTransport = TransportKind::whereIn('id', $sideTransport)->pluck('name')->toArray();
+            $tour->sideTransport = $sideTransport;
+
+            $tour->language = json_decode($tour->language);
+
+            $tour->meals = json_decode($tour->meals);
+
+            $tourGuideKoochita = User::find($tour->tourGuidKoochitaId);
+            if($tourGuideKoochita != null && $tour->tourGuidKoochitaId > 0)
+                $tour->guideName = $tourGuideKoochita->username;
+            else
+                $tour->guideName = $tour->tourGuidName;
+
+            $tour->minCost = number_format($tour->minCost);
+            $otherPrice = TourPrices::where('tourId', $tour->id)->orderBy('ageFrom')->get();
+            foreach ($otherPrice as $item){
+                if($item->isFree == 0)
+                    $item->cost = number_format($item->cost);
+            }
+            $tour->otherCost = $otherPrice;
+
+            $features = TourFeature::where('tourId', $tour->id)->get();
+            foreach($features as $feat)
+                $feat->cost = number_format($feat->cost);
+            $tour->features = $features;
+
+            $tour->groupDiscount = TourDiscount::where('tourId', $tour->id)->whereNotNull('minCount')->whereNotNull('maxCount')->get();
+            $tour->remainingDay = TourDiscount::where('tourId', $tour->id)->whereNotNull('remainingDay')->orderBy('remainingDay')->get();
+
+            $tour->kind = TourKind_Tour::join('tourKind', 'tourKind.id', 'tourKind_tour.kindId')
+                                    ->where('tourKind_tour.tourId', $tour->id)
+                                    ->pluck('tourKind.name')->toArray();
+
+            $tour->defficult = TourDifficult::join('tourDifficult_tours', 'tourDifficult_tours.difficultId', 'tourDifficults.id')
+                                            ->where('tourDifficult_tours.tourId', $tour->id)->select(['tourDifficults.name'])->first();
+            if($tour->defficult != null)
+                $tour->defficult = $tour->defficult->name;
+
+
+            $fitFor = TourFitFor::join('tourFitFor_Tours', 'tourFitFor_Tours.fitForId', 'tourFitFor.id')
+                                ->where('tourFitFor_Tours.tourId', $tour->id)->pluck('tourFitFor.name')->toArray();
+            $tour->fitFor = implode('-', $fitFor);
+
+            $tourStyle = TourStyle_Tour::join('tourStyles', 'tourStyles.id', 'tourStyle_tour.styleId')
+                                    ->where('tourStyle_tour.tourId', $tour->id)->pluck('tourStyles.name')->toArray();
+            $tour->style = implode('-', $tourStyle);
+
+            $equip = TourEquipment::join('subEquipments', 'subEquipments.id','tourEquipments.subEquipmentId')
+                                ->where('tourEquipments.tourId', $tour->id)
+                                ->select(['tourEquipments.isNecessary', 'subEquipments.name'])
+                                ->get()->groupBy('isNecessary');
+
+            $tour->notNeccesseryEquip = implode('-', $equip[0]->pluck('name')->toArray());
+            $tour->neccesseryEquip = implode('-', $equip[1]->pluck('name')->toArray());
+
+            $pics = TourPic::where('tourId', $tour->id)->pluck('pic')->toArray();
+            $baseUrl = URL::asset("_images/tour/{$tour->id}");
+            for($i = 0; $i < count($pics); $i++)
+                $pics[$i] = $baseUrl.'/'.$pics[$i];
+            $tour->pics = $pics;
+
+
+            if($tour->confirm == 0) {
+                $tour->statusText = 'در حال بررسی';
+                $tour->statusCode = 0;
+            }
+            else if($tour->isPublished == 0){
+                $tour->statusText = 'پیش نویس';
+                $tour->statusCode = 1;
+            }
+            else{
+                $tour->statusText = 'منتشر شده';
+                $tour->statusCode = 2;
+            }
+
+
+            return view("{$this->defaultViewLocation}.tour.fullTourInfo", compact(['tour']));
+        }
+        else
+            return redirect(route('businessManagement.tour.list'));
+    }
 
     public function tourStorePic(Request $request){
 
@@ -661,7 +779,6 @@ class TourCreationAgencyController extends Controller{
                     unlink($direction);
 
                 TourPic::where('tourId', $tour->id)->where('pic', $request->storeFileName)->delete();
-
                 return response()->json(['status' => 'canceled']);
             }
 
@@ -685,12 +802,6 @@ class TourCreationAgencyController extends Controller{
                 }
             }
 
-//            if(isset($request->last) && $request->last == 'true' && $data->kind == 'photo'){
-//                $location = __DIR__.'/../../../../assets/_images/festival/limbo';
-//                $size = [[ 'width' => 250, 'height' => 250, 'name' => 'thumb_', 'destination' => $location ]];
-//                $result = resizeUploadedImage(file_get_contents($direction), $size, $fileName);
-//            }
-
             if($result)
                 return response()->json(['status' => 'ok', 'fileName' => $fileName, 'time' => microtime(true)-$start]);
             else
@@ -699,7 +810,6 @@ class TourCreationAgencyController extends Controller{
         else
             return response()->json(['status' => 'error1']);
     }
-
     public function tourDeletePic(Request $request)
     {
         $tour = Tour::find($request->tourId);
@@ -719,4 +829,61 @@ class TourCreationAgencyController extends Controller{
         else
             return response()->status(['status' => 'error1']);
     }
+
+    public function tourUpdateTimeStatus(Request $request){
+        $tourTimeId = $request->timeId;
+        $tourTime = TourTimes::find($tourTimeId);
+        if($tourTime != null){
+            $tour = Tour::find($tourTime->tourId);
+            if($tour != null){
+                if($tour->userId == \auth()->user()->id){
+                    $tourTime->isPublished = $tourTime->isPublished == 1 ? 0 : 1;
+                    $tourTime->save();
+
+                    return response()->json(['status' => 'ok', 'result' => $tourTime->isPublished]);
+                }
+                else
+                    return response()->json(['status' => 'notAccess']);
+            }
+            else
+                return response()->json(['status' => 'notFoundTour']);
+        }
+        else
+            return response()->json(['status' => 'notFound']);
+    }
+
+    public function tourUpdateTourPublished(Request $request)
+    {
+        $tour = Tour::find($request->tourId);
+        if($tour != null){
+            if($tour->userId == \auth()->user()->id){
+                $tour->isPublished = $tour->isPublished == 1 ? 0 : 1;
+                $tour->save();
+
+                return response()->json(['status' => 'ok', 'publish' => $tour->isPublished]);
+            }
+            else
+                return response()->json(['status' => 'notAccess']);
+        }
+        else
+            return response()->json(['status' => 'notFound']);
+    }
+
+    public function deleteTour(Request $request){
+        $tour = Tour::find($request->tourId);
+        if($tour != null){
+            if($tour->userId == \auth()->user()->id){
+                $response = $tour->fullyDeleted();
+                if($response['status'] == 'ok')
+                    return response()->json(['status' => 'ok']);
+                else if($response['status'] == 'hasRegistered')
+                    return response()->json(['status' => 'registered']);
+            }
+            else
+                return response()->json(['status' => 'notAccess']);
+        }
+        else
+            return response()->json(['status' => 'notFound']);
+    }
 }
+
