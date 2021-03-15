@@ -436,7 +436,7 @@
 
     <script>
 
-        var photographerUploadFileLocalShop = '{{route('photographer.uploadFile')}}';
+        var photographerUploadFileLocalShop = '{{route('upload.photographer.uploadFile')}}';
         var getLocalShopReviewsUrl = '{{route("getReviews")}}';
         var setBookMarkInLocalShop = '{{route("setBookMark")}}';
         var askQuestionUrl = '{{route("askQuestion")}}';

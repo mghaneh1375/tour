@@ -67,12 +67,13 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var getPlacePicsUrl = '{{route("place.getPics")}}';
         var filterComments = '{{route('filterComments')}}';
         var getPhotoFilter = '{{route('getPhotoFilter')}}';
-        var reviewUploadPic = '{{route('reviewUploadPic')}}';
-        var doEditReviewPic = '{{route('doEditReviewPic')}}';
         var getCommentsCount = '{{route('getCommentsCount')}}';
-        var deleteReviewPicUrl = '{{route('deleteReviewPic')}}';
         var showUserBriefDetail = '{{route('showUserBriefDetail')}}';
-        var reviewUploadFileURLInPlaceDetails = '{{route('review.uploadFile')}}';
+
+        var reviewUploadFileURLInPlaceDetails = '{{route("upload.review.uploadFile")}}';
+        var reviewUploadPic = '{{route('upload.reviewUploadPic')}}';
+        var doEditReviewPic = '{{route('upload.doEditReviewPic')}}';
+        var deleteReviewPicUrl = '{{route('upload.deleteReviewPic')}}';
 
     </script>
 
@@ -833,7 +834,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
         var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
-        var addPhotoToPlaceUrl = '{{route("photographer.uploadFile")}}';
+        var addPhotoToPlaceUrl = '{{route("upload.photographer.uploadFile")}}';
 
 
         $(window).ready(() => {

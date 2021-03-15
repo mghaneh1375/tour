@@ -1,6 +1,22 @@
 <?php
 
 use App\Http\Controllers\api\APIController;
+use App\Http\Controllers\CookController;
+use App\Http\Controllers\DeleteContentController;
+use App\Http\Controllers\FestivalController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocalShop\CreateLocalShopController;
+use App\Http\Controllers\LocalShop\LocalShopController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MyTripsController;
+use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\SafarnamehController;
+use App\Http\Controllers\TravelController;
+use App\Http\Controllers\UserLoginController;
 use App\models\ConfigModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
@@ -191,7 +207,6 @@ Route::middleware(['throttle:60'])->group(function (){
     Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
     Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
 
-
     Route::middleware(['auth'])->group(function(){
         Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
     });
@@ -201,23 +216,29 @@ Route::middleware(['throttle:60'])->group(function (){
 Route::middleware(['throttle:60'])->group(function (){
 
     Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
-        Route::get('/business/show/{id?}', 'LocalShop\LocalShopController@showLocalShops')->name('business.show');
-        Route::get('/localShops/show/{id?}', 'LocalShop\LocalShopController@showLocalShops')->name('localShops.show');
+
+        Route::get('/business/show/{id?}', [LocalShopController::class, 'showLocalShops'])->name('business.show');
+
+        Route::get('/localShops/show/{id?}', [LocalShopController::class, 'showLocalShops'])->name('localShops.show');
+
     });
 
-    Route::get('localShops/getFeatures', 'LocalShop\LocalShopController@getFeatures')->name('localShop.getFeatureList');
+    Route::get('localShops/getFeatures', [LocalShopController::class, 'getFeatures'])->name('localShop.getFeatureList');
 
     Route::middleware(['auth'])->group(function(){
+
         Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
-            Route::get('localShops/create', 'LocalShop\CreateLocalShopController@createLocalShopPage')->name('localShop.create.page');
+
+            Route::get('localShops/create', [CreateLocalShopController::class, 'createLocalShopPage'])->name('localShop.create.page');
+
         });
+        Route::post('localShops/addIAmHere', [LocalShopController::class, 'addImAmHereLocalShop'])->name('localShop.addIAmHere');
 
-        Route::post('localShops/store', 'LocalShop\CreateLocalShopController@storeLocalShop')->name('localShop.store');
-        Route::post('localShops/store/pics', 'LocalShop\CreateLocalShopController@storeLocalShopPics')->name('localShop.store.pics');
-        Route::delete('localShops/store/delete', 'LocalShop\CreateLocalShopController@deleteLocalShopPics')->name('localShop.store.delete');
+        Route::post('localShops/store', [CreateLocalShopController::class, 'storeLocalShop'])->name('upload.localShop.store');
 
-        Route::post('localShops/addIAmHere', 'LocalShop\LocalShopController@addImAmHereLocalShop')->name('localShop.addIAmHere');
+        Route::post('localShops/store/pics', [CreateLocalShopController::class, 'storeLocalShopPics'])->name('upload.localShop.store.pics');
 
+        Route::delete('localShops/store/delete', [CreateLocalShopController::class, 'deleteLocalShopPics'])->name('upload.localShop.store.delete');
     });
 });
 
@@ -291,25 +312,26 @@ Route::middleware(['nothing'])->group(function () {
     Route::post('getReviews', 'ReviewsController@getReviews')->name('getReviews');
 
     Route::middleware(['auth'])->group(function (){
-        Route::get('review/getReviewsForExplore', 'ReviewsController@getReviewExplore')->name('review.explore');
+        Route::get('review/getReviewsForExplore', [ReviewsController::class, 'getReviewExplore'])->name('review.explore');
 
-        Route::post('review/getNewCodeForUploadNewReview', 'ReviewsController@getNewCodeForUploadNewReview')->name('review.getNewCodeForUploadNewReview');
+        Route::post('review/getNewCodeForUploadNewReview', [ReviewsController::class, 'getNewCodeForUploadNewReview'])->name('review.getNewCodeForUploadNewReview');
 
-        Route::post('reviewUploadFile', 'ReviewsController@reviewUploadFile')->name('review.uploadFile');
+        Route::post('reviewUploadFile', [ReviewsController::class, 'reviewUploadFile'])->name('upload.review.uploadFile');
 
-        Route::post('reviewUploadPic', 'ReviewsController@reviewUploadPic')->name('reviewUploadPic');
+        Route::post('reviewUploadPic', [ReviewsController::class, 'reviewUploadPic'])->name('upload.reviewUploadPic');
 
-        Route::post('doEditReviewPic', 'ReviewsController@doEditReviewPic')->name('doEditReviewPic');
+        Route::post('doEditReviewPic', [ReviewsController::class, 'doEditReviewPic'])->name('upload.doEditReviewPic');
 
-        Route::post('deleteReviewPic', 'ReviewsController@deleteReviewPic')->name('deleteReviewPic');
+        Route::post('deleteReviewPic', [ReviewsController::class, 'deleteReviewPic'])->name('upload.deleteReviewPic');
 
-        Route::post('review/store', 'ReviewsController@storeReview')->name('storeReview');
+        Route::post('review/store', [ReviewsController::class, 'storeReview'])->name('upload.storeReview');
 
-        Route::post('review/ans', 'ReviewsController@ansReview')->name('ansReview');
+        Route::post('review/delete', [ReviewsController::class, 'deleteReview'])->name('upload.review.delete');
 
-        Route::post('review/bookMark', 'ReviewsController@addReviewToBookMark')->name('review.bookMark');
+        Route::post('review/ans', [ReviewsController::class, 'ansReview'])->name('ansReview');
 
-        Route::post('review/delete', 'ReviewsController@deleteReview')->name('review.delete');
+        Route::post('review/bookMark', [ReviewsController::class, 'addReviewToBookMark'])->name('review.bookMark');
+
     });
 
 });
@@ -337,134 +359,142 @@ Route::group([], function () {
     Route::get('/getSafarnamehComments', 'SafarnamehController@getSafarnamehComments')->name('safarnameh.comment.get');
 
     Route::group(['middleware' => ['auth']], function (){
-        Route::post('/safarnameh/like', 'SafarnamehController@LikeSafarnameh')->name('safarnameh.like');
+        Route::post('/safarnameh/like', [SafarnamehController::class, 'LikeSafarnameh'])->name('safarnameh.like');
 
-        Route::post('/safarnameh/comment/store', 'SafarnamehController@StoreSafarnamehComment')->name('safarnameh.comment.store');
+        Route::post('/safarnameh/comment/store', [SafarnamehController::class, 'StoreSafarnamehComment'])->name('safarnameh.comment.store');
 
-        Route::post('/safarnameh/comment/like', 'SafarnamehController@likeSafarnamehComment')->name('safarnameh.comment.like');
+        Route::post('/safarnameh/comment/like',  [SafarnamehController::class, 'likeSafarnamehComment'])->name('safarnameh.comment.like');
 
-        Route::post('/safarnameh/bookMark', 'SafarnamehController@addSafarnamehBookMark')->name('safarnameh.bookMark');
+        Route::post('/safarnameh/bookMark', [SafarnamehController::class, 'addSafarnamehBookMark'])->name('safarnameh.bookMark');
 
-        Route::post('safarnameh/store', 'SafarnamehController@storeSafarnameh')->name('safarnameh.store');
+        Route::post('safarnameh/getForEdit', [SafarnamehController::class, 'getSafarnameh'])->name('safarnameh.get');
 
-        Route::post('safarnameh/getForEdit', 'SafarnamehController@getSafarnameh')->name('safarnameh.get');
+        Route::post('safarnameh/store', [SafarnamehController::class, 'storeSafarnameh'])->name('upload.safarnameh.store');
 
-        Route::post('safarnameh/delete', 'SafarnamehController@deleteSafarnameh')->name('safarnameh.delete');
+        Route::post('safarnameh/delete', [SafarnamehController::class, 'deleteSafarnameh'])->name('upload.safarnameh.delete');
 
-        Route::post('safarnameh/storePic', 'SafarnamehController@storeSafarnamehPics')->name('safarnameh.storePic');
+        Route::post('safarnameh/storePic', [SafarnamehController::class, 'storeSafarnamehPics'])->name('upload.safarnameh.storePic');
     });
 });
 
 //reports
 Route::group(array('middleware' => 'nothing'), function(){
-    Route::post('getReportQuestions', 'ReportController@getReportQuestions')->name('getReportQuestions');
+    Route::post('getReportQuestions', [ReportController::class, 'getReportQuestions'])->name('getReportQuestions');
 
-    Route::post('getReports', array('as' => 'getReportsDir', 'uses' => 'ReportController@getReports1'));
+    Route::post('getReports', [ReportController::class, 'getReports1'])->name('getReportsDir');
 
-    Route::post('getReports2', array('as' => 'getReports', 'uses' => 'ReportController@getReports2'));
+    Route::post('getReports2', [ReportController::class, 'getReports2'])->name('getReports');
 
-    Route::post('report', array('as' => 'report', 'uses' => 'ReportController@report'));
+    Route::post('report', [ReportController::class, 'report'])->name('report');
 
-    Route::get('getReports', array('as' => 'getReports', 'uses' => 'ReportController@getReports'));
+    Route::get('getReports', [ReportController::class, 'getReports'])->name('getReports');
 
-    Route::get('getReports/{page}', array('as' => 'getReports2', 'uses' => 'ReportController@getReports'));
+    Route::get('getReports/{page}', [ReportController::class, 'getReports'])->name('getReports2');
 
-    Route::post('storeReport', array('as' => 'storeReport', 'uses' => 'ReportController@storeReport'));
+    Route::post('storeReport', [ReportController::class, 'storeReport'])->name('storeReport');
 
-    Route::post('sendReceiveReport', array('as' => 'sendReceiveReport', 'uses' => 'ReportController@sendReceiveReport'));
+    Route::post('sendReceiveReport', [ReportController::class, 'sendReceiveReport'])->name('sendReceiveReport');
 
-    Route::post('sendReport', array('as' => 'sendReport', 'uses' => 'ReportController@sendReport'));
+    Route::post('sendReport', [ReportController::class, 'sendReport'])->name('sendReport');
 });
 
 // profile common
 Route::group(['middleware' => ['throttle:60']], function(){
-    Route::get('addPlace/index', 'ProfileController@addPlaceByUserPage')->name('addPlaceByUser.index')->middleware('shareData');
+    Route::get('addPlace/index', [ProfileController::class, 'addPlaceByUserPage'])->name('addPlaceByUser.index')->middleware('shareData');
 
-    Route::get('profile/index/{username?}', 'ProfileController@showProfile')->name('profile')->middleware('shareData');
+    Route::get('profile/index/{username?}', [ProfileController::class, 'showProfile'])->name('profile')->middleware('shareData');
 
-    Route::get('/profile/getUserPicsAndVideo', 'ProfileController@getUserPicsAndVideo')->name('profile.getUserPicsAndVideo');
+    Route::get('/profile/getUserPicsAndVideo', [ProfileController::class, 'getUserPicsAndVideo'])->name('profile.getUserPicsAndVideo');
 
-    Route::post('/profile/getFollower', 'FollowerController@getFollower')->name('profile.getFollower');
+    Route::post('/profile/getFollower', [ProfileController::class, 'getFollower'])->name('profile.getFollower');
 
-    Route::post('/profile/getUserMedals', 'ProfileController@getUserMedals')->name('profile.getUserMedals');
+    Route::post('/profile/getUserMedals', [ProfileController::class, 'getUserMedals'])->name('profile.getUserMedals');
 
-    Route::post('/profile/getSafarnameh', 'ProfileController@getSafarnameh')->name('profile.getSafarnameh');
+    Route::post('/profile/getSafarnameh', [ProfileController::class, 'getSafarnameh'])->name('profile.getSafarnameh');
 
-    Route::post('/profile/getQuestions', 'ProfileController@getQuestions')->name('profile.getQuestions');
+    Route::post('/profile/getQuestions', [ProfileController::class, 'getQuestions'])->name('profile.getQuestions');
 
     Route::group(array('middleware' => ['throttle:60', 'auth']), function () {
 
         Route::middleware(['shareData'])->group(function() {
-            Route::get('profile/editPhoto', 'ProfileController@editPhoto')->name('profile.editPhoto');
-            Route::get('profile/message', 'MessageController@messagingPage')->name('profile.message.page');
-            Route::get('profile/myTrips', 'MyTripsController@myTrips')->name('myTrips');
-            Route::get('profile/tripPlaces/{tripId}/{sortMode?}', 'MyTripsController@myTripsInner')->name('tripPlaces');
-            Route::get('profile/recentlyView', 'MyTripsController@recentlyViewTotal')->name('recentlyViewTotal');
-            Route::get('messages', array('as' => 'msgs', 'uses' => 'MessageController@showMessages'));
-            Route::get('messagesErr/{err}', array('as' => 'msgsErr', 'uses' => 'MessageController@showMessages'));
-            Route::get('travel', array('as' => 'travel', 'uses' => 'TravelController@showTravel'));
 
-            Route::get('profile/accountInfo', 'ProfileController@accountInfo')->name('profile.accountInfo');
+            Route::get('profile/editPhoto', [ProfileController::class, 'editPhoto'])->name('profile.editPhoto');
+
+            Route::get('profile/accountInfo', [ProfileController::class, 'accountInfo'])->name('profile.accountInfo');
+
+            Route::get('profile/message', [MessageController::class, 'messagingPage'])->name('profile.message.page');
+
+            Route::get('messages',[MessageController::class, 'showMessages'])->name('msgs');
+
+            Route::get('messagesErr/{err}', [MessageController::class, 'showMessages'])->name('msgsErr');
+
+            Route::get('profile/myTrips', [MyTripsController::class, 'myTrips'])->name('myTrips');
+
+            Route::get('profile/tripPlaces/{tripId}/{sortMode?}', [MyTripsController::class, 'myTripsInner'])->name('tripPlaces');
+
+            Route::get('profile/recentlyView', [MyTripsController::class, 'recentlyViewTotal'])->name('recentlyViewTotal');
+
+            Route::get('travel', [TravelController::class, 'showTravel'])->name('travel');
 
         });
 
         Route::middleware(['throttle:20'])->group(function() {
-            Route::post('profile/accountInfo/editUsername', 'UserLoginController@editUsernameAccountInfo')->name('profile.accountInfo.editUsername');
+            Route::post('profile/accountInfo/editUsername', [UserLoginController::class, 'editUsernameAccountInfo'])->name('profile.accountInfo.editUsername');
 
-            Route::post('profile/accountInfo/editPhoneNumber', 'UserLoginController@editPhoneNumberAccountInfo')->name('profile.accountInfo.editPhoneNumber');
+            Route::post('profile/accountInfo/editPhoneNumber', [UserLoginController::class, 'editPhoneNumberAccountInfo'])->name('profile.accountInfo.editPhoneNumber');
 
-            Route::post('profile/accountInfo/editGeneralInfo', 'UserLoginController@editGeneralAccountInfo')->name('profile.accountInfo.editGeneralInfo');
+            Route::post('profile/accountInfo/editGeneralInfo', [UserLoginController::class, 'editGeneralAccountInfo'])->name('profile.accountInfo.editGeneralInfo');
 
-            Route::post('profile/accountInfo/editSocialInfo', 'UserLoginController@editSocialInfo')->name('profile.accountInfo.editSocialInfo');
+            Route::post('profile/accountInfo/editSocialInfo', [UserLoginController::class, 'editSocialInfo'])->name('profile.accountInfo.editSocialInfo');
 
-            Route::post('profile/accountInfo/editPassword', 'UserLoginController@editPassword')->name('profile.accountInfo.editPassword');
+            Route::post('profile/accountInfo/editPassword', [UserLoginController::class, 'editPassword'])->name('profile.accountInfo.editPassword');
         });
 
 
-        Route::get('profile/getUserInfoFooter', 'ProfileController@getUserInfoFooter')->name('profile.getUserInfoFooter');
+        Route::get('profile/getUserInfoFooter', [ProfileController::class, 'getUserInfoFooter'])->name('profile.getUserInfoFooter');
 
-        Route::get('profile/getBookMarks', 'ProfileController@getBookMarks')->name('profile.getBookMarks');
+        Route::get('profile/getBookMarks', [ProfileController::class, 'getBookMarks'])->name('profile.getBookMarks');
 
-        Route::get('profile/getMainFestival', 'ProfileController@getMainFestival')->name('profile.getMainFestival');
+        Route::get('profile/getMainFestival', [ProfileController::class, 'getMainFestival'])->name('profile.getMainFestival');
 
-        Route::get('profile/festival/getMyWorks', 'ProfileController@getFestivalContent')->name('profile.festival.getMyWorks');
+        Route::get('profile/festival/getMyWorks', [ProfileController::class, 'getFestivalContent'])->name('profile.festival.getMyWorks');
 
-        Route::delete('profile/festival/deleteMyWork', 'ProfileController@deleteFestivalContent')->name('profile.festival.deleteMyWork');
+        Route::delete('profile/festival/deleteMyWork', [ProfileController::class, 'deleteFestivalContent'])->name('profile.festival.deleteMyWork');
 
-        Route::post('profile/bookMark/delete', 'ProfileController@deleteBookMarkWithId')->name('profile.bookMark.delete');
+        Route::post('profile/bookMark/delete', [ProfileController::class, 'deleteBookMarkWithId'])->name('profile.bookMark.delete');
 
-        Route::post('profile/safarnameh/placeSuggestion', 'ProfileController@placeSuggestion')->name('profile.safarnameh.placeSuggestion');
+        Route::post('profile/safarnameh/placeSuggestion', [ProfileController::class, 'placeSuggestion'])->name('profile.safarnameh.placeSuggestion');
 
-        Route::post('profile/updateUserPhoto', 'ProfileController@updateUserPhoto')->name('profile.updateUserPhoto');
+        Route::post('profile/updateUserPhoto', [ProfileController::class, 'updateUserPhoto'])->name('upload.profile.updateUserPhoto');
 
-        Route::post('profile/updateMyBio', 'ProfileController@updateMyBio')->name('profile.updateMyBio');
+        Route::post('profile/updateBannerPic', [ProfileController::class, 'updateBannerPic'])->name('upload.profile.updateBannerPic');
 
-        Route::post('profile/updateBannerPic', 'ProfileController@updateBannerPic')->name('profile.updateBannerPic');
+        Route::post('profile/updateMyBio', [ProfileController::class, 'updateMyBio'])->name('profile.updateMyBio');
 
-        Route::post('profile/message/get', 'MessageController@getMessages')->name('profile.message.get');
+        Route::post('profile/message/get', [MessageController::class, 'getMessages'])->name('profile.message.get');
 
-        Route::post('profile/message/update', 'MessageController@updateMessages')->name('profile.message.update');
+        Route::post('profile/message/update', [MessageController::class, 'updateMessages'])->name('profile.message.update');
 
-        Route::post('profile/message/send', 'MessageController@sendMessages')->name('profile.message.send');
+        Route::post('profile/message/send', [MessageController::class, 'sendMessages'])->name('profile.message.send');
 
-        Route::get('profile/myTrips/getTrips', 'MyTripsController@getTrips')->name('myTrips.getTrips');
+        Route::get('profile/myTrips/getTrips', [MyTripsController::class, 'getTrips'])->name('myTrips.getTrips');
 
-        Route::post('profile/setFollower', 'FollowerController@setFollower')->name('profile.setFollower');
+        Route::post('profile/setFollower', [FollowerController::class, 'setFollower'])->name('profile.setFollower');
 
-        Route::post('getRecentlyViewElems', array('as' => 'getRecentlyViewElems', 'uses' => 'MyTripsController@getRecentlyViewElems'));
+        Route::post('getRecentlyViewElems', [MyTripsController::class, 'getRecentlyViewElems'])->name('getRecentlyViewElems');
 
-        Route::post('doEditPhoto', array('as' => 'doEditPhoto', 'uses' => 'ProfileController@doEditPhoto'));
+        Route::post('doEditPhoto', [ProfileController::class, 'doEditPhoto'])->name('upload.doEditPhoto');
 
-        Route::post('submitPhoto', array('as' => 'submitPhoto', 'uses' => 'ProfileController@submitPhoto'));
+        Route::post('submitPhoto', [ProfileController::class, 'submitPhoto'])->name('upload.submitPhoto');
 
 
-        Route::post('addPlace/createStepLog', 'ProfileController@createStepLog')->name('addPlaceByUser.createStepLog');
+        Route::post('addPlace/createStepLog', [ProfileController::class, 'createStepLog'])->name('addPlaceByUser.createStepLog');
 
-        Route::post('addPlace/store', 'ProfileController@storeAddPlaceByUser')->name('addPlaceByUser.store');
+        Route::post('addPlace/store', [ProfileController::class, 'storeAddPlaceByUser'])->name('addPlaceByUser.store');
 
-        Route::post('addPlace/storeImg', 'ProfileController@storeImgAddPlaceByUser')->name('addPlaceByUser.storeImg');
+        Route::post('addPlace/storeImg', [ProfileController::class, 'storeImgAddPlaceByUser'])->name('upload.addPlaceByUser.storeImg');
 
-        Route::post('addPlace/deleteImg', 'ProfileController@deleteImgAddPlaceByUser')->name('addPlaceByUser.deleteImg');
+        Route::post('addPlace/deleteImg', [ProfileController::class, 'deleteImgAddPlaceByUser'])->name('upload.addPlaceByUser.deleteImg');
 
         Route::post('getTripStyles', array('as' => 'getTripStyles', 'uses' => 'TripStyleController@getTripStyles'));
 
@@ -523,19 +553,19 @@ Route::group(['middleware' => ['throttle:60']], function(){
         Route::post('sendAns2', array('as' => 'sendAns2', 'uses' => 'PlaceController@sendAns2'));
 
 
-        Route::post('photographer/uploadFile', 'PlaceController@storePhotographerFile')->name('photographer.uploadFile');
+        Route::post('photographer/uploadFile', [PlaceController::class, 'storePhotographerFile'])->name('upload.photographer.uploadFile');
 
-        Route::post('likePhotographer', 'PlaceController@likePhotographer')->name('likePhotographer');
+        Route::post('likePhotographer', [PlaceController::class, 'likePhotographer'])->name('likePhotographer');
 
-        Route::post('addPhotoToComment/{placeId}/{kindPlaceId}', array('as' => 'addPhotoToComment', 'uses' => 'PlaceController@addPhotoToComment'));
+        Route::post('addPhotoToComment/{placeId}/{kindPlaceId}', [PlaceController::class, 'addPhotoToComment'])->name('addPhotoToComment');
 
-        Route::post('setBookMark', array('as' => 'setBookMark', 'uses' => 'PlaceController@setBookMark'));
+        Route::post('setBookMark',  [PlaceController::class, 'setBookMark'])->name('setBookMark');
 
-        Route::get('/alert/get', 'HomeController@getAlerts')->name('getAlerts');
+        Route::get('/alert/get', [HomeController::class, 'getAlerts'])->name('getAlerts');
 
-        Route::post('/alert/seen', 'HomeController@seenAlerts')->name('alert.seen');
+        Route::post('/alert/seen', [HomeController::class, 'seenAlerts'])->name('alert.seen');
 
-        Route::post('deleteUserPicFromComment', array('as' => 'deleteUserPicFromComment', 'uses' => 'PlaceController@deleteUserPicFromComment'));
+        Route::post('deleteUserPicFromComment', [PlaceController::class, 'deleteUserPicFromComment'])->name('upload.deleteUserPicFromComment');
 
     });
 });
@@ -544,41 +574,41 @@ Route::group(['middleware' => ['throttle:60']], function(){
 Route::group(['middleware' => ['web', 'shareData']], function(){
 
     Route::group(['middleware' => 'nothing'], function(){
-        Route::get('/ashpazi', 'CookController@cookFestival')->name('festival.cook');
-        Route::get('/Ashpazi', 'CookController@cookFestival');
-        Route::get('/ASHPAZI', 'CookController@cookFestival');
+        Route::get('/ashpazi', [CookController::class, 'cookFestival'])->name('festival.cook');
+        Route::get('/Ashpazi', [CookController::class, 'cookFestival']);
+        Route::get('/ASHPAZI', [CookController::class, 'cookFestival']);
 
-        Route::post('/festival/cook/checkFirstStepRegister', 'CookController@checkFirstStepRegister')->name('festival.cook.firstStepRegister');
+        Route::post('/festival/cook/checkFirstStepRegister', [CookController::class, 'checkFirstStepRegister'])->name('festival.cook.firstStepRegister');
 
-        Route::post('/festival/cook/fullRegister', 'CookController@fullRegister')->name('festival.cook.fullRegister');
+        Route::post('/festival/cook/fullRegister', [CookController::class, 'fullRegister'])->name('festival.cook.fullRegister');
 
         Route::group(['middleware' => ['auth']], function() {
-            Route::post('/festival/cook/uploadFile', 'CookController@uploadFile')->name('festival.cook.uploadFile');
+            Route::post('/festival/cook/uploadFile', [CookController::class, 'uploadFile'])->name('upload.festival.cook.uploadFile');
 
-            Route::delete('/festival/cook/deleteFile', 'CookController@deleteFile')->name('festival.cook.deleteFile');
+            Route::delete('/festival/cook/deleteFile', [CookController::class, 'deleteFile'])->name('upload.festival.cook.deleteFile');
 
-            Route::post('/festival/cook/submitFiles', 'CookController@submitFiles')->name('festival.cook.submitFiles');
+            Route::post('/festival/cook/submitFiles', [CookController::class, 'submitFiles'])->name('upload.festival.cook.submitFiles');
         });
     });
 
-    Route::get('/festival', 'FestivalController@festivalIntroduction')->name('festival');
+    Route::get('/festival', [FestivalController::class, 'festivalIntroduction'])->name('festival');
 
-    Route::get('/festival/main', 'FestivalController@mainPageFestival')->name('festival.main');
+    Route::get('/festival/main', [FestivalController::class, 'mainPageFestival'])->name('festival.main');
 
-    Route::get('/festival/uploadWorks', 'FestivalController@festivalUploadWorksPage')->name('festival.uploadWorks');
+    Route::get('/festival/uploadWorks', [FestivalController::class, 'festivalUploadWorksPage'])->name('festival.uploadWorks');
 
-    Route::post('/festival/getContent', 'FestivalController@getFestivalContent')->name('festival.getContent');
+    Route::post('/festival/getContent', [FestivalController::class, 'getFestivalContent'])->name('festival.getContent');
 
     Route::group(['middleware' => ['auth']], function(){
-        Route::post('/festival/uploadFile', 'FestivalController@uploadFile')->name('festival.uploadFile');
+        Route::post('/festival/uploadFile', [FestivalController::class, 'uploadFile'])->name('upload.festival.uploadFile');
 
-        Route::post('/festival/uploadFile/delete', 'FestivalController@deleteUploadFile')->name('festival.uploadFile.delete');
+        Route::post('/festival/uploadFile/delete', [FestivalController::class, 'deleteUploadFile'])->name('upload.festival.uploadFile.delete');
 
-        Route::post('/festival/submitWorks', 'FestivalController@submitWorks')->name('festival.submitWorks');
+        Route::post('/festival/submitWorks', [FestivalController::class, 'submitWorks'])->name('upload.festival.submitWorks');
 
-        Route::post('/festival/likeWork', 'FestivalController@likeWork')->name('festival.likeWork');
+        Route::post('/festival/likeWork', [FestivalController::class, 'likeWork'])->name('festival.likeWork');
 
-        Route::post('/festival/getMySurvey', 'FestivalController@getMySurvey')->name('festival.getMySurvey');
+        Route::post('/festival/getMySurvey', [FestivalController::class, 'getMySurvey'])->name('festival.getMySurvey');
     });
 });
 
@@ -625,13 +655,13 @@ Route::group(array('middleware' => ['auth']), function(){
 // admin access
 Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), function () {
 
-    Route::post('mainSliderStore', 'HomeController@mainSliderStore')->name('mainSlider.image.store');
+    Route::post('mainSliderStore', 'HomeController@mainSliderStore')->name('upload.mainSlider.image.store');
 
-    Route::post('mainSliderImagesDelete', 'HomeController@mainSliderImagesDelete')->name('mainSlider.image.delete');
+    Route::post('mainSliderImagesDelete', 'HomeController@mainSliderImagesDelete')->name('upload.mainSlider.image.delete');
 
-    Route::post('middleBannerImage', 'HomeController@middleBannerImages')->name('middleBanner.image.store');
+    Route::post('middleBannerImage', 'HomeController@middleBannerImages')->name('upload.middleBanner.image.store');
 
-    Route::post('middleBannerImagesDelete', 'HomeController@middleBannerImagesDelete')->name('middleBanner.image.delete');
+    Route::post('middleBannerImagesDelete', 'HomeController@middleBannerImagesDelete')->name('upload.middleBanner.image.delete');
 
     Route::get('fillState', 'HomeController@fillState');
 
@@ -654,8 +684,6 @@ Route::group(array('middleware' => ['throttle:60', 'auth', 'adminAccess']), func
     Route::get('test/{c}', array('as' => 'test', 'uses' => 'TestController@start'));
 
     Route::post('testMethod', array('as' => 'testMethod', 'uses' => 'TestController@methodTest'));
-
-//    Route::post('changeMeta/kind={kind}/id={id}', 'MetaController@changeMeta');
 
     Route::post('findPlace', array('as' => 'findPlace', 'uses' => 'HomeController@findPlace'));
 });
@@ -819,13 +847,9 @@ Route::get('provider2', function (){
 // delete contents
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::post('album/pics/delete', 'DeleteContentController@deleteAlbumPic')->name('album.pic.delete');
+    Route::post('album/pics/delete', [DeleteContentController::class, 'deleteAlbumPic'])->name('upload.album.pic.delete');
 
 });
-
-Route::get('emailtest/{email}', 'HomeController@emailtest');
-
-Route::get('exportToExcelTT', 'HomeController@exportExcel');
 
 // not use
 Route::group(array('middleware' => ['nothing']), function () {
@@ -863,6 +887,9 @@ Route::group(array('middleware' => ['nothing']), function () {
     Route::get('alaki/{tripId}', 'HomeController@alaki')->name('alaki');
 
 });
+
+Route::get('emailtest/{email}', 'HomeController@emailtest');
+Route::get('exportToExcelTT', 'HomeController@exportExcel');
 
 Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 

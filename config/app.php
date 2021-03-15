@@ -15,6 +15,8 @@ return [
 
     'koochitaTvNouncCode' => env('KOOCHITATV_NOUNC_CODE'),
     'KOOCHITATV_URL_API' => env('KOOCHITATV_URL_API'),
+    'UploadFileURL' => env('UPLOADFILEURL'),
+    'AllowOtherOrigin' => env('AllowOtherOrigin'),
 
     'name' => env('APP_NAME', 'Laravel'),
 

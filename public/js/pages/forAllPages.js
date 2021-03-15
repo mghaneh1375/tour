@@ -440,6 +440,7 @@ function createPhotoModal(_title, _pics, _choosenIndex = 0){
 }
 
 function chooseAlbumMainPhoto(_index){
+
     choosenIndex = _index;
     $('.chooseSidePhotoAlbum').removeClass('chooseSidePhotoAlbum');
     $('#photoAlbumDescription').text('');
@@ -519,7 +520,7 @@ function closePhotoAlbumModal(){
 var deletedPhotoInAlbum = false;
 function openDeletePhotoModal(){
     var element = $('#deletePicIconsPhotoAlbum');
-    var deletedPhotoInAlbum = element.attr('dataValue');
+    deletedPhotoInAlbum = element.attr('dataValue');
     var deletedPhotoIndex = element.attr('dataIndex');
 
     if(typeof sidePics[deletedPhotoIndex].deleteFunction === 'function')

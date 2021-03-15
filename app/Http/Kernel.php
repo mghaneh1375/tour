@@ -72,7 +72,7 @@ class Kernel extends HttpKernel
         'shareData' => \App\Http\Middleware\ShareData::class,
         'localShopsShareData' => \App\Http\Middleware\LocalShopsShareData::class,
         'shareNews' => \App\Http\Middleware\NewsShareData::class,
-
+        'cors' => \App\Http\Middleware\Cors::class,
 
         'csrfVeri' => \App\Http\Middleware\VerifyCsrfToken::class,
         'BusinessPanelShareData' => \App\Http\Middleware\BusinessPanel\BusinessPanelShareData::class,

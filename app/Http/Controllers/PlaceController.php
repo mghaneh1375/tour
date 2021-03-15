@@ -94,6 +94,7 @@ class PlaceController extends Controller {
     }
 
     public function showPlaceDetails($kindPlaceName, $slug){
+
         deleteReviewPic();  // common.php
 
         $kindPlace = Place::where('fileName', $kindPlaceName)->firstOrFail();

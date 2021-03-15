@@ -47,7 +47,7 @@
                     <div class="uploadAvatarPopupInner">
                         <div class="actionsSide">
 
-                            <form method="post" action="{{URL('doEditPhoto')}}" enctype="multipart/form-data">
+                            <form method="post" action="{{URL('upload.doEditPhoto')}}" enctype="multipart/form-data">
                                 {{csrf_field()}}
                                 <div class="creatingAvatar fromUpload" id="upload-picture">
                                     <div class="fileContainer">
@@ -105,7 +105,7 @@
     <script>
 
         {{--var defaultPics = '{{route('defaultPics')}}';--}}
-        var submitPhotoDir = '{{route('submitPhoto')}}';
+        var submitPhotoDir = '{{route('upload.submitPhoto')}}';
 
         $(document).ready(function() {
 

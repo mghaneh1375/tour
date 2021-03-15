@@ -359,7 +359,7 @@
 
         $.ajax({
             type: 'post',
-            url: '{{route("mainSlider.image.store")}}',
+            url: '{{route("upload.mainSlider.image.store")}}',
             data: data,
             processData: false,
             contentType: false,
@@ -380,7 +380,7 @@
         if(id != 0){
             $.ajax({
                 type: 'post',
-                url: '{{route("mainSlider.image.delete")}}',
+                url: '{{route("upload.mainSlider.image.delete")}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     id: id
@@ -524,7 +524,7 @@
 
         $.ajax({
             type: 'post',
-            url: '{{route("middleBanner.image.store")}}',
+            url: '{{route("upload.middleBanner.image.store")}}',
             data: data,
             processData: false,
             contentType: false,
@@ -543,7 +543,7 @@
         let id = $('#slideId' + kind + '' + num).val();
         $.ajax({
             type: 'post',
-            url: '{{route("middleBanner.image.delete")}}',
+            url: '{{route("upload.middleBanner.image.delete")}}',
             data: {
                 _token: '{{csrf_token()}}',
                 id: id
@@ -581,7 +581,7 @@
 
         $.ajax({
             type: 'post',
-            url: '{{route("middleBanner.image.store")}}',
+            url: '{{route("upload.middleBanner.image.store")}}',
             data: data,
             processData: false,
             contentType: false,

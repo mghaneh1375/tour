@@ -231,7 +231,7 @@
     var superAccess = false;
     var getRecentlyPath = '{{route('recentlyViewed')}}';
     var addPlaceByUserPageUrl = '{{route("addPlaceByUser.index")}}';
-    var addPhotoToPlaceUrlHeader1 = "{{route('photographer.uploadFile')}}";
+    var addPhotoToPlaceUrlHeader1 = "{{route('upload.photographer.uploadFile')}}";
 </script>
 
 <script src="{{URL::asset('js/pages/layout/header1.js?v='.$fileVersions)}}"></script>

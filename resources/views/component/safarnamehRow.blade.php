@@ -92,7 +92,7 @@
                 openLoading(false, function(){
                     $.ajax({
                         type: 'post',
-                        url: '{{route("safarnameh.delete")}}',
+                        url: '{{route("upload.safarnameh.delete")}}',
                         data: {
                             _token: '{{csrf_token()}}',
                             id: deletedSafarnamehId

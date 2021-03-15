@@ -26,7 +26,7 @@ use Illuminate\Http\Request;
 
 class SafarnamehController extends Controller
 {
-
+    public $safarnamehFolder = __DIR__ . '/../../../../assets/_images/posts';
     public function safarnamehListRedirect($type, $search)
     {
         return redirect(route('safarnameh.list', ['type' => $type, 'search' => $search]));
@@ -52,11 +52,11 @@ class SafarnamehController extends Controller
         $newSafarnameh->confirm = 0;
         $newSafarnameh->save();
 
-        $location = __DIR__ . '/../../../../assets/_images/posts/'.$newSafarnameh->id;
+        $location = $this->safarnamehFolder.'/'.$newSafarnameh->id;
         if(!file_exists($location))
             mkdir($location);
 
-        $limboLocation = __DIR__.'/../../../../assets/_images/posts/limbo';
+        $limboLocation = $this->safarnamehFolder.'/limbo';
         $limboLoc = '_images/posts/limbo/';
         $text = $newSafarnameh->description;
         $index = strpos($text, $limboLoc);
@@ -214,7 +214,7 @@ class SafarnamehController extends Controller
                 SafarnamehTagRelations::where('safarnamehId', $request->id)->delete();
                 SafarnamehCityRelations::where('safarnamehId', $request->id)->delete();
 
-                $location = __DIR__ .'/../../../../assets/_images/posts/'.$safar->id;
+                $location = $this->safarnamehFolder.'/'.$safar->id;
                 if(is_dir($location)){
                     $files = scandir($location);
                     foreach ($files as $pic){
@@ -240,7 +240,7 @@ class SafarnamehController extends Controller
     {
         $user = \Auth::user();
         if( $_FILES['file'] && $_FILES['file']['error'] == 0){
-            $location = __DIR__ . '/../../../../assets/_images/posts/limbo';
+            $location = $this->safarnamehFolder.'/limbo';
             if (!file_exists($location))
                 mkdir($location);
 

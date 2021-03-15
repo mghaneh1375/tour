@@ -257,7 +257,7 @@
 <script>
     var rateQuestion = {!! json_encode($rateQuestion) !!} ;
     var textQuestions = {!! json_encode($textQuestion) !!};
-    var storeReviewURLM = '{{route("storeReview")}}';
+    var storeReviewURLM = '{{route("upload.storeReview")}}';
 </script>
 
 <script defer src="{{URL::asset('js/pages/placeDetails/placeDetialsWriteReview.js?v='.$fileVersions)}}"></script>

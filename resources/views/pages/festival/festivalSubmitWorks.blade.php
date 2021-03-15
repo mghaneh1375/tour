@@ -582,7 +582,7 @@
 
         function uploadContentFile(_index){
             let kind = $('#matchMainSection').attr('value');
-            uploadLargeFile('{{route("festival.uploadFile")}}', uploadedPicFile[_index].file, {kind: kind}, (_percent, _fileName = '') =>{
+            uploadLargeFile('{{route("upload.festival.uploadFile")}}', uploadedPicFile[_index].file, {kind: kind}, (_percent, _fileName = '') =>{
                 if(_percent == 'done') {
                     uploadedPicFile[_index].uploadedFileName = _fileName;
                     $('#fileInputRowPercent_'+_index).addClass('done');
@@ -629,7 +629,7 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{route("festival.uploadFile")}}',
+                url: '{{route("upload.festival.uploadFile")}}',
                 data: data,
                 processData: false,
                 contentType: false,
@@ -784,7 +784,7 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{route("festival.submitWorks")}}',
+                url: '{{route("upload.festival.submitWorks")}}',
                 data:{
                     _token: '{{csrf_token()}}',
                     data: JSON.stringify(uploadedPicFile),
@@ -820,7 +820,7 @@
         function deleteUploadedFile(_index){
             $.ajax({
                 type: 'post',
-                url: '{{route("festival.uploadFile.delete")}}',
+                url: '{{route("upload.festival.uploadFile.delete")}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     fileName: uploadedPicFile[_index].uploadedFileName,

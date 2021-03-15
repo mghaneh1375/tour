@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
+use PhpOffice\PhpSpreadsheet\Calculation\Database;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,11 +26,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(UrlGenerator $urlGenerator)
     {
 
+//        dd(config('database.default'));
+//        dd(\DB::connection('mysql')->getPdo());
         config(['userPictureArr' => []]);
 
         date_default_timezone_set('Asia/Tehran');
 
-//        if(env('APP_ENV') !== 'local')
-//            $urlGenerator->forceScheme('https');
+        if(config('app.env') !== 'local')
+            $urlGenerator->forceScheme('https');
+        else if(config('app.env') == 'local')
+            $urlGenerator->forceScheme('http');
     }
 }

@@ -97,7 +97,7 @@
 </div>
 
 <script>
-    var deletePicInAlbumUrl = '{{route("album.pic.delete")}}';
+    var deletePicInAlbumUrl = '{{route("upload.album.pic.delete")}}';
     var likePhotographerUrl = '{{route('likePhotographer')}}';
     var userProfileUrl_albume = '{{url('addPlace/index')}}';
     var sidePics;

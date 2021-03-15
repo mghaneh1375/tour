@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class CreateLocalShopController extends Controller
 {
+    public $localShopFolder = __DIR__.'/../../../../../assets/_images/localShops';
+
     public function createLocalShopPage()
     {
         $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
@@ -64,7 +66,7 @@ class CreateLocalShopController extends Controller
         $localShop->file = $localShop->id;
         $localShop->save();
 
-        $location = __DIR__.'/../../../../../assets/_images/localShops';
+        $location = $this->localShopFolder;
         if(!is_dir($location))
             mkdir($location);
         $location .= '/'.$localShop->id;
@@ -81,7 +83,7 @@ class CreateLocalShopController extends Controller
                 $localShop = LocalShops::find($request->localShopId);
                 if($localShop != null && $localShop->userId == auth()->user()->id){
 
-                    $nLocation = __DIR__ . '/../../../../../assets/_images/localShops';
+                    $nLocation = $this->localShopFolder;
                     if(!is_dir($nLocation))
                         mkdir($nLocation);
 
@@ -168,4 +170,43 @@ class CreateLocalShopController extends Controller
         else
             return response()->json(['status' => 'error1']);
     }
+
+    public function deleteLocalShopPics(Request $request)
+    {
+        if(isset($request->localShopId) && isset($request->fileName)){
+            $localShop = LocalShops::where('id', $request->localShopId)->where('userId', auth()->user()->id)->first();
+
+            if($localShop != null){
+                $pic = LocalShopsPictures::where('localShopId', $localShop->id)
+                    ->where('pic', $request->fileName)
+                    ->first();
+                if($pic != null){
+                    $isMain = 0;
+                    if($pic->isMain == 1)
+                        $isMain = 1;
+                    $location = "{$this->localShopFolder}/{$localShop->id}/";
+                    $fileType = ['', 's-', 'l-', 'f-', 't-'];
+                    foreach ($fileType as $item){
+                        if(is_file($location.$item.$pic->pic))
+                            unlink($location.$item.$pic->pic);
+                    }
+                    $pic->delete();
+
+                    if($isMain == 1){
+                        $newMain = LocalShopsPictures::where('id', $request->localShopId)->first();
+                        if($newMain != null)
+                            $newMain->update(['isMain' => 1]);
+                    }
+                    return response()->json(['status' => 'ok']);
+                }
+                else
+                    return response()->json(['status' => 'ok']);
+            }
+            else
+                return response()->json(['status' => 'error2']);
+        }
+        else
+            return response()->json(['status' => 'error1']);
+    }
+
 }

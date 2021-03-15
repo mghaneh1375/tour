@@ -1115,7 +1115,7 @@
         let newPlaceId = 0;
 
         let myDropzone = new Dropzone("div#dropzone", {
-            url: '{{route("addPlaceByUser.storeImg")}}',
+            url: '{{route("upload.addPlaceByUser.storeImg")}}',
             paramName: "pic",
             dictDefaultMessage: '{{__('به سادگی عکس های خود را در این قاب بی اندازید و یا کلیک کنید')}}',
             timeout: 60000,
@@ -1248,7 +1248,7 @@
         function deleteThisPic(_element, _name){
             $.ajax({
                 type: 'post',
-                url: '{{route("addPlaceByUser.deleteImg")}}',
+                url: '{{route("upload.addPlaceByUser.deleteImg")}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     name: _name,
@@ -1621,7 +1621,7 @@
 
                     $.ajax({
                         type: 'post',
-                        url : '{{route("addPlaceByUser.storeImg")}}',
+                        url : '{{route("upload.addPlaceByUser.storeImg")}}',
                         data: formData,
                         processData: false,
                         contentType: false,

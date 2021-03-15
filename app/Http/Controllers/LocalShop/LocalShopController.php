@@ -77,45 +77,6 @@ class LocalShopController extends Controller
         return response()->json(['status' => 'ok', 'result' => $features]);
     }
 
-    public function deleteLocalShopPics(Request $request)
-    {
-        if(isset($request->localShopId) && isset($request->fileName)){
-            $localShop = LocalShops::where('id', $request->localShopId)
-                                    ->where('userId', auth()->user()->id)
-                                    ->first();
-            if($localShop != null){
-                $pic = LocalShopsPictures::where('localShopId', $localShop->id)
-                                            ->where('pic', $request->fileName)
-                                            ->first();
-                if($pic != null){
-                    $isMain = 0;
-                    if($pic->isMain == 1)
-                        $isMain = 1;
-                    $location = __DIR__.'/../../../../../assets/_images/localShops/'.$localShop->id.'/';
-                    $fileType = ['', 's-', 'l-', 'f-', 't-'];
-                    foreach ($fileType as $item){
-                        if(is_file($location.$item.$pic->pic))
-                            unlink($location.$item.$pic->pic);
-                    }
-                    $pic->delete();
-
-                    if($isMain == 1){
-                        $newMain = LocalShopsPictures::where('id', $request->localShopId)->first();
-                        if($newMain != null)
-                            $newMain->update(['isMain' => 1]);
-                    }
-                    return response()->json(['status' => 'ok']);
-                }
-                else
-                    return response()->json(['status' => 'ok']);
-            }
-            else
-                return response()->json(['status' => 'error2']);
-        }
-        else
-            return response()->json(['status' => 'error1']);
-    }
-
     public function addImAmHereLocalShop(Request $request)
     {
         $localShopId = $request->localShopId;

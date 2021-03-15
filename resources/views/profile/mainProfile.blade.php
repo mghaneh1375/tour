@@ -834,7 +834,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{route("profile.updateUserPhoto")}}',
+                    url: '{{route("upload.profile.updateUserPhoto")}}',
                     data: formDa,
                     processData: false,
                     contentType: false,
@@ -997,7 +997,7 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{route('profile.updateBannerPic')}}',
+                url: '{{route('uplaod.profile.updateBannerPic')}}',
                 data: formDa,
                 processData: false,
                 contentType: false,

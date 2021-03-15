@@ -128,8 +128,8 @@
 <script>
     var applicationLanguage_addSafarnameh = "{{app()->getLocale()}}";
     var userId_addSafarnameh = "{{auth()->user()->id}}";
-    var storePicUrl_addSafarnameh = "{{route("safarnameh.storePic")}}";
-    var storeSafarnamehUrl_addSafarnameh = "{{route('safarnameh.store')}}";
+    var storePicUrl_addSafarnameh = "{{route("upload.safarnameh.storePic")}}";
+    var storeSafarnamehUrl_addSafarnameh = "{{route('upload.safarnameh.store')}}";
     var getSafarnamehUrl_addSafarnameh = "{{route("safarnameh.get")}}";
     var placeSuggestionSafarnamehUrl_addSafarnameh = "{{route("profile.safarnameh.placeSuggestion")}}";
     var searchSuggSafarnamehUrl_addSafarnameh = "{{route("searchSuggestion")}}";

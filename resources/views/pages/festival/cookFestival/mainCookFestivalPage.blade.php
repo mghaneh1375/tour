@@ -949,7 +949,7 @@
                         uFile.uploaded = 0;
                         uploadImgElement.addClass('process');
 
-                        uploadLargeFile('{{route("festival.cook.uploadFile")}}', uFile.file, [], (_percent, _fileName = '') => {
+                        uploadLargeFile('{{route("upload.festival.cook.uploadFile")}}', uFile.file, [], (_percent, _fileName = '') => {
                             if(_percent == 'done') {
                                 uploadProcess = false;
                                 uFile.savedFile = _fileName;
@@ -992,7 +992,7 @@
 
                 $.ajax({
                     type: 'post',
-                    url: '{{route("festival.cook.uploadFile")}}',
+                    url: '{{route("upload.festival.cook.uploadFile")}}',
                     data: data,
                     processData: false,
                     contentType: false,
@@ -1037,7 +1037,7 @@
                 var file = fileImages[_index];
                 $.ajax({
                     type: 'delete',
-                    url: '{{route('festival.cook.deleteFile')}}',
+                    url: '{{route('upload.festival.cook.deleteFile')}}',
                     data: {
                         _token: '{{csrf_token()}}',
                         fileName: file.savedFile,
@@ -1113,7 +1113,7 @@
                         openLoading(false, () => {
                             $.ajax({
                                 type: 'post',
-                                url: '{{route("festival.cook.submitFiles")}}',
+                                url: '{{route("upload.festival.cook.submitFiles")}}',
                                 data:{
                                     _token: '{{csrf_token()}}',
                                     filesName: JSON.stringify(filesName),

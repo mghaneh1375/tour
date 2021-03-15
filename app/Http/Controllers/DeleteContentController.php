@@ -27,6 +27,7 @@ class DeleteContentController extends Controller
     {
         if(isset($request->id)){
             $id = explode( '_', $request->id);
+
             if(count($id) == 2){
                 if($id[0] == 'review'){
                     $result = ReviewPic::find($id[1])->deleteThisPicture();

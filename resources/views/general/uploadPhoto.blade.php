@@ -227,7 +227,7 @@
 
 <script>
     var proSearchUrl = '{{route("proSearch")}}';
-    var uploadPhotographerFileUrl = '{{route("photographer.uploadFile")}}';
+    var uploadPhotographerFileUrl = '{{route("upload.photographer.uploadFile")}}';
 </script>
 
 <script defer src="{{URL::asset('js/component/uploadPhoto.js?v='.$fileVersions)}}"></script>

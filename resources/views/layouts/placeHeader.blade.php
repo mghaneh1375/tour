@@ -758,7 +758,7 @@ if(Auth::check()) {
 
 
         function openUploadPost(){
-            openUploadPhotoModal('کوچیتا', '{{route('photographer.uploadFile')}}', 0, 0, '');
+            openUploadPhotoModal('کوچیتا', '{{route('upload.photographer.uploadFile')}}', 0, 0, '');
         }
     </script>
 @endif

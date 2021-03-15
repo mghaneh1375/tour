@@ -74,10 +74,10 @@
 
 <script>
     var searchPlaceForNewReviewUrl = '{{route("search.place")}}';
-    var reviewUploadFileUrl = '{{route("review.uploadFile")}}';
-    var uploadNewReviewPicUrl = '{{route("reviewUploadPic")}}';
-    var deleteNewReviewPicUrl = '{{route("deleteReviewPic")}}';
-    var storeNewReviewUrl = '{{route("storeReview")}}';
+    var reviewUploadFileUrl = '{{route("upload.review.uploadFile")}}';
+    var uploadNewReviewPicUrl = '{{route("upload.reviewUploadPic")}}';
+    var deleteNewReviewPicUrl = '{{route("upload.deleteReviewPic")}}';
+    var storeNewReviewUrl = '{{route("upload.storeReview")}}';
     var userProfileUrl_newReview = '{{url("profile/index")}}';
     var getNewCodeForUploadNewReviewURl = '{{route("review.getNewCodeForUploadNewReview")}}';
     var searchInReviewTagsUrl = '{{route("review.searchInReviewTags")}}';

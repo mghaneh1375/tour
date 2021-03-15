@@ -138,8 +138,8 @@
     var policiRouteUrl = '{{route("policies")}}';
     var likeLogURL = '{{route('likeLog')}}';
     var ansReviewURL = '{{route('ansReview')}}';
-    var deleteReviewURL = '{{route('review.delete')}}';
-    var deleteReviewPicInAlbumUrl = '{{route('deleteReviewPic')}}';
+    var deleteReviewURL = '{{route('upload.review.delete')}}';
+    var deleteReviewPicInAlbumUrl = '{{route('upload.deleteReviewPic')}}';
     var reviewBookMarkURL = '{{route('review.bookMark')}}';
 
     var gearIconUrl = '{{URL::asset("images/icons/mGear.svg")}}';

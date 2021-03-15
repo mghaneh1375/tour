@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Activity;
+use App\models\ErrorToShow;
 use App\models\places\Amaken;
 use App\models\Cities;
 use App\models\ConfigModel;

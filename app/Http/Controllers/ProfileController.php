@@ -53,6 +53,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Author;
 
 class ProfileController extends Controller {
 
+    public $userProfilePicFolder = __DIR__ . "/../../../../assets/userProfile";
+    public $userPhotoFolder = __DIR__ . "/../../../../assets/userProfile";
+
     private function sideProfilePages($uId){
         $user = User::find($uId);
         $user->picture = getUserPic($uId);
@@ -67,7 +70,7 @@ class ProfileController extends Controller {
         $sideInfos['userScore'] = User::getUserPointInModel($uId);
         $sideInfos['nearLvl'] = User::nearestLevelInModel($uId);
 
-        $location = __DIR__ . '/../../../../assets/userPhoto/';
+        $location = $this->userPhotoFolder. '/';
         $allUserPics = [];
         $photographer = PhotographersPic::where('userId', $uId)->where('status', 1)->orderByDesc('created_at')->get();
         for($i = 0, $j = 0; $i < count($photographer) && $j < 3 ; $i++){
@@ -315,7 +318,7 @@ class ProfileController extends Controller {
         $user->picture = getUserPic($uId);
 
         $allUserPics = [];
-        $location = __DIR__ . '/../../../../assets/userPhoto/';
+        $location = $this->userPhotoFolder.'/';
         $allUserPics = [];
         if(\auth()->check() && \auth()->user()->id == $uId)
             $photographer = PhotographersPic::where('userId', $uId)->orderByDesc('created_at')->get();
@@ -693,15 +696,15 @@ class ProfileController extends Controller {
         if(isset($request->id)){
             $user = \auth()->user();
             if($request->id != 0){
-                if($user->uploadPhoto == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->picture))
-                    unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->picture);
+                if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
+                    unlink($this->userProfilePicFolder."/" . $user->picture);
                 $user->picture = $request->id;
                 $user->uploadPhoto = 0;
                 $user->save();
                 echo 'ok';
             }
             else if(isset($_FILES['pic']) && $_FILES['pic']['error'] == 0){
-                $targetFile = __DIR__ . "/../../../../assets/userProfile";
+                $targetFile = $this->userProfilePicFolder;
                 $size = [
                     [
                         'width' => 450,
@@ -713,8 +716,8 @@ class ProfileController extends Controller {
 
                 $image = $request->file('pic');
                 $fileName = resizeImage($image, $size);
-                if($user->uploadPhoto == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->picture))
-                    unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->picture);
+                if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
+                    unlink($this->userProfilePicFolder. "/" . $user->picture);
                 $user->picture = $fileName;
                 $user->uploadPhoto = 1;
                 $user->save();
@@ -736,8 +739,8 @@ class ProfileController extends Controller {
         if(isset($request->uploaded) && isset($request->pic)){
             $user = \auth()->user();
             if($request->uploaded == 'false'){
-                if($user->uploadBanner == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->banner))
-                    unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->banner);
+                if($user->uploadBanner == 1 && file_exists($this->userProfilePicFolder. "/" . $user->banner))
+                    unlink($this->userProfilePicFolder. "/" . $user->banner);
                 $user->banner = $request->pic;
                 $user->uploadBanner = 0;
                 $user->save();
@@ -745,7 +748,7 @@ class ProfileController extends Controller {
                 $url = URL::asset('images/mainPics/background/'.$user->banner);
             }
             else if($request->uploaded == 'true'){
-                $targetFile = __DIR__ . "/../../../../assets/userProfile";
+                $targetFile = $this->userProfilePicFolder;
                 $size = [
                     [
                         'width' => null,
@@ -757,8 +760,8 @@ class ProfileController extends Controller {
 
                 $image = $request->file('pic');
                 $fileName = resizeImage($image, $size);
-                if($user->uploadBanner == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->banner))
-                    unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->banner);
+                if($user->uploadBanner == 1 && file_exists($this->userProfilePicFolder. "/" .  $user->banner))
+                    unlink($this->userProfilePicFolder. "/" . $user->banner);
                 $user->banner = $fileName;
                 $user->uploadBanner = 1;
                 $user->save();
@@ -912,7 +915,7 @@ class ProfileController extends Controller {
 
             if($user->uploadPhoto == 0 || $user->picture != $file["name"]) {
 
-                $targetFile = __DIR__ . "/../../../../assets/userProfile";
+                $targetFile = $this->userProfilePicFolder;
 
                 $size = [
                     [
@@ -926,8 +929,8 @@ class ProfileController extends Controller {
                 $image = $request->file('newPic');
                 $fileName = resizeImage($image, $size);
 
-                if($user->uploadPhoto == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->picture))
-                    unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->picture);
+                if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
+                    unlink($this->userProfilePicFolder. "/" . $user->picture);
                 $user->picture = $fileName;
                 $user->uploadPhoto = 1;
                 $user->save();
@@ -956,8 +959,8 @@ class ProfileController extends Controller {
 
         if($mode == 0) {
 
-            if($user->uploadPhoto == 1 && file_exists(__DIR__ . "/../../../../assets/userProfile/" . $user->picture))
-                unlink(__DIR__ . "/../../../../assets/userProfile/" . $user->picture);
+            if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
+                unlink($this->userProfilePicFolder. "/" . $user->picture);
 
             $user->uploadPhoto = 0;
             $user->picture = DefaultPic::whereName($pic[count($pic) - 1])->first()->id;

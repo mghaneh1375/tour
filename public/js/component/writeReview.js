@@ -48,6 +48,7 @@ function uploadFileForNewReview(_input, _kind){
     else
         closeLoading();
 }
+
 function createNewFileUploadCardForNewReview(_index){
     closeLoading();
     $('#newReviewPictureInput').val('');
@@ -238,7 +239,6 @@ function uploadReviewVideoThumbnail(_index){
         success: response => {
             if(response.status == 'ok'){
                 $('#uplaodedImgForNewReview_' + uFile.code).removeClass('process').addClass('done');
-                $('#uplaodedImgForNewReview_' + uFile.code);
                 newReviewDataForUpload.files[_index].uploaded = 1;
                 newReviewDataForUpload.files[_index].thumbnailFile = response.result;
                 reviewFileUploadQueueForNewReview();

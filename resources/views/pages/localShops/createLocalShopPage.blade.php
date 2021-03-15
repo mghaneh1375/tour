@@ -520,7 +520,7 @@
             openLoading();
             $.ajax({
                 type: 'post',
-                url: '{{route('localShop.store')}}',
+                url: '{{route('upload.localShop.store')}}',
                 data: dataToSend,
                 success: response => {
                     closeLoading();
@@ -642,7 +642,7 @@
 
                     uploadPicAjax = $.ajax({
                         type: 'post',
-                        url: '{{route("localShop.store.pics")}}',
+                        url: '{{route("upload.localShop.store.pics")}}',
                         data: formData,
                         processData: false,
                         contentType: false,
@@ -717,7 +717,7 @@
             var file = fileImages[_index];
             $.ajax({
                 type: 'delete',
-                url: '{{route('localShop.store.delete')}}',
+                url: '{{route('upload.localShop.store.delete')}}',
                 data: {
                     _token: '{{csrf_token()}}',
                     fileName: file.savedFile,
