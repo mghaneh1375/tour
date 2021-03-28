@@ -84,6 +84,7 @@ class ReviewsController extends Controller
 
                     $newPicReview = new ReviewPic();
                     $newPicReview->pic = $filename;
+                    $newPicReview->server = config('app.ServerNumber');
                     $newPicReview->code = $code;
                     $newPicReview->save();
 
@@ -158,6 +159,7 @@ class ReviewsController extends Controller
             if($result) {
                 $limbo = new ReviewPic();
                 $limbo->code = $code;
+                $limbo->server = config('app.ServerNumber');
                 $limbo->pic = $fileName;
                 $limbo->isVideo = $data->isVideo;
                 $limbo->is360 = $data->is360;

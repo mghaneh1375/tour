@@ -122,7 +122,7 @@
 
 <script>
     var mainSliderPics = {!! $sliderPic !!};
-    
+
 </script>
 
     <script src="{{URL::asset('js/pages/pcMainPage.js?v='.$fileVersions)}}"></script>

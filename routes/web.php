@@ -891,7 +891,7 @@ Route::group(array('middleware' => ['nothing']), function () {
 Route::get('emailtest/{email}', 'HomeController@emailtest');
 Route::get('exportToExcelTT', 'HomeController@exportExcel');
 
-Route::get('/getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
+Route::get('getPages/login', 'GetPagesController@getLoginPage')->name('getPage.login');
 
 Route::get('exampleExportCode/{num}', 'MainController@exampleExportCode');
 
