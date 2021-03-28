@@ -406,7 +406,7 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
     Route::get('/profile/getUserPicsAndVideo', [ProfileController::class, 'getUserPicsAndVideo'])->name('profile.getUserPicsAndVideo');
 
-    Route::post('/profile/getFollower', [ProfileController::class, 'getFollower'])->name('profile.getFollower');
+    Route::post('/profile/getFollower', [FollowerController::class, 'getFollower'])->name('profile.getFollower');
 
     Route::post('/profile/getUserMedals', [ProfileController::class, 'getUserMedals'])->name('profile.getUserMedals');
 

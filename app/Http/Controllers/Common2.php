@@ -43,7 +43,7 @@ function SafarnamehMinimalData($safarnameh){
     if($safarnameh->date != null)
         $safarnameh->date = convertJalaliToText($safarnameh->date);
 
-    $safarnameh->pic = \URL::asset('_images/posts/' . $safarnameh->id . '/' . $safarnameh->pic);
+    $safarnameh->pic = \URL::asset("_images/posts/{$safarnameh->id}/{$safarnameh->pic}");
     $writer = User::find($safarnameh->userId);
     $safarnameh->username = $writer->username;
     $safarnameh->writerPic = getUserPic($writer->id);
@@ -272,18 +272,18 @@ function getReviewPicsURL($pics, $placeFile){
     foreach ($pics as $pic) {
         if($pic->isVideo == 1 || $pic->is360 == 1){
             if($pic->thumbnail != null)
-                $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$pic->thumbnail}");
+                $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$pic->thumbnail}", null, $pic->server);
             else {
                 $videoArray = explode('.', $pic->pic);
                 $videoArray[count($videoArray)-1] = '.png';
                 $videoName = implode('', $videoArray);
 
-                $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$videoName}");
+                $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$videoName}", null, $pic->server);
             }
-            $pic->videoUrl = URL::asset("userPhoto/{$placeFile}/{$pic->pic}");
+            $pic->videoUrl = URL::asset("userPhoto/{$placeFile}/{$pic->pic}", null, $pic->server);
         }
         else
-            $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$pic->pic}");
+            $pic->picUrl = URL::asset("userPhoto/{$placeFile}/{$pic->pic}", null, $pic->server);
         $pic->picKind = 'review';
     }
     return $pics;
