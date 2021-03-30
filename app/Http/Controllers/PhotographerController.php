@@ -90,7 +90,7 @@ class PhotographerController extends Controller
             unlink($location);
         }
 
-        $url = URL::asset("userPhoto/{$kindPlace->fileName}/{$place->file}/f-{$fileName}");
+        $url = URL::asset("userPhoto/{$kindPlace->fileName}/{$place->file}/f-{$fileName}", null, config('app.ServerNumber'));
 
         if($result)
             return response()->json(['status' => 'ok', 'fileName' => $fileName, 'result' => ['fileName' => $fileName, 'url' => $url]]);
@@ -164,14 +164,24 @@ class PhotographerController extends Controller
                     $pic = PhotographersPic::find($id[1]);
                     if($pic != null){
                         if(auth()->check() && auth()->user()->id == $pic->userId){
+                            $picFormat = ['', 't-', 's-', 'l-', 'f-'];
+
                             $kindPlace = Place::find($pic->kindPlaceId);
                             $place = \DB::table($kindPlace->tableName)->find($pic->placeId);
-                            $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
+                            $dir = "userPhoto/{$kindPlace->fileName}/{$place->file}";
 
-                            $picFormat = ['', 't-', 's-', 'l-', 'f-'];
-                            foreach ($picFormat as $item)
-                                if (is_file($location . '/' . $item . $pic->pic))
-                                    unlink($location . '/' . $item . $pic->pic);
+                            if($pic->server == config('app.ServerNumber')){
+                                $location = "{$this->assetLocation}/{$dir}";
+                                foreach ($picFormat as $item)
+                                    if (is_file($location . '/' . $item . $pic->pic))
+                                        unlink($location . '/' . $item . $pic->pic);
+                            }
+                            else{
+                                $files = [];
+                                foreach ($picFormat as $item)
+                                    array_push($files, "{$dir}/".$item.$pic->pic);
+                                Controller::sendDeleteFileApiToServer($files, $pic->server);
+                            }
 
                             PhotographersLog::where('picId', $pic->id)->delete();
                             $pic->delete();

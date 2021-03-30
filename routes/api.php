@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\MainApiController;
 use Illuminate\Http\Request;
 
 /*
@@ -15,14 +16,17 @@ use Illuminate\Http\Request;
 
 Route::group(['namespace' => 'api'], function () {
 
-    Route::get('getPlacesForKoochitaTv', 'APIController@getPlacesForKoochitaTv')->name('api.getPlacesForKoochitaTv');
+    Route::get('getPlacesForKoochitaTv', [MainApiController::class, 'getPlacesForKoochitaTv'])->name('api.getPlacesForKoochitaTv');
+
+    Route::delete('deleteFileWithDir', [MainApiController::class, 'deleteFileWithDir'])->name('api.deleteFileWithDir');
+
 
     Route::post('totalSearchAPI', array('as' => 'totalSearchAPI', 'uses' => 'APIController@totalSearchAPI'));
 
     Route::post('getCitiesOrStates', array('as' => 'getCitiesOrStates', 'uses' => 'APIController@getCitiesOrStates'));
 
     Route::post('getStatesAPI', array('as' => 'getStatesAPI', 'uses' => 'APIController@getStates'));
-    
+
     Route::post('getCitiesAPI', array('as' => 'getCitiesAPI', 'uses' => 'APIController@getCitiesAPI'));
 
     Route::post('getGoyeshAPI', array('as' => 'getGoyeshAPI', 'uses' => 'APIController@getGoyeshAPI'));
@@ -48,7 +52,7 @@ Route::group(['namespace' => 'api', 'middleware' => ['throttle:30', 'cors']], fu
 });
 
 Route::group(['namespace' => 'api', 'middleware' => ['auth:api', 'cors']], function () {
-    
+
     Route::post('logout', array('as' => 'logout', 'uses' => 'APIController@logout'));
 
     Route::post("showProfileAPI", ['as' => 'showProfileAPI', 'uses' => 'APIController@showProfile']);

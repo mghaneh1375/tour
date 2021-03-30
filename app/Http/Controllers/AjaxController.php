@@ -41,11 +41,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 
 
 class AjaxController extends Controller {
+
 
     public function getMyInfoForPassenger(){
         return response()->json([

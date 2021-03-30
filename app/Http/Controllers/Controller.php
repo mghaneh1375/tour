@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 include_once 'Common.php';
 include_once 'Common2.php';
@@ -48,6 +51,29 @@ class Controller extends BaseController
             return 'sick';
         else
             return 'ok';
+    }
+
+    public static function sendDeleteFileApiToServer($files, $server){
+
+        if(config('app.env') === 'local')
+            return ['status' => 'ok', 'result' => 'not in local'];
+
+        $nonce = config('app.DeleteNonceCode');
+        $apiUrl = "https://sr{$server}.koochita.com/api/deleteFileWithDir";
+
+        $time = Carbon::now()->getTimestamp();
+        $hash = Hash::make($nonce.'_'.$time);
+
+        $response = Http::asForm()->delete($apiUrl, [
+            'code' => $hash,
+            'time' => $time,
+            'filesDirectory' => json_encode($files)
+        ]);
+
+        if($response->successful())
+            return ['status' => 'ok', 'result' => $response->json()];
+        else
+            return ['status' => 'error', 'result' => $response->json()];
     }
 
 }

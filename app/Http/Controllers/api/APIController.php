@@ -69,67 +69,6 @@ class APIController extends Controller {
         $this->content = array();
     }
 
-    public function getPlacesForKoochitaTv()
-    {
-        $nowTime = Carbon::now()->getTimestamp();
-        $ck = env("KOOCHITATV_NOUNC_CODE").'_'.$_GET['time'];
-        $checkHash = Hash::check($ck, $_GET['code']);
-        if(($nowTime - $_GET['time']) > 1000)
-            return response('outTime');
-
-        if($checkHash){
-            $states = [];
-            $statesId = json_decode($_GET['state']);
-            foreach ($statesId as $sId) {
-                $st = State::find($sId);
-                if($st != null){
-                    $st->url = route('cityPage', ['kind' => 'state', 'city' => $st->name]);
-                    $st->pic = getStatePic($st->id, 0);
-                    array_push($states, $st);
-                }
-            }
-
-            $cities = [];
-            $citiesId = json_decode($_GET['city']);
-            foreach ($citiesId as $cId) {
-                $ci = Cities::find($cId);
-                if($ci != null) {
-                    $ci->url = route('cityPage', ['kind' => 'city', 'city' => $ci->name]);
-                    $ci->pic = getStatePic(0, $ci->id);
-                    $st = State::find($ci->stateId);
-                    if($st != null)
-                        $st->state = $st->name;
-
-                    array_push($cities, $ci);
-                }
-            }
-
-            $places = [];
-            $pls = json_decode($_GET['places']);
-            foreach ($pls as $item){
-                $kindPlace = Place::find($item->kindPlaceId);
-                if($kindPlace != null && $kindPlace->tableName != null){
-                    $place = \DB::table($kindPlace->tableName)->select(['id', 'name', 'cityId'])->find($item->id);
-                    if($place != null){
-                        $place->url = route('placeDetails', ['kindPlaceId' => $item->kindPlaceId, 'placeId' => $item->id]);
-                        $place->pic = getPlacePic($place->id, $item->kindPlaceId);
-                        $ci = Cities::find($place->cityId);
-                        if($ci != null){
-                            $place->city = $ci->name;
-                            $st = State::find($ci->stateId);
-                            if($st != null)
-                                $place->state = $st->name;
-                        }
-                        array_push($places, $place);
-                    }
-                }
-            }
-
-            return response()->json(['state' => $states, 'cities' => $cities, 'places' => $places]);
-        }
-        else
-            return response('nok');
-    }
 
     public function totalSearchAPI() {
 

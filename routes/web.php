@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\api\APIController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CookController;
-use App\Http\Controllers\DeleteContentController;
 use App\Http\Controllers\FestivalController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
@@ -37,7 +37,6 @@ Route::any('android', function (Illuminate\Http\Request $request) {
             "status" => "0",
             "result" => [$key]
         ]);
-
     }
     $cities = \Illuminate\Support\Facades\DB::select("select concat(name, ' در ', (select name from state where id = stateId)) as name from cities where isVillage = 0 and name like '%" . $key . "%'");
     $out = [];

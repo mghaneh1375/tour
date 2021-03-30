@@ -18,6 +18,7 @@ return [
     'UploadFileURL' => env('UPLOADFILEURL'),
     'AllowOtherOrigin' => env('AllowOtherOrigin'),
     'ServerNumber' => env('ServerNum', 1),
+    'DeleteNonceCode' => env('DeleteNonceCode'),
 
     'name' => env('APP_NAME', 'Laravel'),
 
