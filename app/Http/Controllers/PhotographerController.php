@@ -24,7 +24,11 @@ class PhotographerController extends Controller
         if($kindPlace == null)
             return response()->json(['status' => 'error']);
 
-        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
+        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}";
+        if(!file_exists($location))
+            mkdir($location);
+
+        $location .= "/{$place->file}";
         if(!file_exists($location))
             mkdir($location);
 
