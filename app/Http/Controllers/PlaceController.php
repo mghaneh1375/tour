@@ -37,6 +37,7 @@ use App\models\PicItem;
 use App\models\places\Place;
 use App\models\places\PlaceFeatureRelation;
 use App\models\places\PlaceFeatures;
+use App\models\places\PlacePic;
 use App\models\places\PlaceRates;
 use App\models\places\PlaceStyle;
 use App\models\places\PlaceTag;
@@ -44,6 +45,7 @@ use App\models\Question;
 use App\models\QuestionUserAns;
 use App\models\Report;
 use App\models\places\Restaurant;
+use App\models\Reviews\ReviewPic;
 use App\models\safarnameh\Safarnameh;
 use App\models\safarnameh\SafarnamehCityRelations;
 use App\models\SectionPage;
@@ -95,7 +97,7 @@ class PlaceController extends Controller {
 
     public function showPlaceDetails($kindPlaceName, $slug){
 
-        deleteReviewPic();  // common.php
+        ReviewPic::deleteNotSetPictures();
 
         $kindPlace = Place::where('fileName', $kindPlaceName)->firstOrFail();
         if($kindPlace == null)
@@ -321,10 +323,152 @@ class PlaceController extends Controller {
         $kindPlaceId = $_GET['kindPlaceId'];
         $placeId = $_GET['placeId'];
 
-        $pics = getAllPlacePicsByKind($kindPlaceId, $placeId); // common.php
+        $kindPlace = Place::find($kindPlaceId);
+        $MainFile = $kindPlace->fileName;
+        $place = DB::table($kindPlace->tableName)->find($placeId);
+
+
+        $userPhotosArr = [];
+        $userVideoArr = [];
+        $sliderPics = [];
+        $sitePics = [];
+
+        if(auth()->check())
+            $user = auth()->user();
+
+        $userPhotos = DB::select('SELECT pic.* , users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 0 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
+        foreach ($userPhotos as $item){
+            $item->pic = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}", null, $item->server);
+
+            array_push($userPhotosArr, [
+                'id' => "review_{$item->id}",
+                'sidePic' => $item->pic ,
+                'mainPic' => $item->pic ,
+                'userName' => $item->username ,
+                'userPic' => getUserPic($item->userId) ,
+                'uploadTime' => getDifferenceTimeString($item->created_at) ,
+                'showInfo' => false ,
+            ]);
+        }
+
+        $userVideo = DB::select('SELECT pic.*, users.username, users.id as userId FROM reviewPics AS pic, log, users WHERE pic.isVideo = 1 AND pic.logId = log.id AND log.kindPlaceId = ' . $kindPlaceId . ' AND log.placeId = ' . $placeId . ' AND log.confirm = 1 AND log.visitorId = users.id');
+        foreach ($userVideo as $item){
+            if($item->thumbnail == null){
+                $thumbnail = explode('.', $item->pic);
+                $thumbnail[count($thumbnail) - 1] = '.png';
+                $thumbnail = implode('', $thumbnail);
+            }
+            else
+                $thumbnail = $item->thumbnail;
+
+            $item->picName = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$thumbnail}", null, $item->server);
+            $item->videoUrl = URL::asset("userPhoto/{$MainFile}/{$place->file}/{$item->pic}", null, $item->server);
+
+            array_push($userVideoArr, [
+                'id' => "review_{$item->id}",
+                'sidePic' => $item->picName ,
+                'mainPic' => $item->picName ,
+                'userPic' => getUserPic($item->userId) ,
+                'userName' => $item->username ,
+                'video' => $item->videoUrl ,
+                'uploadTime' => getDifferenceTimeString($item->created_at) ,
+                'showInfo' => false ,
+            ]);
+        }
+
+        $place->pics = PlacePic::where('kindPlaceId', $kindPlaceId)->where('placeId', $place->id)->get();
+        $koochitaPic = URL::asset('images/icons/KOFAV0.svg');
+        $s = [
+            'id' => 'sitePic_0',
+            'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$place->picNumber}"),
+            'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$place->picNumber}"),
+            'alt' => $place->alt,
+            'userName' => 'کوچیتا',
+            'userPic' => $koochitaPic,
+            'showInfo' => false,
+            'uploadTime' => ''
+        ];
+        array_push($sitePics, $s);
+        array_push($sliderPics, $s);
+
+        foreach ($place->pics as $index => $item){
+            $s = [
+                'id' => "sitePic_{$index}",
+                'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$item->picNumber}"),
+                'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$item->picNumber}"),
+                'alt' => $place->alt,
+                'userName' => 'کوچیتا',
+                'userPic' => $koochitaPic,
+                'showInfo' => false,
+                'uploadTime' => ''
+            ];
+
+            array_push($sitePics, $s);
+            array_push($sliderPics, $s);
+        }
+
+        $photographerPic = PhotographersPic::join('users', 'users.id', 'photographersPics.userId')
+            ->where('photographersPics.kindPlaceId', $kindPlaceId)
+            ->where('photographersPics.placeId', $placeId)
+            ->where(function($query){
+                if(auth()->check()) $query->where('photographersPics.userId', auth()->user()->id)->orWhere('photographersPics.status', 1);
+                else $query->where('photographersPics.status', 1);
+            })
+            ->orderByDesc('photographersPics.created_at')
+            ->select(['photographersPics.*', 'users.username'])
+            ->get();
+
+        if($photographerPic != null) {
+            $pid = [0];
+            foreach ($photographerPic as $item)
+                array_push($pid, $item->id);
+
+            $pidLike = auth()->check() ? DB::select('SELECT * FROM photographersLogs WHERE picId IN (' . implode(",", $pid) . ') AND userId = ' . $user->id) : null;
+
+            foreach ($photographerPic as $item) {
+                if($pidLike != null) {
+                    foreach ($pidLike as $item2) {
+                        if($item2->picId == $item->id){
+                            $item->userLike = $item2->like;
+                            break;
+                        }
+                    }
+                    if(!isset($item->userLike))
+                        $item->userLike = 0;
+                }
+                else
+                    $item->userLike = 0;
+            }
+        }
+
+        foreach ($photographerPic as $item){
+            $s = [
+                'id' => "photographer_{$item->id}",
+                'sidePic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/l-{$item->pic}", null, $item->server),
+                'mainPic' => URL::asset("userPhoto/{$MainFile}/{$place->file}/s-{$item->pic}", null, $item->server),
+                'userPic' =>  getUserPic($item->userId),
+                'userName' => $item->username,
+                'picName' => $item->name,
+                'alt' => $item->alt,
+                'showInfo' => true,
+                'like' => $item->like,
+                'dislike' => $item->dislike,
+                'description' => $item->description,
+                'uploadTime' => getDifferenceTimeString($item->created_at),
+                'userLike' => $item->userLike
+            ];
+
+            if($item->isSitePic == 1)
+                array_push($sliderPics, $s);
+
+            array_unshift($userPhotosArr, $s);
+        }
+
+        $pics = ['sitePics' => $sitePics, 'userPhotos' => $userPhotosArr, 'userVideo' => $userVideoArr, 'sliderPics' => $sliderPics];
 
         return response()->json(['status' => 'ok', 'result' => $pics]);
     }
+
 
     public function getNearby()
     {
@@ -1712,201 +1856,6 @@ class PlaceController extends Controller {
 
     }
 
-    public function storePhotographerFile(Request $request){
-        $data = json_decode($request->data);
-        $placeId = $data->placeId;
-        $kindPlaceId = $data->kindPlaceId;
-
-        $kindPlace = Place::find($kindPlaceId);
-        $place = DB::table($kindPlace->tableName)->find($placeId);
-        if($kindPlace == null)
-            return response()->json(['status' => 'error']);
-
-        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
-        if(!file_exists($location))
-            mkdir($location);
-
-        $tSize = [
-            'width' => 150,
-            'height' => null,
-            'name' => 't-',
-            'destination' => $location
-        ];
-        $lSize = [
-            'width' => 200,
-            'height' => null,
-            'name' => 'l-',
-            'destination' => $location
-        ];
-        $fSize =[
-            'width' => 350,
-            'height' => 250,
-            'name' => 'f-',
-            'destination' => $location
-        ];
-        $sSize =[
-            'width' => 600,
-            'height' => 400,
-            'name' => 's-',
-            'destination' => $location
-        ];
-
-        if(isset($request->storeFileName) && isset($request->file_data) && $request->storeFileName != 0)
-            $fileName = $request->storeFileName;
-        else {
-            if(isset($data->fileName) && $data->fileName != null)
-                $fileName = $data->fileName;
-            else {
-                $fileName = time() . rand(100, 999) . '_' . \auth()->user()->id . '.png';
-
-                $photographer = new PhotographersPic();
-                $photographer->userId = Auth::user()->id;
-                $photographer->name = $data->name;
-                $photographer->alt = $data->alt;
-                $photographer->description = $data->description;
-                $photographer->pic = $fileName;
-                $photographer->kindPlaceId = $kindPlaceId;
-                $photographer->placeId = $placeId;
-                $photographer->like = 0;
-                $photographer->dislike = 0;
-                $photographer->isSitePic = 0;
-                $photographer->isPostPic = 0;
-                $photographer->status = 0;
-                $photographer->save();
-            }
-        }
-
-        $location .= "/{$fileName}";
-        $result = uploadLargeFile($location, $request->file_data);
-
-        if($request->last == "true"){
-            $size = [];
-            if($data->fileKind === "mainFile"){
-                if(array_search( "squ", $data->otherSize) !== false){
-                    array_push($size, $tSize);
-                    array_push($size, $lSize);
-                }
-                if(array_search( "req", $data->otherSize) !== false){
-                    array_push($size, $fSize);
-                    array_push($size, $sSize);
-                }
-            }
-            else if($data->fileKind === "squ")
-                $size = [$tSize, $lSize];
-            else if($data->fileKind === "req")
-                $size = [$fSize, $sSize];
-
-            $image = file_get_contents("{$location}");
-            resizeUploadedImage($image, $size, $fileName);
-
-            unlink($location);
-        }
-
-        $url = URL::asset("userPhoto/{$kindPlace->fileName}/{$place->file}/f-{$fileName}");
-
-        if($result)
-            return response()->json(['status' => 'ok', 'fileName' => $fileName, 'result' => ['fileName' => $fileName, 'url' => $url]]);
-        else
-            return response()->json(['status' => 'nok']);
-    }
-
-    public function addPhotoToComment($placeId, $kindPlaceId)
-    {
-
-        if (!Auth::check())
-            return Redirect::to(route('hotelDetails', ['placeId' => $placeId, 'placeName' => Hotel::whereId($placeId)->name]));
-
-        $uId = Auth::user()->id;
-        $err = "";
-
-        if (isset($_FILES["photo"]) && !empty($_FILES["photo"]["name"])) {
-
-            $condition = ["visitorId" => $uId, 'activityId' => Activity::whereName('نظر')->first()->id,
-                'placeId' => $placeId, 'kindPlaceId' => $kindPlaceId];
-
-            $log = LogModel::where($condition)->first();
-
-            if ($log == null) {
-                return $this->writeReview($placeId, $kindPlaceId, "شما باید ابتدا نقد خود را ارسال کرده و سپس به آن عکس اضافه کنید");
-            }
-
-            if (!file_exists(__DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId)) {
-                mkdir(__DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId, 0777, true);
-            }
-
-            $file = $_FILES["photo"];
-            $targetFile = __DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId . "/" . $file["name"];
-            $fileName = $file["name"];
-
-            if (file_exists($targetFile)) {
-                $count = 2;
-                $targetFile = __DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId . "/" . $count . $file["name"];
-                $fileName = $count . $file["name"];
-                while (file_exists($targetFile)) {
-                    $count++;
-                    $targetFile = __DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId . "/" . $count . $file["name"];
-                    $fileName = $count . $file["name"];
-                }
-            }
-
-            $err = uploadCheck($targetFile, "photo", "افزودن تصویر", 3000000, "jpg");
-            if (empty($err)) {
-                $err = upload($targetFile, "photo", "افزودن تصویر");
-            }
-
-            if (empty($err)) {
-
-                $allow = true;
-                if ($log->pic == "")
-                    $allow = false;
-
-                $oldFileName = __DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId . "/" . $log->pic;
-                $log->confirm = 0;
-                $log->pic = $fileName;
-
-                try {
-                    if ($allow && file_exists($oldFileName))
-                        unlink($oldFileName);
-                    $log->save();
-                    return Redirect::to(route('review', ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'mode' => 'success']));
-                } catch (Exception $e) {
-                };
-            }
-        }
-
-        if (empty($err)) {
-            $err = 'لطفا تصویر مورد نظر خود را انتخاب نمایید';
-        }
-        return $this->writeReview($placeId, $kindPlaceId, $err);
-    }
-
-    public function deleteUserPicFromComment()
-    {
-
-        if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"])) {
-
-            $kindPlaceId = makeValidInput($_POST["kindPlaceId"]);
-
-            $condition = ['visitorId' => Auth::user()->id, 'placeId' => makeValidInput($_POST["placeId"]),
-                'kindPlaceId' => $kindPlaceId,
-                'activityId' => Activity::whereName('نظر')->first()->id];
-
-            $log = LogModel::where($condition)->first();
-            if ($log != null) {
-                $target = __DIR__ . "/../../../../assets/userPhoto/comments/" . $kindPlaceId . '/' . $log->pic;
-                if (file_exists($target))
-                    unlink($target);
-                $log->pic = "";
-                $log->save();
-                echo "ok";
-                return;
-            }
-        }
-
-        echo "nok";
-
-    }
-
     public function fillMyDivWithAdv() {
 
         if (isset($_POST["state"]) && isset($_POST["sectionId"])) {
@@ -2067,63 +2016,6 @@ class PlaceController extends Controller {
     {
         $videoSrc = '_images/movie.mp4';
         return view('video3602', array('videoSrc' => $videoSrc));
-    }
-
-    public function likePhotographer(Request $request)
-    {
-        if(Auth::check())
-            $user = Auth::user();
-        else {
-            echo json_encode(['nok1']);
-            return;
-        }
-
-        if(isset($request->id) && isset($request->like)){
-            $id = explode('_', $request->id);
-            if($id[0] == 'photographer') {
-                $photo = PhotographersPic::find($id[1]);
-                if ($photo != null) {
-                    $userStatus = PhotographersLog::where('picId', $photo->id)->where('userId', $user->id)->first();
-
-                    if ($userStatus == null) {
-                        $userStatus = new PhotographersLog();
-
-                        if ($request->like == 1) {
-                            $userStatus->like = 1;
-                            $photo->like++;
-                        } else if ($request->like == -1) {
-                            $userStatus->like = -1;
-                            $photo->dislike++;
-                        }
-
-                        $userStatus->userId = $user->id;
-                        $userStatus->picId = $photo->id;
-                    }
-                    else {
-                        if ($userStatus->like == 1)
-                            $photo->like--;
-                        else if ($userStatus->like == -1)
-                            $photo->dislike--;
-                        if ($request->like == 1) {
-                            $userStatus->like = 1;
-                            $photo->like++;
-                        } else if ($request->like == -1) {
-                            $userStatus->like = -1;
-                            $photo->dislike++;
-                        }
-                    }
-
-                    $userStatus->save();
-                    $photo->save();
-                    echo json_encode(['status' => 'ok', 'like' => $photo->like, 'disLike' => $photo->dislike]);
-                }
-                else
-                    echo json_encode(['nok3']);
-            }
-        }
-        else
-            echo json_encode(['nok4']);
-        return;
     }
 
     public function askQuestion()

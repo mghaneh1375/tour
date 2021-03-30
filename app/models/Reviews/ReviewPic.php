@@ -4,12 +4,15 @@ namespace App\models\Reviews;
 
 use App\models\LogModel;
 use App\models\places\Place;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class ReviewPic extends Model
 {
     protected $guarded = [];
     protected $table = 'reviewPics';
+
+    public static $assetLocation = __DIR__.'/../../../../assets';
 
     public function deleteThisPicture(){
         if(auth()->check()) {
@@ -20,7 +23,7 @@ class ReviewPic extends Model
                 return 'notFoundReview';
 
             if(auth()->user()->id == $review->visitorId){
-                $location = __DIR__ . '/../../../assets/userPhoto/';
+                $location = self::$assetLocation."/userPhoto/";
                 if($this->kindPlaceId == 0 && $this->placeId == 0)
                     $location .= 'nonePlaces';
                 else{
@@ -54,5 +57,19 @@ class ReviewPic extends Model
         }
         else
             return 'notAuth';
+    }
+
+    public static function deleteNotSetPictures(){
+        $pics = ReviewPic::where('logId', null)->get();
+        foreach ($pics as $item){
+            $diffTimeDay = Carbon::now()->diffInHours($item->created_at);
+            if($diffTimeDay > 24){
+
+                $location = self::$assetLocation."/limbo/{$item->pic}";
+                if(file_exists($location))
+                    unlink($location);
+                $item->delete();
+            }
+        }
     }
 }

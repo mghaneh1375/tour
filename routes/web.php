@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\APIController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\CookController;
 use App\Http\Controllers\DeleteContentController;
 use App\Http\Controllers\FestivalController;
@@ -8,8 +9,10 @@ use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocalShop\CreateLocalShopController;
 use App\Http\Controllers\LocalShop\LocalShopController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MyTripsController;
+use App\Http\Controllers\PhotographerController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -193,22 +196,22 @@ Route::get('place-details/{kindPlaceId}/{placeId}', 'PlaceController@setPlaceDet
 Route::middleware(['throttle:60'])->group(function (){
 
     Route::middleware(['shareData'])->group(function (){
-        Route::get('myLocation', 'MainController@myLocation')->name('myLocation');
-        Route::get('placeList/{kindPlaceId}/{mode}/{city?}', 'PlaceController@showPlaceList')->name('place.list');
-        Route::get('show-place-details/{kindPlaceName}/{slug}', 'PlaceController@showPlaceDetails')->name('show.place.details');
-        Route::get('cityPage/{kind}/{city}', 'CityController@cityPage')->name('cityPage');
+        Route::get('myLocation', [MainController::class, 'myLocation'])->name('myLocation');
+        Route::get('placeList/{kindPlaceId}/{mode}/{city?}', [PlaceController::class, 'showPlaceList'])->name('place.list');
+        Route::get('show-place-details/{kindPlaceName}/{slug}', [PlaceController::class, 'showPlaceDetails'])->name('show.place.details');
+        Route::get('cityPage/{kind}/{city}', [CityController::class, 'cityPage'])->name('cityPage');
     });
 
-    Route::get('getPlacesWithLocation', 'MainController@getPlacesWithLocation')->name('getPlaces.location');
+    Route::get('getPlacesWithLocation', [MainController::class, 'getPlacesWithLocation'])->name('getPlaces.location');
 
-    Route::get('placeDetails/getPics', 'PlaceController@getPlacePics')->name('place.getPics');
-    Route::post('getPlaceListElems', 'PlaceController@getPlaceListElems')->name('place.list.getElems');
+    Route::get('placeDetails/getPics', [PlaceController::class, 'getPlacePics'])->name('place.getPics');
+    Route::post('getPlaceListElems', [PlaceController::class, 'getPlaceListElems'])->name('place.list.getElems');
 
-    Route::get('getCityPageTopPlace', 'CityController@getCityPageTopPlace')->name('cityPage.topPlaces');
-    Route::post('getCityAllPlaces', 'CityController@getCityAllPlaces')->name('getCityAllPlaces');
+    Route::get('getCityPageTopPlace', [CityController::class, 'getCityPageTopPlace'])->name('cityPage.topPlaces');
+    Route::post('getCityAllPlaces', [CityController::class, 'getCityAllPlaces'])->name('getCityAllPlaces');
 
     Route::middleware(['auth'])->group(function(){
-        Route::post('places/setRateToPlace', 'PlaceController@setRateToPlace')->name('places.setRateToPlaces');
+        Route::post('places/setRateToPlace', [PlaceController::class, 'setRateToPlace'])->name('places.setRateToPlaces');
     });
 
 });
@@ -450,6 +453,13 @@ Route::group(['middleware' => ['throttle:60']], function(){
             Route::post('profile/accountInfo/editPassword', [UserLoginController::class, 'editPassword'])->name('profile.accountInfo.editPassword');
         });
 
+        Route::middleware(['auth'])->group(function(){
+            Route::post('photographer/uploadFile', [PhotographerController::class, 'storePhotographerFile'])->name('upload.photographer.uploadFile');
+
+            Route::post('photographer/likePicture', [PhotographerController::class, 'likePhotographer'])->name('photographer.likePicture');
+
+            Route::post('album/pics/delete', [PhotographerController::class, 'deleteAlbumPic'])->name('upload.album.pic.delete');
+        });
 
         Route::get('profile/getUserInfoFooter', [ProfileController::class, 'getUserInfoFooter'])->name('profile.getUserInfoFooter');
 
@@ -552,20 +562,11 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('sendAns2', array('as' => 'sendAns2', 'uses' => 'PlaceController@sendAns2'));
 
-
-        Route::post('photographer/uploadFile', [PlaceController::class, 'storePhotographerFile'])->name('upload.photographer.uploadFile');
-
-        Route::post('likePhotographer', [PlaceController::class, 'likePhotographer'])->name('likePhotographer');
-
-        Route::post('addPhotoToComment/{placeId}/{kindPlaceId}', [PlaceController::class, 'addPhotoToComment'])->name('addPhotoToComment');
-
         Route::post('setBookMark',  [PlaceController::class, 'setBookMark'])->name('setBookMark');
 
         Route::get('/alert/get', [HomeController::class, 'getAlerts'])->name('getAlerts');
 
         Route::post('/alert/seen', [HomeController::class, 'seenAlerts'])->name('alert.seen');
-
-        Route::post('deleteUserPicFromComment', [PlaceController::class, 'deleteUserPicFromComment'])->name('upload.deleteUserPicFromComment');
 
     });
 });
@@ -843,13 +844,6 @@ Route::get('provider', function (){
 Route::get('provider2', function (){
     return view('provider-details2');
 })->middleware('shareData');
-
-// delete contents
-Route::group(['middleware' => 'auth'], function () {
-
-    Route::post('album/pics/delete', [DeleteContentController::class, 'deleteAlbumPic'])->name('upload.album.pic.delete');
-
-});
 
 // not use
 Route::group(array('middleware' => ['nothing']), function () {

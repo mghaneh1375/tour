@@ -568,7 +568,6 @@ function likeAlbumPic(_element, _like){
             like : _like
         },
         success: function(response){
-            response = JSON.parse(response);
             if(response.status == 'ok'){
                 setLikeNumberInPhotoAlbum(response.like, 'like');
                 setLikeNumberInPhotoAlbum(response.disLike, 'dislike');

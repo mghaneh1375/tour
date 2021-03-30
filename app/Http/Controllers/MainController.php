@@ -166,16 +166,16 @@ class MainController extends Controller
 
         $sliderPic = MainSliderPic::all();
         foreach ($sliderPic as $item) {
-            $item->pic = URL::asset('_images/sliderPic/' . $item->pic);
+            $item->pic = URL::asset("_images/sliderPic/{$item->pic}");
             if($item->backgroundPic != null)
-                $item->backgroundPic = URL::asset('_images/sliderPic/' . $item->backgroundPic);
+                $item->backgroundPic = URL::asset("_images/sliderPic/{$item->backgroundPic}");
         }
 
         $middleBan = [];
 
         $middleBan1 = BannerPics::where('page', 'mainPage')->where('section', 1)->get();
         foreach ($middleBan1 as $item){
-            $item->pic = URL::asset('_images/bannerPic/' . $item->page . '/' . $item->pic);
+            $item->pic = URL::asset("_images/bannerPic/{$item->page}/{$item->pic}");
             if($item->text == null)
                 $item->text = '';
             if($item->link == 'https://')
