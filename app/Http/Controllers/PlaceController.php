@@ -68,6 +68,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 
 class PlaceController extends Controller {
@@ -96,12 +97,28 @@ class PlaceController extends Controller {
     }
 
     public function showPlaceDetails($kindPlaceName, $slug){
-
         ReviewPic::deleteNotSetPictures();
 
         $kindPlace = Place::where('fileName', $kindPlaceName)->firstOrFail();
         if($kindPlace == null)
             return \redirect(\url('/'));
+
+
+        if(is_numeric($slug))
+            $place = DB::table($kindPlace->tableName)->find((int)$slug);
+        else
+            $place = DB::table($kindPlace->tableName)->where('slug', $slug)->first();
+
+        if($place == null)
+            abort(404);
+
+        $htmlFileDir = __DIR__.'/../../../public/htmls';
+        if(is_file("{$htmlFileDir}/{$place->file}.html") && !isset($_GET['readFile'])){
+            $myHtmlFile = fopen("{$htmlFileDir}/{$place->file}.html", "r");
+            $htmlCode = fread($myHtmlFile, filesize("{$htmlFileDir}/{$place->file}.html"));
+            fclose($myHtmlFile);
+            return $htmlCode;
+        }
 
         $kindPlaceId = $kindPlace->id;
         if($kindPlaceId == 1)
@@ -120,14 +137,6 @@ class PlaceController extends Controller {
             $kindPlace->title = 'بوم گردی های';
         else if($kindPlaceId == 13)
             return \redirect(\url('/'));
-
-        if(is_numeric($slug))
-            $place = DB::table($kindPlace->tableName)->find((int)$slug);
-        else
-            $place = DB::table($kindPlace->tableName)->where('slug', $slug)->first();
-
-        if($place == null)
-            abort(404);
 
         $place->tags = PlaceTag::getTags($kindPlace->id, $place->id);
 
@@ -303,10 +312,9 @@ class PlaceController extends Controller {
             'redirect' => \Request::url(),
             'mainPic' => $place->mainPic
         ];
-        session(['inPage' => 'place_' . $kindPlaceId . '_' . $place->id]);
+        session(['inPage' => "place_{$kindPlaceId}_{$place->id}"]);
 
-        return view('pages.placeDetails.placeDetails',
-            [
+        $htmlCode = view('pages.placeDetails.placeDetails',[
                 'place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
                 'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'],
                 'locationName' => $locationName, 'localStorageData' => $localStorageData,
@@ -315,7 +323,26 @@ class PlaceController extends Controller {
                 'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
                 'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
                 'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()
-            ]);
+            ])->render();
+
+
+        $myHtmlFile = fopen("{$htmlFileDir}/{$place->file}.html", "w");
+        fwrite($myHtmlFile, $htmlCode);
+        fclose($myHtmlFile);
+
+        return $htmlCode;
+
+//        return view('pages.placeDetails.placeDetails',
+//            [
+//                'place' => $place, 'features' => $features , 'save' => $save, 'city' => $city,
+//                'state' => $state, 'avgRate' => $rates['avg'], 'rates' => $rates['numOfRate'], 'yourRate' => $rates['yourRate'],
+//                'locationName' => $locationName, 'localStorageData' => $localStorageData,
+//                'reviewCount' => $reviewCount, 'ansReviewCount' => $ansReviewCount, 'userReviewCount' => $userReviewCount,
+//                'userPic' => $uPic, 'rateQuestion' => $rateQuestion, 'textQuestion' => $textQuestion, 'multiQuestion' => $multiQuestion,
+//                'userCode' => $userCode, 'kindPlaceId' => $kindPlaceId, 'mode' => 'city',
+//                'config' => ConfigModel::first(), 'hasLogin' => $hasLogin, 'bookMark' => $bookMark, 'kindPlace' => $kindPlace, 'placeMode' => $kindPlace->tableName,
+//                'sections' => SectionPage::wherePage(getValueInfo('hotel-detail'))->get()
+//            ]);
     }
 
     public function getPlacePics()

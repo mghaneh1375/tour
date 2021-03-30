@@ -6,7 +6,7 @@
                 <div class="suggestionPackMainBody" style="display: none">
                     <a href="##url##" class="suggestionPackPicLink">
                         <div class="suggestionPackPicDiv">
-                            <img src="##pic##" alt="##alt##" class="suggestionPackPic resizeImgClass" onload="loadSuggestionPack(this)">
+                            <img src="##pic##" alt="##alt##" class="suggestionPackPic resizeImgClass" onload="loadSuggestionPack(this)" onerror="loadSuggestionPack(this, 'error')">
                         </div>
                     </a>
                     <div class="suggestionPackDetailDiv">
@@ -99,9 +99,13 @@
             _callback();
     }
 
-    function loadSuggestionPack(_element){
-        $(_element).parent().parent().parent().show();
-        $(_element).parent().parent().parent().next().remove();
+    function loadSuggestionPack(_element, _type = 'ok'){
+        var elem = $(_element);
+        elem.parent().parent().parent().show();
+        elem.parent().parent().parent().next().remove();
+
+        if(_type == 'error')
+            elem.attr('src', '{{URL::asset("images/mainPics/noPicSite.jpg")}}');
 
         fitThisImg(_element); // in forAllPages
     }
