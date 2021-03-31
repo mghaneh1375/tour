@@ -465,11 +465,11 @@ class ProfileController extends Controller {
             $safarnameh = Safarnameh::where('userId', $userId)->where('confirm', 1)->orderByDesc('created_at')->get();
 
         foreach ($safarnameh as $item) {
-            $item->pic = \URL::asset('_images/posts/'.$item->id.'/'.$item->pic);
+            $item->pic = \URL::asset("_images/posts/{$item->id}/{$item->pic}", null, $item->server);
             $item->time = verta($item->created_at)->format('Y/m/d');
             $item->username = $username;
             $item->userPic = getUserPic($userId);
-            $item->url = url("/safarnameh/show/".$item->id);
+            $item->url = url("/safarnameh/show/{$item->id}");
         }
 
         echo json_encode(['status'  => 'ok', 'result' => $safarnameh]);
