@@ -174,7 +174,7 @@ class ProfileController extends Controller {
             $user->banner = URL::asset('images/mainPics/background/' . $user->banner);
         }
         else
-            $user->banner = URL::asset('userProfile/'.$user->banner);
+            $user->banner = URL::asset('userProfile/'.$user->banner, null, $user->baner_server);
 
         $userMedals = getTakenMedal($uId)['takenMedal'];
 

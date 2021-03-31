@@ -847,7 +847,7 @@ function getUserPic($id = 0){
                         $uPic = URL::asset('images/mainPics/noPicSite.jpg');
                 }
                 else
-                    $uPic = URL::asset("userProfile/{$user->picture}");
+                    $uPic = URL::asset("userProfile/{$user->picture}", null, $user->server);
             }
         }
 
