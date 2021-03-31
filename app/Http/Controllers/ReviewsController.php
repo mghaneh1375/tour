@@ -901,30 +901,11 @@ class ReviewsController extends Controller
                         $kindPlace = Place::find($review->kindPlaceId);
                         $kindPlaceTableName = $kindPlace->tableName;
                         $placeId = $review->placeId;
-                        $place = \DB::table($kindPlaceTableName)->find($review->placeId);
-                        $location = "{$this->assetLocation}/userPhoto/{$kindPlace->fileName}/{$place->file}";
                     }
-                    else
-                        $location = "{$this->assetLocation}/userPhoto/nonePlaces";
 
                     $reviewPics = ReviewPic::where('logId', $review->id)->get();
-                    foreach ($reviewPics as $pic){
-                        if($pic->isVideo == 1){
-                            if($pic->thumbnail != null)
-                                $thumbnail = $pic->thumbnail;
-                            else{
-                                $thumbnail = explode('.', $pic->pic);
-                                $thumbnail[count($thumbnail)-1] = '.png';
-                                $thumbnail = implode('', $thumbnail);
-                            }
-                            if(is_file($location.'/'.$thumbnail))
-                                unlink($location.'/'.$thumbnail);
-                        }
-
-                        if(is_file($location.'/'.$pic->pic))
-                            unlink($location.'/'.$pic->pic);
-                        $pic->delete();
-                    }
+                    foreach ($reviewPics as $pic)
+                        $pic->deleteThisPicture();
 
                     $userAssigned = ReviewUserAssigned::where('logId', $review->id)->get();
                     foreach ($userAssigned as $item){
@@ -950,7 +931,7 @@ class ReviewsController extends Controller
                     $alert->save();
 
                     if($kindPlaceTableName && $review->confirm === 1)
-                        \DB::table($kindPlaceTableName)->where('id', $place->id)->update(['reviewCount' => $place->reviewCount-1]);
+                        \DB::table($kindPlaceTableName)->where('id', $placeId)->update(['reviewCount' => $place->reviewCount-1]);
 
                     $review->delete();
                     echo 'ok';
