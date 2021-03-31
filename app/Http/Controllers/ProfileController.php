@@ -710,6 +710,7 @@ class ProfileController extends Controller {
             if($request->id != 0){
                 $user->picture = $request->id;
                 $user->uploadPhoto = 0;
+                $user->server = 1;
                 $user->save();
                 echo 'ok';
             }
@@ -728,6 +729,7 @@ class ProfileController extends Controller {
                 $fileName = resizeImage($image, $size);
                 $user->picture = $fileName;
                 $user->uploadPhoto = 1;
+                $user->server = config('app.ServerNumber');
                 $user->save();
 
                 echo 'ok';
@@ -760,6 +762,7 @@ class ProfileController extends Controller {
             if($request->uploaded == 'false'){
                 $user->banner = $request->pic;
                 $user->uploadBanner = 0;
+                $user->baner_server = 1;
                 $user->save();
 
                 $url = URL::asset('images/mainPics/background/'.$user->banner);
@@ -779,6 +782,7 @@ class ProfileController extends Controller {
                 $fileName = resizeImage($image, $size);
                 $user->banner = $fileName;
                 $user->uploadBanner = 1;
+                $user->baner_server = config('app.ServerNumber');
                 $user->save();
 
                 $url = URL::asset('userProfile/'.$user->banner);
