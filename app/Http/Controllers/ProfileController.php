@@ -785,7 +785,7 @@ class ProfileController extends Controller {
                 $user->baner_server = config('app.ServerNumber');
                 $user->save();
 
-                $url = URL::asset('userProfile/'.$user->banner);
+                $url = URL::asset('userProfile/'.$user->banner, null, $user->baner_server);
             }
         }
         else
