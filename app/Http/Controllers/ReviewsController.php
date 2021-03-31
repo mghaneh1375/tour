@@ -188,48 +188,39 @@ class ReviewsController extends Controller
         }
 
         if ($pic != null) {
-            if($pic->logId === null)
+            if($pic->logId === null){
                 $fileLocation = $this->limboLocation;
+                if ($pic->isVideo == 1) {
+                    if($pic->thumbnail != null)
+                        $videoName = $pic->thumbnail;
+                    else {
+                        $videoArray = explode('.', $pic->pic);
+                        $videoName = '';
+                        for ($k = 0; $k < count($videoArray) - 1; $k++)
+                            $videoName .= $videoArray[$k] . '.';
+                        $videoName .= 'png';
+                    }
+
+                    $thumbnailLocation = $fileLocation.'/'.$videoName;
+                    if (file_exists($thumbnailLocation))
+                        unlink($thumbnailLocation);
+                }
+
+                $picLocation = "{$fileLocation}/{$pic->pic}";
+                if (file_exists($picLocation))
+                    unlink($picLocation);
+
+                $pic->delete();
+            }
             else{
-                $fileLocation = $this->assetLocation;
                 $log = LogModel::find($pic->logId);
                 if($log === null)
                     return response()->json(['status' => 'notFoundReview']);
                 else if($log->visitorId != \auth()->user()->id)
                     return response()->json(['status' => 'accessDenied']);
-                else{
-                    if($log->kindPlaceId == 0 && $log->placeId == 0)
-                        $fileLocation .= '/userPhoto/nonePlaces';
-                    else{
-                        $kindPlace = Place::find($log->kindPlaceId);
-                        $place = \DB::table($kindPlace->tableName)->find($log->placeId);
-                        $fileLocation .= "/userPhoto/{$kindPlace->fileName}/{$place->file}";
-                    }
-                }
+                else
+                    $pic->deleteThisPicture();
             }
-
-            if ($pic->isVideo == 1) {
-                if($pic->thumbnail != null)
-                    $videoName = $pic->thumbnail;
-                else {
-                    $videoArray = explode('.', $pic->pic);
-                    $videoName = '';
-                    for ($k = 0; $k < count($videoArray) - 1; $k++)
-                        $videoName .= $videoArray[$k] . '.';
-                    $videoName .= 'png';
-                }
-
-                $thumbnailLocation = $fileLocation.'/'.$videoName;
-                if (file_exists($thumbnailLocation))
-                    unlink($thumbnailLocation);
-            }
-
-            $picLocation = "{$fileLocation}/{$pic->pic}";
-            if (file_exists($picLocation))
-                unlink($picLocation);
-
-            $pic->delete();
-
             return response()->json(['status' => 'ok']);
         }
         else
