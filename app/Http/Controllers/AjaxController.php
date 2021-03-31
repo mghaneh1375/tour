@@ -793,7 +793,7 @@ class AjaxController extends Controller {
         }
 
         $safarnameh = Safarnameh::whereIn('id', $safarnamehId)
-                                ->select(['id', 'title', 'slug', 'meta', 'pic', 'date', 'userId', 'keyword', 'seen'])
+                                ->select(['id', 'title', 'slug', 'meta', 'pic', 'date', 'userId', 'keyword', 'seen', 'server'])
                                 ->get();
         foreach ($safarnameh as $item){
             $item = SafarnamehMinimalData($item);

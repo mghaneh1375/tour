@@ -523,7 +523,7 @@ class PlaceController extends Controller {
                                     ->whereNotIn('id', $safarnamehId)
                                     ->where('confirm', 1)
                                     ->take(10 - count($safarnameh))
-                                    ->select(['userId', 'id', 'title',
+                                    ->select(['userId', 'id', 'title', 'server',
                                               'meta', 'slug', 'seen',
                                               'date', 'created_at',
                                                'pic', 'keyword'])

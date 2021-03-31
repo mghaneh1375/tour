@@ -319,7 +319,7 @@ class SafarnamehController extends Controller
 
         $func = getToday();
 
-        $allSafarnameh = Safarnameh::youCanSee()->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword', 'release')
+        $allSafarnameh = Safarnameh::youCanSee()->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword', 'server', 'release')
                                     ->orderBy('date', 'DESC')
                                     ->skip(($page-1) * $take)
                                     ->take($take)
@@ -348,7 +348,7 @@ class SafarnamehController extends Controller
                 ->select(['userId', 'safarnameh.id', 'safarnameh.title',
                     'safarnameh.seen', 'safarnameh.created_at', 'safarnameh.pic',
                     'safarnameh.date', 'safarnameh.title', 'safarnameh.keyword',
-                    'safarnameh.slug', 'safarnameh.summery', 'safarnameh.meta'])
+                    'safarnameh.slug', 'safarnameh.summery', 'safarnameh.meta', 'safarnameh.server'])
                 ->get();
 
             if(count($bSafarnameh) == 3)
@@ -369,7 +369,7 @@ class SafarnamehController extends Controller
             //this section get all safarnameh released in last month
             $lastMonthSafarnameh = [];
             $lastMonthSafarnamehId = [];
-            $lms = \DB::select('SELECT safarnameh.id, safarnameh.title, safarnameh.summery, safarnameh.meta, safarnameh.slug, `date`, safarnameh.time, safarnameh.keyword, safarnameh.pic, safarnameh.seen, safarnameh.userId, u.username AS username FROM safarnameh LEFT JOIN `users` AS u ON safarnameh.userId = u.id WHERE (`date` > ' . $lastMonthDate . ' OR (safarnameh.date = ' . $lastMonthDate . ' AND safarnameh.time <= ' . $todayTime . ' )) AND safarnameh.release <> "draft" AND safarnameh.confirm = 1 ORDER By safarnameh.date DESC ');
+            $lms = \DB::select('SELECT safarnameh.id, safarnameh.title, safarnameh.server, safarnameh.summery, safarnameh.meta, safarnameh.slug, `date`, safarnameh.time, safarnameh.keyword, safarnameh.pic, safarnameh.seen, safarnameh.userId, u.username AS username FROM safarnameh LEFT JOIN `users` AS u ON safarnameh.userId = u.id WHERE (`date` > ' . $lastMonthDate . ' OR (safarnameh.date = ' . $lastMonthDate . ' AND safarnameh.time <= ' . $todayTime . ' )) AND safarnameh.release <> "draft" AND safarnameh.confirm = 1 ORDER By safarnameh.date DESC ');
             foreach ($lms as $item) {
                 $item = SafarnamehMinimalData($item);
                 array_push($lastMonthSafarnameh, $item);
@@ -596,7 +596,7 @@ class SafarnamehController extends Controller
                                             ->where('confirm', 1)
                                             ->where('release', '!=', 'draft')
                                             ->whereRaw('(date < ' . $today . ' OR (date = ' . $today . ' AND  (time <= ' . $nowTime . ' OR time IS NULL) ))')
-                                            ->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword')
+                                            ->select('userId', 'id', 'title', 'meta', 'slug', 'seen', 'date', 'created_at', 'pic', 'keyword', 'server')
                                             ->orderBy('date', 'DESC')
                                             ->skip(($page-1) * $take)
                                             ->take($take)
@@ -633,7 +633,7 @@ class SafarnamehController extends Controller
                                                 ->whereRaw('(date < ' . $today . ' OR (date = ' . $today . ' AND (time <= ' . $nowTime . ' OR time IS NULL) ))')
                                                 ->select([  'userId', 'id', 'title', 'meta',
                                                             'slug', 'seen', 'date', 'created_at',
-                                                            'pic', 'keyword'])
+                                                            'pic', 'keyword', 'server'])
                                                 ->orderBy('date', 'DESC')
                                                 ->skip(($page - 1) * $take)
                                                 ->take($take)
