@@ -90,7 +90,7 @@ class SafarnamehController extends Controller
                 }
                 else{
                     $files = ["_images/posts/{$newSafarnameh->id}/{$newSafarnameh->pic}"];
-                    Controller::sendDeleteFileApiToServer($files, config('app.ServerNumber'));
+                    Controller::sendDeleteFileApiToServer($files, $newSafarnameh->server);
                 }
             }
 
