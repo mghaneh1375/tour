@@ -43,7 +43,7 @@ function SafarnamehMinimalData($safarnameh){
     if($safarnameh->date != null)
         $safarnameh->date = convertJalaliToText($safarnameh->date);
 
-    $safarnameh->pic = \URL::asset("_images/posts/{$safarnameh->id}/{$safarnameh->pic}");
+    $safarnameh->pic = \URL::asset("_images/posts/{$safarnameh->id}/{$safarnameh->pic}", null, $safarnameh->server);
     $writer = User::find($safarnameh->userId);
     $safarnameh->username = $writer->username;
     $safarnameh->writerPic = getUserPic($writer->id);
@@ -85,8 +85,6 @@ function SafarnamehMinimalData($safarnameh){
 }
 
 function createSuggestionPack($_kindPlaceId, $_placeId){
-    $activityId = Activity::whereName('نظر')->first()->id;
-
     $kindPlace = Place::find($_kindPlaceId);
     if($kindPlace->id == 13)
         $place = LocalShops::select(['name', 'id', 'file', 'cityId', 'fullRate', 'reviewCount', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
@@ -102,7 +100,6 @@ function createSuggestionPack($_kindPlaceId, $_placeId){
         $place->state = $city != null ? $city->getState->name : '';
 
         $place->rate = $place->fullRate;
-        $condition = ['placeId' => $place->id, 'kindPlaceId' => $_kindPlaceId, 'activityId' => $activityId, 'confirm' => 1];
         $place->review = $place->reviewCount;
         return $place;
     }

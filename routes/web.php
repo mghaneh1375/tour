@@ -372,9 +372,7 @@ Route::group([], function () {
         Route::post('safarnameh/getForEdit', [SafarnamehController::class, 'getSafarnameh'])->name('safarnameh.get');
 
         Route::post('safarnameh/store', [SafarnamehController::class, 'storeSafarnameh'])->name('upload.safarnameh.store');
-
         Route::post('safarnameh/delete', [SafarnamehController::class, 'deleteSafarnameh'])->name('upload.safarnameh.delete');
-
         Route::post('safarnameh/storePic', [SafarnamehController::class, 'storeSafarnamehPics'])->name('upload.safarnameh.storePic');
     });
 });

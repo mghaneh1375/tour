@@ -4,6 +4,7 @@ var getSuggestionPlaceAjax = null;
 var searchResultPlacess = [];
 var pickedPlaces = [];
 var suggestionPlaces;
+var safarnamehRandomCode = Math.floor(Math.random()*100000);
 
 DecoupledEditor.create( document.querySelector('#safarnamehText'), {
     language: applicationLanguage_addSafarnameh,
@@ -15,7 +16,7 @@ DecoupledEditor.create( document.querySelector('#safarnamehText'), {
         window.editor = editor;
         textEditor = editor;
         editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-            var data = { id: userId_addSafarnameh };
+            var data = { id: userId_addSafarnameh, code: safarnamehRandomCode };
             data = JSON.stringify(data);
             return new MyUploadAdapter( loader, storePicUrl_addSafarnameh, csrfTokenGlobal, data);
         };

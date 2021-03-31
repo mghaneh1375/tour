@@ -966,21 +966,15 @@ class ReviewsController extends Controller
         }
         else if($kind === "tag"){
             $tags = ReviewTags::where('tag', 'LIKE', '%'.$value.'%')->get();
-            foreach($tags as $item){
-                array_push($result, [
-                    'id' => $item->id,
-                    'name' => $item->tag,
-                ]);
-            }
+            foreach($tags as $item)
+                array_push($result, ['id' => $item->id,'name' => $item->tag]);
         }
         else if($kind === "place"){
             $kindPlaces = Place::where('mainSearch', 1)->whereNotNull('tableName')->get();
             foreach ($kindPlaces as $item){
                 $places = DB::select("SELECT place.*, cities.name AS city, state.name AS state FROM {$item->tableName} AS place, cities, state WHERE place.name LIKE '%{$value}%' AND place.cityId = cities.id AND cities.stateId = state.id");
                 foreach($places as $place){
-                    $pic = URL::asset("images/mainPics/noPicSite.jpg");
-                    if(is_file("{$this->assetLocation}/_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}"))
-                        $pic = URL::asset("_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}");
+                    $pic = URL::asset("_images/{$item->fileName}/{$place->file}/t-{$place->picNumber}");
 
                     array_push($result, [
                         'id' => $place->id,

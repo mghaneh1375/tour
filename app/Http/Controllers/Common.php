@@ -872,11 +872,8 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
             $pic = $place->picNumber;
         }
 
-        if($place != null && $place->file != 'none' && $place->file != null){
-//            $location = assetDirLocGet()."/_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}";
-//            if (is_file($location))
-                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}");
-        }
+        if($place != null && $place->file != 'none' && $place->file != null)
+            return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}");
 
     }
 

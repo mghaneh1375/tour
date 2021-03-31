@@ -25,9 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $urlGenerator)
     {
-
-//        dd(config('database.default'));
-//        dd(\DB::connection('mysql')->getPdo());
         config(['userPictureArr' => []]);
 
         date_default_timezone_set('Asia/Tehran');

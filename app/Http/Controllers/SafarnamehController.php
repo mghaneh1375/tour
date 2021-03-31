@@ -31,6 +31,7 @@ class SafarnamehController extends Controller
     {
         return redirect(route('safarnameh.list', ['type' => $type, 'search' => $search]));
     }
+
     public function storeSafarnameh(Request $request)
     {
         $user = \Auth::user();
@@ -65,8 +66,8 @@ class SafarnamehController extends Controller
             $fName = substr($text, $index, $fNameIndex-$index);
             $lastSlash = strripos($fName, '/');
             $fileName = substr($fName, $lastSlash+1);
-            $text = str_replace($fName, '_images/posts/'.$newSafarnameh->id.'/'.$fileName, $text);
-            rename($limboLocation.'/'.$fileName, $location.'/'.$fileName);
+            $text = str_replace($fName, "_images/posts/{$newSafarnameh->id}/{$fileName}", $text);
+            rename("{$limboLocation}/{$fileName}", "{$location}/{$fileName}");
             $index = strpos($text, $limboLoc);
         }
         $newSafarnameh->description = $text;
@@ -82,12 +83,21 @@ class SafarnamehController extends Controller
                 ],
             ];
 
-            if($request->id != 0 && is_file($location.'/'.$newSafarnameh->pic))
-                unlink($location.'/'.$newSafarnameh->pic);
+            if($request->id != 0) {
+                if($newSafarnameh->server == config('app.ServerNumber')){
+                    if(is_file($location.'/'.$newSafarnameh->pic))
+                        unlink($location . '/' . $newSafarnameh->pic);
+                }
+                else{
+                    $files = ["_images/posts/{$newSafarnameh->id}/{$newSafarnameh->pic}"];
+                    Controller::sendDeleteFileApiToServer($files, config('app.ServerNumber'));
+                }
+            }
 
             $image = $request->file('pic');
             $fileName = resizeImage($image, $size);
             $newSafarnameh->pic = $fileName;
+            $newSafarnameh->server = config('app.ServerNumber');
             $newSafarnameh->save();
         }
 
@@ -149,60 +159,6 @@ class SafarnamehController extends Controller
         return;
     }
 
-    public function getSafarnameh(Request $request)
-    {
-        if(isset($request->id)){
-            $user = auth()->user();
-            $safarnameh = Safarnameh::find($request->id);
-            if($safarnameh->userId == $user->id){
-                $safarnameh->pic = \URL::asset('_images/posts/'.$safarnameh->id.'/'.$safarnameh->pic);
-                $safarnameh->tags = SafarnamehTagRelations::join('safarnamehTags', 'safarnamehtags.id', 'safarnamehTagRelations.tagId')
-                                    ->where('safarnamehTagRelations.safarnamehId', $safarnameh->id)
-                                    ->select(['safarnamehtags.tag'])->pluck('safarnamehtags.tag')->toArray();
-                $places = [];
-                $cit = SafarnamehCityRelations::where('safarnamehId', $safarnameh->id)->get();
-
-                foreach ($cit as $item){
-                    if($item->cityId == 0){
-                        $state = State::find($item->stateId);
-                        array_push($places, ['kindPlaceId' => 'state', 'kindPlaceName' => '', 'placeId' => $state->id, 'name' => 'استان ' . $state->name, 'pic' => getStatePic($state->id, 0), 'state' => '']);
-                    }
-                    else{
-                        $city = Cities::find($item->cityId);
-                        $state = State::find($item->stateId);
-                        array_push($places, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $city->id, 'name' => 'شهر ' . $city->name, 'pic' => getStatePic($state->id, $city->id), 'state' => 'در استان ' . $state->name]);
-                    }
-                }
-
-                $pla = SafarnamehPlaceRelations::where('safarnamehId', $safarnameh->id)->get();
-                foreach ($pla as $item){
-                    $kindPlace = Place::find($item->kindPlaceId);
-                    if($kindPlace != null) {
-                        $place = \DB::table($kindPlace->tableName)->select(['id', 'name', 'picNumber', 'cityId'])->find($item->placeId);
-                        if ($place != null) {
-                            $place->pic = getPlacePic($place->id, $kindPlace->id, 'f');
-                            $cit = Cities::find($place->cityId);
-                            $sta = State::find($cit->stateId);
-                            $stasent = 'استان ' . $sta->name . ' ، شهر' . $cit->name;
-                            array_push($places, ['kindPlaceId' => $kindPlace->id,
-                                'kindPlaceName' => $kindPlace->name, 'placeId' => $place->id,
-                                'name' => $place->name, 'pic' => $place->pic, 'state' => $stasent]);
-                        }
-                    }
-                }
-
-                $safarnameh->places = $places;
-                echo json_encode(['status' => 'ok', 'result' => $safarnameh]);
-            }
-            else
-                echo json_encode(['status' => 'notForYou']);
-        }
-        else
-            echo json_encode(['status' => 'nok']);
-
-        return;
-    }
-
     public function deleteSafarnameh(Request $request)
     {
         if(isset($request->id)){
@@ -254,10 +210,65 @@ class SafarnamehController extends Controller
             $image = $request->file('file');
             $fileName = resizeImage($image, $size);
 
-            echo json_encode(['url' => \URL::asset('_images/posts/limbo/'.$user->id.'_'.$fileName)]);
+            echo json_encode(['url' => \URL::asset("_images/posts/limbo/{$user->id}_{$fileName}", null, config('app.ServerNumber'))]);
         }
         else
             echo false;
+
+        return;
+    }
+
+
+    public function getSafarnameh(Request $request)
+    {
+        if(isset($request->id)){
+            $user = auth()->user();
+            $safarnameh = Safarnameh::find($request->id);
+            if($safarnameh->userId == $user->id){
+                $safarnameh->pic = \URL::asset("_images/posts/{$safarnameh->id}/{$safarnameh->pic}", null, $safarnameh->server);
+                $safarnameh->tags = SafarnamehTagRelations::join('safarnamehTags', 'safarnamehtags.id', 'safarnamehTagRelations.tagId')
+                    ->where('safarnamehTagRelations.safarnamehId', $safarnameh->id)
+                    ->select(['safarnamehtags.tag'])->pluck('safarnamehtags.tag')->toArray();
+                $places = [];
+                $cit = SafarnamehCityRelations::where('safarnamehId', $safarnameh->id)->get();
+
+                foreach ($cit as $item){
+                    if($item->cityId == 0){
+                        $state = State::find($item->stateId);
+                        array_push($places, ['kindPlaceId' => 'state', 'kindPlaceName' => '', 'placeId' => $state->id, 'name' => 'استان ' . $state->name, 'pic' => getStatePic($state->id, 0), 'state' => '']);
+                    }
+                    else{
+                        $city = Cities::find($item->cityId);
+                        $state = State::find($item->stateId);
+                        array_push($places, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $city->id, 'name' => 'شهر ' . $city->name, 'pic' => getStatePic($state->id, $city->id), 'state' => 'در استان ' . $state->name]);
+                    }
+                }
+
+                $pla = SafarnamehPlaceRelations::where('safarnamehId', $safarnameh->id)->get();
+                foreach ($pla as $item){
+                    $kindPlace = Place::find($item->kindPlaceId);
+                    if($kindPlace != null) {
+                        $place = \DB::table($kindPlace->tableName)->select(['id', 'name', 'picNumber', 'cityId'])->find($item->placeId);
+                        if ($place != null) {
+                            $place->pic = getPlacePic($place->id, $kindPlace->id, 'f');
+                            $cit = Cities::find($place->cityId);
+                            $sta = State::find($cit->stateId);
+                            $stasent = 'استان ' . $sta->name . ' ، شهر' . $cit->name;
+                            array_push($places, ['kindPlaceId' => $kindPlace->id,
+                                'kindPlaceName' => $kindPlace->name, 'placeId' => $place->id,
+                                'name' => $place->name, 'pic' => $place->pic, 'state' => $stasent]);
+                        }
+                    }
+                }
+
+                $safarnameh->places = $places;
+                echo json_encode(['status' => 'ok', 'result' => $safarnameh]);
+            }
+            else
+                echo json_encode(['status' => 'notForYou']);
+        }
+        else
+            echo json_encode(['status' => 'nok']);
 
         return;
     }
