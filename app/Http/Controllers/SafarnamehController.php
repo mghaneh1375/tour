@@ -226,9 +226,9 @@ class SafarnamehController extends Controller
             $safarnameh = Safarnameh::find($request->id);
             if($safarnameh->userId == $user->id){
                 $safarnameh->pic = \URL::asset("_images/posts/{$safarnameh->id}/{$safarnameh->pic}", null, $safarnameh->server);
-                $safarnameh->tags = SafarnamehTagRelations::join('safarnamehTags', 'safarnamehtags.id', 'safarnamehTagRelations.tagId')
+                $safarnameh->tags = SafarnamehTagRelations::join('safarnamehTags', 'safarnamehTags.id', 'safarnamehTagRelations.tagId')
                     ->where('safarnamehTagRelations.safarnamehId', $safarnameh->id)
-                    ->select(['safarnamehtags.tag'])->pluck('safarnamehtags.tag')->toArray();
+                    ->select(['safarnamehTags.tag'])->pluck('safarnamehTags.tag')->toArray();
                 $places = [];
                 $cit = SafarnamehCityRelations::where('safarnamehId', $safarnameh->id)->get();
 
