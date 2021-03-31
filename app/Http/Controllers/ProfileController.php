@@ -695,9 +695,19 @@ class ProfileController extends Controller {
     {
         if(isset($request->id)){
             $user = \auth()->user();
+
+            if($user->uploadPhoto == 1){
+                if(config('app.ServerName') == $user->server) {
+                    if (file_exists($this->userProfilePicFolder . "/" . $user->picture))
+                        unlink($this->userProfilePicFolder . "/" . $user->picture);
+                }
+                else{
+                    $files = ["userProfile/{$user->picture}"];
+                    Controller::sendDeleteFileApiToServer($files, $user->server);
+                }
+            }
+
             if($request->id != 0){
-                if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
-                    unlink($this->userProfilePicFolder."/" . $user->picture);
                 $user->picture = $request->id;
                 $user->uploadPhoto = 0;
                 $user->save();
@@ -716,8 +726,6 @@ class ProfileController extends Controller {
 
                 $image = $request->file('pic');
                 $fileName = resizeImage($image, $size);
-                if($user->uploadPhoto == 1 && file_exists($this->userProfilePicFolder. "/" . $user->picture))
-                    unlink($this->userProfilePicFolder. "/" . $user->picture);
                 $user->picture = $fileName;
                 $user->uploadPhoto = 1;
                 $user->save();
@@ -735,12 +743,21 @@ class ProfileController extends Controller {
 
     public function updateBannerPic(Request $request)
     {
-
         if(isset($request->uploaded) && isset($request->pic)){
             $user = \auth()->user();
+
+            if($user->uploadBanner == 1){
+                if(config('app.ServerName') == $user->baner_server) {
+                    if (file_exists($this->userProfilePicFolder . "/" . $user->banner))
+                        unlink($this->userProfilePicFolder . "/" . $user->banner);
+                }
+                else{
+                    $files = ["userProfile/{$user->banner}"];
+                    Controller::sendDeleteFileApiToServer($files, $user->baner_server);
+                }
+            }
+
             if($request->uploaded == 'false'){
-                if($user->uploadBanner == 1 && file_exists($this->userProfilePicFolder. "/" . $user->banner))
-                    unlink($this->userProfilePicFolder. "/" . $user->banner);
                 $user->banner = $request->pic;
                 $user->uploadBanner = 0;
                 $user->save();
@@ -760,8 +777,6 @@ class ProfileController extends Controller {
 
                 $image = $request->file('pic');
                 $fileName = resizeImage($image, $size);
-                if($user->uploadBanner == 1 && file_exists($this->userProfilePicFolder. "/" .  $user->banner))
-                    unlink($this->userProfilePicFolder. "/" . $user->banner);
                 $user->banner = $fileName;
                 $user->uploadBanner = 1;
                 $user->save();
@@ -770,11 +785,9 @@ class ProfileController extends Controller {
             }
         }
         else
-            echo json_encode(['status' => 'nok']);
+            return response()->json(['status' => 'nok']);
 
-
-        echo json_encode(['status' => 'ok', 'url' => $url]);
-        return;
+        return response()->json(['status' => 'ok', 'url' => $url]);
     }
 
     public function sendMyInvitationCode() {

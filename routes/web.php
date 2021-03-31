@@ -442,23 +442,18 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::middleware(['throttle:20'])->group(function() {
             Route::post('profile/accountInfo/editUsername', [UserLoginController::class, 'editUsernameAccountInfo'])->name('profile.accountInfo.editUsername');
-
             Route::post('profile/accountInfo/editPhoneNumber', [UserLoginController::class, 'editPhoneNumberAccountInfo'])->name('profile.accountInfo.editPhoneNumber');
-
             Route::post('profile/accountInfo/editGeneralInfo', [UserLoginController::class, 'editGeneralAccountInfo'])->name('profile.accountInfo.editGeneralInfo');
-
             Route::post('profile/accountInfo/editSocialInfo', [UserLoginController::class, 'editSocialInfo'])->name('profile.accountInfo.editSocialInfo');
-
             Route::post('profile/accountInfo/editPassword', [UserLoginController::class, 'editPassword'])->name('profile.accountInfo.editPassword');
+
+            Route::post('profile/updateUserPhoto', [ProfileController::class, 'updateUserPhoto'])->name('upload.profile.updateUserPhoto');
+            Route::post('profile/updateBannerPic', [ProfileController::class, 'updateBannerPic'])->name('upload.profile.updateBannerPic');
         });
 
-        Route::middleware(['auth'])->group(function(){
-            Route::post('photographer/uploadFile', [PhotographerController::class, 'storePhotographerFile'])->name('upload.photographer.uploadFile');
-
-            Route::post('photographer/likePicture', [PhotographerController::class, 'likePhotographer'])->name('photographer.likePicture');
-
-            Route::post('album/pics/delete', [PhotographerController::class, 'deleteAlbumPic'])->name('upload.album.pic.delete');
-        });
+        Route::post('photographer/uploadFile', [PhotographerController::class, 'storePhotographerFile'])->name('upload.photographer.uploadFile');
+        Route::post('photographer/likePicture', [PhotographerController::class, 'likePhotographer'])->name('photographer.likePicture');
+        Route::post('album/pics/delete', [PhotographerController::class, 'deleteAlbumPic'])->name('upload.album.pic.delete');
 
         Route::get('profile/getUserInfoFooter', [ProfileController::class, 'getUserInfoFooter'])->name('profile.getUserInfoFooter');
 
@@ -473,10 +468,6 @@ Route::group(['middleware' => ['throttle:60']], function(){
         Route::post('profile/bookMark/delete', [ProfileController::class, 'deleteBookMarkWithId'])->name('profile.bookMark.delete');
 
         Route::post('profile/safarnameh/placeSuggestion', [ProfileController::class, 'placeSuggestion'])->name('profile.safarnameh.placeSuggestion');
-
-        Route::post('profile/updateUserPhoto', [ProfileController::class, 'updateUserPhoto'])->name('upload.profile.updateUserPhoto');
-
-        Route::post('profile/updateBannerPic', [ProfileController::class, 'updateBannerPic'])->name('upload.profile.updateBannerPic');
 
         Route::post('profile/updateMyBio', [ProfileController::class, 'updateMyBio'])->name('profile.updateMyBio');
 

@@ -81,7 +81,7 @@ class MainApiController extends Controller
         $nowTime = Carbon::now()->getTimestamp();
         $ck = config("app.DeleteNonceCode").'_'.$request->time;
         $checkHash = Hash::check($ck, $request->code);
-        if(($nowTime - $request->time) > 1000)
+        if(($nowTime - $request->time) > 2000)
             return response()->json(['status' => 'outTime']);
 
         if($checkHash){
@@ -93,7 +93,7 @@ class MainApiController extends Controller
             foreach($files as $file) {
                 try {
                     $fileDir = $assetLocation . '/' . $file;
-                    if (is_dir($fileDir)) {
+                    if (is_file($fileDir)) {
                         unlink($fileDir);
                         array_push($deletedFile, $file);
                     }

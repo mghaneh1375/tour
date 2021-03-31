@@ -997,13 +997,12 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{route('uplaod.profile.updateBannerPic')}}',
+                url: '{{route('upload.profile.updateBannerPic')}}',
                 data: formDa,
                 processData: false,
                 contentType: false,
                 success: function(response){
                     closeLoading();
-                    response = JSON.parse(response);
                     if(response.status == 'ok') {
                         closeMyModal('userBannerModal');
                         $('.userProfilePageCoverImg').css('background-image', `url(${response.url})`);
