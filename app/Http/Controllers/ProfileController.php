@@ -1040,6 +1040,7 @@ class ProfileController extends Controller {
 
         if(isset($data->kindPlaceId) && isset($data->name) && isset($data->cityId)){
             $place = new UserAddPlace();
+            $place->server = config('app.ServerNumber');
             $place->userId = \auth()->user()->id;
             $place->kindPlaceId = $data->kindPlaceId;
             $place->name = $data->name;
@@ -1099,12 +1100,10 @@ class ProfileController extends Controller {
             $place->features = json_encode($features);
             $place->save();
 
-            echo json_encode(['status' => 'ok', 'result' => $place->id]);
+            return response()->json(['status' => 'ok', 'result' => $place->id]);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
     public function storeImgAddPlaceByUser(Request $request)
@@ -1113,7 +1112,14 @@ class ProfileController extends Controller {
             if(isset($_FILES['pic']) && $_FILES['pic']['error'] == 0){
                 $place = UserAddPlace::find($request->id);
                 if($place != null){
-                    $fileName = time().$_FILES['pic']['name'];
+                    $fileType = last(explode('.', $_FILES['pic']['name']));
+                    $fileTypeAccepted = ['png', 'jpeg', 'jpg', 'webp'];
+
+                    if(!in_array($fileType, $fileTypeAccepted))
+                        return response()->json(['status' => 'wrongType']);
+
+                    $fileName = time().'_'.rand(10000, 99999).'.'.$fileType;
+
                     $location = __DIR__ .'/../../../../assets/_images/addPlaceByUser';
                     if(!is_dir($location))
                         mkdir($location);
@@ -1128,21 +1134,19 @@ class ProfileController extends Controller {
                         $place->pics = json_encode($pics);
                         $place->save();
 
-                        echo json_encode(['status' => 'ok', 'result' => $fileName]);
+                        return response()->json(['status' => 'ok', 'result' => $fileName]);
                     }
                     else
-                        echo json_encode(['status' => 'nok3']);
+                        return response()->json(['status' => 'nok3']);
                 }
                 else
-                    echo json_encode(['status' => 'nok2']);
+                    return response()->json(['status' => 'nok2']);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
     public function deleteImgAddPlaceByUser(Request $request)
@@ -1162,18 +1166,16 @@ class ProfileController extends Controller {
                     $addPlace->pics = json_encode($pic);
                     $addPlace->save();
 
-                    echo json_encode(['status' => 'ok']);
+                    return response()->json(['status' => 'ok']);
                 }
                 else
-                    echo json_encode(['status' => 'nok2']);
+                    return response()->json(['status' => 'nok2']);
             }
             else
-                echo json_encode(['status' => 'nok1']);
+                return response()->json(['status' => 'nok1']);
         }
         else
-            echo json_encode(['status' => 'nok']);
-
-        return;
+            return response()->json(['status' => 'nok']);
     }
 
 }

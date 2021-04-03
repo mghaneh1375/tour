@@ -6,6 +6,7 @@ use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
 use App\models\CountryCode;
+use App\models\GoyeshTag;
 use App\models\PassengerInfos;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
