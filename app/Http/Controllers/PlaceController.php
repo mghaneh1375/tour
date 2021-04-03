@@ -2697,15 +2697,13 @@ class PlaceController extends Controller {
                 if($kindPlace->id == 13) {
                     $picNm = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
                     if($picNm != null) {
-                        $picNm = $picNm->pic;
                         $server = $picNm->server;
+                        $picNm = $picNm->pic;
                     }
                 }
                 else
                     $picNm = $place->picNumber;
-;
-//                $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}";
-//                if (is_file($location))
+
                 $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $server);
             }
             $place->reviews = $place->reviewCount;
