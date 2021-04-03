@@ -2693,18 +2693,20 @@ class PlaceController extends Controller {
         foreach ($places as $place) {
             $place->pic = $nonePicUrl;
             if($place->file != 'none' && $place->file != null){
-
+                $server = 1;
                 if($kindPlace->id == 13) {
                     $picNm = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
-                    if($picNm != null)
+                    if($picNm != null) {
                         $picNm = $picNm->pic;
+                        $server = $picNm->server;
+                    }
                 }
                 else
                     $picNm = $place->picNumber;
 ;
-                $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}";
-                if (is_file($location))
-                    $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}");
+//                $location = __DIR__ . "/../../../../assets/_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}";
+//                if (is_file($location))
+                $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $server);
             }
             $place->reviews = $place->reviewCount;
 

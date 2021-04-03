@@ -9,3 +9,5 @@ ALTER TABLE `safarnamehLimboPics` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTE
 
 
 ALTER TABLE `userAddPlaces` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `pics`;
+ALTER TABLE `localShopsPictures` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `pic`;
+
