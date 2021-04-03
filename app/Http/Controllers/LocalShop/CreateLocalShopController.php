@@ -154,6 +154,7 @@ class CreateLocalShopController extends Controller
                     $findMain = LocalShopsPictures::where('localShopId', $localShop->id)->where('isMain', 1)->count();
 
                     $newPic = new LocalShopsPictures();
+                    $newPic->server = config('app.ServerNumber');
                     $newPic->localShopId = $localShop->id;
                     $newPic->isMain = $findMain == 0 ? 1 : 0;
                     $newPic->pic = $webpFileName;
