@@ -91,9 +91,9 @@ class PlaceController extends Controller {
 
 
         if($place->slug != null)
-            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->slug));
+            return \redirect(url("show-place-details/{$kindPlace->fileName}/{$place->slug}"));
         else
-            return \redirect(url('show-place-details/' . $kindPlace->fileName . '/' . $place->id));
+            return \redirect(url("show-place-details/{$kindPlace->fileName}/{$place->id}"));
     }
 
     public function showPlaceDetails($kindPlaceName, $slug){
@@ -381,8 +381,8 @@ class PlaceController extends Controller {
         $koochitaPic = URL::asset('images/icons/KOFAV0.svg');
         $s = [
             'id' => 'sitePic_0',
-            'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$place->picNumber}"),
-            'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$place->picNumber}"),
+            'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$place->picNumber}", null, $place->server),
+            'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$place->picNumber}", null, $place->server),
             'alt' => $place->alt,
             'userName' => 'کوچیتا',
             'userPic' => $koochitaPic,
@@ -395,8 +395,8 @@ class PlaceController extends Controller {
         foreach ($place->pics as $index => $item){
             $s = [
                 'id' => "sitePic_{$index}",
-                'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$item->picNumber}"),
-                'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$item->picNumber}"),
+                'sidePic' => URL::asset("_images/{$MainFile}/{$place->file}/l-{$item->picNumber}", null, $item->server),
+                'mainPic' => URL::asset("_images/{$MainFile}/{$place->file}/s-{$item->picNumber}", null, $item->server),
                 'alt' => $place->alt,
                 'userName' => 'کوچیتا',
                 'userPic' => $koochitaPic,
@@ -2704,7 +2704,7 @@ class PlaceController extends Controller {
                 else
                     $picNm = $place->picNumber;
 
-                $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $server);
+                $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $place->server);
             }
             $place->reviews = $place->reviewCount;
 
