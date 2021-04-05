@@ -39,10 +39,6 @@
 <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
 <script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
 
-{{--<link rel='stylesheet' type='text/css' href='{{URL::asset('packages/fontAwesom/css/all.min.css')}}' />--}}
-{{--<script async src="{{URL::asset('packages/fontAwesom/js/all.min.js')}}"></script>--}}
-
-{{--<link rel="manifest" href="{{URL::asset('manifest.json')}}">--}}
 
 @if(\App::getLocale() == 'en')
     <link rel="stylesheet" href="{{URL::asset('css/ltr/mainPageHeader.css?v='.$fileVersions)}}">
@@ -55,10 +51,6 @@
 <script src="{{URL::asset('js/defualt/autosize.min.js')}}"></script>
 <script src="{{URL::asset('js/swiper/swiper.min.js')}}"></script>
 <script async src="{{URL::asset('js/defualt/lazysizes.min.js')}}"></script>
-
-
-{{--<link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css')}}">--}}
-{{--<script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>--}}
 
 <style>
 @if(\App::getLocale() == 'en')
@@ -78,7 +70,17 @@
 @endif
 </style>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>
+
+@if(config('app.env') != 'local')
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158914626-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-158914626-1');
+    </script>
+@endif
+
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -111,8 +113,19 @@
     ]
 },
 </script>
-<script>
-    window.mappIrToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjJiY2RjYzBiYjM4NTE3ZTk0N2YyNDBhZDI4YzE2ZjQ3YTQ4NGE3ZjQ4MjZjMjAxN2M5ZDFlMWQ0MDk1MmMwMzQ2YjJkYjMzOTZhMmNmZGI3In0.eyJhdWQiOiIxMTQ0NiIsImp0aSI6IjJiY2RjYzBiYjM4NTE3ZTk0N2YyNDBhZDI4YzE2ZjQ3YTQ4NGE3ZjQ4MjZjMjAxN2M5ZDFlMWQ0MDk1MmMwMzQ2YjJkYjMzOTZhMmNmZGI3IiwiaWF0IjoxNjA0OTk5NTAwLCJuYmYiOjE2MDQ5OTk1MDAsImV4cCI6MTYwNzUwNTEwMCwic3ViIjoiIiwic2NvcGVzIjpbImJhc2ljIl19.mEowCx8ITTK133c2xmLyl2O6ty0BR4_wrjCt1ZdtsRnlMc4lHyTpbSMbnww01vK9uO-tjEaYc_JSqM5NJPLugc_A4xfccsC9T-B0A8tNL7U0GeYih4KWSBhvvHEgsVR4X1HhMfl2OPpyhuC3ld4qe890jTxJpFOBejkW82VrvEl_rAxps60tENEK-rsG2n-sra6awouMC_-hgvuJD0L2Ma0Ha3mVm0uRNSyXhNcDQ1x3az_VlKjzijSLhFTnj_REifYiqMrNzzgZDaOkHcEdp4IoKplteWaN4iJPRSMn41w0k0UQEGlv4PH7JOFEnQhuye1fJCzufP8BwdLjWIlzyA';
+
+
+@if(auth()->check())
+    @include('layouts.urlAuthed')
+    <script src="{{URL::asset('js/pages/ifLogin.js?v='.$fileVersions)}}"></script>
+@endif
+
+<script type="text/javascript">
+    $.ajaxSetup({
+        xhrFields: { withCredentials: true },
+    });
+
+    window.mappIrToken = '{{config('app.MappIrToken')}}';
     window.mainIconsPlaces = {
         amaken: {
             icon: 'touristAttractions',
@@ -414,10 +427,7 @@
         }
     ];
 
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-158914626-1');
+
 
     var homeURL = "{{route('home')}}";
 
@@ -439,25 +449,12 @@
         $("#" + e).removeClass("hidden");
         $(".dark").show();
     }
-</script>
 
-{{--<script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>--}}
-{{--<script defer src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>--}}
-{{--<script src="https://apis.google.com/js/platform.js" async defer></script>--}}
-{{--<meta name="google-signin-scope" content="profile email">--}}
-{{--<meta name="google-signin-clienwindow.pict_id" content="774684902659-1tdvb7r1v765b3dh7k5n7bu4gpilaepe.apps.googleusercontent.com">--}}
+    function setDefaultPic(_element){
+        _element.src = '{{URL::asset('images/mainPics/noPicSite.jpg')}}';
+    }
 
-@if(auth()->check())
-    @include('layouts.urlAuthed')
-    <script src="{{URL::asset('js/pages/ifLogin.js?v='.$fileVersions)}}"></script>
-@endif
 
-<script>
-    $.ajaxSetup({
-        xhrFields: { withCredentials: true },
-    })
-</script>
-<script type="text/javascript">
     // (function(){
     //     var now = new Date();
     //     var head = document.getElementsByTagName('head')[0];

@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('exportPhonesToExcels', 'HomeController@exporPhone');
 
+Route::get('/checkServerNumber', function(){dd(config('app.ServerNumber'));});
+
 Route::get('/getVideosFromKoochitaTv', 'AjaxController@getVideosFromKoochitaTv')->name('getVideosFromKoochitaTv');
 Route::get('/getNewestVideoFromKoochitaTv', 'AjaxController@getNewestVideoFromKoochitaTv')->name('koochitatv.getNewestVideoFromKoochitaTv');
 

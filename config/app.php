@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'MappIrToken' => env('MappIrToken'),
     'koochitaTvNouncCode' => env('KOOCHITATV_NOUNC_CODE'),
     'KOOCHITATV_URL_API' => env('KOOCHITATV_URL_API'),
     'UploadFileURL' => env('UPLOADFILEURL'),

@@ -6,7 +6,7 @@ var recentlyMainSearchSample = `<div class="prw_rup prw_shelves_rebrand_poi_shel
                                         <div class="prw_rup prw_common_thumbnail_no_style_responsive prw_common_thumbnail_no_style_responsive22">
                                             <div class="prv_thumb has_image" style="height: 100%">
                                                 <div class="image_wrapper spImageWrapper landscape landscapeWide mainSearchImgTop">
-                                                    <img src="##mainPic##" alt="##name##" class="resizeImgClass" style="height: 100%" onload="fitThisImg(this)">
+                                                    <img src="##mainPic##" alt="##name##" class="resizeImgClass" style="height: 100%" onload="fitThisImg(this)" onerror="setDefaultPic(this)">
                                                 </div>
                                             </div>
                                         </div>
