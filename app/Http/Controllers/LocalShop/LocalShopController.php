@@ -26,7 +26,7 @@ class LocalShopController extends Controller
     public function showLocalShops($id = 0){
         $localShop = LocalShops::find($id);
         if($localShop == null)
-            dd('not found');
+            abort(404);
 
         $localShop->user = User::select(['id', 'username'])->find($localShop->userId);
         $localShop->ownerPic = getUserPic($localShop->user != null ? $localShop->user->id : 0);

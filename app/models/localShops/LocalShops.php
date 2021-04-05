@@ -26,11 +26,11 @@ class LocalShops extends Model
         $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')->get();
         foreach ($pictures as $pic){
             $pic->pic = [
-                'main' => \URL::asset('_images/localShops/'.$this->file.'/'.$pic->pic),
-                's' => \URL::asset('_images/localShops/'.$this->file.'/s-'.$pic->pic),
-                'f' => \URL::asset('_images/localShops/'.$this->file.'/f-'.$pic->pic),
-                'l' => \URL::asset('_images/localShops/'.$this->file.'/l-'.$pic->pic),
-                't' => \URL::asset('_images/localShops/'.$this->file.'/t-'.$pic->pic),
+                'main' => \URL::asset("_images/localShops/{$this->file}/{$pic->pic}", null, $pic->server),
+                's' => \URL::asset("_images/localShops/{$this->file}/s-{$pic->pic}", null, $pic->server),
+                'f' => \URL::asset("_images/localShops/{$this->file}/f-{$pic->pic}", null, $pic->server),
+                'l' => \URL::asset("_images/localShops/{$this->file}/l-{$pic->pic}", null, $pic->server),
+                't' => \URL::asset("_images/localShops/{$this->file}/t-{$pic->pic}", null, $pic->server),
             ];
             $pic->picCategory = 'sitePicture';
             $pic->ownerUsername = $owner->username;
@@ -51,11 +51,11 @@ class LocalShops extends Model
 
         foreach($photographerPics as $item){
             $item->pic = [
-                'main' => \URL::asset('userPhoto/localShops/'.$this->file.'/s-'.$item->pic),
-                's' => \URL::asset('userPhoto/localShops/'.$this->file.'/s-'.$item->pic),
-                'f' => \URL::asset('userPhoto/localShops/'.$this->file.'/f-'.$item->pic),
-                'l' => \URL::asset('userPhoto/localShops/'.$this->file.'/l-'.$item->pic),
-                't' => \URL::asset('userPhoto/localShops/'.$this->file.'/t-'.$item->pic),
+                'main' => \URL::asset("userPhoto/localShops/{$this->file}/s-{$item->pic}", null, $item->server),
+                's' => \URL::asset("userPhoto/localShops/{$this->file}/s-{$item->pic}", null, $item->server),
+                'f' => \URL::asset("userPhoto/localShops/{$this->file}/f-{$item->pic}", null, $item->server),
+                'l' => \URL::asset("userPhoto/localShops/{$this->file}/l-{$item->pic}", null, $item->server),
+                't' => \URL::asset("userPhoto/localShops/{$this->file}/t-{$item->pic}", null, $item->server),
             ];
             $item->picCategory = 'photographer';
 
@@ -70,19 +70,17 @@ class LocalShops extends Model
 
     public function getMainPicture()
     {
-        $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')
-                        ->where('isMain', 1)
-                        ->first();
+        $pictures = $this->hasMany(LocalShopsPictures::class, 'localShopId', 'id')->where('isMain', 1)->first();
 
         if($pictures == null)
             return false;
         else {
             $pictures->pic = [
-                'main' => \URL::asset('_images/localShops/' . $this->id . '/' . $pictures->pic),
-                's' => \URL::asset('_images/localShops/' . $this->id . '/s-' . $pictures->pic),
-                'f' => \URL::asset('_images/localShops/' . $this->id . '/f-' . $pictures->pic),
-                'l' => \URL::asset('_images/localShops/' . $this->id . '/l-' . $pictures->pic),
-                't' => \URL::asset('_images/localShops/' . $this->id . '/t-' . $pictures->pic),
+                'main' => \URL::asset("_images/localShops/{$this->id}/{$pictures->pic}"),
+                's' => \URL::asset("_images/localShops/{$this->id}/s-{$pictures->pic}"),
+                'f' => \URL::asset("_images/localShops/{$this->id}/f-{$pictures->pic}"),
+                'l' => \URL::asset("_images/localShops/{$this->id}/l-{$pictures->pic}"),
+                't' => \URL::asset("_images/localShops/{$this->id}/t-{$pictures->pic}"),
             ];
 
             return $pictures;

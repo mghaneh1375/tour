@@ -218,28 +218,18 @@ Route::middleware(['throttle:60'])->group(function (){
 Route::middleware(['throttle:60'])->group(function (){
 
     Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
-
         Route::get('/business/show/{id?}', [LocalShopController::class, 'showLocalShops'])->name('business.show');
-
         Route::get('/localShops/show/{id?}', [LocalShopController::class, 'showLocalShops'])->name('localShops.show');
-
     });
 
     Route::get('localShops/getFeatures', [LocalShopController::class, 'getFeatures'])->name('localShop.getFeatureList');
 
     Route::middleware(['auth'])->group(function(){
+        Route::get('localShops/create', [CreateLocalShopController::class, 'createLocalShopPage'])->name('localShop.create.page')->middleware(['shareData', 'localShopsShareData']);
 
-        Route::middleware(['shareData', 'localShopsShareData'])->group(function (){
-
-            Route::get('localShops/create', [CreateLocalShopController::class, 'createLocalShopPage'])->name('localShop.create.page');
-
-        });
         Route::post('localShops/addIAmHere', [LocalShopController::class, 'addImAmHereLocalShop'])->name('localShop.addIAmHere');
-
         Route::post('localShops/store', [CreateLocalShopController::class, 'storeLocalShop'])->name('upload.localShop.store');
-
         Route::post('localShops/store/pics', [CreateLocalShopController::class, 'storeLocalShopPics'])->name('upload.localShop.store.pics');
-
         Route::delete('localShops/store/delete', [CreateLocalShopController::class, 'deleteLocalShopPics'])->name('upload.localShop.store.delete');
     });
 });
