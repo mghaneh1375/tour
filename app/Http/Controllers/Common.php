@@ -866,14 +866,14 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
             $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'server'])->first();
             $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
             if($pic != null){
-                $pic = $pic->pic;
                 $server = $pic->server;
+                $pic = $pic->pic;
             }
         }
         else {
             $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber', 'server'])->first();
-            $pic = $place->picNumber;
             $server = $place->server;
+            $pic = $place->picNumber;
         }
 
         if($place != null && $place->file != 'none' && $place->file != null)
