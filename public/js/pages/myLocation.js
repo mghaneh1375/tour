@@ -375,7 +375,7 @@ function createListElement(_result, _selectPlaceOnMap){
     });
 
     $('.typeRow .body').empty();
-    $('.selectedPlace').empty().attr('src', '#');
+    $('.selectedPlace').empty();
 
     mobileListContentElement.scrollTop();
     $('.pcPlaceList').scrollTop();
@@ -394,7 +394,7 @@ function createListElement(_result, _selectPlaceOnMap){
     }
     else{
         if(_selectPlaceOnMap != null){
-            var html = `<div class="placeCard listPlaceCard_${_selectPlaceOnMap.kindPlaceId}_${_selectPlaceOnMap.id}" onclick="setMarkerToMap(${_selectPlaceOnMap.C}, ${_selectPlaceOnMap.D}, ${_selectPlaceOnMap.id}, '${_selectPlaceOnMap.name}', ${_selectPlaceOnMap.kindPlaceId})">
+            var html = `<a href="${_selectPlaceOnMap.url}" class="placeCard listPlaceCard_${_selectPlaceOnMap.kindPlaceId}_${_selectPlaceOnMap.id}">
                             <div class="fullyCenterContent img">
                                 <img src="${_selectPlaceOnMap.pic}" class="resizeImgClass" onload="fitThisImg(this)">
                             </div>
@@ -408,8 +408,8 @@ function createListElement(_result, _selectPlaceOnMap){
                                 <div class="address">${_selectPlaceOnMap.address}</div>
                             </div>
                             <a href="${_selectPlaceOnMap.url}" class="showPlacePage" >اطلاعات بیشتر</a>
-                        </div>`;
-            $('.selectedPlace').html(html).attr('src', _selectPlaceOnMap.url);
+                        </a>`;
+            $('.selectedPlace').html(html);
         }
 
 
