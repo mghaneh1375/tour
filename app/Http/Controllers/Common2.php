@@ -433,7 +433,7 @@ function getAnsToComments($logId){
 }
 
 function getNewsMinimal($news){
-    $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}");
+    $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}", null, $news->server);
     $news->url = route('news.show', ['slug' => $news->slug]);
 
     return $news;

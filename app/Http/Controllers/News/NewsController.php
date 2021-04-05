@@ -66,7 +66,7 @@ class NewsController extends Controller
 
         $news->tags = $news->getTags->pluck('tag')->toArray();
 
-        $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}");
+        $news->pic = URL::asset("_images/news/{$news->id}/{$news->pic}", null, $news->server);
         $news->category = NewsCategory::join('newsCategoryRelations', 'newsCategoryRelations.categoryId', 'newsCategories.id')
                                     ->where('newsCategoryRelations.isMain', 1)
                                     ->where('newsCategoryRelations.newsId', $news->id)
@@ -90,7 +90,7 @@ class NewsController extends Controller
         $news->author = User::find($news->userId)->username;
 
         if($news->video != null)
-            $news->video = URL::asset("_images/news/{$news->id}/{$news->video}");
+            $news->video = URL::asset("_images/news/{$news->id}/{$news->video}", null, $news->videoServer);
 
         return view('pages.News.newsShow', compact(['news', 'otherNews']));
     }

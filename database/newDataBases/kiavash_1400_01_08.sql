@@ -15,5 +15,10 @@ ALTER TABLE `sogatSanaies` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `picN
 ALTER TABLE `mahaliFood` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `picNumber`;
 ALTER TABLE `boomgardies` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `picNumber`;
 ALTER TABLE `drinks` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `picNumber`;
+ALTER TABLE `news` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
+ALTER TABLE `newsLimboPics` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
+ALTER TABLE `news` ADD `videoServer` TINYINT(1) NOT NULL DEFAULT '1' AFTER `video`;
+
+
 
 
