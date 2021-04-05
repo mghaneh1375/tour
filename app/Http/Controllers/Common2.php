@@ -21,6 +21,7 @@ use App\models\QuestionAns;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 function SafarnamehMinimalData($safarnameh){
 

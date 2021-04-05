@@ -16,7 +16,7 @@ class NewsController extends Controller
 {
     public function newsMainPage()
     {
-        $selectCol = ['id', 'title', 'meta', 'slug', 'keyword', 'pic', 'video'];
+        $selectCol = ['id', 'title', 'meta', 'slug', 'keyword', 'pic', 'video', 'server'];
 
         $sliderNews = News::youCanSee()->orderByDesc('dateAndTime')->select($selectCol)->take(5)->get();
 
@@ -39,7 +39,7 @@ class NewsController extends Controller
             $category->news = News::youCanSee()->join('newsCategoryRelations', 'newsCategoryRelations.newsId', 'news.id')
                                     ->where('newsCategoryRelations.categoryId', $category->id)
                                     ->where('newsCategoryRelations.isMain', 1)
-                                    ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic', 'news.video'])
+                                    ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic', 'news.server', 'news.video'])
                                     ->orderByDesc('news.dateAndTime')
                                     ->take(7)->get();
 
@@ -77,7 +77,7 @@ class NewsController extends Controller
                             ->where('newsCategoryRelations.categoryId', $news->category->id)
                             ->where('newsCategoryRelations.newsId', '!=', $news->id)
                             ->where('newsCategoryRelations.isMain', 1)
-                            ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic'])
+                            ->select(['news.id', 'news.title', 'news.meta', 'news.slug', 'news.keyword', 'news.pic', 'news.server'])
                             ->get();
         foreach ($otherNews as $item)
             $item = getNewsMinimal($item);
@@ -112,8 +112,8 @@ class NewsController extends Controller
 
     public function newsListElements()
     {
-        $selectCol = ['id', 'title', 'meta', 'slug', 'dateAndTime', 'keyword', 'pic', 'video'];
-        $joinSelectCol = ['news.id', 'news.title', 'news.meta', 'news.slug', 'news.dateAndTime', 'news.keyword', 'news.pic', 'news.video'];
+        $selectCol = ['id', 'title', 'meta', 'slug', 'dateAndTime', 'keyword', 'pic', 'server', 'video'];
+        $joinSelectCol = ['news.id', 'news.title', 'news.meta', 'news.slug', 'news.dateAndTime', 'news.keyword', 'news.pic', 'news.server', 'news.video'];
 
         $kind = $_GET['kind'];
         $content = $_GET['content'];
