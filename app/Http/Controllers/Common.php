@@ -860,20 +860,24 @@ function getUserPic($id = 0){
 
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
     if($placeId != 0) {
+        $server = 1;
         $kindPlace = Place::find($kindPlaceId);
         if($kindPlace->id == 13){
             $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'server'])->first();
             $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
-            if($pic != null)
+            if($pic != null){
                 $pic = $pic->pic;
+                $server = $pic->server;
+            }
         }
         else {
             $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber', 'server'])->first();
             $pic = $place->picNumber;
+            $server = $place->server;
         }
 
         if($place != null && $place->file != 'none' && $place->file != null)
-            return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $place->server);
+            return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
 
     }
 
