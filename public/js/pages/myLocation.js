@@ -79,7 +79,7 @@ function searchThisArea(){
     radius = Math.floor(radius/100)/10;
 
     turnOffSearchThisAreaButton();
-    getPlacesWithLocation(lastLocationGetData, radius);
+    getPlacesWithLocation(center, radius);
 }
 
 function toggleMobileListNearPlace(_kind){
