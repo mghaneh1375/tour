@@ -72,7 +72,7 @@
                 <div class="fullyCenterContent placeListLoading hidden">
                     <img alt="loading" data-src="{{URL::asset('images/loading.gif?v'.$fileVersions)}}" class="lazyload" style="width: 100px;" />
                 </div>
-                <div class="specialSelectedPlace selectedPlace"></div>
+                <a href="#" class="specialSelectedPlace selectedPlace"></a>
                 <div id="mobileShowList" class="typesList"></div>
             </div>
         </div>

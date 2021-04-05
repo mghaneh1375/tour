@@ -375,7 +375,7 @@ function createListElement(_result, _selectPlaceOnMap){
     });
 
     $('.typeRow .body').empty();
-    $('.selectedPlace').empty();
+    $('.selectedPlace').empty().attr('src', '#');
 
     mobileListContentElement.scrollTop();
     $('.pcPlaceList').scrollTop();
@@ -409,7 +409,7 @@ function createListElement(_result, _selectPlaceOnMap){
                             </div>
                             <a href="${_selectPlaceOnMap.url}" class="showPlacePage" >اطلاعات بیشتر</a>
                         </div>`;
-            $('.selectedPlace').html(html);
+            $('.selectedPlace').html(html).attr('src', _selectPlaceOnMap.url);
         }
 
 
