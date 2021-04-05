@@ -81,11 +81,11 @@
             <div class="newsTitleShow hideOnScreen">
                 <h1 style="font-weight: bold">{{$news->title}}</h1>
             </div>
-            <div class="mainPic" style="max-width: 100%; width: 100%; max-height: 500px; overflow: hidden">
+            <div class="mainPic" style="max-width: 100%; width: 100%; max-height: 500px; overflow: hidden; display: flex">
                 @if($news->video == null)
                     <img src="{{$news->pic}}" alt="{{$news->keyword}}" class="resizeImgClass" onload="fitThisImg(this)">
                 @else
-                    <video src="{{$news->video}}" poster="{{$news->pic}}" class="newsVideo" controls style="width: 100%;"></video>
+                    <video src="{{$news->video}}" poster="{{$news->pic}}" class="newsVideo" controls style="width: 100%; max-height: 100%;"></video>
                 @endif
             </div>
             <div class="title hideOnPhone">
