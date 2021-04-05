@@ -69,6 +69,7 @@ class CreateLocalShopController extends Controller
         $location = $this->localShopFolder;
         if(!is_dir($location))
             mkdir($location);
+
         $location .= '/'.$localShop->id;
         if(!is_dir($location))
             mkdir($location);
@@ -130,26 +131,26 @@ class CreateLocalShopController extends Controller
                     if($nFileName == 'error')
                         return response()->json(['status' => 'error4']);
 
-                    $webpFileName = explode('.', $nFileName);
-                    $fileType = end($webpFileName);
-                    $webpFileName[count($webpFileName)-1] = '.png';
-                    $webpFileName = implode('', $webpFileName);
-
-                    foreach ($size as $siz){
-                        $imgLoc = $nLocation.'/'.$siz['name'].$nFileName;
-                        if($fileType === 'webp')
-                            $img = imagecreatefromwebp($imgLoc);
-                        else if($fileType === 'jpg' || $fileType === 'jpeg')
-                            $img = imagecreatefromjpeg($imgLoc);
-                        else if($fileType == 'gif')
-                            $img = imagecreatefromgif($imgLoc);
-                        else
-                            continue;
-
-                        $checkConvert = imagepng($img, $nLocation.'/'.$siz['name'].$webpFileName, 80);
-                        if($checkConvert && is_file($imgLoc))
-                            unlink($imgLoc);
-                    }
+//                    $webpFileName = explode('.', $nFileName);
+//                    $fileType = end($webpFileName);
+//                    $webpFileName[count($webpFileName)-1] = '.png';
+//                    $webpFileName = implode('', $webpFileName);
+//
+//                    foreach ($size as $siz){
+//                        $imgLoc = $nLocation.'/'.$siz['name'].$nFileName;
+//                        if($fileType === 'webp')
+//                            $img = imagecreatefromwebp($imgLoc);
+//                        else if($fileType === 'jpg' || $fileType === 'jpeg')
+//                            $img = imagecreatefromjpeg($imgLoc);
+//                        else if($fileType == 'gif')
+//                            $img = imagecreatefromgif($imgLoc);
+//                        else
+//                            continue;
+//
+//                        $checkConvert = imagepng($img, $nLocation.'/'.$siz['name'].$webpFileName, 80);
+//                        if($checkConvert && is_file($imgLoc))
+//                            unlink($imgLoc);
+//                    }
 
                     $findMain = LocalShopsPictures::where('localShopId', $localShop->id)->where('isMain', 1)->count();
 
@@ -157,7 +158,8 @@ class CreateLocalShopController extends Controller
                     $newPic->server = config('app.ServerNumber');
                     $newPic->localShopId = $localShop->id;
                     $newPic->isMain = $findMain == 0 ? 1 : 0;
-                    $newPic->pic = $webpFileName;
+                    $newPic->server = config('app.ServerNumber');
+                    $newPic->pic = $nFileName;
                     $newPic->save();
 
                     return response()->json(['status' => 'ok', 'result' => $newPic->pic]);
@@ -178,19 +180,19 @@ class CreateLocalShopController extends Controller
             $localShop = LocalShops::where('id', $request->localShopId)->where('userId', auth()->user()->id)->first();
 
             if($localShop != null){
-                $pic = LocalShopsPictures::where('localShopId', $localShop->id)
-                    ->where('pic', $request->fileName)
-                    ->first();
+                $pic = LocalShopsPictures::where('localShopId', $localShop->id)->where('pic', $request->fileName)->first();
                 if($pic != null){
                     $isMain = 0;
                     if($pic->isMain == 1)
                         $isMain = 1;
-                    $location = "{$this->localShopFolder}/{$localShop->id}/";
+
                     $fileType = ['', 's-', 'l-', 'f-', 't-'];
-                    foreach ($fileType as $item){
-                        if(is_file($location.$item.$pic->pic))
-                            unlink($location.$item.$pic->pic);
-                    }
+                    $files = [];
+
+                    foreach ($fileType as $item)
+                        array_push($files, "_images/localShops/{$localShop->id}/{$item}{$pic->pic}");
+                    Controller::sendDeleteFileApiToServer($files, $pic->server);
+
                     $pic->delete();
 
                     if($isMain == 1){
