@@ -15,10 +15,10 @@ class MainApiController extends Controller
     public function getPlacesForKoochitaTv()
     {
         $nowTime = Carbon::now()->getTimestamp();
-        $ck = env("KOOCHITATV_NOUNC_CODE").'_'.$_GET['time'];
+        $ck = config("app.koochitaTvNouncCode").'_'.$_GET['time'];
         $checkHash = Hash::check($ck, $_GET['code']);
         if(($nowTime - $_GET['time']) > 1000)
-            return response('outTime');
+            return response()->json('outTime');
 
         if($checkHash){
             $states = [];
@@ -71,7 +71,7 @@ class MainApiController extends Controller
             return response()->json(['state' => $states, 'cities' => $cities, 'places' => $places]);
         }
         else
-            return response('nok');
+            return response()->json('nok');
     }
 
     public function deleteFileWithDir(Request $request)
