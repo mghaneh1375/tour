@@ -26,6 +26,8 @@ var scrollNumber = -170;
 var mobileListSectionElement = $('#mobileListSection');
 var startMobileListHeight = mobileListSectionElement.height();
 
+var mobileListContentElement = $('.mobileListContent');
+
 $('.topSecMobileList').on('touchstart', e => {
                             var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
                             startTouchY = touch.pageY;
@@ -56,10 +58,10 @@ $('.topSecMobileList').on('touchstart', e => {
                                 mobileListSectionElement.height(75);
                         });
 
-$('.mobileListContent').on('touchstart', e => {
+mobileListContentElement.on('touchstart', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     movePositionMobileList = touch.pageY;
-    mobileListScrollIsTop = $('.mobileListContent').scrollTop() == 0;
+    mobileListScrollIsTop = mobileListContentElement.scrollTop() == 0;
 }).on('touchend', e => {
     var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     var diff = Math.abs(touch.pageY - movePositionMobileList);
@@ -375,7 +377,7 @@ function createListElement(_result, _selectPlaceOnMap){
     $('.typeRow .body').empty();
     $('.selectedPlace').empty();
 
-    $('.mobileListContent').scrollTop();
+    mobileListContentElement.scrollTop();
     $('.pcPlaceList').scrollTop();
 
 
@@ -435,10 +437,10 @@ function createListElement(_result, _selectPlaceOnMap){
                     iconUrl: item.minPic,
                     iconSize: [35, 35], // size of the icon
                     classToImg: filterButtons[item.kindPlaceId].classToImg
-                    // iconUrl: filterButtons[item.kindPlaceId].mapIcon,
-                    // iconSize: [30, 35], // size of the icon
                 })
-            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
+            })
+                .bindPopup(item.name)
+                .on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
             // item.marker = new google.maps.Marker({
             //     position: new google.maps.LatLng(item.C, item.D),
             //     map: mainMap,
