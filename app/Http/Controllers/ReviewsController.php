@@ -735,8 +735,8 @@ class ReviewsController extends Controller
         return response()->json(['status' => 'ok', 'result' => $dbTag, 'hasInDB' => $hasInDB]);
     }
 
-    private function getCityReviews($kind, $id, $take, $notIn = [0]){
-        $reviewActivity = Activity::whereName('نظر')->first();
+    private function getCityReviews($kind, $id, $take, $notIn){
+        $reviewActivity = Activity::where('name', 'نظر')->first();
         $lastReview = [];
         $ids = [];
         $sqlQuery = '';
@@ -797,16 +797,16 @@ class ReviewsController extends Controller
             }
         }
 
-        if (count($notIn) == 0)
-            $notIn = [0];
-
-        $notIn = implode(',', $notIn);
-
         if($sqlQuery != '')
             $sqlQuery .= ' AND ';
-        $sqlQuery .= "`confirm`=1 AND `subject`!='dontShowThisText' ";
 
-        $lastReview = \DB::select("SELECT id FROM log WHERE {$sqlQuery} AND `activityId` = {$reviewActivity->id} AND `id` NOT IN ({$notIn}) ORDER BY `created_at` DESC LIMIT {$take}");
+        $sqlQuery .= "`confirm`=1 AND `subject`!='dontShowThisText'";
+        if(count($notIn) != 0){
+            $notIn = implode(',', $notIn);
+            $sqlQuery .= " AND id NOT IN (".$notIn.")";
+        }
+
+        $lastReview = \DB::select('SELECT id FROM log WHERE '.$sqlQuery.' AND activityId = '.$reviewActivity->id.' ORDER BY created_at DESC LIMIT '. $take);
         foreach($lastReview as $i)
             array_push($ids, $i->id);
 
