@@ -735,7 +735,7 @@ class ReviewsController extends Controller
         return response()->json(['status' => 'ok', 'result' => $dbTag, 'hasInDB' => $hasInDB]);
     }
 
-    private function getCityReviews($kind, $id, $take, $notIn){
+    private function getCityReviews($kind, $id, $take, $notIn=[]){
         $reviewActivity = Activity::where('name', 'نظر')->first();
         $lastReview = [];
         $ids = [];
