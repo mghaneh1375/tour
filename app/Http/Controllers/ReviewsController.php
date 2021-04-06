@@ -737,11 +737,10 @@ class ReviewsController extends Controller
 
     private function getCityReviews($kind, $id, $take, $notIn=[]){
         $reviewActivity = Activity::where('name', 'نظر')->first();
-        $lastReview = [];
         $ids = [];
         $sqlQuery = '(';
 
-        if($kind == 'city' || $kind == 'state' || $kind === 'country') {
+        if($kind == 'city' || $kind == 'state') {
             if ($kind == 'city') {
                 $allAmaken = Amaken::where('cityId', $id)->pluck('id')->toArray();
                 $allMajara = Majara::where('cityId', $id)->pluck('id')->toArray();
@@ -762,42 +761,38 @@ class ReviewsController extends Controller
                 $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->pluck('id')->toArray();
                 $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->pluck('id')->toArray();
             }
-            else
-                $sqlQuery .= 'kindPlaceId = 0 AND placeId = 0';
 
-            if($kind !== 'country') {
-                if (count($allAmaken) != 0)
-                    $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
-                if (count($allRestaurant) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
-                }
-                if (count($allHotels) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
-                }
-                if (count($allMajara) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
-                }
-                if (count($allSogatSanaie) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
-                }
-                if (count($allMahaliFood) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
-                }
-                if (count($allBoomgardy) != 0) {
-                    if ($sqlQuery != '')
-                        $sqlQuery .= ' OR ';
-                    $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
-                }
+            if (count($allAmaken) != 0)
+                $sqlQuery .= '( kindPlaceId = 1 AND placeId IN (' . implode(",", $allAmaken) . ') )';
+            if (count($allRestaurant) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 3 AND placeId IN (' . implode(",", $allRestaurant) . ') )';
+            }
+            if (count($allHotels) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 4 AND placeId IN (' . implode(",", $allHotels) . ') )';
+            }
+            if (count($allMajara) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 6 AND placeId IN (' . implode(",", $allMajara) . ') )';
+            }
+            if (count($allSogatSanaie) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 10 AND placeId IN (' . implode(",", $allSogatSanaie) . ') )';
+            }
+            if (count($allMahaliFood) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 11 AND placeId IN (' . implode(",", $allMahaliFood) . ') )';
+            }
+            if (count($allBoomgardy) != 0) {
+                if ($sqlQuery != '')
+                    $sqlQuery .= ' OR ';
+                $sqlQuery .= '( kindPlaceId = 12 AND placeId IN (' . implode(",", $allBoomgardy) . ') )';
             }
         }
 
@@ -807,14 +802,14 @@ class ReviewsController extends Controller
         if($sqlQuery != '')
             $sqlQuery .= ' ) AND ';
 
-        $sqlQuery .= '`confirm`=1 AND `subject`!="dontShowThisText"';
+        $sqlQuery .= '`confirm`=1 AND `subject` IS NULL AND activityId = '.$reviewActivity->id;
 
         if(count($notIn) != 0){
             $notIn = implode(',', $notIn);
             $sqlQuery .= " AND id NOT IN (".$notIn.")";
         }
 
-        $lastReview = \DB::select('SELECT id FROM log WHERE '.$sqlQuery.' AND activityId = '.$reviewActivity->id.' ORDER BY created_at DESC LIMIT '. $take);
+        $lastReview = \DB::select('SELECT id FROM log WHERE '.$sqlQuery.' ORDER BY created_at DESC LIMIT '. $take);
         foreach($lastReview as $i)
             array_push($ids, $i->id);
 
