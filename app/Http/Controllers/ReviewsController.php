@@ -739,7 +739,7 @@ class ReviewsController extends Controller
         $reviewActivity = Activity::where('name', 'نظر')->first();
         $lastReview = [];
         $ids = [];
-        $sqlQuery = '';
+        $sqlQuery = '(';
 
         if($kind == 'city' || $kind == 'state' || $kind === 'country') {
             if ($kind == 'city') {
@@ -751,7 +751,7 @@ class ReviewsController extends Controller
                 $allSogatSanaie = SogatSanaie::where('cityId', $id)->pluck('id')->toArray();
                 $allBoomgardy = Boomgardy::where('cityId', $id)->pluck('id')->toArray();
             }
-            else if ($kind == 'state' || $kind === 'country') {
+            else if ($kind == 'state') {
                 $allCities = Cities::where('stateId', $id)->where('isVillage', 0)->pluck('id')->toArray();
 
                 $allAmaken = Amaken::whereIn('cityId', $allCities)->pluck('id')->toArray();
@@ -797,10 +797,13 @@ class ReviewsController extends Controller
             }
         }
 
-        if($sqlQuery != '')
-            $sqlQuery .= ' AND ';
+        if($sqlQuery == '(')
+            $sqlQuery = '';
 
-        $sqlQuery .= "`confirm`=1 AND `subject`!='dontShowThisText'";
+        if($sqlQuery != '')
+            $sqlQuery .= ' ) AND ';
+
+        $sqlQuery .= '`confirm`=1 AND `subject`!="dontShowThisText"';
         if(count($notIn) != 0){
             $notIn = implode(',', $notIn);
             $sqlQuery .= " AND id NOT IN (".$notIn.")";
