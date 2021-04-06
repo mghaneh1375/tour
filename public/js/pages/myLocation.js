@@ -1,7 +1,6 @@
 var selectedPlaceId = 0;
 var selectedKindPlaceId = 0;
-var dontShowfilters = [];
-var nearPlacesMapMarker = [];
+var dontShowfilters = [3, 4, 6, 12, 13];
 var nearPlaces = [];
 var markerLocation = {lat: 0, lng: 0};
 var searchPlaceResult = null;
@@ -12,7 +11,6 @@ var mainMap;
 var mobileListIsFull = false;
 var mobileListScrollIsTop = false;
 var movePositionMobileList = 0;
-var isFullMobileList = true;
 var startTouchY = 0;
 var startTouchX = 0;
 
@@ -117,7 +115,7 @@ function createFilterHtml(){
     var text = '';
     var mobile = '';
     for(var item in filterButtons){
-            text += `<div class="filKind ${filterButtons[item].enName} filterButtonMap_${filterButtons[item].id}" onclick="toggleFilter(${item}, this)">
+            text += `<div class="filKind ${filterButtons[item].enName} filterButtonMap_${filterButtons[item].id} ${item == 1 ? '' : 'offFilter'}" onclick="toggleFilter(${item}, this)">
                             <div class="fullyCenterContent icon ${filterButtons[item].icon}"></div>
                             <div class="name">${filterButtons[item].name}</div>
                         </div>`;

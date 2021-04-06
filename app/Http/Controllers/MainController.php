@@ -124,13 +124,16 @@ class MainController extends Controller
                     $place->kindPlaceId = $kindPlace->id;
                     $place->review = $place->reviewCount;
                     $place->rate = floor($place->fullRate);
-                    $place->pic = getPlacePic($place->id, $kindPlace->id);
-                    $place->minPic = getPlacePic($place->id, $kindPlace->id, 't');
                     $place->url =  createUrl($kindPlace->id, $place->id, 0, 0, 0);
                     if($kindPlace->id == 13) {
                         $place->C = $place->lat;
                         $place->D = $place->lng;
                     }
+
+                    $placeMainPic = getPlacePic($place->id, ['f', 't']);
+                    $place->pic = $placeMainPic[0];
+                    $place->minPic = $placeMainPic[1];
+
                     array_push($places, $place);
                 }
             }

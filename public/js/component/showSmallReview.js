@@ -374,7 +374,7 @@ function setFullReviewContent(_reviews){
                     </div>
                 </div>
                 <div class="postsActionsChoices col-xs-6" style="display: flex; justify-content: flex-end;">
-                    <div class="postShareChoice display-inline-block" onclick="openReviewShareBox(this)" style="direction: ltr;font-size: 25px; line-height: 0;">
+                    <div class="postShareChoice display-inline-block" onclick="openReviewShareBox(this)" style="direction: ltr;font-size: 25px; line-height: 0; display: none;">
                         <span class="commentsShareIconFeedback ShareIcon firstIcon"></span>
                     </div>
                     <div style="margin-right: 20px; font-size: 20px;">

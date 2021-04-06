@@ -861,8 +861,15 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
             $pic = $place->picNumber;
         }
 
-        if($place != null && $place->file != 'none' && $place->file != null)
-            return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+        if ($place != null && $place->file != 'none' && $place->file != null) {
+            if (is_array($kind)) {
+                $pics = [];
+                foreach ($kind as $k)
+                    array_push($pics, URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server));
+                return $pics;
+            } else
+                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+        }
 
     }
 

@@ -156,7 +156,7 @@
     width: 20px;
     height: 65px;
     left: -20px;
-    z-index: 9;
+    z-index: 999;
     background: white;
     display: flex;
     justify-content: center;
