@@ -805,7 +805,7 @@ class ReviewsController extends Controller
         if($sqlQuery != '')
             $sqlQuery .= ' ) AND ';
 
-        $sqlQuery .= '`confirm`=1 AND `subject` IS NULL AND activityId = '.$reviewActivity->id;
+        $sqlQuery .= '`confirm`=1 AND `subject` NOT LIKE "dontShowThisText"  AND activityId = '.$reviewActivity->id;
 
         if(count($notIn) != 0){
             $notIn = implode(',', $notIn);
