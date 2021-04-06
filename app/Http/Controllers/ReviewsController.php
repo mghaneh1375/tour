@@ -802,7 +802,7 @@ class ReviewsController extends Controller
 
         $notIn = implode(',', $notIn);
 
-        if($sqlQuery != '')
+        if($sqlQuery == '')
             $sqlQuery = '1';
 
         $lastReview = \DB::select("SELECT id FROM log WHERE {$sqlQuery} AND `subject` != 'dontShowThisText' AND `confirm` = 1 AND `activityId` = {$reviewActivity->id} AND `id` NOT IN ({$notIn}) ORDER BY `created_at` DESC LIMIT {$take}");

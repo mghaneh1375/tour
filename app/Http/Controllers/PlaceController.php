@@ -112,6 +112,8 @@ class PlaceController extends Controller {
         if($place == null)
             abort(404);
 
+        saveViewPerPage($kindPlace->id, $place->id);
+
         $kindPlaceId = $kindPlace->id;
         if($kindPlaceId == 1)
             $kindPlace->title = 'جاذبه های';
@@ -211,14 +213,8 @@ class PlaceController extends Controller {
 
         $featId = [];
 
-//        $features = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->where('parent', 0)->get();
-//        foreach ($features as $item) {
-//            $item->subFeat = PlaceFeatures::where('parent', $item->id)->get();
-//            $fId = $item->subFeat->pluck('id')->toArray();
-//            $featId = array_merge($featId, $fId);
-//        }
-//        $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
-
+        $place->features = [];
+        $features = [];
         $allFeatures = PlaceFeatures::where('kindPlaceId', $kindPlace->id)->get()->groupBy('parent');
         if(isset($allFeatures[0])) {
             foreach ($allFeatures[0] as $feat) {
@@ -228,10 +224,6 @@ class PlaceController extends Controller {
             }
             $place->features = PlaceFeatureRelation::where('placeId', $place->id)->whereIn('featureId', $featId)->pluck('featureId')->toArray();
             $features = $allFeatures[0];
-        }
-        else{
-            $place->features = [];
-            $features = [];
         }
 
         if($kindPlace->tableName == 'sogatSanaies')

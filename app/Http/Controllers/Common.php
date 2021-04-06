@@ -30,6 +30,7 @@ use App\models\State;
 use App\models\User;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Facades\Verta;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -798,31 +799,15 @@ function generateRandomString($length = 20) {
 }
 
 function saveViewPerPage($kindPlaceId, $placeId){
-    return;
-
-    if(Auth::check())
-        $userId = auth()->user()->id;
-    else
-        $userId = 0;
 
     $value = 'kindPlaceId:'.$kindPlaceId.'Id:'.$placeId;
     if(!(Cookie::has($value) == $value)) {
         try {
             $kindPlace = Place::find($kindPlaceId);
             if ($kindPlace != null)
-                \DB::select('UPDATE `' . $kindPlace->tableName . '` SET `seen`= `seen`+1  WHERE `id` = ' . $placeId);
+                \DB::select("UPDATE `{$kindPlace->tableName}` SET `seen`= `seen`+1  WHERE `id`={$placeId}");
         }
         catch (\Exception $exception){}
-
-        $activityId = Activity::whereName('مشاهده')->first()->id;
-        $log = new LogModel();
-        $log->time = getToday()["time"];
-        $log->activityId = $activityId;
-        $log->placeId = $placeId;
-        $log->kindPlaceId = $kindPlaceId;
-        $log->visitorId = $userId;
-        $log->date = date('Y-m-d');
-        $log->save();
         Cookie::queue(Cookie::make($value, $value, 5));
     }
 }
