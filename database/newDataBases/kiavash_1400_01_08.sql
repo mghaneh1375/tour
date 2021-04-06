@@ -19,6 +19,10 @@ ALTER TABLE `news` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
 ALTER TABLE `newsLimboPics` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
 ALTER TABLE `news` ADD `videoServer` TINYINT(1) NOT NULL DEFAULT '1' AFTER `video`;
 ALTER TABLE `localShops` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `placeId`;
+ALTER TABLE `cityPics` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
+ALTER TABLE `cities` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `image`;
+ALTER TABLE `state` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `image`;
+
 
 
 

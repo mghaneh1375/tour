@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\URL;
 
 class CityController extends Controller
 {
+    public $imageLocation = __DIR__ . '/../../../../assets/_images';
 
     public function cityPage($kind, $city, Request $request) {
 
@@ -35,7 +36,7 @@ class CityController extends Controller
         $today = $todayFunc["date"];
         $nowTime = $todayFunc["time"];
 
-        $mainLocation = __DIR__ . '/../../../../assets/_images';
+        $mainLocation = $this->imageLocation;
 
         if($kind === 'state' || $kind === 'country')
             $place = State::where('name', $city)->firstOrFail();
@@ -132,41 +133,30 @@ class CityController extends Controller
 
         $pics = [];
         if($kind === "city"){
-            $location = "{$mainLocation}/city/{$place->id}/";
 
-            if($place->image != null && is_file("{$location}/{$place->image}"))
-                $place->image = URL::asset("_images/city/{$place->id}/{$place->image}");
-            else
-                $place->image = URL::asset('images/mainPics/noPicSite.jpg');
-
-
-            if($place->image != null && is_file($location.$place->image))
+            if($place->image != null){
+                $place->image = URL::asset("_images/city/{$place->id}/{$place->image}", null, $place->serer);
                 array_push($pics, [
-                    'pic' => URL::asset("_images/city/{$place->id}/{$place->image}"),
+                    'pic' => $place->image,
                     'alt' => $place->name
                 ]);
+            }
+            else
+                $place->image = URL::asset('images/mainPics/noPicSite.jpg');
 
             $picsDB = CityPic::where('cityId', $place->id)->get();
             foreach($picsDB as $pic){
-                if(is_file($location.$pic->pic))
-                    array_push($pics, [
-                        'pic' => URL::asset("_images/city/{$place->id}/{$pic->pic}"),
-                        'alt' => $pic->alt != null ? $pic->alt : $place->name
-                    ]);
+                array_push($pics, [
+                    'pic' => URL::asset("_images/city/{$place->id}/{$pic->pic}", null, $pic->server),
+                    'alt' => $pic->alt != null ? $pic->alt : $place->name
+                ]);
             }
         }
         else if($kind === "state" || $kind === "country"){
-            $location = "{$mainLocation}/city/{$place->folder}/";
-            if($place->image != null && is_file("{$location}/{$place->image}"))
-                $place->image = URL::asset("_images/city/{$place->folder}/{$place->image}");
+            if($place->image != null)
+                $place->image = URL::asset("_images/city/{$place->folder}/{$place->image}", null, $place->server);
             else
                 $place->image = URL::asset('images/mainPics/noPicSite.jpg');
-
-//            if($place->image != null && is_file($location.$place->image))
-//                array_push($pics, [
-//                    'pic' => URL::asset("_images/city/{$place->folder}/{$place->image}"),
-//                    'alt' => $place->name
-//                ]);
         }
 
         $place->pic = $pics;
@@ -292,13 +282,7 @@ class CityController extends Controller
             }
             foreach ($plac as $item){
 
-                $location = __DIR__ ."/../../../../assets/_images/{$kindPlace->fileName}/{$item->file}";
-                $item->pic = null;
-                if(is_file($location . '/f-' . $item->picNumber))
-                    $item->pic = URL::asset("_images/{$kindPlace->fileName}/{$item->file}/f-{$item->picNumber}");
-                if($item->pic == null)
-                    $item->pic = URL::asset('images/mainPics/nopicv01.jpg');
-
+                $item->pic = URL::asset("_images/{$kindPlace->fileName}/{$item->file}/f-{$item->picNumber}", null, $item->server);
                 $item->url = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $item->id]);
                 $cit = Cities::find($item->cityId);
                 $item->cityName = $cit->name;
