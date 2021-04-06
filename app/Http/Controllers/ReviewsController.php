@@ -683,38 +683,41 @@ class ReviewsController extends Controller
 
     public function getCityPageReview(Request $request)
     {
+        $reviews = [];
         $take = 10;
         $kind = $_GET['kind'];
         $placeId = $_GET['placeId'];
         $reviewIds = $this->getCityReviews($kind, $placeId, $take);
 
+        $reviewsContent = reviewTrueTypeIdArray($reviewIds);
+        foreach ($reviewsContent as $rev)
+            array_push($reviews, $rev);
+
         if(count($reviewIds) != $take){
-            $lessReview = [];
-            $notIn = [];
-            foreach ($reviewIds as $item)
-                array_push($notIn, $item);
 
             if($kind == 'city'){
                 $place = Cities::find($placeId);
                 $less = $take - count($reviewIds);
-                $lessReview = $this->getCityReviews('state', $place->stateId, $less, $notIn);
+                $lessReview = $this->getCityReviews('state', $place->stateId, $less, $reviewIds);
                 foreach ($lessReview as $item)
                     array_push($reviewIds, $item);
+
+                $reviewsContent = reviewTrueTypeIdArray($lessReview);
+                foreach ($reviewsContent as $rev)
+                    array_push($reviews, $rev);
             }
 
             $less = $take - count($reviewIds);
             if($less != 0){
-                $notIn = [];
-                foreach ($reviewIds as $item)
-                    array_push($notIn, $item);
-
-                $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
+                $lessReview = $this->getCityReviews('country', 0, $less, $reviewIds);
                 foreach ($lessReview as $item)
                     array_push($reviewIds, $item);
+
+                $reviewsContent = reviewTrueTypeIdArray($lessReview);
+                foreach ($reviewsContent as $rev)
+                    array_push($reviews, $rev);
             }
         }
-
-        $reviews = reviewTrueTypeIdArray($reviewIds);
 
         return response()->json(['status' => 'ok', 'result' => $reviews]);
     }
