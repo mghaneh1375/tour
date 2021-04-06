@@ -692,7 +692,7 @@ class ReviewsController extends Controller
             $lessReview = [];
             $notIn = [];
             foreach ($reviewIds as $item)
-                array_push($notIn, $item->id);
+                array_push($notIn, $item);
 
             if($kind == 'city'){
                 $place = Cities::find($placeId);
@@ -706,7 +706,7 @@ class ReviewsController extends Controller
             if($less != 0){
                 $notIn = [];
                 foreach ($reviewIds as $item)
-                    array_push($notIn, $item->id);
+                    array_push($notIn, $item);
 
                 $lessReview = $this->getCityReviews('country', 0, $less, $notIn);
                 foreach ($lessReview as $item)
@@ -804,6 +804,7 @@ class ReviewsController extends Controller
             $sqlQuery .= ' ) AND ';
 
         $sqlQuery .= '`confirm`=1 AND `subject`!="dontShowThisText"';
+
         if(count($notIn) != 0){
             $notIn = implode(',', $notIn);
             $sqlQuery .= " AND id NOT IN (".$notIn.")";
