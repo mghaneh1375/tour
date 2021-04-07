@@ -18,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\SafarnamehController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TravelController;
 use App\Http\Controllers\UserLoginController;
 use App\models\ConfigModel;
@@ -60,19 +61,13 @@ Route::get('language/{lang}', function($lang){
 
 //sitemap
 Route::group(array(), function(){
-    Route::get('/sitemap.xml', 'SitemapController@index');
-
-    Route::get('/sitemap.xml/places', 'SitemapController@places');
-
-    Route::get('/sitemap.xml/lists', 'SitemapController@lists');
-
-    Route::get('/sitemap.xml/posts', 'SitemapController@posts');
-
-    Route::get('/sitemap.xml/city', 'SitemapController@city');
-
-    Route::get('/sitemap.xml/village', 'SitemapController@village');
-
-    Route::get('/sitemap.xml/news', 'SitemapController@news');
+    Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+    Route::get('/sitemap.xml/places', [SitemapController::class, 'places']);
+    Route::get('/sitemap.xml/lists', [SitemapController::class, 'lists']);
+    Route::get('/sitemap.xml/posts', [SitemapController::class, 'posts']);
+    Route::get('/sitemap.xml/city', [SitemapController::class, 'city']);
+    Route::get('/sitemap.xml/village', [SitemapController::class, 'village']);
+    Route::get('/sitemap.xml/news', [SitemapController::class, 'news']);
 });
 
 Route::post('log/storeSeen', 'LogController@storeUserSeenLog')->name('log.storeSeen');
