@@ -130,64 +130,64 @@
             <div class="row cpMainBox">
                 <div class="col-md-8 col-xs-12 pd-0Imp cpSliderSec">
                     @if(isset($place->pic) && count($place->pic) > 0)
-                        <div class="cityPagePics swiper-container">
-                            <div class="swiper-wrapper position-relative"  style="height: 100%">
-                                @for($i = 0; $i < count($place->pic) && $i < 5; $i++)
-                                    <div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
-                                        <img src="{{$place->pic[$i]['pic']}}" class="resizeImgClass" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
-                                    </div>
-                                @endfor
-                            </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-
-                            <div class="hideOnScreen cpShowOnSlider">
-                                @if(isset($place->state))
-                                    <div class="cpStateName" onclick="openMainSearch(0)">
-                                        <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
-                                        {{$place->state}}
-                                    </div>
-                                    <div class="cpCityName" onclick="openMainSearch(0)">
-                                        <span class="cpNameLabel">شهر :</span>
-                                        {{$place->name}}
-                                    </div>
-                                @else
-                                    <div class="cpStateName" onclick="openMainSearch(0)">
-                                        <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
-                                        {{$place->name}}
-                                    </div>
-                                @endif
-                            </div>
+                    <div class="cityPagePics swiper-container">
+                        <div class="swiper-wrapper position-relative"  style="height: 100%">
+                            @for($i = 0; $i < count($place->pic) && $i < 5; $i++)
+                                <div class="swiper-slide position-relative cityImgSlider" onclick="showSliderPic()">
+                                    <img src="{{$place->pic[$i]['pic']}}" class="resizeImgClass" alt="{{ $place->pic[$i]['alt'] }}" onload="fitThisImg(this)">
+                                </div>
+                            @endfor
                         </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     @else
+                    <div style="width: 100%">
                         <div class="cityPagePics fullyCenterContent">
                             <img class="cityPagePics cpPic resizeImgClass" src="{{$place->image}}" onload="fitThisImg(this)">
                         </div>
                     @endif
+                        <div class="hideOnScreen cpShowOnSlider">
+                            @if(isset($place->state))
+                                <div class="cpStateName" onclick="openMainSearch(0)">
+                                    <span class="cpNameLabel">شهر :</span>
+                                    <span>{{$place->name}}</span>
+                                </div>
+                                <div class="cpCityName" onclick="openMainSearch(0)">
+                                    <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
+                                    <span>{{$place->state}}</span>
+                                </div>
+                            @else
+                                <div class="cpStateName" onclick="openMainSearch(0)">
+                                    <span class="cpNameLabel">{{$stateOrCountryText}} :</span>
+                                    <span>{{$place->name}}</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="col-xs-12 underSlider hideOnTablet ">
                         <div class="cpLittleMenu infoLittleMenu">
                             <img src="{{URL::asset('images/icons/info.png')}}">
                         </div>
+                        <div class="col-xs-2 cpLittleMenu">
+                            <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
+                            <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
+                        </div>
+                        <div class="col-xs-2 cpLittleMenu">
+                            <i class="cityPageIcon fa-solid fa-police-box"></i>
+                            <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
+                        </div>
                         <a class="col-xs-2 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-video"></div>
-                            <div class="textCityPageIcon">{{__('سینما')}}</div>
+                            <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
+                            <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
-                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/bakery.png')}}" alt="{{__('قنادی')}}">
-                            <div class="textCityPageIcon">{{__('قنادی')}}</div>
+                            <i class="cityPageIcon fa-solid fa-car-wrench"></i>
+                            <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
-                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/mortarboard(1).png')}}" alt="{{__('آموزش')}}">
-                            <div class="textCityPageIcon">{{__('آموزش')}}</div>
-                        </a>
-                        <a class="col-xs-2 cpLittleMenu" href="#">
-                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/culture.png')}}" alt="{{__('فرهنگ')}}">
-                            <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
-                        </a>
-                        <a class="col-xs-2 cpLittleMenu" href="#">
-                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/barbershop.png')}}" alt="{{__('آرایشگاه')}}">
-                            <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
+                            <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
+                            <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
                         <a class="col-xs-2 cpLittleMenu" href="#">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
@@ -197,22 +197,28 @@
                 </div>
                 <div class="col-md-4 col-xs-12 pd-0Imp hideOnPhone">
                     <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/4/{$kind}/{$place->listName}")}}">
-                            <div class="cityPageIcon hotel"></div>
-                            <div class="textCityPageIcon">{{__('هتل')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>
-                        </a>
-                        <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon ticket"></div>
-                            <div class="textCityPageIcon">{{__('بلیط')}}</div>
+                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/12/' . $kind . '/' . $place->listName)}}">
+                            <div class="cityPageIcon boom"></div>
+                            <div class="textCityPageIcon">{{__('بوم گردی')}}</div>
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['boomgardy']}}</div>
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/1/' . $kind . '/' . $place->listName)}}">
                             <div class="cityPageIcon atraction"></div>
                             <div class="textCityPageIcon">{{__('جاذبه ها')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['amaken']}}</div>
                         </a>
+                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/11/' . $kind . '/' . $place->listName)}}">
+                            <div class="cityPageIcon fas fa-utensils"></div>
+                            <div class="textCityPageIcon">{{__('غذای محلی')}}</div>
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>
+                        </a>
                     </div>
                     <div class="col-xs-12 zpr">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/4/{$kind}/{$place->listName}")}}">
+                            <div class="cityPageIcon hotel"></div>
+                            <div class="textCityPageIcon">{{__('هتل')}}</div>
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>
+                        </a>
                         <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/3/' . $kind. '/' . $place->listName )}}">
                             <div class="cityPageIcon restaurant"></div>
                             <div class="textCityPageIcon">{{__('رستوران')}}</div>
@@ -223,40 +229,18 @@
                             <div class="textCityPageIcon">{{__('سوغات')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/11/' . $kind . '/' . $place->listName)}}">
-{{--                            <div class="cityPageIcon foodIcon"></div>--}}
-                            <div class="cityPageIcon fas fa-utensils"></div>
-                            <div class="textCityPageIcon">{{__('غذای محلی')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>
-                        </a>
                     </div>
                     <div class="col-xs-12 zpr">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/13/' . $kind . '/' . $place->listName)}}">
+                            <div class="cityPageIcon sanaye"></div>
+                            <div class="textCityPageIcon">{{__('فروشگاه صنایع دستی')}}</div>
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
+                        </a>
                         <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/6/' . $kind . '/' . $place->listName)}}">
-                            <div class="cityPageIcon majara"></div>
+                            <i class="cityPageIcon fa-solid fa-campground"></i>
                             <div class="textCityPageIcon">{{__('طبیعت گردی')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['majara']}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/10/' . $kind . '/' . $place->listName)}}">
-                            <div class="cityPageIcon sanaye"></div>
-                            <div class="textCityPageIcon">{{__('صنایع‌دستی')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
-                        </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">
-                            <div class="cityPageIcon fullWalletIcon"></div>
-                            <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
-                        </a>
-                    </div>
-                    <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/12/' . $kind . '/' . $place->listName)}}">
-                            <div class="cityPageIcon boom"></div>
-                            <div class="textCityPageIcon">{{__('بوم گردی')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['boomgardy']}}</div>
-                        </a>
-                        <div class="col-xs-4 cpLittleMenu">
-                            <div class="cityPageIcon estelah"></div>
-                            <div class="textCityPageIcon">{{__('اصطلاحات محلی')}}</div>
-                        </div>
                         <a href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}" class="col-xs-4 cpLittleMenu">
                             <div class="cityPageIcon safarnameIcon"></div>
                             <div class="textCityPageIcon">{{__('سفر نامه')}}</div>
@@ -265,140 +249,251 @@
                     </div>
                     <div class="col-xs-12 zpr">
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon manSportIcon"></div>
-                            <div class="textCityPageIcon">{{__('ورزشی')}}</div>
-                        </a>
-                        <div class="col-xs-4 cpLittleMenu">
-                            <div class="cityPageIcon lebas"></div>
-                            <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
-                        </div>
-                        <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-syringe"></div>
-                            <div class="textCityPageIcon">{{__('پزشکی')}}</div>
-                        </a>
-                    </div>
-                    <div class="col-xs-12 zpr showOnTablet">
-                        <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-video"></div>
-                            <div class="textCityPageIcon">{{__('سینما')}}</div>
+                            <i class="cityPageIcon fa-solid fa-masks-theater"></i>
+                            <div class="textCityPageIcon">{{__('هنر')}}</div>
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-birthday-cake"></div>
-                            <div class="textCityPageIcon">{{__('قنادی')}}</div>
+                            <i class="cityPageIcon fa-solid fa-bowling-ball-pin"></i>
+                            <div class="textCityPageIcon">{{__('سرگرمی')}}</div>
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-user-graduate"></div>
-                            <div class="textCityPageIcon">{{__('آموزش')}}</div>
+                            <i class="cityPageIcon fa-solid fa-truck-medical"></i>
+                            <div class="textCityPageIcon">{{__('بهداشت و درمان')}}</div>
                         </a>
                     </div>
-                    <div class="col-xs-12 zpr showOnTablet">
+                    <div class="col-xs-12 zpr">
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <div class="cityPageIcon fas fa-theater-masks"></div>
-                            <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
+                            <i class="cityPageIcon fa-solid fa-coins"></i>
+                            <div class="textCityPageIcon">{{__('بانک')}}</div>
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
-                            <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/barbershop.png')}}" alt="{{__('آرایشگاه')}}">
-                            <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
+                            <i class="cityPageIcon fa-solid fa-toilet"></i>
+                            <div class="textCityPageIcon">{{__('سرویش بهداشتی')}}</div>
+                        </a>
+                        <a class="col-xs-4 cpLittleMenu" href="#">
+                            <i class="cityPageIcon fa-solid fa-shuttlecock"></i>
+                            <div class="textCityPageIcon">{{__('ورزش و آرامش')}}</div>
+                        </a>
+                    </div>
+
+
+                    <div class="col-xs-12 zpr showOnTablet">
+                        <a class="col-xs-4 cpLittleMenu" href="#">
+                            <i class="cityPageIcon fa-solid fa-car-wrench"></i>
+                            <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
+                        </a>
+                        <a class="col-xs-4 cpLittleMenu" href="#">
+                            <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
+                            <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
                         <a class="col-xs-4 cpLittleMenu" href="#">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
                         </a>
                     </div>
+                    <div class="col-xs-12 zpr showOnTablet">
+                        <div class="col-xs-4 cpLittleMenu">
+                            <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
+                            <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
+                        </div>
+                        <div class="col-xs-4 cpLittleMenu">
+                            <i class="cityPageIcon fa-solid fa-police-box"></i>
+                            <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
+                        </div>
+                        <a class="col-xs-4 cpLittleMenu" href="#">
+                            <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
+                            <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="hideOnScreen cpListsInPhone">
-                    <a class="cpLittleMenu" href="{{url('placeList/4/' . $kind . '/' . $place->listName)}}">
-                        <div class="cityPageIcon hotel"></div>
-                        <div class="textCityPageIcon">{{__('هتل')}}</div>
-                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>
-                    </a>
-
-                    <a class="cpLittleMenu" href="{{url('placeList/12/' . $kind . '/' . $place->listName)}}">
+                    <a class="cpLittleMenu" href="{{url("placeList/12/{$kind}/{$place->listName}")}}">
                         <div class="cityPageIcon boom"></div>
                         <div class="textCityPageIcon">{{__('بوم گردی')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['boomgardy']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/1/' . $kind . '/' . $place->listName)}}">
+                    <a class="cpLittleMenu" href="{{url("placeList/1/{$kind}/{$place->listName}")}}">
                         <div class="cityPageIcon atraction"></div>
                         <div class="textCityPageIcon">{{__('جاذبه ها')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['amaken']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/3/' . $kind. '/' . $place->listName )}}">
+                    <a class="cpLittleMenu" href="{{url("placeList/11/{$kind}/{$place->listName}")}}">
+                        <div class="cityPageIcon fas fa-utensils"></div>
+                        <div class="textCityPageIcon">{{__('غذای محلی')}}</div>
+                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>
+                    </a>
+                    <a class="cpLittleMenu" href="{{url("placeList/4/{$kind}/{$place->listName}")}}">
+                        <div class="cityPageIcon hotel"></div>
+                        <div class="textCityPageIcon">{{__('هتل')}}</div>
+                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>
+                    </a>
+                    <a class="cpLittleMenu" href="{{url("placeList/3/{$kind}/{$place->listName}")}}">
                         <div class="cityPageIcon restaurant"></div>
                         <div class="textCityPageIcon">{{__('رستوران')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['restaurant']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/10/' . $kind . '/' . $place->listName)}}">
+                    <a class="cpLittleMenu" href="{{url("placeList/10/{$kind}/{$place->listName}")}}">
                         <div class="cityPageIcon soghat"></div>
                         <div class="textCityPageIcon">{{__('سوغات')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/11/' . $kind . '/' . $place->listName)}}">
-                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/pan.svg')}}" alt="{{__('غذای محلی')}}" style="width: 44px; margin-bottom: 2px;">
-                        <div class="textCityPageIcon">{{__('غذای محلی')}}</div>
-                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}">
+                        <div class="cityPageIcon sanaye"></div>
+                        <div class="textCityPageIcon">{{__('فروشگاه صنایع دستی')}}</div>
+                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/6/' . $kind . '/' . $place->listName)}}">
-                        <div class="cityPageIcon majara"></div>
+                    <a class="cpLittleMenu" href="{{url("placeList/6/{$kind}/{$place->listName}")}}">
+                        <i class="cityPageIcon fa-solid fa-campground"></i>
                         <div class="textCityPageIcon">{{__('طبیعت گردی')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['majara']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url('placeList/10/' . $kind . '/' . $place->listName)}}">
-                        <div class="cityPageIcon sanaye"></div>
-                        <div class="textCityPageIcon">{{__('صنایع‌دستی')}}</div>
-                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
-                    </a>
-                    <a class="cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">
-                        <div class="cityPageIcon fullWalletIcon"></div>
-                        <div class="textCityPageIcon">{{__('فروشگاه')}}</div>
-                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
-                    </a>
-                    <a href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}" class="cpLittleMenu">
-                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/magazine.svg')}}" alt="{{__('سفر نامه')}}" style="width: 34px; margin-bottom: 9px; margin-top: 10px;">
+                    <a class="cpLittleMenu" href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}">
+                        <div class="cityPageIcon safarnameIcon"></div>
                         <div class="textCityPageIcon">{{__('سفر نامه')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['safarnameh']}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon ticket"></div>
-                        <div class="textCityPageIcon">{{__('بلیط')}}</div>
-                    </a>
-                    <div class="cpLittleMenu">
-                        <div class="cityPageIcon lebas"></div>
-                        <div class="textCityPageIcon">{{__('لباس محلی')}}</div>
-                    </div>
-                    <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon manSportIcon"></div>
-                        <div class="textCityPageIcon">{{__('ورزشی')}}</div>
+                        <i class="cityPageIcon fa-solid fa-masks-theater"></i>
+                        <div class="textCityPageIcon">{{__('هنر')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fas fa-syringe"></div>
-                        <div class="textCityPageIcon">{{__('پزشکی')}}</div>
+                        <i class="cityPageIcon fa-solid fa-bowling-ball-pin"></i>
+                        <div class="textCityPageIcon">{{__('سرگرمی')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fas fa-video"></div>
-                        <div class="textCityPageIcon">{{__('سینما')}}</div>
+                        <i class="cityPageIcon fa-solid fa-truck-medical"></i>
+                        <div class="textCityPageIcon">{{__('بهداشت و درمان')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fas fa-birthday-cake"></div>
-                        <div class="textCityPageIcon">{{__('قنادی')}}</div>
+                        <i class="cityPageIcon fa-solid fa-coins"></i>
+                        <div class="textCityPageIcon">{{__('بانک')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fas fa-user-graduate"></div>
-                        <div class="textCityPageIcon">{{__('آموزش')}}</div>
+                        <i class="cityPageIcon fa-solid fa-toilet"></i>
+                        <div class="textCityPageIcon">{{__('سرویش بهداشتی')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <div class="cityPageIcon fas fa-theater-masks"></div>
-                        <div class="textCityPageIcon">{{__('فرهنگ')}}</div>
+                        <i class="cityPageIcon fa-solid fa-shuttlecock"></i>
+                        <div class="textCityPageIcon">{{__('ورزش و آرامش')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
-                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hairCut.svg')}}" alt="{{__('آرایشگاه')}}" style="width: 44px; margin-bottom: 2px;">
-                        <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>
+                        <i class="cityPageIcon fa-solid fa-car-wrench"></i>
+                        <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
+                    </a>
+                    <a class="cpLittleMenu" href="#">
+                        <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
+                        <div class="textCityPageIcon">{{__('صرافی')}}</div>
                     </a>
                     <a class="cpLittleMenu" href="#">
                         <div class="cityPageIcon fas fa-gas-pump"></div>
                         <div class="textCityPageIcon">{{__('سوخت')}}</div>
                     </a>
+                    <div class="cpLittleMenu">
+                        <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
+                        <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
+                    </div>
+                    <div class="cpLittleMenu">
+                        <i class="cityPageIcon fa-solid fa-police-box"></i>
+                        <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
+                    </div>
+                    <a class="cpLittleMenu" href="#">
+                        <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
+                        <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
+                    </a>
+
+
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/4/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon hotel"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('هتل')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['hotel']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/12/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon boom"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('بوم گردی')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['boomgardy']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/1/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon atraction"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('جاذبه ها')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['amaken']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/3/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon restaurant"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('رستوران')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['restaurant']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/10/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon soghat"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('سوغات')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/11/{$kind}/{$place->listName}")}}">--}}
+{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/pan.svg')}}" alt="{{__('غذای محلی')}}" style="width: 44px; margin-bottom: 2px;">--}}
+{{--                        <div class="textCityPageIcon">{{__('غذای محلی')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['mahaliFood']}}</div>--}}
+{{--                    </a>--}}
+
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/6/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon majara"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('طبیعت گردی')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['majara']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{url("placeList/10/{$kind}/{$place->listName}")}}">--}}
+{{--                        <div class="cityPageIcon sanaye"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('صنایع‌دستی')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $kind, 'city' => $place->listName])}}">--}}
+{{--                        <div class="cityPageIcon fullWalletIcon"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('فروشگاه')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a href="{{route('safarnameh.list', ['type' => $kind, 'search' => $place->listName])}}" class="cpLittleMenu">--}}
+{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/magazine.svg')}}" alt="{{__('سفر نامه')}}" style="width: 34px; margin-bottom: 9px; margin-top: 10px;">--}}
+{{--                        <div class="textCityPageIcon">{{__('سفر نامه')}}</div>--}}
+{{--                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['safarnameh']}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon ticket"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('بلیط')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <div class="cpLittleMenu">--}}
+{{--                        <div class="cityPageIcon lebas"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('لباس محلی')}}</div>--}}
+{{--                    </div>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon manSportIcon"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('ورزشی')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-syringe"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('پزشکی')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-video"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('سینما')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-birthday-cake"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('قنادی')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-user-graduate"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('آموزش')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-theater-masks"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('فرهنگ')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <img class="cpLittleMenuImg" src="{{URL::asset('images/icons/hairCut.svg')}}" alt="{{__('آرایشگاه')}}" style="width: 44px; margin-bottom: 2px;">--}}
+{{--                        <div class="textCityPageIcon">{{__('آرایشگاه')}}</div>--}}
+{{--                    </a>--}}
+{{--                    <a class="cpLittleMenu" href="#">--}}
+{{--                        <div class="cityPageIcon fas fa-gas-pump"></div>--}}
+{{--                        <div class="textCityPageIcon">{{__('سوخت')}}</div>--}}
+{{--                    </a>--}}
                 </div>
             </div>
 

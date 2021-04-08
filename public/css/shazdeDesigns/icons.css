@@ -320,6 +320,11 @@
     font-family: 'Shazde_Regular2' !important;
     font-size: 35px;
     color: #30b4a6;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0px;
 }
 
 /*..........phone popUp Icons..........*/
