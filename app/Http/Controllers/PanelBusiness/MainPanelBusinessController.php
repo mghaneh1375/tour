@@ -22,8 +22,8 @@ class MainPanelBusinessController extends Controller {
 
     public function loginPage() {
 
-        $googleClient_id = '774684902659-1tdvb7r1v765b3dh7k5n7bu4gpilaepe.apps.googleusercontent.com';
-        $googleClient_secret = 'ARyU8-RXFJZD5jl5QawhpHne';
+        $googleClient_id = config('app.GOOGLE_CLIENT_ID');
+        $googleClient_secret = config('app.GOOGLE_CLIENT_SECRET');
         $redirect_uri = route('businessPanel.loginWithGoogle');
         $redirect_uri = str_replace('http://', 'https://', $redirect_uri);
 
@@ -39,7 +39,9 @@ class MainPanelBusinessController extends Controller {
 
         $url = $_SERVER['REQUEST_URI'];
 
-        return view('panelBusiness.pages.auth.login', compact(['authUrl']));
+        $fileVersions = 13;
+
+        return view('panelBusiness.pages.auth.login', compact(['authUrl', 'fileVersions']));
     }
 
     private function sendVerifyCodeForPhone($_phone){
@@ -56,9 +58,9 @@ class MainPanelBusinessController extends Controller {
             $activation->phoneNum = $_phone;
         }
 
-//        $msgId = sendSMS($_phone, $code, 'sms');
-//        if ($msgId == -1)
-//            return 'error';
+        $msgId = sendSMS($_phone, $code, 'sms');
+        if ($msgId == -1)
+            return 'error';
 
         $activation->sendTime = time();
         $activation->code = $code;
@@ -187,7 +189,8 @@ class MainPanelBusinessController extends Controller {
 
                 $activation->delete();
 
-                Auth::loginUsingId($user->id);
+                Auth::login($user);
+
                 return response()->json(['status' => 'ok']);
             }
             else

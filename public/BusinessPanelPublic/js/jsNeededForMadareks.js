@@ -22,8 +22,6 @@ function changeNum(val) {
             filled++;
 
         if(filled > val) {
-            // alert(filled);
-            // alert(val);
             for (var j = i; j < 10; j++) {
                 $("#user_" + j).remove();
                 busy_idx[j] = false;
@@ -32,9 +30,6 @@ function changeNum(val) {
     }
 
     if (filled < val) {
-        // alert("heyy1");
-        // alert(filled);
-        // alert(val);
         for (var i = 0; i < val - filled; i++) {
             for(var j = 0; j < 10; j++) {
                 if(!busy_idx[j]) {
@@ -52,7 +47,6 @@ function changeNum(val) {
 function removeUser(idx) {
 
     if(id_idx[idx] !== -1) {
-        console.log(idx);
         $.ajax({
             type: 'delete',
             url: `${deleteMadarekBaseUrl}/${data.id}?`,

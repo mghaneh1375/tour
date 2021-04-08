@@ -130,7 +130,7 @@ class MainController extends Controller
                         $place->D = $place->lng;
                     }
 
-                    $placeMainPic = getPlacePic($place->id, ['f', 't']);
+                    $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
                     $place->pic = $placeMainPic[0];
                     $place->minPic = $placeMainPic[1];
 

@@ -12,6 +12,8 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    'GOOGLE_CLIENT_ID' => env('GOOGLE_CLIENT_ID'),
+    'GOOGLE_CLIENT_SECRET' => env('GOOGLE_CLIENT_SECRET'),
 
     'MappIrToken' => env('MappIrToken'),
     'koochitaTvNouncCode' => env('KOOCHITATV_NOUNC_CODE'),

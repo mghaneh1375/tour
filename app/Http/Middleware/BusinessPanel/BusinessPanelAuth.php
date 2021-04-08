@@ -17,7 +17,7 @@ class BusinessPanelAuth
     public function handle($request, Closure $next)
     {
         if(auth()->check()){
-            if($request->is('loginPage'))
+            if($request->is('loginPage') || $request->is('login'))
                 return redirect(route('businessPanel.mainPage'));
             else
                 return $next($request);

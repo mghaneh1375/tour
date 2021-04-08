@@ -16,8 +16,8 @@ class TicketController extends Controller {
     }
 
     public function specificMsgs(Ticket $ticket) {
-        return view('panelBusiness.pages.report.specificMsgs', ['id' => $ticket->id,
-            'ticket' => $ticket]);
+
+        return view('panelBusiness.pages.report.specificMsgs', ['id' => $ticket->id, 'ticket' => $ticket]);
     }
 
     public function generalMsgs(Business $business) {
@@ -95,7 +95,6 @@ class TicketController extends Controller {
     }
 
     public function addTicket(Business $business, Request $request) {
-
         $request->validate([
             "title" => "required"
         ]);

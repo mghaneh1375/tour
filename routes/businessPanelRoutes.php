@@ -12,19 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 
-    Route::middleware(['BusinessPanelShareData'])->group(function(){
-
-        Route::get('/loginPage', [MainPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
-
-        Route::get('/loginWithGoogle', [MainPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
-    });
+    Route::get('/loginPage', [MainPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
+    Route::get('/loginWithGoogle', [MainPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
 
     Route::post('/user/checkRegisterInputs', [MainPanelBusinessController::class, 'checkRegisterInputs'])->name('businessPanel.checkRegisterInputs');
-
     Route::post('/user/doSendVerificationPhoneCode', [MainPanelBusinessController::class, 'doSendVerificationPhoneCode'])->name('businessPanel.doSendVerificationPhoneCode');
-
     Route::post('/user/doRegister', [MainPanelBusinessController::class, 'doRegister'])->name('businessPanel.user.doRegister');
-
     Route::post('/doLogin', [MainPanelBusinessController::class, 'doLogin'])->name('businessPanel.doLogin');
 });
 

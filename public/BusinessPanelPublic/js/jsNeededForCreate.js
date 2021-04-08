@@ -18,6 +18,7 @@ $(document).ready(function () {
     });
 
     $('.clockpicker').clockpicker({
+        placement: 'top',
         donetext: 'تایید',
         autoclose: true,
     });
@@ -124,9 +125,12 @@ function searchCity(_element) {
                 response = JSON.parse(response);
                 var newElement = "";
                 response.map(item => {
-                    newElement += `<div onclick="chooseThisCity('${item.cityName}', ${item.id})"><div class="icons location spIcons"></div>
-                                        <p class="suggest cursor-pointer font-weight-700" style="margin: 0px">شهر ${item.cityName}</p>
-                                        <p class="suggest cursor-pointer stateName"> در ${item.stateName}</p>
+                    newElement += `<div onclick="chooseThisCity('${item.cityName}', ${item.id})">
+                                        <div style="font-weight: bold; font-size: 18px; display: flex; align-items: center;">
+                                            <div class="icons location spIcons"></div>
+                                            <div class="suggest cursor-pointer font-weight-700" style="margin: 0px">شهر ${item.cityName}</div>
+                                        </div>
+                                        <div class="suggest cursor-pointer stateName"> در ${item.stateName}</div>
                                     </div>`;
                 });
                 setResultToGlobalSearch(newElement);

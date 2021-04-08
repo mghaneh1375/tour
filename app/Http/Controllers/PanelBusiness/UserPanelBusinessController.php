@@ -233,14 +233,13 @@ class UserPanelBusinessController extends Controller {
     }
 
     public function doCreate(Request $request) {
-
         $request->validate([
             "type" => ["required", Rule::in(["tour", "agency", "restaurant", "hotel"])],
             "haghighi" => ["required", Rule::in(["true", "false"])],
             "hoghoghi" => ["required", Rule::in(["true", "false"])],
             "name" => "required|unique:users,username",
             "nid" => "required",
-            "tel" => "required|integer|min:7",
+            "tel" => "required|min:7",
             "mail" => "required",
             "introduction" => "required",
             "economyCode" => "nullable|integer",
@@ -351,7 +350,7 @@ class UserPanelBusinessController extends Controller {
         $request->validate([
             "name" => "required",
             "nid" => "required",
-            "tel" => "required|integer|min:7",
+            "tel" => "required|min:7",
             "mail" => "required",
             "introduction" => "required",
             "economyCode" => "nullable|integer",
