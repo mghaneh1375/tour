@@ -7,6 +7,8 @@ use App\models\Adab;
 use App\models\Alert;
 use App\models\CountryCode;
 use App\models\GoyeshTag;
+use App\models\localShops\LocalShops;
+use App\models\localShops\LocalShopsCategory;
 use App\models\PassengerInfos;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
@@ -313,12 +315,13 @@ class AjaxController extends Controller {
             if($kind->id == 11 || $kind->id == 10)
                 $pds = \DB::select("SELECT `id`, `name`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%".$value."%'");
             else {
-                if($kind->id == 13)
-                    $selectRow = '`id`, `name`, `lat`, `lng`, `cityId`';
-                else
-                    $selectRow = '`id`, `name`, `C`, `D`, `cityId`';
-
-                $pds = \DB::select("SELECT {$selectRow} FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%'");
+                if($kind->id == 13) {
+                    $onlyOnMapCategories = LocalShopsCategory::where('onlyOnMap', 1)->pluck('id')->toArray();
+                    $pds = \DB::select("SELECT `id`, `name`, `lat`, `lng`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%' AND categoryId NOT IN (".implode(',', $onlyOnMapCategories).")");
+                }
+                else{
+                    $pds = \DB::select("SELECT `id`, `name`, `C`, `D`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%'");
+                }
             }
 
             foreach ($pds as $item){

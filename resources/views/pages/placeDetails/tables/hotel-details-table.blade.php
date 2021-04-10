@@ -26,6 +26,8 @@
                         $placeKindName = 'بوم گردی';
                         break;
                     }
+
+        $hotelRate = ['یک ستاره', 'دو ستاره', 'سه ستاره', 'چهار ستاره', 'پنج ستاره'];
 ?>
 
 
@@ -37,10 +39,9 @@
                 {{$placeKindName}}
             </span>
         </div>
-        <div class="contentSection col-xs-3">{{$place->rate}}
-            @if($place->momtaz == 1)
-                {{__('ممتاز')}}
-            @endif
+        <div class="contentSection col-xs-3">
+            {{$hotelRate[$place->rate_int]}}
+            {{$place->momtaz == 1 ? __('ممتاز') : ''}}
         </div>
     </div>
 @endif
@@ -53,9 +54,7 @@
     ?>
     <div class="descriptionSections" style="width: {{$colWidth}}">
         <div class="titleSection">
-            <span class="titleSectionSpan">
-                {{$item->name}}
-            </span>
+            <span class="titleSectionSpan"> {{$item->name}} </span>
         </div>
         @foreach($item->subFeat as $item2)
             @if(in_array($item2->id, $place->features))

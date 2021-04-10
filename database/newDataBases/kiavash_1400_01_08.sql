@@ -22,6 +22,9 @@ ALTER TABLE `localShops` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `placeI
 ALTER TABLE `cityPics` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `pic`;
 ALTER TABLE `cities` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `image`;
 ALTER TABLE `state` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `image`;
+ALTER TABLE `localShopsCategories` ADD `onlyOnMap` TINYINT NOT NULL DEFAULT '0' AFTER `parentId`;
+ALTER TABLE `localShopsCategories` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `mapIcon`;
+
 
 
 

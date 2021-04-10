@@ -414,31 +414,60 @@ function createListElement(_result, _selectPlaceOnMap){
         nearPlaces.map(item => {
             text = `<div class="placeCard listPlaceCard_${item.kindPlaceId}_${item.id}" onclick="setMarkerToMap(${item.C}, ${item.D}, ${item.id}, '${item.name}', ${item.kindPlaceId})">
                             <div class="fullyCenterContent img">
-                                <img src="${item.pic}" class="resizeImgClass" onload="fitThisImg(this)">
+                                <div class="withoutPic" style="background: ${filterButtons[item.kindPlaceId].color}">
+                                ${item.kindPlaceId == 13 ?
+                                    `<i class="${localShopCategoriesIcons[item.categoryId]}"></i>` :
+                                    `<i class="${filterButtons[item.kindPlaceId].icon}"></i>`
+                                }
+                                </div>
+                                <img src="${item.pic}" class="resizeImgClass hidden" onload="showPicInsteadOfIcon(this)">
                             </div>
                             <div class="info">
                                 <div class="name showOneLineText">${item.name}</div>
-                                <div class="star">
-                                    <div class="ui_bubble_rating bubble_${item.rate}0"></div>
-                                    |
-                                    ${item.review} نقد
-                                </div>
+                                ${item.onlyOnMap == 1 ?
+                                    `` :
+                                    `<div class="star">
+                                        <div class="ui_bubble_rating bubble_${item.rate}0"></div>
+                                        |
+                                        ${item.review} نقد
+                                    </div>`
+                                }
                                 <div class="address">${item.address}</div>
                             </div>
-                            <a href="${item.url}" class="showPlacePage" >اطلاعات بیشتر</a>
+                            ${item.onlyOnMap == 1 ? '' : `<a href="${item.url}" class="showPlacePage" >اطلاعات بیشتر</a>`}
                         </div>`;
             elements += text;
 
+            // let iconClass = item.kindPlaceId == 13 ? localShopCategoriesIcons[item.categoryId] : filterButtons[item.kindPlaceId].icon;
             item.markerInfo = L.marker([parseFloat(item.C), parseFloat(item.D)], {
                 title: item.name,
                 icon: L.icon({
                     iconUrl: item.minPic,
                     iconSize: [35, 35], // size of the icon
-                    classToImg: filterButtons[item.kindPlaceId].classToImg
+                    classToImg: `${filterButtons[item.kindPlaceId].classToImg}`
                 })
-            })
-                .bindPopup(item.name)
-                .on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
+            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId))
+                // .on('add', mark => {
+                    // if(item.kindPlaceId != 13)
+                    //     mark.target._icon.classList.add(iconClass);
+                    // mark.target._icon.addEventListener('error', function(){
+                        // var elm = this;
+                        // iconClass.split(' ').forEach(it => elm.classList.add(it));
+                        // var $select = $(this);
+                        // var $div = $(document.createElement('div'));
+                        //
+                        // var attributes = $select.prop("attributes");
+                        //
+                        // $.each(attributes, function() {
+                        //     $div.attr(this.name, this.value);
+                        // });
+                        // $(this).replaceWith($div);
+
+                        // this.src = emptyPic;
+                    // })
+                // });
+
+
             // item.marker = new google.maps.Marker({
             //     position: new google.maps.LatLng(item.C, item.D),
             //     map: mainMap,
@@ -454,7 +483,6 @@ function createListElement(_result, _selectPlaceOnMap){
             // item.marker.addListener('click', function () {
             //     setMarkerToMap(this.lat, this.lng, this.id, this.title)
             // });
-
 
             $(`#mobileResultRow_${item.kindPlaceId}`).find('.body').append(text);
         });
@@ -574,6 +602,12 @@ function goToMainCategorySection(_id){
     element.animate({
         scrollTop: element.scrollTop() + $('#localShopMainCategorySection_'+_id).position().top + scrollNumber
     }, 1000).scrollTop();
+}
+
+function showPicInsteadOfIcon(_element){
+    _element.classList.remove('hidden');
+    _element.previousElementSibling.classList.add('hidden');
+    fitThisImg(_element);
 }
 
 $(window).ready(() => {

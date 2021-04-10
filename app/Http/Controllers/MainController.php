@@ -52,7 +52,13 @@ class MainController extends Controller
         foreach ($localShopCategories as $category)
             $category->sub = LocalShopsCategory::where('parentId', $category->id)->get();
 
-        return view('pages.placeList.myLocation', compact(['localShopCategories']))->with(['selectedPlaceName' => $selected]);
+
+        $allLocalShopCategoryIcons = [];
+        $ai = LocalShopsCategory::select(['icon', 'id'])->get()->groupBy('id')->toArray();
+        foreach($ai as $index => $cat)
+            $allLocalShopCategoryIcons[$index] = $cat[0]['icon'];
+
+        return view('pages.placeList.myLocation', compact(['localShopCategories', 'allLocalShopCategoryIcons']))->with(['selectedPlaceName' => $selected]);
     }
 
     public function getPlacesWithLocation()
@@ -109,6 +115,12 @@ class MainController extends Controller
                     $latRow = 'lat';
                     $lngRow = 'lng';
                     $selectRows = '`id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `lat`, `lng`, `categoryId`, `address` AS address';
+                    $onlyOnMapCategories = LocalShopsCategory::where('onlyOnMap', 1)->pluck('id')->toArray();
+                    $allLocalShopCategoryIcons = [];
+                    $ai = LocalShopsCategory::select(['icon', 'id', 'server', 'mapIcon'])->get()->groupBy('id')->toArray();
+                    foreach($ai as $index => $cat)
+                        $allLocalShopCategoryIcons[$index] = $cat[0];
+
                 }
                 else{
                     $latRow = 'C';
@@ -128,11 +140,22 @@ class MainController extends Controller
                     if($kindPlace->id == 13) {
                         $place->C = $place->lat;
                         $place->D = $place->lng;
+                        if(in_array($place->categoryId, $onlyOnMapCategories)) {
+                            $place->onlyOnMap = 1;
+                            $place->pic = URL::asset("_images/localShops/mapIcon/big-{$allLocalShopCategoryIcons[$place->categoryId]['mapIcon']}", null, $allLocalShopCategoryIcons[$place->categoryId]['server']);
+                            $place->minPic = URL::asset("_images/localShops/mapIcon/small-{$allLocalShopCategoryIcons[$place->categoryId]['mapIcon']}", null, $allLocalShopCategoryIcons[$place->categoryId]['server']);
+                        }
+                        else{
+                            $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
+                            $place->pic = $placeMainPic[0];
+                            $place->minPic = $placeMainPic[1];
+                        }
                     }
-
-                    $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
-                    $place->pic = $placeMainPic[0];
-                    $place->minPic = $placeMainPic[1];
+                    else {
+                        $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
+                        $place->pic = $placeMainPic[0];
+                        $place->minPic = $placeMainPic[1];
+                    }
 
                     array_push($places, $place);
                 }

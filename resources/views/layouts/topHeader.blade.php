@@ -37,7 +37,7 @@
 <link rel='stylesheet' type='text/css' href='{{URL::asset('css/shazdeDesigns/footer.css?v='.$fileVersions)}}' />
 
 <link rel="stylesheet" href="{{URL::asset('packages/fontAwesome6/css/all.min.css')}}">
-<script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>
+{{--<script src="{{URL::asset('packages/fontAwesome6/js/all.min.js')}}"></script>--}}
 
 
 @if(\App::getLocale() == 'en')

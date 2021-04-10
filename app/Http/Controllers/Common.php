@@ -848,7 +848,7 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
         $server = 1;
         $kindPlace = Place::find($kindPlaceId);
         if($kindPlace->id == 13){
-            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'server'])->first();
+            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file'])->first();
             $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
             if($pic != null){
                 $server = $pic->server;

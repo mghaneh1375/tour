@@ -17,6 +17,18 @@
             display: none;
         }
 
+        .withoutPic{
+            font-size: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .withoutPic i {
+            font-style: normal;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +157,8 @@
 
 
     <script>
+        var emptyPic = '{{URL::asset("images/icons/Empty.png")}}';
+        var localShopCategoriesIcons = {!! json_encode($allLocalShopCategoryIcons) !!};
         var localShopCategories = {!! $localShopCategories !!};
         var selectedPlaceFromBack = {!! json_encode($selectedPlaceName) !!};
         var searchPlaceUrl = "{{route('search.place')}}";
@@ -160,6 +174,7 @@
                 nameTitle: 'جاهای دیدنی نزدیک',
                 classToImg: 'amakenImgIcon mapImgIcon',
                 onClick: '',
+                color: '#ec008c',
             },
             3: {
                 id: 3,
@@ -170,6 +185,7 @@
                 nameTitle: 'رستوران های نزدیک',
                 classToImg: 'restaurantImgIcon mapImgIcon',
                 onClick: '',
+                color: '#fcee23'
             },
             4: {
                 id: 4,
@@ -180,6 +196,7 @@
                 nameTitle: 'اقامتگاه های نزدیک',
                 classToImg: 'hotelImgIcon mapImgIcon',
                 onClick: '',
+                color: '#00516f'
             },
             6: {
                 id: 6,
@@ -190,6 +207,7 @@
                 nameTitle: 'طبیعت گردی های نزدیک',
                 classToImg: 'majaraImgIcon mapImgIcon',
                 onClick: '',
+                color: '#ed1c24'
             },
             12: {
                 id: 12,
@@ -200,6 +218,7 @@
                 nameTitle: 'بوم گردی های نزدیک',
                 classToImg: 'boomgardyImgIcon mapImgIcon',
                 onClick: '',
+                color: '#00aeef'
             },
             13: {
                 id: 13,
@@ -209,7 +228,8 @@
                 name: 'فروشگاه',
                 nameTitle: 'فروشگاه های نزدیک',
                 classToImg: 'localShopImgIcon mapImgIcon',
-                onClick: openLocalShopCategoriesFilter
+                onClick: openLocalShopCategoriesFilter,
+                color: '#00ef1d'
             },
         };
 
