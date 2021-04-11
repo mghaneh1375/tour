@@ -2455,7 +2455,7 @@ class PlaceController extends Controller {
                 if(isset($_GET['category'])){
                     $localShopCategoryId = LocalShopsCategory::where('name', $_GET['category'])->first();
                     if($localShopCategoryId == null)
-                        return \redirect(route('home'));
+                        dd("not found : {$_GET['category']}");
                     else if($localShopCategoryId->onlyOnMap == 1)
                         return \redirect(route('myLocation'));
                     else {
