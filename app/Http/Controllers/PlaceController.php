@@ -2447,21 +2447,32 @@ class PlaceController extends Controller {
 
             $features = PlaceFeatures::where('kindPlaceId', $kindPlaceId)->where('parent', 0)->get();
             foreach ($features as $feature)
-                $feature->subFeat = PlaceFeatures::where('parent', $feature->id)
-                                                    ->whereIn('type', ['YN', 'radio'])
-                                                    ->get();
+                $feature->subFeat = PlaceFeatures::where('parent', $feature->id)->whereIn('type', ['YN', 'radio'])->get();
 
-            $localShopCategories = [];
+            $localShopCategoryId = 0;
+            $sideLocalShopCategories = [];
             if($kindPlace->id == 13){
-                $localShopCategories = LocalShopsCategory::where('parentId', 0)->get();
-                foreach ($localShopCategories as $item)
-                    $item->subs = LocalShopsCategory::where('parentId', $item->id)->get();
+                if(isset($_GET['category'])){
+                    $localShopCategoryId = LocalShopsCategory::where('name', $_GET['category'])->first();
+                    if($localShopCategoryId == null)
+                        return \redirect(route('home'));
+                    else if($localShopCategoryId->onlyOnMap == 1)
+                        return \redirect(route('myLocation'));
+                    else {
+                        $kindPlace->listTitle = $localShopCategoryId->name .' ' . $locationName['name'];
+                        if($localShopCategoryId->parentId == 0)
+                            $sideLocalShopCategories = LocalShopsCategory::where('parentId', $localShopCategoryId->id)->get();
+                        $localShopCategoryId = $localShopCategoryId->id;
+                    }
+                }
+                else
+                    return \redirect(route('home'));
             }
 
             return view('pages.placeList.placeList',
                 compact(['features', 'meta', 'errorTxt', 'locationName', 'kindPlace',
                         'kind', 'kindPlaceId', 'mode', 'city', 'placeMode', 'state',
-                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategories']));
+                        'contentCount', 'notItemToShow', 'topPic', 'cityRel', 'localShopCategoryId', 'sideLocalShopCategories']));
         }
         else
             return \redirect(\url('/'));
@@ -2481,6 +2492,7 @@ class PlaceController extends Controller {
         $nearPlaceIdFilter = $request->nearPlaceIdFilter;
         $nearKindPlaceIdFilter = $request->nearKindPlaceIdFilter;
         $categoryFilter = $request->categoryFilter;
+        $localShopCategoryId = $request->localShopCategoryId;
 
         $places = [];
         $placeIds = [];
@@ -2617,14 +2629,15 @@ class PlaceController extends Controller {
         }
 
         if($kindPlace->id == 13) {
-            if(isset($categoryFilter) && $categoryFilter != 0){
+
+            if(isset($localShopCategoryId) && $localShopCategoryId != 0){
                 $categIds = [];
-                $category = LocalShopsCategory::find($categoryFilter);
+                $category = LocalShopsCategory::find($localShopCategoryId);
                 if($category != null){
                     if ($category->parentId == 0)
-                        $categIds = LocalShopsCategory::where('parentId', $category->id)->pluck('id')->toArray();
+                        $categIds = LocalShopsCategory::where('parentId', $category->id)->OrWhere('id', $category->id)->where('onlyOnMap', 0)->pluck('id')->toArray();
                     else
-                        $categIds = LocalShopsCategory::where('id', $category->id)->pluck('id')->toArray();
+                        $categIds = LocalShopsCategory::where('id', $category->id)->where('onlyOnMap', 0)->pluck('id')->toArray();
                 }
                 if(count($categIds) == 0)
                     $categIds = [0];

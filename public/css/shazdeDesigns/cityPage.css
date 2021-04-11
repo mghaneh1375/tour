@@ -570,7 +570,7 @@ h3{
 }
 
 .cpLittleMenu{
-    transition: .3s !important;
+    transition: 0s !important;
 }
 .showMoreText::before{
     bottom: -13px;

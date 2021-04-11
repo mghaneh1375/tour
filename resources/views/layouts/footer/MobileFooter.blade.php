@@ -226,7 +226,7 @@
                             </div>
                             @include('pages.placeList.filters.mahaliFoodFilters')
                         @elseif($kindPlace->id == 13)
-                            @include('pages.placeList.filters.localShopFilters')
+                            @include('pages.placeList.filters.localShopFilters', ['type' => 'mobile'])
                         @endif
 
                         @foreach($features as $feature)

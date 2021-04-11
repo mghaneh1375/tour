@@ -75,11 +75,6 @@
             </div>
         </div>
 
-
-        @if($kindPlace->id == 13)
-            @include('pages.placeList.filters.localShopHeaderCategoryList')
-        @endif
-
         <div id="BODYCON" class="row placeListBody">
             <div class="col-md-9 col-sm-8 rightLightBorder placeListBodyContentSection PlaceController">
                 <div id="listBody" class="coverpage">
@@ -243,7 +238,7 @@
                         @elseif($kindPlace->id == 11)
                             @include('pages.placeList.filters.mahaliFoodFilters')
                         @elseif($kindPlace->id == 13)
-                            @include('pages.placeList.filters.localShopFilters')
+                            @include('pages.placeList.filters.localShopFilters', ['type' => 'pc'])
                         @endif
 
                         @foreach($features as $feature)
@@ -301,7 +296,7 @@
                                     <div class="contentImgSection">
                                         <a href="##url##" class="thumbnail" style="margin-bottom: 5px !important; height: 100%">
                                             <div class="contentImg">
-                                                <img src='##pic##' class='resizeImgClass' alt='##keyword##' onload="fitThisImg(this)" style="width: 100%">
+                                                <img src='##pic##' class='resizeImgClass' alt='##keyword##' onload="fitThisImg(this)" onerror="setDefaultPic(this)" style="width: 100%">
                                             </div>
                                         </a>
                                         @if(auth()->check())
@@ -345,6 +340,7 @@
     var kindPlaceId = '{{$kindPlace->id}}';
     var placeMode = '{{$placeMode}}';
     var myLocationPlaceListUrl = '{{route('myLocation')}}';
+    var mainLocalShopCategoryId = '{{$localShopCategoryId}}';
 
     var proSearchUrlInList = '{{route('proSearch')}}';
     var getListElementUrl = '{{route("place.list.getElems")}}';

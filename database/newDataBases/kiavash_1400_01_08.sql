@@ -25,6 +25,9 @@ ALTER TABLE `state` ADD `server` TINYINT(1) NOT NULL DEFAULT '1' AFTER `image`;
 ALTER TABLE `localShopsCategories` ADD `onlyOnMap` TINYINT NOT NULL DEFAULT '0' AFTER `parentId`;
 ALTER TABLE `localShopsCategories` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `mapIcon`;
 
+ALTER TABLE `localShops` ADD `seen` INT(11) NOT NULL DEFAULT '0' AFTER `fullRate`;
+
+
 
 
 

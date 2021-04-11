@@ -1,5 +1,4 @@
 var specialFilters = [];
-var categoryFilter = 0;
 var categoryFilterCancelCallBack = 0;
 var page = 1;
 var floor = 1;
@@ -22,6 +21,7 @@ var inTake = false;
 var take = 24;
 var mustBeTaken = false;
 let url = window.location;
+var localShopCategoryId = mainLocalShopCategoryId;
 
 if(url.search.split('?filter=')[1] != undefined){
     var fil = url.search.split('?filter=')[1];
@@ -93,11 +93,9 @@ function searchForMaterial(_value){
         })
     }
 }
-
 function closeFoodMaterialSearch(){
     setTimeout(() => $("#materialSearchBox").addClass('hidden'), 100);
 }
-
 function createChoosenMaterialBox(_ref = 'refresh'){
     var searchResult = '';
     materialFilter.map(item =>  searchResult += `<div class="matSel iconCloseAfter" onclick="deleteMaterialSearch(this)">${item}</div>` );
@@ -106,7 +104,6 @@ function createChoosenMaterialBox(_ref = 'refresh'){
     if(_ref == 'refresh')
         newSearch();
 }
-
 function deleteMaterialSearch(_element){
     var index = materialFilter.indexOf($(_element).text());
     if(index > -1) {
@@ -114,14 +111,12 @@ function deleteMaterialSearch(_element){
         createChoosenMaterialBox();
     }
 }
-
 function chooseThisFoodMaterial(_element){
     var material = $(_element).text();
     $('#materialSearch').val(material);
     materialFilterFunc(material);
     closeSearchInput(); // for mobile search
 }
-
 function materialFilterFunc(_value){
     _value = _value.trim();
     if(_value.length > 2 &&materialFilter.indexOf(_value) == -1) {
@@ -130,7 +125,6 @@ function materialFilterFunc(_value){
     }
     closeFoodMaterialSearch();
 }
-
 function cancelMaterialSearch(){
     materialFilter = [];
     createChoosenMaterialBox('dontRefresh');
@@ -174,23 +168,6 @@ function doKindFilter(_kind, _value, _name = '', _cancelCallBack = ''){
         newSearch();
 }
 
-function addCategoryFilter(_value, _cancelCallBack = '', _callBack = ''){
-    categoryFilterCancelCallBack = _cancelCallBack;
-    categoryFilter = _value;
-
-    if(typeof _callBack === 'function')
-        _callBack();
-}
-
-function cancelCategoryFilter(_type = 'refresh'){
-    categoryFilter = 0;
-    if(typeof categoryFilterCancelCallBack === "function")
-        categoryFilterCancelCallBack(_type);
-
-    if(_type === "refresh")
-        newSearch();
-}
-
 function rateFilterFunc(value, _element = ''){
     if(_element != '' && $(_element).val() == rateFilter)
         cancelRateFilter();
@@ -207,7 +184,6 @@ function doFilterFeature(value){
         featureFilter.push(value);
     newSearch();
 }
-
 function cancelFeatureFilter(id, kind = 'refresh'){
     if(id == 0){
         featureFilter.map(item => $(`.featurePlaceListInput_${item}`).prop("checked", false));
@@ -224,6 +200,7 @@ function cancelFeatureFilter(id, kind = 'refresh'){
         newSearch();
 }
 
+
 function createFilter(){
     var filtersToShow = [];
 
@@ -231,7 +208,7 @@ function createFilter(){
         filtersToShow.push({name: 'امتیاز کاربر', onClick: 'cancelRateFilter()'});
 
     if(categoryFilter != 0)
-        filtersToShow.push({name: 'دسته بندی', onClick: 'cancelCategoryFilter()'});
+        filtersToShow.push({name: categoryFilter, onClick: 'cancelCategoryFilter()'});
 
     if(nameFilter.trim().length > 2)
         filtersToShow.push({name: 'نام', onClick: 'cancelNameFilter()'});
@@ -447,7 +424,6 @@ function getPlaceListItems(){
                 take: take,
                 sort: sort,
                 specialFilters: specialFilters,
-                categoryFilter: categoryFilter,
                 rateFilter: rateFilter,
                 nameFilter: nameFilter,
                 materialFilter: materialFilter,
@@ -456,6 +432,7 @@ function getPlaceListItems(){
                 nearKindPlaceIdFilter: nearKindPlaceIdFilter,
                 city: cityId,
                 mode: placeListModel,
+                localShopCategoryId: localShopCategoryId,
                 kindPlaceId: kindPlaceId
             },
             complete: e =>{
@@ -559,89 +536,27 @@ function showThisPlaceInMap(_element){
     location.href = `${myLocationPlaceListUrl}?place=${placeId}&kindPlace=${placeMode}`;
 }
 
-function showSubCategoryOfLocalShop(_element, _kind){
-    var id = $(_element).attr('data-id');
-    $('.locCategory.selected').removeClass('selected');
-
-    clearFeatureSection();
-    addCategoryFilter(id, showMainLocalShopCategoryList, newSearch);
-
-    if(_kind === 'main'){
-        nowShowLocalShopTopCategory = id;
-        $('#subsOfLocalShopCategory_'+id).removeClass('hideOnBottom');
-        $('#mainLocalShopCategoryRow').addClass('hideOnTop');
-    }
-    else {
-        $(_element).addClass('selected');
-        getFilterForLocalShopCategories(id);
-    }
-}
-
-function showMainLocalShopCategoryList(_type = ''){
-    $(`#subsOfLocalShopCategory_${nowShowLocalShopTopCategory}`).addClass('hideOnBottom');
-    $('#mainLocalShopCategoryRow').removeClass('hideOnTop');
-    $('.locCategory.selected').removeClass('selected');
-    nowShowLocalShopTopCategory = 0;
-
-    clearFeatureSection();
-    if(_type === 'refresh')
-        addCategoryFilter(0, '', newSearch);
-    else
-        addCategoryFilter(0);
-}
-
-function getFilterForLocalShopCategories(_id){
-    $.ajax({
-        type: 'GET',
-        url: `${getLocalShopFeatureListUrl}?id=${_id}`,
-        success: response => {
-            if(response.status == 'ok')
-                createLocalShopFeatureFiler(response.result);
-        }
-    })
-}
-
-function createLocalShopFeatureFiler(_features){
-    var html = '';
-    _features.map(feat => {
-        var moreSubText = '';
-        var featuresCheckBox = '';
-
-        if(feat.sub.length > 5)
-            moreSubText = `<span onclick="showMoreItems(${feat.id})" class="moreItems${feat.id} moreItems">
-                                    <span>نمایش کامل فیلترها</span>
-                                    <span class="downArrowIcon"></span>
-                                </span>
-                                <span onclick="showLessItems(${feat.id})" class="lessItems hidden extraItem${feat.id} moreItems">
-                                    <span>پنهان سازی فیلتر‌ها</span>
-                                    <span class="upArrowIcon"></span>
-                                </span>`;
-
-        feat.sub.map((sub, index) => {
-            featuresCheckBox += `<div class="filterItem lhrFilter filter squerRadioInputSec ${index >= 5 ? `extraItem${feat.id} hidden` : 'selected'}">
-                                        <input id="feat${sub.id}" onclick="doFilterFeature(${sub.id})" type="checkbox" value="${sub.name}"/>
-                                        <label for="feat${sub.id}" class="inputRadionSquer">
-                                            <span class="labelBox"></span>
-                                            <span class="name">${sub.name}</span>
-                                        </label>
-                                    </div>`;
-        });
-
-
-        html += `<div class="bottomLightBorder headerFilter">
-                        <div class="filterHeaderWithClose">
-                            <div class="filterGroupTitle">${feat.name}</div>
-                            ${moreSubText}
-                        </div>
-                        <div class="filterContent ui_label_group inline">${featuresCheckBox}</div>
-                    </div>`;
-    });
-
-    $('.featureListSection').html(html);
-}
-
 function clearFeatureSection(){
     $('.featureListSection').empty();
+}
+
+
+function cancelCategoryFilter(_type = 'refresh'){
+    localShopCategoryFilter(localShopCategoryId);
+}
+function localShopCategoryFilter(_id){
+    if(localShopCategoryId === _id){
+        [...document.querySelectorAll(`.localShopCategoryId_${_id}`)].map(item => item.checked = false);
+        localShopCategoryId = mainLocalShopCategoryId;
+        categoryFilter = 0;
+    }
+    else {
+        [...document.querySelectorAll(`.localShopCategoryId_${_id}`)].map(item => item.checked = true);
+        localShopCategoryId = _id;
+        categoryFilter = document.querySelector(`.localShopCategoryId_${_id}`).getAttribute('data-name');
+    }
+
+    newSearch();
 }
 
 
