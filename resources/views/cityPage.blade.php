@@ -181,7 +181,7 @@
                             <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
                             <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
                             <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                             <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                         </a>
@@ -189,7 +189,7 @@
                             <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                             <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=سوخت">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
                         </a>
@@ -278,7 +278,7 @@
 
 
                     <div class="col-xs-12 zpr showOnTablet">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
                             <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                             <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                         </a>
@@ -286,7 +286,7 @@
                             <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                             <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=سوخت">
+                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
                         </a>
@@ -377,7 +377,7 @@
                         <i class="cityPageIcon fa-solid fa-shuttlecock"></i>
                         <div class="textCityPageIcon">{{__('ورزش و آرامش')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
                         <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                         <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                     </a>
@@ -385,7 +385,7 @@
                         <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                         <div class="textCityPageIcon">{{__('صرافی')}}</div>
                     </a>
-                    <a class="cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=سوخت">
+                    <a class="cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
                         <div class="cityPageIcon fas fa-gas-pump"></div>
                         <div class="textCityPageIcon">{{__('سوخت')}}</div>
                     </a>
