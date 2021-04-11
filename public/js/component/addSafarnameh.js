@@ -9,8 +9,7 @@ var safarnamehRandomCode = Math.floor(Math.random()*100000);
 DecoupledEditor.create( document.querySelector('#safarnamehText'), {
     language: applicationLanguage_addSafarnameh,
     removePlugins: [ 'FontSize', 'MediaEmbed' ],
-})
-    .then( editor => {
+}).then( editor => {
         const toolbarContainer = document.querySelector( '.toolbar-container');
         toolbarContainer.prepend( editor.ui.view.toolbar.element );
         window.editor = editor;

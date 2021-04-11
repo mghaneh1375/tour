@@ -289,7 +289,7 @@
                             <div class="inputBody_1 inputBody">
                                 @foreach($kindPlace['amaken']['features'] as $kind)
                                     <div class="listItem">
-                                        <div class="step5Title">$kind->name</div>
+                                        <div class="step5Title">{{$kind->name}}</div>
                                         <div class="subListItem">
                                             @foreach($kind->subFeat as $sub)
                                                 <div class="detailListItem">
@@ -297,7 +297,7 @@
 
                                                         <label class="checkBoxDiv">
                                                             <input id="amaken_{{$sub->id}}" name="amakenFeature[]" value="{{$sub->id}}" type="checkbox">
-                                                            $sub->name
+                                                            {{$sub->name}}
                                                             <span class="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -324,13 +324,13 @@
 
                                 @foreach($kindPlace['restaurant']['features'] as $kind)
                                     <div {{$kind->name == 'نوع غذای رستوران' ? 'id=restaurantFoodKind' : ''}} class="listItem">
-                                        <div class="step5Title">$kind->name</div>
+                                        <div class="step5Title">{{$kind->name}}</div>
                                         <div class="subListItem">
                                             @foreach($kind->subFeat as $sub)
                                                 <div class="detailListItem">
                                                     <label class="checkBoxDiv">
                                                         <input id="amaken_{{$sub->id}}" name="restaurantFeature[]" value="{{$sub->id}}" type="checkbox">
-                                                        $sub->name
+                                                        {{$sub->name}}
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </div>
@@ -389,13 +389,13 @@
 
                                 @foreach($kindPlace['hotel']['features'] as $kind)
                                     <div class="listItem">
-                                        <div class="step5Title">$kind->name</div>
+                                        <div class="step5Title">{{$kind->name}}</div>
                                         <div class="subListItem">
                                             @foreach($kind->subFeat as $sub)
                                                 <div class="detailListItem">
                                                     <label class="checkBoxDiv">
                                                         <input id="amaken_{{$sub->id}}" name="hotelFeature[]" value="{{$sub->id}}" type="checkbox">
-                                                        $sub->name
+                                                        {{$sub->name}}
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </div>
