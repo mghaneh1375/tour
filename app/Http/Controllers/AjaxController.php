@@ -303,7 +303,7 @@ class AjaxController extends Controller {
         $places = [];
         $value = $_GET['value'];
         if(isset($_GET['kindPlaceId']) && $_GET['kindPlaceId'] == "all")
-            $kindPlace = Place::whereNotNull('tableName')->where('id', '!=', 13)->get();
+            $kindPlace = Place::whereNotNull('tableName')->get();
         else if(isset($_GET['forWhere']) && $_GET['forWhere'] === 'map')
             $kindPlace = Place::whereIn('id', json_decode($_GET['kindPlaceId']))->get();
         else if(isset($_GET['kindPlaceId']))
@@ -316,12 +316,12 @@ class AjaxController extends Controller {
                 $pds = \DB::select("SELECT `id`, `name`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%".$value."%'");
             else {
                 if($kind->id == 13) {
-                    $onlyOnMapCategories = LocalShopsCategory::where('onlyOnMap', 1)->pluck('id')->toArray();
-                    $pds = \DB::select("SELECT `id`, `name`, `lat`, `lng`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%' AND categoryId NOT IN (".implode(',', $onlyOnMapCategories).")");
+//                    $onlyOnMapCategories = LocalShopsCategory::where('onlyOnMap', 1)->pluck('id')->toArray();
+//                    categoryId NOT IN (".implode(',', $onlyOnMapCategories).")
+                    $pds = \DB::select("SELECT `id`, `name`, `lat`, `lng`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%{$value}%' AND categoryId = 280");
                 }
-                else{
-                    $pds = \DB::select("SELECT `id`, `name`, `C`, `D`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%" . $value . "%'");
-                }
+                else
+                    $pds = \DB::select("SELECT `id`, `name`, `C`, `D`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%{$value}%'");
             }
 
             foreach ($pds as $item){

@@ -76,17 +76,13 @@ Route::get('edver/get', 'AdvertisementController@getAdvertisement')->name('adver
 
 Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
-    Route::get('/', 'MainController@showMainPage')->name('home')->middleware('shareData');
+    Route::get('/', [MainController::class, 'showMainPage'])->name('home')->middleware('shareData');
 
-    Route::get('main', function (){
-        return redirect(\route('home'));
-    })->name('main');
+    Route::get('main', function (){ return redirect(\route('home')); })->name('main');
 
-    Route::get('main/{mode?}', function(){
-        return redirect(url('/'));
-    })->name('mainMode');
+    Route::get('main/{mode?}', function(){ return redirect(url('/')); })->name('mainMode');
 
-    Route::get('/landingPage', 'MainController@landingPage')->name('landingPage')->middleware('shareData');
+    Route::get('/landingPage', [MainController::class, 'landingPage'])->name('landingPage')->middleware('shareData');
 
     //PDF creator
 
@@ -143,6 +139,32 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
     Route::post('getNumsActivities', array('as' => 'ajaxRequestToGetActivitiesNum', 'uses' => 'ActivityController@getNumsActivities'));
 
     Route::post('getRecentlyActivities', array('as' => 'recentlyViewed', 'uses' => 'ActivityController@getRecentlyActivities'));
+});
+
+// Searches
+Route::group(['middleware' => ['web']], function(){
+    Route::any('totalSearch', [HomeController::class, 'totalSearch'])->name('totalSearch');
+
+    Route::get('searchPlace', [AjaxController::class, 'searchPlace'])->name('search.place');
+
+    Route::get('searchForFoodMaterial', [AjaxController::class, 'searchForFoodMaterial'])->name('search.foodMaterial');
+
+    Route::post('searchSuggestion', [AjaxController::class, 'searchSuggestion'])->name('searchSuggestion');
+
+    Route::post('searchForMyContacts', [AjaxController::class, 'searchForMyContacts'])->name('searchForMyContacts');
+
+    Route::post('searchEstelah', [AjaxController::class, 'searchEstelah'])->name('searchEstelah');
+
+    Route::post('proSearch', [AjaxController::class, 'proSearch'])->name('proSearch');
+
+    Route::post('searchForCity', [AjaxController::class, 'searchForCity'])->name('searchForCity');
+
+    Route::post('searchForLine', [AjaxController::class, 'searchForLine'])->name('searchForLine');
+
+    Route::get('searchSpecificKindPlace', [AjaxController::class, 'searchSpecificKindPlace'])->name('search.place.with.name.kindPlaceId');
+
+    Route::get('searchInCounty', [AjaxController::class, 'searchInCounty'])->name('ajax.searchInCounty');
+
 });
 
 //authenticated controller
@@ -239,21 +261,11 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::get('getLastPassengers', 'AjaxController@getLastPassengers')->name('getLastPassengers');
 
-    Route::get('searchPlace', 'AjaxController@searchPlace')->name('search.place');
-
-    Route::get('searchForFoodMaterial', 'AjaxController@searchForFoodMaterial')->name('search.foodMaterial');
-
-    Route::post('searchSuggestion', 'AjaxController@searchSuggestion')->name('searchSuggestion');
-
     Route::post('getSingleQuestion', 'AjaxController@getSingleQuestion')->name('getSingleQuestion');
 
     Route::post('getTags', 'AjaxController@getTags')->name('getTags');
 
     Route::post('getCities', 'AjaxController@getCitiesDir')->name('getCitiesDir');
-
-    Route::post('searchForMyContacts', array('as' => 'searchForMyContacts', 'uses' => 'AjaxController@searchForMyContacts'));
-
-    Route::post('searchEstelah', array('as' => 'searchEstelah', 'uses' => 'AjaxController@searchEstelah'));
 
     Route::post('getStates', array('as' => 'getStates', 'uses' => 'AjaxController@getStates'));
 
@@ -263,11 +275,6 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::post('getPlacePic', array('as' => 'getPlacePic', 'uses' => 'AjaxController@getPlacePic'));
 
-    Route::post('proSearch', array('as' => 'proSearch', 'uses' => 'AjaxController@proSearch'));
-
-    Route::post('searchForCity', 'AjaxController@searchForCity')->name('searchForCity');
-
-    Route::post('searchForLine', array('as' => 'searchForLine', 'uses' => 'AjaxController@searchForLine'));
 
     Route::post('findKoochitaAccount', 'AjaxController@findKoochitaAccount')->name('findKoochitaAccount');
 
@@ -275,13 +282,11 @@ Route::middleware(['nothing'])->group(function () {
 
     Route::get('findCityWithState', 'AjaxController@findCityWithState')->name('findCityWithState');
 
-    Route::get('searchSpecificKindPlace', 'AjaxController@searchSpecificKindPlace')->name('search.place.with.name.kindPlaceId');
 
     Route::get('findUser', 'AjaxController@findUser')->name('findUser');
 
     Route::get('getMainPageSuggestion', 'AjaxController@getMainPageSuggestion')->name('getMainPageSuggestion');
 
-    Route::get('searchInCounty', 'AjaxController@searchInCounty')->name('ajax.searchInCounty');
 });
 
 //review section
@@ -783,8 +788,6 @@ Route::group(array('middleware' => ['throttle:30']), function () {
     Route::post('sendPassengersInfo/{ticketId}', ['as' => 'sendPassengersInfo', 'uses' => 'TicketController@sendPassengersInfo']);
 
     Route::post('checkInnerFlightCapacity', ['as' => 'checkInnerFlightCapacity', 'uses' => 'TicketController@checkInnerFlightCapacity']);
-
-    Route::any('totalSearch', 'HomeController@totalSearch')->name('totalSearch');
 
     Route::any('searchForStates', array('as' => 'searchForStates', 'uses' => 'HomeController@searchForStates'));
 

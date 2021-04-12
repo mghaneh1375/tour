@@ -169,27 +169,27 @@
                         <div class="cpLittleMenu infoLittleMenu">
                             <img src="{{URL::asset('images/icons/info.png')}}">
                         </div>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=فروشگاه زنجیره ای">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=284">
                             <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
                             <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=مراکز خدماتی">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=190">
                             <i class="cityPageIcon fa-solid fa-police-box"></i>
                             <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=حمل و نقل">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=1">
                             <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
                             <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=281">
                             <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                             <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=صرافی">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=283">
                             <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                             <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
-                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
+                        <a class="col-xs-2 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=278">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
                         </a>
@@ -231,12 +231,12 @@
                         </a>
                     </div>
                     <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/13/' . $kind . '/' . $place->listName)}}">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=280">
                             <div class="cityPageIcon sanaye"></div>
                             <div class="textCityPageIcon">{{__('فروشگاه صنایع دستی')}}</div>
-                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
+                            <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url('placeList/6/' . $kind . '/' . $place->listName)}}">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/6/{$kind}/{$place->listName}")}}">
                             <i class="cityPageIcon fa-solid fa-campground"></i>
                             <div class="textCityPageIcon">{{__('طبیعت گردی')}}</div>
                             <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['majara']}}</div>
@@ -248,29 +248,29 @@
                         </a>
                     </div>
                     <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=هنر">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=159">
                             <i class="cityPageIcon fa-solid fa-masks-theater"></i>
                             <div class="textCityPageIcon">{{__('هنر')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=سرگرمی">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=279">
                             <i class="cityPageIcon fa-solid fa-bowling-ball-pin"></i>
                             <div class="textCityPageIcon">{{__('سرگرمی')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=بهداشت و درمان">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=226">
                             <i class="cityPageIcon fa-solid fa-truck-medical"></i>
                             <div class="textCityPageIcon">{{__('بهداشت و درمان')}}</div>
                         </a>
                     </div>
                     <div class="col-xs-12 zpr">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=بانک">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=282">
                             <i class="cityPageIcon fa-solid fa-coins"></i>
                             <div class="textCityPageIcon">{{__('بانک')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=ُسرویس بهداشتی">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=285">
                             <i class="cityPageIcon fa-solid fa-toilet"></i>
                             <div class="textCityPageIcon">{{__('سرویش بهداشتی')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=ورزش و آرامش">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=90">
                             <i class="cityPageIcon fa-solid fa-shuttlecock"></i>
                             <div class="textCityPageIcon">{{__('ورزش و آرامش')}}</div>
                         </a>
@@ -278,29 +278,29 @@
 
 
                     <div class="col-xs-12 zpr showOnTablet">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=281">
                             <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                             <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=صرافی">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=283">
                             <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                             <div class="textCityPageIcon">{{__('صرافی')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
+                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=278">
                             <div class="cityPageIcon fas fa-gas-pump"></div>
                             <div class="textCityPageIcon">{{__('سوخت')}}</div>
                         </a>
                     </div>
                     <div class="col-xs-12 zpr showOnTablet">
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=فروشگاه زنجیره ای">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=284">
                             <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
                             <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=مراکز خدماتی">
+                        <a class="col-xs-4 cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=190">
                             <i class="cityPageIcon fa-solid fa-police-box"></i>
                             <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
                         </a>
-                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=حمل و نقل">
+                        <a class="col-xs-4 cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=1">
                             <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
                             <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
                         </a>
@@ -338,10 +338,10 @@
                         <div class="textCityPageIcon">{{__('سوغات')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=280">
                         <div class="cityPageIcon sanaye"></div>
                         <div class="textCityPageIcon">{{__('فروشگاه صنایع دستی')}}</div>
-                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['sogatSanaie']}}</div>
+                        <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['localShops']}}</div>
                     </a>
                     <a class="cpLittleMenu" href="{{url("placeList/6/{$kind}/{$place->listName}")}}">
                         <i class="cityPageIcon fa-solid fa-campground"></i>
@@ -353,51 +353,51 @@
                         <div class="textCityPageIcon">{{__('سفر نامه')}}</div>
                         <div class="textCityPageIcon" style="color: var(--koochita-blue)">{{$placeCounts['safarnameh']}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=هنر">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=159">
                         <i class="cityPageIcon fa-solid fa-masks-theater"></i>
                         <div class="textCityPageIcon">{{__('هنر')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=سرگرمی">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=279">
                         <i class="cityPageIcon fa-solid fa-bowling-ball-pin"></i>
                         <div class="textCityPageIcon">{{__('سرگرمی')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=بهداشت و درمان">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=226">
                         <i class="cityPageIcon fa-solid fa-truck-medical"></i>
                         <div class="textCityPageIcon">{{__('بهداشت و درمان')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=بانک">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=282">
                         <i class="cityPageIcon fa-solid fa-coins"></i>
                         <div class="textCityPageIcon">{{__('بانک')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=ُسرویس بهداشتی">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=285">
                         <i class="cityPageIcon fa-solid fa-toilet"></i>
                         <div class="textCityPageIcon">{{__('سرویش بهداشتی')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=ورزش و آرامش">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=90">
                         <i class="cityPageIcon fa-solid fa-shuttlecock"></i>
                         <div class="textCityPageIcon">{{__('ورزش و آرامش')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=تعمیرگاه ماشین">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=281">
                         <i class="cityPageIcon fa-solid fa-car-wrench"></i>
                         <div class="textCityPageIcon">{{__('تعمیرگاه')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=صرافی">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=283">
                         <i class="cityPageIcon fa-solid fa-circle-dollar"></i>
                         <div class="textCityPageIcon">{{__('صرافی')}}</div>
                     </a>
-                    <a class="cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=جایگاه سوخت">
+                    <a class="cpLittleMenu"  href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=278">
                         <div class="cityPageIcon fas fa-gas-pump"></div>
                         <div class="textCityPageIcon">{{__('سوخت')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=فروشگاه زنجیره ای">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=284">
                         <i class="cityPageIcon fa-solid fa-cart-shopping"></i>
                         <div class="textCityPageIcon">{{__('فروشگاه زنجیره ای')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=مراکز خدماتی">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=190">
                         <i class="cityPageIcon fa-solid fa-police-box"></i>
                         <div class="textCityPageIcon">{{__('خدمات دولتی')}}</div>
                     </a>
-                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=حمل و نقل">
+                    <a class="cpLittleMenu" href="{{url("placeList/13/{$kind}/{$place->listName}")}}?category=1">
                         <i class="cityPageIcon fa-solid fa-taxi-bus"></i>
                         <div class="textCityPageIcon">{{__('حمل و نقل')}}</div>
                     </a>

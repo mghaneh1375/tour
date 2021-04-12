@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\models\Activity;
 use App\models\localShops\LocalShops;
+use App\models\localShops\LocalShopsCategory;
 use App\models\places\Amaken;
 use App\models\places\Boomgardy;
 use App\models\Cities;
@@ -44,6 +45,8 @@ class CityController extends Controller
             $place = Cities::where('name', $city)->firstOrFail();
 
 
+        $localShopCategoryIds = LocalShopsCategory::where("id", 280)->orWhere('parentId', 280)->pluck('id')->toArray();
+
         if($kind == 'city') {
             $cState = State::find($place->stateId);
             $place->state = $cState->name;
@@ -61,7 +64,7 @@ class CityController extends Controller
             $allMahaliFood = MahaliFood::where('cityId', $place->id)->count();
             $allSogatSanaie = SogatSanaie::where('cityId', $place->id)->count();
             $allBoomgardy = Boomgardy::where('cityId', $place->id)->count();
-            $allLocalShops = LocalShops::where('cityId', $place->id)->count();
+            $allLocalShops = LocalShops::where('cityId', $place->id)->whereIn('categoryId', $localShopCategoryIds)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('cityId', $place->id)->count();
         }
         else {
@@ -86,7 +89,7 @@ class CityController extends Controller
             $allMahaliFood = MahaliFood::whereIn('cityId', $allCities)->count();
             $allSogatSanaie = SogatSanaie::whereIn('cityId', $allCities)->count();
             $allBoomgardy = Boomgardy::whereIn('cityId', $allCities)->count();
-            $allLocalShops = LocalShops::whereIn('cityId', $allCities)->count();
+            $allLocalShops = LocalShops::whereIn('cityId', $allCities)->whereIn('categoryId', $localShopCategoryIds)->count();
             $allSafarnamehCount = SafarnamehCityRelations::where('stateId', $place->id)->count();
         }
 

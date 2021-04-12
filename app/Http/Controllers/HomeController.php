@@ -8,6 +8,7 @@ use App\models\Activity;
 use App\models\Adab;
 use App\models\AirLine;
 use App\models\Alert;
+use App\models\localShops\LocalShopsCategory;
 use App\models\places\Amaken;
 use App\models\BannerPics;
 use App\models\places\Boomgardy;
@@ -710,6 +711,8 @@ class HomeController extends Controller
                         $sqlQuery = "cityId = cities.id and state.id = cities.stateId AND ";
                         $tableQuery = ', cities, state';
                     }
+                    if($kplace->id == 13)
+                        $sqlQuery .= " tableName.categoryId = 280 AND ";
 
                     $sqlQuery .= " ( replace(tableName.name, ' ', '') LIKE '%{$key}%'";
                     if (!empty($key2))
