@@ -106,7 +106,7 @@
                     <div class="postalFirstRow">
                         <div class="tourName">{{$tour->name}}</div>
                         <div class="ajansPic">
-                            <img src="{{URL::asset('images/test/itoLogo.png')}}" class="resizeImgClass" alt="نام آژانس" onload="fitThisImg(this)">
+                            <img src="{{$tour->agencyLogo}}" alt="{{$tour->agencyName}}" style="max-width: 100%; max-height: 100%;">
                         </div>
                     </div>
                     @if($tour->isLocal == 0)
@@ -152,7 +152,7 @@
                             <div class="hasInsurance"> بیمه دارد</div>
                         @endif
                     </div>
-                    <div class="postalLastRow"> .این تور توسط "آژانس آیتو" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری ان ندارد</div>
+                    <div class="postalLastRow"> .این تور توسط "{{$tour->agencyName}}" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری آن ندارد</div>
                 </div>
                 <div class="mainSliderSection col-xs-5">
                     <div class="posRelWH100">
@@ -303,26 +303,32 @@
                     <div class="circleButtons top"></div>
                     <div class="circleButtons bottom"></div>
 
-                    <div style="display: flex; width: 40%">
-                        <div class="picSec">
-                            <img src="http://localhost/assets/userProfile/1608119658907.jpg" class="resizeImgClass" alt="tourGuidPic" onload="fitThisImg(this)">
-                        </div>
-                        <div class="infoSec">
-                            <div class="name tourGuidName"></div>
-                            <div class="tourGuidInKoochita" style="position: relative;flex-direction: column; display: flex;">
-                                <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_10"></div></div>
-                                <a href="#" class="butse" style="background: var(--koochita-red);">صفحه تور گردان</a>
-                                <a href="#" class="butse" style="background: var(--koochita-blue);">ارسال پیام</a>
+                    @if($tour->guid->has)
+                        <div class="tourGuidInfo">
+                            <div class="picSec">
+                                <img src="{{$tour->guid->pic}}" class="resizeImgClass" alt="tourGuidPic" onload="fitThisImg(this)">
+                            </div>
+                            <div class="infoSec">
+                                <div class="name tourGuidName showOneLineText">{{$tour->guid->name}}</div>
+                                <div class="tourGuidInKoochita">
+                                    @if($tour->guid->koochita)
+                                        <div class="fullyCenterContent" style="font-size: 25px;">
+                                            <div class="ui_bubble_rating bubble_10"></div>
+                                        </div>
+                                        <a href="{{route('profile', ['username' => $tour->guid->name])}}" target="_blank" class="butse" style="background: var(--koochita-red);">صفحه تور گردان</a>
+                                        <div class="butse" style="background: var(--koochita-blue); cursor: pointer;" onclick="goToMsgPageGuid('{{$tour->guid->name}}')">ارسال پیام</div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
                     <div class="fullyCenterContent ajansInfoSection">
                         <div class="infoSec">
                             <div class="ajasLogo">
-                                <img src="{{URL::asset('images/test/itoLogo.png')}}">
+                                <img src="{{$tour->agencyLogo}}">
                             </div>
-                            <div class="name">آژانس آیتو</div>
+                            <div class="name">{{$tour->agencyName}}</div>
                             <div class="rateAndPage">
                                 <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_10"></div></div>
                                 <a href="#" class="butse" style="background: var(--koochita-red);">صفحه آژانس</a>
@@ -336,11 +342,13 @@
                         </div>
                         <div class="phones">
                             <div class="backupPhones">
-                                <a href="tel:02188539300">021-88539300</a>
+                                @foreach($tour->backupPhone as $phone)
+                                <a href="tel:{{$phone}}">{{$phone}}</a>
+                                @endforeach
                             </div>
                             <div> تماس با پشتیبانی تور</div>
                             <div>کدشناسایی تور</div>
-                            <div> 100-001-1200-1</div>
+                            <div>{{$tour->codeNumber}}</div>
                         </div>
                     </div>
                 </div>
@@ -444,6 +452,7 @@
         var tourInformationUrl = `{{route("tour.getInformation")}}?code=${tourCode}`;
         var checkCapacityUrl = '{{route("tour.reservation.checkCapacity")}}';
         var getPassengerInfoUrl = '{{route("tour.reservation.getPassengerInfo")}}';
+        var messengerTourGuidPage = '{{route("profile.message.page")}}';
 
         var mainSlideSwiper = new Swiper('#mainSlider', {
             spaceBetween: 0,

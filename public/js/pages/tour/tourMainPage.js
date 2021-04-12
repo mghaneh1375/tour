@@ -116,9 +116,8 @@ function createTourSuggestionCards(_result){
                                 </div>
                                 <div class="smallText">شروع قیمت از ${item.minCost} تومان</div>
                             </div>
-
                             <div class="agencyPic">
-                                <img src="${itoPic}" alt="آژانس آیتو" style="max-height: 100%; max-width: 100%;">
+                                <img src="${item.agencyPic}" alt="${item.agencyName}" style="max-height: 100%; max-width: 100%;">
                             </div>
                         </a>`;
     });

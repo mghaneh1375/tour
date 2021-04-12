@@ -147,12 +147,12 @@ function fillTourShowPage(_response){
         $('.notTransport').removeClass('hidden');
     }
 
-    $('.tourGuidName').text(_response.tourGuidName);
-    if(_response.tourGuidKoochitaId != 0){
-        $('.tourGuidInKoochita').removeClass('hidden');
-    }
-    else
-        $('.tourGuidInKoochita').addClass('hidden');
+    // $('.tourGuidName').text(_response.tourGuidName);
+    // if(_response.tourGuidKoochitaId != 0){
+    //     $('.tourGuidInKoochita').removeClass('hidden');
+    // }
+    // else
+    //     $('.tourGuidInKoochita').addClass('hidden');
 
     features = _response.features;
     features.map((item, index) => {
@@ -222,11 +222,13 @@ function fillTourShowPage(_response){
     _response.sideTransport.map(item => tourSideFeatureList.tourSideTransport.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourSideTransport.background}">${item}</div>`);
 
     for(var item of Object.keys(tourSideFeatureList)){
-        var newProp = propertySample;
-        for (var x of Object.keys(tourSideFeatureList[item]))
-            newProp = newProp.replace(new RegExp(`##${x}##`, "g"), tourSideFeatureList[item][x]);
+        if(tourSideFeatureList[item].content != '') {
+            var newProp = propertySample;
+            for (var x of Object.keys(tourSideFeatureList[item]))
+                newProp = newProp.replace(new RegExp(`##${x}##`, "g"), tourSideFeatureList[item][x]);
 
-        propertySection += newProp;
+            propertySection += newProp;
+        }
     }
     $('.propertySection').append(propertySection);
 
@@ -539,6 +541,17 @@ function reserveTour(){
             closeLoading();
         }
     });
+}
+
+function goToMsgPageGuid(_username){
+    var messengerPage = _refresh => {
+        window.open(`${messengerTourGuidPage}?user=${_username}`, '_blank');
+        if(_refresh)
+            location.reload();
+    };
+    if(!checkLogin(window.InUrl, () => messengerPage(true)))
+        return;
+    messengerPage(false);
 }
 
 

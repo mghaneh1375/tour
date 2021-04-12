@@ -40,6 +40,47 @@
 @endsection
 
 @section('body')
+
+    <div class="hideOnPhone">
+        @include('pages.secondHeader')
+
+        <div class="container listSecHeadContainer secHeadNavs spanMarginSecHead" style="padding-top: 10px;">
+            <a class="linkRoute" href="{{url('/main')}}">{{__('صفحه اصلی')}}</a>
+
+            <div class="secHeaderPathDiv lessShowText">
+                <span class="yelCol"> > </span>
+                <a class="linkRoute" href="{{route('cityPage', ['kind' => 'state', 'city' => $locationName['state']])}}">
+                    استان
+                    {{$locationName['state']}}
+                </a>
+            </div>
+
+            <div class="secHeaderPathDiv lessShowText">
+                <span class="yelCol"> > </span>
+                <a class="linkRoute" href="{{route('cityPage', ['kind' => 'city', 'city' => $locationName['cityNameUrl']])}}">
+                    شهر
+                    {{$locationName['cityNameUrl']}}
+                </a>
+            </div>
+
+            <div class="secHeaderPathDiv lessShowText">
+                <span class="yelCol"> > </span>
+                <a class="linkRoute" href="{{route('cityPage', ['kind' => 'city', 'city' => $locationName['cityNameUrl']])}}">
+                    {{$localShop->category->name}}
+                    شهر {{$locationName['cityNameUrl']}}
+                </a>
+            </div>
+
+            <div class="secHeaderPathDiv lessShowText">
+                <span class="yelCol"> > </span>
+                <a class="linkRoute" href="#">
+                    {{$localShop->name}}
+                </a>
+            </div>
+
+        </div>
+    </div>
+
     <div id="topInfos" class="topInfoFixed">
         <div class="infosSec">
             <div class="info">
@@ -82,29 +123,52 @@
 
 
     <div class="showHeader">
-        <div class="container">
+        <div class="container" style="position: relative">
             <div class="inff">
-                <h1 style="font-weight: bold;">{{$localShop->name}}</h1>
-                <div class="address">{{$localShop->address}}</div>
-            </div>
-            <div class="mainHeaderButts" style="position: relative;">
-                <div class="phone telephoneIcon">
-                    @foreach($localShop->telephone as $telephone)
-                        <a href="tel:{{$telephone}}">{{$telephone}}</a>
-                    @endforeach
+                <div class="topHead">
+                    <div>
+                        <h1 style="font-weight: bold;">{{$localShop->name}}</h1>
+                        <div class="rateSec">
+                            <div class="more" style="margin-left: 10px;">امتیاز کاربران</div>
+                            <span class="ui_bubble_rating bubble_{{$localShop->fullRate}}0 placeRateStars font-size-16" property="ratingValue" content="{{$localShop->fullRate}}"></span>
+                        </div>
+                    </div>
+                    <div class="mainHeaderButts">
+                        <div class="bute fullyCenterContent emptyCameraIconAfter" onclick="addPictureToLocalShop()">
+                            <div class="text">گذاشتن عکس</div>
+                        </div>
+                        <div class="bute fullyCenterContent localShopPageBookMark {{$localShop->bookMark == 1 ? 'BookMarkIconAfter' : 'BookMarkIconEmptyAfter'}}">
+                            <div class="text">نشان کردن</div>
+                        </div>
+                        <div id="share_pic" class="bute fullyCenterContent emptyShareIconAfter">
+                            <div class="text">اشتراک گذاری</div>
+                        </div>
+                        @include('layouts.shareBox', ['urlInThisShareBox' => Request::url(), 'idToClick' => 'share_pic'])
+                    </div>
                 </div>
+                <div class="headerOneLine">
+                    <div class="address">
+                        <span class="locationIcon" style="color: var(--koochita-light-green); font-size: 22px; line-height: 9px;"></span>
+                        <span>آدرس : </span>
+                        <span>{{$localShop->address}}</span>
+                    </div>
+                    @if(isset($localShop->telephone) && count($localShop->telephone) > 0)
+                        <div class="phone">
+                            <span class="telephoneIcon"></span>
+                            @foreach($localShop->telephone as $telephone)
+                                <a href="tel:{{$telephone}}">{{$telephone}}</a>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($localShop->instagram != null)
+                        <div class="instagramSec">
+                            <i class="ic fa-brands fa-instagram" style="color: var(--koochita-light-green)"></i>
+                            <a href="https://www.instagram.com/{{$localShop->instagram}}" target="_blank">{{$localShop->instagram}}</a>
+                        </div>
+                    @endif
+                </div>
+            </div>
 
-                <div class="fullyCenterContent emptyCameraIconAfter" onclick="addPictureToLocalShop()">
-                    <div class="text">گذاشتن عکس</div>
-                </div>
-                <div class="fullyCenterContent localShopPageBookMark {{$localShop->bookMark == 1 ? 'BookMarkIconAfter' : 'BookMarkIconEmptyAfter'}}">
-                    <div class="text">نشان کردن</div>
-                </div>
-                <div id="share_pic" class="fullyCenterContent emptyShareIconAfter">
-                    <div class="text">اشتراک گذاری</div>
-                </div>
-                @include('layouts.shareBox', ['urlInThisShareBox' => Request::url(), 'idToClick' => 'share_pic'])
-            </div>
         </div>
     </div>
 
@@ -127,47 +191,69 @@
                 </div>
                 <div class="col-md-5">
                     <div class="bodySec infoSec">
-                        <div class="iWasHere flagIcon {{$localShop->iAmHere == 1 ? 'selected' : ''}}" onclick="imAmHereFunc(this)">من اینجا بودم</div>
-                        <div class="boldText">{{$localShop->name}}</div>
-                        <div class="normText">{{$localShop->address}}</div>
-                        <div class="phone telephoneIconAfter">
-                            @foreach($localShop->telephone as $telephone)
-                                <a href="tel:{{$telephone}}">{{$telephone}}</a>
-                            @endforeach
+                        <div style=" display: flex; justify-content: space-between; align-items: center;">
+                            <div class="boldText">{{$localShop->name}}</div>
+                            <div class="iWasHere {{$localShop->iAmHere == 1 ? 'selected' : ''}}" onclick="imAmHereFunc(this)">
+                                <i class="fa-solid fa-flag" style="font-size: 20px;"></i>
+                                <span>من اینجا بودم</span>
+                            </div>
                         </div>
+
+                        <div class="headerOneLine">
+                            <div class="address">
+                                <span class="locationIcon" style="color: var(--koochita-light-green); font-size: 22px; line-height: 9px;"></span>
+                                <span>آدرس : </span>
+                                <span>{{$localShop->address}}</span>
+                            </div>
+                            @if(isset($localShop->telephone) && count($localShop->telephone) > 0)
+                                <div class="phone">
+                                    <span class="telephoneIcon"></span>
+                                    @foreach($localShop->telephone as $telephone)
+                                        <a href="tel:{{$telephone}}">{{$telephone}}</a>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if($localShop->instagram != null)
+                                <div class="instagramSec">
+                                    <i class="ic fa-brands fa-instagram" style="color: var(--koochita-light-green)"></i>
+                                    <a href="https://www.instagram.com/{{$localShop->instagram}}" target="_blank">{{$localShop->instagram}}</a>
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="groupSec">
-                            <div class="boldText mr4bef clockIcon">ساعات کاری</div>
+                            <div class="boldText mr4bef clockIcon" style="font-weight: normal">ساعات کاری</div>
                             <div class="weekTime">
                                 @if($localShop->isBoarding == 0)
                                     <div>
-                                        <span>روزهای هفته:</span>
-                                        <span>
+                                        <span style="margin-left: 10px; font-size: 10px;">روزهای هفته:</span>
+                                        <span style="font-weight: bold;">
                                             {{$localShop->inWeekOpenTime == null ? '' : $localShop->inWeekOpenTime}}
                                             تا
                                             {{$localShop->inWeekCloseTime == null ? '' : $localShop->inWeekCloseTime}}
                                         </span>
                                     </div>
-                                    <div>
-                                        <span>قبل تعطیلی:</span>
-                                        @if($localShop->afterClosedDayIsOpen == 1)
-                                        <span>
-                                            {{$localShop->afterClosedDayOpenTime == null ? '' : $localShop->afterClosedDayOpenTime}}
-                                            تا
-                                            {{$localShop->afterClosedDayCloseTime == null ? '' : $localShop->afterClosedDayCloseTime}}
-                                        </span>
-                                        @else
-                                            <span class="closse">تعطیل</span>
-                                        @endif
-                                    </div>
+{{--                                    <div>--}}
+{{--                                        <span>قبل تعطیلی:</span>--}}
+{{--                                        @if($localShop->afterClosedDayIsOpen == 1)--}}
+{{--                                        <span>--}}
+{{--                                            {{$localShop->afterClosedDayOpenTime == null ? '' : $localShop->afterClosedDayOpenTime}}--}}
+{{--                                            تا--}}
+{{--                                            {{$localShop->afterClosedDayCloseTime == null ? '' : $localShop->afterClosedDayCloseTime}}--}}
+{{--                                        </span>--}}
+{{--                                        @else--}}
+{{--                                            <span class="closse">تعطیل</span>--}}
+{{--                                        @endif--}}
+{{--                                    </div>--}}
                                 @else
                                     <div>
-                                        <span style="color: green;">شبانه روزی</span>
+                                        <span style="color: var(--koochita-blue);">شبانه روزی</span>
                                     </div>
                                 @endif
                                 <div>
-                                    <span>روزهای تعطیل:</span>
+                                    <span style="margin-left: 10px; font-size: 10px;">روزهای تعطیل:</span>
                                     @if($localShop->closedDayIsOpen == 1)
-                                        <span>
+                                        <span style="font-weight: bold;">
                                             {{$localShop->closedDayOpenTime == null ? '' : $localShop->closedDayOpenTime}}
                                             تا
                                             {{$localShop->closedDayCloseTime == null ? '' : $localShop->closedDayCloseTime}}
@@ -175,6 +261,32 @@
                                     @else
                                         <span class="closse">تعطیل</span>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="koochitaTvSection">
+                            <a href="#" class="picSection koochitaTvLinkUrl">
+                                <img src="{{URL::asset('images/mainPics/koochitatvdefault.webp')}}" class="resizeImgClass koochitaTvPic" alt="koochitaTv" onload="fitThisImg(this)">
+                                <div class="playIconn">
+                                    <img src="{{URL::asset('images/icons/play.webp')}}" alt="playIcon">
+                                </div>
+                            </a>
+                            <div class="infoTvSec">
+                                <div class="tvLogo">
+                                    <img src="{{URL::asset('images/mainPics/vodLobo.webp')}}" alt="koochitaTvLogo" style="width: 100%">
+                                </div>
+                                <div class="textInfo">
+                                    <a href="#" target="_blank" class="title koochitaTvLinkUrl koochitaTvTitle"></a>
+                                    <div class="userInfo userInfoKoochitaTv" style="display: none">
+                                        <div class="userPic">
+                                            <img src="#" target="_blank" alt="koochita" class="resizeImgClass koochitaTvUserPic" onload="fitThisImg(this)">
+                                        </div>
+                                        <div class="userText">
+                                            <div class="username koochitaTvUserName">koochita</div>
+                                            <div class="time koochitaTvUserTime">3 روز پیش</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +351,12 @@
 {{--            </div>--}}
 
             <div id="stickyIndicator" class="row">
-                <div class="col-md-12">
+                <div class="col-md-3 hideOnTablet">
+                    <div class="bodySec leftStar" style="font-size: 17px;height: 40px;" onclick="openRateBoxForPlace()">
+                        به این فروشگاه امتیاز دهید
+                    </div>
+                </div>
+                <div class="col-md-6">
                     <div class="bodySec fastAccess">
                         <div class="tab doubleQuet selected" onclick="goToSection('description')">
                             <div class="text">توضیحات</div>
@@ -255,6 +372,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3 hideOnTablet">
+                    <div class="bodySec" style="height: 40px; display: flex; align-items: center;">
+                        <span style="margin-left: 10px; margin-right: 10px;">امتیاز کاربران</span>
+                        <div class="ratingStarsSection leftStar" onclick="openRateBoxForPlace()">
+                            <div class="fullStarRating star"></div>
+                            <div class="emptyStarRating star"></div>
+                            <div class="emptyStarRating star"></div>
+                            <div class="emptyStarRating star"></div>
+                            <div class="emptyStarRating star"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="row">
@@ -279,10 +409,10 @@
                                 @endforeach
                             </div>
 
-                            <div class="col-md-4 ratingSection">
+                            <div class="col-md-4 ratingSection showOnTablet">
                                 <h2 class="title">امتیاز کاربران</h2>
                                 <div class="ratingStarsSection" onclick="openRateBoxForPlace()">
-                                    <div class="emptyStarRating star"></div>
+                                    <div class="fullStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
                                     <div class="emptyStarRating star"></div>
@@ -443,6 +573,7 @@
         var getQuestionsUrl = '{{route("getQuestions")}}';
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
         var iAmHereLocalShopUrl = '{{route("localShop.addIAmHere")}}';
+        var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
 
         var localShop = {!! $localShop !!};
         var newReview = {

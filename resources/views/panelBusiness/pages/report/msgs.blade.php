@@ -90,20 +90,23 @@
         var isAdminUserInMsgs = '{{\Illuminate\Support\Facades\Auth::user()->level}}';
 
         $(document).ready(function () {
-
             $.ajax({
                 type: 'post',
                 url: '{{route('businessPanel.generalMsgs', ['business' => $id])}}',
                 success: res => createTabelMsgsRow(res.msgs)
             });
-
         });
 
         function createTabelMsgsRow(msgs){
             var newElem = "";
 
-
             for(var i = 0; i < msgs.length; i++) {
+                let elemIf = '';
+                if(isAdminUserInMsgs == "1" && msgs[i].close != "1")
+                    elemIf = `<button onclick='finishMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-warning'>مختومه کردن</button>`;
+                else if(isAdminUserInMsgs == "1" && msgs[i].close == "1")
+                    elemIf = `<button onclick='reOpenMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-primary'>باز کردن</button>`;
+
                 newElem += `<tr>
                                 <td>${(i + 1)}</td>
                                 <td>${msgs[i].subject}</td>
@@ -111,18 +114,13 @@
                                 <td>${msgs[i].update}</td>
                                 <td id='status_${msgs[i].id}'>${msgs[i].close == "1" ? "مختوم" : "باز"}</td>
                                 <td>
-                                    <a href='${businessSpecificMsgsUrl}/${msgs[i].id}' style='margin: 5px' class='btn btn-success'>مشاهده پیام ها</a>`;
-
-                if(isAdminUserInMsgs == "1" && msgs[i].close != "1")
-                    newElem += `<button onclick='finishMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-warning'>مختومه کردن</button>`;
-                else if(isAdminUserInMsgs == "1" && msgs[i].close == "1")
-                    newElem += `<button onclick='reOpenMsg(${msgs[i].id})' style='margin: 5px' class='btn btn-primary'>باز کردن</button>`;
-
-                newElem += `<button onclick='deleteTicket(${msgs[i].id})' style='margin: 5px' class='btn btn-danger circleButton'>
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                            </td>
-                        </tr>`;
+                                    <a href='${businessSpecificMsgsUrl}/${msgs[i].id}' style='margin: 5px' class='btn btn-success'>مشاهده پیام ها</a>
+                                    ${elemIf}
+                                    <button onclick='deleteTicket(${msgs[i].id})' style='margin: 5px' class='btn btn-danger circleButton'>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
             }
 
             $("#tbody").empty().append(newElem);
@@ -173,8 +171,9 @@
         }
 
         function addTicket() {
-            $("#newTicket").removeClass('hidden');
-            $("#table").addClass('hidden');
+
+            // $("#newTicket").removeClass('hidden');
+            // $("#table").addClass('hidden');
         }
 
         function cancelAddMsg() {

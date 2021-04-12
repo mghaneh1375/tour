@@ -20,13 +20,10 @@ class BusinessPanelTypeManager
     {
         $businessId = $request->route("business");
         $business = Business::find($businessId);
-        if($business == null || $business->userId != \auth()->user()->id)
+        if($business == null || $business->userId != \auth()->user()->id || $business->finalStatus == 0)
             return redirect(route("businessPanel.myBusinesses"));
 
-        $businessList = Business::where(['finalStatus' => 1, 'userId' => \auth()->user()->id])->select(['name', 'id'])->get();
-
-        View::share(['businessType' => $business->type, 'businessIdForUrl' => $business->id,
-                     'businessName' => $business->name, 'allOtherYourBusinessForHeader' => $businessList]);
+        View::share(['businessType' => $business->type, 'businessIdForUrl' => $business->id, 'businessName' => $business->name]);
 
         return $next($request);
     }

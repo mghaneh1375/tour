@@ -157,7 +157,6 @@
     </div>
 </div>
 
-
 @if(isset($kindPlace))
     <div class="container-fluid fluidPlacePath secHeadMain">
         <script type="application/ld+json">

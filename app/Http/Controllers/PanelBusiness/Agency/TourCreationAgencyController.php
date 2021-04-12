@@ -107,12 +107,18 @@ class TourCreationAgencyController extends Controller{
                 $newTour->userId = auth()->user()->id;
                 $newTour->businessId = $business->id;
 
-                $code = generateRandomString('10');
-                while(Tour::where('code', $code)->first() != null)
+                do
                     $code = generateRandomString('10');
+                while(Tour::where('code', $code)->first() != null);
 
                 $newTour->code = $code;
                 $newTour->isPublished = 0;
+
+                // tour-tourKind-agencyId-randomNumber
+                do
+                    $codeNumber = '1'.'-'.'3'.'-'.$business->id.'-'.rand(10000, 99999);
+                while(Tour::where('codeNumber', $code)->first() != null);
+                $newTour->codeNumber = $codeNumber;
             }
             else{
                 if($newTour->userId != auth()->user()->id)
@@ -317,6 +323,12 @@ class TourCreationAgencyController extends Controller{
             $tour->sideTransport = json_decode($tour->sideTransport);
             $tour->meals = json_decode($tour->meals);
 
+            if($tour->tourGuidKoochitaId != 0){
+                $tourGuid = User::find($tour->tourGuidKoochitaId);
+                if($tourGuid != null)
+                    $tour->koochitaUserUsername = $tourGuid->username;
+            }
+
             $view = "{$this->defaultViewLocation}.tour.create.createTour_stage_3";
             return view($view, compact(['tour', 'transport']));
         }
@@ -379,10 +391,25 @@ class TourCreationAgencyController extends Controller{
                 $tour->isLocalTourGuide = $data->isLocalTourGuide;
                 $tour->isSpecialTourGuid = $data->isSpecialTourGuid;
                 $tour->isTourGuidDefined = $data->isTourGuidDefined;
-                $tour->isTourGuideInKoochita = $data->isTourGuidInKoochita;
-                $tour->tourGuidKoochitaId = $data->koochitaUserId;
-                $tour->tourGuidName = $data->tourGuidName;
-                $tour->tourGuidSex = $data->tourGuidSex;
+
+                if($data->isTourGuidDefined == 1){
+                    $tour->isTourGuideInKoochita = $data->isTourGuidInKoochita;
+                    if($data->isTourGuidInKoochita == 1){
+                        $tour->tourGuidKoochitaId = $data->koochitaUserId;
+                        $tour->tourGuidName = null;
+                        $tour->tourGuidSex = 1;
+                    }
+                    else{
+                        $tour->tourGuidName = $data->tourGuidName;
+                        $tour->tourGuidSex = $data->tourGuidSex;
+                        $tour->tourGuidKoochitaId = 0;
+                    }
+                }
+                else {
+                    $tour->tourGuidKoochitaId = 0;
+                    $tour->tourGuidName = null;
+                    $tour->tourGuidSex = 1;
+                }
             }
             else{
                 $tour->isTourGuide = 0;

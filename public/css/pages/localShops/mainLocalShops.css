@@ -24,7 +24,7 @@ body{
     font-weight: normal !important;
 }
 .showHeader{
-    border-top: solid 1px lightgrey;
+    /*border-top: solid 1px lightgrey;*/
     padding-bottom: 5px;
     background: white;
 }
@@ -32,7 +32,6 @@ body{
 .mainHeaderButts{
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
 }
 .mainHeaderButts > div{
     cursor: pointer;
@@ -65,10 +64,18 @@ body{
     font-size: 2em;
     margin-right: 5px;
 }
-
+.showHeader .inff{
+    margin-left: 20px;
+}
 .showHeader .inff .address{
-    color: gray;
-    font-size: 12px;
+    color: #666;
+    font-size: 14px;
+    margin-left: 10px;
+    border-left: solid 1px;
+    padding-left: 10px;
+}
+.showHeader .mainHeaderButts{
+    position: relative;
 }
 .showHeader .mainHeaderButts .telephoneIcon{
     display: flex;
@@ -93,7 +100,9 @@ body{
 }
 .showBody .infoSec{
     padding: 10px;
-    height: 420px
+    height: 420px;
+    display: flex;
+    flex-direction: column;
 }
 .showBody .infoSec .boldText{
     font-size: 20px;
@@ -111,16 +120,20 @@ body{
 }
 .showBody .infoSec .groupSec .mr4bef:before{
     margin-left: 5px;
+    color: var(--koochita-light-green);
 }
 .showBody .infoSec .weekTime{
     padding: 0px 10px;
     margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
 }
 .showBody .infoSec .weekTime > div{
     display: flex;
+    align-items: center;
 }
 .showBody .infoSec .weekTime span{
-    width: 100px;
+    /*width: 100px;*/
 }
 .showBody .infoSec .weekTime span.closse{
     color: red;
@@ -219,6 +232,15 @@ body{
 }
 .fastAccess{
     display: flex;
+    justify-content: center;
+}
+.leftStar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 25px;
+    direction: ltr;
 }
 .fastAccess .tab{
     padding: 10px;
@@ -227,7 +249,7 @@ body{
     color: black;
     cursor: pointer;
     transition: .3s;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 100;
     text-align: center;
     display: flex;
@@ -254,19 +276,17 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    left: 5px;
-    top: 5px;
     border: solid 1px;
-    font-size: 8px;
+    font-size: 13px;
     padding: 2px 5px;
-    color: red;
+    color: #2b2b2b !important;
     transition: .3s;
     cursor: pointer;
+    border-color: #7a7a7a !important;
 }
 .iWasHere.selected{
     color: white;
-    background: red;
+    background: var(--koochita-yellow);
 }
 .infoSec .iWasHere:before{
     font-size: 13px;
@@ -824,7 +844,7 @@ body{
 @media (min-width: 767px) {
     .infoSec .iWasHere:hover{
         color: white;
-        background: red;
+        background: var(--koochita-yellow);
     }
 }
 
@@ -926,5 +946,39 @@ body{
 
     .showHeader .mainHeaderButts .telephoneIcon {
         font-size: 14px;
+    }
+
+    .showHeader .mainHeaderButts{
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        display: flex;
+        flex-direction: column;
+    }
+    .showHeader .mainHeaderButts .localShopPageBookMark{
+        margin: 5px 0px;
+        border: none;
+    }
+    .showHeader .mainHeaderButts .bute{
+        margin: 0px !important;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10px !important;
+        border-radius: 50%;
+        font-size: 10px;
+        box-shadow: 0px 0px 4px 1px #00000096;
+        margin-top: 10px !important;
+    }
+    .showHeader .mainHeaderButts .bute .text{
+        display: none;
+    }
+    .mainHeaderButts .localShopPageBookMark:after, .emptyCameraIconAfter:after{
+        margin-right: 0px;
+    }
+    .mainHeaderButts .emptyShareIconAfter:after{
+        margin: 0px;
     }
 }

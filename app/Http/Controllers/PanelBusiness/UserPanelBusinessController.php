@@ -5,12 +5,14 @@ namespace App\Http\Controllers\PanelBusiness;
 use App\Http\Controllers\Controller;
 use App\models\ActivationCode;
 use App\models\Business\Business;
+use App\models\Business\BusinessACL;
 use App\models\Business\BusinessMadarek;
 use App\models\Business\BusinessPic;
 use App\models\Cities;
 use App\models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserPanelBusinessController extends Controller {
@@ -333,16 +335,28 @@ class UserPanelBusinessController extends Controller {
 
     public function delete(Business $business) {
 
-        if($business->readyForCheck)
-            return response()->json([
-                "status" => -1
-            ]);
+        if($business->finalStatus == 1 || $business->readyForCheck == 1)
+            return response()->json(["status" => "notAccess"]);
+        else {
+            BusinessACL::where('businessId', $business->id)->delete();
+            $madarek = BusinessMadarek::where('businessId', $business->id)->get();
+            $pics = BusinessPic::where('businessId', $business->id)->get();
 
-        User::destroy($business->assignUserId);
+            foreach($madarek as $mad){
+                if(is_file("{$this->storagePublic}/{$mad->pic1}")) unlink("{$this->storagePublic}/{$mad->pic1}");
+                if(is_file("{$this->storagePublic}/{$mad->pic2}")) unlink("{$this->storagePublic}/{$mad->pic2}");
+                $mad->delete();
+            }
+            foreach($pics as $pic){
+                if(is_file("{$this->storagePublic}/{$pic->pic}")) unlink("{$this->storagePublic}/{$pic->pic}");
+                $pic->delete();
+            }
 
-        return response()->json([
-            "status" => "0"
-        ]);
+            User::destroy($business->assignUserId);
+            $business->delete();
+            return response()->json(["status" => "ok"]);
+        }
+
     }
 
     public function updateBusinessInfo1(Request $request, Business $business) {

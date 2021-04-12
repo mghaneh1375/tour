@@ -20,6 +20,10 @@
     @endif
 
     @if(auth()->check())
+        <div class="ticketButton" title="پشتیبانی" onclick="openNewTicketModal()">
+            <i class="fa-solid fa-headset"></i>
+        </div>
+
         <div class="userInfoSec">
             <div class="userPic">
                 <img src="{{$userInfo->pic}}" class="resizeImgClass" alt="عکس کاربر" onload="fitThisImg(this)">

@@ -1990,6 +1990,7 @@ p {
     align-items: center;
     overflow: hidden;
     max-width: 150px;
+    height: 100px;
 }
 
 .postalLastRow{
@@ -2455,6 +2456,7 @@ p {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    border-radius: 50%;
 }
 .tourGuidAjansSection .tourGuidSection .infoSec{
     margin: 0px 25px;
@@ -2467,6 +2469,8 @@ p {
     font-size: 25px;
     color: #b41b17;
     margin-bottom: 13px;
+    width: 170px;
+    text-align: center;
 }
 .tourGuidAjansSection .tourGuidSection .button{
     transform: rotate(-90deg);
@@ -2532,7 +2536,8 @@ p {
     align-items: center;
 }
 .tourGuidAjansSection .ajansInfoSection .ajasLogo img{
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
 }
 .tourGuidAjansSection .ajansInfoSection .name{
     font-size: 20px;
@@ -2973,10 +2978,21 @@ p {
 }
 .tourGuidAjansSection .tourGuidSection{
     display: flex;
+    justify-content: space-around;
     border: solid 1px gray;
     padding: 10px;
     position: relative;
     width: 100%;
+}
+.tourGuidAjansSection .tourGuidSection .tourGuidInfo{
+    display: flex;
+    width: 40%;
+    align-items: center;
+}
+.tourGuidAjansSection .tourGuidSection .tourGuidInKoochita{
+    position: relative;
+    flex-direction: column;
+    display: flex;
 }
 
 

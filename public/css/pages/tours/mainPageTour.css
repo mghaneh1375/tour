@@ -386,7 +386,8 @@
 .mainSectionTourMainPage .listSection .list .tourSmallCard .agencyPic{
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 200px;
+    justify-content: flex-end;
+    max-width: 200px;
+    max-height: 100px;
     padding-left: 10px;
 }

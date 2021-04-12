@@ -13,73 +13,6 @@
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-
-{{--    <style>--}}
-{{--        @font-face {--}}
-{{--            font-family: 'IRANSansWeb';--}}
-{{--            font-style: normal;--}}
-{{--            font-weight: normal;--}}
-{{--            src: url('{{URL::asset("fonts/eot/IRANSansWeb(FaNum).eot")}}');--}}
-{{--            src: url('{{URL::asset("fonts/eot/IRANSansWeb(FaNum).eot?#iefix")}}') format('embedded-opentype'),  /* IE6-8 */--}}
-{{--            url('{{URL::asset("fonts/woff2/IRANSansWeb(FaNum).woff2")}}') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/--}}
-{{--            url('{{URL::asset("fonts/woff/IRANSansWeb(FaNum).woff")}}') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/--}}
-{{--            url('{{URL::asset("fonts/ttf/IRANSansWeb(FaNum).ttf")}}') format('truetype');--}}
-{{--        }--}}
-
-{{--        @font-face {--}}
-{{--            font-weight: normal;--}}
-{{--            font-style: normal;--}}
-{{--            font-family: 'Shazde_Regular2';--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.eot")}}');--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.eot")}}') format('embedded-opentype'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.woff2")}}') format('woff2'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.woff")}}') format('woff'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.ttf")}}') format('truetype'),--}}
-{{--        }--}}
-
-{{--        @font-face {--}}
-{{--            font-weight: normal;--}}
-{{--            font-style: normal;--}}
-{{--            font-family: 'Shazde_Regular';--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer_Regular.eot")}}');--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer_Regular.eot")}}') format('embedded-opentype'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer_Regular.woff2")}}') format('woff2'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer_Regular.woff")}}') format('woff'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer_Regular.ttf")}}') format('truetype'),--}}
-{{--        }--}}
-{{--        @font-face {--}}
-{{--            font-weight: normal;--}}
-{{--            font-style: normal;--}}
-{{--            font-family: 'shazdemosafer-tour';--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer-tour.otf")}}');--}}
-{{--            src: url('{{URL::asset("fonts/shazdemosafer-tour.otf")}}') format('embedded-opentype'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer-tour.woff2")}}') format('woff2'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer-tour.woff")}}') format('woff'),--}}
-{{--            url('{{URL::asset("fonts/shazdemosafer/Shazdemosafer.ttf")}}') format('truetype');--}}
-{{--        }--}}
-
-{{--        @font-face {--}}
-{{--            font-weight: normal;--}}
-{{--            font-style: normal;--}}
-{{--            font-family: 'Glyphicons Halflings';--}}
-{{--            src: url('{{URL::asset("fonts/glyphicons-halflings-regular.eot")}}');--}}
-{{--            src: url('{{URL::asset("fonts/glyphicons-halflings-regular.eot")}}') format('embedded-opentype'),--}}
-{{--            url('{{URL::asset("fonts/glyphicons-halflings-regular.woff2?v003.200")}}') format('woff2'),--}}
-{{--            url('{{URL::asset("fonts/glyphicons-halflings-regular.woff?v003.200")}}') format('woff'),--}}
-{{--            url('{{URL::asset("fonts/glyphicons-halflings-regular.ttf?v003.200")}}') format('truetype');--}}
-{{--        }--}}
-
-{{--        @font-face {--}}
-{{--            font-family: Shin;--}}
-{{--            src: url('{{URL::asset("fonts/shin.ttf")}}');--}}
-{{--        }--}}
-
-{{--        @font-face {--}}
-{{--            font-family: Afsane;--}}
-{{--            src: url('{{URL::asset("fonts/AFSANEH.ttf")}}');--}}
-{{--        }--}}
-{{--    </style>--}}
-
     <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/fonts.css?v='.$fileVersions)}}">
 
     <link rel="icon" href="{{URL::asset('images/icons/KOFAV0.svg')}}" sizes="any" type="image/svg+xml">
@@ -117,6 +50,7 @@
 </head>
 <body>
     @include('panelBusiness.layout.businessPanelGeneral')
+    @include('panelBusiness.component.createTicket')
 
     @include('panelBusiness.layout.header')
 
@@ -132,5 +66,6 @@
     @yield('modals')
 
     @yield('script')
+
 </body>
 </html>

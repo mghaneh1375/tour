@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 class LogController extends Controller
 {
 
+
+
     public function storeUserSeenLog(Request $request)
     {
         if(isset($request->seenPageLogId) && $request->seenPageLogId != 0){

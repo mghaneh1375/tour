@@ -3,7 +3,6 @@ var isTransport = 1;
 var multiIsOpen = false;
 var chooseSideTransport = [];
 var language = [
-    'فارسی',
     'انگلیسی',
     'عربی',
     'ترکی',

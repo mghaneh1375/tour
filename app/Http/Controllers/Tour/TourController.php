@@ -50,10 +50,11 @@ class TourController extends Controller{
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
                 ->join('cities', 'cities.id', 'tour.srcId')
                 ->join('state', 'state.id', 'cities.stateId')
+                ->join('business', 'business.id', 'tour.businessId')
                 ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 1])
                 ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
                     'tourTimes.sDate', 'tourTimes.id AS timeId',
-                    'tourPics.pic',
+                    'tourPics.pic', 'business.name AS agencyName', 'business.logo AS agencyLogo',
                     'cities.id AS cityId', 'cities.name AS cityName',
                     'state.name AS stateName'])
                 ->orderBy('tourTimes.sDate')
@@ -80,10 +81,11 @@ class TourController extends Controller{
                 ->join('tourPics', 'tourPics.tourId', 'tour.id')
                 ->join('cities', 'cities.id', 'tour.srcId')
                 ->join('state', 'state.id', 'cities.stateId')
+                ->join('business', 'business.id', 'tour.businessId')
                 ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 0])
                 ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
                     'tourTimes.sDate',
-                    'tourPics.pic',
+                    'tourPics.pic', 'business.name AS agencyName', 'business.logo AS agencyLogo',
                     'cities.id AS cityId', 'cities.name AS cityName',
                     'state.name AS stateName'])
                 ->orderBy('tourTimes.sDate')
@@ -117,8 +119,9 @@ class TourController extends Controller{
             $tour->pic = URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
             $tour->url = route('tour.show', ['code' => $tour->code]);
             $tour->minCost = number_format($tour->minCost);
-        }
 
+            $tour->agencyPic = URL::asset("storage/{$tour->agencyLogo}");
+        }
 
         return response()->json(['status' => 'ok', 'result' => ['tour' => $tours, 'destinations' => $destinations]]);
 
@@ -127,10 +130,15 @@ class TourController extends Controller{
     public function showTour($code){
         $this->defaultActions();
 
-        $tour = Tour::where('code', $code)->first();
+        $tour = Tour::join('business', 'business.id', 'tour.businessId')
+                    ->where('tour.code', $code)
+                    ->select(['tour.*', 'business.name AS agencyName', 'business.logo AS agencyLogo', 'business.tel AS agencyPhone'])
+                    ->first();
 
         if($tour == null)
             abort(404);
+
+        $tour->agencyLogo = URL::asset("storage/{$tour->agencyLogo}");
 
         if($tour->isPublish === 0 || $tour->confirm === 0){
             $you = auth()->check() ? auth()->user() : null;
@@ -157,6 +165,30 @@ class TourController extends Controller{
             $pic->pic = $pic->getPicUrl();
             $pic->userPic = $ownerPic;
         }
+
+        $guid = ['pic' => '', 'name' => '', 'koochita' => false, 'has' => false];
+        if($tour->isTourGuidDefined == 1) {
+            $guid['has'] = true;
+            if ($tour->tourGuidKoochitaId == 0) {
+                $guid['pic'] = getUserPic(0);
+                $guid['name'] = $tour->tourGuidName;
+            }
+            else{
+                $tourGuid = User::find($tour->tourGuidKoochitaId);
+                if ($tourGuid != null) {
+                    $guid['koochita'] = true;
+                    $guid['pic'] = getUserPic($tourGuid->id);
+                    $guid['name'] = $tourGuid->username;
+                }
+            }
+        }
+
+        $tour->guid = (object)$guid;
+
+        if($tour->backupPhone != null)
+            $tour->backupPhone = explode('-', $tour->backupPhone);
+        else
+            $tour->backupPhone = [$tour->agencyPhone];
 
         return view('pages.tour.tour-details', compact(['tour']));
     }

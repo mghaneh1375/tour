@@ -56,6 +56,7 @@ var storeData = {
     isTourGuidDefined: tour.isTourGuidDefined,
     isTourGuidInKoochita: tour.isTourGuideInKoochita,
     koochitaUserId: tour.tourGuidKoochitaId,
+    koochitaUserUsername: tour.koochitaUserUsername,
     tourGuidName: tour.tourGuidName,
     tourGuidSex: tour.tourGuidSex,
 

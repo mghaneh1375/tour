@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LocalShop;
 use App\Http\Requests\StoreLocalShopInfos;
 use App\models\Activity;
 use App\models\BookMark;
+use App\models\Cities;
 use App\models\localShops\LocalShopFeatures;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
@@ -64,8 +65,17 @@ class LocalShopController extends Controller
                             ->select(['local_shop_features.*'])
                             ->get();
         }
+        $stateAndCity = Cities::join('state', 'state.id', 'cities.stateId')->where('cities.id', $localShop->cityId)
+                            ->select(['cities.id AS cityId', 'state.id AS stateId', 'state.name AS stateName', 'cities.name AS cityName', 'state.isCountry AS isCountry'])->first();
 
-        return view('pages.localShops.showLocalShops', compact(['localShop', 'codeForReview']));
+        $locationName = ['name' => $localShop->name, 'state' => $stateAndCity->stateName, 'stateNameUrl' => $stateAndCity->stateName,
+                        'stateIsCountry' => $stateAndCity->isCountry, 'articleUrl' => '#',
+                        'cityName' => $stateAndCity->cityName, 'cityNameUrl' => $stateAndCity->cityName,
+                        'kindState' => 'city', 'kindPage' => 'place'];
+
+        $localShop->category = LocalShopsCategory::find($localShop->categoryId);
+
+        return view('pages.localShops.showLocalShops', compact(['localShop', 'codeForReview', 'locationName']));
     }
 
     public function getFeatures(){

@@ -37,10 +37,10 @@
                 </div>
             @endif
             <div id="lastItemOfSideMenu" class="sideNavRow showInBottom">
-                    <a href="{{route("businessPanel.myBusinesses")}}" class="sideNavHeader hasBody">
-                        <span>بازگشت به مدیریت کسب و کار</span>
-                    </a>
-                </div>
+                <a href="{{route("businessPanel.myBusinesses")}}" class="sideNavHeader hasBody">
+                    <span>بازگشت به مدیریت کسب و کار</span>
+                </a>
+            </div>
         @else
             <div class="sideNavRow">
                 <div class="sideNavHeader hasBody">

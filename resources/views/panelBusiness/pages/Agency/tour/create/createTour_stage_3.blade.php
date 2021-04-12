@@ -93,7 +93,7 @@
                                     <div class="inputBoxText">
                                         <div class="importantFieldLabel">محل شروع</div>
                                     </div>
-                                    <input id="sAddress" class="inputBoxInput" type="text" placeholder="آدرس سوار شدن مساقران">
+                                    <input id="sAddress" class="inputBoxInput" type="text" placeholder="آدرس سوار شدن مسافران">
                                 </div>
                                 <button type="button" class="transportationMapPinningTourCreation col-md-2" onclick="changeCenter('src')">نشانه‌گذاری بر روی نقشه</button>
                                 <input type="hidden" id="sLat" value="0">
@@ -531,8 +531,8 @@
                                 <div class="inputBoxText">
                                     <div class="importantFieldLabel">نام کاربری</div>
                                 </div>
-                                <input id="tourGuidKoochitaUsername" class="inputBoxInput" type="text" onclick="openSearchKoochitaAccount()" readonly>
-                                <input type="hidden" id="tourGuidUserId" value="0">
+                                <input id="tourGuidKoochitaUsername" class="inputBoxInput" type="text" onclick="openSearchKoochitaAccount()" value="{{$tour->koochitaUserName ?? ''}}" readonly>
+                                <input type="hidden" id="tourGuidUserId" value="{{$tour->tourGuidKoochitaId}}">
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\BusinessPanel;
 
+use App\models\Business\Business;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -21,7 +22,10 @@ class BusinessPanelShareData
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);
-            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo]);
+            $businessList = Business::where('userId', $userInfo->id)->select(['name', 'id'])->get();
+
+            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo, 'allOtherYourBusinessForHeader' => $businessList]);
+
 
             if (!$request->is('completeUserInfo') && ($userInfo->first_name == null || $userInfo->last_name == null || $userInfo->phone == null || $userInfo->birthday == null))
                 return redirect(route('businessPanel.completeUserInfo'));

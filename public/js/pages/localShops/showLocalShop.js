@@ -283,7 +283,7 @@ function submitRating(){
 }
 
 function updatePlaceRating(_avg, _separate = []){
-    var elements = $('.ratingSection').find('.star');
+    var elements = $('.ratingStarsSection').find('.star');
     var elementsModal = $('.userRateToPlaceModal').find('.starIcons');
     for(var i = 0; i < elements.length; i++){
         if(i < _avg){
@@ -324,10 +324,39 @@ function imAmHereFunc(_element){
     })
 }
 
+function getVideoFromKoochitaTv(){
+    var setDefaultData = () =>{
+        document.querySelector('.koochitaTvTitle').innerText = 'کوچیتا تی وی ، پلتفرم ویدیو ';
+        [...document.querySelectorAll('.koochitaTvPic')].map(item => 'https://koochitatv.com');
+    };
+
+    $.ajax({
+        type: 'GET',
+        url: `${koochitaTvUrl}?id=${placeId}&kindPlaceId=13`,
+        success: response => {
+            if(response.status == 'ok'){
+                var result = response.result;
+                document.querySelector('.userInfoKoochitaTv').style.display = 'flex';
+
+                document.querySelector('.koochitaTvPic').src = result.pic;
+                document.querySelector('.koochitaTvTitle').innerText = result.title;
+                document.querySelector('.koochitaTvUserTime').innerText = result.time;
+                document.querySelector('.koochitaTvUserName').innerText = result.username;
+                document.querySelector('.koochitaTvUserPic').src = result.userPic;
+                [...document.querySelectorAll('.koochitaTvPic')].map(item => item.setAttribute('href', result.url));
+            }
+            else
+                setDefaultData()
+        },
+        error: setDefaultData
+    })
+}
+
 
 $('.localShopPageBookMark').on('click', bookMarkThisLocalShop);
 
 $(window).ready(() => {
+    getVideoFromKoochitaTv();
     initMap();
     autosize($('.autoResizeTextArea'));
     getLocalShopReviews();

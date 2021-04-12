@@ -100,16 +100,29 @@ input[type="checkbox"], input[type="radio"]{
     top: 0;
     border-bottom: solid 1px var(--lightBordreGray);
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 0 20px;
 }
 .mainHeader .mainLogo{
     height: 75%;
     width: auto;
+    margin-left: auto;
 }
 .mainHeader .mainLogo img{
     height: 100%;
+}
+.mainHeader .ticketButton{
+    margin-left: 20px;
+    font-size: 22px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #3e3e3e;
+    background: #d3d3d378;
 }
 
 .mainHeader .businessName{
@@ -122,6 +135,7 @@ input[type="checkbox"], input[type="radio"]{
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin: 0px auto;
 }
 .mainHeader .businessName select{
     background: none;
