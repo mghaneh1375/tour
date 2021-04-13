@@ -211,8 +211,8 @@ class AuthPanelBusinessController extends Controller
             //Insert your cient ID and sexcret
             //You can get it from : https://console.developers.google.com/
             $client_id = config('app.GOOGLE_CLIENT_ID');
-            $client_secret = '8NM4weptz-Pz-6gbolI5J0yi';
-//            $client_secret = config('app.GOOGLE_CLIENT_SECRET');
+//            $client_secret = '8NM4weptz-Pz-6gbolI5J0yi';
+            $client_secret = config('app.GOOGLE_CLIENT_SECRET2');
             $redirect_uri = route('loginWithGoogle');
             $redirect_uri = str_replace('http://', 'https://', $redirect_uri);
 

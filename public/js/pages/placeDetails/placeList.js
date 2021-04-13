@@ -1,4 +1,5 @@
 var specialFilters = [];
+var categoryFilter = 0;
 var categoryFilterCancelCallBack = 0;
 var page = 1;
 var floor = 1;
