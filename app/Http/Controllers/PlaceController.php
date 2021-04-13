@@ -2709,7 +2709,10 @@ class PlaceController extends Controller {
                 else
                     $picNm = $place->picNumber;
 
-                $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $server);
+                if($picNm != null && $picNm != '')
+                    $place->pic = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/l-{$picNm}", null, $server);
+                else
+                    $place->pic = URL::asset("images/mainPics/noPicSite.jpg");
             }
             $place->reviews = $place->reviewCount;
 

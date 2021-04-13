@@ -164,7 +164,7 @@
             nameFa: 'فروشگاه'
         },
         drinks: {
-            icon: 'fas fa-wine-glass-alt',
+            icon: 'fa-solid fa-mug-hot',
             nameFa: 'نوشیدنی',
             isAwesome: true,
         },

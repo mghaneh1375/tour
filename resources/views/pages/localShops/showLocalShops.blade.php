@@ -376,11 +376,11 @@
                     <div class="bodySec" style="height: 40px; display: flex; align-items: center;">
                         <span style="margin-left: 10px; margin-right: 10px;">امتیاز کاربران</span>
                         <div class="ratingStarsSection leftStar" onclick="openRateBoxForPlace()">
-                            <div class="fullStarRating star"></div>
-                            <div class="emptyStarRating star"></div>
-                            <div class="emptyStarRating star"></div>
-                            <div class="emptyStarRating star"></div>
-                            <div class="emptyStarRating star"></div>
+                            <div class="fullStarRating star star1"></div>
+                            <div class="emptyStarRating star star2"></div>
+                            <div class="emptyStarRating star star3"></div>
+                            <div class="emptyStarRating star star4"></div>
+                            <div class="emptyStarRating star star5"></div>
                         </div>
                     </div>
                 </div>
@@ -412,11 +412,11 @@
                             <div class="col-md-4 ratingSection showOnTablet">
                                 <h2 class="title">امتیاز کاربران</h2>
                                 <div class="ratingStarsSection" onclick="openRateBoxForPlace()">
-                                    <div class="fullStarRating star"></div>
-                                    <div class="emptyStarRating star"></div>
-                                    <div class="emptyStarRating star"></div>
-                                    <div class="emptyStarRating star"></div>
-                                    <div class="emptyStarRating star"></div>
+                                    <div class="fullStarRating star star1"></div>
+                                    <div class="emptyStarRating star star2"></div>
+                                    <div class="emptyStarRating star star3"></div>
+                                    <div class="emptyStarRating star star4"></div>
+                                    <div class="emptyStarRating star star5"></div>
                                 </div>
                             </div>
                         </div>

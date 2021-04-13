@@ -283,15 +283,14 @@ function submitRating(){
 }
 
 function updatePlaceRating(_avg, _separate = []){
-    var elements = $('.ratingStarsSection').find('.star');
     var elementsModal = $('.userRateToPlaceModal').find('.starIcons');
-    for(var i = 0; i < elements.length; i++){
+    for(var i = 0; i < 5; i++){
         if(i < _avg){
-            $(elements[i]).removeClass('emptyStarRating').addClass('fullStarRating');
+            $(`.star${i+1}`).removeClass('emptyStarRating').addClass('fullStarRating');
             $(elementsModal[i]).removeClass('emptyStarRating').addClass('fullStarRating');
         }
         else{
-            $(elements[i]).addClass('emptyStarRating').removeClass('fullStarRating');
+            $(`.star${i+1}`).addClass('emptyStarRating').removeClass('fullStarRating');
             $(elementsModal[i]).addClass('emptyStarRating').removeClass('fullStarRating');
         }
     }

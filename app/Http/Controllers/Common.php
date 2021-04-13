@@ -844,6 +844,7 @@ function getUserPic($id = 0){
 }
 
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
+    $defaultPic = URL::asset("images/mainPics/noPicSite.jpg");
     if($placeId != 0) {
         $server = 1;
         $kindPlace = Place::find($kindPlaceId);
@@ -864,16 +865,26 @@ function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
         if ($place != null && $place->file != 'none' && $place->file != null) {
             if (is_array($kind)) {
                 $pics = [];
-                foreach ($kind as $k)
-                    array_push($pics, URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server));
+                foreach ($kind as $k) {
+                    $pi = $defaultPic;
+                    if($pic != null && $pic != '')
+                        $pi = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server);
+
+                    array_push($pics, $pi);
+                }
                 return $pics;
-            } else
-                return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+            }
+            else{
+                if($pic == null || $pic == '')
+                    return $defaultPic;
+                else
+                    return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+            }
         }
 
     }
 
-    return URL::asset("images/mainPics/noPicSite.jpg");
+    return $defaultPic;
 }
 
 

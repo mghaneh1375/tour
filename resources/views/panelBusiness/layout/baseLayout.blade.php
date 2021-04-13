@@ -50,7 +50,10 @@
 </head>
 <body>
     @include('panelBusiness.layout.businessPanelGeneral')
-    @include('panelBusiness.component.createTicket')
+
+    @if(auth()->check())
+        @include('panelBusiness.component.createTicket')
+    @endif
 
     @include('panelBusiness.layout.header')
 

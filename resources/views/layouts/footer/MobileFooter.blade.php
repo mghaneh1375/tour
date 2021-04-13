@@ -361,7 +361,7 @@
                                 غذاهای محلی {{$locationName['cityNameUrl']}}
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 14, 'mode' => 'country'])}}" class="pSC_cityDetails">
-                                <i class="fas fa-wine-glass-alt fontAwesomIconMFooter"></i>
+                                <i class="fa-solid fa-mug-hot fontAwesomIconMFooter"></i>
                                 نوشیدنی ها
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 10, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}"
@@ -373,7 +373,7 @@
                                 طبیعت گردی ‌های {{$locationName['cityNameUrl']}}
                             </a>
                             <a href="#" class="pSC_cityDetails">
-                                <i class=" fas fa-mug-hot fontAwesomIconMFooter"></i>
+                                <i class="fa-solid fa-cup-togo fontAwesomIconMFooter"></i>
                                 کافه های {{$locationName['cityNameUrl']}}
                             </a>
                             <a href="{{route('place.list', ['kindPlaceId' => 13, 'mode' => $locationName['kindState'], 'city' => $locationName['cityNameUrl']  ])}}" class="pSC_cityDetails fullWalletIcon"> فروشگاه های {{$locationName['cityNameUrl']}}</a>

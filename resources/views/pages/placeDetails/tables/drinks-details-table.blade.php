@@ -60,6 +60,17 @@
 
     <div class="col-md-8 brlMH">
         <div id="drinkRecipes" class="row wm0">
+            <div class="col-md-12 brrMH">
+                <div class="tabContent">
+                    <div class="block_header">
+                        <div class="titlesPlaceDetail">
+                            <h3 class="block_title">توضیحات</h3>
+                        </div>
+                    </div>
+
+                    <div id="introductionText" class="row wm0"> {!! $place->description !!} </div>
+                </div>
+            </div>
             <div class="col-md-6 brrMH">
                 <div class="tabContent">
                     <div class="block_header">

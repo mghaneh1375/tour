@@ -33,12 +33,11 @@ class BusinessPanelShareData
             return $next($request);
         }
         else{
-            return redirect(route("businessPanel.loginPage"));
             $userInfo = [];
+            return redirect(route("businessPanel.loginPage"));
         }
 
         View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo]);
         return $next($request);
-
     }
 }
