@@ -20,9 +20,12 @@
     @endif
 
     @if(auth()->check())
-        <div class="ticketButton" title="پشتیبانی" onclick="openNewTicketModal()">
+        <a href="{{route('ticket.page')}}" class="ticketButton" title="پشتیبانی">
             <i class="fa-solid fa-headset"></i>
-        </div>
+            @if($newTicketCount != 0)
+                <div class="newNum">{{$newTicketCount}}</div>
+            @endif
+        </a>
 
         <div class="userInfoSec">
             <div class="userPic">

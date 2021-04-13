@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\BusinessPanel;
 
 use App\models\Business\Business;
+use App\models\Ticket;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -24,8 +25,8 @@ class BusinessPanelShareData
             $userInfo->pic = getUserPic($userInfo->id);
             $businessList = Business::where('userId', $userInfo->id)->select(['name', 'id'])->get();
 
-            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo, 'allOtherYourBusinessForHeader' => $businessList]);
-
+            $newTicketCount = Ticket::where('userId', $userInfo->id)->where('seen', 0)->count();
+            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo, 'allOtherYourBusinessForHeader' => $businessList, 'newTicketCount' => $newTicketCount]);
 
             if (!$request->is('completeUserInfo') && ($userInfo->first_name == null || $userInfo->last_name == null || $userInfo->phone == null || $userInfo->birthday == null))
                 return redirect(route('businessPanel.completeUserInfo'));

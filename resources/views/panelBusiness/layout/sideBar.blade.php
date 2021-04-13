@@ -21,39 +21,41 @@
                     <a href="{{route('businessPanel.getUnChecked')}}" class="sideNavItem">درخواست های تعیین تکلیف نشده</a>
                 </div>
             </div>
-        @endif
+        @else
+            @if(isset($businessType))
+                @if($businessType === 'agency')
+                    <div class="sideNavRow">
+                        <div class="sideNavHeader hasBody">
+                            <span>مدیریت تورها</span>
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                        <div class="sideNavBody">
+                            <a href="{{route('businessManagement.tour.list', ['business' => $businessIdForUrl])}}" class="sideNavItem">لیست تورها</a>
+                            <a href="{{route('businessManagement.tour.create', ['business' => $businessIdForUrl])}}" class="sideNavItem">ایجاد تور جدید</a>
+                        </div>
+                    </div>
+                @endif
+                <div id="lastItemOfSideMenu" class="sideNavRow showInBottom">
+                    <a href="{{route("businessPanel.myBusinesses")}}" class="sideNavHeader hasBody">
+                        <span>بازگشت به مدیریت کسب و کار</span>
+                    </a>
+                </div>
 
-        @if(isset($businessType))
-            @if($businessType === 'agency')
+                @else
                 <div class="sideNavRow">
                     <div class="sideNavHeader hasBody">
-                        <span>مدیریت تورها</span>
+                        <span>کسب و کار</span>
                         <i class="fas fa-angle-down"></i>
                     </div>
                     <div class="sideNavBody">
-                        <a href="{{route('businessManagement.tour.list', ['business' => $businessIdForUrl])}}" class="sideNavItem">لیست تورها</a>
-                        <a href="{{route('businessManagement.tour.create', ['business' => $businessIdForUrl])}}" class="sideNavItem">ایجاد تور جدید</a>
+                        <a href="{{route('businessPanel.create')}}" class="sideNavItem">ایجاد کسب و کار جدید</a>
+                        <a href="{{route('businessPanel.myBusinesses')}}" class="sideNavItem">کسب و کارهای من</a>
+                        <a href="{{route('businessPanel.completeUserInfo')}}" class="sideNavItem">تغییر اطلاعات فردی</a>
                     </div>
                 </div>
             @endif
-            <div id="lastItemOfSideMenu" class="sideNavRow showInBottom">
-                <a href="{{route("businessPanel.myBusinesses")}}" class="sideNavHeader hasBody">
-                    <span>بازگشت به مدیریت کسب و کار</span>
-                </a>
-            </div>
-        @else
-            <div class="sideNavRow">
-                <div class="sideNavHeader hasBody">
-                    <span>کسب و کار</span>
-                    <i class="fas fa-angle-down"></i>
-                </div>
-                <div class="sideNavBody">
-                    <a href="{{route('businessPanel.create')}}" class="sideNavItem">ایجاد کسب و کار جدید</a>
-                    <a href="{{route('businessPanel.myBusinesses')}}" class="sideNavItem">کسب و کارهای من</a>
-                    <a href="{{route('businessPanel.completeUserInfo')}}" class="sideNavItem">تغییر اطلاعات فردی</a>
-                </div>
-            </div>
         @endif
+
 
     </div>
 </div>

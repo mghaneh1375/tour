@@ -20,6 +20,7 @@
         padding: 5px 10px;
         border-radius: 6px;
         border: solid 1px lightgrey;
+        border: solid 1px var(--koochita-green);
     }
     .drinkTableSection .overviewHistogram{
         width: 100% !important;
@@ -51,6 +52,24 @@
 <div id="generalDescriptionMobile" class="row reviewsAndDetails generalDescription drinkTableSection">
 
     <div class="col-md-4 hideOnTablet">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tabContent">
+                    <div class="block_header">
+                        <div class="titlesPlaceDetail">
+                            <h3 class="block_title">مناسب برای</h3>
+                        </div>
+                    </div>
+                    <div class="fitFor">
+                        @foreach($place->goodFor as $goodFor)
+                            <div class="contentSection">{{$goodFor}}</div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="tabContent">
             <div class="rateOfPlaceMiddleContent">
                 @include('pages.placeDetails.component.PlaceDetailRateSection')
@@ -111,22 +130,22 @@
             </div>
         </div>
 
-        <div class="row wm0 hideOnPhone">
-            <div class="col-md-12">
-                <div class="tabContent">
-                    <div class="block_header">
-                        <div class="titlesPlaceDetail">
-                            <h3 class="block_title">مناسب برای</h3>
-                        </div>
-                    </div>
-                    <div class="fitFor">
-                        @foreach($place->goodFor as $goodFor)
-                            <div class="contentSection">{{$goodFor}}</div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--        <div class="row wm0 hideOnPhone">--}}
+{{--            <div class="col-md-12">--}}
+{{--                <div class="tabContent">--}}
+{{--                    <div class="block_header">--}}
+{{--                        <div class="titlesPlaceDetail">--}}
+{{--                            <h3 class="block_title">مناسب برای</h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="fitFor">--}}
+{{--                        @foreach($place->goodFor as $goodFor)--}}
+{{--                            <div class="contentSection">{{$goodFor}}</div>--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
     </div>
 
 

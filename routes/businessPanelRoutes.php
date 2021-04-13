@@ -24,7 +24,13 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 
 Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
+    // Ticket Routes
     Route::group(['middleware' => ['web']], function(){
+
+        Route::get('ticket/show', [TicketController::class, 'ticketPage'])->name('ticket.page')->middleware(['BusinessPanelShareData']);
+
+        Route::get('ticket/user/get/{parentId}', [TicketController::class, 'ticketGetUser'])->name('ticket.user.get');
+        Route::post('ticket/store', [TicketController::class, 'storeTicket'])->name('ticket.store');
 
         Route::group(['middleware' => ['ticketAccess']], function () {
             Route::middleware(['BusinessPanelShareData'])->group(function (){

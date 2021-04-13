@@ -20,6 +20,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\Adapter\Local;
 
 class LocalShopController extends Controller
@@ -76,6 +77,93 @@ class LocalShopController extends Controller
         $localShop->category = LocalShopsCategory::find($localShop->categoryId);
 
         return view('pages.localShops.showLocalShops', compact(['localShop', 'codeForReview', 'locationName']));
+    }
+
+    public function getNears($id)
+    {
+        $cities = [];
+        $localShop = LocalShops::find($id);
+        if($localShop != null){
+
+
+            $mainLat = $localShop->lat;
+            $mainLng = $localShop->lng;
+
+            $lat = (float)$mainLat * 3.14 / 180;
+            $lng = (float)$mainLng * 3.14 / 180;
+            $radius = 2;
+
+            $places = [];
+            $kindPlaces = Place::whereIn('id', [1, 3, 4, 6, 12, 13])->get();
+
+            foreach ($kindPlaces as $kindPlace){
+                if($kindPlace != null) {
+                    if($kindPlace->id == 13){
+                        $latRow = 'lat';
+                        $lngRow = 'lng';
+                        $selectRows = '`id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `lat`, `lng`, `categoryId`, `address` AS address';
+                        $onlyOnMapCategories = LocalShopsCategory::where('onlyOnMap', 1)->pluck('id')->toArray();
+                        $allLocalShopCategoryIcons = [];
+                        $ai = LocalShopsCategory::select(['icon', 'id', 'server', 'mapIcon'])->get()->groupBy('id')->toArray();
+                        foreach($ai as $index => $cat)
+                            $allLocalShopCategoryIcons[$index] = $cat[0];
+                    }
+                    else{
+                        $latRow = 'C';
+                        $lngRow = 'D';
+                        $address = $kindPlace->id == 6 ? 'dastresi' : 'address';
+                        $selectRows = "`id`, `name`, `reviewCount`, `fullRate`, `slug`, `cityId`, `C`, `D`, `{$address}` AS address";
+                    }
+
+                    $formula = "(acos(" . sin($lng) . " * sin({$lngRow} / 180 * 3.14) + " . cos($lng) . " * cos({$lngRow} / 180 * 3.14) * cos(({$latRow} / 180 * 3.14) - {$lat})) * 6371) as distance";
+                    $DBPlace = DB::select("SELECT {$formula}, {$selectRows} FROM {$kindPlace->tableName} HAVING distance <= {$radius} OR (`{$latRow}` = {$mainLat} AND `{$lngRow}` = {$mainLng}) order by distance ASC");
+
+                    foreach ($DBPlace as $place) {
+                        if(isset($cities[$place->cityId])){
+                            $place->city = $cities[$place->cityId]->cityName;
+                            $place->state = $cities[$place->cityId]->stateName;
+                        }
+                        else{
+                            $cit = Cities::join('state', 'state.id', 'cities.stateId')->where('cities.id', $place->cityId)->select(['cities.name AS cityName', 'state.name AS stateName'])->first();
+                            if($cit != null) {
+                                $cities[$place->cityId] = $cit;
+                                $place->city = $cities[$place->cityId]->cityName;
+                                $place->state = $cities[$place->cityId]->stateName;
+                            }
+                        }
+                        $place->kindPlaceId = $kindPlace->id;
+                        $place->review = $place->reviewCount;
+                        $place->rate = floor($place->fullRate);
+                        $place->url =  createUrl($kindPlace->id, $place->id, 0, 0, 0);
+                        if($kindPlace->id == 13) {
+                            $place->C = $place->lat;
+                            $place->D = $place->lng;
+                            if(in_array($place->categoryId, $onlyOnMapCategories)) {
+                                $place->onlyOnMap = 1;
+                                $place->pic = URL::asset("_images/localShops/mapIcon/big-{$allLocalShopCategoryIcons[$place->categoryId]['mapIcon']}", null, $allLocalShopCategoryIcons[$place->categoryId]['server']);
+                                $place->minPic = URL::asset("_images/localShops/mapIcon/small-{$allLocalShopCategoryIcons[$place->categoryId]['mapIcon']}", null, $allLocalShopCategoryIcons[$place->categoryId]['server']);
+                            }
+                            else{
+                                $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
+                                $place->pic = $placeMainPic[0];
+                                $place->minPic = $placeMainPic[1];
+                            }
+                        }
+                        else {
+                            $placeMainPic = getPlacePic($place->id, $kindPlace->id, ['f', 't']);
+                            $place->pic = $placeMainPic[0];
+                            $place->minPic = $placeMainPic[1];
+                        }
+
+                        array_push($places, $place);
+                    }
+                }
+            }
+
+            return response()->json(['status' => 'ok', 'result' => $places]);
+        }
+        else
+            return response()->json(['status' => 'error1']);
     }
 
     public function getFeatures(){

@@ -26,6 +26,12 @@ ALTER TABLE `localShopsCategories` ADD `onlyOnMap` TINYINT NOT NULL DEFAULT '0' 
 ALTER TABLE `localShopsCategories` ADD `server` TINYINT NOT NULL DEFAULT '1' AFTER `mapIcon`;
 ALTER TABLE `localShops` ADD `seen` INT(11) NOT NULL DEFAULT '0' AFTER `fullRate`;
 ALTER TABLE `tour` ADD `codeNumber` VARCHAR(30) NULL DEFAULT NULL AFTER `code`;
+ALTER TABLE `tickets` ADD `businessId` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `to_`;
+
+ALTER TABLE `tickets` CHANGE `from_` `userId` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `tickets` CHANGE `to_` `adminId` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `tickets` ADD `adminSeen` TINYINT NOT NULL DEFAULT '0' AFTER `seen`;
+ALTER TABLE `tickets` ADD `fileName` VARCHAR(200) NULL DEFAULT NULL AFTER `msg`;
 
 
 

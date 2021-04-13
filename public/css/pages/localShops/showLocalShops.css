@@ -224,6 +224,44 @@ div[class^="col-"]{
     color: white;
 }
 
+
+.headerSec.doubleQuet:before{
+    color: var(--koochita-green);
+    margin-left: 0px;
+}
+.glowThisRate{
+    animation: glowTicketNumber 3s infinite;
+}
+
+
+.mapSection{
+    display: flex;
+}
+.mapSection .boxSec{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.mapSection .boxSec .box{
+    width: calc(100% - 10px);
+    height: 245px;
+    background: white;
+    margin: 0;
+    overflow: hidden;
+}
+.mapSection .boxSec.bsRight{
+    align-items: flex-end;
+}
+.mapSection .boxSec.bsLeft{
+    align-items: flex-start;
+}
+.mapSection .map{
+    width: 60%;
+    margin: 0;
+}
+
+
 @media (max-width: 991px) {
     div[class^="col-md"]{
         width: 100%;
@@ -242,6 +280,26 @@ div[class^="col-"]{
     }
     .mainHeaderButts > div{
         font-size: 10px;
+    }
+
+
+    .mapSection{
+        flex-direction: column;
+    }
+    .mapSection .boxSec{
+        width: 100%;
+        flex-direction: revert;
+        align-items: center !important;
+        justify-content: space-between;
+        height: 190px;
+    }
+    .mapSection .boxSec .box{
+        height: 100%;
+        width: calc(50% - 5px);
+    }
+    .showBody .map{
+        margin: 10px 0px;
+        width: 100%;
     }
 }
 @media (max-width: 767px) {
@@ -273,10 +331,23 @@ div[class^="col-"]{
         border-left: none !important;
         margin-top: 15px;
     }
-}
 
-@media (max-width: 767px) {
     .topHead{
         /*flex-direction: column;*/
+    }
+}
+
+@keyframes glowTicketNumber {
+    0% {
+        background: var(--koochita-green);
+        color: white;
+    }
+    50% {
+        background: white;
+        color: var(--koochita-green);
+    }
+    100% {
+        background: var(--koochita-green);
+        color: white;
     }
 }

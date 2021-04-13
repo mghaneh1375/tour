@@ -1609,17 +1609,46 @@
         background: none;
     }
 
-    .suggestionPackDiv{
-        margin-bottom: 15px;
-        width: 80%;
-    }
+
 
     .mainSuggestion .swiper-button-prev, .mainSuggestion .swiper-button-next{
         display: none;
     }
-
+    .suggestionPackDiv{
+        margin-bottom: 15px;
+        /*width: 80%;*/
+        width: 150px;
+    }
     .suggestionPackDiv .suggestionPackContent{
         box-shadow: 3px 0px 8px 1px #00000052;
+        padding: 0px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .imageGoldPin{
+        position: absolute;
+        top: -8px;
+        right: 5px;
+        z-index: 1;
+        width: 30px;
+    }
+    .suggestionPackPicLink{
+        height: 95px;
+        border-radius: 5px;
+    }
+    .suggestionPackDetailDiv{
+        font-size: 12px;
+        padding: 5px 5px 0px 5px;
+    }
+    .suggestionPackDetailDiv .suggestionPackName{
+        font-size: 1em;
+    }
+    .suggestionPackDetailDiv .suggestionPackReviewRow{
+        font-size: .8em;
+        margin-bottom: 0px;
+    }
+    .suggestionPackDetailDiv .suggestionPackCityRow{
+        font-size: .8em;
     }
 
     .topPlacesDivInCity{

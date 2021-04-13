@@ -67,7 +67,6 @@ class MainController extends Controller
         // Longitude: 1 deg = 111.320*cos(latitude) km
         $selectPlace = null;
         $places = [];
-        $specificData = $_GET['specific'];
         $mainLat = $_GET['lat'];
         $mainLng = $_GET['lng'];
         $lat = (float)$_GET['lat'] * 3.14 / 180;
@@ -75,33 +74,36 @@ class MainController extends Controller
         $radius = (float)$_GET['radius'];
 
         $radius = ($radius == 0 ? 2 : $radius) + 1;
-        $specificData = explode('_', $specificData);
 
-        if($specificData[0] != 0 && $specificData[1] != 0) {
-            $selectKindPlace = Place::find($specificData[0]);
-            if($selectKindPlace != null){
-                $selectRows = "`id`, `name`, `reviewCount` AS `review`, `fullRate`, `slug`, `cityId`";
-                if($selectKindPlace->id == 13){
-                    $selectRows .= ", `lat`, `lng`, `categoryId`, `address` AS address";
-                }
-                else{
-                    $address = $selectKindPlace->id == 6 ? 'dastresi' : 'address';
-                    $selectRows .= ", `C`, `D`, `{$address}` AS address";
-                }
-
-                $selectPlace = \DB::table($selectKindPlace->tableName)->selectRaw($selectRows)->find($specificData[1]);
-                if($selectPlace != null){
-
-                    $selectPlace->kindPlaceId = $selectKindPlace->id;
-                    $selectPlace->rate = floor($selectPlace->fullRate);
-                    $selectPlace->pic = getPlacePic($selectPlace->id, $selectKindPlace->id);
-                    $selectPlace->minPic = getPlacePic($selectPlace->id, $selectKindPlace->id, 't');
-                    $selectPlace->url =  createUrl($selectKindPlace->id, $selectPlace->id, 0, 0, 0);
-                    if($selectKindPlace->id == 13) {
-                        $selectPlace->C = $selectPlace->lat;
-                        $selectPlace->D = $selectPlace->lng;
+        if(isset($_GET['specific'])){
+            $specificData = $_GET['specific'];
+            $specificData = explode('_', $specificData);
+            if($specificData[0] != 0 && $specificData[1] != 0) {
+                $selectKindPlace = Place::find($specificData[0]);
+                if($selectKindPlace != null){
+                    $selectRows = "`id`, `name`, `reviewCount` AS `review`, `fullRate`, `slug`, `cityId`";
+                    if($selectKindPlace->id == 13){
+                        $selectRows .= ", `lat`, `lng`, `categoryId`, `address` AS address";
+                    }
+                    else{
+                        $address = $selectKindPlace->id == 6 ? 'dastresi' : 'address';
+                        $selectRows .= ", `C`, `D`, `{$address}` AS address";
                     }
 
+                    $selectPlace = \DB::table($selectKindPlace->tableName)->selectRaw($selectRows)->find($specificData[1]);
+                    if($selectPlace != null){
+
+                        $selectPlace->kindPlaceId = $selectKindPlace->id;
+                        $selectPlace->rate = floor($selectPlace->fullRate);
+                        $selectPlace->pic = getPlacePic($selectPlace->id, $selectKindPlace->id);
+                        $selectPlace->minPic = getPlacePic($selectPlace->id, $selectKindPlace->id, 't');
+                        $selectPlace->url =  createUrl($selectKindPlace->id, $selectPlace->id, 0, 0, 0);
+                        if($selectKindPlace->id == 13) {
+                            $selectPlace->C = $selectPlace->lat;
+                            $selectPlace->D = $selectPlace->lng;
+                        }
+
+                    }
                 }
             }
         }

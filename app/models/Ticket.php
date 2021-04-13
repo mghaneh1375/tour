@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
  * An Eloquent Model: 'Ticket'
  *
  * @property integer $id
- * @property integer $from_
- * @property integer $to_
+ * @property integer $userId
+ * @property integer $adminId
+ * @property integer $businessId
+ * @property boolean $seen
+ * @property boolean $adminSeen
  * @property boolean $close
  * @property string|null $msg
  * @property string|null $file
@@ -20,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model {
 
+    protected $guarded = [];
     protected $table = 'tickets';
 
     public static function whereId($value) {

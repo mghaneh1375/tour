@@ -123,6 +123,23 @@ input[type="checkbox"], input[type="radio"]{
     cursor: pointer;
     color: #3e3e3e;
     background: #d3d3d378;
+    position: relative;
+}
+.mainHeader .ticketButton .newNum{
+    position: absolute;
+    left: -5px;
+    bottom: -5px;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px red;
+    background: red;
+    color: white;
+    animation: glowTicketNumber 2s infinite;
 }
 
 .mainHeader .businessName{
@@ -517,6 +534,66 @@ label {
     padding-left: 5px;
 }
 
+.createTicketModal .modal-footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.createTicketModal .modal-footer > button{
+    margin: 0px 5px;
+    border-radius: 24px;
+    padding: 5px 25px;
+}
+.createTicketModal .specLabel{
+    width: 110px;
+    font-size: 14px;
+}
+.createTicketModal .specInput{
+    color: black;
+    background: #add8e645;
+    border: none;
+    border-radius: 25px;
+    padding: 5px 15px;
+}
+.createTicketModal .specGroup{
+    display: flex;
+}
+.createTicketModal .addFile{
+    background: var(--koochita-light-green);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.createTicketModal .filesSection{
+    display: flex;
+    flex-wrap: wrap;
+}
+.createTicketModal .filesSection .file{
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+    margin: 5px 0px;
+    background: var(--koochita-yellow);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+.createTicketModal .filesSection .file .closeI{
+    cursor: pointer;
+    color: red;
+    background: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+}
+.createTicketModal .filesSection .file .name{
+
+}
+
 
 @media (max-width:766px) {
     .notifAlertBP {
@@ -542,6 +619,21 @@ label {
 @media (max-width:400px) {
     .topAlertBP{
         bottom: 67px;
+    }
+}
+
+@keyframes glowTicketNumber {
+    0% {
+        background: red;
+        color: white;
+    }
+    50% {
+        background: none;
+        color: red;
+    }
+    100% {
+        background: red;
+        color: white;
     }
 }
 

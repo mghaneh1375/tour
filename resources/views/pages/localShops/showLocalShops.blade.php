@@ -37,6 +37,12 @@
     <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/pages/localShops/showLocalShops.css?v='.$fileVersions)}}">
 
+    <style>
+        .topPlacesDivInCityHeader{
+            margin-bottom: 0px;
+        }
+    </style>
+
 @endsection
 
 @section('body')
@@ -93,7 +99,7 @@
         </div>
         <div class="tabRow fastAccess">
             <div class="tab doubleQuet selected" onclick="goToSection('description')">
-                <div class="text">توضیحات</div>
+                <div class="text">معرفی کلی</div>
             </div>
             <div class="tab earthIcon" onclick="goToSection('map')">
                 <div class="text">نقشه</div>
@@ -102,7 +108,7 @@
                 <div class="text">دیدگاه شما</div>
             </div>
             <div class="tab questionIcon" onclick="goToSection('question')">
-                <div class="text">سوال و جواب ها</div>
+                <div class="text">پرسش و پاسخ</div>
             </div>
         </div>
 
@@ -120,7 +126,6 @@
 
         </div>
     </div>
-
 
     <div class="showHeader">
         <div class="container" style="position: relative">
@@ -171,7 +176,6 @@
 
         </div>
     </div>
-
 
     <div class="grayBackGround showBody">
         <div class="container">
@@ -352,14 +356,14 @@
 
             <div id="stickyIndicator" class="row">
                 <div class="col-md-3 hideOnTablet">
-                    <div class="bodySec leftStar" style="font-size: 17px;height: 40px;" onclick="openRateBoxForPlace()">
+                    <div class="bodySec leftStar glowThisRate" style="font-size: 17px;height: 40px;" onclick="openRateBoxForPlace()">
                         به این فروشگاه امتیاز دهید
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="bodySec fastAccess">
                         <div class="tab doubleQuet selected" onclick="goToSection('description')">
-                            <div class="text">توضیحات</div>
+                            <div class="text">معرفی کلی</div>
                         </div>
                         <div class="tab earthIcon" onclick="goToSection('map')">
                             <div class="text">نقشه</div>
@@ -368,7 +372,7 @@
                             <div class="text">دیدگاه شما</div>
                         </div>
                         <div class="tab questionIcon" onclick="goToSection('question')">
-                            <div class="text">سوال و جواب ها</div>
+                            <div class="text">پرسش و پاسخ</div>
                         </div>
                     </div>
                 </div>
@@ -390,7 +394,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="bodySec pad-15">
-                        <h2 class="headerSec doubleQuet">توضیحات</h2>
+                        <h2 class="headerSec doubleQuet">معرفی کلی</h2>
                         <div class="descriptionBody" style="color: #636363;">{{$localShop->description}}</div>
                         <hr>
                         <div class="row">
@@ -432,8 +436,24 @@
 {{--                <div class="col-md-9 prPc-0">--}}
 {{--                    <div id="mapDiv" class="bodySec map"></div>--}}
 {{--                </div>--}}
-                <div class="col-md-12">
+                <div class="col-md-12 mapSection">
+                    <div class="boxSec bsLeft">
+                        <div class="bodySec box">
+                            <img src="{{URL::asset('images/mainPics/placeList/food.webp')}}" class="resizeImgClass" alt="food" onload="fitThisImg(this)">
+                        </div>
+                        <div class="bodySec box">
+                            <img src="{{URL::asset('images/mainPics/placeList/amaken.webp')}}" class="resizeImgClass" alt="amaken" onload="fitThisImg(this)">
+                        </div>
+                    </div>
                     <div id="mapDiv" class="bodySec map"></div>
+                    <div class="boxSec bsRight">
+                        <div class="bodySec box">
+                            <img src="{{URL::asset('images/mainPics/placeList/hotel.webp')}}" class="resizeImgClass" alt="hotel" onload="fitThisImg(this)">
+                        </div>
+                        <div class="bodySec box">
+                            <img src="{{URL::asset('images/mainPics/placeList/boom.webp')}}" class="resizeImgClass" alt="boomgardi" onload="fitThisImg(this)">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -496,12 +516,18 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="bodySec pad-15">
-                        <h2 class="headerSec questionIcon">سوال و جواب</h2>
+                <div style="direction: ltr;">
+                    @include('component.rowSuggestion')
+                </div>
+            </div>
+
+            <div class="row" style="display: flex; flex-direction: column;">
+                <div class="col-md-6">
+                    <div class="bodySec pad-15" style="box-shadow: 0 0 5px 0px #646464">
+                        <h2 class="headerSec questionIcon">پرسش و پاسخ</h2>
                         <div id="questionSection" class="questionBodies">
                             <div class="questionInfoText">
-                                <div style="font-weight: bold; font-size: 1em;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
+                                <div style="font-size: 1em;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
                                 <div style="margin-top: 12px; font-size: .85em;">
                                     <span>در حال حاضر</span>
                                     <span id="questionCount"></span>
@@ -528,8 +554,8 @@
                     </div>
                 </div>
 
-                <div class="col-md-12" style="direction: ltr;">
-                    <div id="questionSectionDiv"></div>
+                <div class="col-md-6" style="direction: ltr;">
+                    <div id="questionSectionDiv" style="box-shadow: 0 0 5px 0px #646464;"></div>
                 </div>
             </div>
 
@@ -585,6 +611,62 @@
         var kindPlaceId = 13;
         var placeId = localShop.id;
         var questionPerPageNum = [-1];
+
+
+        function getNearPlaces(){
+            $.ajax({
+                type: 'get',
+                url: '{{route("localShop.getNears", ["id" => $localShop->id])}}',
+                success: response => {
+                    if(response.status === 'ok'){
+                        createPlaceCard(response.result);
+                    }
+                },
+            })
+        }
+
+        function createPlaceCard(_result){
+            createSuggestionPack(`nearPlacesToLocalShopRowContent`, _result, () => { // in suggestionPack.blade.php
+                $(`#nearPlacesToLocalShopRowContent`).find('.suggestionPackDiv').addClass('swiper-slide');
+                runMainSwiper();
+            });
+        }
+
+        function runMainSwiper(){
+            new Swiper('.mainSuggestion', {
+                loop: true,
+                navigation: {
+                    prevEl: '.swiper-button-next',
+                    nextEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 'auto',
+                        spaceBetween: 10,
+                        loop: false,
+                    },
+                    991: {
+                        slidesPerView: 3,
+                        spaceBetween: 20,
+                    },
+                    10000: {
+                        slidesPerView: 4,
+                        spaceBetween: 20,
+                    }
+                }
+            });
+        }
+
+        getNearPlaces();
+
+        $(window).ready(() => {
+            initPlaceRowSection([{
+                name: 'نزدیکترین ها',
+                id: 'nearPlacesToLocalShopRow',
+                url: '#'
+            }]);
+        })
+
     </script>
 
     <script defer src="{{URL::asset('js/pages/localShops/showLocalShop.js?v='.$fileVersions)}}"></script>

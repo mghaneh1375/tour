@@ -1,3 +1,7 @@
+<style>
+
+</style>
+
 <script>
     var suggestionPlacePackSample = `
         <div class="suggestionPackDiv">

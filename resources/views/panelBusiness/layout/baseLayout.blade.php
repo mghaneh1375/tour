@@ -51,10 +51,6 @@
 <body>
     @include('panelBusiness.layout.businessPanelGeneral')
 
-    @if(auth()->check())
-        @include('panelBusiness.component.createTicket')
-    @endif
-
     @include('panelBusiness.layout.header')
 
     @if(auth()->check())

@@ -5,11 +5,115 @@ namespace App\Http\Controllers\PanelBusiness;
 use App\Http\Controllers\Controller;
 use App\models\Business\Business;
 use App\models\Ticket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class TicketController extends Controller {
+
+    public function ticketPage()
+    {
+        $tickets = Ticket::where('userId', \auth()->user()->id)->whereNull('parentId')->orderByDesc('updated_at')->get();
+        foreach($tickets as $tic){
+            $tic->closeType = $tic->close == 1 ? 'بسته شده' : 'باز';
+            if($tic->businessId == 0)
+                $tic->businessName = 'آزاد';
+            else
+                $tic->businessName = Business::find($tic->businessId)->name;
+
+            $time = $tic->updated_at->format('H:i');
+            $date = verta($tic->updated_at)->format('Y/m/d');
+
+            $tic->time = "{$date} - {$time}";
+        }
+        return view('panelBusiness.pages.ticketPage', compact(['tickets']));
+    }
+
+    public function ticketGetUser($parentId){
+        $parent = Ticket::find($parentId);
+        $tickets = [];
+        if($parent != null){
+            if($parent->userId === \auth()->user()->id){
+                Ticket::where('parentId', $parent->id)->update(['seen' => 1]);
+
+                $subs = Ticket::where('parentId', $parent->id)->orWhere('id', $parent->id)->get();
+                foreach($subs as $sub){
+                    $time = $sub->created_at->format('H:i');
+                    $date = verta($sub->created_at)->format('Y/m/d');
+
+                    $sub->time = "{$date} - {$time}";
+
+                    $sub->hasFile = 0;
+                    if($sub->file != null){
+                        $sub->hasFile = 1;
+                        $sub->fileUrl = "/storage/{$sub->file}";
+                    }
+
+                    $sub->whoSend = $sub->adminId == 0 ? 'user' : 'admin';
+
+                    array_push($tickets, [
+                        'time' => $sub->time,
+                        'hasFile' => $sub->hasFile,
+                        'fileUrl' => $sub->fileUrl,
+                        'fileName' => $sub->fileName,
+                        'msg' => $sub->msg,
+                        'whoSend' => $sub->whoSend,
+                    ]);
+
+                }
+                return response()->json(['status' => 'ok', 'result' => $tickets, 'isClose' => $parent->close]);
+            }
+            else
+                return response()->json(['status' => 'error2']);
+        }
+        else
+            return response()->json(['status' => 'error1']);
+    }
+
+    public function storeTicket(Request $request){
+        $parent = null;
+        if(isset($request->ticketId) && $request->ticketId != 0) {
+            $parent = Ticket::find($request->ticketId);
+            if($parent->close == 1)
+                return response()->json(['status' => 'close']);
+        }
+
+        $newTicket = new Ticket();
+        $newTicket->userId = \auth()->user()->id;
+        $newTicket->adminSeen = 0;
+        $newTicket->seen = 1;
+
+        if($parent == null){
+            $newTicket->subject = $request->subject ?? null;
+            $newTicket->parentId = null;
+            $newTicket->businessId = $request->businessId === 'free' ? 0 : $request->businessId;
+            $newTicket->adminId = 0;
+        }
+        else{
+            $newTicket->parentId = $parent->id;
+            $newTicket->businessId = $parent->businessId;
+            $newTicket->adminId = $parent->adminId;
+
+            if($request->has("file")) {
+                $newTicket->fileName = $request->file('file')->getClientOriginalName();
+
+                $path = $request->file->store('public/tickets');
+                $path = str_replace('public/', '', $path);
+                $newTicket->file = $path;
+            }
+        }
+        $newTicket->msg = $request->description ?? null;
+        $newTicket->save();
+
+        if($parent != null) {
+            $parent->updated_at = Carbon::now();
+            $parent->save();
+        }
+
+        return response()->json(['status' => 'ok', 'result' => $newTicket->id]);
+    }
 
     public function msgs(Business $business) {
         return view('panelBusiness.pages.report.msgs', ['id' => $business->id]);

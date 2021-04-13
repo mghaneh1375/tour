@@ -242,6 +242,7 @@ Route::middleware(['throttle:60'])->group(function (){
     });
 
     Route::get('localShops/getFeatures', [LocalShopController::class, 'getFeatures'])->name('localShop.getFeatureList');
+    Route::get('localShops/getNears/{id}', [LocalShopController::class, 'getNears'])->name('localShop.getNears');
 
     Route::middleware(['auth'])->group(function(){
         Route::get('localShops/create', [CreateLocalShopController::class, 'createLocalShopPage'])->name('localShop.create.page')->middleware(['shareData', 'localShopsShareData']);

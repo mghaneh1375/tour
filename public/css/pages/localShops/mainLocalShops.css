@@ -241,6 +241,7 @@ body{
     height: 100%;
     font-size: 25px;
     direction: ltr;
+    cursor: pointer;
 }
 .fastAccess .tab{
     padding: 10px;
@@ -739,7 +740,7 @@ body{
     margin-top: 20px;
 }
 .questionBodies .questionInfoText{
-    font-size: 18px;
+    font-size: 15px;
 }
 .questionBodies .inpQ{
     width: calc(100% - 60px);
