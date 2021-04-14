@@ -13,7 +13,7 @@
     <div class="col-md-12 col-xs-12 QAndAMainDiv" style="margin-bottom: 10px;">
         <div class="mainDivQuestions">
             <div class="QAndAMainDivHeader">
-                <h3>سؤال و جواب</h3>
+                <h3>پرسش و پاسخ</h3>
             </div>
             <div class="askQuestionMainDiv">
                 <div class="newQuestionContainer">
@@ -54,20 +54,27 @@
     </div>
 
     <div class="col-md-12" style="padding: 0px;">
-        <div id="questionSectionDiv"></div>
+        <div class="row" style="margin: 0px">
+            <div class="col-md-6">
+                <div id="questionSectionDiv_1"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="questionSectionDiv_2"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="questionPaginationDiv" class="col-xs-12 questionsMainDivFooter position-relative" style="margin-top: 0px;">
-        <div class="col-xs-5 font-size-13 line-height-2">
-            نمایش
-            <span id="showQuestionPerPage"></span>
-            پست در هر صفحه
-        </div>
-        <div class="col-xs-4 font-size-13 line-height-2 text-align-right float-right">
-            <span class="float-right">صفحه</span>
-            <span id="questionPagination"></span>
-        </div>
-    </div>
+{{--    <div id="questionPaginationDiv" class="col-xs-12 questionsMainDivFooter position-relative" style="margin-top: 0px;">--}}
+{{--        <div class="col-xs-5 font-size-13 line-height-2">--}}
+{{--            نمایش--}}
+{{--            <span id="showQuestionPerPage"></span>--}}
+{{--            پست در هر صفحه--}}
+{{--        </div>--}}
+{{--        <div class="col-xs-4 font-size-13 line-height-2 text-align-right float-right">--}}
+{{--            <span class="float-right">صفحه</span>--}}
+{{--            <span id="questionPagination"></span>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 </div>
 
 

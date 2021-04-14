@@ -5,6 +5,9 @@ var deletedReview = 0;
 var globalConfirmText = '<span class="label label-success inConfirmLabel">در انتظار تایید</span>';
 var showFullReview = null;
 var showFullReviewKind = null;
+var smallReviewDefaultOptions = {
+    showWriteCommentSample: false,
+}
 
 var setSmallReviewPlaceHolder = _id => $(`#${_id}`).append(smallReviewPlaceHolder);
 var getReviewPlaceHolder = () => {return smallReviewPlaceHolder};
@@ -13,7 +16,10 @@ function setIntoGlobalReviewInput(_review){
     allReviewsCreated[_review.id] = _review;
 }
 
-function createSmallReviewHtml(item){
+function createSmallReviewHtml(item, _option = smallReviewDefaultOptions){
+    // item = {
+    //
+    // }
 
     allReviewsCreated[item.id] = item;
     var text = reviewSmallSample;
@@ -62,8 +68,15 @@ function createSmallReviewHtml(item){
     }
     text = text.replace( new RegExp("##userAssigned##", "g"), assignedUser);
 
+    text = text.replace(new RegExp("##writeCommentSample##", "g"), _option.showWriteCommentSample ? 'flex' : 'none');
+
     return text;
 }
+
+function focusOnWriteComment(_id){
+    getSingleFullReview(_id, () => document.getElementById(`ansForReviews_${_id}`).focus());
+}
+
 
 function showFullReviews(_input){
     var _reviews = _input.review;
@@ -172,11 +185,14 @@ function getSingleFullDataReview(_id, _callBack){
     })
 }
 
-function getSingleFullReview(_id){
+async function getSingleFullReview(_id, _callBack = ''){
     if(allReviewsCreated[_id] == undefined)
-        getSingleFullDataReview(_id, _review => showFullReviews({ review: _review, kind: 'modal' }));
+        await getSingleFullDataReview(_id, _review => showFullReviews({ review: _review, kind: 'modal' }));
     else
-        showFullReviews({ review: allReviewsCreated[_id], kind: 'modal' })
+        await showFullReviews({ review: allReviewsCreated[_id], kind: 'modal' });
+
+    if(typeof _callBack === 'function')
+        _callBack();
 }
 
 function updateFullReview(_id){

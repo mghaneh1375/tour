@@ -522,40 +522,50 @@
             </div>
 
             <div class="row" style="display: flex; flex-direction: column;">
-                <div class="col-md-6">
-                    <div class="bodySec pad-15" style="box-shadow: 0 0 5px 0px #646464">
-                        <h2 class="headerSec questionIcon">پرسش و پاسخ</h2>
-                        <div id="questionSection" class="questionBodies">
-                            <div class="questionInfoText">
-                                <div style="font-size: 1em;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
-                                <div style="margin-top: 12px; font-size: .85em;">
-                                    <span>در حال حاضر</span>
-                                    <span id="questionCount"></span>
-                                    <span>سؤال</span>
-                                    <span id="answerCount"></span>
-                                    <span>پاسخ موجود می‌باشد.</span>
-                                </div>
-                            </div>
-                            <div class="inputQuestionSec">
-                                <div class="fullyCenterContent uPic50">
-                                    <img src="{{$userPic}}" class="resizeImgClass" onload="fitThisImg(this)" style="width: 100%" >
-                                </div>
-                                <div class="inpQ">
-                                    <textarea id="questionInput" class="autoResizeTextArea" placeholder="شما چه سوالی دارید؟"></textarea>
-                                    <button onclick="sendQuestion(this)">ارسال</button>
-                                    <div class="sendingQuestionLoading" style="display: none;" disabled>
-                                        <img src="{{URL::asset('images/icons/mGear.svg')}}" style="width: 30px; height: 30px;">
-                                        {{__('در حال ثبت سوال')}}
+                <div style="display: flex; margin-bottom: 15px;">
+                    <div class="col-md-7">
+                        <div class="bodySec pad-15" style="box-shadow: 0 0 5px 0px #646464">
+                            <h2 class="headerSec questionIcon">پرسش و پاسخ</h2>
+                            <div id="questionSection" class="questionBodies">
+                                <div class="questionInfoText">
+                                    <div style="font-size: 1em;">سؤلات خود را بپرسید تا با کمک دوستانتان آگاهانه‌تر سفر کنید. همچنین می‌توانید با پاسخ یه سؤالات دوستانتان علاوه بر دریافت امتیاز، اطلاعات خود را به اشتراک بگذارید.</div>
+                                    <div style="margin-top: 12px; font-size: .85em;">
+                                        <span>در حال حاضر</span>
+                                        <span id="questionCount"></span>
+                                        <span>سؤال</span>
+                                        <span id="answerCount"></span>
+                                        <span>پاسخ موجود می‌باشد.</span>
                                     </div>
                                 </div>
+                                <div class="inputQuestionSec">
+                                    <div class="fullyCenterContent uPic50">
+                                        <img src="{{$userPic}}" class="resizeImgClass" onload="fitThisImg(this)" style="width: 100%" >
+                                    </div>
+                                    <div class="inpQ">
+                                        <textarea id="questionInput" class="autoResizeTextArea" placeholder="شما چه سوالی دارید؟"></textarea>
+                                        <button onclick="sendQuestion(this)">ارسال</button>
+                                        <div class="sendingQuestionLoading" style="display: none;" disabled>
+                                            <img src="{{URL::asset('images/icons/mGear.svg')}}" style="width: 30px; height: 30px;">
+                                            {{__('در حال ثبت سوال')}}
+                                        </div>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-5 hideOnTable">
+                        <div class="bodySec" style="width: 100%; height: 100%; margin: 0px;"></div>
+                    </div>
                 </div>
 
-                <div class="col-md-6" style="direction: ltr;">
-                    <div id="questionSectionDiv" style="box-shadow: 0 0 5px 0px #646464;"></div>
+                <div class="row" style="margin: 0px">
+                    <div class="col-md-6" style="direction: ltr;">
+                        <div id="questionSectionDiv_1" style="box-shadow: 0 0 5px 0px #646464;"></div>
+                    </div>
+                    <div class="col-md-6" style="direction: ltr;">
+                        <div id="questionSectionDiv_2" style="box-shadow: 0 0 5px 0px #646464;"></div>
+                    </div>
                 </div>
             </div>
 

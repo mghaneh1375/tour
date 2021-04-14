@@ -143,7 +143,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                 @endif
             @endif
             <div class="tabLinkMainWrap postsBtnTopBar" onclick="changeTabBarColor(this, 'mainDivPlacePost')">نظرات</div>
-            <div class="tabLinkMainWrap QAndAsBtnTopBar" onclick="changeTabBarColor(this,'QAndAMainDivId')">سوالات</div>
+                <div class="tabLinkMainWrap QAndAsBtnTopBar" onclick="changeTabBarColor(this,'QAndAMainDivId')">پرسش و پاسخ</div>
             @if($place->similarPlace)
                 <div class="tabLinkMainWrap similarLocationsBtnTopBar" onclick="changeTabBarColor(this,'topPlacesSection')">مکان های مشابه</div>
             @endif
@@ -346,7 +346,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                         @endif
 
                         <div class="tabLinkMainWrap postsBtnTopBar tab" onclick="changeTabBarColor(this, 'mainDivPlacePost')">نظرات</div>
-                        <div class="tabLinkMainWrap QAndAsBtnTopBar tab" onclick="changeTabBarColor(this, 'QAndAMainDivId')">سوالات</div>
+                        <div class="tabLinkMainWrap QAndAsBtnTopBar tab" onclick="changeTabBarColor(this, 'QAndAMainDivId')">پرسش و پاسخ</div>
 
                         @if($place->similarPlace)
                             <div class="tabLinkMainWrap similarLocationsBtnTopBar tab" onclick="changeTabBarColor(this, 'topPlacesSection')">مکان های مشابه</div>
@@ -428,7 +428,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="collapse navbar-collapse" id="myNavbar">
                                 <ul class="nav navbar-nav">
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)"> سؤالات </a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)"> پرسش و پاسخ </a>
                                     </li>
                                     <li>
                                         <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
@@ -453,7 +453,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                         <a class="tabLinkMainWrap similarLocationsBtnTopBar similarLocationsBtnTopBar" href="#topPlacesSection" onclick="changeTabBarColor(this)"> مکان‌های مشابه </a>
                                     </li>
                                     <li>
-                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">سؤالات</a>
+                                        <a class="tabLinkMainWrap QAndAsBtnTopBar" href="#QAndAMainDivId" onclick="changeTabBarColor(this)">پرسش و پاسخ</a>
                                     </li>
                                     <li>
                                         <a id="pcPostButton" class="tabLinkMainWrap postsBtnTopBar" href="#mainDivPlacePost" onclick="changeTabBarColor(this)"> نظرات </a>
@@ -586,9 +586,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                     <div id="mainDivPlacePost" class="tabContentMainWrap" style="display: flex; direction: rtl; flex-direction: column;">
 
                         <div class="postMainDiv hideOnScreen">
-                            <div class="postMainDivHeader">
-                                {{__('نظر شما')}}
-                            </div>
+                            <div class="postMainDivHeader"> {{__('نظر شما')}} </div>
                             <div id="commentInputMainDiv">
                                 <div class="inputBoxGeneralInfo inputBox postInputBox" id="commentInputBox" onclick="newPostModal('textarea')">
                                     <div id="profilePicForComment" class="fullyCenterContent profilePicForPost circleBase type2" style="overflow: hidden; border-radius: 50%;">

@@ -5,7 +5,9 @@ var firstTimeFilterShow = 1;
 var reviewPerPageNum = [3, 5, 10];
 
 function loadReviews(){
-    $('#showReviewsMain').html(getReviewPlaceHolder()); //in smallShowReview.blade.php
+    setSmallReviewPlaceHolder('showReviewMain_1');
+    setSmallReviewPlaceHolder('showReviewMain_2');
+    // $('#showReviewsMain').html(getReviewPlaceHolder()); //in smallShowReview.blade.php
     $.ajax({
         type: 'POST',
         url: getReviewForPlaceDetailsUrl,
@@ -18,7 +20,9 @@ function loadReviews(){
             filters : reviewFilters
         },
         success: function(response){
-            document.getElementById('showReviewsMain').innerHTML = '';
+            // document.getElementById('showReviewsMain').innerHTML = '';
+            document.getElementById('showReviewMain_1').innerHTML = '';
+            document.getElementById('showReviewMain_2').innerHTML = '';
             if(response == 'nok1') {
                 if(firstTimeFilterShow == 1){
                     document.getElementById('postFilters').style.display = 'none';
@@ -26,8 +30,7 @@ function loadReviews(){
                     document.getElementById('advertiseDiv').style.display = 'none';
                 }
 
-                $('#pcPostButton').attr('href', '#editReviewPictures');
-                $('#pcPostButton').attr('onclick', 'newPostModal()');
+                $('#pcPostButton').attr('href', '#editReviewPictures').attr('onclick', 'newPostModal()');
                 $('#openPostPhone').attr('onclick', 'newPostModal()');
             }
             else{
@@ -43,24 +46,34 @@ function loadReviews(){
                     document.getElementById('postFilters').style.display = 'block';
 
                 firstTimeFilterShow = 0;
-                createReviewPagination(reviewsCount);
                 showReviews(allReviews);
+                // createReviewPagination(reviewsCount);
             }
         }
     })
 }
 
 function showReviews(reviews){
-    for(let i = 0; i < reviews.length; i++)
-        showFullReviews({
-            review: reviews[i],
-            kind: 'append',
-            sectionId : 'showReviewsMain'
-        });
+    let html_1 = '';
+    let html_2 = '';
+    let op = {
+        showWriteCommentSample: true
+    }
+    for(let i = 0; i < reviews.length; i++) {
+        if(i % 2 === 0) html_1 += createSmallReviewHtml(reviews[i], op);
+        else html_2 += createSmallReviewHtml(reviews[i], op);
+        // showFullReviews({
+        //     review: reviews[i],
+        //     kind: 'append',
+        //     sectionId : 'showReviewsMain'
+        // });
+    }
+
+    $('#showReviewMain_1').html(html_1);
+    $('#showReviewMain_2').html(html_2);
 }
 
 function changePerPage(_count){
-
     document.getElementById('reviewPerView' + reviewPerPageIndex).classList.remove('color-blue');
     document.getElementById('reviewPerView' + _count).classList.add('color-blue');
     reviewPerPageIndex = _count;
@@ -68,7 +81,6 @@ function changePerPage(_count){
 
     loadReviews();
 }
-
 function changeReviewPage(_page){
     $('html, body').animate({
         scrollTop: $("#showReviewsMain").offset().top
@@ -76,7 +88,6 @@ function changeReviewPage(_page){
     reviewPage = _page;
     loadReviews();
 }
-
 function createReviewPagination(reviewsCount){
     var text = '';
     var page = Math.round(reviewsCount/reviewPerPageNum[reviewPerPageIndex]);
@@ -146,17 +157,10 @@ function createReviewPagination(reviewsCount){
 
     document.getElementById('reviewPagination').innerHTML = text;
 }
-
 function createReviewPerPage(){
-
     var text = '';
-
     for(var i = 0; i < reviewPerPageNum.length; i++){
-        if(i == reviewPerPageIndex)
-            text += '<span id="reviewPerView' + i + '" class="mg-lt-5 cursor-pointer color-blue" onclick="changePerPage(' + i + ')">' + reviewPerPageNum[i] + '</span>';
-        else
-            text += '<span id="reviewPerView' + i + '" class="mg-lt-5 cursor-pointer" onclick="changePerPage(' + i + ')">' + reviewPerPageNum[i] + '</span>';
-
+        text += `<span id="reviewPerView${i}" class="mg-lt-5 cursor-pointer ${i == reviewPerPageIndex ? 'color-blue' : ''}" onclick="changePerPage(${i})">${reviewPerPageNum[i]}</span>`;
         if(i != (reviewPerPageNum.length - 1))
             text += '-';
     }

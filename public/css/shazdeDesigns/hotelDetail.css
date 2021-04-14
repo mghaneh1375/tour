@@ -1545,15 +1545,15 @@ DIV.ppr_rup.ppr_priv_hr_btf_similar_hotels .hotelName {
     border-radius: 10px;
 }
 
-.circleBase {
-    border-radius: 50%;
-}
+/*.circleBase {*/
+/*    border-radius: 50%;*/
+/*}*/
 
-.type2 {
-    width: 20px;
-    height: 20px;
-    background: #ccc;
-}
+/*.type2 {*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    background: #ccc;*/
+/*}*/
 
 #addToFavouriteTripsMainDiv::before {
     display: none;
@@ -2247,10 +2247,10 @@ DIV.ppr_rup.ppr_priv_hr_btf_similar_hotels .hotelName {
 /*    cursor: pointer;*/
 /*}*/
 
-.commentsMainBox {
-    border-bottom: 1px solid #e5e5e5;
-    width: 100%;
-}
+/*.commentsMainBox {*/
+/*    border-bottom: 1px solid #e5e5e5;*/
+/*    width: 100%;*/
+/*}*/
 
 
 /*.commentsWriterProfilePic {*/
@@ -3139,6 +3139,7 @@ DIV.ppr_rup.ppr_priv_hr_btf_similar_hotels .hotelName {
 .QAndAMainDiv {
     background-color: white;
     margin-top: 15px;
+    box-shadow: 0 0 5px 0px #646464;
 }
 
 .QAndAMainDiv .QAndAMainDivHeader > h3 {

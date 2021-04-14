@@ -368,6 +368,38 @@
     left: 0;
 }
 
+.smallReviewMainDivShown .sampleOfAnsToReview{
+    display: flex;
+    padding: 5px;
+    margin-top: 11px;
+}
+.smallReviewMainDivShown .sampleOfAnsToReview .picSec{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.smallReviewMainDivShown .sampleOfAnsToReview .textSec{
+    width: calc(100% - 50px);
+    background: #f2f2f2;
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    position: relative;
+    cursor: text;
+    margin-right: 10px;
+}
+.smallReviewMainDivShown .sampleOfAnsToReview .textSec .tex{
+    color: gray;
+}
+.smallReviewMainDivShown .sampleOfAnsToReview .textSec .sendBut{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    padding: 10px;
+    color: var(--koochita-blue);
+}
+
 .smallReviewShowMore{
     font-size: 12px;
     margin-left: auto;
@@ -1458,6 +1490,7 @@
     background: white;
     padding: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 0 5px 0px #646464;
 }
 .questionPack .questionContentMainBox{
     white-space: pre-line;

@@ -74,8 +74,11 @@ function getQuestion(){
                     $('#questionPaginationDiv').hide();
                 else {
                     $('#questionSectionDiv').empty();
-                    questions.map(ques => createQuestionPack(ques, 'questionSectionDiv') /**in questoinPack**/  )
-                    createQuestionPagination(questionCount);
+                    questions.map((ques, index) => {
+                        let showId = index%2 == 0 ? 'questionSectionDiv_1' : 'questionSectionDiv_2';
+                        createQuestionPack(ques, showId) /**in questoinPack**/
+                    } )
+                    // createQuestionPagination(questionCount);
                 }
             }
         }

@@ -353,6 +353,7 @@ body{
 }
 .headerSec:before{
     margin-left: 10px;
+    color: var(--koochita-green);
 }
 .yourReviewHeader{
     background: var(--koochita-blue);
@@ -855,6 +856,9 @@ body{
     }
 }
 @media (max-width: 991px) {
+    .hideOnTable{
+        display: none !important;
+    }
     .showBody .infoSec{
         height: auto;
     }

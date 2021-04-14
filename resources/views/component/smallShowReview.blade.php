@@ -38,6 +38,9 @@
             max-height: 100%;
         }
     }
+
+
+
 </style>
 
 <div id="fullReviewModal" class="fullReviewModal modalBlackBack">
@@ -58,57 +61,66 @@
 <script>
     var reviewSmallSample = `
         <div id="smallReviewHtml_##id##" class="smallReviewMainDivShown float-right position-relative">
-        <div class="commentWriterDetailsShow">
-            <a href="##userPageUrl##" class="circleBase type2 commentWriterPicShow">
-                <img src="##userPic##" alt="##userName##" class="resizeImgClass" onload="fitThisImg(this)">
-            </a>
-            <div class="commentWriterExperienceDetails" style="width: 100%">
-                <div style="display: flex; align-items: center">
-                    <a href="##userPageUrl##" target="_blank" class="userProfileName" style="font-weight: bold">##userName##</a>
-                    <span class="label label-success inConfirmLabel" style="display: ##isConfrim##">{{__('در انتظار تایید')}}</span>
-                </div>
-                <div style="font-size: 10px; display: ##showWhere##">
-                    در
-                    <a href="##placeUrl##" target="_blank">
-                        <span class="commentWriterExperiencePlace">##where##</span>
-                    </a>
-                </div>
-                <div class="userAssignedSmall" style="font-size: 11px">##userAssigned##</div>
-                <div style="font-size: 12px;">##timeAgo##</div>
-            </div>
-        </div>
-        <div class="commentContentsShow position-relative">
-            <div class="SummarizedPostTextShown" style="display: ##haveSummery##">
-                ##summery##
-                <span class="smallReviewshowMoreText" onclick="showSmallReviewMoreText(this)"></span>
-            </div>
-            <div class="completePostTextShown" style="display: none">
-                ##text##
-                <span class="showLessText" onclick="showSmallReviewLessText(this)">{{__('کمتر')}}</span>
-            </div>
-            <div class="completePostTextShown" style="display: ##notSummery##">##text##</div>
-        </div>
-        <div class="smallReviewcommentPhotosShow">
-            <div class="photosCol col-xs-12" onclick="showSmallReviewPics(##id##)" style="display: ##havePic##; margin-bottom: 10px">
-                <div class="smallReviewMainPic ##isVideoClass##">
-                    <img src="##mainPic##" class="resizeImgClass" style="position: absolute; width: 100%;" onload="fitThisImg(this)">
-                </div>
-                <div class="numberOfPhotosMainDiv" style="display: ##hasMorePic##">
-                    <div class="numberOfPhotos">##picCount##+</div>
-                    <div>{{__('عکس')}}</div>
+            <div class="commentWriterDetailsShow">
+                <a href="##userPageUrl##" class="circleBase type2 commentWriterPicShow">
+                    <img src="##userPic##" alt="##userName##" class="resizeImgClass" onload="fitThisImg(this)">
+                </a>
+                <div class="commentWriterExperienceDetails" style="width: 100%">
+                    <div style="display: flex; align-items: center">
+                        <a href="##userPageUrl##" target="_blank" class="userProfileName" style="font-weight: bold">##userName##</a>
+                        <span class="label label-success inConfirmLabel" style="display: ##isConfrim##">{{__('در انتظار تایید')}}</span>
+                    </div>
+                    <div style="font-size: 10px; display: ##showWhere##">
+                        در
+                        <a href="##placeUrl##" target="_blank">
+                            <span class="commentWriterExperiencePlace">##where##</span>
+                        </a>
+                    </div>
+                    <div class="userAssignedSmall" style="font-size: 11px">##userAssigned##</div>
+                    <div style="font-size: 12px;">##timeAgo##</div>
                 </div>
             </div>
-            <div class="quantityOfLikesSmallReview">
-                <div class="smallReviewShowMore" onclick="getSingleFullReview(##id##)">مشاهده</div>
-                <div class="reviewLikeNumber_##id## reviewLikeIcon_##id## LikeIconEmpty likedislikeAnsReviews ##likeClass##" onclick="likeReviewInFullReview(##id##, 1, this)">##like##</div>
-                <div class="reviewDisLikeNumber_##id## reviewDisLikeIcon_##id## DisLikeIconEmpty likedislikeAnsReviews ##disLikeClass##" onclick="likeReviewInFullReview(##id##, -1, this)">##disLike##</div>
-                <div style="font-size: 20px;" onclick="getSingleFullReview(##id##)">
-                    <span>##answersCount##</span>
-                    <span class="EmptyCommentIcon" style="font-size: 24px"></span>
+            <div class="commentContentsShow position-relative">
+                <div class="SummarizedPostTextShown" style="display: ##haveSummery##">
+                    ##summery##
+                    <span class="smallReviewshowMoreText" onclick="showSmallReviewMoreText(this)"></span>
+                </div>
+                <div class="completePostTextShown" style="display: none">
+                    ##text##
+                    <span class="showLessText" onclick="showSmallReviewLessText(this)">{{__('کمتر')}}</span>
+                </div>
+                <div class="completePostTextShown" style="display: ##notSummery##">##text##</div>
+            </div>
+            <div class="smallReviewcommentPhotosShow">
+                <div class="photosCol col-xs-12" onclick="showSmallReviewPics(##id##)" style="display: ##havePic##; margin-bottom: 10px">
+                    <div class="smallReviewMainPic ##isVideoClass##">
+                        <img src="##mainPic##" class="resizeImgClass" style="position: absolute; width: 100%;" onload="fitThisImg(this)">
+                    </div>
+                    <div class="numberOfPhotosMainDiv" style="display: ##hasMorePic##">
+                        <div class="numberOfPhotos">##picCount##+</div>
+                        <div>{{__('عکس')}}</div>
+                    </div>
+                </div>
+                <div class="quantityOfLikesSmallReview">
+                    <div class="smallReviewShowMore" onclick="getSingleFullReview(##id##)">مشاهده</div>
+                    <div class="reviewLikeNumber_##id## reviewLikeIcon_##id## LikeIconEmpty likedislikeAnsReviews ##likeClass##" onclick="likeReviewInFullReview(##id##, 1, this)">##like##</div>
+                    <div class="reviewDisLikeNumber_##id## reviewDisLikeIcon_##id## DisLikeIconEmpty likedislikeAnsReviews ##disLikeClass##" onclick="likeReviewInFullReview(##id##, -1, this)">##disLike##</div>
+                    <div style="font-size: 20px;" onclick="getSingleFullReview(##id##)">
+                        <span>##answersCount##</span>
+                        <span class="EmptyCommentIcon" style="font-size: 24px"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>`;
+            <div class="sampleOfAnsToReview" style="display: ##writeCommentSample##">
+                <div class="picSec">
+                    <img src="##userPic##" alt="##userName##" class="resizeImgClass" onload="fitThisImg(this)">
+                </div>
+                <div class="textSec" onclick="focusOnWriteComment(##id##)">
+                    <div class="tex">شما چه نظری دارید؟</div>
+                    <div class="sendBut">ارسال</div>
+                </div>
+            </div>
+        </div>`;
 
     var smallReviewPlaceHolder = `<div class="smallReviewMainDivShown smallReviewPlaceHolder float-right position-relative">
                                     <div class="commentWriterDetailsShow" style="display: flex;">
