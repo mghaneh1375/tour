@@ -153,6 +153,20 @@
     max-width: 350px;
     background: transparent !important;
 }
+.suggestionPackDiv .suggestionPackBookMark{
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000b0;
+    border-radius: 50%;
+    color: white;
+}
 
 .suggestionPackContent{
     padding: 12px;
@@ -1532,6 +1546,85 @@
     align-items: center;
 }
 
+.koochitaTvSection.rowType{
+    direction: rtl;
+    height: 177px;
+    overflow: hidden;
+    margin-top: auto;
+    display: flex;
+    background: #232323;
+    padding: 10px;
+    position: relative;
+    border: solid 4px var(--koochita-light-green);
+}
+.koochitaTvSection.rowType .picSection{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+.koochitaTvSection.rowType .picSection .playIconn{
+    display: flex;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: #0000008c;
+    cursor: pointer;
+}
+.koochitaTvSection.rowType .infoTvSec{
+    width: 40%;
+}
+.koochitaTvSection.rowType .infoTvSec .tvLogo{
+    background: var(--koochita-light-green);
+    width: 39%;
+    position: absolute;
+    left: -1px;
+    top: -2px;
+    padding: 2px 0px 5px 0px;
+    border-radius: 0px 0px 10px 0px;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo{
+    margin-top: 35px;
+    padding: 0px 5px;
+    display: flex;
+    flex-direction: column;
+    height: 115px;
+    justify-content: space-around;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .title{
+    color: white;
+    font-size: 12px;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .userInfo{
+    display: flex;
+    align-items: center;
+    font-size: 9px;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .userInfo .userPic{
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .userInfo .userText{
+    margin-right: 7px;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .userInfo .userText .username{
+    color: var(--koochita-blue);
+    font-size: 1.4em;
+}
+.koochitaTvSection.rowType .infoTvSec .textInfo .userInfo .userText .time{
+    color: white;
+}
+
 
 @media only screen and (max-width: 767px) {
     .fullReviewSeeAnses{
@@ -1649,24 +1742,25 @@
     }
     .suggestionPackDiv{
         margin-bottom: 15px;
-        /*width: 80%;*/
-        width: 150px;
+        width: 170px;
     }
     .suggestionPackDiv .suggestionPackContent{
-        box-shadow: 3px 0px 8px 1px #00000052;
+        /*box-shadow: 3px 0px 8px 1px #00000052;*/
         padding: 0px;
-        border-radius: 5px;
+        border-radius: 8px;
         overflow: hidden;
+        border: solid 1px #0000002b;
     }
     .imageGoldPin{
-        position: absolute;
-        top: -8px;
-        right: 5px;
-        z-index: 1;
-        width: 30px;
+        display: none;
+        /*position: absolute;*/
+        /*top: -8px;*/
+        /*right: 5px;*/
+        /*z-index: 1;*/
+        /*width: 30px;*/
     }
     .suggestionPackPicLink{
-        height: 95px;
+        height: 120px;
         border-radius: 5px;
     }
     .suggestionPackDetailDiv{

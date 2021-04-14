@@ -1,7 +1,7 @@
 <style>
 
 </style>
-
+{{--suggestionPackBookMark--}}
 <script>
     var suggestionPlacePackSample = `
         <div class="suggestionPackDiv">
@@ -9,6 +9,7 @@
                 <img alt="pin" src="{{URL::asset('images/pin.png')}}" class="imageGoldPin">
                 <div class="suggestionPackMainBody" style="display: none">
                     <a href="##url##" class="suggestionPackPicLink">
+                        <div class="suggestionPackBookMark BookMarkIconEmpty hideOnScreen"></div>
                         <div class="suggestionPackPicDiv">
                             <img src="##pic##" alt="##alt##" class="suggestionPackPic resizeImgClass" onload="loadSuggestionPack(this)" onerror="loadSuggestionPack(this, 'error')">
                         </div>

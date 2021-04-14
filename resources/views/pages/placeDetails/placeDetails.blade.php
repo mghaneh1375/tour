@@ -208,7 +208,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                             <div class="tvContentDiv">
                                 <div class="tvContentText"> کوچیتا تی وی برای تماشای آنلاین و زنده محتواهای بصری و صوتی در تمامی حوزه های گردشگری و سفر </div>
                                 <div class="tvContentVideo">
-                                    <a href="#" class="tvVideoPic fullHeight" target="_blank">
+                                    <a href="https://koochitatv.com" class="koochitaTvLinkUrl tvVideoPic fullHeight" target="_blank">
                                         <div class="tvImgHover">
                                             <img src="{{URL::asset('images/icons/play.webp')}}" style="width: 50px">
                                         </div>
@@ -226,16 +226,16 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
                                                 <i class="LikeIcon"></i>
                                             </div>
                                         </div>
-                                        <img src="{{URL::asset('images/mainPics/koochitatvdefault.webp')}}" class="koochitaTvImg resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                                        <img src="{{URL::asset('images/mainPics/koochitatvdefault.webp')}}" class="koochitaTvImg koochitaTvPic resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
                                     </a>
-                                    <a href="#" class="tvVideoName showLessText" target="_blank"></a>
+                                    <a href="https://koochitatv.com" class="koochitaTvLinkUrl koochitaTvTitle tvVideoName showLessText" target="_blank"></a>
                                     <div class="tvUserContentDiv hidden">
                                         <div class="tvUserPic">
-                                            <img  class="koochitaTvUserImg resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
+                                            <img  class="koochitaTvUserPic koochitaTvUserImg resizeImgClass" style="width: 100%" onload="fitThisImg(this)">
                                         </div>
                                         <div class="tvUserInfo">
-                                            <div class="tvUserName"></div>
-                                            <div class="tvUserTime"></div>
+                                            <div class="koochitaTvUserName tvUserName"></div>
+                                            <div class="koochitaTvUserTime tvUserTime"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -416,6 +416,34 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
 
     </div>
 
+
+    <div class="seperatorSections showOnTablet"></div>
+
+    <div class="showOnTablet koochitaTvSection rowType">
+        <a href="https://koochitatv.com" class="picSection koochitaTvLinkUrl">
+            <img src="{{URL::asset('images/mainPics/koochitatvdefault.webp')}}" class="resizeImgClass koochitaTvPic" alt="koochitaTv" onload="fitThisImg(this)">
+            <div class="playIconn">
+                <img src="{{URL::asset('images/icons/play.webp')}}" alt="playIcon">
+            </div>
+        </a>
+        <div class="infoTvSec">
+            <div class="tvLogo">
+                <img src="{{URL::asset('images/mainPics/vodLobo.webp')}}" alt="koochitaTvLogo" style="width: 100%">
+            </div>
+            <div class="textInfo">
+                <a href="https://koochitatv.com" target="_blank" class="title koochitaTvLinkUrl koochitaTvTitle">کوچیتا تی وی ، سامانه ویدیوی گردشگری</a>
+                <div class="userInfo userInfoKoochitaTv" style="display: none">
+                    <div class="userPic">
+                        <img src="#" target="_blank" alt="koochita" class="resizeImgClass koochitaTvUserPic" onload="fitThisImg(this)">
+                    </div>
+                    <div class="userText">
+                        <div class="username koochitaTvUserName"></div>
+                        <div class="time koochitaTvUserTime"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="seperatorSections"></div>
 

@@ -14,21 +14,23 @@ function getVideoFromTv(){
             if(response.status == 'ok'){
                 var result = response.result;
 
+                document.querySelector('.userInfoKoochitaTv').style.display = 'flex';
+
+                [...document.querySelectorAll('.koochitaTvLinkUrl')].map(item => item.setAttribute('href', result.url));
+                [...document.querySelectorAll('.koochitaTvTitle')].map(item => item.innerText = result.title);
+                [...document.querySelectorAll('.koochitaTvUserPic')].map(item => item.src = result.userPic);
+                [...document.querySelectorAll('.koochitaTvUserName')].map(item => item.innerText = result.username);
+                [...document.querySelectorAll('.koochitaTvUserTime')].map(item => item.innerText = result.time);
+                [...document.querySelectorAll('.koochitaTvPic')].map(item => item.src = result.pic);
+
                 var koochitaTvSectionElement = $('.koochitaTvSection');
                 koochitaTvSectionElement.find('.tvOverPic').removeClass('hidden');
                 koochitaTvSectionElement.find('.tvUserContentDiv').removeClass('hidden');
                 koochitaTvSectionElement.find('.tvVideoPic').removeClass('fullHeight');
 
-                koochitaTvSectionElement.find('.tvVideoPic').attr('href', result.url);
-                koochitaTvSectionElement.find('.tvUserName').text(result.username);
-                koochitaTvSectionElement.find('.tvUserTime').text(result.time);
-
                 koochitaTvSectionElement.find('.koochitaTvSeen').text(result.seen);
                 koochitaTvSectionElement.find('.koochitaTvDisLikeCount').text(result.disLike);
                 koochitaTvSectionElement.find('.koochitaTvLikeCount').text(result.like);
-                koochitaTvSectionElement.find('.koochitaTvImg').attr('src', result.pic);
-                koochitaTvSectionElement.find('.tvVideoName').attr('href', result.url).text(result.title);
-                koochitaTvSectionElement.find('.koochitaTvUserImg').attr('src', result.userPic);
             }
         },
     })

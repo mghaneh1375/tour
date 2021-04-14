@@ -124,7 +124,7 @@ class AjaxController extends Controller {
                 if($response->status == 'ok')
                     return response()->json(['status' => 'ok', 'result' => $response->result]);
                 else
-                    return response()->json(['status' => 'errorInResult']);
+                    return response()->json(['status' => 'errorInResult', 'result' => $response->status]);
             }
             else
                 return response()->json(['status' => 'errorInGet']);

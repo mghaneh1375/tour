@@ -269,8 +269,8 @@
                             </div>
                         </div>
 
-                        <div class="koochitaTvSection">
-                            <a href="#" class="picSection koochitaTvLinkUrl">
+                        <div class="koochitaTvSection rowType">
+                            <a href="https://koochitatv.com" class="picSection koochitaTvLinkUrl">
                                 <img src="{{URL::asset('images/mainPics/koochitatvdefault.webp')}}" class="resizeImgClass koochitaTvPic" alt="koochitaTv" onload="fitThisImg(this)">
                                 <div class="playIconn">
                                     <img src="{{URL::asset('images/icons/play.webp')}}" alt="playIcon">
@@ -281,7 +281,7 @@
                                     <img src="{{URL::asset('images/mainPics/vodLobo.webp')}}" alt="koochitaTvLogo" style="width: 100%">
                                 </div>
                                 <div class="textInfo">
-                                    <a href="#" target="_blank" class="title koochitaTvLinkUrl koochitaTvTitle"></a>
+                                    <a href="https://koochitatv.com" target="_blank" class="title koochitaTvLinkUrl koochitaTvTitle"></a>
                                     <div class="userInfo userInfoKoochitaTv" style="display: none">
                                         <div class="userPic">
                                             <img src="#" target="_blank" alt="koochita" class="resizeImgClass koochitaTvUserPic" onload="fitThisImg(this)">
@@ -296,7 +296,6 @@
                         </div>
 
                         {{--the best localShop section--}}
-
 {{--                        <div class="groupSec">--}}
 {{--                            <div class="boldText mr4bef fullStarRating">انتخاب بهترین مغازه دار</div>--}}
 {{--                            <div class="normText" style="padding: 0px 20px;">--}}

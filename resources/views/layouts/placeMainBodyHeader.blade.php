@@ -188,13 +188,13 @@
                         @endif
                         @if(isset($place->phone) && is_array($place->phone) && count($place->phone) > 0 && $kindPlaceId != 12)
                             <div class="blEntry blEn phone truePhone">
+                                <span class="ui_icon phone" style="margin: 0px 5px;"></span>
                                 @foreach($place->phone as $key => $phone)
                                     <a href="tel:{{$phone}}"> {{$phone}} </a>
                                     @if($key != count($place->phone)-1)
                                         -
                                     @endif
                                 @endforeach
-                                <span class="ui_icon phone"></span>
                             </div>
                         @endif
 
