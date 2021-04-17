@@ -179,25 +179,21 @@ function showPhotoAlbum(_kind) {
 }
 
 function addPlaceToBookMark() {
-
     if (!checkLogin())
         return;
 
-    $.ajax({
-        type: 'POST',
-        url: setPlacetoBookMarkUrl,
-        data: {placeId, kindPlaceId},
-        success: function (response) {
-            if (response == "ok-del"){
+    storePlaceToBookMark(placeId, kindPlaceId, (_status, _response) => {
+        if(_status === 'ok'){
+            if (_response == "ok-del"){
                 changeBookmarkIcon();
                 showSuccessNotifi('این صفحه از حالت ذخیره خارج شد', 'left', 'red');
             }
-            else if(response == 'ok-add'){
+            else if(_response == 'ok-add'){
                 changeBookmarkIcon();
                 showSuccessNotifi('این صفحه ذخیره شد', 'left', 'var(--koochita-blue)');
             }
         }
-    })
+    });
 }
 
 function addThisPlaceToTrip() {

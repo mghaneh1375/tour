@@ -344,7 +344,6 @@
 
     var proSearchUrlInList = '{{route('proSearch')}}';
     var getListElementUrl = '{{route("place.list.getElems")}}';
-    var setBookMarkInPlaceListUrl = '{{route("setBookMark")}}';
     var foodMaterialSearchUrl = '{{route("search.foodMaterial")}}';
     var addPlaceByUserInListUrl = '{{route('addPlaceByUser.index')}}';
     var getLocalShopFeatureListUrl = '{{route("localShop.getFeatureList")}}';

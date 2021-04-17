@@ -33,6 +33,30 @@ function updatePercentLoadingBar(_percent){
     fullPageLoaderElement.find('.bar').css('width', `${_percent}%`);
 }
 
+function storePlaceToBookMark(_placeId, _kindPlaceId, _callBack = ''){
+    if(!checkLogin())
+        return;
+
+    openLoading();
+    $.ajax({
+        type: 'POST',
+        url: window.setPlaceToBookMarkUrl,
+        data: {
+            placeId: _placeId,
+            kindPlaceId: _kindPlaceId,
+        },
+        complete: closeLoading,
+        success: response =>{
+            if(typeof _callBack === 'function')
+                _callBack('ok', response);
+        },
+        error: err => {
+            if(typeof _callBack === 'function')
+                _callBack('error', err);
+        }
+    })
+}
+
 
 
 function getLoginPages(_callBack){

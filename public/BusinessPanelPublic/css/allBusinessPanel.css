@@ -92,6 +92,20 @@ input[type="checkbox"], input[type="radio"]{
     width: 100%;
 }
 
+.newTicketCount{
+    width: 20px;
+    height: 20px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    border: solid 1px red;
+    animation: glowTicketNumber 2s infinite;
+}
+
 .mainHeader{
     background: white;
     width: 100%;

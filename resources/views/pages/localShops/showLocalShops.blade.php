@@ -603,7 +603,6 @@
 
         var photographerUploadFileLocalShop = '{{route('upload.photographer.uploadFile')}}';
         var getLocalShopReviewsUrl = '{{route("getReviews")}}';
-        var setBookMarkInLocalShop = '{{route("setBookMark")}}';
         var askQuestionUrl = '{{route("askQuestion")}}';
         var getQuestionsUrl = '{{route("getQuestions")}}';
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';

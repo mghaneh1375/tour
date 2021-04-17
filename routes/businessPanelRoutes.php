@@ -27,31 +27,18 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
     // Ticket Routes
     Route::group(['middleware' => ['web']], function(){
 
-        Route::get('ticket/show', [TicketController::class, 'ticketPage'])->name('ticket.page')->middleware(['BusinessPanelShareData']);
-
+        Route::get('ticket/user/show', [TicketController::class, 'ticketPage'])->name('ticket.page')->middleware(['BusinessPanelShareData']);
         Route::get('ticket/user/get/{parentId}', [TicketController::class, 'ticketGetUser'])->name('ticket.user.get');
-        Route::post('ticket/store', [TicketController::class, 'storeTicket'])->name('ticket.store');
+        Route::post('ticket/user/store', [TicketController::class, 'storeTicketUser'])->name('ticket.user.store');
+        Route::delete('ticket/user/delete', [TicketController::class, 'deleteTicketUser'])->name('ticket.user.delete');
 
-        Route::group(['middleware' => ['ticketAccess']], function () {
-            Route::middleware(['BusinessPanelShareData'])->group(function (){
-                Route::get('/businessSpecificMsgs/{ticket}', [TicketController::class, 'specificMsgs'])->name('ticket.specificMsgs');
-            });
-            Route::post('/ticketAddMsg/{ticket}', [TicketController::class, 'addMsg'])->name('businessPanel.ticketAddMsg');
-            Route::delete('/deleteTicket/{ticket}', [TicketController::class, 'delete'])->name('businessPanel.deleteTicket');
-            Route::post('/ticketMsgs/{ticket}', [TicketController::class, 'ticketMsgs'])->name('businessPanel.ticketMsgs');
+        Route::group(['middleware' => ['adminAccess']], function () {
+            Route::get('ticket/admin/show', [TicketController::class, 'adminTicketPage'])->name('ticket.admin.page')->middleware(['BusinessPanelShareData']);
+            Route::get('ticket/admin/get/{parentId}', [TicketController::class, 'ticketGetAdmin'])->name('ticket.admin.get');
+            Route::post('ticket/admin/store', [TicketController::class, 'storeTicketAdmin'])->name('ticket.admin.store');
+            Route::post('ticket/admin/closeTicket', [TicketController::class, 'closeTicket'])->name('ticket.admin.close');
         });
 
-        Route::group(['middleware' => ['adminAccess']], function(){
-            Route::post('/ticketClose/{ticket}', [TicketController::class, 'close'])->name('businessPanel.ticketClose');
-            Route::post('/ticketOpen/{ticket}', [TicketController::class, 'open'])->name('businessPanel.ticketOpen');
-        });
-
-        Route::group(['middleware' => ['businessAccess']], function(){
-            Route::get('businessMsgs/{business}', [TicketController::class, "msgs"])->name("ticket.msgs")->middleware(['BusinessPanelShareData']);
-
-            Route::post('/businessGeneralMsgs/{business}', [TicketController::class, 'generalMsgs'])->name('businessPanel.generalMsgs');
-            Route::post('/businessAddTicket/{business}', [TicketController::class, 'addTicket'])->name('businessPanel.addTicket');
-        });
     });
 
     Route::group(['middleware' => ['adminAccess']], function () {

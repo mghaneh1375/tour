@@ -144,15 +144,14 @@ function openLoading(_process = false, _callBack = '') {
             _process();
     }, 200);
 }
-
-function closeLoading(){
-    $('#fullPageLoader').addClass('hidden');
-}
-
 function updatePercentLoadingBar(_percent){
     $('#fullPageLoader').find('.percentBar').text(`${_percent}%`)
         .find('.bar').css('width', `${_percent}%`);
 }
+function closeLoading(){
+    $('#fullPageLoader').addClass('hidden');
+}
+
 
 
 function showSuccessNotifiBP(_msg, _side = 'right', _color = '#0076ac') {

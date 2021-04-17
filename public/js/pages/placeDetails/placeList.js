@@ -511,24 +511,18 @@ function bookMarkThisPlace(_element){
         return;
 
     var placeId = $(_element).attr('value');
-    $.ajax({
-        type: 'POST',
-        url: setBookMarkInPlaceListUrl,
-        data: {
-            placeId,
-            kindPlaceId
-        },
-        success: function (response) {
-            if (response == "ok-del"){
+
+    storePlaceToBookMark(placeId, kindPlaceId, (_status, _response) => {
+        if(_status == 'ok') {
+            if (_response == "ok-del") {
                 $(_element).addClass('BookMarkIconEmpty').removeClass('BookMarkIcon');
                 showSuccessNotifi('این صفحه از حالت ذخیره خارج شد', 'left', 'red');
-            }
-            else if(response == 'ok-add'){
+            } else if (_response == 'ok-add') {
                 $(_element).addClass('BookMarkIcon').removeClass('BookMarkIconEmpty');
                 showSuccessNotifi('این صفحه ذخیره شد', 'left', 'var(--koochita-blue)');
             }
         }
-    })
+    });
 }
 
 function showThisPlaceInMap(_element){

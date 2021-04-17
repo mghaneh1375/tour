@@ -70,11 +70,6 @@
                                         </td>
                                     @endif
 
-                                    <td class="msgLast">
-                                        <a class="btn btn-info circleButton" href="{{route('ticket.msgs', ['business' => $business->id])}}" title="پیام ها">
-                                            <i class="fas fa-envelope"></i>
-                                        </a>
-                                    </td>
                                 </tr>
                                 <?php $i++; ?>
                             @endforeach

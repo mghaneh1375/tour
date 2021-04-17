@@ -84,6 +84,9 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
     Route::get('/landingPage', [MainController::class, 'landingPage'])->name('landingPage')->middleware('shareData');
 
+    Route::post('getNearby', [PlaceController::class, 'getNearby'])->name('getNearby');
+
+
     //PDF creator
 
     Route::get('printPage/{tripId}', 'HomeController@printPage')->name('printPage');
@@ -93,14 +96,13 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
     Route::post('fillMyDivWithAdv', ['as' => 'fillMyDivWithAdv', 'uses' => 'PlaceController@fillMyDivWithAdv']);
 
     Route::post('getSimilarsHotel', array('as' => 'getSimilarsHotel', 'uses' => 'HotelController@getSimilarsHotel'));
-
+\
     Route::post('getSimilarsAmaken', array('as' => 'getSimilarsAmaken', 'uses' => 'AmakenController@getSimilarsAmaken'));
 
     Route::post('getSimilarsRestaurant', array('as' => 'getSimilarsRestaurant', 'uses' => 'RestaurantController@getSimilarsRestaurant'));
 
     Route::post('getSimilarsMajara', array('as' => 'getSimilarsMajara', 'uses' => 'MajaraController@getSimilarsMajara'));
 
-    Route::post('getNearby', array('as' => 'getNearby', 'uses' => 'PlaceController@getNearby'));
 
     Route::post('getQuestions', array('as' => 'getQuestions', 'uses' => 'PlaceController@getQuestions'));
 
@@ -143,6 +145,7 @@ Route::group(array('middleware' => ['throttle:60', 'web']), function () {
 
 // Searches
 Route::group(['middleware' => ['web']], function(){
+
     Route::any('totalSearch', [HomeController::class, 'totalSearch'])->name('totalSearch');
 
     Route::get('searchPlace', [AjaxController::class, 'searchPlace'])->name('search.place');
@@ -543,7 +546,7 @@ Route::group(['middleware' => ['throttle:60']], function(){
 
         Route::post('sendAns2', array('as' => 'sendAns2', 'uses' => 'PlaceController@sendAns2'));
 
-        Route::post('setBookMark',  [PlaceController::class, 'setBookMark'])->name('setBookMark');
+        Route::post('setBookMarkPlaces',  [PlaceController::class, 'setBookMarkPlaces'])->name('setBookMark');
 
         Route::get('/alert/get', [HomeController::class, 'getAlerts'])->name('getAlerts');
 

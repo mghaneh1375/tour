@@ -1,19 +1,16 @@
-<style>
 
-</style>
-{{--suggestionPackBookMark--}}
 <script>
     var suggestionPlacePackSample = `
         <div class="suggestionPackDiv">
             <div class="suggestionPackContent">
                 <img alt="pin" src="{{URL::asset('images/pin.png')}}" class="imageGoldPin">
                 <div class="suggestionPackMainBody" style="display: none">
-                    <a href="##url##" class="suggestionPackPicLink">
-                        <div class="suggestionPackBookMark BookMarkIconEmpty hideOnScreen"></div>
-                        <div class="suggestionPackPicDiv">
+                    <div class="suggestionPackPicLink">
+                        <div data-id="##id##" data-kindPlace="##kindPlaceId##" class="suggestionPackBookMark ##isBookMarked## hideOnScreen" onclick="bookMarkThisSuggestionPlace(this)"></div>
+                        <a href="##url##" class="suggestionPackPicDiv">
                             <img src="##pic##" alt="##alt##" class="suggestionPackPic resizeImgClass" onload="loadSuggestionPack(this)" onerror="loadSuggestionPack(this, 'error')">
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                     <div class="suggestionPackDetailDiv">
                         <a href="##url##" class="suggestionPackName lessShowText">##name##</a>
                         <div class="suggestionPackReviewRow" style="display: ##citySection##">
@@ -92,6 +89,15 @@
                 text = text.replace(new RegExp('##articleSetion##', "g"), 'flex');
                 text = text.replace(new RegExp('##citySection##', "g"), 'none');
             }
+
+            if(item['kindPlaceId']){
+                let bookIcon = item['bookMarked'] == 1 ? 'BookMarkIcon' : 'BookMarkIconEmpty';
+                text = text.replace(new RegExp('##isBookMarked##', "g"), bookIcon);
+            }
+            else
+                text = text.replace(new RegExp('##isBookMarked##', "g"), 'hidden');
+
+
             res += text;
         });
 
@@ -129,6 +135,25 @@
 
     function getSuggestionPackPlaceHolder(){
         return suggestionPlacePlaceHolderSample;
+    }
+
+    function bookMarkThisSuggestionPlace(_element){
+        var id = _element.getAttribute('data-id');
+        var kindPlaceId = _element.getAttribute('data-kindPlace');
+
+        storePlaceToBookMark(id, kindPlaceId, (status, response) =>{
+            if(status == 'ok'){
+                if (response == "ok-del") {
+                    _element.classList.add('BookMarkIconEmpty');
+                    _element.classList.remove('BookMarkIcon');
+                    showSuccessNotifi('از نشان کرده ها حذف شد', 'left', 'red');
+                } else if (response == 'ok-add') {
+                    _element.classList.add('BookMarkIcon');
+                    _element.classList.remove('BookMarkIconEmpty');
+                    showSuccessNotifi('به نشان کرده ها اضافه شد.', 'left', 'var(--koochita-blue)');
+                }
+            }
+        });
     }
 
 </script>

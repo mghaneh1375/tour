@@ -141,6 +141,41 @@ class User extends Authenticatable{
         return $userCount;
     }
 
+    public static function isBookMarked($userId, $type, $data){
+//        $type = 'safarnameh' || 'review' || 'place';
+//        $data = [
+//            'kindPlaceId' => '',
+//            'id' => '',
+//        ];
+
+        if(!config('isGetBookMarks')){
+            $placeRefs = BookMarkReference::join('place', 'place.tableName', 'bookMarkReferences.tableName')->select(['bookMarkReferences.tableName', 'place.id AS kindPlaceId'])->get()->toArray();
+            $kindPlaceIds = [];
+            foreach ($placeRefs as $pr)
+                $kindPlaceIds[$pr['tableName']] = $pr['kindPlaceId'];
+
+            $bookMarks = BookMark::join('bookMarkReferences', 'bookMarkReferences.id', 'bookMarks.bookMarkReferenceId')
+                                    ->where('bookMarks.userId', $userId)->select(['bookMarks.id', 'bookMarks.referenceId', 'bookMarkReferences.group', 'bookMarkReferences.tableName'])
+                                    ->get()->groupBy('group');
+            foreach($bookMarks['place'] as $bm)
+                $bm->kindPlaceId = $kindPlaceIds[$bm->tableName] ?? 0;
+
+            config(['userBookMarked' => $bookMarks->toArray()]);
+            config(['isGetBookMarks' => true]);
+        }
+
+        $bookMarks = config('userBookMarked');
+
+        if($type === 'place'){
+            foreach($bookMarks['place'] as $bm){
+                if($bm['referenceId'] == $data['id'] && $bm['kindPlaceId'] == $data['kindPlaceId'])
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getUserTotalPoint()
     {
         return $this->getUserPointInModel(auth()->user()->id);

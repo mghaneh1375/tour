@@ -170,27 +170,18 @@ function bookMarkThisLocalShop(){
     if(!checkLogin())
         return;
 
-    openLoading();
-    $.ajax({
-        type: 'POST',
-        url: setBookMarkInLocalShop,
-        data: {
-            _token: csrfTokenGlobal,
-            placeId: localShop.id,
-            kindPlaceId: 13
-        },
-        complete: closeLoading,
-        success: response =>{
-            if (response == "ok-del"){
+    storePlaceToBookMark(localShop.id, 13, (_status, _response) => {
+        if(_status == 'ok') {
+            if (_response == "ok-del") {
                 $('.BookMarkIconAfter.localShopPageBookMark').removeClass('BookMarkIconAfter').addClass('BookMarkIconEmptyAfter');
                 showSuccessNotifi('این صفحه از حالت ذخیره خارج شد', 'left', 'red');
-            }
-            else if(response == 'ok-add'){
+            } else if (_response == 'ok-add') {
                 $('.BookMarkIconEmptyAfter.localShopPageBookMark').removeClass('BookMarkIconEmptyAfter').addClass('BookMarkIconAfter');
                 showSuccessNotifi('این صفحه ذخیره شد', 'left', 'var(--koochita-blue)');
             }
         }
-    })
+    });
+
 }
 
 function addPictureToLocalShop() {

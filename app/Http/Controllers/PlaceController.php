@@ -103,7 +103,6 @@ class PlaceController extends Controller {
         if($kindPlace == null)
             return \redirect(\url('/'));
 
-
         if(is_numeric($slug))
             $place = DB::table($kindPlace->tableName)->find((int)$slug);
         else
@@ -564,7 +563,7 @@ class PlaceController extends Controller {
         return response()->json([]);
     }
 
-    public function setBookMark()
+    public function setBookMarkPlaces()
     {
         if (isset($_POST["placeId"]) && isset($_POST["kindPlaceId"])) {
             $uId = Auth::user()->id;
@@ -2945,6 +2944,8 @@ class PlaceController extends Controller {
         $D = (float)$D * 3.14 / 180;
         $C = (float)$C * 3.14 / 180;
 
+        $authCheck = \auth()->check() ? \auth()->user()->id : 0;
+
         $tableNames = ['hotels', 'restaurant', 'amaken', 'majara', 'boomgardies'];
 
         foreach ($tableNames as $tableName){
@@ -2952,6 +2953,11 @@ class PlaceController extends Controller {
             if($kindPlace != null) {
                 $nearbys = DB::select("SELECT acos(" . sin($D) . " * sin(D / 180 * 3.14) + " . cos($D) . " * cos(D / 180 * 3.14) * cos(C / 180 * 3.14 - " . $C . ")) * 6371 as distance, id, name, reviewCount, fullRate, slug, alt, cityId, C, D FROM " . $tableName . " HAVING distance between -1 and " . ConfigModel::first()->radius . " order by distance ASC limit 0, " . $count);
                 foreach ($nearbys as $nearby) {
+                    $nearby->bookMarked = 0;
+                    if($authCheck != 0)
+                        $nearby->bookMarked = User::isBookMarked($authCheck, 'place', ['id' => $nearby->id, 'kindPlaceId' => $kindPlace->id]) ? 1 : 0;
+
+                    $nearby->kindPlaceId = $kindPlace->id;
                     $nearby->pic = getPlacePic($nearby->id, $kindPlace->id);
                     $nearby->review = $nearby->reviewCount;
                     $nearby->rate = floor($nearby->fullRate);

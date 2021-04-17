@@ -20,12 +20,14 @@
     @endif
 
     @if(auth()->check())
-        <a href="{{route('ticket.page')}}" class="ticketButton" title="پشتیبانی">
-            <i class="fa-solid fa-headset"></i>
-            @if($newTicketCount != 0)
-                <div class="newNum">{{$newTicketCount}}</div>
-            @endif
-        </a>
+        @if(auth()->user()->level == 0)
+            <a href="{{route('ticket.page')}}" class="ticketButton" title="پشتیبانی">
+                <i class="fa-solid fa-headset"></i>
+                @if($newTicketCount != 0)
+                    <div class="newNum">{{$newTicketCount}}</div>
+                @endif
+            </a>
+        @endif
 
         <div class="userInfoSec">
             <div class="userPic">

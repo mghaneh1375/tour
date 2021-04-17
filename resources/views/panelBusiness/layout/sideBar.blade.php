@@ -21,6 +21,15 @@
                     <a href="{{route('businessPanel.getUnChecked')}}" class="sideNavItem">درخواست های تعیین تکلیف نشده</a>
                 </div>
             </div>
+
+            <div class="sideNavRow">
+                <a href="{{route("ticket.admin.page")}}" class="sideNavHeader">
+                    <span>پشتیبانی</span>
+                    @if($newTicketCount > 0)
+                        <span class="newTicketCount">{{$newTicketCount}}</span>
+                    @endif
+                </a>
+            </div>
         @else
             @if(isset($businessType))
                 @if($businessType === 'agency')

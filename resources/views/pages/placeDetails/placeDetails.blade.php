@@ -801,7 +801,7 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
             function getNearbyToPlace(){
                 // getNearby
                 $.ajax({
-                    type: 'post',
+                    type: 'POST',
                     url: '{{route("getNearby")}}',
                     data: {
                         placeId: placeId,
@@ -825,10 +825,12 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
             function createSuggestionRowWithData(_result){
                 let fk = Object.keys(_result);
                 for (let x of fk) {
-                    if(_result[x].length > 4)
+                    if(_result[x].length > 4) {
+
                         createSuggestionPack(`nearDiv${x}Content`, _result[x], () => {
                             $(`#nearDiv${x}Content`).find('.suggestionPackDiv').addClass('swiper-slide'); /**in suggestionPack.blade.php**/
                         });
+                    }
                     else
                         $(`#nearDiv${x}`).remove();
                 }
@@ -857,7 +859,6 @@ $seoTitle = isset($place->seoTitle) ? $place->seoTitle : "کوچیتا | " . $ci
         var placeNamePlaceDetail = '{{$place->name}}';
         var noPicUrl = "{{URL::asset('images/mainPics/nopictext1.jpg')}}";
 
-        var setPlacetoBookMarkUrl = '{{route("setBookMark")}}';
         var koochitaTvUrl = "{{route('getVideosFromKoochitaTv')}}";
         var setRateToPlaceUrl = '{{route("places.setRateToPlaces")}}';
         var addPhotoToPlaceUrl = '{{route("upload.photographer.uploadFile")}}';
