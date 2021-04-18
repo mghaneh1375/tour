@@ -20,8 +20,14 @@
     @endif
 
     @if(auth()->check())
+        <a href="#" class="headerButton notificationHeader {{$newNotificationCount > 0 ? 'on' : 'off'}}" title="اعلانات">
+            <i class="fa-regular fa-bell icOff"></i>
+            <i class="fa-regular fa-bell-on icOn"></i>
+            <div class="newNum">{{$newNotificationCount}}</div>
+        </a>
+
         @if(auth()->user()->level == 0)
-            <a href="{{route('ticket.page')}}" class="ticketButton" title="پشتیبانی">
+            <a href="{{route('ticket.page')}}" class="headerButton" title="پشتیبانی">
                 <i class="fa-solid fa-headset"></i>
                 @if($newTicketCount != 0)
                     <div class="newNum">{{$newTicketCount}}</div>

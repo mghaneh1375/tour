@@ -125,7 +125,7 @@ input[type="checkbox"], input[type="radio"]{
 .mainHeader .mainLogo img{
     height: 100%;
 }
-.mainHeader .ticketButton{
+.mainHeader .headerButton{
     margin-left: 20px;
     font-size: 22px;
     width: 35px;
@@ -139,7 +139,7 @@ input[type="checkbox"], input[type="radio"]{
     background: #d3d3d378;
     position: relative;
 }
-.mainHeader .ticketButton .newNum{
+.mainHeader .headerButton .newNum{
     position: absolute;
     left: -5px;
     bottom: -5px;
@@ -609,6 +609,27 @@ label {
 }
 
 
+.notificationHeader.off .newNum{
+    display: none;
+}
+.notificationHeader.off .icOn{
+    display: none;
+}
+.notificationHeader.off .icOff{
+    display: block;
+}
+
+.notificationHeader.on .newNum{
+    display: flex;
+}
+.notificationHeader.on .icOn{
+    display: block;
+    animation: notificationBelt 2s infinite;
+}
+.notificationHeader.on .icOff{
+    display: none;
+}
+
 @media (max-width:766px) {
     .notifAlertBP {
         position: fixed;
@@ -651,6 +672,20 @@ label {
     }
 }
 
+@keyframes notificationBelt {
+    0% {
+        color: black;
+        transform: rotate(45deg);
+    }
+    50% {
+        color: red;
+        transform: rotate(-45deg);
+    }
+    100% {
+        color: black;
+        transform: rotate(45deg);
+    }
+}
 
 ::-webkit-scrollbar {
     width: 5px;

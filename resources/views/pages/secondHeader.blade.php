@@ -127,7 +127,7 @@
                     {{$locationName['cityName']}}
                 </a>
                 @if(isset($locationName['state']) && $locationName['kindState'] == 'city')
-                    <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'state', 'state' => $locationName['state']])}}">
+                    <a href="{{route('place.list', ['kindPlaceId' => 11, 'mode' => 'state', 'city' => $locationName['state']])}}">
                         {{__('غذاهای محلی ')}}
                         {{$stateOrCountryText}}
                         {{$locationName['state']}}
@@ -144,11 +144,12 @@
                     {{__('بوم گردی های')}}
                     {{$locationName['cityName']}}</a>
                 @if(isset($locationName['state']) && $locationName['kindState'] == 'city')
-                    <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'state', 'state' => $locationName['state']])}}">
+                    <a href="{{route('place.list', ['kindPlaceId' => 12, 'mode' => 'state', 'city' => $locationName['state']])}}">
                         {{__('بوم گردی های ')}}
                         {{$stateOrCountryText}}
                         {{$locationName['state']}}</a>
                 @endif
+
             </div>
         </div>
         <div class="secHeadTabs ">

@@ -10,7 +10,13 @@
     </div>
 
     <div class="sideMenuSection">
-        @if(\Illuminate\Support\Facades\Auth::user()->level != 0)
+
+        <div class="sideNavRow">
+            <a href="{{route("businessPanel.mainPage")}}" class="sideNavHeader">
+                <span>خانه</span>
+            </a>
+        </div>
+        @if(\auth()->user()->level != 0)
             <div class="sideNavRow">
                 <div class="sideNavHeader hasBody">
                     <span>مدیریت</span>
@@ -51,17 +57,17 @@
                 </div>
 
                 @else
-                <div class="sideNavRow">
-                    <div class="sideNavHeader hasBody">
-                        <span>کسب و کار</span>
-                        <i class="fas fa-angle-down"></i>
+                    <div class="sideNavRow">
+                        <div class="sideNavHeader hasBody">
+                            <span>کسب و کار</span>
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                        <div class="sideNavBody">
+                            <a href="{{route('businessPanel.create')}}" class="sideNavItem">ایجاد کسب و کار جدید</a>
+                            <a href="{{route('businessPanel.myBusinesses')}}" class="sideNavItem">کسب و کارهای من</a>
+                            <a href="{{route('businessPanel.completeUserInfo')}}" class="sideNavItem">تغییر اطلاعات فردی</a>
+                        </div>
                     </div>
-                    <div class="sideNavBody">
-                        <a href="{{route('businessPanel.create')}}" class="sideNavItem">ایجاد کسب و کار جدید</a>
-                        <a href="{{route('businessPanel.myBusinesses')}}" class="sideNavItem">کسب و کارهای من</a>
-                        <a href="{{route('businessPanel.completeUserInfo')}}" class="sideNavItem">تغییر اطلاعات فردی</a>
-                    </div>
-                </div>
             @endif
         @endif
 

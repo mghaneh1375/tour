@@ -19,7 +19,7 @@ class BusinessPanelShareData
      */
     public function handle($request, Closure $next)
     {
-        $fileVersions = 4;
+        $fileVersions = 5;
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);
@@ -30,7 +30,12 @@ class BusinessPanelShareData
             else
                 $newTicketCount = Ticket::where('adminSeen', 0)->count();
 
-            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo, 'allOtherYourBusinessForHeader' => $businessList, 'newTicketCount' => $newTicketCount]);
+
+            $newNotificationCount = 2;
+
+            View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo,
+                        'allOtherYourBusinessForHeader' => $businessList, 'newTicketCount' => $newTicketCount,
+                        'newNotificationCount' => $newNotificationCount]);
 
             if (!$request->is('completeUserInfo') && ($userInfo->first_name == null || $userInfo->last_name == null || $userInfo->phone == null || $userInfo->birthday == null))
                 return redirect(route('businessPanel.completeUserInfo'));

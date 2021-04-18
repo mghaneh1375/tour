@@ -24,21 +24,67 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 
 Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
+    Route::middleware(['BusinessPanelShareData'])->group( function () {
+        Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
+        Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
+        Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');
+        Route::get('/completeUserInfo', [MainPanelBusinessController::class, 'completeUserInfo'])->name('businessPanel.completeUserInfo');
+    });
+
+    Route::post('/doCreate', [UserPanelBusinessController::class, 'doCreate'])->name('businessPanel.doCreate');
+    Route::post('/getContract', [ContractController::class, 'getContract'])->name('businessPanel.getContract');
+    Route::post('/completeUserInfo', [MainPanelBusinessController::class, 'editUserInfo'])->name('businessPanel.editUserInfo');
+
     // Ticket Routes
     Route::group(['middleware' => ['web']], function(){
-
         Route::get('ticket/user/show', [TicketController::class, 'ticketPage'])->name('ticket.page')->middleware(['BusinessPanelShareData']);
         Route::get('ticket/user/get/{parentId}', [TicketController::class, 'ticketGetUser'])->name('ticket.user.get');
         Route::post('ticket/user/store', [TicketController::class, 'storeTicketUser'])->name('ticket.user.store');
         Route::delete('ticket/user/delete', [TicketController::class, 'deleteTicketUser'])->name('ticket.user.delete');
 
-        Route::group(['middleware' => ['adminAccess']], function () {
+        Route::group(['middleware' => ['adminAccess']], function (){
             Route::get('ticket/admin/show', [TicketController::class, 'adminTicketPage'])->name('ticket.admin.page')->middleware(['BusinessPanelShareData']);
             Route::get('ticket/admin/get/{parentId}', [TicketController::class, 'ticketGetAdmin'])->name('ticket.admin.get');
             Route::post('ticket/admin/store', [TicketController::class, 'storeTicketAdmin'])->name('ticket.admin.store');
             Route::post('ticket/admin/closeTicket', [TicketController::class, 'closeTicket'])->name('ticket.admin.close');
         });
+    });
 
+    // TOUR
+    Route::group(['middleware' => ['web']], function(){
+
+        Route::group(['middleware' => ['BusinessPanelShareData', 'BusinessPanelTypeManager']],  function(){
+            Route::get('businessManagement/{business}/tour/list', [AgencyBusinessPanelController::class, 'tourList'])->name('businessManagement.tour.list');
+
+            Route::get('businessManagement/{business}/tour/getFullyData/{tourId}', [TourCreationAgencyController::class, 'getFullyInfoOfTour'])->name('businessManagement.tour.getFullyInfoOfTour');
+
+            Route::get('businessManagement/{business}/tour/create', [TourCreationAgencyController::class, 'tourCreateUrlManager'])->name('businessManagement.tour.create');
+            Route::get('businessManagement/{business}/tour/create/stage_1/{tourId}/{type?}', [TourCreationAgencyController::class, 'tourCreateStageOne'])->name('businessManagement.tour.create.stage_1');
+            Route::get('businessManagement/{business}/tour/create/stage_2/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageTwo'])->name('businessManagement.tour.create.stage_2');
+            Route::get('businessManagement/{business}/tour/create/stage_3/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageThree'])->name('businessManagement.tour.create.stage_3');
+            Route::get('businessManagement/{business}/tour/create/stage_4/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageFour'])->name('businessManagement.tour.create.stage_4');
+            Route::get('businessManagement/{business}/tour/create/stage_5/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageFive'])->name('businessManagement.tour.create.stage_5');
+            Route::get('businessManagement/{business}/tour/create/stage_6/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageSix'])->name('businessManagement.tour.create.stage_6');
+
+            Route::get('businessManagement/{business}/tour/getLists', [AgencyBusinessPanelController::class, 'getTourList'])->name('businessManagement.tour.getLists');
+        });
+
+
+        Route::post('businessManagement/tour/store/stage_1', [TourCreationAgencyController::class, 'tourStoreStageOne'])->name('businessManagement.tour.store.stage_1');
+        Route::post('businessManagement/tour/store/stage_2', [TourCreationAgencyController::class, 'tourStoreStageTwo'])->name('businessManagement.tour.store.stage_2');
+        Route::post('businessManagement/tour/store/stage_3', [TourCreationAgencyController::class, 'tourStoreStageThree'])->name('businessManagement.tour.store.stage_3');
+        Route::post('businessManagement/tour/store/stage_4', [TourCreationAgencyController::class, 'tourStoreStageFour'])->name('businessManagement.tour.store.stage_4');
+        Route::post('businessManagement/tour/store/stage_5', [TourCreationAgencyController::class, 'tourStoreStageFive'])->name('businessManagement.tour.store.stage_5');
+        Route::delete('businessManagement/tour/delete', [TourCreationAgencyController::class, 'deleteTour'])->name('businessManagement.tour.delete');
+        Route::post('businessManagement/tour/store/pic', [TourCreationAgencyController::class, 'tourStorePic'])->name('businessManagement.tour.store.pic');
+        Route::post('businessManagement/tour/delete/pic', [TourCreationAgencyController::class, 'tourDeletePic'])->name('businessManagement.tour.delete.pic');
+
+        Route::post('businessManagement/tour/update/timeStatus', [TourCreationAgencyController::class, 'tourUpdateTimeStatus'])->name('businessManagement.tour.update.timeStatus');
+        Route::post('businessManagement/tour/update/tourPublished', [TourCreationAgencyController::class, 'tourUpdateTourPublished'])->name('businessManagement.tour.update.published');
+    });
+
+    Route::group(['middleware' => ['BusinessPanelTypeManager', 'BusinessPanelShareData']], function(){
+        Route::get('businessManagement/{business}/main', [MainPanelBusinessController::class, 'getToBusinessManagementPage'])->name('businessManagement.panel');
     });
 
     Route::group(['middleware' => ['adminAccess']], function () {
@@ -82,51 +128,6 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::post('/finalizeBusinessInfo/{business}', [UserPanelBusinessController::class, 'finalizeBusinessInfo'])->name('businessPanel.finalizeBusinessInfo');
     });
 
-    Route::group(['middleware' => ['BusinessPanelTypeManager']], function(){
-
-        Route::group(['middleware' => ['BusinessPanelShareData']], function (){
-            Route::get('businessManagement/{business}/main', [MainPanelBusinessController::class, 'getToBusinessManagementPage'])->name('businessManagement.panel');
-
-            Route::get('businessManagement/{business}/tour/list', [AgencyBusinessPanelController::class, 'tourList'])->name('businessManagement.tour.list');
-
-            Route::get('businessManagement/{business}/tour/getFullyData/{tourId}', [TourCreationAgencyController::class, 'getFullyInfoOfTour'])->name('businessManagement.tour.getFullyInfoOfTour');
-
-            Route::get('businessManagement/{business}/tour/create', [TourCreationAgencyController::class, 'tourCreateUrlManager'])->name('businessManagement.tour.create');
-            Route::get('businessManagement/{business}/tour/create/stage_1/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageOne'])->name('businessManagement.tour.create.stage_1');
-            Route::get('businessManagement/{business}/tour/create/stage_2/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageTwo'])->name('businessManagement.tour.create.stage_2');
-            Route::get('businessManagement/{business}/tour/create/stage_3/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageThree'])->name('businessManagement.tour.create.stage_3');
-            Route::get('businessManagement/{business}/tour/create/stage_4/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageFour'])->name('businessManagement.tour.create.stage_4');
-            Route::get('businessManagement/{business}/tour/create/stage_5/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageFive'])->name('businessManagement.tour.create.stage_5');
-            Route::get('businessManagement/{business}/tour/create/stage_6/{tourId}', [TourCreationAgencyController::class, 'tourCreateStageSix'])->name('businessManagement.tour.create.stage_6');
-        });
-
-        Route::get('businessManagement/{business}/tour/getLists', [AgencyBusinessPanelController::class, 'getTourList'])->name('businessManagement.tour.getLists');
-    });
-
-
-    Route::post('businessManagement/tour/store/stage_1', [TourCreationAgencyController::class, 'tourStoreStageOne'])->name('businessManagement.tour.store.stage_1');
-    Route::post('businessManagement/tour/store/stage_2', [TourCreationAgencyController::class, 'tourStoreStageTwo'])->name('businessManagement.tour.store.stage_2');
-    Route::post('businessManagement/tour/store/stage_3', [TourCreationAgencyController::class, 'tourStoreStageThree'])->name('businessManagement.tour.store.stage_3');
-    Route::post('businessManagement/tour/store/stage_4', [TourCreationAgencyController::class, 'tourStoreStageFour'])->name('businessManagement.tour.store.stage_4');
-    Route::post('businessManagement/tour/store/stage_5', [TourCreationAgencyController::class, 'tourStoreStageFive'])->name('businessManagement.tour.store.stage_5');
-    Route::delete('businessManagement/tour/delete', [TourCreationAgencyController::class, 'deleteTour'])->name('businessManagement.tour.delete');
-    Route::post('businessManagement/tour/store/pic', [TourCreationAgencyController::class, 'tourStorePic'])->name('businessManagement.tour.store.pic');
-    Route::post('businessManagement/tour/delete/pic', [TourCreationAgencyController::class, 'tourDeletePic'])->name('businessManagement.tour.delete.pic');
-
-    Route::post('businessManagement/tour/update/timeStatus', [TourCreationAgencyController::class, 'tourUpdateTimeStatus'])->name('businessManagement.tour.update.timeStatus');
-    Route::post('businessManagement/tour/update/tourPublished', [TourCreationAgencyController::class, 'tourUpdateTourPublished'])->name('businessManagement.tour.update.published');
-
-
-    Route::middleware(['BusinessPanelShareData'])->group( function () {
-        Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
-        Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
-        Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');
-        Route::get('/completeUserInfo', [MainPanelBusinessController::class, 'completeUserInfo'])->name('businessPanel.completeUserInfo');
-    });
-
-    Route::post('/doCreate', [UserPanelBusinessController::class, 'doCreate'])->name('businessPanel.doCreate');
-    Route::post('/getContract', [ContractController::class, 'getContract'])->name('businessPanel.getContract');
-    Route::post('/completeUserInfo', [MainPanelBusinessController::class, 'editUserInfo'])->name('businessPanel.editUserInfo');
 
     Route::get('/doLogOut', [AuthPanelBusinessController::class, 'doLogOut'])->name('businessPanel.doLogOut');
 });

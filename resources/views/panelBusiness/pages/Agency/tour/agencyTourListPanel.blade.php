@@ -161,6 +161,7 @@
         var tours = [];
         var openEditIndex = null;
         var deleteTourIndex = null;
+        var getFullDataUrl = '{{url("businessManagement/{$businessIdForUrl}/tour/getFullyData")}}';
 
         function getTourList(){
             openLoading();
@@ -196,7 +197,7 @@
                             <td>${item.day} روز / ${item.night} شب</td>
                             <td>${item.status}</td>
                             <td>
-                                <a href="{{url("businessManagement/{$businessIdForUrl}/tour/getFullyData")}}/${item.id}" class="circleButton yellowBut" title="اطلاعات کامل تور">
+                                <a href="${getFullDataUrl}/${item.id}" class="circleButton yellowBut" title="اطلاعات کامل تور">
                                     <i class="fa-regular fa-info"></i>
                                 </a>
                                 <button class="circleButton editBut" title="ویرایش" onclick="editTour(${index})">

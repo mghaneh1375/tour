@@ -64,9 +64,11 @@ class TourCreationAgencyController extends Controller{
         return view($view);
     }
 
-    public function tourCreateStageOne($business, $tourId){
+    public function tourCreateStageOne($business, $tourId, $type = ''){
         $tour = Tour::find($tourId);
         $states = State::all();
+
+        dd($type);
 
         if($tour != null){
             $business = Business::find($business);
@@ -698,17 +700,26 @@ class TourCreationAgencyController extends Controller{
 
                 $transport->sMap = json_decode($transport->sLatLng);
                 $transport->eMap = json_decode($transport->eLatLng);
+                $tour->transport = $transport;
             }
-            $tour->transport = $transport;
-
+            else
+                $tour->transport = false;
 
             $sideTransport = json_decode($tour->sideTransport);
-            $sideTransport = TransportKind::whereIn('id', $sideTransport)->pluck('name')->toArray();
-            $tour->sideTransport = $sideTransport;
+            if($sideTransport != null) {
+                $sideTransport = TransportKind::whereIn('id', $sideTransport)->pluck('name')->toArray();
+                $tour->sideTransport = $sideTransport;
+            }
+            else
+                $tour->sideTransport = [];
 
             $tour->language = json_decode($tour->language);
+            if($tour->language == null)
+                $tour->language = [];
 
             $tour->meals = json_decode($tour->meals);
+            if($tour->meals == null)
+                $tour->meals = [];
 
             $tourGuideKoochita = User::find($tour->tourGuidKoochitaId);
             if($tourGuideKoochita != null && $tour->tourGuidKoochitaId > 0)
@@ -747,7 +758,9 @@ class TourCreationAgencyController extends Controller{
             $tour->fitFor = implode('-', $fitFor);
 
             $tourStyle = TourStyle_Tour::join('tourStyles', 'tourStyles.id', 'tourStyle_tour.styleId')
-                                    ->where('tourStyle_tour.tourId', $tour->id)->pluck('tourStyles.name')->toArray();
+                                        ->where('tourStyle_tour.tourId', $tour->id)
+                                        ->pluck('tourStyles.name')
+                                        ->toArray();
             $tour->style = implode('-', $tourStyle);
 
             $equip = TourEquipment::join('subEquipments', 'subEquipments.id','tourEquipments.subEquipmentId')
@@ -755,8 +768,10 @@ class TourCreationAgencyController extends Controller{
                                 ->select(['tourEquipments.isNecessary', 'subEquipments.name'])
                                 ->get()->groupBy('isNecessary');
 
-            $tour->notNeccesseryEquip = implode('-', $equip[0]->pluck('name')->toArray());
-            $tour->neccesseryEquip = implode('-', $equip[1]->pluck('name')->toArray());
+            if(count($equip) > 0) {
+                $tour->notNeccesseryEquip = implode('-', $equip[0]->pluck('name')->toArray());
+                $tour->neccesseryEquip = implode('-', $equip[1]->pluck('name')->toArray());
+            }
 
             $pics = TourPic::where('tourId', $tour->id)->pluck('pic')->toArray();
             $baseUrl = URL::asset("_images/tour/{$tour->id}");
@@ -777,7 +792,6 @@ class TourCreationAgencyController extends Controller{
                 $tour->statusText = 'منتشر شده';
                 $tour->statusCode = 2;
             }
-
 
             return view("{$this->defaultViewLocation}.tour.fullTourInfo", compact(['tour']));
         }

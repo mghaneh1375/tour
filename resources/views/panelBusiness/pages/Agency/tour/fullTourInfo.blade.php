@@ -724,50 +724,53 @@
         }
 
 
-        var tourSMap = {!! json_encode($tour->transport->sMap) !!};
-        var tourEMap = {!! json_encode($tour->transport->eMap) !!};
 
-        var mainMap = null;
+        @if($tour->transport !== false)
+            var tourSMap = {!! json_encode($tour->transport->sMap) !!};
+            var tourEMap = {!! json_encode($tour->transport->eMap) !!};
 
-        function initMapIr(){
-            if(mainMap == null) {
-                mainMap = L.map("mapDiv", {
-                    minZoom: 1,
-                    maxZoom: 20,
-                    crs: L.CRS.EPSG3857,
-                    center: [32.42056639964595, 54.00537109375],
-                    zoom: 6
-                });
-                L.TileLayer.wmsHeader(
-                    "https://map.ir/shiveh",
-                    {
-                        layers: "Shiveh:Shiveh",
-                        format: "image/png",
+            var mainMap = null;
+
+            function initMapIr(){
+                if(mainMap == null) {
+                    mainMap = L.map("mapDiv", {
                         minZoom: 1,
-                        maxZoom: 20
-                    },
-                    [
+                        maxZoom: 20,
+                        crs: L.CRS.EPSG3857,
+                        center: [32.42056639964595, 54.00537109375],
+                        zoom: 6
+                    });
+                    L.TileLayer.wmsHeader(
+                        "https://map.ir/shiveh",
                         {
-                            header: "x-api-key",
-                            value: window.mappIrToken
-                        }
-                    ]
-                ).addTo(mainMap);
+                            layers: "Shiveh:Shiveh",
+                            format: "image/png",
+                            minZoom: 1,
+                            maxZoom: 20
+                        },
+                        [
+                            {
+                                header: "x-api-key",
+                                value: window.mappIrToken
+                            }
+                        ]
+                    ).addTo(mainMap);
 
-                L.marker(tourSMap).addTo(mainMap);
-                L.marker(tourEMap).addTo(mainMap);
+                    L.marker(tourSMap).addTo(mainMap);
+                    L.marker(tourEMap).addTo(mainMap);
+                }
             }
-        }
 
-        function changeCenter(_kind){
-            mapIsOpen = _kind;
-            $('#modalMap').modal('show');
-            setTimeout(() => {
-                initMapIr();
-                var center = _kind == 'src' ? tourSMap : tourEMap;
-                mainMap.setView(center, 6);
-            }, 500);
-        }
+            function changeCenter(_kind){
+                mapIsOpen = _kind;
+                $('#modalMap').modal('show');
+                setTimeout(() => {
+                    initMapIr();
+                    var center = _kind == 'src' ? tourSMap : tourEMap;
+                    mainMap.setView(center, 6);
+                }, 500);
+            }
+        @endif
     </script>
 @endsection
 

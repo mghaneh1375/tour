@@ -21,7 +21,12 @@ require_once(__DIR__.'/../glogin/libraries/Google/autoload.php');
 class MainPanelBusinessController extends Controller {
 
     public function mainPage() {
-        return view('panelBusiness.pages.empty');
+        $myBusiness = Business::where('userId', \auth()->user()->id)->get();
+        foreach($myBusiness as $mb){
+            $mb->url = route('businessManagement.panel', ['business' => $mb->id]);
+        }
+
+        return view('panelBusiness.pages.mainPage', compact(['myBusiness']));
     }
 
     public function completeUserInfo() {
