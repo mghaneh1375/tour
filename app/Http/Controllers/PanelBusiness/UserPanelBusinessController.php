@@ -244,7 +244,7 @@ class UserPanelBusinessController extends Controller {
             "tel" => "required|min:7",
             "mail" => "required",
             "introduction" => "required",
-            "economyCode" => "nullable|integer",
+            "economyCode" => "nullable",
         ], $messages=[
             "type.in" => "لطفا نوع خدمت قابل ارائه خود را مشخص کنید.",
             "name.unique" => "نام انتخاب شده در سیستم موجود است."
