@@ -33,8 +33,7 @@ class TourController extends Controller{
         'جمعه',
     ];
 
-    public function tourMainPage()
-    {
+    public function tourMainPage(){
         return view('pages.tour.mainPageTourF.mainPageTour');
     }
 
@@ -43,7 +42,7 @@ class TourController extends Controller{
         $categoryName = '';
         $destinations = [];
 
-        if($type === 'cityTour'){
+        if($type === 'cityTourism'){
             $categoryName = 'شهر گردی';
             $tours = TourTimes::YouCanSee()
                 ->join('tour', 'tour.id', 'tourTimes.tourId')

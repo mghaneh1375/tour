@@ -2320,3 +2320,137 @@ textarea {
         transform: rotate(360deg);
     }
 }
+
+
+
+.submitBTNCircleIcon{
+    border: none;
+    background: green;
+    /* width: 30px; */
+    /* height: 30px; */
+    border-radius: 5px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+}
+.personInfosLabel{
+    display: inline-flex;
+    align-items: center;
+    margin: 7px 20px;
+    font-size: 14px;
+}
+.transportInfoSec{
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    direction: rtl;
+    float: unset;
+}
+.transportInfoSec > div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.dayActionButton{
+    margin: 0px 10px;
+    padding: 4px 10px;
+    background: var(--koochita-blue);
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+    box-shadow: 1px 1px 4px 2px #bbbbbb;
+}
+
+.icon-circle-arrow-right{
+    width: 10px;
+    height: 10px;
+    display: flex;
+    border-right: solid 2px black;
+    border-top: solid 2px black;
+    transform: rotate(45deg);
+}
+.icon-circle-arrow-left{
+    width: 10px;
+    height: 10px;
+    display: flex;
+    border-left: solid 2px black;
+    border-bottom: solid 2px black;
+    transform: rotate(45deg);
+}
+.calendarIcon{
+    font-style: normal;
+}
+.addNewDateRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.calendarRow{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.youCantSelect{
+    opacity: 1 !important;
+}
+.youCantSelect > span{
+    background: var(--koochita-blue) !important;
+    color: white !important;
+}
+
+
+.dayToDiscountRow{
+    display: flex;
+    align-items: center;
+}
+.dayToDiscountRow .textSec{
+    align-items: center;
+    display: flex;
+    margin: 0px 10px;
+}
+.dayToDiscountRow .dayInput{
+    width: 100px;
+    background: #ebebeb;
+    padding: 3px 0px;
+    margin: 0px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    text-align: center;
+}
+.onlyInputBackGray{
+    width: 45px;
+    background: #ebebeb;
+    border: 1px solid #cccccc !important;
+    margin: 0px 10px;
+    border-radius: 5px;
+}
+.textareaInForDescription{
+    width: 100%;
+    text-align: right;
+}
+
+.dateModal .topBorder{
+    border-top: solid 1px gray;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.dateModal .secTitle{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.otherDateSection{
+    margin-top: 14px;
+}
+.tableButton{
+    font-size: 11px;
+    padding: 4px 10px;
+}

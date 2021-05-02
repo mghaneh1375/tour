@@ -133,9 +133,10 @@
     var getMainPageToursUrl = '{{route("tour.getMainPageTours")}}';
     var isShowFullSearchPanel = true;
     var nowTourTypeShow;
+    var nowShowTypeTour = 'cityTourism';
     var tourTypeMenu = [
         {
-            id: 'cityTour',
+            id: 'cityTourism',
             backPic: '{{URL::asset("images/test/tehran.jpg")}}',
             color: '#522d2d',
             picText: {
@@ -147,19 +148,19 @@
             tours: [],
             destinations: []
         },
-        {
-            id: 'iranTour',
-            backPic: '{{URL::asset("images/test/tourMainPic.jpg")}}',
-            color: '#0d6650',
-            picText: {
-                top: 'شناخت',
-                main: 'جاذبه های دیدنی',
-                bottom: 'ایران من'
-            },
-            isGet: false,
-            tours: [],
-            destinations: []
-        }
+        {{--{--}}
+        {{--    id: 'iranTour',--}}
+        {{--    backPic: '{{URL::asset("images/test/tourMainPic.jpg")}}',--}}
+        {{--    color: '#0d6650',--}}
+        {{--    picText: {--}}
+        {{--        top: 'شناخت',--}}
+        {{--        main: 'جاذبه های دیدنی',--}}
+        {{--        bottom: 'ایران من'--}}
+        {{--    },--}}
+        {{--    isGet: false,--}}
+        {{--    tours: [],--}}
+        {{--    destinations: []--}}
+        {{--}--}}
     ];
 
     function doSearchFromPanel(){
@@ -173,7 +174,7 @@
 
     $(window).ready(() => {
         updatePageElementsSizes();
-        showTourTypeShow('cityTour');
+        showTourTypeShow(nowShowTypeTour);
     }).on('resize', () => {
         updatePageElementsSizes();
     });

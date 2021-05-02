@@ -405,7 +405,11 @@ class cityTourismCreationController extends Controller implements tourCreations
         }
 
         $tour->backupPhone = $request->backUpPhone;
-        $tour->language = json_encode($request->otherLanguage);
+        if(isset($request->otherLanguage))
+            $tour->language = json_encode($request->otherLanguage);
+        else
+            $tour->language = null;
+
         $tour->save();
 
         return 'ok';

@@ -445,6 +445,296 @@ function fullDataInFields() {
     //     tour.remainingDay.forEach(item => addLastDayDiscount(item));
 }
 
+function hasOtherDate(_value){
+    if(otherDates.length === 0 && _value == 1)
+        openDateModal();
+}
+
+function openDateModal(_date = null){
+    if(_date == null){
+        _date = {
+            code: 0,
+            date: '',
+            anyCapacity: 0,
+            minCapacity: '',
+            maxCapacity: '',
+            cost: '',
+            isInsurance: 1,
+            sDateRegister: {
+                date: '',
+                time: ''
+            },
+            eDateRegister: {
+                date: '',
+                time: ''
+            },
+            groupDiscount: [],
+        }
+    }
+
+    document.getElementById('tourDateCode').value = _date.code;
+
+    createGroupDisCountCard('modal');
+    openMyModalBP('dateModal');
+}
+
+function changeModalDate(_value, _type){
+    let className = _type === 'main' ? '.mainDateShow' : '.dateClassInModal';
+    [...document.querySelectorAll(className)].map(item => item.innerText = _value);
+}
+
+function submitDateModal(){
+    let errorText = '';
+
+    let code = document.getElementById('tourDateCode').value;
+    if(code == 0)
+        code = Math.floor(Math.random() * 100000);
+
+    let index = null;
+    for(let i = 0; i < otherDates.length; i++) {
+        if(code == otherDates.code){
+            index = i;
+            break;
+        }
+    }
+
+    let groupDiscount = [];
+    let date = document.getElementById('dateInModal').value;
+    let cost = parseFloat(document.getElementById('costInModal').value.replace(new RegExp(',', 'g'), ''));
+    let isInsurance = document.querySelector('input[name="isInsuranceInModal"]:checked').value;
+    let minCapacity = parseInt(document.getElementById('minCapacityInModal').value);
+    let maxCapacity = parseInt(document.getElementById('maxCapacityInModal').value);
+
+    let groupDiscountRow = 0;
+    [...document.querySelectorAll('#groupDiscountDiv .discountRow')].map(item => {
+        groupDiscountRow++;
+        let hasError = false;
+        let index = item.getAttribute('data-index');
+
+        let disId = document.getElementById(`disCountGroupId_${index}`).value;
+        let min = parseInt(document.getElementById(`disCountFrom_${index}`).value);
+        let max = parseInt(document.getElementById(`disCountTo_${index}`).value);
+        let discount = parseFloat(document.getElementById(`disCountCap_${index}`).value);
+
+        if(!(min > 0)){
+            hasError = true;
+            document.getElementById(`disCountFrom_${index}`).classList.add('errorClass');
+        }
+        if(!(max > 0)){
+            hasError = true;
+            document.getElementById(`disCountTo_${index}`).classList.add('errorClass');
+        }
+        if(!(discount > 0)){
+            hasError = true;
+            document.getElementById(`disCountCap_${index}`).classList.add('errorClass');
+        }
+
+        if(!hasError)
+            groupDiscount.push({ id: disId, min, max, discount});
+    });
+
+    if(date.trim().length === 0)
+        errorText += `<li>تاریخ را مشخص کنید</li>`;
+    for(let i = 0; i < otherDates.length; i++){
+        if(otherDates[i].code != code){
+            if(otherDates[i].date === date){
+                errorText += `<li>تاریخ تکراری می باشد.</li>`;
+                break;
+            }
+        }
+    }
+    if(!(cost > 0))
+        errorText += `<li>قیمت تور را  مشخص کنید.</li>`;
+    if(!(minCapacity > 0))
+        errorText += `<li>حداقل ظرفیت را مشخص کنید</li>`;
+    if(!(maxCapacity > 0))
+        errorText += `<li>حداکثر ظرفیت را مشخص کنید</li>`;
+    if(groupDiscountRow != groupDiscount.length)
+        errorText += `<li>بعضی از فیلد های تخفیف خالی است. آنها را پر کنید.</li>`;
+    if(minCapacity > maxCapacity)
+        errorText += `<li>حداکثر ظرفیت نمی تواند از حداقل کمتر باشد</li>`;
+
+
+    if(errorText.trim().length > 0){
+        errorText = `<ul class="errorList">${errorText}</ul>`;
+        openErrorAlertBP(errorText);
+    }
+    else {
+        let data = {id: 0, code, date, cost, isInsurance, minCapacity, maxCapacity, groupDiscount};
+
+        if (index == null)
+            otherDates.push(data);
+        else
+            otherDates[index] = data;
+
+        let html = '';
+        otherDates.forEach(item => {
+            html += `<tr id="dateRow_${item.code}">
+                            <td>${item.date}</td>
+                            <td>${numberWithCommas(item.cost)} تومان</td>
+                            <td>${item.minCapacity}-${item.maxCapacity} نفر</td>
+                            <td>${item.groupDiscount.length} تا تخفیف گروهی</td>
+                            <td>
+<!--                                <button class="btn btn-primary tableButton" onclick="editThisDate(${item.id})">ویرایش</button>-->
+                                <button class="btn btn-danger tableButton" onclick="deleteThisDate(${item.code})">حذف</button>
+                            </td>
+                        </tr>`;
+        });
+        document.getElementById('otherDateTableBody').innerHTML = html;
+        document.getElementById('otherDateSection').classList.remove('hidden');
+
+        closeMyModalBP('dateModal');
+        cleanDateModalDate();
+    }
+}
+
+function cleanDateModalDate(){
+    document.getElementById('dateInModal').value = '';
+    document.getElementById('minCapacityInModal').value = '';
+    document.getElementById('maxCapacityInModal').value = '';
+    document.getElementById('costInModal').value = '';
+    document.getElementById('groupDiscountDiv').innerHTML = '';
+}
+
+function deleteThisDate(_code){
+    let index = null;
+    for(let i = 0; i < otherDates.length; i++){
+        if(otherDates[i].code == _code){
+            index = i;
+            break;
+        }
+    }
+
+    if(index != null){
+        document.getElementById(`dateRow_${otherDates[index].code}`).remove();
+        otherDates.splice(index, 1);
+    }
+}
+
+function checkInput() {
+    let allDates = [];
+    dataToSend = {
+        tourType,
+        tourId: document.getElementById('tourId').value,
+        businessId: document.getElementById('businessId').value,
+        tourName: document.getElementById('tourName').value,
+        srcCityId: document.getElementById('srcCityId').value,
+        anyCapacity: 0,
+        private: document.querySelector('input[name="private"]:checked').value,
+        userInfoNeed: ['faName', 'sex', 'birthDay', 'meliCode'],
+        cancelAble: document.querySelector('input[name="isCancelAbel"]:checked').value,
+        cancelDescription: document.getElementById('cancelDescription').value,
+
+        dates: []
+    };
+
+    let errorText = '';
+    if (dataToSend.tourName.trim().length < 2)
+        errorText += '<li>نام تور خود را مشخص کنید.</li>';
+
+    if (!(dataToSend.srcCityId >= 1))
+        errorText += '<li>شهر برگزاری تور خود را مشخص کنید.</li>';
+
+    if(dataToSend.cancelAble == 1 && dataToSend.cancelDescription.trim().length === 0)
+        errorText += '<li>در صورت داشتن شرایط کنسلی، شرایط آن را بنویسید.</li>';
+
+    let mainDate = document.getElementById('mainDate').value;
+    let mainCost = parseFloat(document.getElementById('tourCost').value.replace(new RegExp(',', 'g'), ''));
+    let mainMinCapacity = parseInt(document.getElementById('minCapacity').value);
+    let mainMaxCapacity = parseInt(document.getElementById('maxCapacity').value);
+    let mainIsInsurance = document.querySelector('input[name="isInsurance"]:checked').value;
+
+    let mainGroupDiscount = [];
+    let mainGroupDiscountRow = 0;
+    [...document.querySelectorAll('#mainGroupDiscount .discountRow')].map(item => {
+        mainGroupDiscountRow++;
+        let index = item.getAttribute('data-index');
+
+        let min = parseInt(document.getElementById(`disCountFrom_${index}`).value);
+        let max = parseInt(document.getElementById(`disCountTo_${index}`).value);
+        let discount = parseFloat(document.getElementById(`disCountCap_${index}`).value);
+        let hasError = false;
+
+        if(!(min > 0)){
+            hasError = true;
+            document.getElementById(`disCountFrom_${index}`).classList.add('errorClass');
+        }
+
+        if(!(max > 0)){
+            hasError = true;
+            document.getElementById(`disCountTo_${index}`).classList.add('errorClass');
+        }
+
+        if(!(discount > 0)){
+            hasError = true;
+            document.getElementById(`disCountCap_${index}`).classList.add('errorClass');
+        }
+
+        if(!hasError)
+            mainGroupDiscount.push({id: 0, min, max, discount});
+    });
+
+    if (mainDate.trim().length === 0)
+        errorText += `<li>تاریخ اصلی تور را مشخص کنید.</li>`;
+    if (!(mainCost > 0))
+        errorText += `<li>قیمت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+    if (!(mainMinCapacity >= 0))
+        errorText += `<li>حداقل ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+    if (!(mainMaxCapacity >= 0))
+        errorText += `<li>حداکثر ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+    if (mainMaxCapacity < mainMinCapacity)
+        errorText += `<li>حداکثر ظرفیت تور نمی تواند کوچکتر از حداقل باشد</li>`;
+    if(mainGroupDiscount.length != mainGroupDiscountRow)
+        errorText += `<li>بعضی از فیلدهای تخفیف گروهی برای تاریخ ${mainDate} خالی است. آنها را پر کنید و یا حذف کنید.</li>`;
+
+    allDates.push({
+        id: 0,
+        date: mainDate,
+        cost: mainCost,
+        inInsurance: mainIsInsurance,
+        minCapacity: mainMinCapacity,
+        maxCapacity: mainMaxCapacity,
+        groupDiscount: mainGroupDiscount
+    });
+
+    otherDates.forEach(item => allDates.push(item));
+
+    dataToSend.dates = allDates;
+
+    let errorInEmpty = false;
+    if (errorInEmpty)
+        errorText += '<li>بعضی از فیلدهای تخفیف خالی است. انها را کامل کنید.</li>';
+
+    if (errorText != '') {
+        errorText = `<ul class="errorList">${errorText}</ul>`;
+        openErrorAlertBP(errorText);
+    }
+    else
+        submitInputs();
+}
+
+function submitInputs(){
+    openLoading(false, () => {
+        $.ajax({
+            type: 'POST',
+            url: stageOneStoreUrl,
+            data: dataToSend,
+            success: response => {
+                if(response.status === 'ok')
+                    location.href = `${stageTwoUrl}/${response.result}`;
+                else{
+                    closeLoading();
+                    showSuccessNotifiBP('در ثبت مشکلی پیش آمده', 'left', 'red');
+                }
+            },
+            error: err =>{
+                closeLoading();
+                showSuccessNotifiBP('در ثبت مشکلی پیش آمده', 'left', 'red')
+            }
+        })
+    });
+}
+
 $(document).ready(() => {
     $('.observer-example').datepicker(datePickerOptions);
     $('.tourBasicKindsCheckbox').mouseenter(() => $(this).addClass('green-border')).mouseleave(() => $(this).removeClass('green-border'));
