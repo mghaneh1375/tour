@@ -149,10 +149,23 @@ class TourController extends Controller{
         $owner = User::find($tour->userId);
         $ownerPic = getUserPic($owner->id);
 
-        $tour->timeCode = isset($_GET['timeCode']) ? $_GET['timeCode'] : TourTimes::where('tourId', $tour->id)->orderBy('sDate')->first()->code;
+        $time = null;
+        $timeCode = null;
+        if(isset($_GET['timeCode']))
+            $time = TourTimes::youCanSee()->where('tourId', $tour->id)->where('code', $_GET['timeCode'])->first();
+
+        if($time == null)
+            $time = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->first();
+
+        $stt = explode('/', $time->sDate);
+        $tour->sDateName = Verta::createJalali($stt[0], $stt[1], $stt[2])->format('%A Y/m/d');
+        if($tour->type != 'cityTourism'){
+            $stt = explode('/', $time->eDate);
+            $tour->eDateName = Verta::createJalali($stt[0], $stt[1], $stt[2])->format('%A Y/m/d');
+        }
 
         $tour->src = Cities::find($tour->srcId);
-        if($tour->isLocal == 0){
+        if($tour->type !== 'cityTourism'){
             $table = $tour->kindDest == 'city' ? 'cities' : 'majara';
             $tour->dest = \DB::table($table)->select(['id', 'name'])->find($tour->destId);
         }
@@ -190,6 +203,7 @@ class TourController extends Controller{
         else
             $tour->backupPhone = [$tour->agencyPhone];
 
+
         return view('pages.tour.tour-details', compact(['tour']));
     }
 
@@ -210,18 +224,6 @@ class TourController extends Controller{
 
         $tour->cost = number_format($tour->minCost);
 
-        $sideTransport = [];
-        $sideTransportId = json_decode($tour->sideTransport);
-        if(is_array($sideTransportId))
-            $sideTransport = TransportKind::whereIn('id', $sideTransportId)->pluck('name')->toArray();
-
-        $tour->sideTransport = $sideTransport;
-
-        $tour->kinds = $tour->kinds()->pluck('name')->toArray();
-        $tour->style = $tour->Styles()->pluck('name')->toArray();
-        $tour->fitFor = $tour->FitFor()->pluck('name')->toArray();
-        $tour->difficult = $tour->Difficults()->pluck('name')->toArray();
-
         $tour->language = json_decode($tour->language);
 
         if($tour->isTransport == 1){
@@ -233,25 +235,6 @@ class TourController extends Controller{
                 $tour->mainTransport->eTransportName = $tour->mainTransport->sTransportName;
         }
 
-        $tour->features = $tour->GetFeatures;
-        foreach ($tour->features as $feat)
-            $feat->cost = number_format($feat->cost);
-
-        $mustEquip = [];
-        $suggestEquip = [];
-        $equipments = TourEquipment::join('subEquipments', 'subEquipments.id', 'tourEquipments.subEquipmentId')
-                                    ->where('tourEquipments.tourId', $tour->id)
-                                    ->select(['subEquipments.name', 'tourEquipments.isNecessary'])
-                                    ->get();
-        foreach ($equipments as $item){
-            if($item->isNecessary == 1)
-                array_push($mustEquip, $item->name);
-            else
-                array_push($suggestEquip, $item->name);
-        }
-
-        $tour->mustEquip = $mustEquip;
-        $tour->suggestEquip = $suggestEquip;
 
         $tour->schedule = $tour->getFullySchedule();
 
@@ -270,12 +253,42 @@ class TourController extends Controller{
             $item->capacityRemaining = $item->maxCapacity - $item->registered;
             $item->hasCapacity = ($item->capacityRemaining > 0);
         }
-        $tour->timeAndPrices = $times;
+        $tour->times = $times;
+
+
+        $mustEquip = [];
+        $suggestEquip = [];
+        $equipments = TourEquipment::join('subEquipments', 'subEquipments.id', 'tourEquipments.subEquipmentId')
+            ->where('tourEquipments.tourId', $tour->id)
+            ->select(['subEquipments.name', 'tourEquipments.isNecessary'])
+            ->get();
+        foreach ($equipments as $item){
+            if($item->isNecessary == 1)
+                array_push($mustEquip, $item->name);
+            else
+                array_push($suggestEquip, $item->name);
+        }
+
+        $tour->mustEquip = $mustEquip;
+        $tour->suggestEquip = $suggestEquip;
+
+        $sideTransport = [];
+        $sideTransportId = json_decode($tour->sideTransport);
+        if(is_array($sideTransportId))
+            $sideTransport = TransportKind::whereIn('id', $sideTransportId)->pluck('name')->toArray();
+
+        $tour->sideTransport = $sideTransport;
+
+        $tour->kinds = $tour->kinds()->pluck('name')->toArray();
+        $tour->style = $tour->Styles()->pluck('name')->toArray();
+        $tour->fitFor = $tour->FitFor()->pluck('name')->toArray();
+        $tour->difficult = $tour->Difficults()->pluck('name')->toArray();
 
         if($tour->tourGuidKoochitaId != 0){
             $guid = User::select(['first_name', 'last_name'])->find($tour->tourGuidKoochitaId);
             $tour->tourGuidName = $guid->first_name . ' ' . $guid->last_name;
         }
+
 
         return response()->json(['status' => 'ok', 'result' => $tour]);
     }

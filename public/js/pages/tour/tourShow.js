@@ -55,6 +55,7 @@ var tourSideFeatureList = {
     },
 };
 
+var tourGet = null;
 var mainMap = null;
 var tourTimeAndPrices;
 var mainTransportLocations = { start: [], end: []};
@@ -101,13 +102,13 @@ function selectBuyButton(){
 }
 
 function fillTourShowPage(_response){
-    console.log(_response);
     var propertySection = '';
     var newFeature = '';
     var newFeatureForBuy = '';
     var equipments;
 
-    tourTimeAndPrices = _response.timeAndPrices;
+    tourGet = _response;
+    tourTimeAndPrices = _response.times;
 
     $('.tourName').text(_response.name);
     $('.sDateName').text(_response.sDateName);
@@ -155,22 +156,22 @@ function fillTourShowPage(_response){
     // else
     //     $('.tourGuidInKoochita').addClass('hidden');
 
-    features = _response.features;
-    features.map((item, index) => {
-        newFeature += ` <tr>
-                            <td>${item.name}</td>
-                            <td>${item.cost}</td>
-                            <td>${item.description}</td>
-                        </tr>`;
-
-        newFeatureForBuy += `<div class="full-width inline-block buyFeatureRow">
-                                <span>${item.name}</span>
-                                <span>${item.cost}</span>
-                                <input type="number" class="form-control featuresInputCount" data-index="${index}" placeholder="تعداد" onchange="calculateFullCost()">
-                            </div>`;
-    });
-    $('.additionalFeatures').html(newFeature);
-    $('.additionalFeaturesForBuy').html(newFeatureForBuy);
+    // features = _response.features;
+    // features.map((item, index) => {
+    //     newFeature += ` <tr>
+    //                         <td>${item.name}</td>
+    //                         <td>${item.cost}</td>
+    //                         <td>${item.description}</td>
+    //                     </tr>`;
+    //
+    //     newFeatureForBuy += `<div class="full-width inline-block buyFeatureRow">
+    //                             <span>${item.name}</span>
+    //                             <span>${item.cost}</span>
+    //                             <input type="number" class="form-control featuresInputCount" data-index="${index}" placeholder="تعداد" onchange="calculateFullCost()">
+    //                         </div>`;
+    // });
+    // $('.additionalFeatures').html(newFeature);
+    // $('.additionalFeaturesForBuy').html(newFeatureForBuy);
 
     if(newFeature == '')
         $('#moreFeatureDivSec').addClass('hidden');
@@ -242,14 +243,31 @@ function fillTourShowPage(_response){
 }
 
 function createTourPricesAndTimeHtml(){
-    var timeHtml = '';
-    tourTimeAndPrices.map((item, index) => {
-        timeHtml += `<tr id="tourTime_${item.code}" class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'}" onclick="chooseOtherDates(${index})">
+    console.log(tourTimeAndPrices);
+    var timeHtml  = '';
+
+    if(tourGet.type === 'cityTourism'){
+        timeHtml = `<thead>
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>قیمت</th>
+                            <th>ظرفیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+        tourTimeAndPrices.map((item, index) => {
+            timeHtml += `<tr id="tourTime_${item.code}" class="otherDateChoose ${item.hasCapacity ? 'can' : 'cant'}" onclick="chooseOtherDates(${index})">
                             <td>${item.sDateName}</td>
-                            <td>${item.eDateName}</td>
+                            <td>${numberWithCommas(item.cost)} تومان</td>
                             <td>${ item.hasCapacity ? (item.anyCapacity == 1 ? 'دارد' : item.capacityRemaining + ' نفر') : 'تکمیل' }</td>
                         </tr>`;
-    });
+        });
+    }
+    else{
+
+    }
+
+    timeHtml += `</tbody>`;
     $('#tourTimesTable').html(timeHtml);
     $(`#tourTime_${tourTimeCode}`).click();
 }

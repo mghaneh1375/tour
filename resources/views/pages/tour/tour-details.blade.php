@@ -118,7 +118,7 @@
                         </div>
                     @endif
                     <div class="detailRowPost">
-                        @if($tour->sDateName === $tour->eDateName)
+                        @if($tour->type === 'cityTourism')
                             <span class="boldPostal">
                                 <span class="sDateName">{{$tour->sDateName}}</span>
                             </span>
@@ -179,16 +179,7 @@
 
         <div class="rowChooseDate" style="direction: rtl;">
             <div class="bodiesHeader" style="text-align: center;font-size: 25px;">تاریخ های دیگری که این تور برگزار می شود</div>
-            <table class="moreFeature table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>از تاریخ</th>
-                        <th>تا تاریخ</th>
-                        <th>ظرفیت</th>
-                    </tr>
-                </thead>
-                <tbody id="tourTimesTable"></tbody>
-            </table>
+            <table id="tourTimesTable" class="moreFeature table table-bordered table-striped"></table>
         </div>
 
         <div class="lightCraftBackground">
@@ -251,7 +242,7 @@
 {{--                        <div class="bodiesText">{{$tour->tourLimit}}</div>--}}
 {{--                    </div>--}}
 {{--                </div>--}}
-                <div class="col-md-4 borderLight top left" style="padding: 0px">
+                <div class="col-md-12 borderLight top left" style="padding: 0px">
                     <div id="propertySection" class="propertySection"></div>
                 </div>
             </div>
