@@ -19,7 +19,7 @@
             <center>
 
                 <button class="btn btn-success" style="margin-top: 20px" onclick="finalize()">اتمام ارزیابی درخواست</button>
-                <a class="btn btn-primary" style="margin-top: 20px" href="{{route('ticket.msgs', ['business' => $id])}}">پیام به درخواست دهنده</a>
+{{--                <a class="btn btn-primary" style="margin-top: 20px" href="{{route('ticket.msgs', ['business' => $id])}}">پیام به درخواست دهنده</a>--}}
 
                 <table style="margin-top: 10px" class="table table-striped">
                     <tr style="background: var(--koochita-yellow);">
