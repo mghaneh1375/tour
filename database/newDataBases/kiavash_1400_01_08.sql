@@ -31,6 +31,19 @@ ALTER TABLE `tickets` CHANGE `from_` `userId` INT(10) UNSIGNED NULL DEFAULT NULL
 ALTER TABLE `tickets` CHANGE `to_` `adminId` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `tickets` ADD `adminSeen` TINYINT NOT NULL DEFAULT '0' AFTER `seen`;
 ALTER TABLE `tickets` ADD `fileName` VARCHAR(200) NULL DEFAULT NULL AFTER `msg`;
+ALTER TABLE `tour` ADD `type` ENUM('cityTourism','onDay','multiDay','package') NULL AFTER `codeNumber`;
+ALTER TABLE `tourTimes` ADD `cost` VARCHAR(20) NOT NULL DEFAULT '0' AFTER `code`;
+ALTER TABLE `tourTimes` CHANGE `eDate` `eDate` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+ALTER TABLE `tour` CHANGE `destId` `destId` INT(10) UNSIGNED NULL;
+ALTER TABLE `tourScheduleDetails` CHANGE `detailKindId` `detailKindId` BIGINT(20) UNSIGNED NULL;
+INSERT INTO `tourScheduleDetailKinds` (`id`, `name`, `color`, `icon`, `code`) VALUES (NULL, 'وعده غذایی', 'green', NULL, '9');
+ALTER TABLE `tour` ADD `tourGuidPhone` VARCHAR(20) NULL DEFAULT NULL AFTER `tourGuidSex`;
+ALTER TABLE `tourDiscounts` ADD `status` TINYINT(1) NOT NULL DEFAULT '1' AFTER `remainingDay`;
+ALTER TABLE `tourGuids` ADD `phone` VARCHAR(20) NULL DEFAULT NULL AFTER `sex`;
+ALTER TABLE `tourTimes` ADD `isInsurance` TINYINT(1) NULL AFTER `cost`;
+ALTER TABLE `tourTimes` ADD `minCapacity` SMALLINT NOT NULL AFTER `eDate`, ADD `maxCapacity` SMALLINT NOT NULL AFTER `minCapacity`;
+ALTER TABLE `tourDiscounts` ADD `tourTimeId` INT(11) NOT NULL AFTER `tourId`;
+
 
 
 

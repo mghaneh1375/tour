@@ -1,0 +1,168 @@
+
+.popover-title{
+    direction: ltr;
+}
+.chooseLastDay{
+    position: absolute;
+    background: #0000006b;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.chooseLastDay .confirm{
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px 10px;
+    margin: 7px;
+    font-size: 12px;
+}
+.chooseLastDay .change{
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 5px 10px;
+    margin: 7px;
+    font-size: 12px;
+}
+.timeSec{
+    display: flex;
+}
+.newEventBox{
+    padding: 10px;
+    border: solid 1px gray;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.newEventBox .til{
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--koochita-green);
+}
+.newEventBox .sec_{
+    margin-top: 10px;
+    padding-top: 10px;
+}
+.newEventBox .sec_.tBordre{
+    border-top: solid 1px lightgray;
+}
+.newEventBox .sec_ .hea{
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+.newEventBox .sec_ .selectKindRow{
+    display: flex;
+    align-items: center;
+}
+.newEventBox .sec_ .selectKindRow .item{
+    padding: 10px;
+    margin: 0px 10px;
+    border: solid 1px lightgray;
+    border-radius: 25px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.newEventBox .sec_ .selectKindRow .item.selected{
+    background: var(--koochita-yellow);
+}
+
+.eventRows{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.eventRows .newEventBox{
+    text-align: center;
+    padding: 30px 10px;
+    font-size: 14px;
+    color: gray;
+    cursor: pointer;
+    padding-top: 20px;
+    margin: 5px 10px;
+}
+.eventRows .newEventBox .text{
+    width: 80%;
+    text-align: center;
+    margin: 0px auto;
+}
+.eventRows .newEventBox .icon{
+    font-size: 60px;
+    line-height: 0px;
+    margin-top: 20px;
+}
+
+.eventAdded{
+    border: solid 1px lightgray;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-left: 20px;
+}
+.eventAdded .picSec{
+    width: 150px;
+    height: 120px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    position: relative;
+}
+.eventAdded .picSec .mealType{
+    position: absolute;
+    top: 5px;
+    background: black;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 20px;
+}
+.eventAdded .infoSec{
+    border-top: solid 1px lightgray;
+    margin-top: 5px;
+}
+.eventAdded .infoSec .buttons{
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+    justify-content: flex-end !important;
+}
+.eventAdded .infoSec .buttons > button{
+    font-size: 9px;
+    margin-right: 10px;
+    padding: 3px 10px;
+}
+
+.chooseButSection{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.chooseButSection .chooseBut{
+    font-size: 12px;
+    border: solid 1px lightgray;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.chooseButSection .chooseBut.selected{
+    background: var(--koochita-yellow);
+}
+
+
+.transportInfoSec{
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    direction: rtl;
+    float: unset;
+}
+.transportInfoSec > div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}

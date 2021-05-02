@@ -241,6 +241,7 @@ function calculateDate() {
 var dataToSend;
 function checkInput() {
     dataToSend = {
+        tourType,
         tourId: document.getElementById('tourId').value,
         businessId: document.getElementById('businessId').value,
         tourName: document.getElementById('tourName').value,

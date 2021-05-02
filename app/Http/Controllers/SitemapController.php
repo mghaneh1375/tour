@@ -19,6 +19,11 @@ class SitemapController extends Controller
         return response()->view('sitemap.index')->header('Content-Type', 'application/xml');
     }
 
+    public function mainPages()
+    {
+        return response()->view('sitemap.mainPages')->header('Content-Type', 'application/xml');
+    }
+
     public function places()
     {
         $pl = [];
@@ -44,6 +49,30 @@ class SitemapController extends Controller
         return response()->view('sitemap.siteMapUrls', ['lists' => $lists])->header('Content-Type', 'application/xml');
     }
 
+    public function placesKind($kpi)
+    {
+        $pl = [];
+        $lists = [];
+        $count = 0;
+        $kindPlaces = Place::whereIn('id', [$kpi])->get();
+        foreach ($kindPlaces as $kindPlace) {
+            if ($kindPlace->tableName != null) {
+                $places = \DB::table($kindPlace->tableName)->select(['id', 'slug', 'name'])->get();
+                foreach ($places as $place) {
+                    if($place->slug != null) {
+                        $slug = urlencode($place->slug);
+                        $place->url = url('show-place-details/' . $kindPlace->fileName . '/' . $slug);
+                        $count++;
+                        array_push($pl, $place);
+                        array_push($lists, $place->url);
+                    }
+                }
+            }
+        }
+
+        return response()->view('sitemap.siteMapUrls', ['lists' => $lists])->header('Content-Type', 'application/xml');
+    }
+
     public function lists()
     {
         $kindPlaces = [1, 3, 4, 6, 10, 11, 12];
@@ -57,6 +86,7 @@ class SitemapController extends Controller
             url('placeList/10/country'),
             url('placeList/11/country'),
             url('placeList/12/country'),
+            url('placeList/14/country'),
         ];
 
         foreach ($state as $item){

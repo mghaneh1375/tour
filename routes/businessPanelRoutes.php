@@ -3,6 +3,7 @@
 use App\Http\Controllers\PanelBusiness\Agency\TourCreationAgencyController;
 use App\Http\Controllers\PanelBusiness\Agency\AgencyBusinessPanelController;
 use App\Http\Controllers\PanelBusiness\AuthPanelBusinessController;
+use App\Http\Controllers\PanelBusiness\BPAjax;
 use App\Http\Controllers\PanelBusiness\ContractController;
 use App\Http\Controllers\PanelBusiness\MainPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
@@ -30,6 +31,25 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');
         Route::get('/completeUserInfo', [MainPanelBusinessController::class, 'completeUserInfo'])->name('businessPanel.completeUserInfo');
     });
+
+    Route::group(['middleware' => ['adminAccess']], function () {
+        Route::middleware(['BusinessPanelShareData'])->group( function () {
+            Route::get('getUnChecked', [ReportPanelBusinessController::class, "getUnChecked"])->name("businessPanel.getUnChecked");
+            Route::get('getSpecificUnChecked/{business}', [ReportPanelBusinessController::class, "getSpecificUnChecked"])->name("businessPanel.getSpecificUnChecked");
+
+            Route::get('contract', [ContractController::class, 'index'])->name('businessPanel.contracts');
+            Route::get('contract/{contract}', [ContractController::class, 'show'])->name('businessPanel.contract');
+        });
+
+        Route::post('contract/{contract}', [ContractController::class, 'update'])->name('businessPanel.editContract');
+
+        Route::post("businessFinalize/{business}", [ReportPanelBusinessController::class, "finalize"])->name("businessPanel.finalize");
+        Route::post("getBusinessFinalStatus/{business}", [ReportPanelBusinessController::class, "getFinalStatus"])->name("businessPanel.getFinalStatus");
+        Route::post("setBusinessFieldStatus/{business}", [ReportPanelBusinessController::class, "setFieldStatus"])->name("businessPanel.setFieldStatus");
+
+        Route::get("formatAllTours", [AgencyBusinessPanelController::class, "deleteAllTours"]);
+    });
+
 
     Route::post('/doCreate', [UserPanelBusinessController::class, 'doCreate'])->name('businessPanel.doCreate');
     Route::post('/getContract', [ContractController::class, 'getContract'])->name('businessPanel.getContract');
@@ -87,23 +107,6 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::get('businessManagement/{business}/main', [MainPanelBusinessController::class, 'getToBusinessManagementPage'])->name('businessManagement.panel');
     });
 
-    Route::group(['middleware' => ['adminAccess']], function () {
-        Route::middleware(['BusinessPanelShareData'])->group( function () {
-            Route::get('getUnChecked', [ReportPanelBusinessController::class, "getUnChecked"])->name("businessPanel.getUnChecked");
-            Route::get('getSpecificUnChecked/{business}', [ReportPanelBusinessController::class, "getSpecificUnChecked"])->name("businessPanel.getSpecificUnChecked");
-
-            Route::get('contract', [ContractController::class, 'index'])->name('businessPanel.contracts');
-            Route::get('contract/{contract}', [ContractController::class, 'show'])->name('businessPanel.contract');
-        });
-
-        Route::post('contract/{contract}', [ContractController::class, 'update'])->name('businessPanel.editContract');
-
-
-        Route::post("businessFinalize/{business}", [ReportPanelBusinessController::class, "finalize"])->name("businessPanel.finalize");
-        Route::post("getBusinessFinalStatus/{business}", [ReportPanelBusinessController::class, "getFinalStatus"])->name("businessPanel.getFinalStatus");
-        Route::post("setBusinessFieldStatus/{business}", [ReportPanelBusinessController::class, "setFieldStatus"])->name("businessPanel.setFieldStatus");
-    });
-
     Route::group(['middleware' => ['businessAccess']], function () {
         Route::delete('/deleteBusiness/{business}', [UserPanelBusinessController::class, 'delete'])->name('businessPanel.deleteBusiness');
 
@@ -126,6 +129,11 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::delete('/deleteBusinessPic/{business}', [UserPanelBusinessController::class, 'deletePic'])->name('businessPanel.deletePic');
         Route::delete('/deleteBusinessMadarek/{business}', [UserPanelBusinessController::class, 'deleteMadarek'])->name('businessPanel.deleteMadarek');
         Route::post('/finalizeBusinessInfo/{business}', [UserPanelBusinessController::class, 'finalizeBusinessInfo'])->name('businessPanel.finalizeBusinessInfo');
+    });
+
+    Route::group(['middleware' => ['web']], function(){
+       Route::get('bp/ajax/searchCity', [BPAjax::class, 'searchCity'])->name('BP.ajax.searchCity');
+       Route::post('bp/ajax/searchInPlace', [BPAjax::class, 'searchInPlace'])->name('BP.ajax.searchInPlace');
     });
 
 

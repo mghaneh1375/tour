@@ -19,7 +19,7 @@ class BusinessPanelShareData
      */
     public function handle($request, Closure $next)
     {
-        $fileVersions = 5;
+        $fileVersions = 6;
         if(\auth()->check()) {
             $userInfo = auth()->user();
             $userInfo->pic = getUserPic($userInfo->id);
@@ -31,7 +31,7 @@ class BusinessPanelShareData
                 $newTicketCount = Ticket::where('adminSeen', 0)->count();
 
 
-            $newNotificationCount = 2;
+            $newNotificationCount = 0;
 
             View::share(['fileVersions' => $fileVersions, 'userInfo' => $userInfo,
                         'allOtherYourBusinessForHeader' => $businessList, 'newTicketCount' => $newTicketCount,

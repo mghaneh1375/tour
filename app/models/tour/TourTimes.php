@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static youCanSee()
+ * @property int tourId
+ * @property int isInsurance
+ * @property int minCapacity
+ * @property int maxCapacity
+ * @property int isPublished
+ * @property int canRegister
+ * @property int registered
+ * @property string code
+ * @property string cost
+ * @property string sDate
+ * @property string eDate
  */
 class TourTimes extends Model
 {

@@ -12,9 +12,11 @@ var contracts = [];
 $(document).ready(function () {
 
     $(".businessType").on("click", function () {
-        $(".businessType").removeClass('selected');
-        $(this).addClass("selected");
-        data.type = $(this).attr('data-type');
+        if(!this.getAttribute('disabled')) {
+            $(".businessType").removeClass('selected');
+            $(this).addClass("selected");
+            data.type = $(this).attr('data-type');
+        }
     });
 
     $('.clockpicker').clockpicker({

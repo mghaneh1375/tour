@@ -119,7 +119,7 @@
                         <button type="button" class="closee" data-dismiss="modal" style="border: none; background: none; float: left">&times;</button>
                     </div>
                     <div class="selectEditCardSection">
-                        <div class="editCard card1" onclick="chooseTourKind('city')">
+                        <div class="editCard card1" onclick="chooseTourKind('cityTourism')">
                             <div class="icon">
                                 <i class="fa-light fa-car-building"></i>
                             </div>

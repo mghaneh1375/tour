@@ -61,8 +61,11 @@ Route::get('language/{lang}', function($lang){
 
 //sitemap
 Route::group(array(), function(){
-    Route::get('/sitemap.xml', [SitemapController::class, 'index']);
     Route::get('/sitemap.xml/places', [SitemapController::class, 'places']);
+
+    Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+    Route::get('/sitemap.xml/places/{kpi}', [SitemapController::class, 'placesKind']);
+    Route::get('/sitemap.xml/mainPages', [SitemapController::class, 'mainPages']);
     Route::get('/sitemap.xml/lists', [SitemapController::class, 'lists']);
     Route::get('/sitemap.xml/posts', [SitemapController::class, 'posts']);
     Route::get('/sitemap.xml/city', [SitemapController::class, 'city']);

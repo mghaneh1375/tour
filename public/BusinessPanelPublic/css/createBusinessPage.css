@@ -71,6 +71,10 @@
     justify-content: center;
     border-radius: 10px;
 }
+.createBusinessPage .businessType.disabled{
+    filter: grayscale(1);
+    opacity: .5;
+}
 .createBusinessPage .businessType .picSection{
     float: right;
     width: 100px;

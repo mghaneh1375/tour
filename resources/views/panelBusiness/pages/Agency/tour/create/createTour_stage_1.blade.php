@@ -80,7 +80,6 @@
                     <input id="tourName" class="inputBoxInput" type="text" name="name" placeholder="فارسی" required>
                 </div>
 
-                <div class="inboxHelpSubtitle" style="width: 100%;">با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.</div>
                 <div class="InlineTourInputBoxesMainDiv">
                     <div class="inputBoxGeneralInfo inputBoxTour InlineTourInputBoxes" id="tourOriginInputBox">
                         <div class="inputBoxTextGeneralInfo inputBoxText">
@@ -99,6 +98,9 @@
                         <input id="destPlaceId" type="hidden" name="destId">
                         <input id="destKind" type="hidden" name="destKind">
                     </div>
+                </div>
+                <div class="inboxHelpSubtitle" style="width: 100%;">
+                    با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد نمایید.
                 </div>
                 <div>
                     <input type="checkbox" id="sameSrcDestInput" name="sameSrcDestInput" onchange="srcDest()" value="1"/>
@@ -484,12 +486,12 @@
 
 @section('script')
     <script>
+        var tourType = '{{$type}}';
         var stageOneStoreUrl = "{{route('businessManagement.tour.store.stage_1')}}";
         var stageTwoUrl = "{{url('businessManagement/'.$businessIdForUrl.'/tour/create/stage_2')}}";
         var findCityWithStateUrl = '{{route("findCityWithState")}}';
         var findPlaceWithKindPlaceIdUrl = '{{route("search.place.with.name.kindPlaceId")}}';
         var tour = {!! json_encode($tour) !!};
-
 
         @if(isset($tour))
             if(tour) {

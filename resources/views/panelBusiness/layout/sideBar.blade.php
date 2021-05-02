@@ -16,7 +16,7 @@
                 <span>خانه</span>
             </a>
         </div>
-        @if(\auth()->user()->level != 0)
+        @if(\auth()->user()->level === 2)
             <div class="sideNavRow">
                 <div class="sideNavHeader hasBody">
                     <span>مدیریت</span>

@@ -65,7 +65,7 @@
 
                         <label for="haghighi" class="kindOfBusinessOwnerSection">
                             <div class="inputSec">
-                                <input id="haghighi" type="radio" name="haghHogh" style="display: block;">
+                                <input id="haghighi" type="radio" name="haghHogh" style="display: block;" disabled>
                             </div>
                             <div class="content">
                                 <i class="fa fa-user"></i>
@@ -112,7 +112,7 @@
                     </div>
 
                     <div class="col-xs-12 col-md-8" style="margin-top: 10px">
-                        <div data-type="tour" class="businessType">
+                        <div data-type="tour" class="businessType disabled" disabled="true">
                             <div class="picSection">
                                 <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
                             </div>
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="col-xs-12 col-md-8" style="margin-top: 10px">
-                        <div data-type="hotel" class="businessType">
+                        <div data-type="hotel" class="businessType disabled" disabled="true">
                             <div class="picSection">
                                 <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
                             </div>
@@ -137,7 +137,7 @@
                     </div>
 
                     <div class="col-xs-12 col-md-8" style="margin-top: 10px">
-                        <div data-type="restaurant" class="businessType">
+                        <div data-type="restaurant" class="businessType disabled" disabled="true">
                             <div class="picSection">
                                 <img class="resizeImgClass" src="{{URL::asset('defaultPic/4.jpg')}}" onload="fitThisImg(this)">
                             </div>

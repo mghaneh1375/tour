@@ -5,6 +5,7 @@ namespace App\models\tour;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int id
  * @property int tourScheduleId
  * @property int detailKindId
  * @property string sTime

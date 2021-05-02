@@ -8,9 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int isPublished
+ * @property int userId
+ * @property int businessId
+ * @property string type
+ * @property string code
+ * @property string codeNumber
+ * @property string name
+ * @property int srcId
+ * @property int maxCapacity
+ * @property int minCapacity
+ * @property int anyCapacity
+ * @property int minCost
+ * @property int allUserInfoNeed
+ * @property int userInfoNeed
+ * @property int private
+ * @property int isInsurance
  */
 class Tour extends Model {
     protected $table = 'tour';
+
+//    type = ['cityTourism','onDay','multiDay','package'];
 
     public function kinds()
     {

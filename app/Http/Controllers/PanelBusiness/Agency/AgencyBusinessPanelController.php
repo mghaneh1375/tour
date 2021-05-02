@@ -7,14 +7,28 @@ use App\models\Business\Business;
 use App\models\Cities;
 use App\models\places\Majara;
 use App\models\tour\Tour;
+use App\models\tour\TourDifficult_Tour;
+use App\models\tour\TourDiscount;
+use App\models\tour\TourEquipment;
+use App\models\tour\TourFeature;
+use App\models\tour\TourFitFor_Tour;
+use App\models\tour\TourFocus_Tour;
+use App\models\tour\TourKind_Tour;
+use App\models\tour\TourNotice;
+use App\models\tour\TourPic;
+use App\models\tour\TourPlaceRelation;
+use App\models\tour\TourPrices;
+use App\models\tour\TourSchedule;
+use App\models\tour\TourStyle_Tour;
+use App\models\tour\TourTimes;
+use App\models\tour\Transport_Tour;
 use Illuminate\Http\Request;
 
 class AgencyBusinessPanelController extends Controller
 {
     public $defaultViewLocation = 'panelBusiness.pages.Agency';
 
-    public function tourList()
-    {
+    public function tourList(){
         $view = $this->defaultViewLocation.'.tour.agencyTourListPanel';
         return view($view);
     }
@@ -52,5 +66,42 @@ class AgencyBusinessPanelController extends Controller
         }
 
         return response()->json(['status' => 'ok', 'result' => $tours]);
+    }
+
+    public function deleteAllTours(){
+        $code = 'koochita1400121232';
+        if($code === $_GET['code']) {
+
+            Tour::whereRaw('1')->delete();
+            TourDifficult_Tour::truncate();
+            TourFitFor_Tour::truncate();
+            TourFocus_Tour::truncate();
+            TourStyle_Tour::truncate();
+            TourKind_Tour::truncate();
+            TourNotice::truncate();
+            TourTimes::truncate();
+            Transport_Tour::truncate();
+            TourPlaceRelation::truncate();
+            TourSchedule::truncate();
+            TourPrices::truncate();
+            TourDiscount::truncate();
+            TourEquipment::truncate();
+            TourFeature::truncate();
+
+            $location = __DIR__ . '/../../../../../../assets/_images/tour';
+
+            $pics = TourPic::all();
+            foreach ($pics as $pic) {
+                $nLoc = "{$location}/{$pic->tourId}/{$pic->pic}";
+                if (is_file($nLoc))
+                    unlink($nLoc);
+
+                $pic->delete();
+            }
+
+            dd("done");
+        }
+        else
+            dd("wrong code");
     }
 }

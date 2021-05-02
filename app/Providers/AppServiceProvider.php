@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\places\Place;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**
@@ -29,7 +30,8 @@ class AppServiceProvider extends ServiceProvider
         config(['userPictureArr' => []]);
         config(['isGetBookMarks' => false]);
         config(['userBookMarked' => []]);
-        config(['kindPlace' => Place::all()]);
+
+        DefaultDataDB::setPlaceDB();
 
         date_default_timezone_set('Asia/Tehran');
 
