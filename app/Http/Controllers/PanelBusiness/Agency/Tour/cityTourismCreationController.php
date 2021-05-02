@@ -231,8 +231,8 @@ class cityTourismCreationController extends Controller implements tourCreations
         $allKindPlaces = DefaultDataDB::getPlaceDB();
 
         foreach ($amakens as $item){
-            $kindPlace = $allKindPlaces[$item['kindPlaceId']];
-            if($kindPlace != null) {
+            if(isset($allKindPlaces[$item['kindPlaceId']])) {
+                $kindPlace = $allKindPlaces[$item['kindPlaceId']];
                 $place = \DB::table($kindPlace->tableName)->find($item['id']);
                 if($place != null) {
                     $tsc = new TourScheduleDetail();
@@ -265,22 +265,23 @@ class cityTourismCreationController extends Controller implements tourCreations
             $tsc->save();
 
             $place = null;
-            $kindPlace = $allKindPlaces[$item['kindPlaceId']];
-            if($kindPlace != null)
-                $place = \DB::table($kindPlace->tableName)->find($item['id']);
+            if(isset($allKindPlaces[$item['kindPlaceId']])) {
+                $kindPlace = $allKindPlaces[$item['kindPlaceId']];
+                if ($kindPlace != null)
+                    $place = \DB::table($kindPlace->tableName)->find($item['id']);
 
-            if($place != null){
-                $tsc->hasPlace = 1;
-                $tsc->save();
+                if ($place != null) {
+                    $tsc->hasPlace = 1;
+                    $tsc->save();
 
-                $plr = new TourPlaceRelation();
-                $plr->tourId = $tour->id;
-                $plr->tourScheduleDetailId = $tsc->id;
-                $plr->placeId = $place->id;
-                $plr->kindPlaceId = $item['kindPlaceId'];
-                $plr->save();
+                    $plr = new TourPlaceRelation();
+                    $plr->tourId = $tour->id;
+                    $plr->tourScheduleDetailId = $tsc->id;
+                    $plr->placeId = $place->id;
+                    $plr->kindPlaceId = $item['kindPlaceId'];
+                    $plr->save();
+                }
             }
-
         }
 
         foreach($special as $item){
@@ -446,30 +447,38 @@ class cityTourismCreationController extends Controller implements tourCreations
         $data = (object)$request->data;
 
         $existTourDifficult = [];
-        foreach ($data->levels as $level) {
-            $diff = TourDifficult_Tour::firstOrCreate(['tourId' => $tour->id, 'difficultId' => $level]);
-            array_push($existTourDifficult, $diff->id);
+        if(isset($data->levels)) {
+            foreach ($data->levels as $level) {
+                $diff = TourDifficult_Tour::firstOrCreate(['tourId' => $tour->id, 'difficultId' => $level]);
+                array_push($existTourDifficult, $diff->id);
+            }
         }
         TourDifficult_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourDifficult)->delete();
 
         $existTourKind = [];
-        foreach ($data->kinds as $kind){
-            $kind = TourKind_Tour::firstOrCreate(['tourId' => $tour->id, 'kindId' => $kind]);
-            array_push($existTourKind, $kind->id);
+        if(isset($data->kinds)) {
+            foreach ($data->kinds as $kind) {
+                $kind = TourKind_Tour::firstOrCreate(['tourId' => $tour->id, 'kindId' => $kind]);
+                array_push($existTourKind, $kind->id);
+            }
         }
         TourKind_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourKind)->delete();
 
         $existTourFitFor = [];
-        foreach ($data->fitFor as $fitFor){
-            $fit = TourFitFor_Tour::firstOrCreate(['tourId' => $tour->id, 'fitForId' => $fitFor]);
-            array_push($existTourFitFor, $fit->id);
+        if(isset($data->fitFor)) {
+            foreach ($data->fitFor as $fitFor) {
+                $fit = TourFitFor_Tour::firstOrCreate(['tourId' => $tour->id, 'fitForId' => $fitFor]);
+                array_push($existTourFitFor, $fit->id);
+            }
         }
         TourFitFor_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourFitFor)->delete();
 
         $existTourStyle = [];
-        foreach ($data->style as $style){
-            $style = TourStyle_Tour::firstOrCreate(['tourId' => $tour->id, 'styleId' => $style]);
-            array_push($existTourStyle, $style->id);
+        if(isset($data->style)) {
+            foreach ($data->style as $style) {
+                $style = TourStyle_Tour::firstOrCreate(['tourId' => $tour->id, 'styleId' => $style]);
+                array_push($existTourStyle, $style->id);
+            }
         }
         TourStyle_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourStyle)->delete();
 
@@ -485,7 +494,6 @@ class cityTourismCreationController extends Controller implements tourCreations
                 array_push($equipmentId, $id->id);
             }
         }
-
         TourEquipment::where('tourId', $tour->id)->whereNotIn('id', $equipmentId)->delete();
 
         return 'ok';
