@@ -640,7 +640,7 @@
                             <td>${item.minCapacity}-${item.maxCapacity} نفر</td>
                             <td>${item.groupDiscount.length} تا تخفیف گروهی</td>
                             <td>
-                                <button class="btn btn-primary tableButton" onclick="editThisDate(${item.id})">ویرایش</button>
+<!--                                <button class="btn btn-primary tableButton" onclick="editThisDate(${item.id})">ویرایش</button>-->
                                 <button class="btn btn-danger tableButton" onclick="deleteThisDate(${item.code})">حذف</button>
                             </td>
                         </tr>`;
