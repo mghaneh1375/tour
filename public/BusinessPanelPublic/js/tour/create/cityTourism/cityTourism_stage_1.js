@@ -445,7 +445,7 @@ function fullDataInFields() {
     //     tour.remainingDay.forEach(item => addLastDayDiscount(item));
 }
 
-$(window).ready(() => {
+$(document).ready(() => {
     $('.observer-example').datepicker(datePickerOptions);
     $('.tourBasicKindsCheckbox').mouseenter(() => $(this).addClass('green-border')).mouseleave(() => $(this).removeClass('green-border'));
     if(tour != null)

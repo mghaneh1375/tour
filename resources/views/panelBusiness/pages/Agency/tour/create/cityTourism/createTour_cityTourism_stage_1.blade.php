@@ -4,7 +4,7 @@
     <title>مرحله اول</title>
 
     <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css')}}">
-    <script src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
+    <script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
 
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v='.$fileVersions)}}"/>
 
