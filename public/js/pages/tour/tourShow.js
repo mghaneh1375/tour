@@ -101,6 +101,7 @@ function selectBuyButton(){
 }
 
 function fillTourShowPage(_response){
+    console.log(_response);
     var propertySection = '';
     var newFeature = '';
     var newFeatureForBuy = '';

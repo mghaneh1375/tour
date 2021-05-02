@@ -50,10 +50,11 @@ class TourController extends Controller{
                 ->join('cities', 'cities.id', 'tour.srcId')
                 ->join('state', 'state.id', 'cities.stateId')
                 ->join('business', 'business.id', 'tour.businessId')
-                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.isLocal' => 1])
-                ->select(['tour.id', 'tour.name', 'tour.code', 'tour.day', 'tour.night', 'tour.srcId', 'tour.destId', 'tour.minCost',
-                    'tourTimes.sDate', 'tourTimes.id AS timeId',
-                    'tourPics.pic', 'business.name AS agencyName', 'business.logo AS agencyLogo',
+                ->where(['tour.isPublished' => 1, 'tour.confirm' => 1, 'tour.type' => $type])
+                ->select(['tour.id', 'tour.name', 'tour.code', 'tour.srcId', 'tour.type',
+                    'tourTimes.sDate', 'tourTimes.id AS timeId', 'tourTimes.cost AS cost',
+                    'tourPics.pic', 'business.name AS agencyName',
+                    'business.logo AS agencyLogo',
                     'cities.id AS cityId', 'cities.name AS cityName',
                     'state.name AS stateName'])
                 ->orderBy('tourTimes.sDate')
@@ -200,7 +201,7 @@ class TourController extends Controller{
         $thisTour = ['tourId' => $tour->id];
 
         $tour->src = Cities::select(['id', 'name'])->find($tour->srcId);
-        if($tour->isLocal == 0){
+        if($tour->type !== 'cityTourism'){
             $table = $tour->kindDest == 'city' ? 'cities' : 'majara';
             $tour->dest = \DB::table($table)->select(['id', 'name'])->find($tour->destId);
         }
@@ -209,8 +210,12 @@ class TourController extends Controller{
 
         $tour->cost = number_format($tour->minCost);
 
+        $sideTransport = [];
         $sideTransportId = json_decode($tour->sideTransport);
-        $tour->sideTransport = TransportKind::whereIn('id', $sideTransportId)->pluck('name')->toArray();
+        if(is_array($sideTransportId))
+            $sideTransport = TransportKind::whereIn('id', $sideTransportId)->pluck('name')->toArray();
+
+        $tour->sideTransport = $sideTransport;
 
         $tour->kinds = $tour->kinds()->pluck('name')->toArray();
         $tour->style = $tour->Styles()->pluck('name')->toArray();
@@ -250,67 +255,20 @@ class TourController extends Controller{
 
         $tour->schedule = $tour->getFullySchedule();
 
-        $prices = TourPrices::where('tourId', $tour->id)->get();
-        $pricesArr = [[
-            'id' => 0,
-            'text' => 'بزرگسال' ,
-            'mainCost' => $tour->minCost,
-            'payAbleCost' => $tour->minCost,
-            'payAbleShow' => number_format($tour->minCost),
-            'mainCostShow' => number_format($tour->minCost),
-            'isFree' => 0,
-        ]];
-
-        foreach ($prices as $price){
-            array_push($pricesArr , [
-                'id' => $price->id,
-                'text' => 'از سن ' . $price->ageFrom . ' تا ' . $price->ageTo,
-                'mainCost' => $price->cost,
-                'payAbleCost' => $price->cost,
-                'payAbleShow' => number_format($price->cost),
-                'mainCostShow' => number_format($price->cost),
-                'isFree' => $price->isFree,
-            ]);
-        }
-
-
-        $tourDayDiscount = TourDiscount::where('tourId', $tour->id)->where('remainingDay', '!=', null)->orderBy('remainingDay')->get();
         $times = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->get();
         foreach($times as $item){
+
             $stt = explode('/', $item->sDate);
             $item->sDateName = Verta::createJalali($stt[0], $stt[1], $stt[2])->format('%A Y/m/d');
 
-            $ett = explode('/', $item->eDate);
-            $item->eDateName = Verta::createJalali($ett[0], $ett[1], $ett[2])->format('%A Y/m/d');
-
-            if($tour->anyCapacity == 1) {
-                $item->anyCapacity = 1;
-                $item->hasCapacity = true;
-            }
-            else{
-                $item->anyCapacity = 0;
-                $item->capacityRemaining = $tour->maxCapacity - $item->registered;
-                $item->hasCapacity = ($item->capacityRemaining > 0);
+            if($item->eDate != null) {
+                $ett = explode('/', $item->eDate);
+                $item->eDateName = Verta::createJalali($ett[0], $ett[1], $ett[2])->format('%A Y/m/d');
             }
 
-            $item->addedDiscount = 0;
-
-            $addPrices = $pricesArr;
-            $item->diffDay = abs(Verta::createJalali($stt[0], $stt[1], $stt[2])->diffDays(\verta()));
-            foreach ($tourDayDiscount as $dis){
-                if($dis->remainingDay >= $item->diffDay){
-                    $item->addedDiscount = $dis->discount;
-                    for($i = 0; $i < count($addPrices); $i++){
-                        if($addPrices[$i]['isFree'] == 0) {
-                            $addPrices[$i]['payAbleCost'] = $addPrices[$i]['mainCost'] * (100 - $dis->discount) / 100;
-                            $addPrices[$i]['payAbleShow'] = number_format($addPrices[$i]['payAbleCost']);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            $item->prices = $addPrices;
+            $item->anyCapacity = 0;
+            $item->capacityRemaining = $item->maxCapacity - $item->registered;
+            $item->hasCapacity = ($item->capacityRemaining > 0);
         }
         $tour->timeAndPrices = $times;
 

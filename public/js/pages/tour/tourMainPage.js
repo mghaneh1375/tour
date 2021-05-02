@@ -108,13 +108,16 @@ function createTourSuggestionCards(_result){
                                 <div class="smallText">${item.categoryName}</div>
                                 <div class="bigBoldText">${item.name}</div>
                                 <div class="smallText">
-                                    <span>
-                                        ${item.day} روز
-                                        ${ item.night > 0 ? `/ ${item.night} شب` : '' }
-                                    </span>
+                                    ${item.type === 'cityTourism' ?
+                                        `` :
+                                        `<span>
+                                            ${item.day} روز
+                                            ${ item.night > 0 ? `/ ${item.night} شب` : '' }
+                                        </span>`
+                                    }
                                     <span style="margin-right: 20px;"> ${item.sDate} </span>
                                 </div>
-                                <div class="smallText">شروع قیمت از ${item.minCost} تومان</div>
+                                <div class="smallText">شروع قیمت از ${numberWithCommas(item.cost)} تومان</div>
                             </div>
                             <div class="agencyPic">
                                 <img src="${item.agencyPic}" alt="${item.agencyName}" style="max-height: 100%; max-width: 100%;">
@@ -129,8 +132,8 @@ function createDestinationCardsPlaceHolder(_count){
     var html = '';
     for(var i = 0; i < _count; i++){
         html += `<div class="destinationCard">
-                        <div class="destImg placeHolderAnime"></div>
-                    </div>`;
+                    <div class="destImg placeHolderAnime"></div>
+                </div>`;
     }
     document.getElementById('destinationResult').innerHTML = html;
 }
@@ -139,10 +142,10 @@ function createDestinationCards(_result){
     var html = '';
     _result.map(item => {
         html += `<a href="${item.url}" class="destinationCard">
-                        <div class="destImg">
-                            <img src="${item.pic}" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
-                        </div>
-                    </a>`;
+                    <div class="destImg">
+                        <img src="${item.pic}" class="resizeImgClass" alt="cityName" onload="fitThisImg(this)">
+                    </div>
+                </a>`;
     });
 
     document.getElementById('destinationResult').innerHTML = html;

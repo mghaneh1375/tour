@@ -53,56 +53,56 @@
             </div>
 
             <div class="listAndDateSection">
-                <div id="listSearchTopSection">
-                    <div class="searchSection">
-                        <div class="searchButtonSec searchIcon"></div>
-                        <div class="inputSec">
-                            <input type="text" placeholder="نام مقصد و یا تور را وارد کنید...">
-                        </div>
-                    </div>
+{{--                <div id="listSearchTopSection">--}}
+{{--                    <div class="searchSection">--}}
+{{--                        <div class="searchButtonSec searchIcon"></div>--}}
+{{--                        <div class="inputSec">--}}
+{{--                            <input type="text" placeholder="نام مقصد و یا تور را وارد کنید...">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                    <div class="findTourSection" style="display: none;">
-                        <div class="searchButton backgroundColorChanges searchIcon" onclick="doSearchFromPanel()"></div>
+{{--                    <div class="findTourSection" style="display: none;">--}}
+{{--                        <div class="searchButton backgroundColorChanges searchIcon" onclick="doSearchFromPanel()"></div>--}}
 
-                        <div class="findTourBody">
-                            <div class="title">تور خودت رو پیدا کن</div>
-                            <div id="iranTour_searchPanel" class="body searchPanelBodies show">
-                                <div class="inputRow">
-                                    <div class="icon changeableIconColor locationIcon"></div>
-                                    <div class="inputSec">
-                                        <input type="text" placeholder="نام مقصد خود را وارد کنید...">
-                                    </div>
-                                </div>
-                                <div class="inputRow">
-                                    <div class="icon changeableIconColor calendarIcon"></div>
-                                    <div class="inputSec">
-                                        <input type="text" placeholder="تاریخ رفت">
-                                    </div>
-                                </div>
-                                <div class="inputRow">
-                                    <div class="icon changeableIconColor twoManIcon"></div>
-                                    <div class="inputSec">
-                                        <input type="text" placeholder="تعداد نفرات را وارد کنید...">
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="cityTour_searchPanel" class="body searchPanelBodies">
-                                <div class="inputRow">
-                                    <div class="icon changeableIconColor locationIcon"></div>
-                                    <div class="inputSec">
-                                        <input type="text" placeholder="نام شهر مورد نظر را وارد کنید...">
-                                    </div>
-                                </div>
-                                <div class="inputRow">
-                                    <div class="icon changeableIconColor calendarIcon"></div>
-                                    <div class="inputSec">
-                                        <input type="text" placeholder="تاریخ">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{--                        <div class="findTourBody">--}}
+{{--                            <div class="title">تور خودت رو پیدا کن</div>--}}
+{{--                            <div id="iranTour_searchPanel" class="body searchPanelBodies show">--}}
+{{--                                <div class="inputRow">--}}
+{{--                                    <div class="icon changeableIconColor locationIcon"></div>--}}
+{{--                                    <div class="inputSec">--}}
+{{--                                        <input type="text" placeholder="نام مقصد خود را وارد کنید...">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="inputRow">--}}
+{{--                                    <div class="icon changeableIconColor calendarIcon"></div>--}}
+{{--                                    <div class="inputSec">--}}
+{{--                                        <input type="text" placeholder="تاریخ رفت">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="inputRow">--}}
+{{--                                    <div class="icon changeableIconColor twoManIcon"></div>--}}
+{{--                                    <div class="inputSec">--}}
+{{--                                        <input type="text" placeholder="تعداد نفرات را وارد کنید...">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div id="cityTourism_searchPanel" class="body searchPanelBodies">--}}
+{{--                                <div class="inputRow">--}}
+{{--                                    <div class="icon changeableIconColor locationIcon"></div>--}}
+{{--                                    <div class="inputSec">--}}
+{{--                                        <input type="text" placeholder="نام شهر مورد نظر را وارد کنید...">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="inputRow">--}}
+{{--                                    <div class="icon changeableIconColor calendarIcon"></div>--}}
+{{--                                    <div class="inputSec">--}}
+{{--                                        <input type="text" placeholder="تاریخ">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 <div id="listSection" class="listSection">
                     <div class="title">تور های پیشنهادی کوچیتا</div>
@@ -118,8 +118,10 @@
                     <div>خوب</div>
                 </div>
                 <div class="sideMenuTabs">
-                    <div class="item cityTour_sideItem sideItem sunIcon" onclick="showTourTypeShow('cityTour')"></div>
-                    <div class="item iranTour_sideItem sideItem moonIcon" onclick="showTourTypeShow('iranTour')"></div>
+                    <div class="item cityTourism_sideItem fullyCenterContent sideItem" onclick="showTourTypeShow('cityTourism')">
+                        <i class="fa-regular fa-car-building"></i>
+                    </div>
+{{--                    <div class="item iranTour_sideItem sideItem moonIcon" onclick="showTourTypeShow('iranTour')"></div>--}}
                 </div>
             </div>
         </div>

@@ -206,9 +206,9 @@ class cityTourismCreationController extends Controller implements tourCreations
         return view($view, compact(['tour', 'tourScheduleKinds']));
     }
     public function storeStep_2($request, $tour){
-        $amakens = $request->amaken;
-        $meals = $request->meals;
-        $special = $request->special;
+        $amakens = isset($request->amaken) ? $request->amaken : [];
+        $meals = isset($request->meals) ? $request->meals : [];
+        $special = isset($request->special) ? $request->special : [];
 
         $tourSC = TourSchedule::where('tourId', $tour->id)->first();
         if($tourSC == null){

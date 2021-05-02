@@ -109,7 +109,7 @@
                             <img src="{{$tour->agencyLogo}}" alt="{{$tour->agencyName}}" style="max-width: 100%; max-height: 100%;">
                         </div>
                     </div>
-                    @if($tour->isLocal == 0)
+                    @if($tour->type != 'cityTourism')
                         <div class="detailRowPost">
                             از
                             <span class="boldPostal">{{$tour->src->name}}</span>
@@ -234,29 +234,23 @@
                                 <span class="eMainTransportDescription"></span>
                             </div>
                         </div>
-
-
                         <div class="notTransport hidden"> حمل و نقل این تور برعهده خود مسافر می باشد </div>
                     </div>
                 </div>
-                <div class="col-md-8 borderLight top">
-                    <div class="borderBotDashed">
-                        <div class="bodiesHeader">چه انتظاری داشته باشیم</div>
-                        <div class="bodiesText">{{$tour->textExpectation}}</div>
-                    </div>
-                    <div class="borderBotDashed">
-                        <div class="bodiesHeader">اطلاعات اختصاصی</div>
-                        <div class="bodiesText">{{$tour->specialInformation}}</div>
-                    </div>
+{{--                <div class="col-md-8 borderLight top">--}}
 {{--                    <div class="borderBotDashed">--}}
-{{--                        <div class="bodiesHeader">پیشنهادات برای سفر بهتر</div>--}}
-{{--                        <div class="bodiesText">{{$tour->opinion}}</div>--}}
+{{--                        <div class="bodiesHeader">چه انتظاری داشته باشیم</div>--}}
+{{--                        <div class="bodiesText">{{$tour->textExpectation}}</div>--}}
 {{--                    </div>--}}
-                    <div class="borderBotDashed">
-                        <div class="bodiesHeader">محدودیت های سفر</div>
-                        <div class="bodiesText">{{$tour->tourLimit}}</div>
-                    </div>
-                </div>
+{{--                    <div class="borderBotDashed">--}}
+{{--                        <div class="bodiesHeader">اطلاعات اختصاصی</div>--}}
+{{--                        <div class="bodiesText">{{$tour->specialInformation}}</div>--}}
+{{--                    </div>--}}
+{{--                    <div class="borderBotDashed">--}}
+{{--                        <div class="bodiesHeader">محدودیت های سفر</div>--}}
+{{--                        <div class="bodiesText">{{$tour->tourLimit}}</div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-md-4 borderLight top left" style="padding: 0px">
                     <div id="propertySection" class="propertySection"></div>
                 </div>
