@@ -116,11 +116,11 @@ class TourController extends Controller{
 
         foreach($tours as $tour){
             $tour->categoryName = $categoryName;
-            $tour->pic = URL::asset("_images/tour/{$tour->id}/{$tour->pic}");
+            $tour->pic = URL::asset("_images/tour/{$tour->id}/{$tour->pic}", null, 1);
             $tour->url = route('tour.show', ['code' => $tour->code]);
             $tour->minCost = number_format($tour->minCost);
 
-            $tour->agencyPic = URL::asset("storage/{$tour->agencyLogo}");
+            $tour->agencyPic = URL::asset("storage/{$tour->agencyLogo}", null, 1);
         }
 
         return response()->json(['status' => 'ok', 'result' => ['tour' => $tours, 'destinations' => $destinations]]);
@@ -204,7 +204,7 @@ class TourController extends Controller{
         else
             $tour->backupPhone = [$tour->agencyPhone];
 
-        $tour->agencyLogo = URL::asset("storage/{$tour->agencyLogo}");
+        $tour->agencyLogo = URL::asset("storage/{$tour->agencyLogo}", null, 1);
 
         return view('pages.tour.tour-details', compact(['tour']));
     }
