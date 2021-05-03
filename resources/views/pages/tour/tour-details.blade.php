@@ -98,6 +98,7 @@
         .tourPlanDateSection{
             display: flex;
             padding: 10px 0px;
+            flex-wrap: wrap;
         }
         .tourPlanDateSection .card{
             border: solid 1px lightgray;
