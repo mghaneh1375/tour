@@ -2598,6 +2598,7 @@ p {
 }
 .buyModal .modalBody{
     max-width: 1000px;
+    min-width: 500px;
 }
 .buyModal .modalBody .additionalFeaturesForBuy{
     background: #f5f5f5;
@@ -2605,10 +2606,12 @@ p {
 .buyModal .modalBody .buyFeatureRow{
     display: flex;
     border-top: solid 1px lightgray;
-    margin-bottom: 10px;
-    padding: 5px 0px;
     align-items: center;
+    padding: 5px 10px;
+    margin: 0px;
+    font-size: 14px;
 }
+
 .buyModal .priceSection{
     margin-top: 15px;
     padding-top: 15px;
@@ -3075,17 +3078,6 @@ p {
     padding-bottom: 0px;
 }
 
-.buyModal .modalBody{
-    min-width: 1000px;
-}
-.buyModal .modalBody .buyFeatureRow{
-    display: flex;
-    border-top: solid 1px lightgray;
-    align-items: center;
-    padding: 5px 10px;
-    margin: 0px;
-    font-size: 14px;
-}
 .editButtonRow{
     border-top: solid 1px lightgrey;
     margin-top: 15px;

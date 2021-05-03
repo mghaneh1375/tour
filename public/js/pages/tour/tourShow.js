@@ -59,6 +59,7 @@ var tourGet = null;
 var mainMap = null;
 var tourTimeAndPrices;
 var mainTransportLocations = { start: [], end: []};
+var nowTimeSelected = null;
 
 function getInformation(){
     $.ajax({
@@ -71,33 +72,8 @@ function getInformation(){
     })
 }
 
-function openDayDetails(_day){
-    $('#dayEventIdicator').html(dayEvents[(_day-1)].indicatorHtml);
-    $('#detailInfSec').html(dayEvents[(_day-1)].detailHtml);
-    $('#fullDayDetailSection').addClass('showMinDetail');
-    $('#showBigDays').addClass('hidden');
-}
-
-function selectDay(_element){
-
-    $('html, body').animate({ scrollTop: $('#dayInfoSection').offset().top }, 500);
-    $('#fullDayDetailSection').removeClass('showMinDetail');
-
-    var day = $(_element).attr('data-day');
-
-    $(_element).parent().find('.selected').removeClass('selected');
-    $(_element).addClass('selected');
-
-    $('#showBigDays').removeClass('hidden').find('.selected').removeClass('selected');
-    $('#mainDayShow_'+day).addClass('selected');
-
-
-    $('#showBigDays').animate({
-        scrollTop: $('#showBigDays').scrollTop() + $('#mainDayShow_' + day).position().top
-    }, 1000).scrollTop();
-}
-
 function selectBuyButton(){
+    document.getElementById('tourDateInNameInBuyModal').innerText = `(${nowTimeSelected.sDate})`;
     openMyModal('buyModal');
 }
 
@@ -304,37 +280,41 @@ function createTourPricesAndTimeHtml(){
 }
 
 function chooseOtherDates(_index){
-    var selectedTime = tourTimeAndPrices[_index];
-    if(selectedTime.hasCapacity) {
-        var element = $(`#tourTime_${selectedTime.code}`);
+    nowTimeSelected = tourTimeAndPrices[_index];
+    if(nowTimeSelected.hasCapacity) {
+
+        let newUrl = window.location.origin + window.location.pathname + '?timeCode=' + nowTimeSelected.code;
+        window.history.pushState({"html":'',"pageTitle":''},"", newUrl);
+
+        var element = $(`#tourTime_${nowTimeSelected.code}`);
         element.parent().find('.selectdd').removeClass('selectdd');
         element.addClass('selectdd');
 
-        $('.sDateName').text(selectedTime.sDateName);
-        $('.eDateName').text(selectedTime.eDateName);
-        $('.mainCostShow').text(numberWithCommas(selectedTime.cost));
+        $('.sDateName').text(nowTimeSelected.sDateName);
+        $('.eDateName').text(nowTimeSelected.eDateName);
+        $('.mainCostShow').text(numberWithCommas(nowTimeSelected.cost));
 
-        if(selectedTime.isInsurance === 1)
+        if(nowTimeSelected.isInsurance === 1)
             [...document.querySelectorAll('.hasInsurance')].map(item => item.classList.remove('hidden'));
         else
             [...document.querySelectorAll('.hasInsurance')].map(item => item.classList.add('hidden'));
 
-        tourTimeCode = selectedTime.code;
+        tourTimeCode = nowTimeSelected.code;
 
         $('.showCostSection').removeClass('hasDiscount');
         $('#discountButton').addClass('hidden');
-        // if(selectedTime.addedDiscount == 0){
+        // if(nowTimeSelected.addedDiscount == 0){
         //     $('.showCostSection').removeClass('hasDiscount');
         //     $('#discountButton').addClass('hidden');
         // }
         // else{
         //     $('.showCostSection').addClass('hasDiscount');
-        //     $('#discountButton').removeClass('hidden').find('.text').text(`${selectedTime.addedDiscount}% تخفیف`);
+        //     $('#discountButton').removeClass('hidden').find('.text').text(`${nowTimeSelected.addedDiscount}% تخفیف`);
         // }
 
         // var pricesHtml = '';
         // passengerCount = [];
-        // selectedTime.prices.map((item, index) => {
+        // nowTimeSelected.prices.map((item, index) => {
         //     if(item.id == 0){
         //         $('.mainCostShow').text(item.mainCostShow);
         //         $('.costWithDiscount').text(item.payAbleShow);
@@ -402,7 +382,6 @@ function calculateFeatureCost(){
     return totalCost;
 }
 
-
 function createTourPlaces(_places){
     let html = '';
     _places.forEach(item => {
@@ -411,7 +390,14 @@ function createTourPlaces(_places){
                         <img src="${item.img}" alt="${item.name}" class="resizeImgClass" onload="fitThisImg(this)">
                     </div>
                     <div class="infos">
-                        <div class="name lessShowText">${item.name}</div>
+                        <a href="${item.url}" target="_blank" class="name lessShowText">${item.name}</a>
+                        <div class="rateAndReview">
+                            <span class="rate ui_bubble_rating bubble_${item.rate}0"></span>
+                            <span class="review">
+                                <span>${item.reviewCount}</span>
+                                <span>نقد</span>
+                            </span>
+                        </div>
                         <a href="${item.url}" target="_blank" class="link">اطلاعات بیشتر</a>
                     </div>
                 </div>`;
@@ -419,103 +405,6 @@ function createTourPlaces(_places){
 
     document.getElementById('tourPlanDateSection').innerHTML = html;
 }
-
-// function createScheduleHtml(_schedule) {
-//     var dayListHtml = '';
-//     var dayBigInfoHtml = '';
-//     var allDay = 24 * 60;
-//
-//     _schedule.map((item, index) => {
-//         dayListHtml += `<div class="dayRow ${index+1 == 1 ? 'selected' : ''}" data-day="${index+1}" onclick="selectDay(this)">
-//                             <div class="dayCircle"></div>
-//                             <div class="dayName">روز ${index+1} :</div>
-//                             <div class="dayTitle">برنامه روز ${index+1}</div>
-//                         </div>`;
-//
-//         dayBigInfoHtml += `<div id="mainDayShow_${index+1}" class="bigDetailRow borderBotDashed">
-//                                 <div class="title">
-//                                     <div class="dayCount">روز ${index+1}</div>
-//                                     <div class="name">برنامه روز ${index+1}</div>
-//                                 </div>
-//                                 <div class="text">${item.description}</div>
-//                                 ${ item.hotel == null ? '' :
-//                                         `<div class="sideInfos">
-//                                             <div class="title">
-//                                                 <div class="iconSec hotelIcon"></div>
-//                                                 <div class="name">محل اقامت :</div>
-//                                             </div>
-//                                             <div class="content">
-//                                                 <a href="${item.hotel.url}">${item.hotel.name}</a>
-//                                             </div>
-//                                         </div>`
-//                                 }
-//                                 <div class="sideInfos">
-//                                     <div class="title">
-//                                         <div class="iconSec restaurantIcon"></div>
-//                                         <div class="name">وعده غذایی تور :</div>
-//                                     </div>
-//                                     <div class="content">${item.meals.join(" - ")}</div>
-//                                 </div>
-//                                 <div class="showAllDetail leftArrowIconAfter" onclick="openDayDetails(${index+1})">مشاهده جزئیات روز</div>
-//                             </div>`;
-//
-//         dayEvents.push({
-//             indicatorHtml: '',
-//             detailHtml: ''
-//         });
-//
-//         item.events.map(event => {
-//             var placesHtml = '';
-//             var sTime = event.sTime.split(':');
-//             var eTime = event.eTime.split(':');
-//             var sMinutes = parseInt(sTime[0])*60 + parseInt(sTime[1]);
-//             var eMinutes = parseInt(eTime[0])*60 + parseInt(eTime[1]);
-//             var height = ((eMinutes - sMinutes)/allDay) * 100;
-//             var startPos = (sMinutes/allDay) * 100;
-//
-//             if(event.places.length > 0){
-//                 event.places.map(place => {
-//                     placesHtml += `<a href="${place.url}" class="placeCardInShowTour" target="_blank">
-//                                     <div class="picSection">
-//                                         <div class="backPic">
-//                                             <img src="${place.pic}" alt="${place.name}" class="resizeImgClass" onload="fitThisImg(this)">
-//                                         </div>
-//                                     </div>
-//                                     <div class="content">
-//                                         <div class="boldText">${place.name}</div>
-//                                         <div class="smallText">${place.stateAndCity}</div>
-//                                     </div>
-//                                 </a>`
-//                 });
-//             }
-//
-//             dayEvents[index].indicatorHtml += `<div class="dayEvent" style="background: ${event.color}; top: ${startPos}%; height: ${height}%;">
-//                                                    <div class="dayEventName">${event.kindName}</div>
-//                                                </div>`;
-//
-//             dayEvents[index].detailHtml += `<div class="dayInfoRow">
-//                                                 <div class="title">
-//                                                     <div class="iconSec" style="background: ${event.color}">
-//                                                         <div class="${event.icon}"></div>
-//                                                     </div>
-//                                                     ${event.text == null ? event.kindName : event.text}
-//                                                     <div class="time">${event.sTime} - ${event.eTime}</div>
-//                                                 </div>
-//                                                 <div class="text">
-//                                                     <div>${event.description}</div>
-//                                                     <div class="schedulePlaceSection">${placesHtml}</div>
-//                                                 </div>
-//                                             </div>`;
-//         });
-//     });
-//
-//     $('#listOfDays').html(dayListHtml);
-//     $('#showBigDays').html(dayBigInfoHtml);
-//
-//
-//     if(_schedule.length == 1)
-//         openDayDetails(1);
-// }
 
 function showTransportInMap(_kind){
     openMyModal('mapModal');
@@ -628,4 +517,131 @@ function goToMsgPageGuid(_username){
 }
 
 
-getInformation();
+$(document).ready(() => {
+    getInformation();
+});
+
+
+// FOR TOUR SCHEDULE
+
+// function createScheduleHtml(_schedule) {
+//     var dayListHtml = '';
+//     var dayBigInfoHtml = '';
+//     var allDay = 24 * 60;
+//
+//     _schedule.map((item, index) => {
+//         dayListHtml += `<div class="dayRow ${index+1 == 1 ? 'selected' : ''}" data-day="${index+1}" onclick="selectDay(this)">
+//                             <div class="dayCircle"></div>
+//                             <div class="dayName">روز ${index+1} :</div>
+//                             <div class="dayTitle">برنامه روز ${index+1}</div>
+//                         </div>`;
+//
+//         dayBigInfoHtml += `<div id="mainDayShow_${index+1}" class="bigDetailRow borderBotDashed">
+//                                 <div class="title">
+//                                     <div class="dayCount">روز ${index+1}</div>
+//                                     <div class="name">برنامه روز ${index+1}</div>
+//                                 </div>
+//                                 <div class="text">${item.description}</div>
+//                                 ${ item.hotel == null ? '' :
+//                                         `<div class="sideInfos">
+//                                             <div class="title">
+//                                                 <div class="iconSec hotelIcon"></div>
+//                                                 <div class="name">محل اقامت :</div>
+//                                             </div>
+//                                             <div class="content">
+//                                                 <a href="${item.hotel.url}">${item.hotel.name}</a>
+//                                             </div>
+//                                         </div>`
+//                                 }
+//                                 <div class="sideInfos">
+//                                     <div class="title">
+//                                         <div class="iconSec restaurantIcon"></div>
+//                                         <div class="name">وعده غذایی تور :</div>
+//                                     </div>
+//                                     <div class="content">${item.meals.join(" - ")}</div>
+//                                 </div>
+//                                 <div class="showAllDetail leftArrowIconAfter" onclick="openDayDetails(${index+1})">مشاهده جزئیات روز</div>
+//                             </div>`;
+//
+//         dayEvents.push({
+//             indicatorHtml: '',
+//             detailHtml: ''
+//         });
+//
+//         item.events.map(event => {
+//             var placesHtml = '';
+//             var sTime = event.sTime.split(':');
+//             var eTime = event.eTime.split(':');
+//             var sMinutes = parseInt(sTime[0])*60 + parseInt(sTime[1]);
+//             var eMinutes = parseInt(eTime[0])*60 + parseInt(eTime[1]);
+//             var height = ((eMinutes - sMinutes)/allDay) * 100;
+//             var startPos = (sMinutes/allDay) * 100;
+//
+//             if(event.places.length > 0){
+//                 event.places.map(place => {
+//                     placesHtml += `<a href="${place.url}" class="placeCardInShowTour" target="_blank">
+//                                     <div class="picSection">
+//                                         <div class="backPic">
+//                                             <img src="${place.pic}" alt="${place.name}" class="resizeImgClass" onload="fitThisImg(this)">
+//                                         </div>
+//                                     </div>
+//                                     <div class="content">
+//                                         <div class="boldText">${place.name}</div>
+//                                         <div class="smallText">${place.stateAndCity}</div>
+//                                     </div>
+//                                 </a>`
+//                 });
+//             }
+//
+//             dayEvents[index].indicatorHtml += `<div class="dayEvent" style="background: ${event.color}; top: ${startPos}%; height: ${height}%;">
+//                                                    <div class="dayEventName">${event.kindName}</div>
+//                                                </div>`;
+//
+//             dayEvents[index].detailHtml += `<div class="dayInfoRow">
+//                                                 <div class="title">
+//                                                     <div class="iconSec" style="background: ${event.color}">
+//                                                         <div class="${event.icon}"></div>
+//                                                     </div>
+//                                                     ${event.text == null ? event.kindName : event.text}
+//                                                     <div class="time">${event.sTime} - ${event.eTime}</div>
+//                                                 </div>
+//                                                 <div class="text">
+//                                                     <div>${event.description}</div>
+//                                                     <div class="schedulePlaceSection">${placesHtml}</div>
+//                                                 </div>
+//                                             </div>`;
+//         });
+//     });
+//
+//     $('#listOfDays').html(dayListHtml);
+//     $('#showBigDays').html(dayBigInfoHtml);
+//
+//
+//     if(_schedule.length == 1)
+//         openDayDetails(1);
+// }
+// function openDayDetails(_day){
+//     $('#dayEventIdicator').html(dayEvents[(_day-1)].indicatorHtml);
+//     $('#detailInfSec').html(dayEvents[(_day-1)].detailHtml);
+//     $('#fullDayDetailSection').addClass('showMinDetail');
+//     $('#showBigDays').addClass('hidden');
+// }
+//
+// function selectDay(_element){
+//
+//     $('html, body').animate({ scrollTop: $('#dayInfoSection').offset().top }, 500);
+//     $('#fullDayDetailSection').removeClass('showMinDetail');
+//
+//     var day = $(_element).attr('data-day');
+//
+//     $(_element).parent().find('.selected').removeClass('selected');
+//     $(_element).addClass('selected');
+//
+//     $('#showBigDays').removeClass('hidden').find('.selected').removeClass('selected');
+//     $('#mainDayShow_'+day).addClass('selected');
+//
+//
+//     $('#showBigDays').animate({
+//         scrollTop: $('#showBigDays').scrollTop() + $('#mainDayShow_' + day).position().top
+//     }, 1000).scrollTop();
+// }

@@ -82,6 +82,8 @@ class Tour extends Model {
                         array_push($allPlaces, [
                             'url' => route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $pl->id]),
                             'name' => $pl->name,
+                            'rate' => (int)$pl->fullRate,
+                            'reviewCount' => $pl->reviewCount,
                             'img' => getPlacePic($pl->id, $kindPlace->id, 'f')
                         ]);
                     }

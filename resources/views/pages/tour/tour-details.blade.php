@@ -101,6 +101,7 @@
             flex-wrap: wrap;
         }
         .tourPlanDateSection .card{
+            width: 200px;
             border: solid 1px lightgray;
             padding: 3px;
             border-radius: 5px;
@@ -108,7 +109,7 @@
             margin: 5px 10px;
         }
         .tourPlanDateSection .card .img{
-            width: 200px;
+            width: 100%;
             height: 150px;
             overflow: hidden;
             display: flex;
@@ -123,7 +124,11 @@
             flex-direction: column;
         }
         .tourPlanDateSection .card .infos .name{
-
+            color: black;
+        }
+        .tourPlanDateSection .card .infos .rateAndReview .review{
+            font-size: 11px;
+            color: gray;
         }
         .tourPlanDateSection .card .infos .link{
             font-size: 10px;
@@ -217,7 +222,7 @@
 
     <div class="container" style="display: flex; flex-direction: column; padding: 0px">
 
-        <div class="rowChooseDate" style="direction: rtl;">
+        <div id="chooseDateSection" class="rowChooseDate" style="direction: rtl;">
             <div class="bodiesHeader" style="text-align: center;font-size: 25px;">تاریخ های دیگری که این تور برگزار می شود</div>
             <table id="tourTimesTable" class="moreFeature table table-bordered table-striped"></table>
         </div>
@@ -355,8 +360,8 @@
                             </div>
                             <div class="name">{{$tour->agencyName}}</div>
                             <div class="rateAndPage">
-                                <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_10"></div></div>
-                                <a href="#" class="butse" style="background: var(--koochita-red);">صفحه آژانس</a>
+                                <div class="fullyCenterContent" style="font-size: 25px;"><div class="ui_bubble_rating bubble_50"></div></div>
+{{--                                <a href="#" class="butse" style="background: var(--koochita-red);">صفحه آژانس</a>--}}
                             </div>
                         </div>
                     </div>
@@ -424,37 +429,46 @@
             <div class="header">
                 خرید تور
                 <span class="tourName"></span>
+                <span id="tourDateInNameInBuyModal"></span>
             </div>
-            <div>از <span class="sDateName"></span> تا <span class="eDateName"></span></div>
+
+{{--            <div>از <span class="sDateName"></span> تا <span class="eDateName"></span></div>--}}
+
             <div>برای خرید تور شما باید تعداد نفرات خود را مشخص کنید، سپس اطلاعات فردی هر مسافر را وارد نمایید</div>
             <div class="row priceSection">
-                <div id="tourPriceOptions" class="col-xs-5">
-                    <div class="full-width inline-block">
-                        <span class="inline-block" style="font-weight: bold;">هزینه امکانات اضافه</span>
-                        <span class="inline-block"></span>
-                        <div class="full-width inline-block additionalFeaturesForBuy"></div>
-                    </div>
-
-                    <div class="full-width inline-block">
-                        <div class="totalFeaturesCost" style="font-size: 14px;">
-                            <div class="title">جمع کل امکانات اضافه</div>
-                            <div class="cost featureTotalCost">0</div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="tourBuyCount">تعداد بلیت را وارد کنید</label>
+                    <input id="tourBuyCount" type="number" class="form-control" placeholder="تعداد بلیت">
                 </div>
 
-                <div id="tourPricePerMan" class="col-xs-7">
-                    <div id="pricesInBuyButton"></div>
-                    <div class="full-width inline-block">
-                        <span>هزینه امکانات اضافه</span>
-                        <span class="featureTotalCost">0</span>
-                    </div>
-                    <div class="full-width inline-block">
-                        <div class="totalFeaturesCost" style="margin-top: 10px;">
-                            <div class="title">جمع کل هزینه ها</div>
-                            <div class="cost passengerTotalCost">0</div>
-                        </div>
-                    </div>
+{{--                 Buy Tour Feature Section --}}
+{{--                <div id="tourPriceOptions" class="col-xs-5">--}}
+{{--                    <div class="full-width inline-block">--}}
+{{--                        <span class="inline-block" style="font-weight: bold;">هزینه امکانات اضافه</span>--}}
+{{--                        <span class="inline-block"></span>--}}
+{{--                        <div class="full-width inline-block additionalFeaturesForBuy"></div>--}}
+{{--                    </div>--}}
+{{--                    <div class="full-width inline-block">--}}
+{{--                        <div class="totalFeaturesCost" style="font-size: 14px;">--}}
+{{--                            <div class="title">جمع کل امکانات اضافه</div>--}}
+{{--                            <div class="cost featureTotalCost">0</div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+
+                <div id="tourPricePerMan" class="col-xs-12">
+{{--                    <div id="pricesInBuyButton"></div>--}}
+{{--                    <div class="full-width inline-block">--}}
+{{--                        <span>هزینه امکانات اضافه</span>--}}
+{{--                        <span class="featureTotalCost">0</span>--}}
+{{--                    </div>--}}
+{{--                    <div class="full-width inline-block">--}}
+{{--                        <div class="totalFeaturesCost" style="margin-top: 10px;">--}}
+{{--                            <div class="title">جمع کل هزینه ها</div>--}}
+{{--                            <div class="cost passengerTotalCost">0</div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
 
                 <div class="col-md-12 fullyCenterContent">
