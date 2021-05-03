@@ -138,8 +138,6 @@ class TourController extends Controller{
         if($tour == null)
             abort(404);
 
-        $tour->agencyLogo = URL::asset("storage/{$tour->agencyLogo}");
-
         if($tour->isPublish === 0 || $tour->confirm === 0){
             $you = auth()->check() ? auth()->user() : null;
             if($you === null || $you->id != $tour->userId)
@@ -156,6 +154,9 @@ class TourController extends Controller{
 
         if($time == null)
             $time = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->first();
+
+        $tour->timeCode = $time->code;
+        $tour->cost = number_format($time->cost);
 
         $stt = explode('/', $time->sDate);
         $tour->sDateName = Verta::createJalali($stt[0], $stt[1], $stt[2])->format('%A Y/m/d');
@@ -203,6 +204,7 @@ class TourController extends Controller{
         else
             $tour->backupPhone = [$tour->agencyPhone];
 
+        $tour->agencyLogo = URL::asset("storage/{$tour->agencyLogo}");
 
         return view('pages.tour.tour-details', compact(['tour']));
     }
@@ -210,7 +212,14 @@ class TourController extends Controller{
     public function getFullTourInformation(){
         $code = $_GET['code'];
 
-        $tour = Tour::where('code', $code)->first();
+        $tour = Tour::join('tourTimes', 'tourTimes.tourId', 'tour.id')
+                            ->where('tourTimes.code', $code)
+                            ->select([
+                                'tour.*', 'tourTimes.code AS timeCode', 'tourTimes.cost AS cost', 'tourTimes.isInsurance',
+                                'tourTimes.sDate', 'tourTimes.eDate', 'tourTimes.minCapacity', 'tourTimes.maxCapacity',
+                                'tourTimes.isPublished', 'tourTimes.canRegister', 'tourTimes.registered'
+                            ])
+                            ->first();
 
         $thisTour = ['tourId' => $tour->id];
 
@@ -236,7 +245,8 @@ class TourController extends Controller{
         }
 
 
-        $tour->schedule = $tour->getFullySchedule();
+//        $tour->schedule = $tour->getFullySchedule();
+        $tour->places = $tour->getAllPlaces();
 
         $times = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->get();
         foreach($times as $item){

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\DefaultDataDB;
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
@@ -844,44 +845,47 @@ function getUserPic($id = 0){
 }
 
 function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
+    $allKindPlaces = DefaultDataDB::getPlaceDB();
+
     $defaultPic = URL::asset("images/mainPics/noPicSite.jpg");
     if($placeId != 0) {
         $server = 1;
-        $kindPlace = Place::find($kindPlaceId);
-        if($kindPlace->id == 13){
-            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file'])->first();
-            $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
-            if($pic != null){
-                $server = $pic->server;
-                $pic = $pic->pic;
-            }
-        }
-        else {
-            $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber', 'server'])->first();
-            $server = $place->server;
-            $pic = $place->picNumber;
-        }
-
-        if ($place != null && $place->file != 'none' && $place->file != null) {
-            if (is_array($kind)) {
-                $pics = [];
-                foreach ($kind as $k) {
-                    $pi = $defaultPic;
-                    if($pic != null && $pic != '')
-                        $pi = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server);
-
-                    array_push($pics, $pi);
+        if(isset($allKindPlaces[$kindPlaceId])){
+            $kindPlace = $allKindPlaces[$kindPlaceId];
+            if($kindPlace->id == 13){
+                $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file'])->first();
+                $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
+                if($pic != null){
+                    $server = $pic->server;
+                    $pic = $pic->pic;
                 }
-                return $pics;
             }
-            else{
-                if($pic == null || $pic == '')
-                    return $defaultPic;
-                else
-                    return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+            else {
+                $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber', 'server'])->first();
+                $server = $place->server;
+                $pic = $place->picNumber;
+            }
+
+            if ($place != null && $place->file != 'none' && $place->file != null) {
+                if (is_array($kind)) {
+                    $pics = [];
+                    foreach ($kind as $k) {
+                        $pi = $defaultPic;
+                        if($pic != null && $pic != '')
+                            $pi = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server);
+
+                        array_push($pics, $pi);
+                    }
+                    return $pics;
+                }
+                else{
+                    if($pic == null || $pic == '')
+                        return $defaultPic;
+                    else
+                        return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
+                }
             }
         }
-
     }
 
     return $defaultPic;

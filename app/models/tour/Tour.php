@@ -2,9 +2,11 @@
 
 namespace App\models\tour;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Cities;
 use App\models\places\Place;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int isPublished
@@ -63,8 +65,36 @@ class Tour extends Model {
     }
 
 
+    public function getAllPlaces(){
+        $allKindPlaces = DefaultDataDB::getPlaceDB();
+
+        $allPlaces = [];
+        $schedules = TourSchedule::where('tourId', $this->id)->orderBy('day')->get();
+        foreach($schedules as $index => $schedule){
+            $placesWithKindPlaceIds = TourPlaceRelation::where('tourId', $this->id)->get()->groupBy('kindPlaceId');
+            foreach($placesWithKindPlaceIds as $kindPlaceId => $plki){
+                if(isset($allKindPlaces[$kindPlaceId])) {
+                    $kindPlace = $allKindPlaces[$kindPlaceId];
+                    $allPlaceIds = $plki->pluck('placeId')->toArray();
+                    $places = DB::table($kindPlace->tableName)->whereIn('id', $allPlaceIds)->get();
+
+                    foreach($places as $pl){
+                        array_push($allPlaces, [
+                            'url' => route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $pl->id]),
+                            'name' => $pl->name,
+                            'img' => getPlacePic($pl->id, $kindPlace->id, 'f')
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return $allPlaces;
+    }
+
     public function getFullySchedule(){
         $schedules = TourSchedule::where('tourId', $this->id)->orderBy('day')->get();
+
         $isFullDayMeals = $this->isMealAllDay;
         $meals = json_decode($this->meals);
 

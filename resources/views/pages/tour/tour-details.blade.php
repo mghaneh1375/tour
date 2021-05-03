@@ -93,6 +93,42 @@
             color: gray;
             font-size: .8em;
         }
+
+
+        .tourPlanDateSection{
+            display: flex;
+            padding: 10px 0px;
+        }
+        .tourPlanDateSection .card{
+            border: solid 1px lightgray;
+            padding: 3px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 3px 1px grey;
+            margin: 5px 10px;
+        }
+        .tourPlanDateSection .card .img{
+            width: 200px;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .tourPlanDateSection .card .infos{
+            margin-top: 5px;
+            padding: 0px 5px;
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .tourPlanDateSection .card .infos .name{
+
+        }
+        .tourPlanDateSection .card .infos .link{
+            font-size: 10px;
+            margin-left: 5px;
+            margin-right: auto;
+        }
     </style>
 @stop
 
@@ -109,7 +145,12 @@
                             <img src="{{$tour->agencyLogo}}" alt="{{$tour->agencyName}}" style="max-width: 100%; max-height: 100%;">
                         </div>
                     </div>
-                    @if($tour->type != 'cityTourism')
+                    @if($tour->type === 'cityTourism')
+                        <div class="detailRowPost">
+                            <span>تور شهرگردی : </span>
+                            <span class="boldPostal">{{$tour->src->name}}</span>
+                        </div>
+                    @else
                         <div class="detailRowPost">
                             از
                             <span class="boldPostal">{{$tour->src->name}}</span>
@@ -137,7 +178,7 @@
                     <div class="detailRowPost">
                         قیمت :
                         <span class="boldPostal showCostSection">
-                            <div class="mainCostShow"></div>
+                            <div class="mainCostShow">{{$tour->cost}}</div>
                             <div class="costWithDiscount"></div>
                         </span>
 
@@ -148,9 +189,7 @@
                         <div id="discountButton" class="buyButton hidden">
                             <div class="text">10% تخفیف</div>
                         </div>
-                        @if($tour->isInsurance == 1)
-                            <div class="hasInsurance"> بیمه دارد</div>
-                        @endif
+                        <div class="hasInsurance hidden"> بیمه دارد</div>
                     </div>
                     <div class="postalLastRow"> .این تور توسط "{{$tour->agencyName}}" برگذار می شود و کوچیتا هیچ گونه مسئولیتی ، درباره نحوه ی برگزاری آن ندارد</div>
                 </div>
@@ -341,33 +380,33 @@
         </div>
 
         <div id="dayInfoSection" class="row" style="direction: rtl">
-            <div class="bodiesHeader">برنامه روزانه تور</div>
-            <div class="dayInfoSectionRow">
-                <div class="selectDaySec" style="width: 30%">
-                    <div id="listOfDays" class="daysChoose"></div>
-                </div>
+            <div class="bodiesHeader">برنامه تور</div>
+            <div id="tourPlanDateSection" class="tourPlanDateSection"></div>
+{{--            <div class="dayInfoSectionRow">--}}
+{{--                <div class="selectDaySec" style="width: 30%">--}}
+{{--                    <div id="listOfDays" class="daysChoose"></div>--}}
+{{--                </div>--}}
+{{--                <div class="dayDetails" style="width: 70%;">--}}
+{{--                    <div id="fullDayDetailSection" class="minDatail">--}}
+{{--                        <div id="detailInfSec" class="detailInfSec"></div>--}}
+{{--                        <div class="dayIndicator" style="display: none;">--}}
+{{--                            <div class="indiMainLineSection">--}}
+{{--                                <div class="mainLine"></div>--}}
+{{--                                <div class="linesSec">--}}
+{{--                                    @for($i = 0; $i < 24; $i++)--}}
+{{--                                        <div class="hourSec">--}}
+{{--                                            <div class="text">{{$i < 10 ? '0'.$i : $i}}:{{$i != 23 ? '00' : '59'}}</div>--}}
+{{--                                        </div>--}}
+{{--                                    @endfor--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div id="dayEventIdicator" class="indiDatas"></div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                <div class="dayDetails" style="width: 70%;">
-                    <div id="fullDayDetailSection" class="minDatail">
-                        <div id="detailInfSec" class="detailInfSec"></div>
-                        <div class="dayIndicator" style="display: none;">
-                            <div class="indiMainLineSection">
-                                <div class="mainLine"></div>
-                                <div class="linesSec">
-                                    @for($i = 0; $i < 24; $i++)
-                                        <div class="hourSec">
-                                            <div class="text">{{$i < 10 ? '0'.$i : $i}}:{{$i != 23 ? '00' : '59'}}</div>
-                                        </div>
-                                    @endfor
-                                </div>
-                            </div>
-                            <div id="dayEventIdicator" class="indiDatas"></div>
-                        </div>
-                    </div>
-
-                    <div id="showBigDays" class="BigDetail"></div>
-                </div>
-            </div>
+{{--                    <div id="showBigDays" class="BigDetail"></div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
     </div>
 
@@ -434,7 +473,7 @@
         var dayEvents = [];
         var tourCode = '{{$tour->code}}';
         var tourTimeCode = '{{$tour->timeCode}}';
-        var tourInformationUrl = `{{route("tour.getInformation")}}?code=${tourCode}`;
+        var tourInformationUrl = `{{route("tour.getInformation")}}?code=${tourTimeCode}`;
         var checkCapacityUrl = '{{route("tour.reservation.checkCapacity")}}';
         var getPassengerInfoUrl = '{{route("tour.reservation.getPassengerInfo")}}';
         var messengerTourGuidPage = '{{route("profile.message.page")}}';
