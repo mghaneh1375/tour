@@ -222,12 +222,37 @@ function fillTourShowPage(_response){
         $(`#${diffEquip > 0 ? 'suggestEquipments' : 'mustEquipments'}`).append(equipments);
 
 
-    _response.difficult.map(item => tourSideFeatureList.tourDifficult.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourDifficult.background}">${item}</div>`);
-    _response.kinds.map(item => tourSideFeatureList.tourKind.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourKind.background}">${item}</div>`);
-    _response.language.map(item => tourSideFeatureList.tourLanguage.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourLanguage.background}">${item}</div>`);
-    _response.fitFor.map(item => tourSideFeatureList.tourFitFor.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourFitFor.background}">${item}</div>`);
-    _response.style.map(item => tourSideFeatureList.tourStyle.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourStyle.background}">${item}</div>`);
-    _response.sideTransport.map(item => tourSideFeatureList.tourSideTransport.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourSideTransport.background}">${item}</div>`);
+    if(Array.isArray(_response.difficult)) {
+        _response.difficult.forEach(item => {
+            tourSideFeatureList.tourDifficult.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourDifficult.background}">${item}</div>`;
+        });
+    }
+    if(Array.isArray(_response.kinds)){
+        _response.kinds.forEach(item => {
+            tourSideFeatureList.tourKind.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourKind.background}">${item}</div>`;
+        });
+    }
+    if(Array.isArray(_response.language)){
+        _response.language.forEach(item => {
+            tourSideFeatureList.tourLanguage.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourLanguage.background}">${item}</div>`;
+        });
+    }
+    if(Array.isArray(_response.fitFor)){
+        _response.fitFor.forEach(item => {
+            tourSideFeatureList.tourFitFor.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourFitFor.background}">${item}</div>`
+        });
+    }
+    if(Array.isArray(_response.style)){
+        _response.style.forEach(item => {
+            tourSideFeatureList.tourStyle.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourStyle.background}">${item}</div>`
+        });
+    }
+    if(Array.isArray(_response.sideTransport)){
+        _response.sideTransport.forEach(item => {
+            tourSideFeatureList.tourSideTransport.content += `<div class="propItem" style="background: ${tourSideFeatureList.tourSideTransport.background}">${item}</div>`;
+        });
+    }
+
 
     for(var item of Object.keys(tourSideFeatureList)){
         if(tourSideFeatureList[item].content != '') {
