@@ -223,14 +223,15 @@ class Tour extends Model {
         foreach ($schedule as $item)
             $item->fullyDelete();
 
-
         $folderLocation = __DIR__."/../../../../assets/_images/tour/{$this->id}";
-        $filesInFolder = scandir($folderLocation);
-        foreach($filesInFolder as $file){
-            if($filesInFolder != '.' && $filesInFolder != '..' && is_file("{$folderLocation}/{$file}"))
-                unlink("{$folderLocation}/{$file}");
+        if(is_dir($folderLocation)) {
+            $filesInFolder = scandir($folderLocation);
+            foreach ($filesInFolder as $file) {
+                if ($filesInFolder != '.' && $filesInFolder != '..' && is_file("{$folderLocation}/{$file}"))
+                    unlink("{$folderLocation}/{$file}");
+            }
         }
-        $pics = TourPic::where($condition)->delete();
+        TourPic::where($condition)->delete();
 
         $this->delete();
         return ['status' => 'ok'];

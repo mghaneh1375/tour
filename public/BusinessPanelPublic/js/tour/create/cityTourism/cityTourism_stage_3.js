@@ -773,11 +773,13 @@ async function getPlaceInfoForPlan(_id, _kindPlaceId, _callBack){
                 place = response.result;
             else{
                 console.error(response.result);
+                closeLoading();
                 error = true;
             }
         },
         error: err =>{
             console.error(err);
+            closeLoading();
             error = true;
         }
     });
