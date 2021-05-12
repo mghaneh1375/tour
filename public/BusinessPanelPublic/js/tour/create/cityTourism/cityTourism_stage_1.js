@@ -701,7 +701,7 @@ async function checkInput() {
             id: 0,
             date: mainDate,
             cost: mainCost,
-            inInsurance: mainIsInsurance,
+            isInsurance: mainIsInsurance,
             minCapacity: mainMinCapacity,
             maxCapacity: mainMaxCapacity,
             groupDiscount: mainGroupDiscount

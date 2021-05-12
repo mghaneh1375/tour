@@ -43,9 +43,6 @@ ALTER TABLE `tourGuids` ADD `phone` VARCHAR(20) NULL DEFAULT NULL AFTER `sex`;
 ALTER TABLE `tourTimes` ADD `isInsurance` TINYINT(1) NULL AFTER `cost`;
 ALTER TABLE `tourTimes` ADD `minCapacity` SMALLINT NOT NULL AFTER `eDate`, ADD `maxCapacity` SMALLINT NOT NULL AFTER `minCapacity`;
 ALTER TABLE `tourDiscounts` ADD `tourTimeId` INT(11) NOT NULL AFTER `tourId`;
-
-
-
 ALTER TABLE `transportKind` ADD `actualName` VARCHAR(200) NULL AFTER `name`, ADD `icon` VARCHAR(200) NULL AFTER `actualName`;
 ALTER TABLE `tourScheduleDetails` ADD `type` ENUM('place','meal','special') NULL DEFAULT NULL AFTER `tourScheduleId`;
 ALTER TABLE `tourScheduleDetails` ADD `kindPlaceId` INT(11) NULL AFTER `description`, ADD `placeId` INT(11) NULL AFTER `kindPlaceId`;
