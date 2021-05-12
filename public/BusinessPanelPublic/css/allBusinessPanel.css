@@ -74,7 +74,7 @@ input[type="checkbox"], input[type="radio"]{
 
 .mainBodySection{
     position: fixed;
-    width: calc(100% - 300px);
+    width: calc(100% - 250px);
     height: calc(100vh - 60px);
     left: 0;
     top: 60px;
@@ -82,7 +82,7 @@ input[type="checkbox"], input[type="radio"]{
     text-align: right;
     padding: 15px;
 }
-.mainBodySection .row{
+.mainBodySection > .row{
     height: 100%;
 }
 /*.mainBodySection > div {*/
@@ -235,7 +235,7 @@ input[type="checkbox"], input[type="radio"]{
     position: fixed;
     right: 0;
     top: 60px;
-    width: 300px;
+    width: 250px;
     height: 100%;
 
     border-left: solid 1px var(--lightBordreGray);
@@ -287,7 +287,7 @@ input[type="checkbox"], input[type="radio"]{
     cursor: pointer;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavHeader{
-    font-size: 18px;
+    font-size: 14px;
     padding: 10px 20px;
     display: flex;
     align-items: center;
@@ -316,6 +316,7 @@ input[type="checkbox"], input[type="radio"]{
     font-weight: bold;
     border-radius: 10px;
     margin: 3px 5px;
+    font-size: 12px;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem.selected,
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem:hover{

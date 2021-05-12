@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\BookMark;
 use App\models\BookMarkReference;
 use App\models\Cities;
@@ -234,12 +235,12 @@ class SafarnamehController extends Controller
 
                 foreach ($cit as $item){
                     if($item->cityId == 0){
-                        $state = State::find($item->stateId);
+                        $state = DefaultDataDB::getStateWithId($item->stateId);
                         array_push($places, ['kindPlaceId' => 'state', 'kindPlaceName' => '', 'placeId' => $state->id, 'name' => 'استان ' . $state->name, 'pic' => getStatePic($state->id, 0), 'state' => '']);
                     }
                     else{
                         $city = Cities::find($item->cityId);
-                        $state = State::find($item->stateId);
+                        $state = DefaultDataDB::getStateWithId($item->stateId);
                         array_push($places, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $city->id, 'name' => 'شهر ' . $city->name, 'pic' => getStatePic($state->id, $city->id), 'state' => 'در استان ' . $state->name]);
                     }
                 }
@@ -252,7 +253,7 @@ class SafarnamehController extends Controller
                         if ($place != null) {
                             $place->pic = getPlacePic($place->id, $kindPlace->id, 'f');
                             $cit = Cities::find($place->cityId);
-                            $sta = State::find($cit->stateId);
+                            $sta = DefaultDataDB::getStateWithId($cit->stateId);
                             $stasent = 'استان ' . $sta->name . ' ، شهر' . $cit->name;
                             array_push($places, ['kindPlaceId' => $kindPlace->id,
                                 'kindPlaceName' => $kindPlace->name, 'placeId' => $place->id,
@@ -619,7 +620,7 @@ class SafarnamehController extends Controller
                                                             ->toArray();
                     }
                     else{
-                        $place = State::find($search);
+                        $place = DefaultDataDB::getStateWithId($search);
                         $safarnamehId = SafarnamehCityRelations::where('stateId', $place->id)
                                                             ->pluck('safarnamehId')
                                                             ->toArray();

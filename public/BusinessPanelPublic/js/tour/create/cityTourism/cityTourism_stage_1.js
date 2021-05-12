@@ -8,6 +8,10 @@ var disCounts = [];
 var discountError = false;
 var selectedDate = [];
 var lastDatePickerOpen = null;
+
+var nowCitySearchResult = [];
+var allDatesInformations = [];
+
 // var timeRowSample = document.getElementById('timeRowSample').innerHTML;
 // document.getElementById('timeRowSample').remove();
 
@@ -105,19 +109,22 @@ function changeCityName(_element){
 
 
 function createGroupDisCountCard(_type, _discount = null){
+
     if(_discount == null){
         _discount = {
             id: 0,
+            code: Math.floor(Math.random()*1000000),
             discount: '',
-            minCount: 0,
-            maxCount: 0,
+            minCount: '',
+            maxCount: '',
             status: 1,
         }
     }
 
-    var text = `<div id="groupDiscount_${disCountNumber}" data-index="${disCountNumber}" class="col-md-12 pd-0 discountRow" style="display: flex; align-items: center">
+    var text = `<div id="groupDiscount_${disCountNumber}" data-index="${disCountNumber}" class="col-md-12 pd-0 discountRow ${_discount.status == 1 ? 'active' : 'notActive'}" style="display: flex; align-items: center">
                     <div id="groupDiscountInputs_${disCountNumber}" class="inputBox discountLimitationWholesale float-right">
-                        <input id="disCountGroupId_${disCountNumber}" type="hidden" value="0">
+                        <input id="disCountGroupId_${disCountNumber}" type="hidden" value="${_discount.id}">
+                        <input id="disCountGroupStatus_${disCountNumber}" type="hidden" value="${_discount.status}">
                         <div class="inputBoxText">
                             <div>از</div>
                         </div>
@@ -125,8 +132,13 @@ function createGroupDisCountCard(_type, _discount = null){
                                class="inputBoxInput startDisCountNumber"
                                type="number"
                                placeholder="نفر"
-                               onkeyup="checkDiscount(${disCountNumber}, this.value, 0)"
-                               onchange="checkAllDiscount()" style="width: 100px;">
+                               value="${_discount.minCount}"
+                               ${_discount.id === 0 ?
+                                    `onkeyup="checkDiscount(${disCountNumber}, this.value, 0)"
+                                    onchange="checkAllDiscount()" style="width: 100px;"`
+                                    :
+                                    'readOnly'
+                                }>
                         <div class="inputBoxText">
                             <div>الی</div>
                         </div>
@@ -134,111 +146,57 @@ function createGroupDisCountCard(_type, _discount = null){
                                class="inputBoxInput endDisCountNumber"
                                type="number"
                                placeholder="نفر"
-                               onkeyup="checkDiscount(${disCountNumber}, this.value, 1)"
-                               onchange="checkAllDiscount()" style="width: 100px;">
+                               value="${_discount.maxCount}"
+                               ${_discount.id === 0 ?
+                                    `onkeyup="checkDiscount(${disCountNumber}, this.value, 1)"
+                                    onchange="checkAllDiscount()" style="width: 100px;"`
+                                    :
+                                    'readOnly'
+                                }
+                               >
                         <div class="inputBoxText">
                             <div class="importantFieldLabel">درصد تخفیف</div>
                         </div>
                         <input id="disCountCap_${disCountNumber}"
                                class="inputBoxInput no-border-imp"
                                type="number"
+                               value="${_discount.discount}"${_discount.id === 0 ? `` : 'readOnly' }
                                placeholder="درصد تخفیف">
                     </div>
                     <div class="inline-block mg-rt-10">
-                        <button type="button" class="submitBTNCircleIcon" onclick="this.remove()">
-                                تایید
-                        </button>
-                        <button type="button" class="submitBTNCircleIcon" style="background: #94341e;" onclick="deleteDisCountCard(${disCountNumber})">
-                            حذف
-                        </button>
+                        ${
+                            _discount.id == 0 ?
+                                `<button type="button" class="submitBTNCircleIcon" onclick="this.remove()"> تایید </button>
+                                <button type="button" class="submitBTNCircleIcon" onclick="deleteDisCountCard(${disCountNumber})" style="background: #94341e;"> حذف </button>`
+                                :
+                                `<button type="button" class="submitBTNCircleIcon disableButton" onclick="disableThisGroupDiscount(${disCountNumber})" style="font-size: 11px;"></button>`
+                            }
+
                     </div>
                 </div>`;
-
-    // var text = `<div id="groupDiscount_${disCountNumber}" data-index="${disCountNumber}" class="col-md-12 pd-0 discountRow" style="display: flex">
-    //                 <div id="groupDiscountInputs_${disCountNumber}" class="inputBox discountLimitationWholesale float-right" style="opacity: ${_discount.status == 1 ? '1' : '.2'}">
-    //                     <input id="disCountGroupId_${disCountNumber}" type="hidden" value="${_discount.id}">
-    //                     <div class="inputBoxText">
-    //                         <div class="importantFieldLabel">بازه‌ی تخفیف</div>
-    //                     </div>
-    //                     <input id="disCountFrom_${disCountNumber}"
-    //                             class="inputBoxInput startDisCountNumber"
-    //                             type="number"
-    //                             value="${_discount.minCount}"
-    //                             ${_discount.id == 0
-    //                                 ?
-    //                                     `placeholder="از"
-    //                                     onkeyup="checkDiscount(${disCountNumber}, this.value, 0)"
-    //                                     onchange="checkAllDiscount()"`
-    //                                 :
-    //                                     `readonly`
-    //                             }>
-    //
-    //                     <div class="inputBoxText">
-    //                         <div>الی</div>
-    //                     </div>
-    //                     <input id="disCountTo_${disCountNumber}"
-    //                             class="inputBoxInput endDisCountNumber"
-    //                             type="number"
-    //                             value="${_discount.maxCount}"
-    //                             ${_discount.id == 0
-    //                                 ?
-    //                                 `placeholder="تا"
-    //                                 onkeyup="checkDiscount(${disCountNumber}, this.value, 1)"
-    //                                 onchange="checkAllDiscount()"`
-    //                                 :
-    //                                 `readonly`
-    //                             }>
-    //                     <div class="inputBoxText">
-    //                         <div class="importantFieldLabel">درصد تخفیف</div>
-    //                     </div>
-    //                     <input id="disCountCap_${disCountNumber}"
-    //                             class="inputBoxInput no-border-imp"
-    //                             type="number"
-    //                             value="${_discount.discount}"
-    //                             ${_discount.id == 0
-    //                                 ?
-    //                                 `placeholder="درصد تخفیف"`
-    //                                 :
-    //                                 `readonly`
-    //                             }>
-    //                 </div>
-    //                 <div class="inline-block mg-tp-12 mg-rt-10">
-    //                     ${_discount.id === 0
-    //                     ?
-    //                         `<button type="button" class="wholesaleDiscountLimitationBtn deleteBtnTourCreation deleteDisCountButton" onclick="deleteDisCountCard(${disCountNumber})">
-    //                             حذف تخفیف گروهی
-    //                         </button>`
-    //                     :
-    //                         `<button id="disableGroupDiscountButton_${disCountNumber}" data-status="${_discount.status}"
-    //                                 type="button"
-    //                                 class="wholesaleDiscountLimitationBtn deleteBtnTourCreation deleteDisCountButton"
-    //                                 style="background: ${_discount.status === 1 ? 'var(--koochita-yellow)' : 'var(--koochita-green)'}"
-    //                                 onclick="disableThisGroupDiscount(${disCountNumber})">
-    //                             ${_discount.status === 1 ? 'غیر فعال' : 'فعال'} کردن تخفیف
-    //                         </button>`
-    //                     }
-    //                 </div>
-    //             </div>`;
 
     let className = _type === 'main' ? '#mainGroupDiscount' : '#groupDiscountDiv';
     $(className).append(text);
     disCountNumber++;
 
     disCounts.push(_discount);
-
-    // if(disCountNumber > 1)
-    //     checkAllDiscount();
 }
 function disableThisGroupDiscount(_index){
-    let gdbElement = document.getElementById(`disableGroupDiscountButton_${_index}`);
-    let status = gdbElement.getAttribute('data-status');
+    let nowStatus = document.getElementById(`disCountGroupStatus_${_index}`).value;
+    let updateStatus = nowStatus == 1 ? 0 : 1;
 
-    disCounts[_index].status = status == 1 ? 0 : 1;
-    gdbElement.setAttribute('data-status', disCounts[_index].status);
-    gdbElement.style.background = disCounts[_index].status == 1 ? 'var(--koochita-yellow)' : 'var(--koochita-green)';
-    gdbElement.innerText = disCounts[_index].status == 1 ? 'غیر فعال کردن تخفیف' : 'فعال کردن تخفیف';
+    document.getElementById(`disCountGroupStatus_${_index}`).value = updateStatus;
 
-    document.getElementById(`groupDiscountInputs_${_index}`).style.opacity = disCounts[_index].status == 1 ? '1' : '.2';
+    let element = document.getElementById(`groupDiscount_${_index}`);
+    if(updateStatus === 1){
+        element.classList.remove('notActive');
+        element.classList.add('active');
+    }
+    else{
+        element.classList.add('notActive');
+        element.classList.remove('active');
+    }
+
 }
 function deleteDisCountCard(_index){
     disCounts[_index] = null;
@@ -401,7 +359,6 @@ function changeCancelAble(_value){
 }
 
 function fullDataInFields() {
-    console.log(tour);
 
     $('#tourId').val(tour.id);
     $('#tourName').val(tour.name);
@@ -424,57 +381,82 @@ function fullDataInFields() {
         document.getElementById('cancelDiv').classList.add('hidden');
     }
 
-    // for (var i = 0; i < tour.times.length - 1; i++)
-    //     newCalendar();
-    //
-    // for (i = 0; i < tour.times.length; i++) {
-    //     document.getElementById(`sDate_${i}`).value = tour.times[i].sDate;
-    //     document.getElementById(`sDateCost_${i}`).value = numberWithCommas(tour.times[i].moreCost);
-    // }
-    //
-    // if(tour.times.length > 1){
-    //     $('input[name="anotherDay"]').parent().removeClass('active');
-    //     $('input[name="anotherDay"][value="1"]').prop('checked', true).parent().addClass('active');
-    //     document.getElementById('anotherDaysDate').classList.remove('hidden');
-    // }
-    //
-    // if(tour.groupDiscount.length > 0)
-    //     tour.groupDiscount.forEach(item => createGroupDisCountCard(item));
-    //
-    // if(tour.remainingDay.length > 0)
-    //     tour.remainingDay.forEach(item => addLastDayDiscount(item));
+    [...document.querySelectorAll('.onlyOnNew')].map(item => item.classList.add('hidden'));
+    [...document.querySelectorAll('.onlyOnEdit')].map(item => item.classList.remove('hidden'));
+
+    document.getElementById('otherDateSection').classList.remove('hidden');
+
+    if(Array.isArray(tour.times)) {
+        tour.times.forEach(item => {
+            allDatesInformations.push({
+                id: item.id,
+                code: Math.floor(Math.random()*10000000),
+                date: item.sDate,
+                cost: item.cost,
+                isInsurance: item.isInsurance,
+                minCapacity: item.minCapacity,
+                maxCapacity: item.maxCapacity,
+                groupDiscount: item.groupDiscount,
+                canEdit: item.canEdit
+            });
+        });
+        createDateTableRows();
+    }
 }
 
 function hasOtherDate(_value){
-    if(otherDates.length === 0 && _value == 1)
+    if(allDatesInformations.length === 0 && _value == 1)
         openDateModal();
 }
 
 function openDateModal(_date = null){
     if(_date == null){
         _date = {
+            id: 0,
             code: 0,
             date: '',
-            anyCapacity: 0,
             minCapacity: '',
             maxCapacity: '',
             cost: '',
-            isInsurance: 1,
-            sDateRegister: {
-                date: '',
-                time: ''
-            },
-            eDateRegister: {
-                date: '',
-                time: ''
-            },
+            isInsurance: 0,
             groupDiscount: [],
         }
     }
 
+    document.getElementById('tourDateId').value = _date.id;
     document.getElementById('tourDateCode').value = _date.code;
+    document.getElementById('dateInModal').value = _date.date;
+    document.getElementById('dateInModalWithoutCalendar').value = _date.date;
+    document.getElementById('minCapacityInModal').value = _date.minCapacity;
+    document.getElementById('maxCapacityInModal').value = _date.maxCapacity;
+    document.getElementById('costInModal').value = numberWithCommas(_date.cost);
 
-    createGroupDisCountCard('modal');
+    if(_date.date != '')
+        changeModalDate(_date.date, 'modal');
+    else
+        changeModalDate('...', 'modal');
+
+    if(_date.id == 0){
+        document.getElementById('dateInModalWithoutCalendar').classList.add('hidden');
+        document.getElementById('dateInModal').classList.remove('hidden');
+    }
+    else{
+        document.getElementById('dateInModalWithoutCalendar').classList.remove('hidden');
+        document.getElementById('dateInModal').classList.add('hidden');
+    }
+
+    $('input[name="isInsuranceInModal"]').parent().removeClass('active');
+    $(`input[name="isInsuranceInModal"][value="${_date.isInsurance}"]`).prop('checked', true).parent().addClass('active');
+
+    if(_date.groupDiscount.length == 0 && _date.id === 0){
+        document.getElementById('groupDiscountDiv').innerHTML = '';
+        createGroupDisCountCard('modal');
+    }
+    else
+        _date.groupDiscount.forEach(item => {
+            createGroupDisCountCard('modal', item);
+        });
+
     openMyModalBP('dateModal');
 }
 
@@ -486,13 +468,14 @@ function changeModalDate(_value, _type){
 function submitDateModal(){
     let errorText = '';
 
+    let id = document.getElementById('tourDateId').value;
     let code = document.getElementById('tourDateCode').value;
     if(code == 0)
         code = Math.floor(Math.random() * 100000);
 
     let index = null;
-    for(let i = 0; i < otherDates.length; i++) {
-        if(code == otherDates.code){
+    for(let i = 0; i < allDatesInformations.length; i++) {
+        if(code == allDatesInformations[i].code){
             index = i;
             break;
         }
@@ -512,15 +495,16 @@ function submitDateModal(){
         let index = item.getAttribute('data-index');
 
         let disId = document.getElementById(`disCountGroupId_${index}`).value;
-        let min = parseInt(document.getElementById(`disCountFrom_${index}`).value);
-        let max = parseInt(document.getElementById(`disCountTo_${index}`).value);
+        let status = document.getElementById(`disCountGroupStatus_${index}`).value;
+        let minCount = parseInt(document.getElementById(`disCountFrom_${index}`).value);
+        let maxCount = parseInt(document.getElementById(`disCountTo_${index}`).value);
         let discount = parseFloat(document.getElementById(`disCountCap_${index}`).value);
 
-        if(!(min > 0)){
+        if(!(minCount > 0)){
             hasError = true;
             document.getElementById(`disCountFrom_${index}`).classList.add('errorClass');
         }
-        if(!(max > 0)){
+        if(!(maxCount > 0)){
             hasError = true;
             document.getElementById(`disCountTo_${index}`).classList.add('errorClass');
         }
@@ -530,14 +514,14 @@ function submitDateModal(){
         }
 
         if(!hasError)
-            groupDiscount.push({ id: disId, min, max, discount});
+            groupDiscount.push({ id: disId, minCount, maxCount, discount, status});
     });
 
     if(date.trim().length === 0)
         errorText += `<li>تاریخ را مشخص کنید</li>`;
-    for(let i = 0; i < otherDates.length; i++){
-        if(otherDates[i].code != code){
-            if(otherDates[i].date === date){
+    for(let i = 0; i < allDatesInformations.length; i++){
+        if(allDatesInformations[i].code != code && allDatesInformations[i].delete != 1){
+            if(allDatesInformations[i].date === date){
                 errorText += `<li>تاریخ تکراری می باشد.</li>`;
                 break;
             }
@@ -560,31 +544,60 @@ function submitDateModal(){
         openErrorAlertBP(errorText);
     }
     else {
-        let data = {id: 0, code, date, cost, isInsurance, minCapacity, maxCapacity, groupDiscount};
-
+        let data = {id, code, date, cost, isInsurance, minCapacity, maxCapacity, groupDiscount, canEdit: true, delete: 0};
         if (index == null)
-            otherDates.push(data);
+            allDatesInformations.push(data);
         else
-            otherDates[index] = data;
+            allDatesInformations[index] = data;
 
-        let html = '';
-        otherDates.forEach(item => {
-            html += `<tr id="dateRow_${item.code}">
-                            <td>${item.date}</td>
-                            <td>${numberWithCommas(item.cost)} تومان</td>
-                            <td>${item.minCapacity}-${item.maxCapacity} نفر</td>
-                            <td>${item.groupDiscount.length} تا تخفیف گروهی</td>
-                            <td>
-<!--                                <button class="btn btn-primary tableButton" onclick="editThisDate(${item.id})">ویرایش</button>-->
-                                <button class="btn btn-danger tableButton" onclick="deleteThisDate(${item.code})">حذف</button>
-                            </td>
-                        </tr>`;
-        });
-        document.getElementById('otherDateTableBody').innerHTML = html;
-        document.getElementById('otherDateSection').classList.remove('hidden');
+        for(let i = 0; i < allDatesInformations.length-1; i++){
+            for(let j = i+1; j < allDatesInformations.length; j++){
+                if(allDatesInformations[i].date > allDatesInformations[j].date){
+                    let last = allDatesInformations[i];
+                    allDatesInformations[i] = allDatesInformations[j];
+                    allDatesInformations[j] = last;
+                }
+            }
+        }
 
+        createDateTableRows();
         closeMyModalBP('dateModal');
         cleanDateModalDate();
+    }
+}
+
+function createDateTableRows(){
+    let html = '';
+    allDatesInformations.forEach(item => {
+        if(item.delete != 1) {
+            html += `<tr id="dateRow_${item.code}">
+                    <td>${item.date}</td>
+                    <td>${numberWithCommas(item.cost)} تومان</td>
+                    <td>${item.minCapacity}-${item.maxCapacity} نفر</td>
+                    <td>${item.groupDiscount.length} تا تخفیف گروهی</td>
+                    <td>
+                        ${
+                item.canEdit ?
+                    `<button class="btn btn-primary tableButton" onclick="editThisDate(${item.code})">ویرایش</button>\n
+                                 <button class="btn btn-danger tableButton" onclick="deleteThisDate(${item.code})">حذف</button>`
+                    :
+                    ''
+            }
+                    </td>
+                </tr>`;
+        }
+    });
+    document.getElementById('otherDateTableBody').innerHTML = html;
+    document.getElementById('otherDateSection').classList.remove('hidden');
+}
+
+function editThisDate(_code){
+    for(let i = 0; i < allDatesInformations.length; i++) {
+        if(allDatesInformations[i].code == _code){
+            cleanDateModalDate();
+            openDateModal(allDatesInformations[i]);
+            break;
+        }
     }
 }
 
@@ -597,21 +610,17 @@ function cleanDateModalDate(){
 }
 
 function deleteThisDate(_code){
-    let index = null;
-    for(let i = 0; i < otherDates.length; i++){
-        if(otherDates[i].code == _code){
-            index = i;
+    for(let i = 0; i < allDatesInformations.length; i++){
+        if(allDatesInformations[i].code == _code){
+            document.getElementById(`dateRow_${allDatesInformations[i].code}`).classList.add('hidden');
+            allDatesInformations[i].delete = 1;
             break;
         }
     }
 
-    if(index != null){
-        document.getElementById(`dateRow_${otherDates[index].code}`).remove();
-        otherDates.splice(index, 1);
-    }
 }
 
-function checkInput() {
+async function checkInput() {
     let allDates = [];
     dataToSend = {
         tourType,
@@ -638,66 +647,68 @@ function checkInput() {
     if(dataToSend.cancelAble == 1 && dataToSend.cancelDescription.trim().length === 0)
         errorText += '<li>در صورت داشتن شرایط کنسلی، شرایط آن را بنویسید.</li>';
 
-    let mainDate = document.getElementById('mainDate').value;
-    let mainCost = parseFloat(document.getElementById('tourCost').value.replace(new RegExp(',', 'g'), ''));
-    let mainMinCapacity = parseInt(document.getElementById('minCapacity').value);
-    let mainMaxCapacity = parseInt(document.getElementById('maxCapacity').value);
-    let mainIsInsurance = document.querySelector('input[name="isInsurance"]:checked').value;
+    if(dataToSend.tourId == 0) {
+        let mainGroupDiscount = [];
+        let mainGroupDiscountRow = 0;
+        let mainDate = document.getElementById('mainDate').value;
+        let mainCost = parseFloat(document.getElementById('tourCost').value.replace(new RegExp(',', 'g'), ''));
+        let mainMinCapacity = parseInt(document.getElementById('minCapacity').value);
+        let mainMaxCapacity = parseInt(document.getElementById('maxCapacity').value);
+        let mainIsInsurance = document.querySelector('input[name="isInsurance"]:checked').value;
 
-    let mainGroupDiscount = [];
-    let mainGroupDiscountRow = 0;
-    [...document.querySelectorAll('#mainGroupDiscount .discountRow')].map(item => {
-        mainGroupDiscountRow++;
-        let index = item.getAttribute('data-index');
+        [...document.querySelectorAll('#mainGroupDiscount .discountRow')].map(item => {
+            mainGroupDiscountRow++;
+            let index = item.getAttribute('data-index');
 
-        let min = parseInt(document.getElementById(`disCountFrom_${index}`).value);
-        let max = parseInt(document.getElementById(`disCountTo_${index}`).value);
-        let discount = parseFloat(document.getElementById(`disCountCap_${index}`).value);
-        let hasError = false;
+            let min = parseInt(document.getElementById(`disCountFrom_${index}`).value);
+            let max = parseInt(document.getElementById(`disCountTo_${index}`).value);
+            let discount = parseFloat(document.getElementById(`disCountCap_${index}`).value);
+            let hasError = false;
 
-        if(!(min > 0)){
-            hasError = true;
-            document.getElementById(`disCountFrom_${index}`).classList.add('errorClass');
-        }
+            if(!(min > 0)){
+                hasError = true;
+                document.getElementById(`disCountFrom_${index}`).classList.add('errorClass');
+            }
 
-        if(!(max > 0)){
-            hasError = true;
-            document.getElementById(`disCountTo_${index}`).classList.add('errorClass');
-        }
+            if(!(max > 0)){
+                hasError = true;
+                document.getElementById(`disCountTo_${index}`).classList.add('errorClass');
+            }
 
-        if(!(discount > 0)){
-            hasError = true;
-            document.getElementById(`disCountCap_${index}`).classList.add('errorClass');
-        }
+            if(!(discount > 0)){
+                hasError = true;
+                document.getElementById(`disCountCap_${index}`).classList.add('errorClass');
+            }
 
-        if(!hasError)
-            mainGroupDiscount.push({id: 0, min, max, discount});
-    });
+            if(!hasError)
+                mainGroupDiscount.push({id: 0, min, max, discount});
+        });
 
-    if (mainDate.trim().length === 0)
-        errorText += `<li>تاریخ اصلی تور را مشخص کنید.</li>`;
-    if (!(mainCost > 0))
-        errorText += `<li>قیمت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
-    if (!(mainMinCapacity >= 0))
-        errorText += `<li>حداقل ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
-    if (!(mainMaxCapacity >= 0))
-        errorText += `<li>حداکثر ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
-    if (mainMaxCapacity < mainMinCapacity)
-        errorText += `<li>حداکثر ظرفیت تور نمی تواند کوچکتر از حداقل باشد</li>`;
-    if(mainGroupDiscount.length != mainGroupDiscountRow)
-        errorText += `<li>بعضی از فیلدهای تخفیف گروهی برای تاریخ ${mainDate} خالی است. آنها را پر کنید و یا حذف کنید.</li>`;
+        if (mainDate.trim().length === 0)
+            errorText += `<li>تاریخ اصلی تور را مشخص کنید.</li>`;
+        if (!(mainCost > 0))
+            errorText += `<li>قیمت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+        if (!(mainMinCapacity >= 0))
+            errorText += `<li>حداقل ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+        if (!(mainMaxCapacity >= 0))
+            errorText += `<li>حداکثر ظرفیت تور در تاریخ ${mainDate} را مشخص کنید.</li>`;
+        if (mainMaxCapacity < mainMinCapacity)
+            errorText += `<li>حداکثر ظرفیت تور نمی تواند کوچکتر از حداقل باشد</li>`;
+        if(mainGroupDiscount.length != mainGroupDiscountRow)
+            errorText += `<li>بعضی از فیلدهای تخفیف گروهی برای تاریخ ${mainDate} خالی است. آنها را پر کنید و یا حذف کنید.</li>`;
 
-    allDates.push({
-        id: 0,
-        date: mainDate,
-        cost: mainCost,
-        inInsurance: mainIsInsurance,
-        minCapacity: mainMinCapacity,
-        maxCapacity: mainMaxCapacity,
-        groupDiscount: mainGroupDiscount
-    });
+        allDates.push({
+            id: 0,
+            date: mainDate,
+            cost: mainCost,
+            inInsurance: mainIsInsurance,
+            minCapacity: mainMinCapacity,
+            maxCapacity: mainMaxCapacity,
+            groupDiscount: mainGroupDiscount
+        });
+    }
 
-    otherDates.forEach(item => allDates.push(item));
+    allDatesInformations.forEach(item => allDates.push(item));
 
     dataToSend.dates = allDates;
 
@@ -724,7 +735,31 @@ function submitInputs(){
                     location.href = `${stageTwoUrl}/${response.result}`;
                 else{
                     closeLoading();
-                    showSuccessNotifiBP('در ثبت مشکلی پیش آمده', 'left', 'red');
+                    let errorText = '';
+                    errorText += `<li>خطا در ثبت اطلاعات</li>`;
+                    response.result.forEach(err => {
+                        if(err.status === 0)
+                            errorText += `<li>تاریخ ${err.result.date} تکراری می باشد</li>`;
+                        if(err.status === 3)
+                            errorText += `<li>نام تور نباید خالی باشد</li>`;
+                        if(err.status === 4)
+                            errorText += `<li>شهر خود را از لیست انتهاب کنید.</li>`;
+                        if(err.status === 5)
+                            errorText += `<li>توضیح کنسلی نمی تواند خالی باشد</li>`;
+                        if(err.status === 6) {
+                            errorText += `<li>شما نمی توانید تاریخ ${err.result.date} را حذف کنید.</li>`;
+
+                            for(let i = 0; i < allDatesInformations.length; i++){
+                                if(allDatesInformations[i].date == err.result.date){
+                                    document.getElementById(`dateRow_${allDatesInformations[i].code}`).classList.remove('hidden');
+                                    allDatesInformations[i].delete = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                    errorText = `<ul>${errorText}</ul>`;
+                    openErrorAlertBP(errorText);
                 }
             },
             error: err =>{
@@ -742,7 +777,6 @@ $(document).ready(() => {
         fullDataInFields();
 
     createGroupDisCountCard('main');
-
 });
 
 

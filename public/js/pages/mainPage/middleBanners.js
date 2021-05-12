@@ -118,38 +118,39 @@ function createMainPageSuggestion(_result){
 
     // createSuggestionPack in suggestionPack.blade.php
     createSuggestionPack('newInKoochita', _result.result, function() {
-        $('.newInKoochita').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.newInKoochita').css('direction', 'ltr');
+        let elem = $('.newInKoochita');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
     }, true);
 
     createSuggestionPack('topFood', food, function() {
-        $('.topFood').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.topFood').css('direction', 'ltr');
+        let elem = $('.topFood');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
     }, true);
 
     createSuggestionPack('topTabiat', tabiat, function() {
-        $('.topTabiat').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.topTabiat').css('direction', 'ltr');
+        let elem = $('.topTabiat');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
     }, true);
 
     createSuggestionPack('topRestaurant', restaurant, function() {
-        $('.topRestaurant').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.topRestaurant').css('direction', 'ltr');
+        let elem = $('.topRestaurant');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
     }, true);
 
     createSuggestionPack('topTarikhi', tarikhi, function() {
-        $('.topTarikhi').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.topTarikhi').css('direction', 'ltr');
+        let elem = $('.topTarikhi');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
     }, true);
 
-    // createSuggestionPack('topKharid', kharid, function() {
-    //     $('.topKharid').find('.suggestionPackDiv').addClass('swiper-slide');
-    //     $('.topKharid').css('direction', 'ltr');
-    // });
-
     createSuggestionPack('topSafarnameh', safarnameh, function() {
-        $('.topSafarnameh').find('.suggestionPackDiv').addClass('swiper-slide');
-        $('.topSafarnameh').css('direction', 'ltr');
+        let elem = $('.topSafarnameh');
+        elem.find('.suggestionPackDiv').addClass('swiper-slide');
+        elem.css('direction', 'ltr');
         runMainSwiper('mainSuggestion')
     }, true);
 }

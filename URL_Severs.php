@@ -29,7 +29,7 @@ class URL extends Facade
 
             $httpType = config('app.env') == 'local' ? "http" : "https";
 
-            $serverNum = $serverNum == 1 ? '' : $serverNum;
+//            $serverNum = $serverNum == 1 ? '' : $serverNum;
 
             switch ($tmp[0]) {
                 case "_images":
@@ -45,7 +45,10 @@ class URL extends Facade
                 case "js":
                 case "images":
                     return "{$httpType}://koochita.com/{$tmp[0]}/{$stub}";
+                case "storage":
+                    return "{$httpType}://sr{$serverNum}.koochita.com/{$tmp[0]}/{$stub}";
             }
+
         }
 
         return app('url')->asset($path, $secure);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\DefaultDataDB;
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\ActivityLogs;
@@ -97,7 +98,7 @@ class ProfileController extends Controller {
             }
         }
 
-        $revAct = Activity::where('name', 'نظر')->first();
+        $revAct = DefaultDataDB::getActivityWithName('نظر');
         $reviewLog = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->get();
         $reviewLogId = $reviewLog->pluck('id')->toArray();
 
@@ -209,7 +210,7 @@ class ProfileController extends Controller {
                 if(strpos($text, $item->name) !== false) {
                     $pic = getPlacePic($item->id, $kind->id, 'f');
                     $cit = Cities::find($item->cityId);
-                    $sta = State::find($cit->stateId);
+                    $sta = DefaultDataDB::getStateWithId($cit->stateId);
                     $stasent = 'استان ' . $sta->name . ' ، شهر' . $cit->name;
                     array_push($inPlace, ['kindPlaceId' => $kind->id, 'kindPlaceName' => $kind->name, 'placeId' => $item->id, 'name' => $item->name, 'pic' => $pic, 'state' => $stasent]);
                 }
@@ -329,7 +330,7 @@ class ProfileController extends Controller {
             $kindPlace = Place::find($photographer[$i]->kindPlaceId);
             $pl = \DB::table($kindPlace->tableName)->find($photographer[$i]->placeId);
             $city = Cities::find($pl->cityId);
-            $state = State::find($city->stateId);
+            $state = DefaultDataDB::getStateWithId($city->stateId);
 
             $location1 = $location.'/'.$kindPlace->fileName.'/'.$pl->file.'/s-'.$photographer[$i]->pic;
             if(is_file($location1)) {
@@ -365,7 +366,7 @@ class ProfileController extends Controller {
             }
         }
 
-        $revAct = Activity::where('name', 'نظر')->first();
+        $revAct = DefaultDataDB::getActivityWithName('نظر');
         $reviewLog = LogModel::where('visitorId', $uId)->where('activityId', $revAct->id)->orderByDesc('date')->get();
         $reviewLogId = $reviewLog->pluck('id')->toArray();
 

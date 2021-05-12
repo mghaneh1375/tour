@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Tour;
 
+use App\Helpers\DefaultDataDB;
 use App\Http\Controllers\Controller;
 use App\models\Cities;
 use App\models\tour\Tour;
@@ -9,6 +10,7 @@ use App\models\tour\TourDiscount;
 use App\models\tour\TourEquipment;
 use App\models\tour\TourPic;
 use App\models\tour\TourPrices;
+use App\models\tour\TourScheduleDetail;
 use App\models\tour\TourTimes;
 use App\models\tour\TourUserReservation;
 use App\models\tour\Transport_Tour;
@@ -19,6 +21,7 @@ use ClassesWithParents\CInterface;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Transport\Transport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class TourController extends Controller{
@@ -38,6 +41,7 @@ class TourController extends Controller{
     }
 
     public function getMainPageTours(){
+
         $type = $_GET['type'];
         $categoryName = '';
         $destinations = [];
@@ -134,6 +138,8 @@ class TourController extends Controller{
                     ->where('tour.code', $code)
                     ->select(['tour.*', 'business.name AS agencyName', 'business.logo AS agencyLogo', 'business.tel AS agencyPhone'])
                     ->first();
+
+        $places = $tour->getAllPlaces();
 
         if($tour == null)
             abort(404);
@@ -246,7 +252,93 @@ class TourController extends Controller{
 
 
 //        $tour->schedule = $tour->getFullySchedule();
-        $tour->places = $tour->getAllPlaces();
+//        $tour->places = $tour->getAllPlaces();
+        $events = [];
+        $getEvents = TourScheduleDetail::join('tourSchedules', 'tourSchedules.id', 'tourScheduleDetails.tourScheduleId')
+            ->where('tourSchedules.tourId', $tour->id)
+            ->select(['tourScheduleDetails.*'])
+            ->orderBy('tourScheduleDetails.sortNumber')
+            ->get();
+
+        $allKindPlaces = DefaultDataDB::getPlaceDB();
+        foreach($getEvents as $event){
+
+            $event->url = '#';
+            $event->place = null;
+            $event->placeRate = null;
+            $event->placeReviewCount = null;
+            $event->picture = getPlacePic(0, 0, 'f');
+
+            if($event->placeId != null && $event->kindPlaceId != null){
+                if(isset($allKindPlaces[$event->kindPlaceId])){
+                    $kindPlace = $allKindPlaces[$event->kindPlaceId];
+                    $place = DB::table($kindPlace->tableName)->find($event->placeId);
+
+                    $event->placeRate = (int)$place->fullRate;
+                    $event->placeReviewCount = (int)$place->reviewCount;
+                    $event->title = $place->name;
+                    $event->description = $place->meta;
+                    $event->lat = $place->C;
+                    $event->lng = $place->D;
+                    $event->picture = getPlacePic($place->id, $kindPlace->id, 'f');
+                    $event->url = createUrl($kindPlace->id, $place->id, 0, 0, 0);
+                }
+            }
+
+            if($event->sTime == null) $event->sTime = '';
+            if($event->eTime == null) $event->eTime = '';
+            if($event->title == null) $event->title = '';
+            if($event->description == null) $event->description = '';
+            if($event->lat == null) $event->lat = 0;
+            if($event->lng == null) $event->lng = 0;
+
+            array_push($events, [
+                'type' => $event->type,
+                'url' => $event->url,
+                'picture' => $event->picture,
+                'title' => $event->title,
+                'description' => $event->description,
+                'sTime' => $event->sTime,
+                'eTime' => $event->eTime,
+                'lat' => $event->lat,
+                'lng' => $event->lng,
+                'placeRate' => $event->placeRate,
+                'placeReviewCount' => $event->placeReviewCount,
+            ]);
+        }
+
+        $transport = Transport_Tour::where('tourId', $tour->id)->first();
+        $sLoc = json_decode($transport->sLatLng);
+        $eLoc = json_decode($transport->eLatLng);
+
+        array_unshift($events, [
+            'type' => 'start',
+            'url' => '#',
+            'picture' => getPlacePic(0, 0),
+            'title' => 'شروع حرکت',
+            'description' => $transport->sAddress,
+            'sTime' => $transport->sTime,
+            'eTime' => '',
+            'lat' => $sLoc[0],
+            'lng' => $sLoc[1],
+            'placeRate' => null,
+            'placeReviewCount' => null,
+        ]);
+        array_push($events, [
+            'type' => 'end',
+            'url' => '#',
+            'picture' => getPlacePic(0, 0),
+            'title' => 'پایان تور',
+            'description' => $transport->eAddress,
+            'sTime' => $transport->eTime,
+            'eTime' => '',
+            'lat' => $eLoc[0],
+            'lng' => $eLoc[1],
+            'placeRate' => null,
+            'placeReviewCount' => null,
+        ]);
+
+        $tour->events = $events;
 
         $times = TourTimes::youCanSee()->where('tourId', $tour->id)->orderBy('sDate')->get();
         foreach($times as $item){
@@ -264,7 +356,6 @@ class TourController extends Controller{
             $item->hasCapacity = ($item->capacityRemaining > 0);
         }
         $tour->times = $times;
-
 
         $mustEquip = [];
         $suggestEquip = [];

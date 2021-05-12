@@ -446,7 +446,7 @@ function createListElement(_result, _selectPlaceOnMap){
                     iconSize: [35, 35], // size of the icon
                     classToImg: `${filterButtons[item.kindPlaceId].classToImg}`
                 })
-            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId))
+            }).bindPopup(item.name).on('click', () => setMarkerToMap(item.C, item.D, item.id, item.name, item.kindPlaceId));
                 // .on('add', mark => {
                     // if(item.kindPlaceId != 13)
                     //     mark.target._icon.classList.add(iconClass);

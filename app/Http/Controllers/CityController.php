@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\localShops\LocalShops;
 use App\models\localShops\LocalShopsCategory;
@@ -48,7 +49,7 @@ class CityController extends Controller
         $localShopCategoryIds = LocalShopsCategory::where("id", 280)->orWhere('parentId', 280)->pluck('id')->toArray();
 
         if($kind == 'city') {
-            $cState = State::find($place->stateId);
+            $cState = DefaultDataDB::getStateWithId($place->stateId);
             $place->state = $cState->name;
             $place->listName = $place->name;
             $articleUrl = route('safarnameh.list', ['type' => 'city', 'search' => $place->listName]);
@@ -104,35 +105,6 @@ class CityController extends Controller
             'safarnameh' => $allSafarnamehCount,
             'localShops' => $allLocalShops,
         ];
-
-//        $pics = [];
-//        $DBpic = PlacePic::join('amaken', 'amaken.id', 'placePics.placeId')
-//                        ->where('placePics.kindPlaceId', 1)
-//                        ->whereIn('placePics.placeId', $allAmakenId)
-//                        ->select(['amaken.id', 'amaken.picNumber AS mainPic', 'amaken.keyword', 'amaken.name', 'amaken.file', 'placePics.alt', 'placePics.picNumber'])
-//                        ->get();
-//
-//        $location = $mainLocation.'/amaken/';
-//        foreach ($DBpic as $item){
-//            $mainPic = null;
-//            $smallPic = null;
-//            if(is_file($location.$item->file.'/s-'.$item->picNumber))
-//                $mainPic= URL::asset("_images/amaken/$item->file/s-$item->picNumber");
-//
-//            if(is_file($location.$item->file.'/l-'.$item->picNumber))
-//                $smallPic = URL::asset("_images/amaken/$item->file/l-$item->picNumber");
-//            else
-//                $smallPic = $mainPic;
-//
-//            if($mainPic != null)
-//                array_push($pics, [
-//                    'mainPic' => $mainPic,
-//                    'smallPic' => $smallPic,
-//                    'alt' => $item->keyword,
-//                    'name' => $item->name,
-//                    'url' => route('placeDetails', ['kindPlaceId' => 1, 'placeId' => $item->id])
-//                ]);
-//        }
 
         $pics = [];
         if($kind === "city"){
@@ -214,8 +186,7 @@ class CityController extends Controller
         return view('cityPage', compact(['place', 'kind', 'localStorageData', 'locationName', 'safarnameh', 'placeCounts']));
     }
 
-    public function getCityPageTopPlace()
-    {
+    public function getCityPageTopPlace(){
         $kind = $_GET['kind'];
         $id = $_GET['id'];
 
@@ -242,7 +213,7 @@ class CityController extends Controller
 
     public function getCityAllPlaces(Request $request)
     {
-        $activityId = Activity::whereName('نظر')->first()->id;
+        $activityId = DefaultDataDB::getActivityWithName('نظر')->id;
 
         if($request->kind == 'city'){
             $allAmaken = Amaken::where('cityId', $request->id)->select(['id', 'name', 'slug', 'C', 'D', 'address', 'picNumber', 'file', 'keyword', 'cityId', 'phone', 'reviewCount', 'fullRate'])->get();
@@ -318,11 +289,13 @@ class CityController extends Controller
     }
 
     private function getTopPlaces($kindPlaceId, $kind, $cityId){
-        $kindPlace = Place::find($kindPlaceId);
-        $seenActivity = Activity::whereName('مشاهده')->first()->id;
-        $activityId = Activity::whereName('نظر')->first()->id;
-        $ansActivityId = Activity::whereName('پاسخ')->first()->id;
-        $quesActivityId = Activity::whereName('سوال')->first()->id;
+        $kindPlace = DefaultDataDB::getSinglePlace($kindPlaceId);
+
+        $seenActivity = DefaultDataDB::getActivityWithName('مشاهده')->id;
+        $activityId = DefaultDataDB::getActivityWithName('نظر')->id;
+        $ansActivityId = DefaultDataDB::getActivityWithName('پاسخ')->id;
+        $quesActivityId = DefaultDataDB::getActivityWithName('سوال')->id;
+
 
         $lastMonthDate = Carbon::now()->subMonth()->format('Y-m-d');
 
@@ -371,15 +344,15 @@ class CityController extends Controller
             foreach ($randomPlace as $item)
                 array_push($placeId, $item);
 
-            $places = DB::table($kindPlace->tableName)->whereIn('id', $placeId)->select(['id', 'cityId','name', 'file', 'picNumber', 'keyword'])->get();
+            $places = DB::table($kindPlace->tableName)->whereIn('id', $placeId)->select(['id', 'cityId','name', 'file', 'picNumber', 'keyword', 'fullRate'])->get();
             foreach ($places as $item){
 
                 $item->pic = getPlacePic($item->id, $kindPlace->id);
                 $item->url = createUrl($kindPlace->id, $item->id, 0, 0);
-                $item->rate = getRate($item->id, $kindPlace->id)[1];
+                $item->rate = $item->fullRate;
                 $item->cityV = Cities::find($item->cityId);
                 $item->city =  $item->cityV->name;
-                $item->state = State::find($item->cityV->stateId)->name;
+                $item->state = DefaultDataDB::getStateWithId($item->cityV->stateId)->name;
 
                 $condition = ['activityId' => $activityId, 'placeId' => $item->id, 'kindPlaceId' => $kindPlace->id, 'confirm' => 1, 'relatedTo' => 0];
                 $item->review = LogModel::where($condition)->count();

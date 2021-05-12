@@ -533,4 +533,15 @@ class MultiDayTourCreationController extends Controller implements tourCreations
 
         return 'ok';
     }
+
+    public function showStep_1($tour)
+    {
+        // TODO: Implement showStep_1() method.
+    }
+
+    public function deleteTour($tour)
+    {
+        $response = $tour->fullyDeleted();
+        return $response;
+    }
 }

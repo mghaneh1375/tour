@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
@@ -182,7 +183,7 @@ class AjaxController extends Controller {
     public function getSingleQuestion(Request $request)
     {
         if(isset($request->id)){
-            $act = Activity::where('name', 'سوال')->first();
+            $act = DefaultDataDB::getActivityWithName('سوال');
             $quest = LogModel::find($request->id);
             if($quest->activityId != $act->id){
                 while($quest->activityId != $act->id && $quest->relatedTo != 0)
@@ -302,8 +303,9 @@ class AjaxController extends Controller {
     public function searchPlace() {
         $places = [];
         $value = $_GET['value'];
+
         if(isset($_GET['kindPlaceId']) && $_GET['kindPlaceId'] == "all")
-            $kindPlace = Place::whereNotNull('tableName')->get();
+            $kindPlace = DefaultDataDB::getPlaceDB();
         else if(isset($_GET['forWhere']) && $_GET['forWhere'] === 'map')
             $kindPlace = Place::whereIn('id', json_decode($_GET['kindPlaceId']))->get();
         else if(isset($_GET['kindPlaceId']))
@@ -312,7 +314,7 @@ class AjaxController extends Controller {
             $kindPlace = Place::whereIn('id', [1, 3, 4, 6, 12])->get();
 
         foreach ($kindPlace as $kind){
-            if($kind->id == 11 || $kind->id == 10)
+            if($kind->id == 11 || $kind->id == 10 || $kind->id == 14)
                 $pds = \DB::select("SELECT `id`, `name`, `cityId` FROM $kind->tableName WHERE `name` LIKE '%".$value."%'");
             else {
                 if($kind->id == 13) {
@@ -443,7 +445,7 @@ class AjaxController extends Controller {
             $key = $_POST["key"];
 
             if(isset($request->mode) && $request->mode == 'state'){
-                $state = State::find($request->selectedCities);
+                $state = DefaultDataDB::getStateWithId($request->selectedCities);
                 if($state != null){
                     $cities = Cities::where('stateId', $state->id)->get();
                     foreach ($cities as $city){
@@ -551,8 +553,7 @@ class AjaxController extends Controller {
         return response()->json(['status' => 'nok']);
     }
 
-    public function searchSpecificKindPlace()
-    {
+    public function searchSpecificKindPlace(){
         $place = [];
         if($_GET['kindPlaceId'] == 0){
             $kindPlaceses = Place::whereNotNull('tableName')->where('mainSearch', 1)->get();
@@ -694,26 +695,21 @@ class AjaxController extends Controller {
     }
 
 
-    public function getMainPageSuggestion()
-    {
+    public function getMainPageSuggestion(){
+
         $lastPages = json_decode($_GET['lastPage']);
         $lastState = [];
 
-        $reviewId = Activity::where('name', 'نظر')->first()->id;
-        $ansId = Activity::where('name', 'پاسخ')->first()->id;
+        $reviewId = DefaultDataDB::getActivityWithName('نظر')->id;
+        $ansId = DefaultDataDB::getActivityWithName('پاسخ')->id;
 
         $kindPlaceId = [1, 3, 4, 6, 10, 11, 12];
         $result = array();
 
         for($i = 0; $i < count($kindPlaceId); $i++){
-            $kindPlace = Place::find($kindPlaceId[$i]);
+            $kindPlace = DefaultDataDB::getSinglePlace($kindPlaceId[$i]);
             $place = DB::table($kindPlace->tableName)->latest('id')->first();
             $placeId = $place->id;
-//            if(Carbon::now()->diffInWeeks($place->created_at) > 2){
-//                $nPlaceId = \DB::select('SELECT MAX(`date`), placeId, kindPlaceId, activityId, id FROM `log` WHERE kindPlaceId = ' . $kindPlace->id . ' AND ( activityId = '.$reviewId.' OR activityId = ' . $ansId . ' ) ORDER BY `date` DESC' );
-//                if($nPlaceId[0]->placeId != null)
-//                    $placeId = $nPlaceId[0]->placeId;
-//            }
 
             $place = createSuggestionPack($kindPlaceId[$i], $placeId);
             if($place != null)
@@ -912,10 +908,10 @@ class AjaxController extends Controller {
 
     private function getPlaceInKindPlaceId($placeId, $allPlace, $kindPlaceId, $getCount){
         $questionRate = Question::where('ansType', 'rate')->pluck('id')->toArray();
-        $reviewId = Activity::where('name', 'نظر')->first()->id;
-        $ansId = Activity::where('name', 'پاسخ')->first()->id;
-        $quesActivityId = Activity::where('name', 'سوال')->first()->id;
-        $seeActivityId = Activity::where('name', 'مشاهده')->first()->id;
+        $reviewId = DefaultDataDB::getActivityWithName('نظر')->id;
+        $ansId = DefaultDataDB::getActivityWithName('پاسخ')->id;
+        $quesActivityId = DefaultDataDB::getActivityWithName('سوال')->id;
+        $seeActivityId = DefaultDataDB::getActivityWithName('مشاهده')->id;
 
         if (count($placeId) > $getCount) {
             $topInCity = $this->getTopInIds($kindPlaceId, $placeId, $getCount, $questionRate, $reviewId, $ansId, $quesActivityId);
@@ -1026,7 +1022,7 @@ class AjaxController extends Controller {
                 $result = Cities::where('name', 'LIKE','%'.$request->text.'%')->where('isVillage', 0)->get();
 
                 foreach ($result as $item) {
-                    $state = State::find($item->stateId);
+                    $state = DefaultDataDB::getStateWithId($item->stateId);
                     $stateText = $state->isCountry == 1 ? ' کشور ' : ' استان ';
                     array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => "در {$stateText} " . $state->name]);
                 }
@@ -1034,7 +1030,7 @@ class AjaxController extends Controller {
             else{
                 $result = Cities::where('name', 'LIKE', '%'.$request->text.'%')->where('isVillage','!=', 0)->get();
                 foreach ($result as $item) {
-                    $state = State::find($item->stateId);
+                    $state = DefaultDataDB::getStateWithId($item->stateId);
                     $city = Cities::find($item->isVillage);
                     $stateText = $state->isCountry == 1 ? ' کشور ' : ' استان ';
                     array_push($inPlace, ['kindPlaceId' => 'city', 'kindPlaceName' => '', 'placeId' => $item->id, 'name' => 'شهر ' . $item->name, 'pic' => getStatePic($item->id, 0), 'state' => "در {$stateText} " . $state->name . ' ، در شهر ' . $city->name]);
@@ -1047,7 +1043,7 @@ class AjaxController extends Controller {
             foreach ($places as $pl){
                 $pic = getPlacePic($pl->id, $kindPlace->id, 'f');
                 $cit = Cities::find($pl->cityId);
-                $sta = State::find($cit->stateId);
+                $sta = DefaultDataDB::getStateWithId($cit->stateId);
                 $stateText = $sta->isCountry == 1 ? ' کشور ' : ' استان ';
 
                 $stasent = $stateText . $sta->name . ' ، شهر' . $cit->name;

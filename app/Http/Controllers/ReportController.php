@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
@@ -241,7 +242,7 @@ class ReportController extends Controller {
                     return;
                 }
 
-                $activity = Activity::where('name', 'گزارش')->first();
+                $activity = DefaultDataDB::getActivityWithName('گزارش');
                 $condition = ['visitorId' => $uId, 'activityId' => $activity->id, 'relatedTo' => $logId];
                 $reportLog = LogModel::where($condition)->first();
                 if($reportLog == null){

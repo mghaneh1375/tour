@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property string code
  * @property string codeNumber
  * @property string name
+ * @property string remainingStage
  * @property int srcId
  * @property int maxCapacity
  * @property int minCapacity
@@ -59,14 +60,42 @@ class Tour extends Model {
         return $this->hasMany(TourDiscount::class, 'tourId', 'id');
     }
 
-    public function scopeYouCanSee($query)
-    {
+    public function scopeYouCanSee($query){
         return $query->where('isPublished', 1)->where('confirm', 1);
     }
 
+    public function updateRemainingStage($stage){
+        $remainingStage = $this->remainingStage;
+        if($remainingStage != null){
+            $remainingStage = json_decode($remainingStage);
+            $pos = array_search($stage, $remainingStage);
+            if($pos !== false) {
+                array_splice($remainingStage, $pos, 1);
+
+                if(count($remainingStage) == 0)
+                    $this->remainingStage = null;
+                else
+                    $this->remainingStage = json_encode($remainingStage);
+
+                $this->save();
+            }
+        }
+        return true;
+    }
+
+    public function checkAccessToThisStage($stage){
+        $remainingStage = $this->remainingStage;
+        if($remainingStage != null){
+            $remainingStage = json_decode($remainingStage);
+            $minStage = min($remainingStage);
+            if((int)$minStage < (int)$stage)
+                return route("businessManagement.tour.create.stage_{$minStage}", ['business' => $this->businessId, 'tourId' => $this->id]);
+        }
+        return true;
+    }
 
     public function getAllPlaces(){
-        $allKindPlaces = DefaultDataDB::getPlaceDB();
+//        $allKindPlaces = DefaultDataDB::getPlaceDB();
 
         $allPlaces = [];
         $schedules = TourSchedule::where('tourId', $this->id)->orderBy('day')->get();
@@ -95,6 +124,7 @@ class Tour extends Model {
     }
 
     public function getFullySchedule(){
+        $allKindPlaces = DefaultDataDB::getPlaceDB();
         $schedules = TourSchedule::where('tourId', $this->id)->orderBy('day')->get();
 
         $isFullDayMeals = $this->isMealAllDay;
@@ -110,21 +140,23 @@ class Tour extends Model {
                 if($event->hasPlace == 1){
                     $eventPlaces = TourPlaceRelation::where('tourScheduleDetailId', $event->id)->get();
                     foreach ($eventPlaces as $item){
-                        $kindPlace = Place::find($item->kindPlaceId);
-                        $tabNaPl = $kindPlace->tableName;
-                        $place = \DB::table($tabNaPl)
-                                    ->join('cities', 'cities.id', "$tabNaPl.cityId")
-                                    ->join('state', 'state.id', "cities.stateId")
-                                    ->where("$tabNaPl.id", $item->placeId)
-                                    ->select(["$tabNaPl.id", "$tabNaPl.name", "$tabNaPl.cityId", "state.name AS stateName", "cities.name AS cityName"])
-                                    ->first();
+                        if(isset($allKindPlaces[$item->kindPlaceId])){
+                            $kindPlace = $allKindPlaces[$item->kindPlaceId];
+                            $tabNaPl = $kindPlace->tableName;
+                            $place = \DB::table($tabNaPl)
+                                ->join('cities', 'cities.id', "$tabNaPl.cityId")
+                                ->join('state', 'state.id', "cities.stateId")
+                                ->where("$tabNaPl.id", $item->placeId)
+                                ->select(["$tabNaPl.id", "$tabNaPl.name", "$tabNaPl.cityId", "state.name AS stateName", "cities.name AS cityName"])
+                                ->first();
 
-                        if($place != null){
-                            $place->url = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $place->id]);
-                            $place->pic = getPlacePic($place->id, $kindPlace->id);
-                            $place->stateAndCity = ' در شهر '.$place->cityName.' ، استان '.$place->stateName;
-                            $place->kindPlaceId = $kindPlace->id;
-                            array_push($placesArr, $place);
+                            if($place != null){
+                                $place->url = route('placeDetails', ['kindPlaceId' => $kindPlace->id, 'placeId' => $place->id]);
+                                $place->pic = getPlacePic($place->id, $kindPlace->id);
+                                $place->stateAndCity = ' در شهر '.$place->cityName.' ، استان '.$place->stateName;
+                                $place->kindPlaceId = $kindPlace->id;
+                                array_push($placesArr, $place);
+                            }
                         }
                     }
                 }

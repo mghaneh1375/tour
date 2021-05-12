@@ -1,7 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    <title>قدم چهارم</title>
+    <title>ویرایش تور: مرحله چهارم</title>
 
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v='.$fileVersions)}}"/>
     <script src="{{URL::asset('js/defualt/autosize.min.js')}}"></script>
@@ -31,7 +31,7 @@
 @section('body')
 
     <div class="mainBackWhiteBody">
-        <div class="head">ایجاد تور: مرحله چهارم</div>
+        <div class="head">ویرایش تور: مرحله چهارم</div>
         <div style="margin-top: 20px">
             <div class="whiteBox">
                 <div id="tourKindChoseTitleTourCreation">
@@ -60,15 +60,7 @@
                     <span>درجه سختی تور خود را مشخص کنید.</span>
                     <span onclick="$('#tourDifficultDescriptionModal').toggle()" style="cursor: pointer;">آیا نیازمند راهنمایی هستید؟</span>
                 </div>
-{{--                <div class="inboxHelpSubtitle">انتخاب گزینه‌های--}}
-{{--                    @foreach($tourDifficult as $item)--}}
-{{--                        @if($item->alone == 0)--}}
-{{--                            {{$item->name}} ,--}}
-{{--                        @endif--}}
-{{--                    @endforeach--}}
-{{--                    با گزینه‌های دیگر مجاز--}}
-{{--                    می‌باشد.--}}
-{{--                </div>--}}
+
                 <div class="tourLevelIconsTourCreation">
                     @foreach($tourDifficult as $difficult)
                         <div>
@@ -101,22 +93,6 @@
                 </div>
             </div>
 
-            {{--        <div class="whiteBox">--}}
-            {{--            <div id="concentrationChoseTitleTourCreation">تمرکز خود را مشخص کنید.</div>--}}
-            {{--            <div class="concentrationChoseTourCreation">--}}
-            {{--                @foreach($tourFocus as $focus)--}}
-            {{--                    <div class="col-md-2">--}}
-            {{--                        <input id="focus_{{$focus->id}}" type="checkbox" name="focus[]" value="{{$focus->id}}"/>--}}
-            {{--                        <label for="focus_{{$focus->id}}">--}}
-            {{--                            <span></span>--}}
-            {{--                            {{$focus->name}}--}}
-            {{--                        </label>--}}
-            {{--                    </div>--}}
-            {{--                @endforeach--}}
-            {{--            </div>--}}
-            {{--            <div class="inboxHelpSubtitle">از بین گزینه‌های فوقمواردی را که بهتر تمرکز تور شما را بیان می‌کند،انتخاب نمایید.</div>--}}
-            {{--        </div>--}}
-
             <div class="whiteBox">
                 <div id="tourTypeChoseTitleTourCreation">
                     <span>تیپ خود را مشخص کنید.</span>
@@ -135,63 +111,6 @@
                     @endforeach
                 </div>
             </div>
-
-            {{--        <div class="whiteBox ">--}}
-            {{--            <div class="boxTitlesTourCreation">معرفی کلی</div>--}}
-            {{--            <div class="inboxHelpSubtitle">در کمتر از 100 کلمه تور خود را به طور کلی توصیف کنید</div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-150">--}}
-{{--            <textarea id="mainDescription" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>--}}
-            {{--            </div>--}}
-            {{--        </div>--}}
-
-            {{--        <div class="whiteBox ">--}}
-            {{--            <div class="boxTitlesTourCreation">نکات کلیدی</div>--}}
-            {{--            <div class="inboxHelpSubtitle">حداکثر چهار نکته را به عنوان نکات کلیدی و مزیت اصلی تور خود بیان کنید.</div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
-{{--            <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3 textareaInForDescription" name="sideDescription[]" placeholder="نکته‌ی اول - حداکثر 30 کلمه" style="display: none"/>--}}
-{{--                        </div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
-{{--            <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3 textareaInForDescription" name="sideDescription[]" placeholder="نکته‌ی دوم - حداکثر 30 کلمه" style="display: none"/>--}}
-            {{--            </div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
-{{--            <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3 textareaInForDescription" name="sideDescription[]" placeholder="نکته‌ی سوم - حداکثر 30 کلمه" style="display: none"/>--}}
-            {{--            </div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-50 mg-5-0">--}}
-{{--            <input type="text" class="inputBoxInput fullwidthDiv text-align-right full-height line-height-3 textareaInForDescription" name="sideDescription[]" placeholder="نکته‌ی چهارم - حداکثر 30 کلمه" style="display: none"/>--}}
-            {{--            </div>--}}
-            {{--        </div>--}}
-
-{{--            <div class="whiteBox ">--}}
-{{--                <div class="boxTitlesTourCreation">چه انتظاری داشته باشیم</div>--}}
-{{--                <div class="inboxHelpSubtitle">به صورت کاملاً شفاف به مشتریان‌تان بگویید از تور شما چه انتظاری داشته باشند و با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</div>--}}
-{{--                <div class="inputBox fullwidthDiv height-150">--}}
-{{--                    <textarea id="textExpectation" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription" placeholder="متن خود را وارد کنید"></textarea>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-{{--            <div class="whiteBox ">--}}
-{{--                <div class="boxTitlesTourCreation">اطلاعات اختصاصی</div>--}}
-{{--                <div class="inboxHelpSubtitle">هر نوع اطلاعاتی که مختص تور شماست و دوست دارید مشتریان‌تان آن را بدانند در حداکثر 150 کلمه وارد نمایید</div>--}}
-{{--                <div class="inputBox fullwidthDiv height-150">--}}
-{{--                    <textarea id="specialInformation" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription" placeholder="متن خود را وارد کنید"></textarea>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-            {{--        <div class="whiteBox ">--}}
-            {{--            <div class="boxTitlesTourCreation">پیشنهادات شما برای سفر بهتر</div>--}}
-            {{--            <div class="inboxHelpSubtitle">هرنوع پیشنهاد، پیش‌نیاز، درخواست و یا مطلب اضافه‌ای که در صورت رعایت از سوی مشتران شما می‌تواندتضمین‌کننده‌ی تجربه‌ی بهتری باشد را وارد نمایید</div>--}}
-            {{--            <div class="inputBox fullwidthDiv height-150">--}}
-{{--            <textarea id="opinionText" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>--}}
-            {{--            </div>--}}
-            {{--        </div>--}}
-
-{{--            <div class="whiteBox ">--}}
-{{--                <div class="boxTitlesTourCreation">محدودیت‌های سفر</div>--}}
-{{--                <div class="inboxHelpSubtitle"> هر نوع محدودیت که مشتریان شما در طول تور با ان مواجه می‌شوند و مجبور به رعایت آن می‌باشند را وارد نمایید</div>--}}
-{{--                <div class="inputBox fullwidthDiv height-150">--}}
-{{--                    <textarea id="tourLimit" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription" placeholder="متن خود را وارد کنید"></textarea>--}}
-{{--                </div>--}}
-{{--            </div>--}}
 
             <div class="whiteBox ">
                 <div class="boxTitlesTourCreation">چه همراه داشته باشیم</div>
@@ -263,8 +182,9 @@
                 </div>
             </div>
 
-            <div class="row" style="padding: 15px;">
-                <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
+            <div class="row submitAndPrevButton" style="padding: 15px;">
+                <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">ثبت اطلاعات و رفتن به گام بعدی</button>
+                <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()" style="margin-right: auto">بازگشت به مرحله قبل</button>
             </div>
         </div>
     </div>

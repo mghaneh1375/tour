@@ -23,4 +23,6 @@ interface tourCreations
 
     public function showStep_5($tour);
     public function storeStep_5($request, $tour);
+
+    public function deleteTour($tour);
 }

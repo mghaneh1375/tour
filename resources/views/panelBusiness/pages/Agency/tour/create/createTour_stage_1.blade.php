@@ -531,7 +531,7 @@
         @endif
     </script>
 
-    <script defer src="{{URL::asset('BusinessPanelPublic/js/tour/tourCreate_stage_1.js?v='.$fileVersions)}}"></script>
+    <script defer src="{{URL::asset('BusinessPanelPublic/js/tour/create/tourCreate_stage_1.js?v='.$fileVersions)}}"></script>
 @endsection
 
 

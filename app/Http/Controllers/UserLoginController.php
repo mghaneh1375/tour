@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\DefaultDataDB;
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\Cities;
@@ -566,7 +567,7 @@ class UserLoginController extends Controller
                 $log->visitorId = $user->id;
                 $log->date = date('Y-m-d');
                 $log->time = getToday()["time"];
-                $log->activityId = Activity::where('name','دعوت')->first()->id;
+                $log->activityId = DefaultDataDB::getActivityWithName('دعوت')->id;
                 $log->kindPlaceId = -1;
                 $log->confirm = 1;
                 $log->placeId = -1;
@@ -578,7 +579,7 @@ class UserLoginController extends Controller
                 $log->visitorId = $dest->id;
                 $log->date = date('Y-m-d');
                 $log->time = getToday()["time"];
-                $log->activityId = Activity::where('name','دعوت')->first()->id;
+                $log->activityId = DefaultDataDB::getActivityWithName('دعوت')->id;
                 $log->kindPlaceId = -1;
                 $log->confirm = 1;
                 $log->placeId = -1;

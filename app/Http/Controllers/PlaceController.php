@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\SaveErrorEvent;
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
@@ -545,7 +546,7 @@ class PlaceController extends Controller {
                 $selectedPlace->url =  createUrl($kindPlace->id, $selectedPlace->id, 0, 0, 0);
                 if($selectedPlace->cityId != 0) {
                     $selectedPlace->city = Cities::find($selectedPlace->cityId);
-                    $selectedPlace->state = State::find($selectedPlace->city->stateId);
+                    $selectedPlace->state = DefaultDataDB::getStateWithId($selectedPlace->city->stateId);
 
                     $selectedPlace->cityName = $selectedPlace->city->name;
                     $selectedPlace->stateName = $selectedPlace->state->name;
@@ -2515,7 +2516,7 @@ class PlaceController extends Controller {
             $totalCount = DB::table($table)->count();
         }
         else if($request->mode === "state"){
-            $state = State::find($request->city);
+            $state = DefaultDataDB::getStateWithId($request->city);
             $cities = Cities::where('stateId', $request->city)->pluck('id')->toArray();
             $placeIds = DB::table($table)->whereIn('cityId', $cities)->where('name', 'LIKE', "%{$nameFilter}%")->pluck('id')->toArray();
             $totalCount = DB::table($table)->whereIn('cityId', $cities)->count();
@@ -2964,7 +2965,7 @@ class PlaceController extends Controller {
                     $nearby->url =  createUrl($kindPlace->id, $nearby->id, 0, 0, 0);
                     if($nearby->cityId != 0) {
                         $nearby->city = Cities::find($nearby->cityId);
-                        $nearby->state = State::find($nearby->city->stateId);
+                        $nearby->state = DefaultDataDB::getStateWithId($nearby->city->stateId);
 
                         $nearby->cityName = $nearby->city->name;
                         $nearby->stateName = $nearby->state->name;

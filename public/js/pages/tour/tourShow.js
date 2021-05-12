@@ -241,7 +241,7 @@ function fillTourShowPage(_response){
     }
     $('.propertySection').append(propertySection);
 
-    createTourPlaces(_response.places);
+    createTourPlaces(_response.events);
     // createScheduleHtml(_response.schedule);
 
     createTourPricesAndTimeHtml();
@@ -382,29 +382,6 @@ function calculateFeatureCost(){
     return totalCost;
 }
 
-function createTourPlaces(_places){
-    let html = '';
-    _places.forEach(item => {
-        html += `<div class="card">
-                    <div class="img">
-                        <img src="${item.img}" alt="${item.name}" class="resizeImgClass" onload="fitThisImg(this)">
-                    </div>
-                    <div class="infos">
-                        <a href="${item.url}" target="_blank" class="name lessShowText">${item.name}</a>
-                        <div class="rateAndReview">
-                            <span class="rate ui_bubble_rating bubble_${item.rate}0"></span>
-                            <span class="review">
-                                <span>${item.reviewCount}</span>
-                                <span>نقد</span>
-                            </span>
-                        </div>
-                        <a href="${item.url}" target="_blank" class="link">اطلاعات بیشتر</a>
-                    </div>
-                </div>`;
-    });
-
-    document.getElementById('tourPlanDateSection').innerHTML = html;
-}
 
 function showTransportInMap(_kind){
     openMyModal('mapModal');
@@ -521,6 +498,31 @@ $(document).ready(() => {
     getInformation();
 });
 
+
+
+// function createTourPlaces(_places){
+//     let html = '';
+//     _places.forEach(item => {
+//         html += `<div class="card">
+//                     <div class="img">
+//                         <img src="${item.img}" alt="${item.name}" class="resizeImgClass" onload="fitThisImg(this)">
+//                     </div>
+//                     <div class="infos">
+//                         <a href="${item.url}" target="_blank" class="name lessShowText">${item.name}</a>
+//                         <div class="rateAndReview">
+//                             <span class="rate ui_bubble_rating bubble_${item.rate}0"></span>
+//                             <span class="review">
+//                                 <span>${item.reviewCount}</span>
+//                                 <span>نقد</span>
+//                             </span>
+//                         </div>
+//                         <a href="${item.url}" target="_blank" class="link">اطلاعات بیشتر</a>
+//                     </div>
+//                 </div>`;
+//     });
+//
+//     document.getElementById('tourPlanDateSection').innerHTML = html;
+// }
 
 // FOR TOUR SCHEDULE
 

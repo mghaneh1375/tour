@@ -62,4 +62,5 @@ class BPAjax extends Controller
 
         return response()->json(['status' => 'ok', 'result' => $places]);
     }
+
 }

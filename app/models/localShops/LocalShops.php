@@ -2,6 +2,7 @@
 
 namespace App\models\localShops;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\LogModel;
 use App\models\PhotographersPic;
@@ -88,7 +89,7 @@ class LocalShops extends Model
     }
 
     public function getReviews(){
-        $reviewAct = Activity::where('name', 'نظر')->first();
+        $reviewAct = DefaultDataDB::getActivityWithName('نظر');
         $reviews = $this->hasMany(LogModel::class, 'placeId', 'id')
                         ->where('kindPlaceId', 13)
                         ->where('activityId', $reviewAct->id)

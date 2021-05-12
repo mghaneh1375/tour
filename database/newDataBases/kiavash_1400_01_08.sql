@@ -46,7 +46,13 @@ ALTER TABLE `tourDiscounts` ADD `tourTimeId` INT(11) NOT NULL AFTER `tourId`;
 
 
 
-
+ALTER TABLE `transportKind` ADD `actualName` VARCHAR(200) NULL AFTER `name`, ADD `icon` VARCHAR(200) NULL AFTER `actualName`;
+ALTER TABLE `tourScheduleDetails` ADD `type` ENUM('place','meal','special') NULL DEFAULT NULL AFTER `tourScheduleId`;
+ALTER TABLE `tourScheduleDetails` ADD `kindPlaceId` INT(11) NULL AFTER `description`, ADD `placeId` INT(11) NULL AFTER `kindPlaceId`;
+ALTER TABLE `tourScheduleDetails` CHANGE `text` `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `tourScheduleDetails` ADD `lat` VARCHAR(30) NULL AFTER `placeId`, ADD `lng` VARCHAR(30) NULL AFTER `lat`;
+ALTER TABLE `tourScheduleDetails` ADD `sortNumber` TINYINT UNSIGNED NULL DEFAULT NULL AFTER `lng`;
+ALTER TABLE `tour` ADD `remainingStage` VARCHAR(200) NULL AFTER `confirm`;
 
 
 

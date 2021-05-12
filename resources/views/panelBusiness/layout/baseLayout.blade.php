@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/allBusinessPanel.css?v='.$fileVersions)}}">
 
     <script src="{{URL::asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="{{URL::asset('js/bootstrap/bootstrap-rtl.min.js')}}"></script>
     <script src="{{URL::asset('BusinessPanelPublic/js/allBusinessPanel.js?v='.$fileVersions)}}"></script>
 

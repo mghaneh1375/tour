@@ -1,420 +1,300 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    <title>مرحله دوم</title>
+    <title>ویرایش تور : مرحله دوم</title>
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v='.$fileVersions)}}"/>
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('BusinessPanelPublic/css/tour/cityTourism.css?v='.$fileVersions)}}"/>
 
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/clockpicker.css?v=1')}}"/>
     <script src= {{URL::asset("js/clockpicker.js") }}></script>
 
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v='.$fileVersions)}}"/>
-    <link rel="stylesheet" type="text/css" href="{{URL::asset('BusinessPanelPublic/css/tour/cityTourism.css?v='.$fileVersions)}}"/>
+    <link rel="stylesheet" href="{{URL::asset('packages/leaflet/leaflet.css')}}">
 @endsection
 
 
 @section('body')
 
     <div class="mainBackWhiteBody">
-        <div class="head">قدم دوم: برنامه تور</div>
+        <div class="head">ویرایش تور : مرحله دوم</div>
         <div>
-            <div class="whiteBox">
-                <div class="inboxHelpSubtitle">در این بخش شما می توانید برنامه تور خود را با جزئیات وارد کنید تا مسافران از برنامه تور مطلع شوند.</div>
-                <div class="inboxHelpSubtitle big">
-                    <span style="color: var(--koochita-green)">مکان های دیدنی</span>
-                    را که در تور خود می برید مشخص کنید.
-                </div>
-                <div class="inboxHelpSubtitle">در این بخش شما می توانید تمامی مکان های دیدنی ، زیارتی ، مراکز خرید و ... را که قرار است در برنامه تور خود داشته باشید را مشخص کنید.</div>
-                <div class="eventRows">
-                    <div id="amakenEvents" style="display: flex; flex-wrap: wrap;"></div>
-                    <div class="newEventBox" onclick="createNewAmakenEvent()">
-                        <div id="newAmakenButtonText" class="text">برای ثبت محل بازدید جدید کلیک کنید</div>
-                        <div class="icon">+</div>
+            <div class="menu whiteBox">
+                <div class="boxTitlesTourCreation">رفت و آمد</div>
+                <div id="tourMainTransports">
+                    <div id="sDiv">
+                        <div class="row">
+                            <div class="col-md-12 inboxHelpSubtitle">نوع وسیله رفت و آمد در تور خود را مشخص کنید.</div>
+                            <div class="col-md-4 inputBoxTour transportationKindTourCreation">
+                                <div class="inputBoxText">
+                                    <div class="importantFieldLabel">نوع وسیله</div>
+                                </div>
+                                <select id="sTransport" class="inputBoxInput styled-select">
+                                    <option value="0">انتخاب کنید</option>
+                                    @foreach($transport as $item)
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="seperatorInWhiteSec">
+                            <div class="col-md-12 inboxHelpSubtitle">در این بخش اطلاعات شروع حرکت خود را وارد کنید.</div>
+                            <div class="row">
+                                <div class="col-md-4 inputBoxTour transportationStartTimeTourCreation">
+                                    <div class="inputBoxText">
+                                        <div class="importantFieldLabel">ساعت حرکت</div>
+                                    </div>
+                                    <input id="sTime" type="text" class="inputBoxInput center clock" placeholder="00:00" required readonly>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="inputBoxTour col-md-9" id="sAddressDiv" style="margin-left: 10px;">
+                                    <div class="inputBoxText">
+                                        <div class="importantFieldLabel">آدرس دقیق محل سوار شدن</div>
+                                    </div>
+                                    <input id="sAddress" class="inputBoxInput" type="text" placeholder="آدرس سوار شدن مسافران">
+                                </div>
+                                <button type="button" class="transportationMapPinningTourCreation col-md-2" onclick="changeCenter('src')">نشانه‌گذاری بر روی نقشه</button>
+                                <input type="hidden" id="sLat" value="0">
+                                <input type="hidden" id="sLng" value="0">
+                            </div>
+
+                            <div class="row">
+                                <div class="inputBoxTour col-md-12" >
+                                    <div class="inputBoxText" style="width: 120px">توضیحات تکمیلی</div>
+                                    <textarea id="sDescription" class="inputBoxInput" placeholder="حداکثر 100 کاراکتر" maxlength="100"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seperatorInWhiteSec">
+                            <div class="col-md-12 inboxHelpSubtitle">در این بخش اطلاعات پایان تور خود را وارد کنید.</div>
+
+                            <div class="row">
+                                <div class="col-md-4 inputBoxTour transportationStartTimeTourCreation" style="margin-left: 10px;">
+                                    <div class="inputBoxText">
+                                        <div class="importantFieldLabel">ساعت پیاده شدن</div>
+                                    </div>
+                                    <input id="eTime" type="text" class="inputBoxInput clock" placeholder="00:00" readonly>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="inputBoxTour col-md-9" style="margin-left: 10px;">
+                                    <div class="inputBoxText">
+                                        <div class="importantFieldLabel">آدرس دقیق محل پیاده شدن</div>
+                                    </div>
+                                    <input id="eAddress" class="inputBoxInput" type="text" placeholder="فارسی">
+                                </div>
+                                <button type="button" class="transportationMapPinningTourCreation col-md-2" onclick="changeCenter('dest')">نشانه‌گذاری بر روی نقشه</button>
+                                <input id="eLat" type="hidden" value="0">
+                                <input id="eLng" type="hidden" value="0">
+                            </div>
+
+                            <div class="row" style="display: flex">
+                                <div class="inputBoxTour col-md-12" >
+                                    <div class="inputBoxText" style="width: 120px">توضیحات تکمیلی</div>
+                                    <textarea id="eDescription" class="inputBoxInput" placeholder="حداکثر 100 کاراکتر" maxlength="100"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="whiteBox">
-                <div class="inboxHelpSubtitle big">
-                    <span style="color: var(--koochita-blue)">وعده های غذایی</span>
-                    تور خود را مشخص کنید.</div>
-                <div class="inboxHelpSubtitle">در این بخش شما می توانید تمامی وعده های غذایی از جمله رستوران و میان وعده های تور خود را مشخص کنید.</div>
-                <div class="eventRows">
-                    <div id="mealsEvents" style="display: flex; flex-wrap: wrap;"></div>
-                    <div class="newEventBox" onclick="createNewMealEvent()">
-                        <div class="text">برای ثبت وعده غذایی جدید کلیک کنید</div>
-                        <div class="icon">+</div>
+                <div class="boxTitlesTourCreation">زبان تور</div>
+                <div class="nonGovernmentalTitleTourCreation">
+                    <span>آیا مسافران خارجی هم می توانند در این تور شرکت کنند؟ در صورت بله بودن ، زبان های قابل ارائه را انتهاب کنید.</span>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="hasOtherLanguage" value="1" autocomplete="off" onchange="changeOtherLanguage(this.value)">
+                            بله
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="hasOtherLanguage" value="0" autocomplete="off" onchange="changeOtherLanguage(this.value)" checked>
+                            خیر
+                        </label>
+                    </div>
+                </div>
+
+                <div id="otherLanguageSection" class="hidden">
+                    <div class=" col-md-12 inputBoxTour relative-position">
+                        <div class="inputBoxText width-130"> زبان‌های دیگر</div>
+                        <div id="multiSelectedLanguage" class="transportationKindChosenMainDiv multiSelected" onclick="openMultiSelect(this)"></div>
+                        <div id="multiSelectLanguage" class="multiselect"></div>
                     </div>
                 </div>
             </div>
 
             <div class="whiteBox">
-                <div class="inboxHelpSubtitle big">
-                    <span style="color: var(--koochita-red)">برنامه های ویژه</span>
-                     تور خود را مشخص کنید.
+                <div class="boxTitlesTourCreation">راهنمای تور</div>
+                <div class="inboxHelpSubtitle"> نام راهنمای تور خود را وارد نمایید. این امر نقش مؤثری در اطمینان خاطر کاربران خواهد داشت.</div>
+                <div class="tourGuiderQuestions mg-tp-15">
+                    <span>آیا تور شما راهنما دارد؟</span>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="isTourGuide" value="1" onchange="showSection('isTourGuidDiv', this)"  checked>بلی
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="isTourGuide" value="0" onchange="showSection('isTourGuidDiv', this)" >خیر
+                        </label>
+                    </div>
                 </div>
-                <div class="inboxHelpSubtitle">اگر در تور خود برنامه آموزشی ، تفریحی یا ویژه ای دارید مشخص کنید.</div>
-                <div class="eventRows">
-                    <div id="SEvents" style="display: flex; flex-wrap: wrap;"></div>
-                    <div class="newEventBox" onclick="createNewSEvent()">
-                        <div class="text">برای ثبت وعده غذایی جدید کلیک کنید</div>
-                        <div class="icon">+</div>
+                <div id="isTourGuidDiv">
+                    <div class="tourGuiderQuestions mg-tp-15">
+                        <span>آیا راهنمای تور شما از افراد محلی منطقه می باشد؟</span>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="isLocalTourGuide" value="1" checked>بلی
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="isLocalTourGuide" value="0">خیر
+                            </label>
+                        </div>
+                    </div>
+                    <div class="tourGuiderQuestions mg-tp-15">
+                        <span>آیا راهنمای تور شما تجربه‌ی مخصوصی برای افراد فراهم می‌آورد؟</span>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="isSpecialTourGuid" value="1" checked>بلی
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="isSpecialTourGuid" value="0">خیر
+                            </label>
+                        </div>
+                    </div>
+                    <div class="inboxHelpSubtitle mg-tp-5" style="width: 100%">برخی از راهنمایان تور صرفاً گروه را هدایت می‌کنند اما برخی همراه با گردشگران در همه جا حضور می‌یابند و تجربه‌ی اختصاصی‌تری ایجاد می‌کنند.</div>
+                    <div class="tourGuiderQuestions mg-tp-15">
+                        <span>آیا راهنمای تور شما هم اکنون مشخص است؟</span>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="isTourGuidDefined" value="1" onchange="showSection('isTourGuidDefinedDiv', this)" checked>بلی
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="isTourGuidDefined" value="0" onchange="showSection('isTourGuidDefinedDiv', this)">خیر
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="isTourGuidDefinedDiv">
+                        <div class="tourGuiderQuestions mg-tp-15">
+                            <span>آیا راهنمای تور شما دارای حساب کاربری کوچیتا می‌باشد؟</span>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary ">
+                                    <input type="radio" name="isTourGuidInKoochita" value="1" onchange="hasKoochitaAccount(this.value)">بلی
+                                </label>
+                                <label class="btn btn-secondary active">
+                                    <input type="radio" name="isTourGuidInKoochita" value="0" onchange="hasKoochitaAccount(this.value)" checked>خیر
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="notKoochitaAccountDiv">
+                            <div class="inboxHelpSubtitle mg-tp-5">
+                                به راهنمای تور خود توصیه کنید تا حساب خود را در کوچیتا ایجاد نماید و از مزایای آن بهره‌مند شود. برای ما راهنمایان تور دارای حساب کاربری از اهمیت بیشتری برخوردار هستند. پس از باز کردن حساب کاربری راهنمای تور شما می‌تواند با وارد کردن کد تور و پس از تأیید شما نام خود را به صفحه‌ی کاربریش اتصال دهد.
+                            </div>
+                            <div class="row" style="align-items: center;">
+                                <div class="col-md-5 inputBoxTour">
+                                    <div class="inputBoxText" style="width: 160px">
+                                        <div class="importantFieldLabel">نام و نام خانوادگی</div>
+                                    </div>
+                                    <input id="tourGuidName" class="inputBoxInput" type="text" placeholder="فارسی">
+                                </div>
+                                <div class="col-md-2 inputBoxTour" style="margin: 0px 10px;">
+                                    <div class="inputBoxText width-45per">
+                                        <div class="importantFieldLabel">جنسیت</div>
+                                    </div>
+                                    <div class="select-side">
+                                        <i class="glyphicon glyphicon-triangle-bottom"></i>
+                                    </div>
+                                    <select id="tourGuidSex" class="inputBoxInput width-50per styled-select">
+                                        <option value="1">مرد</option>
+                                        <option value="0">زن</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 inputBoxTour">
+                                    <div class="inputBoxText width-45per">
+                                        <div class="importantFieldLabel">شماره تماس</div>
+                                    </div>
+                                    <input id="tourGuidPhone" class="inputBoxInput" type="text" placeholder="09xxxxxxxx">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="haveKoochitaAccountDiv" style="display: none;">
+                            <div class="inboxHelpSubtitle mg-tp-5" style="width: 100%;">درخواست شما برای کاربر مورد نظر ارسال می‌شود و پس از تأیید او نام او به عنوان راهنمای تور معرفی می‌گردد.</div>
+                            <div class="inputBoxTour float-right col-md-3">
+                                <div class="inputBoxText">
+                                    <div class="importantFieldLabel">نام کاربری</div>
+                                </div>
+                                <input id="tourGuidKoochitaUsername" class="inputBoxInput" type="text" onclick="openSearchKoochitaAccount()" value="{{$tour->koochitaUserName ?? ''}}" readonly>
+                                <input type="hidden" id="tourGuidUserId" value="{{$tour->tourGuidKoochitaId}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="whiteBox">
+                <div class="boxTitlesTourCreation">تلفن پشتیبانی برای این تور</div>
+                <div id="backUpPhoneDiv">
+                    <div class="inputBoxTour float-right col-md-3">
+                        <div class="inputBoxText">
+                            <div class="importantFieldLabel">تلفن</div>
+                        </div>
+                        <input id="backUpPhone" class="inputBoxInput" type="text">
+                    </div>
+                    <div class="inboxHelpSubtitle" style="width: 100%;">
+                        شماره را همانگونه که با موبایل خود تماس می‌گیرید وارد نمایید. در صورت وجود بیش از یک شماره با استفاده از - شماره‌ها را جدا نمایید.
                     </div>
                 </div>
             </div>
 
 
-            <div class="row fullyCenterContent" style="padding: 15px;">
-                <button class="btn nextStepBtnTourCreation" type="button" onclick="submitSchedule()">گام بعدی</button>
+            <div class="row submitAndPrevButton">
+                <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">ثبت اطلاعات و رفتن به گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()">بازگشت به مرحله قبل</button>
             </div>
         </div>
     </div>
 @endsection
 
+
 @section('modals')
-{{--    add new amaken event modal--}}
-    <div id="addAmakenEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('addAmakenEventModal')" class="iconClose closeModal"></div>
+    @include('panelBusiness.component.userKoochitaSearchBP')
 
-            <div class="options">
-                <div class="title"> ثبت یک محل دیدنی جدید </div>
-            </div>
-
-            <div class="optBody">
-                <div class="form-group" style="position: relative;">
-                    <label for="newAmakenName">نام محل</label>
-                    <input type="text" id="newAmakenName" data-id="0" data-name="" data-img="" class="form-control" onkeyup="searchForAmakenForNewPlace(this.value)">
-
-                    <div id="amakenSearchResultSec" class="searchResultBoxSection hidden" style="width: 100%;">
-                        <div class="loader fullyCenterContent">
-                            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                        </div>
-                        <div class="resContent hidden" style="max-height: 200px; overflow: auto;"></div>
-                    </div>
+    <div class="modal fade" id="modalMap">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">زمان بازدید</div>
-                <div class="inboxHelpSubtitle">
-                    ساعت تقریبی شروع و پایان
-                    <span id="newAmakenNameTitle">...</span>
-                    را دارد کنید.
+                <div class="modal-body">
+                    <div id="mapDiv" style="width: 100%; height: 500px"></div>
                 </div>
-                <div class="inp">
-                    <div class="clockTitle">
-                        <div class="name">ساعت شروع</div>
-                        <input type="text" id="startTimeNewAmaken" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
-                    <div class="clockTitle">
-                        <div class="name">ساعت پایان</div>
-                        <input type="text" id="endTimeNewAmaken" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">تایید</button>
                 </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">توضیح خاص برنامه</div>
-                <div class="inboxHelpSubtitle">اگر بازدید از این مکان محدودیت و یا وسیله ی خاصی می خواهد توضیح دهید.</div>
-                <textarea id="descriptionForAmaken" class="form-control" rows="3" placeholder="مطلب خود را اینجا بنویسید..."></textarea>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('addAmakenEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="submitNewAmaken()" style="color: white; background: green;">ثبت برنامه</button>
-            </div>
-        </div>
-    </div>
-
-{{--    edit new amaken event modal--}}
-    <div id="editAmakenEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('editAmakenEventModal')" class="iconClose closeModal"></div>
-
-            <input type="hidden" id="editAmakenCode">
-
-            <div class="options">
-                <div class="title"> ویرایش محل دیدنی </div>
-            </div>
-
-            <div class="optBody">
-                <div class="form-group" style="position: relative;">
-                    <label for="editAmakenName">نام محل</label>
-                    <input type="text" id="editAmakenName" class="form-control" readonly>
-                </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">زمان بازدید</div>
-                <div class="inboxHelpSubtitle">
-                    ساعت تقریبی شروع و پایان
-                    <span id="editAmakenNameTitle"></span>
-                    را دارد کنید.
-                </div>
-                <div class="inp">
-                    <div class="clockTitle">
-                        <div class="name">ساعت شروع</div>
-                        <input type="text" id="startTimeEditAmaken" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
-                    <div class="clockTitle">
-                        <div class="name">ساعت پایان</div>
-                        <input type="text" id="endTimeEditAmaken" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">توضیح خاص برنامه</div>
-                <div class="inboxHelpSubtitle">اگر بازدید از این مکان محدودیت و یا وسیله ی خاصی می خواهد توضیح دهید.</div>
-                <textarea id="descriptionForEditAmaken" class="form-control" rows="3" placeholder="مطلب خود را اینجا بنویسید..."></textarea>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('editAmakenEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="submitEditAmaken()" style="color: white; background: green;">ثبت برنامه</button>
-            </div>
-        </div>
-    </div>
-
-
-{{--    add new Meal event modal--}}
-    <div id="addMealEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('addMealEventModal')" class="iconClose closeModal"></div>
-
-            <div class="options">
-                <div class="title"> ثبت وعده غذایی </div>
-            </div>
-
-            <div class="optBody">
-                <div>
-                    <div>نوع وعده را مشخص کنید</div>
-                    <div class="chooseButSection">
-                        <div class="chooseBut" data-name="mealKind" data-value="main" onclick="changeMealKind('main')">وعده اصلی</div>
-                        <div class="chooseBut" data-name="mealKind" data-value="snack" onclick="changeMealKind('snack')">میان وعده</div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px;">
-                    <div>آیا این وعده در دستوران داده می شود و یا در یک مکان خاص؟</div>
-                    <div class="chooseButSection">
-                        <div class="chooseBut" data-name="mealWhere" data-value="restaurant" onclick="changeMealWhere('restaurant')">در رستوران</div>
-                        <div class="chooseBut" data-name="mealWhere" data-value="amaken" onclick="changeMealWhere('amaken')">محل خاص</div>
-                    </div>
-                </div>
-
-                <div id="restaurantNameSection" class="form-group hidden" style="position: relative;margin-top: 10px;">
-                    <label id="forMealInAmaken" for="newRestaurantName"> نام محل برای وعده غذایی را وارد کنید</label>
-                    <label id="forMealInRestaurant" for="newRestaurantName"> نام رستوران برای وعده غذایی را وارد کنید</label>
-                    <input type="text" id="newRestaurantName" data-id="0" data-name="" data-img="" class="form-control" onkeyup="searchForRestaurantForNewPlace(this.value)">
-
-                    <div id="mealSearchResultSec" class="searchResultBoxSection hidden" style="width: 100%;">
-                        <div class="loader fullyCenterContent">
-                            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                        </div>
-                        <div class="resContent hidden" style="max-height: 200px; overflow: auto;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">زمان وعده غذایی</div>
-                <div class="inboxHelpSubtitle">ساعتی که وعده غذایی را می دهید وارد کنید.</div>
-                <div class="inp">
-                    <div class="clockTitle">
-                        <input type="text" id="mealTime" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
-                </div>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('addMealEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="submitNewMeal()" style="color: white; background: green;">ثبت برنامه</button>
-            </div>
-        </div>
-    </div>
-
-{{--    edit Meal event modal--}}
-    <div id="editMealEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('editMealEventModal')" class="iconClose closeModal"></div>
-            <input type="hidden" id="editMealCode">
-            <div class="options">
-                <div class="title"> ویرایش برنامه وعده غذایی </div>
-            </div>
-
-            <div class="optBody">
-                <div>
-                    <div>نوع وعده را مشخص کنید</div>
-                    <div class="chooseButSection">
-                        <div class="chooseBut disabled" id="mainMealKindEdit">وعده اصلی</div>
-                        <div class="chooseBut disabled" id="snackMealKindEdit">میان وعده</div>
-                    </div>
-                </div>
-                <div style="margin-top: 10px;">
-                    <div>آیا این وعده در دستوران داده می شود و یا در یک مکان خاص؟</div>
-                    <div class="chooseButSection">
-                        <div class="chooseBut disabled" id="restaurantMealWhere">در رستوران</div>
-                        <div class="chooseBut disabled" id="amakenMealWhere">محل خاص</div>
-                    </div>
-                </div>
-
-                <div id="restaurantNameSection" class="form-group" style="position: relative;margin-top: 10px;">
-                    <label for="mealPlaceName">محل ارائه وعده غذایی</label>
-                    <input type="text" id="mealPlaceName" class="form-control" readonly>
-                </div>
-            </div>
-
-            <div class="timeSec" style="display: block;">
-                <div class="title">زمان وعده غذایی</div>
-                <div class="inboxHelpSubtitle">ساعتی که وعده غذایی را می دهید وارد کنید.</div>
-                <div class="inp">
-                    <div class="clockTitle">
-                        <input type="text" id="mealTimeEdit" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                    </div>
-                </div>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('editMealEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="editNewMeal()" style="color: white; background: green;">ثبت برنامه</button>
-            </div>
-        </div>
-    </div>
-
-
-{{--    add new special event modal--}}
-    <div id="specialEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('specialEventModal')" class="iconClose closeModal"></div>
-
-            <div class="options">
-                <div class="title"> ثبت برنامه ویژه </div>
-            </div>
-
-            <div class="optBody">
-                <div class="form-group">
-                    <label for="specialEventName">عنوان برنامه ویژه را مشخص کنید.</label>
-                    <input id="specialEventName" type="text" class="form-control">
-                </div>
-                <div>
-                    <div class="nonGovernmentalTitleTourCreation">
-                        <span>آیا برنامه ویژه در ساعت مشخصی است؟</span>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="sEventHasTime" value="1" autocomplete="off" onchange="specialEventHasTime(this.value)">
-                                بله
-                            </label>
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="sEventHasTime" value="0" autocomplete="off" onchange="specialEventHasTime(this.value)" checked>
-                                خیر
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="sEventTimeSectionNew" class="timeSec hidden" style="margin-top: 0px;">
-                        <div>
-                            <div class="title">زمان برنامه ویژه</div>
-                            <div class="inp">
-                                <div class="clockTitle">
-                                    <div class="name">ساعت شروع</div>
-                                    <input type="text" id="sTimeSEvent" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                                </div>
-                                <div class="clockTitle">
-                                    <div class="name">ساعت پایان</div>
-                                    <input type="text" id="eTimeSEvent" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeSec" style="display: block;">
-                    <div class="title">توضیح خاص برنامه</div>
-                    <div class="inboxHelpSubtitle">اگر برنامه شما دارای توضیحات خاصی هست، آن را وارد کنید.</div>
-                    <textarea id="descriptionForSEvent" class="form-control" rows="3" placeholder="اگر مطلبی برای این برنامه دارید بنویسید..."></textarea>
-                </div>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('specialEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="submitNewSEvent()" style="color: white; background: green;">ثبت برنامه</button>
-            </div>
-        </div>
-    </div>
-
-{{--    edit special event modal--}}
-    <div id="editSpecialEventModal" class="modalBlackBack fullCenter notCloseOnClick eventModal" style="z-index: 9999;">
-        <div class="modalBody" style="width: 600px;">
-            <div onclick="closeMyModalBP('editSpecialEventModal')" class="iconClose closeModal"></div>
-            <input type="hidden" id="sEventCode">
-
-            <div class="options">
-                <div class="title"> ویرایش برنامه ویژه </div>
-            </div>
-
-            <div class="optBody">
-                <div class="form-group">
-                    <label for="editSpecialEventName">عنوان برنامه ویژه</label>
-                    <input id="editSpecialEventName" type="text" class="form-control">
-                </div>
-                <div>
-                    <div class="nonGovernmentalTitleTourCreation">
-                        <span>آیا برنامه ویژه در ساعت مشخصی است؟</span>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="sEditEventHasTime" value="1" autocomplete="off" onchange="specialEventHasTime(this.value, 'Edit')">
-                                بله
-                            </label>
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="sEditEventHasTime" value="0" autocomplete="off" onchange="specialEventHasTime(this.value, 'Edit')" checked>
-                                خیر
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="sEventTimeSectionEdit" class="timeSec hidden" style="margin-top: 0px;">
-                        <div>
-                            <div class="title">زمان برنامه ویژه</div>
-                            <div class="inp">
-                                <div class="clockTitle">
-                                    <div class="name">ساعت شروع</div>
-                                    <input type="text" id="sTimeSEventEdit" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                                </div>
-                                <div class="clockTitle">
-                                    <div class="name">ساعت پایان</div>
-                                    <input type="text" id="eTimeSEventEdit" class="form-control clockP" placeholder="کلیک کنید..." readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeSec" style="display: block;">
-                    <div class="title">توضیح خاص برنامه</div>
-                    <div class="inboxHelpSubtitle">اگر برنامه شما دارای توضیحات خاصی هست، آن را وارد کنید.</div>
-                    <textarea id="descriptionForSEventEdit" class="form-control" rows="3" placeholder="اگر مطلبی برای این برنامه دارید بنویسید..."></textarea>
-                </div>
-            </div>
-
-            <div class="submitOptions direction-rtl mg-tp-20" style="display: flex;">
-                <button class="btn btn-default" onclick="closeMyModalBP('editSpecialEventModal')" style="margin-right: 10px; margin-right: auto;">بستن</button>
-                <button class="btn successBtn" onclick="editSEvent()" style="color: white; background: green;">ثبت برنامه</button>
             </div>
         </div>
     </div>
 @endsection
 
 @section('script')
+    <script defer type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-src.js')}}"></script>
+    <script defer type="text/javascript" src="{{URL::asset('packages/leaflet/leaflet-wms-header.js')}}"></script>
+
     <script>
-        var tour = {!! json_encode($tour) !!};
-        var dateCount = {{$tour->day}};
-        var defaultPicture = "{{\URL::asset('images/mainPics/noPicSite.jpg')}}";
+        var mappIrToken = '{{config('app.MappIrToken')}}';
+
+        var tour = {!! $tour!!};
+        var transports = {!! $transport !!};
         var prevStageUrl = "{{route('businessManagement.tour.create.stage_1', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}";
         var nextStageUrl = "{{route('businessManagement.tour.create.stage_3', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}";
-        var stageTwoStoreUrl = "{{route('businessManagement.tour.store.stage_2')}}";
-        var searchPlaceWithNameKinPlaceIdUrl = '{{route("BP.ajax.searchInPlace")}}';
-        var eventType = {!! $tourScheduleKinds !!};
-
+        var storeStageURL = "{{route('businessManagement.tour.store.stage_2')}}";
     </script>
-    <script src="{{URL::asset('BusinessPanelPublic/js/tour/create/cityTourism/cityTourism_stage_2.js')}}"></script>
+
+    <script defer src="{{URL::asset('BusinessPanelPublic/js/tour/create/cityTourism/cityTourism_stage_2.js?v='.$fileVersions)}}"></script>
 @endsection

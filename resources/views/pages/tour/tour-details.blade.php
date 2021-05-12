@@ -387,7 +387,11 @@
 
         <div id="dayInfoSection" class="row" style="direction: rtl">
             <div class="bodiesHeader">برنامه تور</div>
-            <div id="tourPlanDateSection" class="tourPlanDateSection"></div>
+            @if($tour->type === 'cityTourism')
+                @include('pages.tour.tourDetails.cityTourism_plan')
+            @else
+                <div id="tourPlanDateSection" class="tourPlanDateSection"></div>
+            @endif
 {{--            <div class="dayInfoSectionRow">--}}
 {{--                <div class="selectDaySec" style="width: 30%">--}}
 {{--                    <div id="listOfDays" class="daysChoose"></div>--}}

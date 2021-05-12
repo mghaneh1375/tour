@@ -1,590 +1,380 @@
+var inKoochita = 0 ;
+var multiIsOpen = false;
+var language = [
+    'انگلیسی',
+    'عربی',
+    'ترکی',
+    'چینی',
+    'کره ای',
+    'ژاپنی',
+    'اسپانیایی',
+    'آلمانی',
+    'فرانسوی',
+    'پرتغالی',
+];
+var languageChoose = [];
 var clockOptions = {
     placement: 'left',
     donetext: 'تایید',
     autoclose: true,
 };
+var map;
+var srcLatLng = tour.srcLatLng;
+var destLatLng = tour.destLatLng;
+var sMarker = 0;
+var eMarker = 0;
+var mapType;
+var mapIsOpen = false;
+var mainMap = null;
 
-var amakenAdded = [];
-var mealsAdded = [];
-var sEventAdded = [];
-var lastAjax = null;
-var lastType = 'amaken';
+var storeData = {
+    isTransportTour : tour.isTransport,
+    sTransportKind : tour.hasTransport ? tour.transports.sTransportId : 0,
+    eTransportKind : tour.hasTransport ? tour.transports.eTransportId : 0,
+    sTime : tour.hasTransport ? tour.transports.sTime : '',
+    eTime : tour.hasTransport ? tour.transports.eTime : '',
+    sAddress : tour.hasTransport ? tour.transports.sAddress : '',
+    eAddress : tour.hasTransport ? tour.transports.eAddress : '',
+    sLat :  tour.hasTransport ? tour.transports.sLatLng[0] : 0,
+    eLat : tour.hasTransport ? tour.transports.eLatLng[0] : 0,
+    sLng : tour.hasTransport ? tour.transports.sLatLng[1] : 0,
+    eLng : tour.hasTransport ? tour.transports.eLatLng[1] : 0,
+    sDescription : tour.hasTransport ? tour.transports.sDescription : '',
+    eDescription : tour.hasTransport ? tour.transports.eDescription : '',
 
-var mealWhere = null;
-var mealKind = null;
-function createNewMealEvent(){
-    openMyModalBP('addMealEventModal');
+    otherLanguage: tour.language,
+
+    hasTourGuid: tour.isTourGuide,
+    isLocalTourGuide: tour.isLocalTourGuide,
+    isSpecialTourGuid: tour.isSpecialTourGuid,
+    isTourGuidDefined: tour.isTourGuidDefined,
+    isTourGuidInKoochita: tour.isTourGuideInKoochita,
+    koochitaUserId: tour.tourGuidKoochitaId,
+    koochitaUserUsername: tour.koochitaUserUsername,
+    tourGuidName: tour.tourGuidName,
+    tourGuidSex: tour.tourGuidSex,
+    tourGuidPhone: tour.tourGuidPhone,
+
+    backUpPhone: tour.backupPhone,
+};
+
+function fillInputs(){
+    $('#sTransport').val(storeData.sTransportKind);
+    $('#sTime').val(storeData.sTime);
+    $('#sAddress').val(storeData.sAddress);
+    $('#sDescription').val(storeData.sDescription);
+    $('#sLat').val(storeData.sLat);
+    $('#sLng').val(storeData.sLng);
+
+    $('#eTime').val(storeData.eTime);
+    $('#eAddress').val(storeData.eAddress);
+    $('#eDescription').val(storeData.eDescription);
+    $('#eLat').val(storeData.eLat);
+    $('#eLng').val(storeData.eLng);
+
+    if(storeData.otherLanguage) {
+        storeData.otherLanguage.map(item => chooseLanguageMultiSelect(language.indexOf(item)));
+        $('input[name="hasOtherLanguage"]').parent().removeClass('active');
+        $('input[name="hasOtherLanguage"][value="1"]').prop('checked', true).parent().addClass('active');
+        changeOtherLanguage(1);
+    }
+
+    showSection('isTourGuidDiv', $(`input[name="isTourGuide"][value="${storeData.hasTourGuid}"]`)[0], true);
+    showSection('', $(`input[name="isLocalTourGuide"][value="${storeData.isLocalTourGuide}"]`)[0]), true;
+    showSection('', $(`input[name="isSpecialTourGuid"][value="${storeData.isSpecialTourGuid}"]`)[0], true);
+    showSection('isTourGuidDefinedDiv', $(`input[name="isTourGuidDefined"][value="${storeData.isTourGuidDefined}"]`)[0], true);
+    showSection('', $(`input[name="isTourGuidInKoochita"][value="${storeData.isTourGuidInKoochita}"]`)[0], true);
+
+    hasKoochitaAccount(storeData.isTourGuidInKoochita);
+    $('#tourGuidName').val(storeData.tourGuidName);
+    $('#tourGuidSex').val(storeData.tourGuidSex);
+    $('#tourGuidPhone').val(storeData.tourGuidPhone);
+    $('#tourGuidUserId').val(storeData.koochitaUserId);
+    $('#tourGuidKoochitaUsername').val(storeData.koochitaUserUsername);
+
+    $('#backUpPhone').val(storeData.backUpPhone);
 }
-function changeMealWhere(_type){
-    document.getElementById('restaurantNameSection').classList.remove('hidden');
 
-    document.getElementById('forMealInAmaken').classList.add('hidden');
-    document.getElementById('forMealInRestaurant').classList.add('hidden');
-
-    if(_type === 'amaken')
-        document.getElementById('forMealInAmaken').classList.remove('hidden');
-    else
-        document.getElementById('forMealInRestaurant').classList.remove('hidden');
-
-    mealWhere = _type;
+function initLanguage(){
+    var text = '';
+    language.map((item, index) => text += `<div class="optionMultiSelect" id="multiSelectLanguage_${index}" onclick="chooseLanguageMultiSelect(${index})">${item}</div>`);
+    $("#multiSelectLanguage").html(text);
 }
-function changeMealKind(_kind){
-    mealKind = _kind;
-}
-function searchForRestaurantForNewPlace(_value){
-    let responseFunction = response => {
-        if(response.status == 'ok') {
-            let html = '';
-            response.result.forEach(item => {
-                html += `<div class="res" data-id="${item.id}" data-name="${item.name}" data-img="${item.pic}" data-kindPlaceId="${item.kindPlaceId}" onclick="chooseThisMealPlace(this)">
-                                            <span>${item.name}</span>
-                                            <span class="light"> (در شهر ${item.cityName})</span>
-                                        </div>`;
-            });
-            document.querySelector('#mealSearchResultSec .loader').classList.add('hidden');
-            document.querySelector('#mealSearchResultSec .resContent').classList.remove('hidden');
-            document.querySelector('#mealSearchResultSec .resContent').innerHTML = html;
-        }
-        else{
-            console.error(response.status);
-            document.querySelector('#mealSearchResultSec .loader').classList.add('hidden');
-            document.querySelector('#mealSearchResultSec .resContent').classList.remove('hidden');
-            document.querySelector('#mealSearchResultSec .resContent').innerHTML = '';
-        }
-    };
 
-
-    if(_value.trim().length > 1){
-        document.getElementById('mealSearchResultSec').classList.remove('hidden');
-        document.querySelector('#mealSearchResultSec .loader').classList.remove('hidden');
-        document.querySelector('#mealSearchResultSec .resContent').classList.add('hidden');
-
-        if(mealWhere === 'amaken')
-            ajaxSearchAmaken(_value, responseFunction);
-        else
-            ajaxSearchRestaurant(_value, responseFunction);
+function openMultiSelect(_element){
+    if(multiIsOpen){
+        $(_element).next().hide();
+        multiIsOpen = false;
     }
     else{
-        document.getElementById('mealSearchResultSec').classList.add('hidden');
-        document.querySelector('#mealSearchResultSec .resContent').innerHTML = '';
-    }
-}
-function chooseThisMealPlace(_element){
-    let id   = _element.getAttribute('data-id');
-    let name = _element.getAttribute('data-name');
-    let pic  = _element.getAttribute('data-img');
-    let kindPlaceId  = _element.getAttribute('data-kindPlaceId');
-
-    let inputElement = document.getElementById('newRestaurantName');
-
-    document.getElementById('mealSearchResultSec').classList.add('hidden');
-    document.getElementById('newRestaurantName').value = name;
-
-    inputElement.setAttribute('data-id', id);
-    inputElement.setAttribute('data-name', name);
-    inputElement.setAttribute('data-img', pic);
-    inputElement.setAttribute('data-kindPlaceId', kindPlaceId);
-}
-function submitNewMeal(){
-    if(mealKind != null) {
-        document.getElementById('restaurantNameSection').classList.add('hidden');
-        document.getElementById('forMealInAmaken').classList.add('hidden');
-        document.getElementById('forMealInRestaurant').classList.add('hidden');
-
-        [...document.querySelectorAll('div[data-name="mealWhere"]')].map(item => item.classList.remove('selected'));
-        [...document.querySelectorAll('div[data-name="mealKind"]')].map(item => item.classList.remove('selected'));
-
-        openLoading();
-        closeMyModalBP('addMealEventModal');
-        let inputElement = document.getElementById('newRestaurantName');
-
-        let place_id = inputElement.getAttribute('data-id');
-        let place_name = inputElement.getAttribute('data-name');
-        let place_img = inputElement.getAttribute('data-img');
-        let place_kindPlaceId = inputElement.getAttribute('data-kindPlaceId');
-        let time = document.getElementById('mealTime').value;
-
-        if(place_name.trim().length === 0) {
-            place_id = 0;
-            place_kindPlaceId = 0;
-            place_name = '';
-            place_img = defaultPicture;
-        }
-
-        let newValue = {
-            code: Math.floor(Math.random() * 100000),
-            kind: mealKind,
-            where: mealWhere,
-            id: place_id,
-            kindPlaceId: place_kindPlaceId,
-            name: place_name,
-            img: place_img,
-            sTime: time,
-            eTime: '',
-        };
-
-        mealsAdded.push(newValue);
-
-        createNewEventBox(newValue, 'meal');
-
-        inputElement.setAttribute('data-id', '');
-        inputElement.setAttribute('data-name', '');
-        inputElement.setAttribute('data-img', '');
-        inputElement.setAttribute('data-kindPlaceId', '');
-        document.getElementById('mealTime').value = '';
-        inputElement.value = '';
-        mealWhere = null;
-        mealKind = null;
-
-        closeLoading();
-    }
-    else
-        openErrorAlertBP('نوع وعده غذایی را مشخص کنید.');
-}
-function editNewMeal(){
-    let code = document.getElementById('editMealCode').value;
-    let time = document.getElementById('mealTimeEdit').value;
-
-    for(let i = 0; i < mealsAdded.length; i++){
-        if(mealsAdded[i].code == code){
-            mealsAdded[i].sTime = time;
-            document.querySelector(`#eventBox_${code} .time`).innerText = time;
-            break;
-        }
-    }
-
-    closeMyModalBP('editMealEventModal');
-}
-
-function createNewAmakenEvent(){
-    openMyModalBP('addAmakenEventModal');
-}
-function searchForAmakenForNewPlace(_value){
-    if(_value.trim().length > 1){
-        document.getElementById('amakenSearchResultSec').classList.remove('hidden');
-        document.querySelector('#amakenSearchResultSec .loader').classList.remove('hidden');
-        document.querySelector('#amakenSearchResultSec .resContent').classList.add('hidden');
-
-        ajaxSearchAmaken(_value, response => {
-            if(response.status == 'ok') {
-                let html = '';
-                response.result.forEach(item => {
-                    html += `<div class="res" data-id="${item.id}" data-name="${item.name}" data-img="${item.pic}" data-kindPlaceId="${item.kindPlaceId}" onclick="chooseThisAmaken(this)">
-                                            <span>${item.name}</span>
-                                            <span class="light"> (در شهر ${item.cityName})</span>
-                                        </div>`;
-                });
-                document.querySelector('#amakenSearchResultSec .loader').classList.add('hidden');
-                document.querySelector('#amakenSearchResultSec .resContent').classList.remove('hidden');
-                document.querySelector('#amakenSearchResultSec .resContent').innerHTML = html;
-            }
-            else{
-                console.error(response.status);
-                document.querySelector('#amakenSearchResultSec .loader').classList.add('hidden');
-                document.querySelector('#amakenSearchResultSec .resContent').classList.remove('hidden');
-                document.querySelector('#amakenSearchResultSec .resContent').innerHTML = '';
-            }
-        });
-    }
-    else{
-        document.getElementById('amakenSearchResultSec').classList.add('hidden');
-        document.querySelector('#amakenSearchResultSec .resContent').innerHTML = '';
-    }
-}
-function chooseThisAmaken(_element){
-    let id   = _element.getAttribute('data-id');
-    let name = _element.getAttribute('data-name');
-    let pic  = _element.getAttribute('data-img');
-    let kindPlaceId  = _element.getAttribute('data-kindPlaceId');
-
-    let inputElement = document.getElementById('newAmakenName');
-
-    document.getElementById('amakenSearchResultSec').classList.add('hidden');
-    document.getElementById('newAmakenName').value = name;
-    document.getElementById('newAmakenNameTitle').innerText = name;
-
-    inputElement.setAttribute('data-id', id);
-    inputElement.setAttribute('data-name', name);
-    inputElement.setAttribute('data-img', pic);
-    inputElement.setAttribute('data-kindPlaceId', kindPlaceId);
-}
-function submitNewAmaken(){
-    openLoading();
-    closeMyModalBP('addAmakenEventModal');
-    let inputElement = document.getElementById('newAmakenName');
-
-    let place_id = inputElement.getAttribute('data-id');
-    let place_name = inputElement.getAttribute('data-name');
-    let place_img = inputElement.getAttribute('data-img');
-    let place_kindPlaceId = inputElement.getAttribute('data-kindPlaceId');
-
-    let sTime = document.getElementById('startTimeNewAmaken').value;
-    let eTime = document.getElementById('endTimeNewAmaken').value;
-    let description = document.getElementById('descriptionForAmaken').value;
-
-    let newValue = {
-        code: Math.floor(Math.random()*100000),
-        id: place_id,
-        kindPlaceId: place_kindPlaceId,
-        name: place_name,
-        img: place_img,
-        sTime,
-        eTime,
-        description
-    };
-
-    amakenAdded.push(newValue);
-
-    createNewEventBox(newValue, 'amaken');
-
-    document.getElementById('startTimeNewAmaken').value = '';
-    document.getElementById('endTimeNewAmaken').value = '';
-    document.getElementById('descriptionForAmaken').value = '';
-    inputElement.value = '';
-
-    document.getElementById('newAmakenButtonText').innerText = 'محل بعدی بازدید را مشخص کنید';
-    closeLoading();
-}
-function submitEditAmaken(){
-    let code = document.getElementById('editAmakenCode').value;
-    let sTime = document.getElementById('startTimeEditAmaken').value;
-    let eTime = document.getElementById('endTimeEditAmaken').value;
-    let description = document.getElementById('descriptionForEditAmaken').value;
-
-    for(let i = 0; i < amakenAdded.length; i++){
-        if(amakenAdded[i].code == code){
-            amakenAdded[i].sTime = sTime;
-            amakenAdded[i].eTime = eTime;
-            amakenAdded[i].description = description;
-            document.querySelector(`#eventBox_${code} .time`).innerText = `${eTime} - ${sTime}`;
-            break;
-        }
-    }
-
-    closeMyModalBP('editAmakenEventModal');
-}
-
-function ajaxSearchAmaken(_value, _callBack){
-    if(lastAjax != null)
-        lastAjax.abort();
-
-    lastAjax = $.ajax({
-        type: 'POST',
-        url: searchPlaceWithNameKinPlaceIdUrl,
-        data:{
-            _token: csrfTokenGlobal,
-            value: _value,
-            kindPlaceIds: [1, 6]
-        },
-        success: response => {
-            if(response.status === 'ok')
-                _callBack({
-                    status: 'ok',
-                    result: response.result
-                });
-            else
-                _callBack({
-                    status: response.status,
-                });
-
-        },
-        error: err => {
-            _callBack({
-                status: err,
-            });
-        }
-    })
-}
-function ajaxSearchRestaurant(_value, _callBack){
-    if(lastAjax != null)
-        lastAjax.abort();
-
-    lastAjax = $.ajax({
-        type: 'POST',
-        url: searchPlaceWithNameKinPlaceIdUrl,
-        data:{
-            _token: csrfTokenGlobal,
-            value: _value,
-            kindPlaceIds: [3]
-        },
-        success: response => {
-            if(response.status === 'ok')
-                _callBack({
-                    status: 'ok',
-                    result: response.result
-                });
-            else
-                _callBack({
-                    status: response.status,
-                });
-
-        },
-        error: err => {
-            _callBack({
-                status: err,
-            });
-        }
-    })
-}
-
-function createNewEventBox(_value, _type){
-    let html = `<div id="eventBox_${_value.code}" class="eventAdded">
-                            <div class="picSec">
-                                <img src="${_value.img}" class="resizeImgClass" onload="fitThisImg(this)">
-                                ${
-        _type === 'meal' ? `<div class="mealType">${_value.kind === 'main' ? 'وعده اصلی' : 'میان وعده'}</div>`: ''
-    }
-                            </div>
-                            <div class="infoSec">
-                                <div class="name">${_value.name}</div>
-                                <div class="time">${_value.eTime} - ${_value.sTime}</div>
-                                <div class="buttons">
-                                    <button onclick="deleteThisEvent(${_value.code}, '${_type}')" class="btn btn-danger">حدف</button>
-                                    <button onclick="editThisEvent(${_value.code}, '${_type}')" class="btn btn-primary">ویرایش</button>
-                                </div>
-                            </div>
-                        </div>`;
-
-    if(_type === 'amaken')
-        document.getElementById('amakenEvents').innerHTML += html;
-    else if(_type === 'meal')
-        document.getElementById('mealsEvents').innerHTML += html;
-    else if(_type === 'sEvent')
-        document.getElementById('SEvents').innerHTML += html;
-}
-
-function deleteThisEvent(_code, _type){
-    let index = null;
-    let searchVar = [];
-    document.getElementById(`eventBox_${_code}`).remove();
-
-    if(_type === 'amaken')
-        searchVar = amakenAdded;
-    else if(_type === "meal")
-        searchVar = mealsAdded;
-    else if(_type === "sEvent")
-        searchVar = sEventAdded;
-
-    searchVar.forEach((_item, _index) => {
-        if(_item.code === _code)
-            index = _index;
-    });
-
-    if(index !== null) {
-        if(_type === 'amaken')
-            amakenAdded.splice(index, 1);
-        else if(_type === "meal")
-            mealsAdded.splice(index, 1);
-        else if(_type === "sEvent")
-            sEventAdded.splice(index, 1);
+        $(_element).next().show();
+        multiIsOpen = true;
     }
 }
 
-function editThisEvent(_code, _type){
-    let event = null;
-    if(_type === 'amaken'){
-        amakenAdded.forEach(item => {
-            if(item.code === _code)
-                event = item;
-        });
-        document.getElementById('editAmakenNameTitle').innerText = event.name;
+function chooseLanguageMultiSelect(_index){
+    if(languageChoose.indexOf(language[_index]) == -1) {
+        languageChoose[languageChoose.length] = language[_index];
+        $(`#multiSelectLanguage_${_index}`).css('display', 'none');
 
-        document.getElementById('editAmakenCode').value = event.code;
-        document.getElementById('editAmakenName').value = event.name;
-        document.getElementById('startTimeEditAmaken').value = event.sTime;
-        document.getElementById('endTimeEditAmaken').value = event.eTime;
-        document.getElementById('descriptionForEditAmaken').value = event.description;
-
-        openMyModalBP('editAmakenEventModal');
-    }
-    else if(_type === 'meal'){
-        mealsAdded.forEach(item => {
-            if(item.code === _code)
-                event = item;
-        });
-        document.getElementById('snackMealKindEdit').classList.remove('selected');
-        document.getElementById('mainMealKindEdit').classList.remove('selected');
-
-        document.getElementById('restaurantMealWhere').classList.remove('selected');
-        document.getElementById('amakenMealWhere').classList.remove('selected');
-
-        let eventKindId = event.kind === 'main' ? 'mainMealKindEdit' : 'snackMealKindEdit';
-        document.getElementById(eventKindId).classList.add('selected');
-
-
-        let eventWhereId = event.where === 'amaken' ? 'amakenMealWhere' : 'restaurantMealWhere';
-        document.getElementById(eventWhereId).classList.add('selected');
-
-
-        document.getElementById('mealPlaceName').value = event.name;
-        document.getElementById('mealTimeEdit').value = event.sTime;
-        document.getElementById('editMealCode').value = event.code;
-
-        openMyModalBP('editMealEventModal');
-    }
-    else if(_type === 'sEvent'){
-        sEventAdded.forEach(item => {
-            if(item.code === _code)
-                event = item;
-        });
-
-        document.getElementById('editSpecialEventName').value = event.name;
-        document.getElementById('descriptionForSEventEdit').value = event.description;
-        document.getElementById('sTimeSEventEdit').value = event.sTime;
-        document.getElementById('eTimeSEventEdit').value = event.eTime;
-
-        if(event.sTime != ''){
-            document.querySelector('input[name="sEditEventHasTime"][value="0"]').checked = false;
-            document.querySelector('input[name="sEditEventHasTime"][value="0"]').parentElement.classList.remove('active');
-
-            document.querySelector('input[name="sEditEventHasTime"][value="1"]').checked = true;
-            document.querySelector('input[name="sEditEventHasTime"][value="1"]').parentElement.classList.add('active');
-
-            document.getElementById('sEventTimeSectionEdit').classList.remove('hidden');
-        }
-        else{
-            document.querySelector('input[name="sEditEventHasTime"][value="1"]').checked = false;
-            document.querySelector('input[name="sEditEventHasTime"][value="1"]').parentElement.classList.remove('active');
-
-            document.querySelector('input[name="sEditEventHasTime"][value="0"]').checked = true;
-            document.querySelector('input[name="sEditEventHasTime"][value="0"]').parentElement.classList.add('active');
-
-            document.getElementById('sEventTimeSectionEdit').classList.add('hidden');
-        }
-        document.getElementById('sEventCode').value = event.code;
-
-        openMyModalBP('editSpecialEventModal');
+        var text = `<div id="selectedMultiLanguage_${_index}" class="transportationKindChosenOnes col-md-2">${language[_index]}
+                        <i class="fa-regular fa-xmark" onclick="removeMultiSelectLanguage(${_index})" style="color: red;"></i>
+                    </div>`;
+        $('#multiSelectedLanguage').append(text);
     }
 }
 
-function specialEventHasTime(_value, _type = 'New'){
-    if(_value == 1)
-        document.getElementById(`sEventTimeSection${_type}`).classList.remove('hidden');
-    else
-        document.getElementById(`sEventTimeSection${_type}`).classList.add('hidden');
-}
-function createNewSEvent(){
-    openMyModalBP('specialEventModal');
-}
-function submitNewSEvent(){
-    let sTime = '';
-    let eTime = '';
-    let name = document.getElementById('specialEventName').value;
-    let description = document.getElementById('descriptionForSEvent').value;
-
-    if(name.trim().length === 0){
-        openErrorAlertBP('عنوان برنامه را مشخص کنید.');
-        return;
+function removeMultiSelectLanguage(_index){
+    $('#selectedMultiLanguage_' + _index).remove();
+    $(`#multiSelectLanguage_${_index}`).css('display', 'block');
+    if(languageChoose.includes(language[_index])){
+        var index = languageChoose.indexOf(language[_index]);
+        languageChoose.splice(index, 1);
     }
-
-    let hasTime = document.querySelector('input[name="sEventHasTime"]:checked').value;
-    if(hasTime == 1){
-        sTime = document.getElementById('sTimeSEvent').value;
-        eTime = document.getElementById('eTimeSEvent').value;
-
-        if(sTime.trim().length === 0 || eTime.trim().length === 0){
-            openErrorAlertBP('زمان برنامه را مشخص کنید');
-            return;
-        }
-    }
-
-    let newValue = {
-        code: Math.floor(Math.random()*100000),
-        id: 0,
-        kindPlaceId: 0,
-        name: name,
-        img: defaultPicture,
-        sTime,
-        eTime,
-        description
-    };
-    sEventAdded.push(newValue);
-
-    createNewEventBox(newValue, 'sEvent');
-
-    document.getElementById('specialEventName').value = '';
-    document.getElementById('descriptionForSEvent').value = '';
-    document.getElementById('sTimeSEvent').value = '';
-    document.getElementById('eTimeSEvent').value = '';
-
-    closeMyModalBP('specialEventModal');
-}
-function editSEvent(){
-    let sTime = '';
-    let eTime = '';
-    let code = document.getElementById('sEventCode').value;
-    let name = document.getElementById('editSpecialEventName').value;
-    let description = document.getElementById('descriptionForSEventEdit').value;
-
-    let hasTime = document.querySelector('input[name="sEditEventHasTime"]:checked').value;
-    if(hasTime == 1){
-        sTime = document.getElementById('sTimeSEventEdit').value;
-        eTime = document.getElementById('eTimeSEventEdit').value;
-
-        if(sTime.trim().length === 0 || eTime.trim().length === 0){
-            openErrorAlertBP('زمان برنامه را مشخص کنید');
-            return;
-        }
-    }
-
-    for(let i = 0; i < sEventAdded.length; i++){
-        if(sEventAdded[i].code == code){
-            sEventAdded[i].name = name;
-            sEventAdded[i].description = description;
-            sEventAdded[i].sTime = sTime;
-            sEventAdded[i].eTime = eTime;
-
-            document.querySelector(`#eventBox_${code} .name`).innerText = `${name}`;
-            document.querySelector(`#eventBox_${code} .time`).innerText = `${eTime} - ${sTime}`;
-        }
-    }
-
-    closeMyModalBP('editSpecialEventModal');
 }
 
-function submitSchedule(){
-    openLoading();
+function hasKoochitaAccount(_value){
+    $('#notKoochitaAccountDiv').css('display', _value == 1 ? 'none' : 'block');
+    $('#haveKoochitaAccountDiv').css('display', _value == 1 ? 'block' : 'none');
+}
 
-    $.ajax({
-        type: 'POST',
-        url: stageTwoStoreUrl,
-        data: {
-            tourId: tour.id,
-            amaken: amakenAdded,
-            meals: mealsAdded,
-            special: sEventAdded,
-        },
-        success: response =>{
-            if(response.status == 'ok') {
-                localStorage.removeItem(`planeDate_${tour.id}`);
-                location.href = nextStageUrl;
-            }
-            else{
-                closeLoading();
-                showSuccessNotifiBP('ثبت در خواست با مشکل مواچه شد', 'left', 'red');
-            }
-        },
-        error: err => {
-            closeLoading();
-            showSuccessNotifiBP('ثبت در خواست با مشکل مواچه شد', 'left', 'red');
-        }
+function openSearchKoochitaAccount() {
+    openKoochitaUserSearchModal('راهنمای تور خود را مشخص کنید', (_id, _username) => {
+        $('#tourGuidKoochitaUsername').val(_username);
+        $('#tourGuidUserId').val(_id);
     })
 }
 
 function goToPrevStep(){
-    openLoading(false, () => {
-        location.href = prevStageUrl;
-    })
+    openLoading(false, () => location.href = prevStageUrl);
 }
 
-[...document.querySelectorAll('.chooseBut')].map(item => {
-    if(!item.classList.contains('disabled')) {
-        item.addEventListener('click', function () {
-            let name = this.getAttribute('data-name');
-            [...document.querySelectorAll(`div[data-name="${name}"]`)].map(item => item.classList.remove('selected'));
-            this.classList.add('selected');
-        });
-    }
-});
+function showSection(_id = '', _element, _fromJs = false){
+    var _value = _element.value;
+    var name = _element.getAttribute('name');
 
-$(window).ready(() => $('.clockP').clockpicker(clockOptions));
+    _element.checked = true;
+
+    if(_fromJs) {
+        [...document.querySelectorAll(`input[name="${name}"]`)].map(item => item.parentElement.classList.remove('active'));
+        document.querySelector(`input[name="${name}"]:checked`).parentElement.classList.add('active');
+    }
+
+    if(_id != '')
+        $(`#${_id}`).css('display', _value == 1 ? 'block' : 'none');
+}
+
+function changeOtherLanguage(_value){
+    if(_value == 1)
+        document.getElementById('otherLanguageSection').classList.remove('hidden');
+    else
+        document.getElementById('otherLanguageSection').classList.add('hidden');
+}
+
+function checkInput(_isMainStore = true){
+    var errorText = '';
+
+    storeData = {
+        isTransportTour : 1,
+        sTransportKind : $('#sTransport').val(),
+        sTime : $('#sTime').val(),
+        eTime : $('#eTime').val(),
+        sAddress : $('#sAddress').val(),
+        eAddress : $('#eAddress').val(),
+        sLat : $('#sLat').val(),
+        eLat : $('#eLat').val(),
+        sLng : $('#sLng').val(),
+        eLng : $('#eLng').val(),
+        sDescription : $('#sDescription').val(),
+        eDescription : $('#eDescription').val(),
+
+        otherLanguage: languageChoose,
+
+        hasTourGuid: $('input[name="isTourGuide"]:checked').val(),
+        isLocalTourGuide: $('input[name="isLocalTourGuide"]:checked').val(),
+        isSpecialTourGuid: $('input[name="isSpecialTourGuid"]:checked').val(),
+        isTourGuidDefined: $('input[name="isTourGuidDefined"]:checked').val(),
+        isTourGuidInKoochita: $('input[name="isTourGuidInKoochita"]:checked').val(),
+        koochitaUserId: $('#tourGuidUserId').val(),
+        koochitaUserUsername: $('#tourGuidKoochitaUsername').val(),
+        tourGuidName: $('#tourGuidName').val(),
+        tourGuidSex: $('#tourGuidSex').val(),
+        tourGuidPhone: $('#tourGuidPhone').val(),
+
+        backUpPhone: $('#backUpPhone').val(),
+    };
+
+    if(storeData.sTransportKind == 0)
+        errorText += '<li>نوع وسیله رفت و آمد را مشخص کنید</li>';
+
+    if(storeData.sTime.trim().length == 0)
+        errorText += '<li>ساعت حرکت را مشخص کنید</li>';
+
+    if(storeData.sAddress.trim().length == 0)
+        errorText += '<li>آدرس دقیق محل حرکت را مشخص کنید</li>';
+
+    if(storeData.sLat == 0 || storeData.sLng == 0)
+        errorText += '<li>محل حرکت را روی نقشه مشخص کنید</li>';
+
+    if(storeData.eTime.trim().length == 0)
+        errorText += '<li>ساعت پیاده شدن را مشخص کنید</li>';
+
+    if(storeData.eAddress.trim().length == 0)
+        errorText += '<li>آدرس دقیق محل پیاده شدن را مشخص کنید</li>';
+
+    if(storeData.eLat == 0 || storeData.eLng == 0)
+        errorText += '<li>محل پیاده شدن را روی نقشه مشخص کنید</li>';
+
+    if(storeData.hasTourGuid == 1 && storeData.isTourGuidDefined == 1){
+        if(storeData.isTourGuidInKoochita == 1 && storeData.koochitaUserId == 0)
+            errorText += '<li>نام کاربری راهنمای تور را مشخص کنید</li>';
+        else if(storeData.isTourGuidInKoochita == 0){
+            if(storeData.tourGuidName.trim().length == 0)
+                errorText += '<li>نام راهنمای تور را وارد کنید</li>';
+
+            if(storeData.tourGuidPhone.trim().length == 0)
+                errorText += '<li>شماره تماس راهنمای تور را وارد کنید</li>';
+            else if(storeData.tourGuidPhone[0] != 0 || storeData.tourGuidPhone[1] != 9)
+                errorText += '<li>شماره همراه راهنمای تور را به درستی وارد کنید</li>';
+        }
+    }
+
+    if(storeData.backUpPhone.trim().length === 0)
+        errorText += '<li>وارد کردن تلفن پشتیبانی برای این تور اجباری است.</li>';
+
+
+    if(_isMainStore) {
+        if (errorText.trim().length == 0) {
+            openLoading();
+            $.ajax({
+                type: 'POST',
+                url: storeStageURL,
+                data: {
+                    _token: csrfTokenGlobal,
+                    tourId: tour.id,
+                    data: storeData
+                },
+                success: response => {
+                    if (response.status == 'ok') {
+                        localStorage.removeItem(`stageThreeTourCreation_${tour.id}`);
+                        location.href = nextStageUrl;
+                    }
+                    else{
+                        openErrorAlertBP('در ثبت مشکلی پیش امده لطفا دوباره تلاش کنید');
+                        closeLoading();
+                    }
+                },
+                error: err => {
+                    console.error(err);
+                    openErrorAlertBP('در ثبت مشکلی پیش امده لطفا دوباره تلاش کنید');
+                    closeLoading();
+                }
+            })
+        }
+        else
+            openErrorAlertBP(errorText);
+    }
+    else
+        localStorage.setItem(`stageThreeTourCreation_${tour.id}`, JSON.stringify(storeData));
+}
+
+function initMapIr(){
+    if(mainMap == null) {
+        mainMap = L.map("mapDiv", {
+            minZoom: 1,
+            maxZoom: 20,
+            crs: L.CRS.EPSG3857,
+            center: [32.42056639964595, 54.00537109375],
+            zoom: 6
+        }).on('click', e => {
+            setMarkerToMap(e.latlng.lat, e.latlng.lng);
+        });
+        L.TileLayer.wmsHeader(
+            "https://map.ir/shiveh",
+            {
+                layers: "Shiveh:Shiveh",
+                format: "image/png",
+                minZoom: 1,
+                maxZoom: 20
+            },
+            [
+                {
+                    header: "x-api-key",
+                    value: mappIrToken
+                }
+            ]
+        ).addTo(mainMap);
+
+        if(storeData.sLat != 0 && storeData.sLng != 0)
+            setMarkerToMap(storeData.sLat, storeData.sLng, 'src');
+        if(storeData.eLat != 0 && storeData.eLng != 0)
+            setMarkerToMap(storeData.eLat, storeData.eLng, 'dest');
+
+    }
+}
+
+function changeCenter(_kind){
+    mapIsOpen = _kind;
+    $('#modalMap').modal('show');
+    setTimeout(() => {
+        initMapIr();
+
+        var lat = 32.42056639964595;
+        var lng = 54.00537109375;
+        var zoom = 6;
+
+        if(_kind === 'src'){
+            if(sMarker === 0 && tour.srcCityLocation.lat && tour.srcCityLocation.lng){
+                lat = parseFloat(tour.srcCityLocation.lat);
+                lng = parseFloat(tour.srcCityLocation.lng);
+                zoom = 10;
+            }
+            else if(sMarker != 0){
+                lat = parseFloat(document.getElementById('sLat').value);
+                lng = parseFloat(document.getElementById('sLng').value);
+                zoom = 16;
+            }
+        }
+        else{
+            if(eMarker === 0 && tour.destCityLocation.lat && tour.destCityLocation.lng){
+                lat = parseFloat(tour.destCityLocation.lat);
+                lng = parseFloat(tour.destCityLocation.lng);
+                zoom = 10;
+            }
+            else if(eMarker != 0){
+                lat = parseFloat(document.getElementById('eLat').value);
+                lng = parseFloat(document.getElementById('eLng').value);
+                zoom = 16;
+            }
+        }
+        mainMap.setView([lat, lng], zoom);
+    }, 500);
+}
+
+function setMarkerToMap(_lat, _lng, _type = mapIsOpen){
+    if(_type == 'src'){
+        if(sMarker != 0)
+            mainMap.removeLayer(sMarker);
+        sMarker = L.marker([_lat, _lng]).addTo(mainMap);
+        document.getElementById('sLat').value = parseFloat(_lat);
+        document.getElementById('sLng').value = parseFloat(_lng);
+    }
+    else{
+        if(eMarker != 0)
+            mainMap.removeLayer(eMarker);
+        eMarker = L.marker([_lat, _lng]).addTo(mainMap);
+
+        document.getElementById('eLat').value = parseFloat(_lat);
+        document.getElementById('eLng').value = parseFloat(_lng);
+    }
+}
+
+$(window).ready(() => {
+    $('.clock').clockpicker(clockOptions);
+    initLanguage();
+    fillInputs();
+}).on('click', e => {
+    var target = $(e.target);
+    if( multiIsOpen  && !target.is('.optionMultiSelect') && !target.is('.multiSelected'))
+        $('.multiselect').hide();
+});

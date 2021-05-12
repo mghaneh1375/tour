@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Helpers\DefaultDataDB;
 use App\models\localShops\LocalShops;
 use App\models\logs\UserSeenLog;
 use App\models\safarnameh\SafarnamehCategoryRelations;
@@ -86,7 +87,11 @@ function SafarnamehMinimalData($safarnameh){
 }
 
 function createSuggestionPack($_kindPlaceId, $_placeId){
-    $kindPlace = Place::find($_kindPlaceId);
+    $allKindPlace = DefaultDataDB::getPlaceDB();
+    if(!isset($allKindPlace[$_kindPlaceId]))
+        return null;
+
+    $kindPlace = $allKindPlace[$_kindPlaceId];
     if($kindPlace->id == 13)
         $place = LocalShops::select(['name', 'id', 'file', 'cityId', 'fullRate', 'reviewCount', 'meta', 'slug', 'seoTitle', 'keyword'])->find($_placeId);
     else
@@ -104,6 +109,7 @@ function createSuggestionPack($_kindPlaceId, $_placeId){
         $place->review = $place->reviewCount;
         return $place;
     }
+
     return null;
 }
 
@@ -148,9 +154,10 @@ function reviewTrueTypeIdArray($reviewIds){
 }
 
 function getReviewContents($item, $authUserId){
+    $allKindPlace = DefaultDataDB::getPlaceDB();
 
-    if($item->kindPlaceId != 0 && $item->placeId != 0) {
-        $kindPlace = Place::find($item->kindPlaceId);
+    if($item->kindPlaceId != 0 && $item->placeId != 0 && isset($allKindPlace[$item->kindPlaceId])) {
+        $kindPlace = $allKindPlace[$item->kindPlaceId];
         $place = DB::table($kindPlace->tableName)->select(['id', 'name', 'cityId', 'file'])->find($item->placeId);
 
         $item->mainFile = $kindPlace->fileName;
@@ -306,7 +313,7 @@ function questionTrueType($_ques){
 
     $_ques->city = Cities::find($_ques->place->cityId);
     $_ques->cityName = $_ques->city->name;
-    $_ques->state = State::find($_ques->city->stateId);
+    $_ques->state = DefaultDataDB::getStateWithId($_ques->city->stateId);
     $_ques->stateName = $_ques->state->name;
 
     $time = $_ques->date . '';
@@ -339,7 +346,7 @@ function getAnsToComments($logId){
     if(auth()->check())
         $uId = auth()->user()->id;
 
-    $a = Activity::where('name', 'پاسخ')->first();
+    $a = DefaultDataDB::getActivityWithName('پاسخ');
 
     $ansToReview = DB::select('SELECT log.visitorId, log.text, log.subject, log.id, log.confirm, log.date, log.time FROM log WHERE (log.confirm = 1 || log.visitorId = ' . $uId . ') AND log.relatedTo = ' . $logId . ' AND log.activityId = ' . $a->id . ' ORDER BY `created_at` DESC; ');
 

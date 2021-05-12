@@ -2,6 +2,7 @@
 
 namespace App\models\places;
 
+use App\Helpers\DefaultDataDB;
 use App\Helpers\ReviewTrueType;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class Restaurant extends Model {
     public $timestamps = false;
 
     public function getReviews(){
-        $reviewAct = Activity::where('name', 'نظر')->first();
+        $reviewAct = DefaultDataDB::getActivityWithName('نظر');
         $reviews = $this->hasMany(LogModel::class, 'placeId', 'id')
                         ->where('kindPlaceId', 3)
                         ->where('activityId', $reviewAct->id)

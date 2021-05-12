@@ -102,7 +102,7 @@ function getTakenMedal($userId){
         foreach ($medals as $item) {
             $act = Activity::find($item->activityId);
             $kindPlaceName = '';
-            $kindPlace = Place::find($item->kindPlaceId);
+            $kindPlace = DefaultDataDB::getSinglePlace($item->kindPlaceId);
             if ($kindPlace != null) {
                 $item->sumText = $item->floor . ' ' . $act->name . ' در ' . $kindPlace->name;
                 $kindPlaceName = ' در ' . $kindPlace->name;
@@ -392,6 +392,9 @@ function makeValidInput($input) {
 //    if(get_magic_quotes_gpc())
 //        $input = stripslashes($input);
     $input = htmlspecialchars($input);
+
+//    $input = str_replace('ي', 'ی',  $input);
+
     return $input;
 }
 
@@ -459,7 +462,7 @@ function sortByNeeded($a, $b) {
 function getRate($placeId, $kindPlaceId) {
 
     try {
-        $kindPlace = Place::find($kindPlaceId);
+        $kindPlace = DefaultDataDB::getSinglePlace($kindPlaceId);
         $place = \DB::table($kindPlace->tableName)->find($placeId);
 
         $avgRate = floor($place->fullRate);
@@ -728,7 +731,7 @@ function getDifferenceTimeString($time){
 }
 
 function deleteAnses($logId){
-    $activity = Activity::where('name', 'پاسخ')->first();
+    $activity = DefaultDataDB::getActivityWithName('پاسخ');
     $log = LogModel::where('activityId', $activity)->where('id', $logId)->first();
     if($log != null){
         LogFeedBack::where('logId', $logId)->delete();
@@ -772,8 +775,8 @@ function commonInPlaceDetails($kindPlaceId, $placeId, $city, $state, $place){
             array_push($rateQuestion, $item);
     }
 
-    $a2 = Activity::where('name', 'نظر')->first();
-    $a3 = Activity::where('name', 'پاسخ')->first();
+    $a2 = DefaultDataDB::getActivityWithName('نظر');
+    $a3 = DefaultDataDB::getActivityWithName('پاسخ');
 
     $condition = ['activityId' => $a2->id, 'placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'confirm' => 1, 'relatedTo' => 0];
     $reviews = LogModel::where($condition)->whereRaw('CHARACTER_LENGTH(text) > 2')->get();
@@ -800,13 +803,15 @@ function generateRandomString($length = 20) {
 }
 
 function saveViewPerPage($kindPlaceId, $placeId){
-
+    $allKindPlaces = DefaultDataDB::getPlaceDB();
     $value = 'kindPlaceId:'.$kindPlaceId.'Id:'.$placeId;
     if(!(Cookie::has($value) == $value)) {
         try {
-            $kindPlace = Place::find($kindPlaceId);
-            if ($kindPlace != null)
-                \DB::select("UPDATE `{$kindPlace->tableName}` SET `seen`= `seen`+1  WHERE `id`={$placeId}");
+            if(isset($allKindPlaces[$kindPlaceId])) {
+                $kindPlace = $allKindPlaces[$kindPlaceId];
+                if ($kindPlace != null)
+                    \DB::select("UPDATE `{$kindPlace->tableName}` SET `seen`= `seen`+1  WHERE `id`={$placeId}");
+            }
         }
         catch (\Exception $exception){}
         Cookie::queue(Cookie::make($value, $value, 5));
@@ -915,7 +920,7 @@ function getStatePic($stateId = 0, $cityId = 0){
 
 function createUrl($kindPlaceId, $placeId, $stateId, $cityId, $articleId = 0){
     if($stateId != 0){
-        $state = State::find($stateId);
+        $state = DefaultDataDB::getStateWithId($stateId);
         return url('cityPage/state/' . $state->name);
     }
     else if($cityId != 0){

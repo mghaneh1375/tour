@@ -269,5 +269,5 @@
         createNewMenuSideBar(sideMenuAdditional);
     </script>
 
-    <script src="{{URL::asset('BusinessPanelPublic/js/tour/tourCreate_stage_4.js?v='.$fileVersions)}}"></script>
+    <script src="{{URL::asset('BusinessPanelPublic/js/tour/create/tourCreate_stage_4.js?v='.$fileVersions)}}"></script>
 @endsection

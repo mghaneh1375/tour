@@ -1,0 +1,61 @@
+.selectEditCardSection{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+.selectEditCardSection .editCard{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    height: 170px;
+    width: 165px;
+    margin: 11px 10px;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 1px 2px 3px 2px #00000073;
+}
+.selectEditCardSection .editCard.notAllow{
+    cursor: not-allowed;
+    opacity: .3;
+    filter: grayscale(1);
+}
+.selectEditCardSection .editCard.card1{
+    background: linear-gradient(45deg, #0014ff, #0014ff75);
+}
+.selectEditCardSection .editCard.card2{
+    background: linear-gradient(45deg, #ff00c8, #0014ff75);
+}
+.selectEditCardSection .editCard.card3{
+    background: linear-gradient(45deg, #ff0000, #ff00c88a);
+}
+.selectEditCardSection .editCard.card4{
+    background: linear-gradient(45deg, #ffb000, #ff0000d6);
+}
+.selectEditCardSection .editCard.card5{
+    background: linear-gradient(45deg, #00ff4e, #0049ff);
+}
+.selectEditCardSection .editCard .icon{
+    font-size: 3em;
+    transition: .3s;
+}
+.selectEditCardSection .editCard .name{
+
+}
+.selectEditCardSection .editCard .name .stage{
+    font-size: .6em;
+}
+.selectEditCardSection .editCard .name .text{
+    font-weight: bold;
+    font-size: .8em;
+    margin-top: 8px;
+}
+
+.selectEditCardSection .editCard:hover .icon{
+    transform: scale(1.1);
+}

@@ -9,20 +9,24 @@ use App\models\Cities;
 use App\models\MainEquipment;
 use App\models\places\Majara;
 use App\models\places\Place;
+use App\models\State;
 use App\models\SubEquipment;
 use App\models\tour\Tour;
 use App\models\tour\TourDifficult;
 use App\models\tour\TourDifficult_Tour;
 use App\models\tour\TourDiscount;
 use App\models\tour\TourEquipment;
+use App\models\tour\TourFeature;
 use App\models\tour\TourFitFor;
 use App\models\tour\TourFitFor_Tour;
 use App\models\tour\TourFocus_Tour;
+use App\models\tour\TourGuid;
 use App\models\tour\TourKind;
 use App\models\tour\TourKind_Tour;
 use App\models\tour\TourNotice;
 use App\models\tour\TourPic;
 use App\models\tour\TourPlaceRelation;
+use App\models\tour\TourPrices;
 use App\models\tour\TourSchedule;
 use App\models\tour\TourScheduleDetail;
 use App\models\tour\TourScheduleDetailKind;
@@ -33,6 +37,7 @@ use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Transport\Transport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
@@ -41,17 +46,20 @@ class cityTourismCreationController extends Controller implements tourCreations
 {
     public $defaultViewLocation = 'panelBusiness.pages.Agency';
 
-    public $tourKindInfo = [
-        'cityTourism' => ['code' => 1]
-    ];
-
+    public $tourKindInfo = ['cityTourism' => ['code' => 1]];
 
     public function showStep_1($tour){
         $tour->src = Cities::find($tour->srcId);
         $tour->userInfoNeed = json_decode($tour->userInfoNeed);
         $times = TourTimes::where('tourId', $tour->id)->orderBy('sDate')->get();
-        foreach ($times as $time)
-            $time->discounts = TourDiscount::where('tourTimeId', $time->id)->get();
+        foreach ($times as $time){
+            $time->canEdit = true;
+
+            if($time->registered > 0)
+                $time->canEdit = false;
+
+            $time->groupDiscount = TourDiscount::where('tourTimeId', $time->id)->get();
+        }
 
         $tour->times = $times;
         return $tour;
@@ -59,7 +67,7 @@ class cityTourismCreationController extends Controller implements tourCreations
     public function storeStep_1($request, $business){
         $errors = [];
         $tour = null;
-//        dd($request->all());
+
         if(isset($request->tourId) && $request->tourId != 0){
             $tour = Tour::find($request->tourId);
 
@@ -84,22 +92,21 @@ class cityTourismCreationController extends Controller implements tourCreations
             $tour->code = $code;
             $tour->codeNumber = $codeNumber;
             $tour->isPublished = 1;
+            $tour->remainingStage = json_encode(['2', '3', '4']);
         }
 
         $cancelDescription = makeValidInput($request->cancelDescription);
 
         $tourName = makeValidInput($request->tourName);
         if(empty($tourName))
-            array_push($errors, 'tour name is empty');
+            array_push($errors, ['status' => 3,'text' => 'tour name is empty']);
 
         $city = Cities::find($request->srcCityId);
         if($city == null)
-            array_push($errors, 'city not found');
+            array_push($errors, ['status' => 4,'text' => 'city not found']);
 
         if($tour->cancelAble == 1 && empty($cancelDescription))
-            array_push($errors, 'cancel description is empty');
-
-        DB::beginTransaction();
+            array_push($errors, ['status' => 5,'text' => 'cancel description is empty']);
 
         $tour->name = $tourName;
         $tour->srcId = $city->id;
@@ -110,196 +117,99 @@ class cityTourismCreationController extends Controller implements tourCreations
         $tour->cancelDescription = $cancelDescription;
         $tour->save();
 
-        foreach($request->dates as $item){
+        foreach($request->dates as $index => $item){
             $item = (object)$item;
-            $date = convertDateToString(convertNumber('en', $item->date), '/');
 
-            $check = \DB::select("SELECT * FROM `tourTimes` WHERE `tourId` = {$tour->id} AND (`sDate` LIKE '{$date}')");
-            if(count($check) === 0) {
+            if(isset($item->delete) && $item->delete == 1){
+                if($item->id != 0){
+                    $tourTimeDelete = TourTimes::find($item->id);
+                    if($tourTimeDelete == null || $tourTimeDelete->tourId != $tour->id)
+                        array_push($errors, ['status' => 6, 'text' => 'cant delete this date', 'result' => ['date' => $item->date]]);
+                    else{
+                        if($tourTimeDelete->registered == 0){
+                            TourDiscount::where('tourTimeId', $tourTimeDelete->id)->delete();
+                            $tourTimeDelete->delete();
+                        }
+                        else
+                            array_push($errors, ['status' => 6, 'text' => 'cant delete this date', 'result' => ['date' => $item->date]]);
+                    }
+                }
+
+                continue;
+            }
+
+            if($item->id == 0){
                 do
                     $code = generateRandomString(6);
                 while (TourTimes::where('code', $code)->count() > 0);
 
-                $tourTime = new TourTimes();
-                $tourTime->tourId = $tour->id;
-                $tourTime->code = $code;
-                $tourTime->sDate = $date;
-                $tourTime->cost = $item->cost;
-//                $tourTime->isInsurance = (int)$item->isInsurance;
-                $tourTime->isInsurance = 0;
-                $tourTime->minCapacity = (int)$item->minCapacity;
-                $tourTime->maxCapacity = (int)$item->maxCapacity;
-                $tourTime->canRegister = 1;
-                $tourTime->isPublished = 1;
-                $tourTime->registered = 0;
-                $tourTime->save();
+                $date = convertDateToString(convertNumber('en', $item->date), '/');
 
-                if(isset($item->groupDiscount)) {
-                    $groupDiscount = $item->groupDiscount;
-                    foreach ($groupDiscount as $gd) {
-                        $gd = (object)$gd;
+                $checkDate = TourTimes::where('tourId', $tour->id)->where('sDate', $date)->first();
+                if($checkDate === null) {
+                    $tourTime = new TourTimes();
+                    $tourTime->tourId = $tour->id;
+                    $tourTime->code = $code;
+                    $tourTime->sDate = $date;
+                    $tourTime->canRegister = 1;
+                    $tourTime->isPublished = 1;
+                    $tourTime->registered = 0;
+                }
+                else{
+                    array_push($errors, ['status' => 0,'text' => "duplicate date", 'result' => ['date' => $date]]);
+                    continue;
+                }
+            }
+            else{
+                $tourTime = TourTimes::find($item->id);
+                if($tourTime == null || $tourTime->tourId != $tour->id){
+                    array_push($errors, ['status' => 1, 'text' => "wrong date info", 'result' => ['date' => $item->date]]);
+                    continue;
+                }
+            }
 
+            $tourTime->cost = $item->cost;
+            $tourTime->isInsurance = (int)$item->isInsurance;
+            $tourTime->minCapacity = (int)$item->minCapacity;
+            $tourTime->maxCapacity = (int)$item->maxCapacity;
+            $tourTime->save();
+
+            if(isset($item->groupDiscount)) {
+                $groupDiscount = $item->groupDiscount;
+                foreach ($groupDiscount as $disIndex => $gd) {
+                    $gd = (object)$gd;
+
+                    if($gd->id == 0){
                         $newGroupDiscount = new TourDiscount();
                         $newGroupDiscount->tourId = $tour->id;
                         $newGroupDiscount->tourTimeId = $tourTime->id;
                         $newGroupDiscount->discount = $gd->discount;
-                        $newGroupDiscount->minCount = $gd->min;
-                        $newGroupDiscount->maxCount = $gd->max;
-                        $newGroupDiscount->status = 1;
+                        $newGroupDiscount->minCount = $gd->minCount;
+                        $newGroupDiscount->maxCount = $gd->maxCount;
                         $newGroupDiscount->remainingDay = null;
                         $newGroupDiscount->code = null;
-                        $newGroupDiscount->save();
                     }
+                    else{
+                        $newGroupDiscount = TourDiscount::find($gd->id);
+                        if($newGroupDiscount == null || $newGroupDiscount->tourId != $tour->id || $newGroupDiscount->tourTimeId != $tourTime->id){
+                            array_push($errors, ['status' => 2, 'text' => "wrong discount info", 'result' => ['discountId' => $gd->id, 'tourTimeId' => $tourTime->id]]);
+                            continue;
+                        }
+                    }
+
+                    $newGroupDiscount->status = $gd->status;
+                    $newGroupDiscount->save();
                 }
             }
         }
 
-        if(count($errors) != 0) {
-            DB::rollBack();
+        if(count($errors) != 0)
             return ['status' => 'error', 'errors' => $errors];
-        }
-        else{
-            DB::commit();
+        else
             return ['status' => 'ok', 'result' => $tour];
-        }
     }
 
     public function showStep_2($tour){
-        $tourScheduleKinds = TourScheduleDetailKind::all();
-
-        $tour->schedules = TourSchedule::where('tourId', $tour->id)->orderBy('day')->get();
-        foreach($tour->schedules as $schedule){
-            $schedule->events = TourScheduleDetail::join('tourScheduleDetailKinds', 'tourScheduleDetailKinds.id', 'tourScheduleDetails.detailKindId')
-                ->where('tourScheduleDetails.tourScheduleId', $schedule->id)
-                ->select(['tourScheduleDetails.*', 'tourScheduleDetailKinds.code'])
-                ->orderBy('tourScheduleDetails.sTime')->get();
-
-            foreach($schedule->events as $event){
-                $placesArr = [];
-                if($event->hasPlace == 1){
-                    $eventPlaces = TourPlaceRelation::where('tourScheduleDetailId', $event->id)->get();
-                    foreach ($eventPlaces as $item){
-                        $kindPlace = Place::find($item->kindPlaceId);
-                        $tabNaPl = $kindPlace->tableName;
-                        $place = \DB::table($tabNaPl)
-                            ->join('cities', 'cities.id', "$tabNaPl.cityId")
-                            ->join('state', 'state.id', "cities.stateId")
-                            ->where("$tabNaPl.id", $item->placeId)
-                            ->select(["$tabNaPl.id", "$tabNaPl.name", "$tabNaPl.cityId", "state.name AS stateName", "cities.name AS cityName"])
-                            ->first();
-
-                        if($place != null){
-                            $place->pic = getPlacePic($place->id, $kindPlace->id);
-                            $place->stateAndCity = ' در شهر '.$place->cityName.' ، استان '.$place->stateName;
-                            $place->kindPlaceId = $kindPlace->id;
-                            array_push($placesArr, $place);
-                        }
-                    }
-                }
-
-                $event->places = $placesArr;
-            }
-        }
-
-        $view = "{$this->defaultViewLocation}.tour.create.cityTourism.createTour_cityTourism_stage_2";
-
-        return view($view, compact(['tour', 'tourScheduleKinds']));
-    }
-    public function storeStep_2($request, $tour){
-        $amakens = isset($request->amaken) ? $request->amaken : [];
-        $meals = isset($request->meals) ? $request->meals : [];
-        $special = isset($request->special) ? $request->special : [];
-
-        $tourSC = TourSchedule::where('tourId', $tour->id)->first();
-        if($tourSC == null){
-            $tourSC = new TourSchedule();
-            $tourSC->tourId = $tour->id;
-            $tourSC->day = 1;
-            $tourSC->hotelId = 0;
-            $tourSC->isBoomgardi = 0;
-            $tourSC->description = null;
-            $tourSC->save();
-        }
-        $idss = TourScheduleDetail::where('tourScheduleId', $tourSC->id)->pluck('id')->toArray();
-        TourPlaceRelation::whereIn('tourScheduleDetailId', $idss)->delete();
-        TourScheduleDetail::where('tourScheduleId', $tourSC->id)->delete();
-
-        $amakenKindId = TourScheduleDetailKind::where('code', 3)->first();
-        $mealsKindId = TourScheduleDetailKind::where('code', 9)->first();
-        $specialKindId = TourScheduleDetailKind::where('code', 6)->first();
-
-        $allKindPlaces = DefaultDataDB::getPlaceDB();
-
-        foreach ($amakens as $item){
-            if(isset($allKindPlaces[$item['kindPlaceId']])) {
-                $kindPlace = $allKindPlaces[$item['kindPlaceId']];
-                $place = \DB::table($kindPlace->tableName)->find($item['id']);
-                if($place != null) {
-                    $tsc = new TourScheduleDetail();
-                    $tsc->tourScheduleId = $tourSC->id;
-                    $tsc->detailKindId = $amakenKindId->id;
-                    $tsc->description = $item['description'];
-                    $tsc->sTime = $item['sTime'];
-                    $tsc->eTime = $item['eTime'];
-                    $tsc->hasPlace = 1;
-                    $tsc->save();
-
-                    $plr = new TourPlaceRelation();
-                    $plr->tourId = $tour->id;
-                    $plr->tourScheduleDetailId = $tsc->id;
-                    $plr->placeId = $place->id;
-                    $plr->kindPlaceId = $item['kindPlaceId'];
-                    $plr->save();
-                }
-            }
-        }
-
-        foreach($meals as $item){
-            $tsc = new TourScheduleDetail();
-            $tsc->tourScheduleId = $tourSC->id;
-            $tsc->detailKindId = $mealsKindId->id;
-            $tsc->text = $item['kind'];
-            $tsc->sTime = $item['sTime'];
-            $tsc->eTime = $item['eTime'];
-            $tsc->hasPlace = 0;
-            $tsc->save();
-
-            $place = null;
-            if(isset($allKindPlaces[$item['kindPlaceId']])) {
-                $kindPlace = $allKindPlaces[$item['kindPlaceId']];
-                if ($kindPlace != null)
-                    $place = \DB::table($kindPlace->tableName)->find($item['id']);
-
-                if ($place != null) {
-                    $tsc->hasPlace = 1;
-                    $tsc->save();
-
-                    $plr = new TourPlaceRelation();
-                    $plr->tourId = $tour->id;
-                    $plr->tourScheduleDetailId = $tsc->id;
-                    $plr->placeId = $place->id;
-                    $plr->kindPlaceId = $item['kindPlaceId'];
-                    $plr->save();
-                }
-            }
-        }
-
-        foreach($special as $item){
-            $tsc = new TourScheduleDetail();
-            $tsc->tourScheduleId = $tourSC->id;
-            $tsc->detailKindId = $specialKindId->id;
-            $tsc->text = $item['name'];
-            $tsc->sTime = $item['sTime'];
-            $tsc->eTime = $item['eTime'];
-            $tsc->description = $item['description'];
-            $tsc->hasPlace = 0;
-            $tsc->save();
-        }
-
-        return "ok";
-    }
-
-    public function showStep_3($tour){
         $tourStartCity = Cities::find($tour->srcId);
         if($tourStartCity != null)
             $tour->srcCityLocation = ['lat' => $tourStartCity->x, 'lng' => $tourStartCity->y];
@@ -332,10 +242,10 @@ class cityTourismCreationController extends Controller implements tourCreations
         }
 
         $transport = TransportKind::all();
-        $view = "{$this->defaultViewLocation}.tour.create.cityTourism.createTour_cityTourism_stage_3";
+        $view = "{$this->defaultViewLocation}.tour.create.cityTourism.createTour_cityTourism_stage_2";
         return view($view, compact(['tour', 'transport']));
     }
-    public function storeStep_3($request, $tour){
+    public function storeStep_2($request, $tour){
 
         $request = (object)$request->data;
         $transport = Transport_Tour::where('tourId', $tour->id)->first();
@@ -410,10 +320,117 @@ class cityTourismCreationController extends Controller implements tourCreations
             $tour->language = json_encode($request->otherLanguage);
         else
             $tour->language = null;
-
         $tour->save();
 
         return 'ok';
+    }
+
+    public function showStep_3($tour){
+        $transport = DB::table('transportTours AS TT')
+                        ->join('transportKind AS TK', 'TK.id', 'TT.sTransportId')
+                        ->where('TT.tourId', $tour->id)
+                        ->first();
+
+        $events = TourScheduleDetail::join('tourSchedules', 'tourSchedules.id', 'tourScheduleDetails.tourScheduleId')
+                                    ->where('tourSchedules.tourId', $tour->id)
+                                    ->select(['tourScheduleDetails.*'])
+                                    ->orderBy('tourScheduleDetails.sortNumber')
+                                    ->get();
+
+        $allKindPlaces = DefaultDataDB::getPlaceDB();
+        foreach($events as $event){
+
+            $event->place = null;
+            $event->picture = getPlacePic(0, 0, 'f');
+            $event->url = null;
+
+            if($event->placeId != null && $event->kindPlaceId != null){
+                if(isset($allKindPlaces[$event->kindPlaceId])){
+                    $kindPlace = $allKindPlaces[$event->kindPlaceId];
+                    $place = DB::table($kindPlace->tableName)->find($event->placeId);
+                    $event->picture = getPlacePic($place->id, $kindPlace->id, 'f');
+                    $event->place = ['rate' => (int)$place->fullRate, 'reviewCount' => $place->reviewCount, 'name' => $place->name, 'id' => $place->id];
+                    $event->url = createUrl($kindPlace->id, $place->id, 0, 0, 0);
+                }
+            }
+
+            if($event->sTime == null)
+                $event->sTime = '';
+
+            if($event->eTime == null)
+                $event->eTime = '';
+
+            if($event->title == null)
+                $event->title = '';
+
+            if($event->description == null)
+                $event->description = '';
+
+            if($event->lat == null)
+                $event->lat = 0;
+
+            if($event->lng == null)
+                $event->lng = 0;
+        }
+
+        $tour->start = [
+            'actualName' => $transport->actualName,
+            'icon' => $transport->icon,
+            'location' => $transport->sLatLng,
+            'time' => $transport->sTime,
+            'title' => 'شروع حرکت',
+            'description' => $transport->sDescription,
+        ];
+
+        $tour->end = [
+            'actualName' => $transport->actualName,
+            'icon' => $transport->icon,
+            'location' => $transport->eLatLng,
+            'time' => $transport->eTime,
+            'title' => 'پایان حرکت',
+            'description' => $transport->eDescription,
+        ];
+
+        $view = "{$this->defaultViewLocation}.tour.create.cityTourism.createTour_cityTourism_stage_3";
+
+        return view($view, compact(['tour', 'events']));
+    }
+    public function storeStep_3($request, $tour){
+        $events = $request->events;
+
+        $tourSC = TourSchedule::where('tourId', $tour->id)->first();
+        if($tourSC == null){
+            $tourSC = new TourSchedule();
+            $tourSC->tourId = $tour->id;
+            $tourSC->day = 1;
+            $tourSC->hotelId = 0;
+            $tourSC->isBoomgardi = 0;
+            $tourSC->description = null;
+            $tourSC->save();
+        }
+
+        TourScheduleDetail::where('tourScheduleId', $tourSC->id)->delete();
+        foreach ($events as $index => $event) {
+            $event = (object)$event;
+
+            $nEvent = new TourScheduleDetail();
+            $nEvent->tourScheduleId = $tourSC->id;
+            $nEvent->type = $event->type;
+            $nEvent->title = $event->title;
+            $nEvent->sTime = $event->sTime;
+            $nEvent->eTime = $event->eTime;
+            $nEvent->description = $event->description;
+            $nEvent->lat = $event->lat != 0 ? $event->lat : null;
+            $nEvent->lng = $event->lng != 0 ? $event->lng : null;
+            $nEvent->placeId = $event->placeId != 0 ? $event->placeId : null;
+            $nEvent->kindPlaceId = $event->kindPlaceId != 0 ? $event->kindPlaceId : null;
+            $nEvent->hasPlace = $event->placeId != 0 ? 1 : 0;
+            $nEvent->sortNumber = $index+1;
+            $nEvent->save();
+        }
+
+
+        return "ok";
     }
 
     public function showStep_4($tour){
@@ -443,7 +460,6 @@ class cityTourismCreationController extends Controller implements tourCreations
         return view($view, compact(['tour', 'mainEquipment', 'tourKind', 'tourDifficult', 'tourFitFor', 'tourStyle']));
     }
     public function storeStep_4($request, $tour){
-
         $data = (object)$request->data;
 
         $existTourDifficult = [];
@@ -500,10 +516,15 @@ class cityTourismCreationController extends Controller implements tourCreations
     }
 
     public function showStep_5($tour){
-        dd('done');
+        $view = "{$this->defaultViewLocation}.tour.create.cityTourism.createTour_cityTourism_stage_end";
+        return view($view, compact(['tour']));
     }
     public function storeStep_5($request, $tour){
-
+        dd('null');
     }
 
+    public function deleteTour($tour){
+        $response = $tour->fullyDeleted();
+        return $response;
+    }
 }

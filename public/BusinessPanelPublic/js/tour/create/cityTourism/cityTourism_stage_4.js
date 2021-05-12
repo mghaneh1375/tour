@@ -58,6 +58,11 @@ function chooseDifficult(_element){
     $(_element).toggleClass('chooseTourKind');
 }
 
+function goToPrevStep(){
+    openLoading(false, () => {
+        location.href = prevStageUrl;
+    })
+}
 
 function allowDrop(ev){
     ev.preventDefault();
@@ -276,7 +281,7 @@ function deleteThisPic(_id) {
 
 function deletedUploadedPic(_fileName){
     $.ajax({
-        type: 'POST',
+        type: 'DELETE',
         url: deleteTourPicUrl,
         data: {
             _token: csrfTokenGlobal,

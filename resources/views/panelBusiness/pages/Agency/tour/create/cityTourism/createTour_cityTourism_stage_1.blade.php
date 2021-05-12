@@ -1,7 +1,10 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    <title>مرحله اول</title>
+    <title>
+        {{$tour == null ? 'ایجاد' : 'ویرایش'}}
+        تور: مرحله اول
+    </title>
 
     <link rel="stylesheet" href="{{URL::asset('css/theme2/bootstrap-datepicker.css')}}">
     <script async src="{{URL::asset("js/bootstrap-datepicker.js")}}"></script>
@@ -9,6 +12,29 @@
     <link rel="stylesheet" type="text/css" href="{{URL::asset('css/shazdeDesigns/tourCreation.css?v='.$fileVersions)}}"/>
 
     <script src="{{URL::asset('js/jalali.js')}}"></script>
+
+    <style>
+        .otherDateSection tr{
+            font-size: 11px;
+        }
+
+        .discountRow.active .disableButton{
+            background: var(--koochita-yellow);
+        }
+        .discountRow.active .disableButton:before{
+            content: 'غیر فعال کردن تخفیف';
+        }
+        .discountRow.notActive .discountLimitationWholesale{
+            opacity: .2;
+        }
+        .discountRow.notActive .disableButton{
+            background: var(--koochita-green);
+        }
+        .discountRow.notActive .disableButton:before{
+            content: 'فعال کردن تخفیف';
+        }
+
+    </style>
 @endsection
 
 
@@ -17,7 +43,7 @@
     <div class="mainBackWhiteBody">
         <div class="head">
             {{$tour == null ? 'ایجاد' : 'ویرایش'}}
-            تور: قدم اول
+            تور: مرحله اول
         </div>
         <div>
             <input type="hidden" id="tourId" name="id" value="{{$tour->id ?? 0}}">
@@ -72,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="whiteBox">
+            <div class="whiteBox onlyOnNew">
                 <div class="boxTitlesTourCreation">تاریخ برگزاری تور</div>
                 <div class="inboxHelpSubtitle">در این بخش تاریخ های برگزاری این تور را تعریف کنید.</div>
                 <div class="row">
@@ -88,7 +114,7 @@
                 </div>
             </div>
 
-            <div class="whiteBox ">
+            <div class="whiteBox onlyOnNew">
                 <div class="boxTitlesTourCreation">
                     <span>ظرفیت تور برای تاریخ </span>
                     <span class="mainDateShow">....</span>
@@ -116,7 +142,7 @@
                 </div>
             </div>
 
-            <div class="whiteBox">
+            <div class="whiteBox onlyOnNew">
                 <div class="boxTitlesTourCreation">
                     <span>قیمت تور برای تاریخ </span>
                     <span class="mainDateShow">....</span>
@@ -150,7 +176,7 @@
 
             </div>
 
-            <div class="whiteBox">
+            <div class="whiteBox onlyOnNew">
                 <div class="fullwidthDiv">
                     <div class="boxTitlesTourCreation">
                         <span>تخفیف خرید گروهی تور برای تاریخ </span>
@@ -165,9 +191,8 @@
                 </div>
             </div>
 
-
             <div class="whiteBox">
-                <div class="nonGovernmentalTitleTourCreation" style="margin-top: 25px;">
+                <div class="nonGovernmentalTitleTourCreation onlyOnNew" style="margin-top: 25px;">
                     <span>آیا این تور شما در تاریخ های دیگری نیز برگزار می شود؟</span>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary">
@@ -180,6 +205,7 @@
                         </label>
                     </div>
                 </div>
+                <div class="boxTitlesTourCreation onlyOnEdit hidden">تاریخ های برگزاری تور</div>
                 <div id="otherDateSection" class="otherDateSection hidden">
                     <table class="table table-striped">
                         <thead>
@@ -232,8 +258,8 @@
                 </div>
             </div>
 
-            <div class="row" style="padding: 15px;">
-                <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
+            <div class="row submitAndPrevButton">
+                <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">ثبت اطلاعات و رفتن به گام بعدی</button>
             </div>
         </div>
     </div>
@@ -267,6 +293,7 @@
     <div id="dateModal" class="modalBlackBack fullCenter notCloseOnClick dateModal" style="z-index: 9999;">
         <div class="modalBody" style="max-width: 850px; width: 95%; overflow: auto; max-height: 95%;">
             <div onclick="closeMyModalBP('dateModal')" class="iconClose closeModal"></div>
+            <input type="hidden" id="tourDateId">
             <input type="hidden" id="tourDateCode">
             <div class="options" style="padding-bottom: 10px;">
                 <div class="title"> ایجاد/ویرایش تاریخ برگزاری تور</div>
@@ -281,6 +308,7 @@
                         <i class="ui_icon calendar calendarIcon" ></i>
                     </div>
                     <input id="dateInModal" class="observer-example inputBoxInput" type="text" placeholder="انتخاب کنید..." onchange="changeModalDate(this.value, 'modal')">
+                    <input id="dateInModalWithoutCalendar" class="inputBoxInput hidden" type="text" style="opacity: .5;" readonly>
                 </div>
             </div>
 
@@ -372,12 +400,8 @@
         var stageTwoUrl = "{{url('businessManagement/'.$businessIdForUrl.'/tour/create/stage_2')}}";
         var findCityWithStateUrl = '{{route("BP.ajax.searchCity")}}';
         var findPlaceWithKindPlaceIdUrl = '{{route("search.place.with.name.kindPlaceId")}}';
-        var nowCitySearchResult = [];
-        var otherDates = [];
 
-        function editThisDate(_code){
 
-        }
     </script>
 
     <script defer src="{{URL::asset('BusinessPanelPublic/js/tour/create/cityTourism/cityTourism_stage_1.js?v='.$fileVersions)}}"></script>

@@ -7086,8 +7086,10 @@
   			return null;
   		}
 
-  		var img = this._createImg(src, oldIcon && oldIcon.tagName === 'IMG' ? oldIcon : null);
-  		this._setIconStyles(img, name);
+  		var img;
+
+        img = this._createImg(src, oldIcon && oldIcon.tagName === 'IMG' ? oldIcon : null);
+        this._setIconStyles(img, name);
 
   		return img;
   	},

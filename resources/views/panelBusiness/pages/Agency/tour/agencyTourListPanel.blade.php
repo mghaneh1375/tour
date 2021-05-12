@@ -3,81 +3,40 @@
 @section('head')
     <title>لیست تورها</title>
 
+    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/tour/commonTour.css')}}">
+
     <style>
-
-        .selectEditCardSection{
+        table{
+            font-size: 13px;
+        }
+        table thead th{
+            font-weight: normal;
+        }
+        .editButton{
+            color: black;
+            background: white;
+            font-size: 11px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
             align-items: center;
-        }
-        .selectEditCardSection .editCard{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 15px;
-            height: 170px;
-            width: 165px;
-            margin: 11px 10px;
-            text-align: center;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            color: white;
-            box-shadow: 1px 2px 3px 2px #00000073;
-        }
-        .selectEditCardSection .editCard.card1{
-            background: linear-gradient(45deg, #0014ff, #0014ff75);
-        }
-        .selectEditCardSection .editCard.card2{
-            background: linear-gradient(45deg, #ff00c8, #0014ff75);
-        }
-        .selectEditCardSection .editCard.card3{
-            background: linear-gradient(45deg, #ff0000, #ff00c88a);
-        }
-        .selectEditCardSection .editCard.card4{
-            background: linear-gradient(45deg, #ffb000, #ff0000d6);
-        }
-        .selectEditCardSection .editCard.card5{
-            background: linear-gradient(45deg, #00ff4e, #0049ff);
-        }
-        .selectEditCardSection .editCard .icon{
-            font-size: 3em;
-            transition: .3s;
-        }
-        .selectEditCardSection .editCard .name{
-
-        }
-        .selectEditCardSection .editCard .name .stage{
-            font-size: .6em;
-        }
-        .selectEditCardSection .editCard .name .text{
-            font-weight: bold;
-            font-size: .8em;
-            margin-top: 8px;
-        }
-
-        .selectEditCardSection .editCard:hover .icon{
-            transform: scale(1.1);
+            border-color: var(--koochita-blue);
         }
     </style>
 @endsection
 
 
 @section('body')
-    <div class="mainBackWhiteBody">
+    <div class="mainBackWhiteBody" style="height: 100%;">
         <div class="head">لیست تور ها</div>
         <div>
             <table class="table table-striped">
                 <thead style="background: var(--koochita-blue); color: white;">
                     <tr>
                         <th>#</th>
+                        <th>کد تور</th>
                         <th>عنوان</th>
-                        <th>مبدا</th>
-                        <th>مقصد</th>
-                        <th>روز / شب</th>
+                        <th>نوع تور</th>
                         <th>وضعیت</th>
+                        <th>تعداد تاریخ های تعریف شده</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -97,60 +56,11 @@
                         <div class="addPlaceGeneralInfoTitleTourCreation">قصد ویرایش کدام مرحله را دارید</div>
                         <button type="button" class="closee" data-dismiss="modal" style="border: none; background: none; float: left">&times;</button>
                     </div>
-                    <div class="selectEditCardSection">
-                        <div class="editCard card1" onclick="goToEditPage(1)">
-                            <div class="icon">
-                                <i class="fa-duotone fa-info"></i>
-                            </div>
-                            <div class="name">
-                                <div class="stage">قدم اول</div>
-                                <div class="text">اطلاعات اولیه</div>
-                            </div>
-                        </div>
-                        <div class="editCard card2" onclick="goToEditPage(2)">
-                            <div class="icon">
-                                <i class="fa-duotone fa-calendar-pen"></i>
-                            </div>
-                            <div class="name">
-                                <div class="stage">قدم دوم</div>
-                                <div class="text">برنامه سفر</div>
-                            </div>
-                        </div>
-                        <div class="editCard card3" onclick="goToEditPage(3)">
-                            <div class="icon">
-                                <i class="fa-duotone fa-plane-tail"></i>
-                            </div>
-                            <div class="name">
-                                <div class="stage">قدم سوم</div>
-                                <div class="text">اطلاعات برگزاری</div>
-                            </div>
-                        </div>
-                        <div class="editCard card4" onclick="goToEditPage(4)">
-                            <div class="icon">
-                                <i class="fa-duotone fa-sack-dollar"></i>
-                            </div>
-                            <div class="name">
-                                <div class="stage">قدم چهارم</div>
-                                <div class="text">اطلاعات مالی</div>
-                            </div>
-                        </div>
-                        <div class="editCard card5" onclick="goToEditPage(5)">
-                            <div class="icon">
-                                <i class="fa-duotone fa-clipboard-list-check"></i>
-                            </div>
-                            <div class="name">
-                                <div class="stage">قدم پنجم</div>
-                                <div class="text">اطلاعات اضافی</div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="editModalSelectBody" class="selectEditCardSection"></div>
                 </div>
-
-                <!-- Modal footer -->
                 <div class="modal-footer fullyCenterContent">
                     <button class="btn " data-dismiss="modal">بستن</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -158,113 +68,40 @@
 
 @section('script')
     <script>
-        var tours = [];
-        var openEditIndex = null;
-        var deleteTourIndex = null;
         var getFullDataUrl = '{{url("businessManagement/{$businessIdForUrl}/tour/getFullyData")}}';
+        var getListUrl = '{{route("businessManagement.tour.getLists", ['business' => $businessIdForUrl])}}';
+        var editTourUrl = '{{url("businessManagement/{$businessIdForUrl}/tour/create")}}';
+        var deleteTourUrl = '{{route("businessManagement.tour.delete")}}';
 
-        function getTourList(){
-            openLoading();
-            $.ajax({
-                type: 'GET',
-                url: '{{route("businessManagement.tour.getLists", ['business' => $businessIdForUrl])}}',
-                complete: closeLoading,
-                success: response => {
-                    if(response.status == 'ok'){
-                        tours = response.result;
-                        createTourList();
-                    }
-                    else
-                        showSuccessNotifiBP('Server Error', 'left', 'red');
-                },
-                error: err => {
-                    showSuccessNotifiBP('Connection Error', 'left', 'red');
-                }
-            })
-        }
+        var cityTourismEdit = [
+            {
+                stage: 1,
+                topTitle: 'مرحله اول',
+                title: 'اطلاعات اصلی',
+                icon: '<i class="fa-duotone fa-info"></i>',
+            },
+            {
+                stage: 2,
+                topTitle: 'مرحله دوم',
+                title: 'اطلاعات برگزاری',
+                icon: '<i class="fa-duotone fa-info"></i>',
+            },
+            {
+                stage: 3,
+                topTitle: 'مرحله سوم',
+                title: 'برنامه سفر',
+                icon: '<i class="fa-duotone fa-calendar-pen"></i>',
+            },
+            {
+                stage: 4,
+                topTitle: 'مرحله چهارم',
+                title: 'اطلاعات تکمیلی',
+                icon: '<i class="fa-duotone fa-clipboard-list-check"></i>',
+            },
+        ]
 
-        function createTourList(){
-            var html = '';
-            tours.map((item, index) => {
-                html += `<tr>
-                            <td>${index+1}</td>
-                            <td>
-                                ${item.name}
-                                ${item.isLocal == 1 ? '(شهرگردی)' : ''}
-                            </td>
-                            <td>${item.srcName}</td>
-                            <td>${item.destName}</td>
-                            <td>${item.day} روز / ${item.night} شب</td>
-                            <td>${item.status}</td>
-                            <td>
-                                <a href="${getFullDataUrl}/${item.id}" class="circleButton yellowBut" title="اطلاعات کامل تور">
-                                    <i class="fa-regular fa-info"></i>
-                                </a>
-                                <button class="circleButton editBut" title="ویرایش" onclick="editTour(${index})">
-                                    <i class="fa-light fa-pen-to-square"></i>
-                                </button>
-                                <button class="circleButton deleteBut" title="حذف" onclick="deleteTour(${index})">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </td>
-                        </tr>`
-            });
-
-            document.getElementById('toursListTBody').innerHTML = html;
-        }
-
-        function editTour(_index){
-            openEditIndex = _index;
-            $('#editTourModal').modal('show');
-        }
-
-        function goToEditPage(_stage){
-            openLoading(false, () => location.href = `{{url("businessManagement/{$businessIdForUrl}/tour/create")}}/stage_${_stage}/${tours[openEditIndex].id}`)
-        }
-
-        function deleteTour(_index){
-            deleteTourIndex = _index;
-            openWarningBP('ایا از حذف تور اطمینان دارید؟ در صورت حذف امکان بازگشت تور وجود ندارد', doDeleteTour, 'بله، پاک شود');
-        }
-
-        function doDeleteTour(){
-            openLoading(false, () => {
-                $.ajax({
-                    type: 'DELETE',
-                    url: '{{route("businessManagement.tour.delete")}}',
-                    data: {
-                        _token: csrfTokenGlobal,
-                        tourId: tours[deleteTourIndex].id
-                    },
-                    success: response => {
-                        if(response.status == 'ok')
-                            getTourList();
-                        else if(response.status == 'registered'){
-                            closeLoading();
-                            openErrorAlertBP('برای تور شما افرادی ثبت نام کرده اند و شما نمی توانید تور خود را حذف کنید.');
-                        }
-                        else if(response.status == 'notAccess'){
-                            closeLoading();
-                            openErrorAlertBP('شما دسترسی لازم برای حذف تور را ندارید.');
-                        }
-                        else{
-                            closeLoading();
-                            console.error(response.status);
-                            showSuccessNotifiBP('Server Error', 'left', 'red')
-                        }
-                    },
-                    error: err => {
-                        closeLoading();
-                        console.error(err);
-                        showSuccessNotifiBP('Connection error', 'left', 'red')
-                    }
-                })
-            })
-        }
-
-        $(window).ready(() => {
-           getTourList();
-        });
     </script>
+
+    <script src="{{URL::asset('BusinessPanelPublic/js/tour/tourList.js?v='.$fileVersions)}}"></script>
 @endsection
 

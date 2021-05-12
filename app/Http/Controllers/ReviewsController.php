@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DefaultDataDB;
 use App\models\Activity;
 use App\models\Adab;
 use App\models\Alert;
@@ -48,13 +49,13 @@ class ReviewsController extends Controller
 
     public function showReviewPage($id)
     {
-        $activity = Activity::where('name', 'نظر')->first();
+        $activity = DefaultDataDB::getActivityWithName('نظر');
         $review = LogModel::where('id', $id)->where('activityId', $activity->id)->first();
         if($review == null)
             return redirect()->back();
 
 
-        $kindPlace = Place::find($review->kindPlaceId);
+        $kindPlace = DefaultDataDB::getSinglePlace($review->kindPlaceId);
         $place = createSuggestionPack($review->kindPlaceId, $review->placeId);
         $reviewId = $review->id;
 
@@ -249,7 +250,7 @@ class ReviewsController extends Controller
 
     public function storeReview(Request $request)
     {
-        $activity = Activity::where('name', 'نظر')->first();
+        $activity = DefaultDataDB::getActivityWithName('نظر');
 
         if (isset($request->code)) {
 
@@ -259,7 +260,7 @@ class ReviewsController extends Controller
                 $kindPlaceId = $request->kindPlaceId;
                 $placeId = $request->placeId;
 
-                $kindPlace = Place::find($kindPlaceId);
+                $kindPlace = DefaultDataDB::getSinglePlace($kindPlaceId);
                 $place = DB::table($kindPlace->tableName)->find($placeId);
 
                 $location = $this->assetLocation."/userPhoto/{$kindPlace->fileName}";
@@ -428,8 +429,8 @@ class ReviewsController extends Controller
     public function getReviews(Request $request)
     {
         if (isset($request->placeId) && isset($request->kindPlaceId)) {
-            $activity = Activity::where('name', 'نظر')->first();
-            $a = Activity::where('name', 'پاسخ')->first();
+            $activity = DefaultDataDB::getActivityWithName('نظر');
+            $a = DefaultDataDB::getActivityWithName('پاسخ');
 
             $isFilter = false;
             $isPicFilter = false;
@@ -578,7 +579,7 @@ class ReviewsController extends Controller
             if (isset($request->text) && isset($request->logId)) {
                 if (strlen($request->text) > 2) {
                     $u = Auth::user();
-                    $a = Activity::where('name', 'پاسخ')->first();
+                    $a = DefaultDataDB::getActivityWithName('پاسخ');
                     $mainLog = LogModel::find($request->logId);
                     if ($mainLog != null) {
                         $newLog = New LogModel();
@@ -646,7 +647,7 @@ class ReviewsController extends Controller
     public function getUserReviews()
     {
         $username = $_GET['username'];
-        $reviewAct = Activity::where('name', 'نظر')->first();
+        $reviewAct = DefaultDataDB::getActivityWithName('نظر');
         if(\auth()->check() && ( $username == \auth()->user()->username) ){
             $user = \auth()->user();
             $reviews = LogModel::where('activityId', $reviewAct->id)->where('visitorId', $user->id)->orderByDesc('created_at')->get();
@@ -739,7 +740,7 @@ class ReviewsController extends Controller
     }
 
     private function getCityReviews($kind, $id, $take, $notIn=[]){
-        $reviewActivity = Activity::where('name', 'نظر')->first();
+        $reviewActivity = DefaultDataDB::getActivityWithName('نظر');
         $ids = [];
         $sqlQuery = '(';
 
@@ -905,7 +906,7 @@ class ReviewsController extends Controller
                     $placeId = 0;
                     $kindPlaceTableName = null;
                     if($review->kindPlaceId != 0 && $review->placeId != 0) {
-                        $kindPlace = Place::find($review->kindPlaceId);
+                        $kindPlace = DefaultDataDB::getSinglePlace($review->kindPlaceId);
                         $kindPlaceTableName = $kindPlace->tableName;
                         $placeId = $review->placeId;
                     }
@@ -1011,7 +1012,7 @@ class ReviewsController extends Controller
 
         $reviewIds = [0];
 
-        $reviewAct = Activity::where('name', 'نظر')->first();
+        $reviewAct = DefaultDataDB::getActivityWithName('نظر');
 
         if($kind === 'all'){
             $reviewIds = LogModel::youCanSeeReview($reviewAct->id)

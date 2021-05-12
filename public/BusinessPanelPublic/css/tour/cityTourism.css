@@ -149,6 +149,9 @@
     border-radius: 20px;
     cursor: pointer;
 }
+.chooseButSection .chooseBut input[type="radio"]{
+    display: none;
+}
 .chooseButSection .chooseBut.selected{
     background: var(--koochita-yellow);
 }
@@ -166,3 +169,262 @@
     display: flex;
     align-items: center;
 }
+
+
+.plane_section {
+    height: 100%;
+}
+.plane_section .whiteBox{
+    height: calc(100% - 125px);
+}
+.plane_section .planSection{
+    height: 100%;
+    overflow: hidden;
+}
+.plane_section .planSection .planStepSection{
+    padding: 10px;
+    width: 100%;
+    border-left: solid 1px lightgray;
+    height: 100%;
+    overflow: auto;
+}
+.plane_section .planSection .mapSection{
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    background: gray;
+}
+.plane_section .placeOnMapIcon{
+    z-index: -1 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    border-radius: 50%;
+    border: solid 2px red;
+    position: relative;
+}
+
+.myIconOnMap{
+    position: relative;
+    width: 35px !important;
+    height: 35px !important;
+    margin-top: -37px !important;
+    margin-left: -17px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.myIconOnMap .imgInIcon{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: solid 2px blue;
+    z-index: 1;
+}
+.myIconOnMap .imgInIcon > img{
+    height: 100%;
+}
+.myIconOnMap .topOnPic{
+    position: absolute;
+    z-index: 2;
+    bottom: 105%;
+    transition: .3s;
+    white-space: nowrap;
+}
+
+.seenPlaceType, .mealType, .specialType{
+    font-size: 14px;
+    background: red;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    border: solid 2px black;
+    padding: 0px 5px;
+}
+.mealType{
+    background: var(--koochita-blue);
+}
+.specialType{
+    background: var(--koochita-green);
+}
+
+.myIconOnMap:after{
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    background: blue;
+    transform: rotate(45deg);
+}
+
+.plane_section .planSection .emptyPlan{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 27px;
+    opacity: .2;
+    padding: 0px 40px;
+}
+.plane_section .planSection .planStepSection .addNewEventBox{
+    text-align: center;
+    border: solid 1px;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 20px 0px;
+    font-size: 30px;
+    background: #4dc7bc73;
+    box-shadow: 2px 2px 3px 2px #929292;
+}
+.plane_section .planSection .planStepSection .addNewEventBox .text{
+
+}
+.plane_section .planSection .planStepSection .addNewEventBox .plusChar{
+    font-size: 50px;
+    line-height: 30px;
+    margin-top: 10px;
+}
+
+.plane_section .planSection .planStepSection .placeBoxesSection{
+    margin-top: 20px;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px lightgray;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .moveSec{
+    margin-left: 10px;
+    cursor: move;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .imgSection{
+    width: 150px;
+    margin-left: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection{
+    width: 100%;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .name{
+    display: flex;
+    align-items: center;
+}
+.seenPlaceTypeRow, .mealTypeRow, .specialTypeRow{
+    background: white;
+    border: dashed 1px black;
+    border-radius: 0px;
+    font-size: 10px;
+    padding: 0px 5px;
+}
+.seenPlaceTypeRow{
+    color: red;
+}
+.mealTypeRow{
+    color: var(--koochita-blue);
+}
+.specialTypeRow{
+    color: var(--koochita-green);
+}
+
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .time{
+    font-size: 10px;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .ratesAndReview{
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .ratesAndReview .rate{
+
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .ratesAndReview .review{
+    color: gray;
+    margin-right: 10px;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .buttonsGroup{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: auto;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .buttonsGroup button{
+    font-size: 11px;
+    padding: 2px 5px;
+    margin: 5px 0px;
+}
+.plane_section .planSection .planStepSection .placeBoxesSection .placeCard .infoSection .description{
+    color: gray;
+    font-size: 11px;
+}
+
+
+.moveManIcon{
+    width: 35px;
+}
+.leaflet-div-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+}
+
+.ligthBRT{
+    border-top: solid 1px lightgray;
+}
+
+.chooseButSection{
+    margin-top: 5px;
+}
+.chooseButSection .chooseBut.disabled{
+    opacity: .3;
+}
+.eventModal .eventInputSection{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: solid 1px;
+}
+.eventModal .eventSectionPartSec{
+    border-top: solid 1px;
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+.eventModal .eventSectionPartSec .title{
+    margin-left: 10px;
+}
+
+.mapForSpecialEvent{
+    width: 100%;
+    height: 500px;
+    max-height: 80vh;
+    background: lightgrey;
+}
+.isSetMapMarker{
+    margin-right: 20px;
+    font-size: 10px;
+}
+.isSetMapMarker.false{
+    color: red;
+}
+.isSetMapMarker.true{
+    color: green;
+}
+

@@ -34,6 +34,7 @@ class AgencyBusinessPanelController extends Controller
     }
 
     public function getTourList($business){
+        $sendData = [];
         $urlParse = parse_url(\Illuminate\Support\Facades\Request::url());
         $hostName = explode('.', $urlParse['host']);
         $port = isset($urlParse['port']) ? ":{$urlParse['port']}" : '';
@@ -43,29 +44,68 @@ class AgencyBusinessPanelController extends Controller
                     ->where('tour.businessId', $business)
                     ->select([
                         'cities.name AS srcName',
-                        'tour.name', 'tour.id', 'tour.code', 'tour.srcId', 'tour.destId',
-                        'tour.kindDest', 'tour.isLocal', 'tour.day', 'tour.night',
-                        'tour.private', 'tour.isPublished', 'tour.confirm'
+                        'tour.name', 'tour.id', 'tour.code', 'tour.codeNumber',
+                        'tour.type', 'tour.remainingStage', 'tour.srcId', 'tour.destId',
+                        'tour.kindDest', 'tour.isPublished', 'tour.confirm'
                     ])
                     ->orderBy('tour.id', 'desc')
                     ->get();
 
         foreach($tours as $item){
-            if($item->isPublished == 0)
-                $item->status = 'پیش نویس';
-            else if($item->confirm == 0)
-                $item->status = 'در حال بررسی';
-            else if($item->confirm == 1)
-                $item->status = 'انتشار';
+            if($item->remainingStage != null){
+                $item->status = 'اطلاعات ناقص';
+                $item->statusCode = 0;
+            }
+            else {
+                if ($item->isPublished == 0){
+                    $item->status = 'پیش نویس';
+                    $item->statusCode = 1;
+                }
+                else {
+                    if ($item->confirm == 0){
+                        $item->status = 'در حال بررسی';
+                        $item->statusCode = 2;
+                    }
+                    else if ($item->confirm == 1){
+                        $item->status = 'انتشار';
+                        $item->statusCode = 3;
+                    }
+                }
+            }
 
-            $destination = $item->kindDest == 'city' ? 'cities' : 'majara';
-            $destination = \DB::table($destination)->find($item->destId);
-            $item->destName = $destination != null ? $destination->name : '';
+            if($item->confirm == 0)
+                $item->statusCode = -1;
+
+            if($item->type === 'cityTourism') {
+                $item->typeName = "شهر گردی ({$item->srcName})";
+            }
+            else{
+                $item->typeName = null;
+
+                $destination = $item->kindDest == 'city' ? 'cities' : 'majara';
+                $destination = \DB::table($destination)->find($item->destId);
+                $destName = $destination != null ? $destination->name : '';
+            }
+
+            $item->timeCount = TourTimes::where('tourId', $item->id)->count();
 
             $item->url = "{$baseUrl}/tour/show/{$item->code}";
+
+            array_push($sendData, [
+                'id' => $item->id,
+                'code' => $item->codeNumber,
+                'type' => $item->type,
+                'typeName' => $item->typeName,
+                'name' => $item->name,
+                'status' => $item->status,
+                'statusCode' => $item->statusCode,
+                'timeCount' => $item->timeCount,
+                'url' => $item->url,
+                'remainingStage' => json_decode($item->remainingStage)
+            ]);
         }
 
-        return response()->json(['status' => 'ok', 'result' => $tours]);
+        return response()->json(['status' => 'ok', 'result' => $sendData]);
     }
 
     public function deleteAllTours(){

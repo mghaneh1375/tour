@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PanelBusiness\Agency;
 
+use App\Helpers\DefaultDataDB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PanelBusiness\Agency\Tour\cityTourismCreationController;
 use App\Http\Controllers\PanelBusiness\Agency\Tour\MultiDayTourCreationController;
@@ -18,14 +19,17 @@ use App\models\tour\TourKind_Tour;
 use App\models\tour\TourPeriod;
 use App\models\tour\TourPic;
 use App\models\tour\TourPrices;
+use App\models\tour\TourPurchased;
 use App\models\tour\TourStyle_Tour;
 use App\models\tour\TourTimes;
+use App\models\tour\TourUserReservation;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
 use App\models\users\UserInfoNeeded;
 use App\User;
 use ClassesWithParents\CInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class TourCreationAgencyController extends Controller{
@@ -111,8 +115,10 @@ class TourCreationAgencyController extends Controller{
                 $createClass = new MultiDayTourCreationController();
 
             $result = $createClass->storeStep_2($request, $tour);
-            if($result === 'ok')
+            if($result === 'ok'){
+                $tour->updateRemainingStage('2');
                 return response()->json(['status' => 'ok']);
+            }
             else
                 return response()->json(['status' => 'error']);
         }
@@ -127,6 +133,10 @@ class TourCreationAgencyController extends Controller{
         if($tour != null){
             if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
+
+            $checkAccessToThisStage = $tour->checkAccessToThisStage('3');
+            if($checkAccessToThisStage !== true)
+                return redirect($checkAccessToThisStage);
 
             if($tour->type === 'cityTourism')
                 $class = new cityTourismCreationController();
@@ -149,8 +159,10 @@ class TourCreationAgencyController extends Controller{
                 $createClass = new MultiDayTourCreationController();
 
             $result = $createClass->storeStep_3($request, $tour);
-            if($result === 'ok')
+            if($result === 'ok'){
+                $tour->updateRemainingStage('3');
                 return response()->json(['status' => 'ok']);
+            }
             else
                 return response()->json(['status' => 'error']);
         }
@@ -165,6 +177,10 @@ class TourCreationAgencyController extends Controller{
             if($tour != null){
                 if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
                     return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
+
+                $checkAccessToThisStage = $tour->checkAccessToThisStage('4');
+                if($checkAccessToThisStage !== true)
+                    return redirect($checkAccessToThisStage);
 
                 if($tour->type === 'cityTourism')
                     $class = new cityTourismCreationController();
@@ -189,8 +205,10 @@ class TourCreationAgencyController extends Controller{
 
             $result = $createClass->storeStep_4($request, $tour);
 
-            if($result === 'ok')
+            if($result === 'ok'){
+                $tour->updateRemainingStage('4');
                 return response()->json(['status' => 'ok']);
+            }
             else
                 return response()->json(['status' => 'error']);
         }
@@ -205,6 +223,10 @@ class TourCreationAgencyController extends Controller{
         if($tour->userId == auth()->user()->id){
             if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
+
+            $checkAccessToThisStage = $tour->checkAccessToThisStage('5');
+            if($checkAccessToThisStage !== true)
+                return redirect($checkAccessToThisStage);
 
             if($tour->type === 'cityTourism')
                 $class = new cityTourismCreationController();
@@ -227,8 +249,10 @@ class TourCreationAgencyController extends Controller{
                 $class = new MultiDayTourCreationController();
 
             $result = $class->storeStep_5($request, $tour);
-            if($result === 'ok')
+            if($result === 'ok'){
+                $tour->updateRemainingStage('5');
                 return response()->json(['status' => 'ok']);
+            }
             else
                 return response()->json(['status' => 'error']);
 
@@ -244,6 +268,10 @@ class TourCreationAgencyController extends Controller{
         if($tour->userId == auth()->user()->id){
             if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
+
+            $checkAccessToThisStage = $tour->checkAccessToThisStage('6');
+            if($checkAccessToThisStage !== true)
+                return redirect($checkAccessToThisStage);
 
             $view = "{$this->defaultViewLocation}.tour.create.createTour_stage_6";
             return view($view, compact(['tour']));
@@ -499,17 +527,61 @@ class TourCreationAgencyController extends Controller{
         $tour = Tour::find($request->tourId);
         if($tour != null){
             if($tour->userId == \auth()->user()->id){
-                $response = $tour->fullyDeleted();
+                $tourTimeCheck = TourTimes::where('tourId', $tour->id)->where('registered', '>', 0)->count();
+
+                $tourTimes = TourTimes::where('tourId', $tour->id)->pluck('id')->toArray();
+                $tourReservation = TourUserReservation::whereIn('tourTimeId', $tourTimes)->count();
+                $tourPruchCkeck = TourPurchased::whereIn('tourTimeId', $tourTimes)->count();
+
+                if($tourTimeCheck != 0 || $tourReservation != 0 || $tourPruchCkeck != 0)
+                    return response()->json(['status' => 'registered']);
+
+
+                if($tour->type === 'cityTourism')
+                    $class = new cityTourismCreationController();
+                else
+                    $class = new MultiDayTourCreationController();
+
+                $response = $class->deleteTour($tour);
+
                 if($response['status'] == 'ok')
                     return response()->json(['status' => 'ok']);
-                else if($response['status'] == 'hasRegistered')
-                    return response()->json(['status' => 'registered']);
             }
             else
                 return response()->json(['status' => 'notAccess']);
         }
         else
             return response()->json(['status' => 'notFound']);
+    }
+
+    public function getPlaceInfoForPlan(){
+        $placeId = isset($_GET['placeId']) ? $_GET['placeId'] : 0;
+        $kindPlaceId = isset($_GET['kindPlaceId']) ? $_GET['kindPlaceId'] : 0;
+
+        $allKindPlaces = DefaultDataDB::getPlaceDB();
+
+        if(!isset($allKindPlaces[$kindPlaceId]))
+            return response()->json(['status' => 'error', 'result' => 'not found kindPlace']);
+
+        $kindPlace = $allKindPlaces[$kindPlaceId];
+
+        $place = DB::table($kindPlace->tableName)->find($placeId);
+
+        if($place == null)
+            return response()->json(['status' => 'error', 'result' => 'not found place']);
+
+        $sendData = [
+            'id' => $place->id,
+            'name' => $place->name,
+            'lat' => $place->C,
+            'lng' => $place->D,
+            'rate' => $place->fullRate,
+            'reviewCount' => $place->reviewCount,
+            'description' => $place->meta,
+            'pics' => getPlacePic($place->id, $kindPlaceId, ['f', 'l']),
+        ];
+
+        return response()->json(['status' => 'ok', 'result' => $sendData]);
     }
 }
 

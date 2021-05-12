@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CommentBroadCast;
+use App\Helpers\DefaultDataDB;
 use App\models\ActivationCode;
 use App\models\Activity;
 use App\models\Adab;
@@ -861,9 +862,9 @@ class HomeController extends Controller
                     }
                     else if($item->subject == 'ansAns'){
                         $uRef = User::find($reference->visitorId);
-                        $reviewActivity = Activity::where('name', 'نظر')->first();
-                        $ansActivity = Activity::where('name', 'پاسخ')->first();
-                        $quesActivity = Activity::where('name', 'سوال')->first();
+                        $reviewActivity = DefaultDataDB::getActivityWithName('نظر');
+                        $ansActivity = DefaultDataDB::getActivityWithName('پاسخ');
+                        $quesActivity = DefaultDataDB::getActivityWithName('سوال');
                         $releatedLog = LogModel::find($reference->relatedTo);
 
                         if($releatedLog->activityId == $reviewActivity->id)
@@ -919,7 +920,7 @@ class HomeController extends Controller
                         if($referenceLog->kindPlaceId != 0 && $referenceLog->placeId != 0) {
                             $kindPlaceId = $referenceLog->kindPlaceId;
                             $placeId = $referenceLog->placeId;
-                            $kindPlace = Place::find($kindPlaceId);
+                            $kindPlace = DefaultDataDB::getSinglePlace($referenceLog->kindPlaceId);
                             $place = \DB::table($kindPlace->tableName)->find($placeId);
                             $placeUrl = createUrl($kindPlaceId, $placeId, 0, 0, 0);
                             $setPlace = true;
@@ -936,9 +937,9 @@ class HomeController extends Controller
                         }
                         else if ($item->subject == 'likeAns' || $item->subject == 'dislikeAns') {
                             $uRef = User::find($reference->userId);
-                            $reviewActivity = Activity::where('name', 'نظر')->first();
-                            $ansActivity = Activity::where('name', 'پاسخ')->first();
-                            $quesActivity = Activity::where('name', 'سوال')->first();
+                            $reviewActivity = DefaultDataDB::getActivityWithName('نظر');
+                            $ansActivity = DefaultDataDB::getActivityWithName('پاسخ');
+                            $quesActivity = DefaultDataDB::getActivityWithName('سوال');
                             $releatedLog = LogModel::find($reference->logId);
 
                             if ($releatedLog->activityId == $reviewActivity->id)

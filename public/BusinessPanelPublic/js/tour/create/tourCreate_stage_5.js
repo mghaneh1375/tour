@@ -333,7 +333,7 @@ function deleteThisPic(_id) {
 
 function deletedUploadedPic(_fileName){
     $.ajax({
-        type: 'POST',
+        type: 'DELETE',
         url: deleteTourPicUrl,
         data: {
             _token: csrfTokenGlobal,
