@@ -767,7 +767,7 @@ async function getPlaceInfoForPlan(_id, _kindPlaceId, _callBack){
 
     await $.ajax({
         type: 'GET',
-        url: `{{route("tour.getPlaceInfoForPlan")}}?placeId=${_id}&kindPlaceId=${_kindPlaceId}`,
+        url: `${getPlaceInfoForPlanUrl}?placeId=${_id}&kindPlaceId=${_kindPlaceId}`,
         success: response => {
             if(response.status === 'ok')
                 place = response.result;

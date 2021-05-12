@@ -1,5 +1,5 @@
 <div id="koochitaUserSearchModal" class="modalBlackBack fullCenter followerModal" style="z-index: 10000;">
-    <div class="modalBody" style="width: 400px; border-radius: 10px;">
+    <div class="modalBody" style="width: 400px; border-radius: 10px; display: flex; flex-direction: column;">
         <div>
             <div onclick="closeMyModalBP('koochitaUserSearchModal')" class="iconClose closeModal"></div>
             <div id="koochitaUserSearchModalTitle" style="color: var(--koochita-light-green); font-size: 25px; font-weight: bold;"></div>

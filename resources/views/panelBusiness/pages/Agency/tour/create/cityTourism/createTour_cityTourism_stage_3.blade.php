@@ -289,6 +289,8 @@
         var nextStageUrl = "{{route('businessManagement.tour.create.stage_4', ['business' => $businessIdForUrl ,'tourId' => $tour->id])}}";
         var stageStoreUrl = "{{route('businessManagement.tour.store.stage_3')}}";
         var searchPlaceWithNameKinPlaceIdUrl = '{{route("BP.ajax.searchInPlace")}}';
+        var getPlaceInfoForPlanUrl = '{{route("tour.getPlaceInfoForPlan")}}';
+
         var moveIconGif = '{{URL::asset("images/tour/bicycle.gif")}}';
     </script>
     <script src="{{URL::asset('BusinessPanelPublic/js/tour/create/cityTourism/cityTourism_stage_3.js')}}"></script>
