@@ -2,10 +2,10 @@
 <link rel="stylesheet" href="{{URL::asset('css/pages/tours/tourShowPlan.css')}}">
 
 <div class="row planSection">
-    <div class="col-md-6 maxHeight90Vh">
+    <div class="col-md-6 maxHeight80Vh">
         <div id="planMapDiv" class="mapSection"></div>
     </div>
-    <div class="col-md-6 maxHeight90Vh" style="overflow: auto; padding-right: 0;">
+    <div class="col-md-6 maxHeight80Vh" style="overflow: auto; padding-right: 0;">
         <div id="eventBoxSection" class="placeBoxesSection"></div>
     </div>
 </div>

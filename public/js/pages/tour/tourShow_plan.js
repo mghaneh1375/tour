@@ -15,8 +15,12 @@ var typesTitles = {
         name: 'برنامه ویژه ',
         class: 'placeCardSpecial',
     },
-    start : 'شروع',
-    end : 'پایان'
+    start : {
+        name: 'شروع'
+    },
+    end : {
+        name: 'پایان'
+    }
 };
 
 function initPlanMap()  {
@@ -60,7 +64,7 @@ function createPlanBox(){
 
         events[index].number = numbers[item.type];
 
-        html += `<div data-index="${index}" class="placeCard">
+        html += `<div data-index="${index}" class="placeCard ${typeClass}">
                         <span class="number">
                             ${index+1}
                             <span class="dash"></span>
@@ -71,7 +75,7 @@ function createPlanBox(){
                         <div class="infoSection">
                             <a href="${item.url}" ${item.url != '#' ? `target="_blank"` : ''} class="name lessShowText">
                                 <span style="margin-left: 10px;">${item.title}</span>
-                                <span class="${typeClass}">${typeTitle}</span>
+                                <span class="kindType">${typeTitle}</span>
                             </a>
                             <div class="time">${item.sTime} ${item.eTime != '' ? `تا ${item.eTime}` : ''}</div>
                             ${item.placeRate == null ? '' :
