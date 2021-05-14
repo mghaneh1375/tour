@@ -39,7 +39,7 @@ function initPlanMap()  {
         [
             {
                 header: "x-api-key",
-                // value: window.mappIrToken
+                value: window.mappIrToken
             }
         ]
     ).addTo(planMap);
@@ -169,8 +169,8 @@ function createPathBetween(){
         let line = [[places[i].lat, places[i].lng], [places[i+1].lat, places[i+1].lng]];
         let path = L.polyline(line, {
             weight: 2,
-            color: 'blue',
-            // dashArray: '10'
+            color: 'black',
+            dashArray: '5'
         });
 
         path.addTo(planMap);
