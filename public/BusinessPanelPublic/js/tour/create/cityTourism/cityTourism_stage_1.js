@@ -517,16 +517,27 @@ function submitDateModal(){
             groupDiscount.push({ id: disId, minCount, maxCount, discount, status});
     });
 
+    let mainDate = null;
+    if(document.getElementById('tourId').value === '0')
+        mainDate = document.getElementById('mainDate').value;
+
+
     if(date.trim().length === 0)
         errorText += `<li>تاریخ را مشخص کنید</li>`;
-    for(let i = 0; i < allDatesInformations.length; i++){
-        if(allDatesInformations[i].code != code && allDatesInformations[i].delete != 1){
-            if(allDatesInformations[i].date === date){
-                errorText += `<li>تاریخ تکراری می باشد.</li>`;
-                break;
+
+    if(date === mainDate)
+        errorText += `<li>تاریخ تکراری می باشد.</li>`;
+    else {
+        for (let i = 0; i < allDatesInformations.length; i++) {
+            if (allDatesInformations[i].code != code && allDatesInformations[i].delete != 1) {
+                if (allDatesInformations[i].date === date) {
+                    errorText += `<li>تاریخ تکراری می باشد.</li>`;
+                    break;
+                }
             }
         }
     }
+
     if(!(cost > 0))
         errorText += `<li>قیمت تور را  مشخص کنید.</li>`;
     if(!(minCapacity > 0))
@@ -565,6 +576,7 @@ function submitDateModal(){
         cleanDateModalDate();
     }
 }
+
 
 function createDateTableRows(){
     let html = '';

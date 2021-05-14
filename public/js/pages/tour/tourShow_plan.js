@@ -1,7 +1,23 @@
 var planMap;
 var events = [];
 var numbers = [];
-var typesTitles = {'place' : 'بازدید ', 'meal' : 'وعده غذایی ', 'special' : 'برنامه ویژه ', 'start' : 'شروع ', 'end' : 'پایان '};
+var typesTitles = {
+    place : {
+        name: 'بازدید ',
+        hover: '#4dc7bc59',
+        class: 'placeCardPlace',
+    },
+    meal : {
+        name: 'وعده غذایی ',
+        class: 'placeCardMeals'
+    },
+    special : {
+        name: 'برنامه ویژه ',
+        class: 'placeCardSpecial',
+    },
+    start : 'شروع',
+    end : 'پایان'
+};
 
 function initPlanMap()  {
     planMap = L.map("planMapDiv", {
@@ -23,7 +39,7 @@ function initPlanMap()  {
         [
             {
                 header: "x-api-key",
-                value: window.mappIrToken
+                // value: window.mappIrToken
             }
         ]
     ).addTo(planMap);
@@ -36,7 +52,7 @@ function createPlanBox(){
     let html = '';
     events.forEach((item, index) => {
         numbers[item.type]++;
-        let typeTitle = `${typesTitles[item.type]}`;
+        let typeTitle = `${typesTitles[item.type].name}`;
         if(item.type != 'start' && item.type != 'end')
             typeTitle += ` ${numbers[item.type]}`;
 
@@ -45,6 +61,10 @@ function createPlanBox(){
         events[index].number = numbers[item.type];
 
         html += `<div data-index="${index}" class="placeCard">
+                        <span class="number">
+                            ${index+1}
+                            <span class="dash"></span>
+                        </span>
                         <a href="${item.url}" ${item.url != '#' ? `target="_blank"` : ''} class="imgSection">
                             <img src="${item.picture}" class="resizeImgClass" onload="fitThisImg(this)">
                         </a>
@@ -55,7 +75,7 @@ function createPlanBox(){
                             </a>
                             <div class="time">${item.sTime} ${item.eTime != '' ? `تا ${item.eTime}` : ''}</div>
                             ${item.placeRate == null ? '' :
-            `<div class="ratesAndReview">
+                                    `<div class="ratesAndReview">
                                         <div class="rate ui_bubble_rating bubble_${item.placeRate}0"></div>
                                         <div class="review">${item.placeReviewCount} نقد</div>
                                     </div>`
@@ -115,7 +135,7 @@ function createMarkers(){
 }
 
 function createMapMarker(_place){
-    let typeName = typesTitles[_place.type];
+    let typeName = typesTitles[_place.type].name;
     let typeClass = _place.type === 'place' ? 'seenPlaceType' : (_place.type === 'meal' ? 'mealType' : 'specialType');
     let name = _place.type === 'special' ? `برنامه ویژه ${_place.number}` : _place.title;
 
@@ -129,7 +149,7 @@ function createMapMarker(_place){
     return L.marker([_place.lat, _place.lng], {
         title: name,
         icon: L.divIcon({
-            className: `myIconOnMap mapMarker_${_place.eventIndex}`,
+            className: `myIconOnMap ${typeClass} mapMarker_${_place.eventIndex}`,
             html: iconHtml
         })
     });
@@ -180,11 +200,16 @@ function createPathBetween(){
     }
 
     if(moveIconPolyLines.length > 0) {
-        moveIconTime = moveIconPolyLines.length * 4000;
+        moveIconTime = moveIconPolyLines.length * 3500;
         moveMarker = L.motion.seq(moveIconPolyLines).addTo(planMap);
-        moveMarker.motionStart();
-        setInterval(() => moveMarker.motionStart(), moveIconTime);
+        reloadMoveMarker();
     }
+}
+
+function reloadMoveMarker(){
+    moveMarker.motionStop();
+    moveMarker.motionStart();
+    setTimeout(reloadMoveMarker, moveIconTime);
 }
 
 function createTourPlaces(_events){

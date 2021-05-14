@@ -400,8 +400,6 @@
         var stageTwoUrl = "{{url('businessManagement/'.$businessIdForUrl.'/tour/create/stage_2')}}";
         var findCityWithStateUrl = '{{route("BP.ajax.searchCity")}}';
         var findPlaceWithKindPlaceIdUrl = '{{route("search.place.with.name.kindPlaceId")}}';
-
-
     </script>
 
     <script defer src="{{URL::asset('BusinessPanelPublic/js/tour/create/cityTourism/cityTourism_stage_1.js?v='.$fileVersions)}}"></script>

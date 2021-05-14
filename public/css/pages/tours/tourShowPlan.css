@@ -10,12 +10,34 @@
     border-radius: 20px;
     box-shadow: 0px 0px 5px 0px black;
 }
+.planSection .placeBoxesSection .placeCard.placeCardPlace:hover{
+    background: #4dc7bc59;
+}
+.planSection .placeBoxesSection .placeCard.placeCardMeals:hover{
+    background: #fcc1566e;
+}
+.planSection .placeBoxesSection .placeCard.placeCardSpecial:hover{
+    background: #0076a352;
+}
 .planSection .placeBoxesSection .placeCard{
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0;
     border-bottom: solid 1px lightgray;
+    transition: .3s;
+}
+.planSection .placeBoxesSection .placeCard .number{
+    margin-left: 12px;
+    font-size: 42px;
+    display: flex;
+    align-items: center;
+}
+.planSection .placeBoxesSection .placeCard .number .dash{
+    width: 20px;
+    height: 3px;
+    background: #2c2c2c;
+    margin-top: 20px;
+    margin-right: 0px;
 }
 .planSection .placeBoxesSection .placeCard .imgSection{
     width: 150px;
@@ -62,13 +84,13 @@
     padding: 0px 5px;
 }
 .seenPlaceTypeRow {
-    color: red;
+    color: var(--koochita-light-green);
 }
 .specialTypeRow {
-    color: var(--koochita-green);
+    color: var(--koochita-blue);
 }
 .mealTypeRow {
-    color: var(--koochita-blue);
+    color: var(--koochita-yellow);
 }
 
 .planSection .maxHeight90Vh{
@@ -97,6 +119,42 @@
     overflow: hidden;
     border: solid 2px blue;
     z-index: 1;
+}
+
+.myIconOnMap .topOnPic{
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    border: solid 1px #00000057;
+    padding: 0px 5px;
+}
+.myIconOnMap.seenPlaceType:after{
+    background: var(--koochita-light-green);
+}
+.myIconOnMap.mealType:after{
+    background: var(--koochita-yellow);
+}
+.myIconOnMap.specialType:after{
+    background: var(--koochita-blue);
+}
+.myIconOnMap.seenPlaceType .topOnPic{
+    background: var(--koochita-light-green);
+}
+.myIconOnMap.mealType .topOnPic{
+    background: var(--koochita-yellow);
+}
+.myIconOnMap.specialType .topOnPic{
+    background: var(--koochita-blue);
+}
+.myIconOnMap.seenPlaceType .imgInIcon{
+    border-color: var(--koochita-light-green);
+}
+.myIconOnMap.mealType .imgInIcon{
+    border-color: var(--koochita-yellow);
+}
+.myIconOnMap.specialType .imgInIcon{
+    border-color: var(--koochita-blue);
 }
 .myIconOnMap .htmlMarker{
     width: 100%;
@@ -127,24 +185,8 @@
 }
 .myIconOnMap.hideMarker{
     opacity: .3;
+    z-index: -1 !important;
 }
-
-.seenPlaceType, .mealType, .specialType{
-    font-size: 14px;
-    background: red;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    border: solid 2px black;
-    padding: 0px 5px;
-}
-.mealType{
-    background: var(--koochita-blue);
-}
-.specialType{
-    background: var(--koochita-green);
-}
-
 
 
 .leaflet-div-icon{
