@@ -32,6 +32,7 @@
 }
 .planSection .placeBoxesSection .placeCard .imgSection{
     width: 150px;
+    height: 100px;
     margin-left: 10px;
     border-radius: 10px;
     overflow: hidden;
@@ -184,7 +185,7 @@
 }
 .myIconOnMap.hideMarker{
     opacity: .3;
-    z-index: -1 !important;
+    z-index: -27 !important;
 }
 
 

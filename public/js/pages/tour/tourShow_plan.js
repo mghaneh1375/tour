@@ -64,19 +64,31 @@ function createPlanBox(){
 
         events[index].number = numbers[item.type];
 
+        let urlLink1;
+        let urlLink2;
+
+        if(item.url != '#') {
+            urlLink1 = `a href="${item.url}" ${item.url != '#' ? `target="_blank"` : ''}`;
+            urlLink2 = 'a';
+        }
+        else {
+            urlLink1 = `div`;
+            urlLink2 = 'div';
+        }
+
         html += `<div data-index="${index}" class="placeCard ${typeClass}">
                         <span class="number">
                             ${index+1}
                             <span class="dash"></span>
                         </span>
-                        <a href="${item.url}" ${item.url != '#' ? `target="_blank"` : ''} class="imgSection">
+                        <${urlLink1} class="imgSection">
                             <img src="${item.picture}" class="resizeImgClass" onload="fitThisImg(this)">
-                        </a>
+                        </${urlLink2}>
                         <div class="infoSection">
-                            <a href="${item.url}" ${item.url != '#' ? `target="_blank"` : ''} class="name lessShowText">
+                            <${urlLink1} class="name lessShowText">
                                 <span style="margin-left: 10px;">${item.title}</span>
                                 <span class="kindType">${typeTitle}</span>
-                            </a>
+                            </${urlLink2}>
                             <div class="time">${item.sTime} ${item.eTime != '' ? `تا ${item.eTime}` : ''}</div>
                             ${item.placeRate == null ? '' :
                                     `<div class="ratesAndReview">
@@ -171,13 +183,13 @@ function createPathBetween(){
 
     for(let i = 0; i < places.length-1; i++){
         let line = [[places[i].lat, places[i].lng], [places[i+1].lat, places[i+1].lng]];
-        let path = L.polyline(line, {
-            weight: 2,
-            color: 'black',
-            dashArray: '5'
-        });
-
-        path.addTo(planMap);
+        // let path = L.polyline(line, {
+        //     weight: 2,
+        //     color: 'black',
+        //     dashArray: '5'
+        // });
+        //
+        // path.addTo(planMap);
 
         let nLine = [{
             lat: places[i].lat,
@@ -194,17 +206,18 @@ function createPathBetween(){
         var moveManIcon = `<div class="moveManIcon"></div>`;
 
         var motion = L.motion.polyline(nLine, {
-            color: "transparent"
+            weight: 2,
+            color: 'black',
         }, null, {
             removeOnEnd: true,
             icon: L.divIcon({html: moveManIcon, iconSize: L.point(27.5, 24)})
-        }).motionDuration(3000);
+        }).motionDuration(5000);
 
         moveIconPolyLines.push(motion);
     }
 
     if(moveIconPolyLines.length > 0) {
-        moveIconTime = moveIconPolyLines.length * 3500;
+        moveIconTime = moveIconPolyLines.length * 5500;
         moveMarker = L.motion.seq(moveIconPolyLines).addTo(planMap);
         reloadMoveMarker();
     }

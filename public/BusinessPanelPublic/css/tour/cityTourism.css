@@ -311,6 +311,7 @@
 }
 .plane_section .planSection .planStepSection .placeBoxesSection .placeCard .imgSection{
     width: 150px;
+    height: 100px;
     margin-left: 10px;
     border-radius: 10px;
     overflow: hidden;
