@@ -182,7 +182,7 @@ function createPathBetween(){
     });
 
     for(let i = 0; i < places.length-1; i++){
-        let line = [[places[i].lat, places[i].lng], [places[i+1].lat, places[i+1].lng]];
+        // let line = [[places[i].lat, places[i].lng], [places[i+1].lat, places[i+1].lng]];
         // let path = L.polyline(line, {
         //     weight: 2,
         //     color: 'black',

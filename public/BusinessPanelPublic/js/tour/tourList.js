@@ -37,7 +37,7 @@ function createTourList(){
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary dropdown-toggle editButton" data-toggle="dropdown"> تنظیمات </button>
                         <div class="dropdown-menu" style="font-size: 12px">
-                          <a class="dropdown-item" href="#" style="padding: 0px 5px;">ویرایش تاریخ های برگزاری تور</a>
+<!--                          <a class="dropdown-item" href="#" style="padding: 0px 5px;">ویرایش تاریخ های برگزاری تور</a>-->
                           <a class="dropdown-item" onclick="editTour(${index})" href="#" style="padding: 5px; margin: 5px 0;">ویرایش اطلاعات تور</a>
                           ${item.statusCode != -1 ? '' :
                             `<div class="dropdown-divider"></div>
