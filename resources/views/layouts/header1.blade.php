@@ -25,7 +25,7 @@
 <div class="mainHeader hideOnPhone">
     <div class="container headerContainer">
         <a href="{{route('main')}}" class="headerPcLogoDiv" >
-            <img src="{{URL::asset('images/camping/undp.svg')}}" alt="{{__('کوچیتا')}}" class="headerPcLogo"/>
+{{--            <img src="{{URL::asset('images/camping/undp.svg')}}" alt="{{__('کوچیتا')}}" class="headerPcLogo"/>--}}
             <img src="{{URL::asset('images/icons/mainLogo.png')}}" alt="{{__('کوچیتا')}}" class="headerPcLogo"/>
         </a>
         @if(Request::is('main') || Request::is('main/*') || Request::is('profile') || Request::is('profile/*') || Request::is('/') || Request::is('article/*'))
@@ -201,7 +201,7 @@
 {{--mobile header--}}
 <div class="hideOnScreen mobileHeader">
     <a href="{{route('main')}}" class="global-nav-logo" style="height: 100%; display: flex; align-items: center">
-        <img src="{{URL::asset('images/camping/undp.svg')}}" alt="{{__('کوچیتا')}}" style="height: 50px; width: auto;"/>
+{{--        <img src="{{URL::asset('images/camping/undp.svg')}}" alt="{{__('کوچیتا')}}" style="height: 50px; width: auto;"/>--}}
         <img src="{{URL::asset('images/icons/mainLogo.png')}}" alt="{{__('کوچیتا')}}" style="height: 80%; width: auto;"/>
     </a>
 </div>
@@ -210,7 +210,7 @@
     <div class="headerCampaignModalBody">
         <span class="iconClose closeLanding" onclick="$('#campingHeader').hide();"></span>
         <div class="headerCampingTop" onclick="goToLanding()">
-            <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 60px; top: 10px; right: 2%;">
+{{--            <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 60px; top: 10px; right: 2%;">--}}
             <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/landing.webp')}}" class="resizeImgClass" style="width: 100%;" onload="fitThisImg(this)">
         </div>
         <div class="headerCampingBottom">

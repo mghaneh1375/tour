@@ -79,7 +79,7 @@
     <div class="container">
         <div class="logos">
             <a href="{{route('main')}}">
-                <img src="{{URL::asset('images/camping/undp.svg')}}" style="height: 100%">
+{{--                <img src="{{URL::asset('images/camping/undp.svg')}}" style="height: 100%">--}}
                 <img src="{{URL::asset('images/icons/mainLogo.png')}}" style="height: 100%">
             </a>
         </div>

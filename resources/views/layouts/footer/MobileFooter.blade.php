@@ -273,7 +273,7 @@
             <div style="height: calc(100% - 170px); overflow-y: auto">
                 <div id="specRowsPage" class="lp_others_content specPages" style="position: relative;">
                     <div class="specialFooterRow"  onclick="goToLanding()">
-                        <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 23px; top: 18px; right: 14px;">
+{{--                        <img  alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/undp.svg')}}" style="position: absolute; width: 23px; top: 18px; right: 14px;">--}}
                         <img alt="کوچیتا، سامانه جامع گردشگری ایران" src="{{URL::asset('images/camping/' . app()->getLocale() . '/landing.webp')}}" class="resizeImgClass" style="width: 100%;">
                     </div>
                     <div class="specialFooterRow" onclick="goToCookFestival()">
