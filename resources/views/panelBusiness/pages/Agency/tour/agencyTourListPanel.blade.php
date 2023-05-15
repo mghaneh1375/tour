@@ -3,16 +3,18 @@
 @section('head')
     <title>لیست تورها</title>
 
-    <link rel="stylesheet" href="{{URL::asset('BusinessPanelPublic/css/tour/commonTour.css')}}">
+    <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/tour/commonTour.css') }}">
 
     <style>
-        table{
+        table {
             font-size: 13px;
         }
-        table thead th{
+
+        table thead th {
             font-weight: normal;
         }
-        .editButton{
+
+        .editButton {
             color: black;
             background: white;
             font-size: 11px;
@@ -54,7 +56,8 @@
                 <div class="modal-body" style="direction: rtl">
                     <div class="fullwidthDiv" style="display: flex; justify-content: space-between;">
                         <div class="addPlaceGeneralInfoTitleTourCreation">قصد ویرایش کدام مرحله را دارید</div>
-                        <button type="button" class="closee" data-dismiss="modal" style="border: none; background: none; float: left">&times;</button>
+                        <button type="button" class="closee" data-dismiss="modal"
+                            style="border: none; background: none; float: left">&times;</button>
                     </div>
                     <div id="editModalSelectBody" class="selectEditCardSection"></div>
                 </div>
@@ -68,13 +71,12 @@
 
 @section('script')
     <script>
-        var getFullDataUrl = '{{url("businessManagement/{$businessIdForUrl}/tour/getFullyData")}}';
-        var getListUrl = '{{route("businessManagement.tour.getLists", ['business' => $businessIdForUrl])}}';
-        var editTourUrl = '{{url("businessManagement/{$businessIdForUrl}/tour/create")}}';
-        var deleteTourUrl = '{{route("businessManagement.tour.delete")}}';
+        var getFullDataUrl = '{{ url("businessManagement/{$businessIdForUrl}/tour/getFullyData") }}';
+        var getListUrl = '{{ route('businessManagement.tour.getLists', ['business' => $businessIdForUrl]) }}';
+        var editTourUrl = '{{ url("businessManagement/{$businessIdForUrl}/tour/create") }}';
+        var deleteTourUrl = '{{ route('businessManagement.tour.delete') }}';
 
-        var cityTourismEdit = [
-            {
+        var cityTourismEdit = [{
                 stage: 1,
                 topTitle: 'مرحله اول',
                 title: 'اطلاعات اصلی',
@@ -99,9 +101,8 @@
                 icon: '<i class="fa-duotone fa-clipboard-list-check"></i>',
             },
         ]
-
     </script>
 
-    <script src="{{URL::asset('BusinessPanelPublic/js/tour/tourList.js?v='.$fileVersions)}}"></script>
+    {{-- <script src="{{URL::asset('BusinessPanelPublic/js/tour/tourList.js?v='.$fileVersions)}}"></script> --}}
+    <script src="{{ URL::asset('BusinessPanelPublic/js/tour/tourList.js?v=300') }}"></script>
 @endsection
-

@@ -124,7 +124,6 @@ class AuthPanelBusinessController extends Controller
             {
                 $user = Auth::user();
                 if ($user->status != 0) {
-                    RetrievePas::where('uId', $user->id)->delete();
                     return redirect(route('businessPanel.mainPage'));
                 }
                 else {

@@ -36,6 +36,7 @@ use App\models\tour\TourTimes;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Transport\Transport;
 use Illuminate\Support\Facades\DB;
@@ -460,58 +461,65 @@ class cityTourismCreationController extends Controller implements tourCreations
         return view($view, compact(['tour', 'mainEquipment', 'tourKind', 'tourDifficult', 'tourFitFor', 'tourStyle']));
     }
     public function storeStep_4($request, $tour){
-        $data = (object)$request->data;
 
-        $existTourDifficult = [];
-        if(isset($data->levels)) {
-            foreach ($data->levels as $level) {
-                $diff = TourDifficult_Tour::firstOrCreate(['tourId' => $tour->id, 'difficultId' => $level]);
-                array_push($existTourDifficult, $diff->id);
+        try {
+            $data = (object)$request->data;
+
+            $existTourDifficult = [];
+            if(isset($data->levels)) {
+                foreach ($data->levels as $level) {
+                    $diff = TourDifficult_Tour::firstOrCreate(['tourId' => $tour->id, 'difficultId' => $level]);
+                    array_push($existTourDifficult, $diff->id);
+                }
             }
+            TourDifficult_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourDifficult)->delete();
+
+            $existTourKind = [];
+            if(isset($data->kinds)) {
+                foreach ($data->kinds as $kind) {
+                    $kind = TourKind_Tour::firstOrCreate(['tourId' => $tour->id, 'kindId' => $kind]);
+                    array_push($existTourKind, $kind->id);
+                }
+            }
+            TourKind_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourKind)->delete();
+
+            $existTourFitFor = [];
+            if(isset($data->fitFor)) {
+                foreach ($data->fitFor as $fitFor) {
+                    $fit = TourFitFor_Tour::firstOrCreate(['tourId' => $tour->id, 'fitForId' => $fitFor]);
+                    array_push($existTourFitFor, $fit->id);
+                }
+            }
+            TourFitFor_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourFitFor)->delete();
+
+            $existTourStyle = [];
+            if(isset($data->style)) {
+                foreach ($data->style as $style) {
+                    $style = TourStyle_Tour::firstOrCreate(['tourId' => $tour->id, 'styleId' => $style]);
+                    array_push($existTourStyle, $style->id);
+                }
+            }
+            TourStyle_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourStyle)->delete();
+
+            $equipmentId = [];
+            if(isset($data->equipment)) {
+                $equips = (object)$data->equipment;
+                foreach ($equips->necessary as $item) {
+                    $id = TourEquipment::firstOrCreate(['tourId' => $tour->id, 'subEquipmentId' => $item, 'isNecessary' => 1]);
+                    array_push($equipmentId, $id->id);
+                }
+                foreach ($equips->suggest as $item) {
+                    $id = TourEquipment::firstOrCreate(['tourId' => $tour->id, 'subEquipmentId' => $item, 'isNecessary' => 0]);
+                    array_push($equipmentId, $id->id);
+                }
+            }
+            TourEquipment::where('tourId', $tour->id)->whereNotIn('id', $equipmentId)->delete();
+
         }
-        TourDifficult_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourDifficult)->delete();
-
-        $existTourKind = [];
-        if(isset($data->kinds)) {
-            foreach ($data->kinds as $kind) {
-                $kind = TourKind_Tour::firstOrCreate(['tourId' => $tour->id, 'kindId' => $kind]);
-                array_push($existTourKind, $kind->id);
-            }
+        catch(\Exception $x) {
+            dd($x->getMessage());
         }
-        TourKind_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourKind)->delete();
-
-        $existTourFitFor = [];
-        if(isset($data->fitFor)) {
-            foreach ($data->fitFor as $fitFor) {
-                $fit = TourFitFor_Tour::firstOrCreate(['tourId' => $tour->id, 'fitForId' => $fitFor]);
-                array_push($existTourFitFor, $fit->id);
-            }
-        }
-        TourFitFor_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourFitFor)->delete();
-
-        $existTourStyle = [];
-        if(isset($data->style)) {
-            foreach ($data->style as $style) {
-                $style = TourStyle_Tour::firstOrCreate(['tourId' => $tour->id, 'styleId' => $style]);
-                array_push($existTourStyle, $style->id);
-            }
-        }
-        TourStyle_Tour::where('tourId', $tour->id)->whereNotIn('id', $existTourStyle)->delete();
-
-        $equipmentId = [];
-        if(isset($data->equipment)) {
-            $equips = (object)$data->equipment;
-            foreach ($equips->necessary as $item) {
-                $id = TourEquipment::firstOrCreate(['tourId' => $tour->id, 'subEquipmentId' => $item, 'isNecessary' => 1]);
-                array_push($equipmentId, $id->id);
-            }
-            foreach ($equips->suggest as $item) {
-                $id = TourEquipment::firstOrCreate(['tourId' => $tour->id, 'subEquipmentId' => $item, 'isNecessary' => 0]);
-                array_push($equipmentId, $id->id);
-            }
-        }
-        TourEquipment::where('tourId', $tour->id)->whereNotIn('id', $equipmentId)->delete();
-
+        
         return 'ok';
     }
 

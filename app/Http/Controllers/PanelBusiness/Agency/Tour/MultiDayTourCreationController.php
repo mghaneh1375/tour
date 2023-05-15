@@ -367,6 +367,7 @@ class MultiDayTourCreationController extends Controller implements tourCreations
         return view($view, compact(['tour']));
     }
     public function storeStep_4($request, $tour){
+
         $data = json_decode($request->data);
         $tour->minCost = (int)$data->cost;
         $tour->isInsurance = (int)$data->isInsurance;

@@ -34,174 +34,12 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 function assetDirLocGet(){
     return __DIR__.'/../../../../assets';
-}
-
-//medals
-function getTakenMedal($userId){
-    $takenMedal = [];
-    $takenMedalId = [];
-    $countsTaken = [];
-
-    $groupMedal = Medal::orderBy('floor')
-        ->groupBy('activityId')
-        ->groupBy('kindPlaceId')
-        ->select(['activityId', 'kindPlaceId'])
-        ->get();
-
-    foreach ($groupMedal as $gm){
-        $activity = Activity::find($gm->activityId);
-        if($activity->tableName != null) {
-            if($activity->tableName == 'log')
-                $sqlQuery = 'visitorId = '.$userId.' ';
-            else
-                $sqlQuery = 'userId = '.$userId.' ';
-
-            if($activity->controllerNeed == 1){
-                if($activity->tableName == 'photographersPics')
-                    $sqlQuery .= '&& status = 1 ';
-                else if($activity->tableName == 'userAddPlaces')
-                    $sqlQuery .= '&& archive = 1 ';
-                else
-                    $sqlQuery .= '&& confirm = 1 ';
-            }
-
-            if($gm->kindPlaceId != -1)
-                $sqlQuery .= '&& kindPlaceId = '.$gm->kindPlaceId.' ';
-
-            $countss = \DB::table($activity->tableName)->whereRaw($sqlQuery)->count();
-
-            $countsTaken[$gm->kindPlaceId.'_'.$gm->activityId] = $countss;
-
-            $med = Medal::where('kindPlaceId', $gm->kindPlaceId)
-                ->where('activityId', $gm->activityId)
-                ->where('floor', '<=', $countss)->get();
-
-            foreach ($med as $item) {
-                array_push($takenMedal, $item);
-                array_push($takenMedalId, $item->id);
-            }
-        }
-        else
-            $countsTaken[$gm->kindPlaceId.'_'.$gm->activityId] = 0;
-    }
-
-    $inProgressMedal = Medal::whereNotIn('id', $takenMedalId)
-                                ->orderBy('floor')
-                                ->groupBy('activityId')
-                                ->groupBy('kindPlaceId')
-                                ->select(['activityId', 'kindPlaceId'])
-                                ->get();
-    $allMedals = Medal::orderBy('floor')->get();
-
-    foreach ([$allMedals, $inProgressMedal, $takenMedal] as $medals){
-        foreach ($medals as $item) {
-            $act = Activity::find($item->activityId);
-            $kindPlaceName = '';
-            $kindPlace = DefaultDataDB::getSinglePlace($item->kindPlaceId);
-            if ($kindPlace != null) {
-                $item->sumText = $item->floor . ' ' . $act->name . ' در ' . $kindPlace->name;
-                $kindPlaceName = ' در ' . $kindPlace->name;
-            }
-            else
-                $item->sumText = $item->floor . ' ' . $act->name;
-
-            $item->take = $countsTaken[$item->kindPlaceId . '_' . $item->activityId];
-            if ($item->take >= $item->floor) {
-                $item->take = $item->floor;
-                $item->offPic = URL::asset('_images/badges/' . $item->pic_2);
-                $item->percent = 0;
-            }
-            else {
-                $item->offPic = URL::asset('_images/badges/' . $item->pic_1);
-                $item->percent = floor(($item->take / $item->floor) * 100);
-            }
-
-            $item->text = 'این مدال بعد از ' . $item->floor . ' تا ' . $act->name . ' ' . $kindPlaceName . ' بدست می آید';
-            $item->onPic = URL::asset('_images/badges/' . $item->pic_2);
-        }
-    }
-
-    return ['allMedal' => $allMedals, 'inProgressMedal' => $inProgressMedal, 'takenMedal' => $medals];
-}
-function getUserPoints($uId) {
-    $points = DB::select("SELECT SUM(activity.rate) as total FROM log, activity WHERE confirm = 1 and log.visitorId = " . $uId . " and log.activityId = activity.id");
-
-    if($points == null || count($points) == 0 || $points[0]->total == "")
-        return 0;
-
-    return $points[0]->total;
-}
-function nearestLevel($uId) {
-
-    $points = getUserPoints($uId);
-    $currLevel = Level::where('floor', '<=', $points)->orderBy('floor', 'DESC')->first();
-
-    if($currLevel == null)
-        $currLevel = Level::orderBy('floor', 'ASC')->first();
-
-    $nextLevel = Level::where('floor', '>', $points)->orderBy('floor', 'ASC')->first();
-
-    if($nextLevel == null)
-        $nextLevel = Level::orderBy('floor', 'ASC')->first();
-
-    return [$currLevel, $nextLevel];
-}
-function getMedals($uId) {
-
-    $medals = Medal::all();
-
-    $counter = 0;
-
-    foreach ($medals as $medal) {
-//        if($medal->controllerNeed == 1)
-//            $count = \DB::table($medal->tableName)->
-
-        if(getActivitiesCount($uId, $medal->activityId, $medal->kindPlaceId) >= $medal->floor)
-            $counter++;
-    }
-
-    return $counter;
-}
-function getNearestMedals($uId) {
-
-    $activities = Activity::all();
-
-    $arr = array();
-    $counter = 0;
-
-    foreach ($activities as $activity) {
-        $count = LogModel::where('visitorId', $uId)->where('activityId',$activity->id)->count();
-        $medals = Medal::where('activityId',$activity->id)->get();
-
-        foreach ($medals as $medal) {
-            if($medal->floor > $count) {
-                $alaki = Place::whereId($medal->kindPlaceId);
-                if($alaki == null)
-                    $arr[$counter++] = ["medal" => $medal, "needed" => $medal->floor - $count, "kindPlaceId" => -1];
-                else
-                    $arr[$counter++] = ["medal" => $medal, "needed" => $medal->floor - $count, "kindPlaceId" => $alaki->name];
-            }
-        }
-    }
-
-    usort($arr, 'sortByNeeded');
-
-    $limit = (count($arr) >= 3) ? 3 : count($arr);
-
-    array_splice($arr, $limit);
-    $counter = 0;
-
-    while ($counter < $limit) {
-        $arr[$counter]["medal"]->activityId = Activity::whereId($arr[$counter]["medal"]->activityId)->name;
-        $counter++;
-    }
-
-    return $arr;
 }
 
 function uploadLargeFile($_direction, $_file_data){
@@ -224,59 +62,6 @@ function decode_chunk( $data ) {
     return $data;
 }
 
-function getPostCategories() {
-
-    return [
-        [
-            'super' => "اماکن گردشگری",
-            'childs' => [
-                ['id' => 1, 'key' => 'اماکن تاریخی'],
-                ['id' => 2, 'key' => 'اماکن مذهبی'],
-                ['id' => 3, 'key' => 'اماکن تفریحی'],
-                ['id' => 4, 'key' => 'طبیعت گردی'],
-                ['id' => 5, 'key' => 'مراکز خرید'],
-                ['id' => 6, 'key' => 'موزه ها']
-            ]
-        ],
-        [
-            'super' => "هتل و رستوران",
-            "childs" => [
-                ['id' => 7, 'key' => 'هتل'],
-                ['id' => 8, 'key' => 'رستوران'],
-            ]
-        ],
-        [
-            'super' => "حمل و نقل",
-            'childs' => [
-                ['id' => 9, 'key' => 'هواپیما'],
-                ['id' => 10, 'key' => 'اتوبوس'],
-                ['id' => 11, 'key' => 'سواری'],
-                ['id' => 12, 'key' => 'فطار']
-            ]
-        ],
-        [
-            'super' => "آداب و رسوم",
-            "childs" => [
-                ['id' => 13, 'key' => 'سوغات محلی'],
-                ['id' => 14, 'key' => 'صنایع دستی'],
-                ['id' => 15, 'key' => 'اماکن تفریحی'],
-                ['id' => 16, 'key' => 'غذای محلی'],
-                ['id' => 17, 'key' => 'لباس محلی'],
-                ['id' => 18, 'key' => 'گویش محلی'],
-                ['id' => 19, 'key' => 'اصطلاحات محلی'],
-            ]
-        ],
-        [
-            'super' => "جشنواره و آیین",
-            "childs" => [
-                ['id' => 20, 'key' => 'رسوم محلی'],
-                ['id' => 21, 'key' => 'جشنواره'],
-                ['id' => 22, 'key' => 'تور'],
-                ['id' => 23, 'key' => 'کنسرت']
-            ]
-        ]
-    ];
-}
 
 function getValueInfo($key) {
 
@@ -316,26 +101,6 @@ function dotNumber($number){
         $tmp .= $string_number[$i];
     }
 
-//    $mande = $num % 3;
-//    $string_number = floor($number / (10**($num-$mande)));
-//    $number = $number % (10**($num-$mande));
-//    $num = $num - $mande;
-//    $div = $num;
-//
-//    for($i = 0; $i < $div/3; $i++){
-//        $string_number .= '.';
-//        if($number != 0) {
-//            $num -= 3;
-//            $string_number .= floor($number / (10 ** ($num)));
-//            $number = $number % (10 ** ($num));
-//        }
-//        else if($i < ($div/3)-1){
-//            $string_number .= '000';
-//        }
-//        else{
-//            $string_number .= '000';
-//        }
-//    }
 
     return $tmp;
 }
@@ -441,42 +206,8 @@ function sendMail($text, $recipient, $subject) {
     }
 }
 
-function getActivitiesCount($uId, $activityId, $kindPlaceId) {
-
-    if($kindPlaceId != -1) {
-        $conditions = ["visitorId" => $uId, 'activityId' => $activityId, 'confirm' => 1,
-            'kindPlaceId' => $kindPlaceId];
-    }
-    else {
-        $conditions = ["visitorId" => $uId, 'activityId' => $activityId, 'confirm' => 1];
-    }
-
-    return LogModel::where($conditions)->count();
-
-}
-
 function sortByNeeded($a, $b) {
     return $a['needed'] - $b['needed'];
-}
-
-function getRate($placeId, $kindPlaceId) {
-
-    try {
-        $kindPlace = DefaultDataDB::getSinglePlace($kindPlaceId);
-        $place = \DB::table($kindPlace->tableName)->find($placeId);
-
-        $avgRate = floor($place->fullRate);
-        $numOfRate = ['1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0];
-
-        $numOfRateDB = PlaceRates::where('kindPlaceId', $kindPlace->id)->where('placeId', $place->id)->select(['id', 'rate'])->get()->groupBy('rate');
-        foreach ($numOfRateDB as $key => $item)
-            $numOfRate[$key] = count($item);
-
-        return [$numOfRate, $avgRate];
-    }
-    catch (\Exception $exception){
-        return [[0, 0, 0, 0, 0], 0];
-    }
 }
 
 function uploadCheck($target_file, $name, $section, $limitSize, $ext) {
@@ -581,7 +312,7 @@ function sendSMS($destNum, $text, $template, $token2 = "") {
 function welcomeEmail($username, $email){
     $header = 'به کوچیتا خوش آمدید';
     $userName = $username;
-    $view = \View::make('emails.welcomeEmail', compact(['header', 'userName']));
+    $view = View::make('emails.welcomeEmail', compact(['header', 'userName']));
     $html = $view->render();
     if(sendEmail($html, $header, $email))
         return true;
@@ -591,7 +322,7 @@ function welcomeEmail($username, $email){
 
 function forgetPassEmail($userName, $link, $email){
     $header = 'فراموشی رمز عبور';
-    $view = \View::make('emails.forgetPass', compact(['header', 'userName', 'link']));
+    $view = View::make('emails.forgetPass', compact(['header', 'userName', 'link']));
     $html = $view->render();
     if(sendEmail($html, $header, $email))
         return true;
@@ -645,23 +376,6 @@ function sendEmail($text, $subject, $to){
 //        $mail->send();
     }
     catch (Exception $e) {
-        return false;
-    }
-}
-
-function distanceBetweenCoordination($lat1, $lng1, $lat2, $lng2){
-    try{
-        $earthRadius = 6371000;
-        $latFrom = deg2rad($lat1);
-        $lonFrom = deg2rad($lng1);
-        $latTo = deg2rad($lat2);
-        $lonTo = deg2rad($lng2);
-        $latDelta = $latTo - $latFrom;
-        $lonDelta = $lonTo - $lonFrom;
-        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-        return $angle * $earthRadius;
-    }
-    catch(\Exception $exception){
         return false;
     }
 }
@@ -730,67 +444,6 @@ function getDifferenceTimeString($time){
 
 }
 
-function deleteAnses($logId){
-    $activity = DefaultDataDB::getActivityWithName('پاسخ');
-    $log = LogModel::where('activityId', $activity)->where('id', $logId)->first();
-    if($log != null){
-        LogFeedBack::where('logId', $logId)->delete();
-        $related = LogModel::where('activityId', $activity)->where('relatedTo', $logId)->get();
-        foreach ($related as $item)
-            deleteAnses($item->id);
-        $log->delete();
-    }
-    return true;
-}
-
-function commonInPlaceDetails($kindPlaceId, $placeId, $city, $state, $place){
-
-    $section = \DB::select('SELECT questionId FROM questionSections WHERE (kindPlaceId = 0 OR kindPlaceId = ' . $kindPlaceId . ') AND (stateId = 0 OR stateId = ' . $state->id . ') AND (cityId = 0 OR cityId = ' . $city->id . ') GROUP BY questionId');
-
-    $questionId = array();
-    foreach ($section as $item)
-        array_push($questionId, $item->questionId);
-
-    if($questionId != null && count($questionId) != 0) {
-        $questions = \DB::select('SELECT * FROM questions WHERE id IN (' . implode(",", $questionId) . ')');
-        $questionsAns = \DB::select('SELECT * FROM questionAns WHERE questionId IN (' . implode(",", $questionId) . ')');
-    }
-    else{
-        $questions = array();
-        $questionsAns = array();
-    }
-
-    $multiQuestion = array();
-    $textQuestion = array();
-    $rateQuestion = array();
-
-    foreach ($questions as $item) {
-        if ($item->ansType == 'multi') {
-            $item->ans = QuestionAns::where('questionId', $item->id)->get();
-            array_push($multiQuestion, $item);
-        }
-        else if($item->ansType == 'text')
-            array_push($textQuestion, $item);
-        else if($item->ansType == 'rate')
-            array_push($rateQuestion, $item);
-    }
-
-    $a2 = DefaultDataDB::getActivityWithName('نظر');
-    $a3 = DefaultDataDB::getActivityWithName('پاسخ');
-
-    $condition = ['activityId' => $a2->id, 'placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'confirm' => 1, 'relatedTo' => 0];
-    $reviews = LogModel::where($condition)->whereRaw('CHARACTER_LENGTH(text) > 2')->get();
-    $reviewCount = count($reviews);
-
-    $ansReviewCount = 0;
-    foreach ($reviews as $item)
-        $ansReviewCount += getAnsToComments($item->id)[1];
-
-    $userReviweCount = DB::select('SELECT visitorId FROM log WHERE placeId = ' . $placeId . ' AND kindPlaceId = '. $kindPlaceId . ' AND confirm = 1 AND activityId = ' . $a2->id . ' AND CHARACTER_LENGTH(text) > 2 GROUP BY visitorId');
-    $userReviweCount = count($userReviweCount);
-
-    return [$reviewCount, $ansReviewCount, $userReviweCount, $multiQuestion, $textQuestion, $rateQuestion];
-}
 
 function generateRandomString($length = 20) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -802,234 +455,6 @@ function generateRandomString($length = 20) {
     return $randomString;
 }
 
-function saveViewPerPage($kindPlaceId, $placeId){
-    $allKindPlaces = DefaultDataDB::getPlaceDB();
-    $value = 'kindPlaceId:'.$kindPlaceId.'Id:'.$placeId;
-    if(!(Cookie::has($value) == $value)) {
-        try {
-            if(isset($allKindPlaces[$kindPlaceId])) {
-                $kindPlace = $allKindPlaces[$kindPlaceId];
-                if ($kindPlace != null)
-                    \DB::select("UPDATE `{$kindPlace->tableName}` SET `seen`= `seen`+1  WHERE `id`={$placeId}");
-            }
-        }
-        catch (\Exception $exception){}
-        Cookie::queue(Cookie::make($value, $value, 5));
-    }
-}
-
-function getUserPic($id = 0){
-    $userPicsInArray = config('userPictureArr');
-
-    if(!array_key_exists($id, $userPicsInArray)){
-        $user = User::find($id);
-        if ($id == 0 || $user == null)
-            $uPic = URL::asset('images/mainPics/noPicSite.jpg');
-        else {
-            if (strpos($user->picture, 'http') !== false)
-                $uPic = $user->picture;
-            else {
-                if ($user->uploadPhoto == 0) {
-                    $deffPic = DefaultPic::find($user->picture);
-
-                    if ($deffPic != null)
-                        $uPic = URL::asset("defaultPic/{$deffPic->name}");
-                    else
-                        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
-                }
-                else
-                    $uPic = URL::asset("userProfile/{$user->picture}", null, $user->server);
-            }
-        }
-
-        $userPicsInArray[$id] = $uPic;
-        config(['userPictureArr' => $userPicsInArray]);
-    }
-
-    return $userPicsInArray[$id];
-}
-
-function getPlacePic($placeId = 0, $kindPlaceId = 0, $kind = 'f'){
-    $allKindPlaces = DefaultDataDB::getPlaceDB();
-
-    $defaultPic = URL::asset("images/mainPics/noPicSite.jpg");
-    if($placeId != 0) {
-        $server = 1;
-        if(isset($allKindPlaces[$kindPlaceId])){
-            $kindPlace = $allKindPlaces[$kindPlaceId];
-            if($kindPlace->id == 13){
-                $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file'])->first();
-                $pic = LocalShopsPictures::where('localShopId', $place->id)->where('isMain', 1)->first();
-                if($pic != null){
-                    $server = $pic->server;
-                    $pic = $pic->pic;
-                }
-            }
-            else {
-                $place = DB::table($kindPlace->tableName)->where('id', $placeId)->select(['id', 'file', 'picNumber', 'server'])->first();
-                $server = $place->server;
-                $pic = $place->picNumber;
-            }
-
-            if ($place != null && $place->file != 'none' && $place->file != null) {
-                if (is_array($kind)) {
-                    $pics = [];
-                    foreach ($kind as $k) {
-                        $pi = $defaultPic;
-                        if($pic != null && $pic != '')
-                            $pi = URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$k}-{$pic}", null, $server);
-
-                        array_push($pics, $pi);
-                    }
-                    return $pics;
-                }
-                else{
-                    if($pic == null || $pic == '')
-                        return $defaultPic;
-                    else
-                        return URL::asset("_images/{$kindPlace->fileName}/{$place->file}/{$kind}-{$pic}", null, $server);
-                }
-            }
-        }
-    }
-
-    return $defaultPic;
-}
-
-
-function getStatePic($stateId = 0, $cityId = 0){
-    $locationPic = assetDirLocGet().'/_images/city';
-    if($cityId != 0){
-        $place = Cities::find($cityId);
-        $pics = CityPic::where('cityId', $cityId)->get();
-        if(count($pics) == 0)
-            return URL::asset('images/mainPics/noPicSite.jpg');
-        else{
-            $locationPic1 = $locationPic .'/' . $place->id . '/' . $place->image;
-            if(is_file($locationPic1))
-                return URL::asset('_images/city/' . $place->id  . '/' . $place->image);
-            else
-                return URL::asset('_images/city/' . $place->id  . '/' . $pics[0]->pic);
-        }
-    }
-    else if($stateId != 0)
-        return URL::asset('images/mainPics/nopicv01.jpg');
-    else
-        return URL::asset('images/mainPics/nopicv01.jpg');
-}
-
-function createUrl($kindPlaceId, $placeId, $stateId, $cityId, $articleId = 0){
-    if($stateId != 0){
-        $state = DefaultDataDB::getStateWithId($stateId);
-        return url('cityPage/state/' . $state->name);
-    }
-    else if($cityId != 0){
-        $city = Cities::find($cityId);
-        return url('cityPage/city/' . $city->name);
-    }
-    else if($kindPlaceId != 0){
-        return route('placeDetails', ['kindPlaceId' => $kindPlaceId, 'placeId' => $placeId]);
-    }
-    else if($articleId != 0){
-        $post = \App\models\safarnameh\Safarnameh::find($articleId);
-        if($post != null)
-            return url('/safarnameh/show/'. $post->id);
-        else
-            return false;
-    }
-}
-
-function createPicUrl($articleId){
-
-    if($articleId != 0){
-        $post = \App\models\safarnameh\Safarnameh::find($articleId);
-        if($post != null)
-            return URL::asset('_images/userPhoto/' . $post->userId . '/' . $post->pic);
-    }
-}
-
-function createSeeLog($placeId, $kindPlaceId, $subject, $text){
-
-    $time = getToday()['time'];
-    $today = Carbon::now()->format('Y-m-d');
-
-    $userId = 0;
-    if(auth()->check())
-        $userId = auth()->user()->id;
-
-    $log = new LogModel();
-    $log->visitorId = $userId;
-    $log->placeId = $placeId;
-    $log->kindPlaceId = $kindPlaceId;
-    $log->date = $today;
-    $log->time = $time;
-    $log->activityId = 1;
-    $log->subject = $subject;
-    $log->text = $text;
-//    $log->save();
-
-    return [$time, $today, $log->id];
-}
-
-function storeNewTag($tag){
-    $check = \App\models\Tag::where('name', $tag)->first();
-    if($check == null){
-        $newTag = new \App\models\Tag();
-        $newTag->name = $tag;
-        $newTag->save();
-
-        return $newTag->id;
-    }
-    else
-        return false;
-}
-
-function getCityPic($cityId){
-    $resultPic = null;
-    $city = Cities::find($cityId);
-    if($cityId != null) {
-        $loc = assetDirLocGet().'/_images/city/' . $city->id;
-
-        if($city->image == null){
-            $pics = CityPic::where("cityId", $city->ic)->get();
-            if(count($pics) != 0) {
-                foreach ($pics as $pic) {
-                    if(is_file($loc . '/' . $pic->pic)) {
-                        $resultPic = URL::asset('_images/city/' . $city->id . '/' . $pic->pic);
-                        break;
-                    }
-                }
-            }
-            else{
-                $seenActivity = Activity::whereName('مشاهده')->first();
-                $ala = Amaken::where('cityId', $cityId)->pluck('id')->toArray();
-                $mostSeen = [];
-                if (count($ala) != 0)
-                    $mostSeen = DB::select('SELECT placeId, COUNT(id) as seen FROM log WHERE activityId = ' . $seenActivity->id . ' AND kindPlaceId = 1 AND placeId IN (' . implode(",", $ala) . ') GROUP BY placeId ORDER BY seen DESC');
-
-                if (count($mostSeen) != 0) {
-                    foreach ($mostSeen as $item) {
-                        $p = Amaken::find($item->placeId);
-                        $location = assetDirLocGet().'/_images/amaken/' . $p->file . '/s-' . $p->picNumber;
-                        if (file_exists($location)) {
-                            $resultPic = URL::asset('_images/amaken/' . $p->file . '/s-' . $p->picNumber);
-                            break;
-                        }
-                    }
-//                    if ($resultPic == null || $resultPic == '')
-//                        $resultPic = URL::asset('images/mainPics/noPicSite.jpg');
-                }
-//                else
-//                    $resultPic = URL::asset('images/mainPics/noPicSite.jpg');
-            }
-        }
-        else
-            $resultPic = URL::asset('_images/city/' . $city->id . '/' . $city->image);
-
-    }
-
-    return $resultPic;
-}
 
 //    http://image.intervention.io/
 function resizeImage($image, $size, $fileName = ''){
@@ -1315,19 +740,35 @@ function convertJalaliToText($date){
 
 }
 
-function createWelcomeMsg($userId){
-    $msg = '<div>مرسی از ثبت نامت دوست من.</div><div>شما بخش مهمی از کوچیتا هستید. ما سعی کردیم تا همه چیز برای شما خوب طراحی بشه. در کوچیتا شما می تونید شهر، روستا، غذای محلی،سوغات، بوم گردی ها، جاذبه ها، طبیعت گردی و هتل ها رو پیدا کنید و عکس و نظر خودتون و دوستانتون را ببینید و بهترین انتخاب رو داشته باشید.</div><a href="https://koochita.com/placeList/11/country" target="_blank" style="display: block; margin: 5px 0px;">لیست غذاهای محلی ایران</a><a href="https://koochita.com/placeList/1/country" target="_blank" style="display: block; margin: 5px 0px;">لیست جاذبه های ایران  </a><a href="https://koochita.com/placeList/12/country" target="_blank" style="display: block; margin: 5px 0px;">لیست بوم‌گردی های ایران</a><a href="https://koochita.com/placeList/6/country" target="_blank" style="display: block; margin: 5px 0px;">لیست طبیعت گردی (کمپینگ) های ایران</a><div>شما همیشه می تونید از صفحه اول سایت و یا دکمه منو، شهر یا مکان مورد نظرتون رو سریع پیدا کنید. هر جایی که رفتید در قسمت ارسال دیدگاه می تونید نظرتون رو به همراه عکس و یا فیلم برای دوستانتون به اشتراک بگذارید.اگر عکاس هستید می تونید در قسمت من عکاس هستم عکس هاتون رو آپلود کنید تا ما با اسم خودتون منتشر کنیم.  شما می تونید از لینک زیر صفحه پروفایلتون رو ببینید. به شما کمک  می‌کنه تا با دوستانتون در تماس باشید ، برنامه ریزی سفر کنید ، سفرنامه بنویسید و با دوستانتون به اشتراک بگذارید.  این امکان از منوی کناری در موبایل و منوی بالا در کامپیوتر هم در دسترسه.</div><a href="https://koochita.com/profile/index" target="_blank" style="display: block; margin: 5px 0px;">صفحه پروفایل من</a><div>هر وقت سوالی داشتید و یا نظرتون رو می خواستید به ما بگید به همین اکانت پیام بدید. ما مشتاق صحبت کردن با شما هستیم.</div><div>در آخر هم خوشحال میشیم که ما رو در اینستاگرام دنبال کنید تا از خبرهای جدید، فعالیت های تیم کوچیتا و مسابقات اطلاع پیدا کنید. آیدی اینستاگرام <a href="https://www.instagram.com/koochita_com/">@koochita_com</a></div>';
 
-    $newMsg = new Message();
-    $newMsg->senderId = 0;
-    $newMsg->receiverId = $userId;
-    $newMsg->message = $msg;
-    $newMsg->date = verta()->format('Y-m-d');
-    $newMsg->time = verta()->format('H:i');
-    $newMsg->seen = 0;
-    $newMsg->save();
+function getUserPic($id = 0){
+    $userPicsInArray = config('userPictureArr');
 
-    \Session::put(['newRegister' => true]);
+    if(!array_key_exists($id, $userPicsInArray)){
+        $user = User::find($id);
+        if ($id == 0 || $user == null)
+            $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+        else {
+            if (strpos($user->picture, 'http') !== false)
+                $uPic = $user->picture;
+            else {
+                if ($user->uploadPhoto == 0) {
+                    $deffPic = DefaultPic::find($user->picture);
 
-    return true;
+                    if ($deffPic != null)
+                        $uPic = URL::asset("defaultPic/{$deffPic->name}");
+                    else
+                        $uPic = URL::asset('images/mainPics/noPicSite.jpg');
+                }
+                else
+                    $uPic = URL::asset("userProfile/{$user->picture}", null, $user->server);
+            }
+        }
+
+        $userPicsInArray[$id] = $uPic;
+        config(['userPictureArr' => $userPicsInArray]);
+    }
+
+    return $userPicsInArray[$id];
 }
+

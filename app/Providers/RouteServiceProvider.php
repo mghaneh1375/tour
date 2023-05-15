@@ -46,32 +46,14 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes();
-
         $this->mapTourWebRoutes();
-
-        $this->mapNewsRoutes();
-        //
-    }
-
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
-    {
-        Route::middleware(['web', 'cors'])
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
     }
 
     protected function mapPanelBusinessWebRoutes()
     {
         Route::middleware('web')
-             ->domain('businessPanel.localhost')
+             ->domain('mybusiness.koochita.com')
+            //  ->domain('businessPanel.localhost')
             ->namespace($this->namespace.'\PanelBusiness')
             ->group(base_path('routes/businessPanelRoutes.php'));
     }
@@ -82,14 +64,6 @@ class RouteServiceProvider extends ServiceProvider
 //             ->domain('tour.'.env('ROUTURL'))
             ->namespace($this->namespace.'\Tour')
             ->group(base_path('routes/tourRoutes.php'));
-    }
-
-    protected function mapNewsRoutes()
-    {
-        Route::middleware('web')
-//             ->domain('news.'.env('ROUTURL'))
-            ->namespace($this->namespace.'\News')
-            ->group(base_path('routes/newsRoutes.php'));
     }
 
     /**

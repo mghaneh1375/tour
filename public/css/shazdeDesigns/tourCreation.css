@@ -1,5 +1,5 @@
 /*1st box of styles*/
-.relative-position{
+.relative-position {
     position: relative;
 }
 
@@ -52,7 +52,7 @@
     cursor: pointer;
     display: inline-block;
     float: right;
-    background-image: url('../../images/icons.jpg');
+    background-image: url("../../images/icons.jpg");
     background-size: 72px;
 }
 
@@ -82,7 +82,8 @@ body {
     display: none;
 }
 
-DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::before {
+DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic
+    .atf_meta_and_photos_wrapper::before {
     display: none;
 }
 
@@ -125,7 +126,6 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::b
 /*tour creation 1st page styles*/
 
 #termsAndConditionMainBox {
-
 }
 
 .tourCreationMainTitle {
@@ -164,17 +164,14 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::b
     display: inline-block;
 }
 
-#termsAndConditionAcceptBox {
-    text-align: center;
-}
-
 #termsAndConditionText {
     display: inline-block;
     width: 70%;
     float: right;
 }
 
-#termsAndConditionText > span , #supportingInfos > div > span {
+#termsAndConditionText > span,
+#supportingInfos > div > span {
     width: 100%;
     display: inline-block;
     text-align: justify;
@@ -202,12 +199,13 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic .atf_meta_and_photos_wrapper::b
     font-weight: 700;
 }
 
-#supportingInfos > div > span:last-child{
+#supportingInfos > div > span:last-child {
     margin-bottom: 10px;
     font-weight: 700;
 }
 
-#termsAndConditionBtn , #goToProfile{
+#termsAndConditionBtn,
+#goToProfile {
     display: inline-block;
     background-color: var(--koochita-light-green);
     /*width: 150px;*/
@@ -227,36 +225,41 @@ footer {
 @font-face {
     font-weight: normal;
     font-style: normal;
-    font-family: 'shazdemosafer-tour';
-    src: url('../../fonts/shazdemosafer-tour.otf');
-    src: url('../../fonts/shazdemosafer-tour.otf') format('embedded-opentype'),
-    url('../../fonts/shazdemosafer-tour.woff2?v003.200') format('woff2'),
-    url('../../fonts/shazdemosafer-tour.woff?v003.200') format('woff'),
-    url('../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200') format('truetype');
+    font-family: "shazdemosafer-tour";
+    src: url("../../fonts/shazdemosafer-tour.otf");
+    src: url("../../fonts/shazdemosafer-tour.otf") format("embedded-opentype"),
+        url("../../fonts/shazdemosafer-tour.woff2?v003.200") format("woff2"),
+        url("../../fonts/shazdemosafer-tour.woff?v003.200") format("woff"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200")
+            format("truetype");
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type="checkbox"],
+input[type="radio"] {
     display: none !important;
 }
 
-input[type="checkbox"] + label, input[type="radio"] + label {
+input[type="checkbox"] + label,
+input[type="radio"] + label {
     font-weight: normal;
     color: black;
     cursor: pointer;
 }
 
-input[type="checkbox"] + label span, input[type="radio"] + label span {
+input[type="checkbox"] + label span,
+input[type="radio"] + label span {
     display: inline-block;
     width: 19px;
     height: 19px;
     margin: -2px 0 0 0;
     vertical-align: middle;
-    background: url('../../images/check_radio_sheet.png') 1px top no-repeat;
+    background: url("../../images/check_radio_sheet.png") 1px top no-repeat;
     cursor: pointer;
 }
 
-input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label span {
-    background: url('../../images/check_radio_sheet.png') -18px top no-repeat;
+input[type="checkbox"]:checked + label span,
+input[type="radio"]:checked + label span {
+    background: url("../../images/check_radio_sheet.png") -18px top no-repeat;
 }
 
 .formName {
@@ -309,7 +312,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     color: darkred;
     font-size: 13px;
 }
-.inboxHelpSubtitle.big{
+.inboxHelpSubtitle.big {
     display: block;
     font-size: 18px;
     font-weight: bold;
@@ -332,7 +335,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 #destinationListTourCreation {
     position: absolute;
     background-color: white;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #e5e5e5;
     padding: 20px 15px;
     z-index: 1;
     width: 190px;
@@ -354,7 +357,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     color: var(--koochita-light-green);
 }
 
-.addNewDestinationBoxTourCreation , .popUpsSpecificInfoTourCreation {
+.addNewDestinationBoxTourCreation,
+.popUpsSpecificInfoTourCreation {
     background-color: white;
     z-index: 1;
     direction: rtl;
@@ -382,11 +386,13 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: auto;
 }
 
-#tourOriginStateInputBox , .tourOriginStateInputBox {
+#tourOriginStateInputBox,
+.tourOriginStateInputBox {
     width: auto;
 }
 
-#tourOriginStateInputBox > div , .tourOriginStateInputBox > div {
+#tourOriginStateInputBox > div,
+.tourOriginStateInputBox > div {
     width: auto;
 }
 
@@ -424,8 +430,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .closeNewDestinationTourCreation > img {
-      width: 18px;
-      margin-top: 3px;
+    width: 18px;
+    margin-top: 3px;
 }
 
 .addNewDestinationBtn {
@@ -448,19 +454,23 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     display: inline-block;
 }
 
-#tourKindChoseTitleTourCreation > span:first-child , #tourLevelChoseTitleTourCreation  > span:first-child,
-#concentrationChoseTitleTourCreation , #tourTypeChoseTitleTourCreation > span:first-child ,
+#tourKindChoseTitleTourCreation > span:first-child,
+#tourLevelChoseTitleTourCreation > span:first-child,
+#concentrationChoseTitleTourCreation,
+#tourTypeChoseTitleTourCreation > span:first-child,
 .nonGovernmentalTitleTourCreation > span:first-child {
     font-weight: 700;
 }
 
-#tourKindChoseTitleTourCreation > span:last-child , #tourLevelChoseTitleTourCreation  > span:last-child {
+#tourKindChoseTitleTourCreation > span:last-child,
+#tourLevelChoseTitleTourCreation > span:last-child {
     font-size: 12px;
     color: darkblue;
     margin-right: 5px;
 }
 
-.tourKindIconsTourCreation , .tourLevelIconsTourCreation{
+.tourKindIconsTourCreation,
+.tourLevelIconsTourCreation {
     margin: 10px 0;
     padding: 0 10px;
     display: flex;
@@ -480,7 +490,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     border-radius: 50%;
     overflow: hidden;
 }
-.tourLevelIconsTourCreation > div{
+.tourLevelIconsTourCreation > div {
     position: relative;
     margin: 5px;
     display: flex !important;
@@ -520,58 +530,58 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 #cityKindTour::before {
-    content: '\E0E0';
+    content: "\E0E0";
     font-family: shazdemosafer-tour;
     right: 13px;
 }
 
 #hikingKindTour::before {
-    content: '\E0E1';
+    content: "\E0E1";
     font-family: shazdemosafer-tour;
 }
 
 #villageKindTour::before {
-    content: '\E0E2';
+    content: "\E0E2";
     font-family: shazdemosafer-tour;
 }
 
 #adventureKindTour::before {
-    content: '\E0E3';
+    content: "\E0E3";
     font-family: shazdemosafer-tour;
 }
 
 #healthKindTour::before {
-    content: '\E0E4';
+    content: "\E0E4";
     font-family: shazdemosafer-tour;
 }
 
 #recreationalKindTour::before {
-    content: '\E0E5';
+    content: "\E0E5";
     font-family: shazdemosafer-tour;
 }
 
 #artisticKindTour::before {
-    content: '\E0E6';
+    content: "\E0E6";
     font-family: shazdemosafer-tour;
 }
 
 #sportsKindTour::before {
-    content: '\E0E7';
+    content: "\E0E7";
     font-family: shazdemosafer-tour;
 }
 
 #scientificKindTour::before {
-    content: '\E0E8';
+    content: "\E0E8";
     font-family: shazdemosafer-tour;
 }
 
 #culturalKindTour::before {
-    content: '\E0E9';
+    content: "\E0E9";
     font-family: shazdemosafer-tour;
 }
 
 #ProfessionalKindTour::before {
-    content: '\E0EA';
+    content: "\E0EA";
     font-family: shazdemosafer-tour;
 }
 
@@ -599,69 +609,74 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 #easyLevelTour::before {
-    content: '\E0EC';
+    content: "\E0EC";
     font-family: shazdemosafer-tour;
     top: -10px;
     left: 8px;
 }
 
 #lightLevelTour::before {
-    content: '\E0ED';
+    content: "\E0ED";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 5px;
 }
 
 #activeLevelTour::before {
-    content: '\E0F4';
+    content: "\E0F4";
     font-family: shazdemosafer-tour;
     top: -9px;
     right: 7px;
 }
 
 #hardLevelTour::before {
-    content: '\E0F5';
+    content: "\E0F5";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: 5px;
 }
 
 #professionalLevelTour::before {
-    content: '\E0EB';
+    content: "\E0EB";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 6px;
 }
 
 #blindLevelTour::before {
-    content: '\E0F6';
+    content: "\E0F6";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: 2px;
 }
 
 #disabledLevelTour::before {
-    content: '\E0F8';
+    content: "\E0F8";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: 6px;
 }
 
 #studentLevelTour::before {
-    content: '\E0EC';
+    content: "\E0EC";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 9px;
 }
 
-.concentrationChoseTourCreation , .tourTypeChoseChoseTourCreation{
+.concentrationChoseTourCreation,
+.tourTypeChoseChoseTourCreation {
     direction: rtl;
     margin: 15px 0 10px;
     display: inline-block;
 }
 
-.concentrationChoseTourCreation > div , .tourTypeChose > div , .tourTypeChoseChoseTourCreation > div ,
-#tourBestSeasonTitleTourCreation , #tourBestSeasonChoseTourCreation , #tourBestSeasonChoseTourCreation > div {
+.concentrationChoseTourCreation > div,
+.tourTypeChose > div,
+.tourTypeChoseChoseTourCreation > div,
+#tourBestSeasonTitleTourCreation,
+#tourBestSeasonChoseTourCreation,
+#tourBestSeasonChoseTourCreation > div {
     float: right;
 }
 
@@ -670,14 +685,15 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .btn-group-toggle {
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
     border-radius: 7px;
     direction: rtl;
     border: 1px solid #b4b4b4;
     margin-right: 8px;
 }
 
-.btn.active, .btn:active {
+.btn.active,
+.btn:active {
     box-shadow: none;
     -webkit-box-shadow: none;
     background-color: var(--koochita-light-green);
@@ -700,7 +716,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     display: inline-block;
 }
 
-#tourBestSeasonTitleTourCreation , #tourBestSeasonChoseTourCreation {
+#tourBestSeasonTitleTourCreation,
+#tourBestSeasonChoseTourCreation {
     margin-top: 15px;
 }
 
@@ -760,7 +777,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     text-align: center;
 }
 
-.transportationTitleBoxesLocal{
+.transportationTitleBoxesLocal {
     position: absolute;
     right: -155px;
     width: 250px;
@@ -773,15 +790,16 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     text-align: center;
 }
 
-#toTheDestinationTitleBox{
+#toTheDestinationTitleBox {
     background-color: var(--koochita-light-green);
 }
 
-#fromTheDestinationTitleBox{
+#fromTheDestinationTitleBox {
     background-color: darkred;
 }
 
-.transportationStartTimeTourCreation , .transportationKindTourCreation {
+.transportationStartTimeTourCreation,
+.transportationKindTourCreation {
     margin-right: 0 !important;
 }
 
@@ -791,7 +809,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .transportationStartTimeTourCreation > input:nth-child(2) {
-    border-right: 1px solid #d8d8d8 ;
+    border-right: 1px solid #d8d8d8;
 }
 
 .transportationMapPinningTourCreation {
@@ -826,7 +844,9 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 130px;
 }
 
-#mainClassificationOfTransportationInputDiv select , .mainClassificationOfPlaceInputDiv select , .mainClassificationOfPlaceInputDiv select {
+#mainClassificationOfTransportationInputDiv select,
+.mainClassificationOfPlaceInputDiv select,
+.mainClassificationOfPlaceInputDiv select {
     width: 85%;
 }
 
@@ -859,7 +879,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     margin-top: 15px;
 }
 
-.tourFoodMealTitleTourCreation , .tourFoodMealChoseTourCreation {
+.tourFoodMealTitleTourCreation,
+.tourFoodMealChoseTourCreation {
     margin-top: 15px;
     float: right;
 }
@@ -897,7 +918,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 100%;
 }
 
-.addTourPlacesNameTourCreation > div , .addTourPlacesNameTourCreation > b {
+.addTourPlacesNameTourCreation > div,
+.addTourPlacesNameTourCreation > b {
     width: 100%;
     line-height: 1.8;
 }
@@ -968,7 +990,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     }
 }
 
-.placeNameAddingPlaceInputDiv > div.inputBoxText , .mainClassificationOfPlaceInputDiv > div.inputBoxText{
+.placeNameAddingPlaceInputDiv > div.inputBoxText,
+.mainClassificationOfPlaceInputDiv > div.inputBoxText {
     width: 15%;
 }
 
@@ -1009,7 +1032,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 20%;
 }
 
-.tourTicketKindTourCreation .inputBoxTour , .tourTicketKindTourCreation .inboxHelpSubtitleBlue{
+.tourTicketKindTourCreation .inputBoxTour,
+.tourTicketKindTourCreation .inboxHelpSubtitleBlue {
     float: left;
 }
 
@@ -1029,7 +1053,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .tourOccupationDetailsTourCreation {
-    background-color: rgb(213 , 238 , 235);
+    background-color: rgb(213, 238, 235);
     padding: 5px 10px;
     position: relative;
 }
@@ -1048,7 +1072,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .copyBtnTourCreation {
-    background-color: rgb(251 , 193 , 86);
+    background-color: rgb(251, 193, 86);
 }
 
 .copyBtnTourCreation > img {
@@ -1056,7 +1080,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .deleteBtnTourCreation {
-    background-color: rgb(148 , 52 , 30);
+    background-color: rgb(148, 52, 30);
     left: 20px;
     color: white;
     cursor: pointer;
@@ -1096,21 +1120,24 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     margin-top: 5px;
 }
 
-.tourCapacityNGOTours .inputBoxText , .specialDiscountBoxes .inputBoxText {
+.tourCapacityNGOTours .inputBoxText,
+.specialDiscountBoxes .inputBoxText {
     width: 45%;
 }
 
-.tourCapacityNGOTours .inputBoxInput  , .specialDiscountBoxes .inputBoxInput {
+.tourCapacityNGOTours .inputBoxInput,
+.specialDiscountBoxes .inputBoxInput {
     width: 50%;
 }
 
 #tourCapacityCheckbox {
     font-size: 13px;
     font-weight: 500;
-    color:black;
+    color: black;
 }
 
-.discountLimitationWholesale > div , .discountLimitationWholesale > input {
+.discountLimitationWholesale > div,
+.discountLimitationWholesale > input {
     width: auto;
     float: right;
 }
@@ -1136,7 +1163,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 .tourBasicKindsCheckboxLabel {
     font-size: 13px;
     font-weight: 500;
-    color:black;
+    color: black;
     width: 85%;
     display: inline-block;
     line-height: 1.45;
@@ -1146,8 +1173,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 .tourBasicKindsCheckbox {
     float: right;
     padding: 31px 30px;
-    box-shadow: 0 4px 16px 0
-    rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
     margin: 15px 0 0 20px;
     border-radius: 5px;
     width: 30%;
@@ -1156,7 +1182,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     align-items: center;
     justify-content: space-between;
 }
-.tourBasicKindsCheckbox > div{
+.tourBasicKindsCheckbox > div {
     width: 80%;
     display: inline-block;
     color: black;
@@ -1166,7 +1192,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     float: right;
 }
 
-input[type="checkbox"]:checked + label.tourBasicKindsCheckbox , input[type="radio"]:checked + label.tourBasicKindsCheckbox{
+input[type="checkbox"]:checked + label.tourBasicKindsCheckbox,
+input[type="radio"]:checked + label.tourBasicKindsCheckbox {
     border: 2px solid var(--koochita-light-green);
 }
 
@@ -1192,7 +1219,7 @@ input[type="checkbox"]:checked + label.tourBasicKindsCheckbox , input[type="radi
 }
 
 .tourNthOccurrence {
-    background-color: rgb(251 , 193 , 86);
+    background-color: rgb(251, 193, 86);
     color: white;
     padding: 2px 15px;
     float: right;
@@ -1226,7 +1253,8 @@ textarea {
     width: 100%;
 }
 
-.panel-default > .panel-heading + .panel-collapse > .panel-body , .panel-body {
+.panel-default > .panel-heading + .panel-collapse > .panel-body,
+.panel-body {
     border-top: none;
     padding: 0;
 }
@@ -1243,7 +1271,7 @@ textarea {
     display: inline-block;
 }
 
-.panel-title > a:hover  {
+.panel-title > a:hover {
     background-color: #ddd;
     text-decoration: none;
     text-transform: none;
@@ -1255,7 +1283,8 @@ textarea {
     background-color: #ddd;
 }
 
-.collapse.in , .collapsing {
+.collapse.in,
+.collapsing {
     display: inline-block;
 }
 
@@ -1265,15 +1294,18 @@ textarea {
     float: right;
 }
 
-.panel-collapse.collapse.in , .panel-collapse.collapsing {
+.panel-collapse.collapse.in,
+.panel-collapse.collapsing {
     background-color: #f5f5f5;
     padding: 25px 10px;
     width: 65%;
     margin-right: 10px;
 }
 
-.panel-collapse.collapse.in > .panel-body > div , .panel-collapse.collapsing > .panel-body > div ,
-.essentialItemsTourCreation > div , .suggestionItemsTourCreation > div {
+.panel-collapse.collapse.in > .panel-body > div,
+.panel-collapse.collapsing > .panel-body > div,
+.essentialItemsTourCreation > div,
+.suggestionItemsTourCreation > div {
     background-color: white;
     display: inline-block;
     text-align: center;
@@ -1323,13 +1355,12 @@ textarea {
     cursor: pointer;
     overflow: hidden;
 }
-.imgUploadsTourCreation .addPicText{
+.imgUploadsTourCreation .addPicText {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-
 
 .deleteBtnImgTourCreation {
     position: absolute;
@@ -1350,7 +1381,8 @@ textarea {
     float: right;
 }
 
-.optionalCancellingTourCreation > span , .optionalCancellingTourCreation > div {
+.optionalCancellingTourCreation > span,
+.optionalCancellingTourCreation > div {
     float: right;
     display: inline-block;
 }
@@ -1529,7 +1561,8 @@ textarea {
     margin: 30px 10px;
 }
 
-.green-border , .green-border-onclick {
+.green-border,
+.green-border-onclick {
     border: 2px solid var(--koochita-light-green);
 }
 
@@ -1542,8 +1575,8 @@ textarea {
 }
 
 .styled-select {
-    -moz-appearance:none; /* Firefox */
-    -webkit-appearance:none; /* Safari and Chrome */
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari and Chrome */
     height: 30px;
     padding-right: 5px;
 }
@@ -1563,7 +1596,7 @@ textarea {
     font-size: 10px;
 }
 
-.modalBack{
+.modalBack {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -1574,7 +1607,7 @@ textarea {
     z-index: 9;
 }
 
-.multiselect{
+.multiselect {
     background: white;
     position: absolute;
     width: 84%;
@@ -1586,13 +1619,13 @@ textarea {
     padding: 10px;
     display: none;
 }
-.optionMultiSelect{
+.optionMultiSelect {
     cursor: pointer;
 }
-.optionMultiSelect:hover{
+.optionMultiSelect:hover {
     background: red;
 }
-.searchResult{
+.searchResult {
     width: 85%;
     padding-right: 9px;
     float: left;
@@ -1607,18 +1640,18 @@ textarea {
     overflow: auto;
 }
 
-.searchHover{
+.searchHover {
     cursor: pointer;
 }
-.searchHover:hover{
+.searchHover:hover {
     background-color: white;
     padding-right: 10px;
     border-radius: 5px;
 }
-.searchHover.blue:hover{
+.searchHover.blue:hover {
     background: var(--koochita-light-green);
 }
-.errorDiv{
+.errorDiv {
     position: fixed;
     z-index: 99999;
     top: 50px;
@@ -1627,35 +1660,35 @@ textarea {
     direction: rtl;
     display: none;
 }
-.errorClass{
+.errorClass {
     background-color: #ff9191 !important;
 }
 
-.featuresRow{
+.featuresRow {
     margin-bottom: 25px;
     display: flex;
     align-items: center;
 }
-.featuresRow > div{
+.featuresRow > div {
     margin-left: 10px;
 }
 
-.selectTag{
-    background-color: #DDD;
+.selectTag {
+    background-color: #ddd;
     text-decoration: none;
     text-transform: none;
     color: #16174f;
     outline: none;
 }
-.draghere{
+.draghere {
     cursor: pointer;
 }
-.draghere:hover{
+.draghere:hover {
     background-color: var(--koochita-light-green) !important;
     color: white;
 }
 
-.inputBoxTour{
+.inputBoxTour {
     padding: 2px 7px;
     font-size: 0.8em;
     display: flex !important;
@@ -1665,18 +1698,18 @@ textarea {
     line-height: 30px;
     margin: 10px 0;
 }
-.inputBoxTour .inputBoxInput{
+.inputBoxTour .inputBoxInput {
     border: none;
     background: none;
-   width: 100%;
+    width: 100%;
     text-align: right;
     padding-right: 10px;
 }
-.inputBoxTour .inputBoxInput.center{
+.inputBoxTour .inputBoxInput.center {
     text-align: center;
     padding: 0px;
 }
-.inputBoxTour .inputBoxText{
+.inputBoxTour .inputBoxText {
     border-left: 1px solid #d8d8d8;
     padding-left: 10px;
     width: auto;
@@ -1686,7 +1719,7 @@ textarea {
     white-space: nowrap;
 }
 
-.hotelCardButtons{
+.hotelCardButtons {
     position: absolute;
     left: 10px;
     display: flex !important;
@@ -1695,7 +1728,7 @@ textarea {
     justify-content: center;
     top: 0px;
 }
-.hotelCardButtons > button{
+.hotelCardButtons > button {
     border: 0;
     border-radius: 8px;
     padding: 3px 17px;
@@ -1703,8 +1736,7 @@ textarea {
     margin: 5px 0px;
 }
 
-
-.dateRow{
+.dateRow {
     border: solid 1px #afafaf;
     padding: 10px 5px;
     margin-bottom: 15px;
@@ -1712,7 +1744,7 @@ textarea {
     box-shadow: 0px 0px 5px 3px #0000001f;
     background: #f0f0f0;
 }
-.dateRow .headerSec{
+.dateRow .headerSec {
     margin-bottom: 5px;
     cursor: pointer;
     font-size: 18px;
@@ -1721,20 +1753,19 @@ textarea {
     justify-content: space-between;
     padding: 0px 15px;
 }
-.dateRow .headerSec .title{
+.dateRow .headerSec .title {
     font-size: 24px;
 }
-.dateRow .headerSec .icon{
-
+.dateRow .headerSec .icon {
 }
 
-.dateRow .bodySec{
+.dateRow .bodySec {
     max-height: 0px;
     width: 100%;
     overflow: hidden;
-    transition: .3s;
+    transition: 0.3s;
 }
-.dateRow .bodySec.open{
+.dateRow .bodySec.open {
     max-height: 30000px;
     padding: 20px;
     padding-top: 5px;
@@ -1742,22 +1773,21 @@ textarea {
     background: white;
     border-radius: 10px;
 }
-.dateRow .title{
+.dateRow .title {
     font-weight: bold;
     font-size: 18px;
     margin: 0px 0px;
     padding: 5px 0px;
     margin-top: 5px;
 }
-.dateRow .hotelSec{
-
+.dateRow .hotelSec {
 }
-.dateRow .hotelSec .hotelInfo{
+.dateRow .hotelSec .hotelInfo {
     display: flex;
     align-items: center;
     position: relative;
 }
-.dateRow .hotelSec .hotelInfo .hotelPic{
+.dateRow .hotelSec .hotelInfo .hotelPic {
     height: 70px;
     width: 70px;
     overflow: hidden;
@@ -1767,13 +1797,13 @@ textarea {
     border-radius: 50%;
     margin: 10px;
 }
-.dateRow .hotelSec .hotelInfo .name{
+.dateRow .hotelSec .hotelInfo .name {
     font-weight: bold;
 }
-.dateRow .hotelSec .hotelInfo .normText{
-    font-size: .7em;
+.dateRow .hotelSec .hotelInfo .normText {
+    font-size: 0.7em;
 }
-.dateRow .hotelSec .addNewHotel{
+.dateRow .hotelSec .addNewHotel {
     font-size: 11px;
     border-radius: 11px;
     border: solid 1px gray;
@@ -1782,21 +1812,21 @@ textarea {
     cursor: pointer;
     font-weight: normal;
 }
-.dateRow .planSec{
+.dateRow .planSec {
     border-top: solid 1px #8080802e;
 }
-.dateRow .planSec .bod{
+.dateRow .planSec .bod {
     position: relative;
     width: 100%;
 }
-.dateRow .planSec .bod .mainRule{
+.dateRow .planSec .bod .mainRule {
     position: absolute;
     width: 100%;
     height: 1px;
-    background:  var(--koochita-light-green);
+    background: var(--koochita-light-green);
     top: 50%;
 }
-.dateRow .planSec .bod .sections{
+.dateRow .planSec .bod .sections {
     width: 100%;
     height: 100px;
     position: relative;
@@ -1804,11 +1834,11 @@ textarea {
     justify-content: center;
     align-items: center;
 }
-.dateRow .planSec .bod .sections .sec{
+.dateRow .planSec .bod .sections .sec {
     width: calc(100% / 24);
     height: 20px;
 }
-.dateRow .planSec .bod .sections .lineSec{
+.dateRow .planSec .bod .sections .lineSec {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1817,12 +1847,12 @@ textarea {
     margin-top: 12px;
     width: 1px;
 }
-.dateRow .planSec .bod .sections .planDetSec{
+.dateRow .planSec .bod .sections .planDetSec {
     position: absolute;
     width: 100%;
     top: calc(50% - 10px);
 }
-.dateRow .planSec .bod .sections .planDetSec .detail{
+.dateRow .planSec .bod .sections .planDetSec .detail {
     position: absolute;
     height: 20px;
     border-radius: 20px;
@@ -1832,18 +1862,18 @@ textarea {
     justify-content: center;
     align-items: center;
     font-size: 8px;
-    transition: .3s;
+    transition: 0.3s;
     overflow: hidden;
 }
-.dateRow .planSec .bod .sections .planDetSec .detail:hover{
-    opacity: .8;
+.dateRow .planSec .bod .sections .planDetSec .detail:hover {
+    opacity: 0.8;
 }
-.dateRow .planSec .bod .sections .line{
+.dateRow .planSec .bod .sections .line {
     height: 40px;
     width: 1px;
     background: var(--koochita-light-green);
 }
-.dateRow .planSec .iconsPlus{
+.dateRow .planSec .iconsPlus {
     font-size: 30px;
     border: none;
     background: no-repeat;
@@ -1851,53 +1881,50 @@ textarea {
     cursor: pointer;
     margin-right: auto;
 }
-.dateRow .summerySec{
+.dateRow .summerySec {
     border-top: solid 1px #8080802e;
 }
 
-.clockpicker-popover{
+.clockpicker-popover {
     z-index: 99999;
 }
 
-
-.eventModal{
-
+.eventModal {
 }
-.eventModal .title{
+.eventModal .title {
     font-weight: bold;
 }
-.eventModal .timeSec{
+.eventModal .timeSec {
     margin-top: 20px;
     /*border-top: solid 1px lightgray;*/
     /*padding-top: 20px;*/
     padding-top: 5px;
 }
-.eventModal .timeSec .inp{
+.eventModal .timeSec .inp {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 5px;
 }
-.eventModal .timeSec .inp .clockTitle{
+.eventModal .timeSec .inp .clockTitle {
     width: 40%;
 }
-.eventModal .timeSec .inp .clockTitle .clockP{
-
+.eventModal .timeSec .inp .clockTitle .clockP {
 }
-.eventModal .timeSec .inp .clockTitle .name{
+.eventModal .timeSec .inp .clockTitle .name {
     font-size: 10px;
 }
-.eventModal .options{
+.eventModal .options {
     /*margin-top: 15px;*/
     border-bottom: solid 1px lightgray;
     /*padding-top: 10px;*/
 }
-.eventModal .options .bod{
+.eventModal .options .bod {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-.eventModal .options .bod .eventItem{
+.eventModal .options .bod .eventItem {
     padding: 10px;
     margin: 5px;
     border: solid 1px gray;
@@ -1905,34 +1932,32 @@ textarea {
     font-size: 11px;
     cursor: pointer;
 }
-.eventModal .options .bod .eventItem:hover{
+.eventModal .options .bod .eventItem:hover {
     background: var(--koochita-yellow);
 }
-.eventModal .options .bod .eventItem.select{
+.eventModal .options .bod .eventItem.select {
     background: var(--koochita-yellow);
 }
-.eventModal .options .bod .eventItem .text{
-
+.eventModal .options .bod .eventItem .text {
 }
-.eventModal .options .bod .eventItem .icon{
-
+.eventModal .options .bod .eventItem .icon {
 }
-.eventModal .optBody{
+.eventModal .optBody {
     margin-top: 15px;
 }
-.eventModal .optBody .choosedPlace{
+.eventModal .optBody .choosedPlace {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     position: relative;
 }
-.eventModal .optBody .choosedPlace .placeCar{
+.eventModal .optBody .choosedPlace .placeCar {
     display: flex;
     align-items: center;
     margin: 10px;
     position: relative;
 }
-.eventModal .optBody .choosedPlace .placeCar .imgSec{
+.eventModal .optBody .choosedPlace .placeCar .imgSec {
     width: 50px;
     height: 50px;
     display: flex;
@@ -1942,15 +1967,15 @@ textarea {
     border-radius: 50%;
     margin-left: 10px;
 }
-.eventModal .optBody .choosedPlace .placeCar .name{
+.eventModal .optBody .choosedPlace .placeCar .name {
     font-weight: bold;
     font-size: 13px;
 }
-.eventModal .optBody .choosedPlace .placeCar .text{
+.eventModal .optBody .choosedPlace .placeCar .text {
     font-weight: normal;
     font-size: 11px;
 }
-.eventModal .optBody .choosedPlace .placeCar .cancelPlace{
+.eventModal .optBody .choosedPlace .placeCar .cancelPlace {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -1963,14 +1988,14 @@ textarea {
     background: #0000004d;
     border-radius: 50px;
 }
-.eventModal .optBody .choosedPlace .placeCar:hover .cancelPlace{
+.eventModal .optBody .choosedPlace .placeCar:hover .cancelPlace {
     display: flex;
 }
 
-.eventModal .optBody .searchBox{
+.eventModal .optBody .searchBox {
     position: relative;
 }
-.eventModal .optBody .searchBox .searchResult{
+.eventModal .optBody .searchBox .searchResult {
     position: absolute;
     top: 100%;
     width: 100%;
@@ -1978,51 +2003,50 @@ textarea {
     overflow: auto;
     z-index: 1;
 }
-.eventModal .optBody .searchBox .searchResult .res{
+.eventModal .optBody .searchBox .searchResult .res {
     padding: 10px;
     cursor: pointer;
     font-size: 13px;
 }
-.eventModal .optBody .searchBox .searchResult .res:hover{
+.eventModal .optBody .searchBox .searchResult .res:hover {
     background: var(--koochita-light-green);
 }
 
-.errorList{
+.errorList {
     list-style-type: none;
 }
-.errorList li{
+.errorList li {
     margin: 10px 0px;
 }
 
-.seperatorInWhiteSec{
+.seperatorInWhiteSec {
     border-top: solid 1px #e0e0e06b;
     margin-top: 15px;
     padding-top: 15px;
 }
 
-
-.float-right{
+.float-right {
     float: right !important;
 }
-.importantFieldLabel:after{
-    content: '*';
+.importantFieldLabel:after {
+    content: "*";
     color: red;
     margin-right: 5px;
 }
-.btn.btn-secondary{
+.btn.btn-secondary {
     background: lightgray;
     border: none;
     color: black;
-    opacity: .4;
+    opacity: 0.4;
 }
-.btn.btn-secondary.active{
+.btn.btn-secondary.active {
     color: white !important;
     opacity: 1 !important;
     background: #4dc7bcf0 !important;
     border: solid 1px var(--koochita-light-green) !important;
 }
 
-.goToPrevStep{
+.goToPrevStep {
     margin-left: 10px;
     background: none;
     color: var(--koochita-red);
@@ -2064,7 +2088,7 @@ textarea {
 /*background-color: var(--koochita-light-green);*/
 /*}*/
 
-.uploadHover{
+.uploadHover {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -2076,7 +2100,7 @@ textarea {
     z-index: 9;
     background: #00000069;
 }
-.uploadHover .tickIcon{
+.uploadHover .tickIcon {
     color: lime;
     font-size: 85px;
     border: solid 10px;
@@ -2087,31 +2111,30 @@ textarea {
     justify-content: center;
     align-items: center;
 }
-.uploadHover .warningIcon{
+.uploadHover .warningIcon {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: var(--koochita-yellow);
 }
-.uploadHover .warningIcon:before{
+.uploadHover .warningIcon:before {
     font-size: 60px;
     font-weight: normal;
 }
-.uploadHover .process{
+.uploadHover .process {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
-.uploadHover .process .processCounter{
+.uploadHover .process .processCounter {
     position: absolute;
     font-size: 22px;
     color: white;
 }
 
-
-.uploadHover .hoverInfos{
+.uploadHover .hoverInfos {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -2125,47 +2148,45 @@ textarea {
     color: red;
     cursor: pointer;
 }
-.uploadHover .hoverInfos .cancelButton{
+.uploadHover .hoverInfos .cancelButton {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     font-size: 22px;
 }
-.uploadHover .hoverInfos .cancelButton:before{
+.uploadHover .hoverInfos .cancelButton:before {
     font-size: 55px;
 }
-.uploadHover:hover .hoverInfos{
+.uploadHover:hover .hoverInfos {
     display: flex;
 }
 
-.equipmentSection{
-
+.equipmentSection {
 }
-.equipmentSection .panel-title{
-
+.equipmentSection .panel-title {
 }
-.equipmentSection .panel-title > div{
+.equipmentSection .panel-title > div {
     padding: 3px 5px;
     font-size: 14px;
     cursor: pointer;
     margin: 3px 0px;
 }
-.equipmentSection .panel-title > div:hover, .equipmentSection .panel-title > div.selectTag{
+.equipmentSection .panel-title > div:hover,
+.equipmentSection .panel-title > div.selectTag {
     color: white;
     background: var(--koochita-light-green);
 }
 
-
-.textareaInForDescription{
+.textareaInForDescription {
     width: 100%;
     text-align: right;
 }
-.chooseTourKind{
+.chooseTourKind {
     background: rgb(77, 199, 188) !important;
     color: white !important;
 }
-.tourLevelIcons::before{
+.tourLevelIcons::before {
     width: 100%;
     display: flex;
     font-weight: normal;
@@ -2174,28 +2195,28 @@ textarea {
     text-align: center;
     position: relative;
 }
-.tourLevelIcons{
+.tourLevelIcons {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     cursor: pointer;
 }
-.tourKindIcons:hover{
+.tourKindIcons:hover {
     background: var(--koochita-light-green);
 }
 
-.goToPrevStep{
+.goToPrevStep {
     margin-left: 10px;
     background: none;
     color: var(--koochita-red);
 }
 
-.tourKind:hover{
+.tourKind:hover {
     background: var(--koochita-light-green);
 }
 
-.tourLevelIcons::before{
+.tourLevelIcons::before {
     width: 100%;
     display: flex;
     font-weight: normal;
@@ -2204,18 +2225,18 @@ textarea {
     text-align: center;
     position: relative;
 }
-.tourLevelIcons{
+.tourLevelIcons {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     cursor: pointer;
 }
-.tourLevelIcons:hover{
+.tourLevelIcons:hover {
     background: var(--koochita-light-green);
     color: white;
 }
-.tourKindIcons:hover{
+.tourKindIcons:hover {
     background: var(--koochita-light-green);
 }
 
@@ -2235,7 +2256,7 @@ textarea {
 }
 
 .redStar:before {
-    content: '\E00B';
+    content: "\E00B";
     font-size: 0.5em;
     color: #92321b;
     position: absolute;
@@ -2243,7 +2264,7 @@ textarea {
     left: -10px;
 }
 .bottomArrowIcon:before {
-    content: '\E04A';
+    content: "\E04A";
     color: black;
 }
 
@@ -2258,7 +2279,7 @@ textarea {
     margin: 10px 0;
 }
 
-.searchResultBoxSection{
+.searchResultBoxSection {
     position: absolute;
     left: 0px;
     top: 100%;
@@ -2269,19 +2290,19 @@ textarea {
     border-radius: 0px 0px 10px 10px;
     border: solid 1px #cccccc;
 }
-.searchResultBoxSection .res{
+.searchResultBoxSection .res {
     margin: 0px 2px;
     padding: 5px 2px;
     border-bottom: solid 1px gray;
     font-size: 18px;
-    transition: .3s;
+    transition: 0.3s;
     cursor: pointer;
 }
-.searchResultBoxSection .res:hover{
+.searchResultBoxSection .res:hover {
     background: var(--koochita-light-green);
     color: white;
 }
-.searchResultBoxSection .res .light{
+.searchResultBoxSection .res .light {
     font-size: 11px;
 }
 
@@ -2321,9 +2342,7 @@ textarea {
     }
 }
 
-
-
-.submitBTNCircleIcon{
+.submitBTNCircleIcon {
     border: none;
     background: green;
     /* width: 30px; */
@@ -2336,26 +2355,26 @@ textarea {
     cursor: pointer;
     font-size: 15px;
 }
-.personInfosLabel{
+.personInfosLabel {
     display: inline-flex;
     align-items: center;
     margin: 7px 20px;
     font-size: 14px;
 }
-.transportInfoSec{
+.transportInfoSec {
     display: flex !important;
     align-items: center;
     flex-wrap: wrap;
     direction: rtl;
     float: unset;
 }
-.transportInfoSec > div{
+.transportInfoSec > div {
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-.dayActionButton{
+.dayActionButton {
     margin: 0px 10px;
     padding: 4px 10px;
     background: var(--koochita-blue);
@@ -2365,7 +2384,7 @@ textarea {
     box-shadow: 1px 1px 4px 2px #bbbbbb;
 }
 
-.icon-circle-arrow-right{
+.icon-circle-arrow-right {
     width: 10px;
     height: 10px;
     display: flex;
@@ -2373,7 +2392,7 @@ textarea {
     border-top: solid 2px black;
     transform: rotate(45deg);
 }
-.icon-circle-arrow-left{
+.icon-circle-arrow-left {
     width: 10px;
     height: 10px;
     display: flex;
@@ -2381,10 +2400,10 @@ textarea {
     border-bottom: solid 2px black;
     transform: rotate(45deg);
 }
-.calendarIcon{
+.calendarIcon {
     font-style: normal;
 }
-.addNewDateRow{
+.addNewDateRow {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2393,30 +2412,29 @@ textarea {
     padding-top: 20px;
 }
 
-.calendarRow{
+.calendarRow {
     display: flex;
     width: 100%;
     align-items: center;
 }
-.youCantSelect{
+.youCantSelect {
     opacity: 1 !important;
 }
-.youCantSelect > span{
+.youCantSelect > span {
     background: var(--koochita-blue) !important;
     color: white !important;
 }
 
-
-.dayToDiscountRow{
+.dayToDiscountRow {
     display: flex;
     align-items: center;
 }
-.dayToDiscountRow .textSec{
+.dayToDiscountRow .textSec {
     align-items: center;
     display: flex;
     margin: 0px 10px;
 }
-.dayToDiscountRow .dayInput{
+.dayToDiscountRow .dayInput {
     width: 100px;
     background: #ebebeb;
     padding: 3px 0px;
@@ -2425,37 +2443,37 @@ textarea {
     border-radius: 5px;
     text-align: center;
 }
-.onlyInputBackGray{
+.onlyInputBackGray {
     width: 45px;
     background: #ebebeb;
     border: 1px solid #cccccc !important;
     margin: 0px 10px;
     border-radius: 5px;
 }
-.textareaInForDescription{
+.textareaInForDescription {
     width: 100%;
     text-align: right;
 }
 
-.dateModal .topBorder{
+.dateModal .topBorder {
     border-top: solid 1px gray;
     padding-top: 10px;
     margin-top: 10px;
 }
-.dateModal .secTitle{
+.dateModal .secTitle {
     font-size: 18px;
     font-weight: bold;
 }
 
-.otherDateSection{
+.otherDateSection {
     margin-top: 14px;
 }
-.tableButton{
+.tableButton {
     font-size: 11px;
     padding: 4px 10px;
 }
 
-.submitAndPrevButton{
+.submitAndPrevButton {
     padding: 15px;
     direction: ltr;
 }

@@ -2,33 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ActivityLogEvent;
-use App\Helpers\DefaultDataDB;
 use App\models\ActivationCode;
-use App\models\Activity;
-use App\models\Cities;
-use App\models\DefaultPic;
-use App\models\LogModel;
-use App\models\logs\UserSeenLog;
-use App\models\Message;
 use App\models\RetrievePas;
 use App\models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class UserLoginController extends Controller
 {
     public function login()
     {
         return redirect(route('main'));
-    }
-
-    public function mainDoLogin()
-    {
-        echo 'ok';
-        return;
     }
 
     public function doLogin()
@@ -45,7 +32,7 @@ class UserLoginController extends Controller
             if (Auth::attempt($credentials, true) || Auth::attempt($credentialsPhone, true) || Auth::attempt($credentialsEmail, true)) {
                 $user = Auth::user();
                 if ($user->status != 0) {
-                    RetrievePas::where('uId', $user->id)->delete();
+                    
                     if(!Auth::check())
                         Auth::login($user);
 
@@ -87,14 +74,14 @@ class UserLoginController extends Controller
         $request->session()->invalidate();
 
         $back = \redirect()->back();
-        if(\Session::has('lang'))
-            $language = \Session::get('lang');
+        if(Session::has('lang'))
+            $language = Session::get('lang');
 
         Auth::logout();
-        \Session::flush();
+        Session::flush();
 
         if(isset($language))
-            \Session::put('lang', $language);
+            Session::put('lang', $language);
 
         return \redirect()->back();
     }
@@ -226,7 +213,7 @@ class UserLoginController extends Controller
                 try {
                     $activation->save();
                     echo json_encode(['status' => 'ok', 'reminder' => 90]);
-                } catch (Exception $x) {
+                } catch (\Exception $x) {
                 }
             }
             return;
@@ -304,145 +291,13 @@ class UserLoginController extends Controller
                         $activation->save();
                         echo json_encode(['status' => 'ok', 'reminder' => 90]);;
                         return;
-                    } catch (Exception $x) {
+                    } catch (\Exception $x) {
                     }
                 }
             }
             echo json_encode(['status' => 'nok', 'reminder' => 90]);
         }
     }
-
-    public function resendActivationCodeForget()
-    {
-
-        if (isset($_POST["phoneNum"])) {
-            $phoneNum = $_POST["phoneNum"];
-            $phoneNum = convertNumber('en', $phoneNum);
-
-            $user = User::where('phone', makeValidInput($phoneNum))->first();
-
-            if ($user != null) {
-
-                $retrievePas = RetrievePas::where('uId', $user->id)->first();
-
-                if ($retrievePas == null) {
-                    echo json_encode(['status' => 'nok4', 'reminder' => 90]);
-                    return;
-                }
-
-                if (time() - $retrievePas->sendTime < 90) {
-                    echo json_encode(['status' => 'nok', 'reminder' => (90 - time() + $retrievePas->sendTime)]);
-                    return;
-                }
-
-                $newPas = $this->generatePassword();
-                $msgId = sendSMS($user->phone, $newPas, 'sms');
-
-                if ($msgId != -1) {
-                    $user->password = \Hash::make($newPas);
-                    $retrievePas->sendTime = time();
-                    try {
-                        $user->save();
-                        $retrievePas->save();
-                        echo json_encode(['status' => 'ok', 'reminder' => 90]);
-                    } catch (Exception $x) {
-                    }
-                } else {
-                    echo json_encode(['status' => 'nok2', 'reminder' => 90]);
-                }
-                return;
-            }
-        }
-        echo json_encode(['status' => 'nok3', 'reminder' => 90]);
-    }
-
-    public function retrievePasByEmail()
-    {
-        if (isset($_POST["email"])) {
-            $email = makeValidInput($_POST["email"]);
-            $user = User::where('email',$email)->first();
-
-            if ($user != null) {
-
-                $code = generateRandomString(10);
-                while(RetrievePas::where('code', $code)->count() != 0)
-                    $code = generateRandomString(10);
-
-                $ret = RetrievePas::where('email', $email)->first();
-                if($ret != null){
-                    if(300 + $ret->sendTime < time()){
-                        $ret->code = $code;
-                        $ret->sendTime = time();
-                        $ret->save();
-                    }
-                    else{
-                        echo json_encode(['status' => 'nok3', 'remainder' => 300 + $ret->sendTime - time()]);
-                        return;
-                    }
-                }
-                else {
-                    $ret = new RetrievePas();
-                    $ret->uId = $user->id;
-                    $ret->code = $code;
-                    $ret->email = $_POST['email'];
-                    $ret->sendTime = time();
-                    $ret->save();
-                }
-
-                $link = route('newPasswordEmail', ['code' => $code]);
-                try {
-                    forgetPassEmail($user->username, $link, $user->email);
-                    echo json_encode(['status' => 'ok', 'remainder' => 300 + $ret->sendTime - time()]);
-                }
-                catch (\Exception $exception){
-                    $ret->delete();
-                    echo json_encode(['status' => 'nok2']);
-                }
-            }
-            else
-                echo json_encode(['status' => 'nok1']);
-        }
-        else
-            echo json_encode(['status' => 'nok']);
-
-        return;
-    }
-
-    public function newPasswordEmailPage($code)
-    {
-        $retPass = RetrievePas::where('code', $code)->first();
-        if( !($retPass != null && (300 - time() + $retPass->sendTime) > 0) ) {
-            if($retPass != null)
-                $retPass->delete();
-
-            return \redirect(url('main'));
-        }
-
-        return view('pages.newPasswordEmail', compact(['code']));
-    }
-
-    public function setNewPasswordEmail(Request $request)
-    {
-        if(isset($request->code) && isset($request->password)){
-            $retPass = RetrievePas::where('code', $request->code)->first();
-            if($retPass != null){
-                $user = User::find($retPass->uId);
-                $user->password = \Hash::make($request->password);
-                $user->save();
-
-                $retPass->delete();
-
-                echo 'ok';
-            }
-            else
-                echo 'nok1';
-        }
-        else
-            echo 'nok';
-
-        return;
-    }
-
     public function retrievePasByPhone()
     {
         if (isset($_POST["phone"])) {
@@ -483,120 +338,6 @@ class UserLoginController extends Controller
             return response()->json(['status' => 'nok']);
     }
 
-    public function registerAndLogin(Request $request)
-    {
-        if (isset($_POST["username"]) && isset($_POST["password"]) &&
-            (isset($_POST["email"]) || isset($_POST["phone"]))) {
-
-            $uInvitationCode = createCode();
-            while (User::where('invitationCode',$uInvitationCode)->count() > 0)
-                $uInvitationCode = createCode();
-
-            $checkUserName = User::where('username', $request->username)->count();
-            if($checkUserName > 0){
-                echo 'nok1';
-                return;
-            }
-
-            if(isset($request->phone) && $request->phone != ''){
-                if(isset($request->actCode)) {
-                    $phone = convertNumber('en', $request->phone);
-                    $actCode = convertNumber('en', $request->actCode);
-                    $check = ActivationCode::where('phoneNum', $phone)->where('code', $actCode)->first();
-                    if ($check == null) {
-                        echo 'nok5';
-                        return;
-                    }
-                    $check->delete();
-                }
-                else{
-                    echo 'nok5';
-                    return;
-                }
-            }
-            else if(isset($_POST["email"]) && $_POST["email"] != ''){
-
-            }
-            else{
-                echo 'nok10';
-                return;
-            }
-
-            $invitationCode = "";
-            if (isset($request->invitationCode) && $request->invitationCode != '') {
-                $invitationCode = makeValidInput($request->invitationCode);
-                if (!empty($invitationCode)) {
-                    $dest = User::where('invitationCode',$invitationCode)->first();
-                    if ($dest == null) {
-                        echo 'nok3';
-                        return;
-                    }
-                }
-            }
-
-            $defualt = DefaultPic::inRandomOrder()->first();
-
-            $user = new User();
-            $user->username = makeValidInput($request->username);
-            $user->password = \Hash::make(makeValidInput($request->password));
-            $user->email = makeValidInput($request->email);
-            $user->phone = convertNumber('en', makeValidInput($request->phone));
-            $user->invitationCode = $uInvitationCode;
-            $user->level = 0;
-            $user->picture = $defualt->id;
-
-            try {
-                $user->save();
-                createWelcomeMsg($user->id);
-                event(new ActivityLogEvent($user->id, $user->id, 'register'));
-            } catch (Exception $x) {
-                echo "nok1 " . $x->getMessage();
-                return;
-            }
-
-            try {
-                if (isset($request->email))
-                    welcomeEmail($user->username, $user->email);
-            } catch (Exception $x) {
-                echo "nok2";
-                return;
-            }
-
-            if (isset($dest) && $dest != null && isset($request->invitationCode) && $request->invitationCode != null ) {
-                $log = new LogModel();
-                $log->visitorId = $user->id;
-                $log->date = date('Y-m-d');
-                $log->time = getToday()["time"];
-                $log->activityId = DefaultDataDB::getActivityWithName('دعوت')->id;
-                $log->kindPlaceId = -1;
-                $log->confirm = 1;
-                $log->placeId = -1;
-                try {
-                    $log->save();
-                } catch (Exception $x) {}
-
-                $log = new LogModel();
-                $log->visitorId = $dest->id;
-                $log->date = date('Y-m-d');
-                $log->time = getToday()["time"];
-                $log->activityId = DefaultDataDB::getActivityWithName('دعوت')->id;
-                $log->kindPlaceId = -1;
-                $log->confirm = 1;
-                $log->placeId = -1;
-                try {
-                    $log->save();
-                } catch (Exception $x) {}
-            }
-
-            Auth::loginUsingId($user->id);
-            echo "ok";
-        }
-        else
-            echo "nok";
-
-        return;
-    }
-
     public function loginWithGoogle()
     {
         $url = route('main');
@@ -604,7 +345,7 @@ class UserLoginController extends Controller
             $url = $_GET['state'];
 
         if (Auth::check())
-            return \Redirect::to($url);
+            return Redirect::to($url);
 
         if (isset($_GET['code'])) {
 
@@ -653,11 +394,11 @@ class UserLoginController extends Controller
             if($userCheckEmail != null){
                 if($userCheckEmail->googleId == null){
                     $userCheckEmail->googleId = $user->id;
-                    $userCheckEmail->password = \Hash::make($user->id);
+                    $userCheckEmail->password = Hash::make($user->id);
                     try {
                         $userCheckEmail->save();
                     }
-                    catch (Exception $x) {
+                    catch (\Exception $x) {
                     }
                 }
             }
@@ -674,7 +415,7 @@ class UserLoginController extends Controller
 
                 $userCheckEmail = new User();
                 $userCheckEmail->username = $usernameCheck;
-                $userCheckEmail->password = \Hash::make($user->id);
+                $userCheckEmail->password = Hash::make($user->id);
                 $name = explode(' ', $user->name);
                 if(isset($name[0]))
                     $userCheckEmail->first_name = $name[0];
@@ -687,174 +428,13 @@ class UserLoginController extends Controller
                     $userCheckEmail->save();
                     createWelcomeMsg($userCheckEmail->id);
                 }
-                catch (Exception $x) {
+                catch (\Exception $x) {
                 }
             }
             Auth::attempt(['username' => $userCheckEmail->username, 'password' => $user->id], true);
         }
 
         return redirect(url($url));
-    }
-
-    public function setNewPassword(Request $request)
-    {
-        if(isset($request->pass) && isset($request->phone) && isset($request->code)){
-            $checkPhone = ActivationCode::where('phoneNum', $request->phone)->where('code', $request->code)->first();
-            if($checkPhone != null && ($checkPhone->sendTime + 600) - time() > 0 ){
-                $user = User::where('phone', $request->phone)->first();
-                if($user != null && $checkPhone->userId == $user->id){
-                    $user->password = \Hash::make($request->pass);
-                    $user->save();
-                    $checkPhone->delete();
-
-                    echo 'ok';
-                }
-                else
-                    echo 'nok1';
-            }
-            else
-                echo 'nok5';
-        }
-        else
-            echo 'nok';
-
-        return;
-    }
-
-    public function editUsernameAccountInfo(Request $request)
-    {
-        if(isset($request->username)){
-            $username = $request->username;
-            $user = auth()->user();
-
-            $check = User::where('username', $username)->where('id', '!=', $user->id)->first();
-            if($check != null)
-                return response()->json(['status' => 'duplicate']);
-            else{
-                $user = User::find($user->id);
-                $user->username = $username;
-                $user->save();
-
-                return response()->json(['status' => 'ok']);
-            }
-        }
-        else
-            return response()->json(['status' => 'error']);
-    }
-
-    public function editPhoneNumberAccountInfo(Request $request)
-    {
-        if(isset($request->code) && isset($request->phoneNum)){
-            $user = User::find(\auth()->user()->id);
-
-            $code = convertNumber('en', makeValidInput($request->code));
-            $phone = convertNumber('en', makeValidInput($request->phoneNum));
-
-            $check = User::where('phone', $phone)->where('id', '!=', $user->id)->first();
-            if($check != null)
-                return response()->json(['status' => 'duplicate']);
-
-            $activation = ActivationCode::where('phoneNum', $phone)->first();
-            if($activation == null || (90 - time() + $activation->sendTime) < 0)
-                return response()->json(['status' => 'expire']);
-
-            if($activation->code != $code)
-                return response()->json(['status' => 'wrong']);
-            else{
-                $activation->delete();
-
-                $user->phone = $phone;
-                $user->save();
-
-                return response()->json(['status' => 'ok']);
-            }
-        }
-        else
-            return response()->json(['status' => 'error']);
-    }
-
-    public function editGeneralAccountInfo(Request $request){
-
-        $user = \auth()->user();
-        $user->first_name = isset($request->firstName) ? $request->firstName : null;
-        $user->last_name = isset($request->lastName) ? $request->lastName : null;
-        $user->age = isset($request->age) ? $request->age : null;
-        $user->sex = isset($request->gender) ? $request->gender : null;
-        $user->introduction = isset($request->introduction) ? $request->introduction : null;
-
-        $cityId = $request->cityId;
-        if(Cities::find($cityId) != null)
-            $user->cityId = $cityId;
-
-        $user->save();
-
-        return response()->json(['status' => 'ok']);
-    }
-
-    public function editSocialInfo(Request $request)
-    {
-        $status = 'ok';
-        $result = [];
-        $user = User::find(\auth()->user()->id);
-
-        if(User::where('email', $request->email)->where('id', '!=', $user->id)->first() == null)
-            $user->email = $request->email;
-        else{
-            $status = 'error';
-            array_push($result, 'emailDuplicate');
-        }
-
-        if(User::where('instagram', $request->instagram)->where('id', '!=', $user->id)->first() == null)
-            $user->instagram = $request->instagram;
-        else{
-            $status = 'error';
-            array_push($result, 'instagramDuplicate');
-        }
-
-        $user->save();
-
-        return response()->json(['status' => $status, 'result' => $result]);
-    }
-
-    public function editPassword(Request $request) {
-        $user = \auth()->user();
-
-        if(isset($request->password) && isset($request->repPassword)){
-            $password = makeValidInput($request->password);
-            $repPassword = makeValidInput($request->repPassword);
-
-            if(strlen($password) >= 6) {
-                if ($password === $repPassword) {
-                    $user->password = Hash::make($password);
-                    $user->save();
-                    return \redirect()->back()->with(['passStatus' => 'ok']);
-                }
-                else
-                    return \redirect()->back()->with(['passStatus' => 'notSame']);
-            }
-            else
-                return \redirect()->back()->with(['passStatus' => 'min6']);
-        }
-        else
-            return \redirect()->back()->with(['passStatus' => 'error']);
-
-    }
-
-
-    private function generatePassword()
-    {
-        $init = 65;
-        $init2 = 97;
-        $code = "";
-
-        for ($i = 0; $i < 10; $i++) {
-            if (rand(0, 1) == 0)
-                $code .= chr(rand(0, 25) + $init);
-            else
-                $code .= chr(rand(0, 25) + $init2);
-        }
-
-        return $code;
     }
 
 }

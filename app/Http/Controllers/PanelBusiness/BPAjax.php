@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\models\Cities;
 use App\models\places\Place;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class BPAjax extends Controller
@@ -43,7 +44,7 @@ class BPAjax extends Controller
         foreach ($kindPlaceIdes as $kindPlaceId){
             $kindPlace = $allKindPlaces[$kindPlaceId];
 
-            $finded = \DB::table("$kindPlace->tableName AS mainT")
+            $finded = DB::table("$kindPlace->tableName AS mainT")
                             ->join('cities', 'cities.id', 'mainT.cityId')
                             ->where('mainT.name', 'LIKE', "%{$value}%")
                             ->select(['mainT.*', 'cities.name AS cityName'])

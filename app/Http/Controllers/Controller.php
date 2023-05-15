@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
 include_once 'Common.php';
-include_once 'Common2.php';
 
 class Controller extends BaseController
 {

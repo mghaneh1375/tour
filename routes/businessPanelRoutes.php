@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\PanelBusiness\Agency\TourCreationAgencyController;
 use App\Http\Controllers\PanelBusiness\Agency\AgencyBusinessPanelController;
 use App\Http\Controllers\PanelBusiness\AuthPanelBusinessController;
@@ -146,6 +147,10 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 });
 
 
+    Route::post('searchForCity', [AjaxController::class, 'searchForCity'])->name('searchForCity');
 
+    Route::get('findUser', 'AjaxController@findUser')->name('findUser');
 
-
+    Route::get('searchSpecificKindPlace', [AjaxController::class, 'searchSpecificKindPlace'])->name('search.place.with.name.kindPlaceId');
+    
+    Route::get('findCityWithState', [AjaxController::class, 'findCityWithState'])->name('findCityWithState');

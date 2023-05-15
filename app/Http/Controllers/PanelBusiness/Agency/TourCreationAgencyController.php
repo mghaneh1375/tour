@@ -25,9 +25,8 @@ use App\models\tour\TourTimes;
 use App\models\tour\TourUserReservation;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
-use App\models\users\UserInfoNeeded;
 use App\User;
-use ClassesWithParents\CInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -47,7 +46,7 @@ class TourCreationAgencyController extends Controller{
 
     public function tourCreateStageOne($business, $tourId, $type = ''){
         $tour = Tour::select(['id', 'userId', 'businessId', 'name', 'type', 'srcId', 'userInfoNeed', 'private', 'cancelAble', 'cancelDescription'])->find($tourId);
-
+        
         if($tour != null){
             $business = Business::find($business);
             if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
@@ -58,8 +57,8 @@ class TourCreationAgencyController extends Controller{
             else
                 $class = new MultiDayTourCreationController();
 
-            $tour = $class->showStep_1($tour);
             $type = $tour->type;
+            $tour = $class->showStep_1($tour);
         }
 
         if ($type === 'cityTourism')
@@ -171,6 +170,7 @@ class TourCreationAgencyController extends Controller{
     }
 
     public function tourCreateStageFour($businessId, $tourId){
+
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
         if(auth()->user()->id == $tour->userId){
@@ -196,7 +196,6 @@ class TourCreationAgencyController extends Controller{
     public function tourStoreStageFour(Request $request)
     {
         $tour = Tour::find($request->tourId);
-
         if($tour->userId == auth()->user()->id){
             if($tour->type === 'cityTourism')
                 $createClass = new cityTourismCreationController();
@@ -204,8 +203,8 @@ class TourCreationAgencyController extends Controller{
                 $createClass = new MultiDayTourCreationController();
 
             $result = $createClass->storeStep_4($request, $tour);
-
-            if($result === 'ok'){
+            
+            if($result === 'ok' || ($result instanceof JsonResponse && str_contains($result, 'ok'))){
                 $tour->updateRemainingStage('4');
                 return response()->json(['status' => 'ok']);
             }
@@ -214,6 +213,7 @@ class TourCreationAgencyController extends Controller{
         }
         else
             return response()->json(['status' => 'error1']);
+    
     }
 
     public function tourCreateStageFive($businessId, $tourId){
@@ -290,7 +290,7 @@ class TourCreationAgencyController extends Controller{
 
             $src = Cities::find($tour->srcId);
             $destType = $tour->kindDest === 'city' ? 'cities' : 'majara';
-            $dest = \DB::table($destType)->find($tour->destId);
+            $dest = DB::table($destType)->find($tour->destId);
 
             $tour->srcName = $src->name ?? '';
             $tour->destName = $dest->name ?? '';
