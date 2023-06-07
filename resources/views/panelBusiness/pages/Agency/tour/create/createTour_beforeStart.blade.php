@@ -113,10 +113,14 @@
                         اطلاعاتی
                         که وارد می‌کنید به صورت موقت ذخیره می‌شود مگر آن‌که هشداری مبنی بر عدم صحت آن دریافت
                         کنید.</figcaption>
-                    <figcaption>این فرآیند تقریباً مابین ... الی ... دقیقه زمان می‌برد.</figcaption>
+                    <figcaption>این فرآیند تقریباً مابین 10 الی 15 دقیقه زمان می‌برد.</figcaption>
                 </div>
-                <button id="termsAndConditionBtn" class="btn nextStepBtnTourCreation"
-                    onclick="openChooseTourKindModal()">شروع کنید</button>
+                <div style="width: 150px;
+    height: 40px;
+    align-self: self-end;">
+                    <button id="termsAndConditionBtn" class="btn nextStepBtnTourCreation"
+                        onclick="openChooseTourKindModal()">شروع کنید</button>
+                </div>
 
                 {{--                    <a href="{{route('businessManagement.tour.create.stage_1', ['business' => $businessIdForUrl, 'tourId' => 0])}}"> --}}
                 {{--                        <button id="termsAndConditionBtn" class="btn nextStepBtnTourCreation" onclick="openChooseTourKindModal()">شروع کنید</button> --}}

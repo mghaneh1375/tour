@@ -3,12 +3,36 @@
 @section('head')
     <title>مرحله دوم</title>
 
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/clockpicker.css?v=1') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/clockpicker.css?v=2') }}" />
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
-
-    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/shazdeDesigns/tourCreation.css?v=' . $fileVersions) }}" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/shazdeDesigns/tourCreation.css?v=11') }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
     <style>
+        swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+        }
+
+        swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        swiper-container {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .chooseLastDay {
             position: absolute;
             background: #0000006b;
@@ -53,7 +77,7 @@
                         <div class="headerSec" onclick="openDatePlanRow(this)">
                             <div class="title">برنامه روز {{ $i + 1 }}</div>
                             <div class="sumInfos"></div>
-                            <i class="icon fa-regular fa-angle-down"></i>
+                            <i class=" icon fa-regular  {{ $i == 0 ? 'fa-angle-up' : 'fa-angle-down' }}"></i>
                         </div>
                         <div class="bodySec {{ $i == 0 ? 'open' : '' }}">
                             <div style="width: 100%; height: 100%;">
@@ -119,7 +143,7 @@
                 @endfor
             </div>
 
-            <div class="row fullyCenterContent" style="padding: 15px;">
+            <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()">بازگشت به
                     مرحله قبل</button>
@@ -138,7 +162,8 @@
 
             <div class="options">
                 <div class="title">برنامه</div>
-                <div id="eventTitles" class="bod"></div>
+                <swiper-container id="eventTitles" class="mySwiper bod" slides-per-view="5">
+                </swiper-container>
             </div>
 
             <div id="optBody" class="optBody">
@@ -193,7 +218,7 @@
                     placeholder="اگر مطلبی برای این برنامه دارید بنویسید..."></textarea>
             </div>
 
-            <div class="submitOptions direction-rtl mg-tp-20">
+            <div class="submitOptions direction-rtl mg-tp-20 rowReverse SpaceBetween" style="display: flex">
                 <button class="btn successBtn" onclick="doAddEvent()" style="color: white; background: green;">افزودن به
                     برنامه روز</button>
                 <button class="btn btn-default" onclick="closeMyModalBP('addNewEventModal')">بستن</button>

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('tour')->group(function (){
+
     // 'shareData'
     Route::middleware([])->group(function(){
         Route::get('main', [TourController::class, 'tourMainPage'])->name('tour.main');

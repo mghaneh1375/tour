@@ -10,9 +10,11 @@ use App\Http\Controllers\PanelBusiness\MainPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\TicketController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
+use App\models\State;
 use Illuminate\Support\Facades\Route;
 
 
+    Route::view('salam', 'test.salam');
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
     Route::get('/loginPage', [AuthPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
     Route::get('/loginWithGoogle', [AuthPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
@@ -27,6 +29,14 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
     Route::middleware(['BusinessPanelShareData'])->group( function () {
+        
+        Route::view('createForm', 'panelBusiness.pages.assetManager.createForm');
+    
+        Route::get('asset/{assetId}/step/{formId}', function($assetId, $formId) {
+            $states = State::all();
+            return view('panelBusiness.pages.assetManager.assetForm', compact('assetId', 'formId', 'states'));
+        });
+
         Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
         Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
         Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');

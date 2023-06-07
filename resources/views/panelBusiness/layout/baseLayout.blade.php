@@ -57,7 +57,6 @@
 
 <body>
     @include('panelBusiness.layout.businessPanelGeneral')
-
     @include('panelBusiness.layout.header')
 
     @if (auth()->check())
@@ -70,6 +69,10 @@
 
 
     @yield('modals')
+
+    <script>
+        const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+    </script>
 
     @yield('script')
 

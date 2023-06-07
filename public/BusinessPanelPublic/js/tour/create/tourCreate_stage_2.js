@@ -5,32 +5,34 @@ var searchResults = [];
 var ajaxProcess = null;
 
 var clockOptions = {
-    placement: 'left',
-    donetext: 'تایید',
+    placement: "left",
+    donetext: "تایید",
     autoclose: true,
 };
+var placeCardSample = $("#choosePlaceSample").html();
+$("#choosePlaceSample").remove();
 
-var placeCardSample = $('#choosePlaceSample').html();
-$('#choosePlaceSample').remove();
-
-if(tour.schedules.length != 0){
+if (tour.schedules.length != 0) {
     for (var i = 0; i < dateCount; i++) {
         planDate[i] = {
             hotelId: tour.schedules[i].hotelId,
             hotelKindPlaceId: tour.schedules[i].isBoomgardi == 1 ? 13 : 4,
             hotelInfo: {
-                name: tour.schedules[i].hotel ? tour.schedules[i].hotel.name : '',
-                pic: tour.schedules[i].hotel ? tour.schedules[i].hotel.pic : '',
-                stateAndCity: tour.schedules[i].hotel ? tour.schedules[i].hotel.cityAndState : '',
+                name: tour.schedules[i].hotel
+                    ? tour.schedules[i].hotel.name
+                    : "",
+                pic: tour.schedules[i].hotel ? tour.schedules[i].hotel.pic : "",
+                stateAndCity: tour.schedules[i].hotel
+                    ? tour.schedules[i].hotel.cityAndState
+                    : "",
             },
             description: tour.schedules[i].description,
-            events: []
+            events: [],
         };
-        tour.schedules[i].events.map(item => {
+        tour.schedules[i].events.map((item) => {
             var eventIndex = null;
             eventType.map((ev, ind) => {
-                if(ev.code == item.code)
-                    eventIndex = ind;
+                if (ev.code == item.code) eventIndex = ind;
             });
             var events = {
                 eventIndex: eventIndex,
@@ -40,182 +42,195 @@ if(tour.schedules.length != 0){
                 moreData: item.text,
                 description: item.description,
             };
-            if(item.code == 3 || item.code == 7)
-                events.moreData = item.places;
+            if (item.code == 3 || item.code == 7) events.moreData = item.places;
 
             planDate[i].events.push(events);
-        })
-
+        });
     }
-}
-else {
+} else {
     for (var i = 0; i < dateCount; i++)
         planDate[i] = {
             hotelId: 0,
             hotelKindPlaceId: 0,
             hotelInfo: {
-                name: '',
-                pic: '',
-                stateAndCity: ''
+                name: "",
+                pic: "",
+                stateAndCity: "",
             },
-            description: '',
-            events: []
+            description: "",
+            events: [],
         };
 }
 
 $(window).ready(() => {
-    $('.clockP').clockpicker(clockOptions);
+    $(".clockP").clockpicker(clockOptions);
 
-    var text = '';
-    eventType.map(item => text += `<div class="eventItem" onclick="chooseThisItem(this, ${item.code})">
-                                            <div class="text">${item.name}</div>
-                                            <div class="icon"></div>
-                                        </div>`);
-    $('#eventTitles').html(text);
+    var text = "";
+    eventType.map(
+        (item) =>
+            (text += `<swiper-slide class="eventItem" onclick="chooseThisItem(this, ${item.code})">
+                    <div class="text">${item.name}</div>
+                    <div class="icon"></div>
+                    </swiper-slide>`)
+    );
+    $("#eventTitles").html(text);
 
     doLastUpdate(false);
 });
 
-
-function goToPrevStep(){
+function goToPrevStep() {
     openLoading(false, () => {
         location.href = prevStageUrl;
-    })
-}
-
-function openDatePlanRow(_element){
-    $('.dateRow').find('.bodySec').removeClass('open');
-    $(_element).next().toggleClass('open');
-}
-
-function addEventTo(_day){
-    $('#newEventTo').val(_day);
-
-    $('#descriptionOfNewEvent').val('');
-    $('#optBody').find('input').val('');
-
-    $('.eventItem').removeClass('select');
-    $('.optbodies').addClass('hidden');
-    $('.choosedPlace').empty();
-    $('.clockP').val('');
-
-    openedDateEvent = _day;
-    openMyModalBP('addNewEventModal');
-}
-
-function chooseThisItem(_element, _kind){
-    $('.eventItem').removeClass('select');
-    $(_element).addClass('select');
-
-    $('.optbodies').addClass('hidden');
-    $('#optBod'+_kind).removeClass('hidden');
-
-    eventType.map((ev, index) => {
-        if(ev.code == _kind)
-            searchEventPlaceKind = index;
     });
 }
 
-function searchForPlaces(_element, _kindPlaceId){
+function openDatePlanRow(_element) {
+    if ($(_element).next().hasClass("bodySec open")) {
+        $(_element).find(".icon").removeClass("fa-angle-up");
+        $(_element).find(".icon").addClass("fa-angle-down");
+        $(_element).next().find(".bodySec").removeClass("open");
+        $(_element).next().removeClass("open");
+    } else {
+        $(".whiteBox").find(".open").removeClass("open");
+        $(".whiteBox").find(".icon").removeClass("fa-angle-up");
+        $(".whiteBox").find(".icon").addClass("fa-angle-down");
+        $(_element).find(".icon").removeClass("fa-angle-down");
+        $(_element).find(".icon").addClass("fa-angle-up");
+        $(_element).next().toggleClass("open");
+    }
+}
+
+function addEventTo(_day) {
+    $("#newEventTo").val(_day);
+
+    $("#descriptionOfNewEvent").val("");
+    $("#optBody").find("input").val("");
+
+    $(".eventItem").removeClass("select");
+    $(".optbodies").addClass("hidden");
+    $(".choosedPlace").empty();
+    $(".clockP").val("");
+
+    openedDateEvent = _day;
+    openMyModalBP("addNewEventModal");
+}
+
+function chooseThisItem(_element, _kind) {
+    $(".eventItem").removeClass("select");
+    $(_element).addClass("select");
+
+    $(".optbodies").addClass("hidden");
+    $("#optBod" + _kind).removeClass("hidden");
+
+    eventType.map((ev, index) => {
+        if (ev.code == _kind) searchEventPlaceKind = index;
+    });
+}
+
+function searchForPlaces(_element, _kindPlaceId) {
     _element = $(_element);
     var value = _element.val();
     _element.next().empty();
-    if(value.trim().length > 1){
+    if (value.trim().length > 1) {
         searchResults = [];
-        if(ajaxProcess != null)
-            ajaxProcess.abort();
+        if (ajaxProcess != null) ajaxProcess.abort();
 
         ajaxProcess = $.ajax({
-            type: 'GET',
+            type: "GET",
             url: `${searchPlaceWithNameKinPlaceIdUrl}?kindPlaceId=${_kindPlaceId}&value=${value}`,
-            success: response => {
-                if(response.status == 'ok'){
-                    var text = '';
+            success: (response) => {
+                if (response.status == "ok") {
+                    var text = "";
                     searchResults = response.result;
                     searchResults.map((item, index) => {
-                        item.stateAndCity = (item.state && item.city) ? `استان ${item.state.name} شهر ${item.city.name}` : '';
-                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this, ${_kindPlaceId})">${item.name}</div>`
+                        item.stateAndCity =
+                            item.state && item.city
+                                ? `استان ${item.state.name} شهر ${item.city.name}`
+                                : "";
+                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this, ${_kindPlaceId})">${item.name}</div>`;
                     });
                     _element.next().html(text);
                 }
-            }
-        })
+            },
+        });
     }
 }
-function chooseThisPlaceForDate(_element, _kind){
+function chooseThisPlaceForDate(_element, _kind) {
     _element = $(_element);
 
-    var index = _element.attr('data-index');
-    createPlaceCardForSelect(searchResults[index], _element.parent().parent().parent().find('.choosedPlace'));
+    var index = _element.attr("data-index");
+    createPlaceCardForSelect(
+        searchResults[index],
+        _element.parent().parent().parent().find(".choosedPlace")
+    );
 
-    _element.parent().empty().prev().val('');
+    _element.parent().empty().prev().val("");
 }
-function createPlaceCardForSelect(_place, _resultSec){
+function createPlaceCardForSelect(_place, _resultSec) {
     var text = placeCardSample;
     var fn = Object.keys(_place);
-    for(var x of fn)
-        text = text.replace(new RegExp(`##${x}##`, 'g'), _place[x]);
+    for (var x of fn)
+        text = text.replace(new RegExp(`##${x}##`, "g"), _place[x]);
 
-    text = text.replace(new RegExp(`##dateIndex##`, 'g'), openedDateEvent);
+    text = text.replace(new RegExp(`##dateIndex##`, "g"), openedDateEvent);
 
     _resultSec.append(text);
 }
-function deleteThisPlace(_element){
+function deleteThisPlace(_element) {
     $(_element).parent().remove();
 }
 
-function doAddEvent(){
-    var startTime = $('#startTimeEvent').val();
-    var endTime = $('#endTimeEvent').val();
+function doAddEvent() {
+    var startTime = $("#startTimeEvent").val();
+    var endTime = $("#endTimeEvent").val();
     var code = eventType[searchEventPlaceKind].code;
-    var errorText = '';
+    var errorText = "";
     var error = false;
-
-    if(startTime.trim().length != 5 || endTime.trim().length != 5){
-        alert('پر کردن زمان برنامه اجباری است');
+    if (startTime.trim().length != 5 || endTime.trim().length != 5) {
+        alert("پر کردن زمان برنامه اجباری است");
         return;
     }
 
-    if(startTime.trim() >= endTime.trim()){
-        alert('زمان شروع باید قبل از زمان پایان باشد.');
+    if (startTime.trim() >= endTime.trim()) {
+        alert("زمان شروع باید قبل از زمان پایان باشد.");
         return;
     }
 
-    planDate[openedDateEvent].events.map(item =>{
-        if((item.sTime < endTime && item.eTime > endTime) ||
+    planDate[openedDateEvent].events.map((item) => {
+        if (
+            (item.sTime < endTime && item.eTime > endTime) ||
             (item.sTime < startTime && item.eTime > startTime) ||
-            (item.sTime > startTime && item.eTime < endTime)){
-            alert('زمان این برنامه با برنامه های دیگر روز مغایرت دارد...');
+            (item.sTime > startTime && item.eTime < endTime)
+        ) {
+            alert("زمان این برنامه با برنامه های دیگر روز مغایرت دارد...");
             error = true;
         }
     });
 
-    if(error)
-        return;
+    if (error) return;
 
     var datas = {
         eventIndex: searchEventPlaceKind,
         eventCode: eventType[searchEventPlaceKind].code,
         sTime: startTime,
         eTime: endTime,
-        moreData: '',
-        description: $('#descriptionOfNewEvent').val(),
+        moreData: "",
+        description: $("#descriptionOfNewEvent").val(),
     };
 
-    if(code == 1 || code == 4 || code == 5 || code == 6){
+    if (code == 1 || code == 4 || code == 5 || code == 6) {
         datas.moreData = $(`#opt${code}Name`).val();
-    }
-    else if(code == 3 || code == 7){
+    } else if (code == 3 || code == 7) {
         var ids = [];
-        var placesSec = $('#optBod'+code).find('.placeCar');
-        for(var i = 0; i < placesSec.length; i++){
+        var placesSec = $("#optBod" + code).find(".placeCar");
+        for (var i = 0; i < placesSec.length; i++) {
             var element = $($(placesSec[i])[0]);
             ids.push({
-                id: element.attr('data-placeId'),
-                kindPlaceId: element.attr('data-kindPlaceId'),
-                pic: element.find('img').attr('src'),
-                name: element.find('.name').text(),
-                stateAndCity: element.find('.text').text(),
+                id: element.attr("data-placeId"),
+                kindPlaceId: element.attr("data-kindPlaceId"),
+                pic: element.find("img").attr("src"),
+                name: element.find(".name").text(),
+                stateAndCity: element.find(".text").text(),
             });
         }
         datas.moreData = ids;
@@ -225,82 +240,92 @@ function doAddEvent(){
 
     searchEventPlaceKind = null;
     addNewEventToDayCalendar(openedDateEvent);
-    closeMyModalBP('addNewEventModal');
+    closeMyModalBP("addNewEventModal");
 }
 
-function editThisDetail(_day, _index){
+function editThisDetail(_day, _index) {
     openedDateEvent = _day;
     var editData = planDate[_day].events[_index];
     var event = eventType[editData.eventIndex];
 
-    $('#editDay').val(_day);
-    $('#editIndex').val(_index);
+    $("#editDay").val(_day);
+    $("#editIndex").val(_index);
 
-    $('#editEventTitle').text(event.name);
-    $('#startTimeEventEdit').val(editData.sTime);
-    $('#endTimeEventEdit').val(editData.eTime);
-    $('#editBody').empty().html($('#optBod'+event.code).html());
+    $("#editEventTitle").text(event.name);
+    $("#startTimeEventEdit").val(editData.sTime);
+    $("#endTimeEventEdit").val(editData.eTime);
+    $("#editBody")
+        .empty()
+        .html($("#optBod" + event.code).html());
 
-    $('#descriptionOfEditEvent').val(editData.description);
-    if(event.code == 1 || event.code == 4 || event.code == 5 || event.code == 6)
-        $('#editBody').find('input').val(editData.moreData);
-    else if(event.code == 3 || event.code == 7){
-        $('#editBody').find('.choosedPlace').empty();
-        editData.moreData.map(item => createPlaceCardForSelect(item, $('#editBody').find('.choosedPlace')));
+    $("#descriptionOfEditEvent").val(editData.description);
+    if (
+        event.code == 1 ||
+        event.code == 4 ||
+        event.code == 5 ||
+        event.code == 6
+    )
+        $("#editBody").find("input").val(editData.moreData);
+    else if (event.code == 3 || event.code == 7) {
+        $("#editBody").find(".choosedPlace").empty();
+        editData.moreData.map((item) =>
+            createPlaceCardForSelect(item, $("#editBody").find(".choosedPlace"))
+        );
     }
-    openMyModalBP('editEventModal');
+    openMyModalBP("editEventModal");
 }
-function doEditEvent(){
-    var day = $('#editDay').val();
-    var index = $('#editIndex').val();
+function doEditEvent() {
+    var day = $("#editDay").val();
+    var index = $("#editIndex").val();
 
-    var startTime = $('#startTimeEventEdit').val();
-    var endTime = $('#endTimeEventEdit').val();
+    var startTime = $("#startTimeEventEdit").val();
+    var endTime = $("#endTimeEventEdit").val();
 
     var event = planDate[day].events[index];
     var code = eventType[event.eventIndex].code;
     var error = false;
 
-    if(startTime.trim().length != 5 || endTime.trim().length != 5){
-        alert('پر کردن زمان برنامه اجباری است');
+    if (startTime.trim().length != 5 || endTime.trim().length != 5) {
+        alert("پر کردن زمان برنامه اجباری است");
         return;
     }
 
-    if(startTime.trim() >= endTime.trim()){
-        alert('زمان شروع باید قبل از زمان پایان باشد.');
+    if (startTime.trim() >= endTime.trim()) {
+        alert("زمان شروع باید قبل از زمان پایان باشد.");
         return;
     }
 
-    planDate[openedDateEvent].events.map((item , index) =>{
-        if(index != index) {
-            if ((item.sTime < endTime && item.eTime > endTime) ||
+    planDate[openedDateEvent].events.map((item, index) => {
+        if (index != index) {
+            if (
+                (item.sTime < endTime && item.eTime > endTime) ||
                 (item.sTime < startTime && item.eTime > startTime) ||
-                (item.sTime > startTime && item.eTime < endTime)) {
-                alert('زمان این برنامه با برنامه های دیگر روز مغایرت دارد...');
+                (item.sTime > startTime && item.eTime < endTime)
+            ) {
+                alert("زمان این برنامه با برنامه های دیگر روز مغایرت دارد...");
                 error = true;
             }
         }
     });
 
-    if(error)
-        return;
+    if (error) return;
 
-    event.description = $('#descriptionOfEditEvent').val();
+    event.description = $("#descriptionOfEditEvent").val();
 
-    if(code == 1 || code == 4 || code == 5 || code == 6)
-        event.moreData = $('#editBody').find('input').val();
-    else if(code == 3 || code == 7){
+    if (code == 1 || code == 4 || code == 5 || code == 6)
+        event.moreData = $("#editBody").find("input").val();
+    else if (code == 3 || code == 7) {
         var ids = [];
-        var placesSec = $('#editBody').find('.placeCar');
-        for(var i = 0; i < placesSec.length; i++){
+        var placesSec = $("#editBody").find(".placeCar");
+        for (var i = 0; i < placesSec.length; i++) {
             var element = $($(placesSec[i])[0]);
 
             ids.push({
-                id: element.attr('data-placeId'),
-                kindPlaceId: element.attr('data-kindPlaceId'),
-                pic: element.find('img').attr('src'),
-                name: element.find('.name').text(),
-                stateAndCity: element.find('.text').text(),
+                id: element.attr("data-placeId"),
+                kindPlaceId: element.attr("data-kindPlaceId"),
+                pic: element.find("img").attr("src"),
+                name: element.find(".name").text(),
+                stateAndCity: element.find(".text").text(),
             });
         }
         event.moreData = ids;
@@ -311,151 +336,158 @@ function doEditEvent(){
     planDate[day].events[index] = event;
 
     addNewEventToDayCalendar(openedDateEvent);
-    closeMyModalBP('editEventModal');
+    closeMyModalBP("editEventModal");
 }
 
-function deleteThisEvent(){
-    var day = $('#editDay').val();
-    var index = $('#editIndex').val();
+function deleteThisEvent() {
+    var day = $("#editDay").val();
+    var index = $("#editIndex").val();
     $(`#detailPlan_${day}_${index}`).remove();
     planDate[day].events.splice(index, 1);
-    closeMyModalBP('editEventModal');
+    closeMyModalBP("editEventModal");
 }
-function addNewEventToDayCalendar(_day){
+function addNewEventToDayCalendar(_day) {
     var allDay = 24 * 60;
-    var text = '';
+    var text = "";
     planDate[_day].events.map((item, index) => {
-        var sTime = item.sTime.split(':');
-        var eTime = item.eTime.split(':');
+        var sTime = item.sTime.split(":");
+        var eTime = item.eTime.split(":");
 
-        var sMinutes = parseInt(sTime[0])*60 + parseInt(sTime[1]);
-        var eMinutes = parseInt(eTime[0])*60 + parseInt(eTime[1]);
+        var sMinutes = parseInt(sTime[0]) * 60 + parseInt(sTime[1]);
+        var eMinutes = parseInt(eTime[0]) * 60 + parseInt(eTime[1]);
 
-        var width = ((eMinutes - sMinutes)/allDay) * 100;
-        var startPos = (sMinutes/allDay) * 100;
+        var width = ((eMinutes - sMinutes) / allDay) * 100;
+        var startPos = (sMinutes / allDay) * 100;
         var event = eventType[item.eventIndex];
 
-        text += `<div id="detailPlan_${_day}_${index}" class="detail" style="width: ${width}%; right: ${startPos}%; background: ${event.color}" onclick="editThisDetail(${_day}, ${index})">${event.name}</div>`;
+        text += `<div id="detailPlan_${_day}_${index}" class="detail tooltipRow" style="width: ${width}%; right: ${startPos}%; background: ${event.color}" onclick="editThisDetail(${_day}, ${index})">${event.name}
+        <span class="tooltipRowtext">${event.name}</span>
+        </div>`;
     });
-    $('#planRow_'+_day).html(text);
+    $("#planRow_" + _day).html(text);
 
     openedDateEvent = 0;
 }
 
-function chooseHotel(_day){
-    $('#dayForHotelModal').val(_day);
-    $('#inputSearchHotel').val('');
-    $('#addHotelModal').modal('show');
+function chooseHotel(_day) {
+    $("#dayForHotelModal").val(_day);
+    $("#inputSearchHotel").val("");
+    $("#addHotelModal").modal("show");
 }
-function searchForHotel(_element){
+function searchForHotel(_element) {
     var value = $(_element).val();
-    if(ajaxProcess != null)
-        ajaxProcess.abort();
+    if (ajaxProcess != null) ajaxProcess.abort();
 
-    var kindPlaceId = $('#hotelKind').val();
+    var kindPlaceId = $("#hotelKind").val();
 
-    if(value.trim().length > 1){
+    if (value.trim().length > 1) {
         ajaxProcess = $.ajax({
-            type: 'GET',
+            type: "GET",
             url: `${searchPlaceWithNameKinPlaceIdUrl}?value=${value}&kindPlaceId=${kindPlaceId}`,
-            success: response => {
-                if(response.status == 'ok') {
-                    var text = '';
+            success: (response) => {
+                if (response.status == "ok") {
+                    var text = "";
                     searchResults = response.result;
-                    searchResults.map((item, key) => text += `<div class="searchHover blue" data-index="${key}" data-kindPlaceId="${kindPlaceId}" onclick="chooseThisHotel(this)" >${item.name} در ${item.state.name} , ${item.city.name}</div>`);
+                    searchResults.map(
+                        (item, key) =>
+                            (text += `<div class="searchHover blue" data-index="${key}" data-kindPlaceId="${kindPlaceId}" onclick="chooseThisHotel(this)" >${item.name} در ${item.state.name} , ${item.city.name}</div>`)
+                    );
                     $(_element).next().html(text);
                 }
-            }
+            },
         });
     }
 }
-function chooseThisHotel(_element){
-    var index = $(_element).attr('data-index');
-    var kindPlaceId = $(_element).attr('data-kindPlaceId');
-    var day = $('#dayForHotelModal').val();
+function chooseThisHotel(_element) {
+    var index = $(_element).attr("data-index");
+    var kindPlaceId = $(_element).attr("data-kindPlaceId");
+    var day = $("#dayForHotelModal").val();
     $(_element).parent().empty();
-    $('#inputSearchHotel').val('');
+    $("#inputSearchHotel").val("");
 
     planDate[day].hotelId = searchResults[index].id;
     planDate[day].hotelKindPlaceId = kindPlaceId;
     planDate[day].hotelInfo.name = searchResults[index].name;
     planDate[day].hotelInfo.pic = searchResults[index].pic;
-    planDate[day].hotelInfo.stateAndCity = `استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`;
-    $('#addHotelModal').modal('hide');
+    planDate[
+        day
+    ].hotelInfo.stateAndCity = `استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`;
+    $("#addHotelModal").modal("hide");
 
     showHotelInDay(day);
 }
-function showHotelInDay(_day){
-    $('#answerForSubmitLastHotel_'+_day).addClass('hidden');
-    $('#hotelImgForDay_'+_day).attr('src', planDate[_day].hotelInfo.pic);
-    $('#hotelNameForDay_'+_day).text(planDate[_day].hotelInfo.name);
-    $('#hotelCityForDay_'+_day).text(planDate[_day].hotelInfo.stateAndCity);
+function showHotelInDay(_day) {
+    $("#answerForSubmitLastHotel_" + _day).addClass("hidden");
+    $("#hotelImgForDay_" + _day).attr("src", planDate[_day].hotelInfo.pic);
+    $("#hotelNameForDay_" + _day).text(planDate[_day].hotelInfo.name);
+    $("#hotelCityForDay_" + _day).text(planDate[_day].hotelInfo.stateAndCity);
     // $('#hotelAddressForDay_'+_day).text(searchResults[index].address);
 
-    for(var i = parseInt(_day)+1; i < dateCount; i++){
-        if(planDate[i], planDate[i].hotelId == 0) {
-            $('#hotelImgForDay_'+i).attr('src', planDate[_day].hotelInfo.pic);
-            $('#hotelNameForDay_'+i).text( planDate[_day].hotelInfo.name);
-            $('#hotelCityForDay_'+i).text( planDate[_day].hotelInfo.stateAndCity);
+    for (var i = parseInt(_day) + 1; i < dateCount; i++) {
+        if ((planDate[i], planDate[i].hotelId == 0)) {
+            $("#hotelImgForDay_" + i).attr("src", planDate[_day].hotelInfo.pic);
+            $("#hotelNameForDay_" + i).text(planDate[_day].hotelInfo.name);
+            $("#hotelCityForDay_" + i).text(
+                planDate[_day].hotelInfo.stateAndCity
+            );
             // $('#hotelAddressForDay_'+i).text(searchResults[index].address);
 
-            $('#answerForSubmitLastHotel_' + i).removeClass('hidden');
-            $('#lastHotelId_' + i).val(planDate[_day].hotelId);
-            $('#lastHotelKindPlaceId' + i).val(planDate[_day].hotelKindPlaceId);
-        }
-        else
-            break;
+            $("#answerForSubmitLastHotel_" + i).removeClass("hidden");
+            $("#lastHotelId_" + i).val(planDate[_day].hotelId);
+            $("#lastHotelKindPlaceId" + i).val(planDate[_day].hotelKindPlaceId);
+        } else break;
     }
-
 }
-function submitThisHotel(_day){
-    var hotelId = $('#lastHotelId_'+_day).val();
-    var hotelKindPlaceId = $('#lastHotelKindPlaceId'+_day).val();
-    $('#answerForSubmitLastHotel_'+_day).addClass('hidden');
+function submitThisHotel(_day) {
+    var hotelId = $("#lastHotelId_" + _day).val();
+    var hotelKindPlaceId = $("#lastHotelKindPlaceId" + _day).val();
+    $("#answerForSubmitLastHotel_" + _day).addClass("hidden");
     planDate[_day].hotelId = parseInt(hotelId);
     planDate[_day].hotelKindPlaceId = parseInt(hotelKindPlaceId);
 }
 
-function checkInput(mainStore = true){
+function checkInput(mainStore = true) {
+    planDate.map(
+        (item, index) =>
+            (item.description = $("#dateDescription_" + index).val())
+    );
 
-    planDate.map((item, index) => item.description = $('#dateDescription_'+index).val());
-
-    if(mainStore)
-        submitSchedule();
-    else
-        localStorage.setItem(`planeDate_${tour.id}`, JSON.stringify(planDate));
+    if (mainStore) submitSchedule();
+    else localStorage.setItem(`planeDate_${tour.id}`, JSON.stringify(planDate));
 }
 
-function submitSchedule(){
+function submitSchedule() {
     openLoading();
 
     $.ajax({
-        type: 'POST',
+        type: "POST",
         url: stageTwoStoreUrl,
         data: {
             tourId: tour.id,
             planDate: JSON.stringify(planDate),
         },
-        success: response =>{
-            if(response.status == 'ok') {
+        success: (response) => {
+            if (response.status == "ok") {
                 localStorage.removeItem(`planeDate_${tour.id}`);
                 location.href = nextStageUrl;
-            }
-            else{
+            } else {
                 closeLoading();
-                showSuccessNotifiBP('ثبت در خواست با مشکل مواچه شد', 'left', 'red');
+                showSuccessNotifiBP(
+                    "ثبت در خواست با مشکل مواچه شد",
+                    "left",
+                    "red"
+                );
             }
         },
-        error: err => {
+        error: (err) => {
             closeLoading();
-            showSuccessNotifiBP('ثبت در خواست با مشکل مواچه شد', 'left', 'red');
-        }
-    })
+            showSuccessNotifiBP("ثبت در خواست با مشکل مواچه شد", "left", "red");
+        },
+    });
 }
 
-function doLastUpdate(_lastData = true){
-    if(_lastData)
-        planDate = JSON.parse(planD);
+function doLastUpdate(_lastData = true) {
+    if (_lastData) planDate = JSON.parse(planD);
 
     planDate.map((day, index) => {
         showHotelInDay(index);
@@ -465,7 +497,11 @@ function doLastUpdate(_lastData = true){
 }
 
 var planD = localStorage.getItem(`planeDate_${tour.id}`);
-if(!(planD == false || planD == null))
-    openWarningBP('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+if (!(planD == false || planD == null))
+    openWarningBP(
+        "بازگرداندن اطلاعات قبلی",
+        doLastUpdate,
+        "بله قبلی را ادامه می دهم"
+    );
 
 setInterval(() => checkInput(false), 5000);

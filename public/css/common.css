@@ -1,0 +1,15 @@
+.shopMapInput {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+.myLocationButton {
+    background: #ffbaba;
+    border: none;
+    margin-right: 10px;
+    padding: 3px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}

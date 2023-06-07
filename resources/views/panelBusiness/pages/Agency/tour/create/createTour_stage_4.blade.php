@@ -23,12 +23,7 @@
         }
 
         .deleteButton {
-            position: absolute;
-            left: 15px;
-            background: var(--koochita-red);
-            padding: 4px 15px;
-            border-radius: 10px;
-            top: 20%;
+            margin: 10px 0;
             cursor: pointer;
             color: white;
         }
@@ -79,14 +74,14 @@
 
 @section('body')
     <div class="mainBackWhiteBody">
-        <div class="head">ایجاد تور: مرحله چهارم</div>
+        <h1>ایجاد تور: مرحله چهارم</h1>
         <div style="margin-top: 20px">
             <div class="whiteBox" style="display: flex; flex-direction: column;">
                 <div class="col-md-12">
-                    <div class="boxTitlesTourCreation">قیمت پایه</div>
-                    <div class="inboxHelpSubtitle">قیمت پایه‌ی تور قیمتی است که فارغ از هرگونه امکانات اضافه بدست آمده است و
+                    <h2>قیمت پایه</h2>
+                    <figcaption>قیمت پایه‌ی تور قیمتی است که فارغ از هرگونه امکانات اضافه بدست آمده است و
                         کمترین قیمتی است که کاربران می‌توانند تور را با آن خریداری نمایند. اگر برخی امکانات قیمت تور را
-                        تغییر می‌دهد، آن‌ها را در قسمت‌های بعدی وارد نمایید.</div>
+                        تغییر می‌دهد، آن‌ها را در قسمت‌های بعدی وارد نمایید.</figcaption>
                     <div class="tourBasicPriceTourCreation col-md-6" style="display: flex; align-items: center">
                         <div class="inputBoxTour col-md-10">
                             <div class="inputBoxText">
@@ -96,9 +91,9 @@
                                 onkeyup="$(this).val(numberWithCommas(this.value))">
                         </div>
                         <div id="tourInsuranceConfirmation" class="col-md-10 pd-0" style="margin-right: 25px;">
-                            <span>آیا تور شما دارای بیمه می‌باشد؟</span>
+                            <p class="bold dispalyInline">آیا تور شما دارای بیمه می‌باشد؟</p>
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-secondary active">
+                                <label class="btn btn-secondary ">
                                     <input type="radio" name="isInsurance" value="1" checked>بلی
                                 </label>
                                 <label class="btn btn-secondary">
@@ -110,8 +105,8 @@
                 </div>
 
                 <div class="col-md-12" style="margin-top: 20px;">
-                    <div class="inboxHelpSubtitle">اگر تور شما به ازای سن های مختلف قیمت متفاوتی دارد، در زیر می توانید قیمت
-                        ها را به ازای سن تعریف کنید.</div>
+                    <figcaption>اگر تور شما به ازای سن های مختلف قیمت متفاوتی دارد، در زیر می توانید قیمت
+                        ها را به ازای سن تعریف کنید.</figcaption>
                     <div id="pricesSection" class="fullyCenterContent" style="display: flex; flex-direction: column;"></div>
 
                     <div class="fullyCenterContent">
@@ -141,30 +136,39 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">امکانات اضافه</div>
-                <div class="inboxHelpSubtitle">سایر امکاناتی که شما در تور با دریافت هزینه‌ی اضافه ارئه می‌دهید را وارد
-                    نمایید.</div>
+                <h2>امکانات اضافه</h2>
+                <figcaption>سایر امکاناتی که شما در تور با دریافت هزینه‌ی اضافه ارئه می‌دهید را وارد
+                    نمایید.</figcaption>
                 <div style="position: relative">
-                    <div id="featuresDiv"></div>
-                    <button type="button" class="tourMoreFacilityDetailsBtn verifyBtnTourCreation"
-                        onclick="createFeatureRow()">
-                        <img src="{{ URL::asset('images/tourCreation/approve.png') }}">
-                    </button>
+                    <div id="featuresDiv">
+
+                        {{-- <button type="button"
+                            class="tourMoreFacilityDetailsBtn wholesaleDiscountLimitationBtn verifyBtnTourCreation  plus2"
+                            style="left: 255px!important" onclick="createFeatureRow()">
+
+                        </button> --}}
+                    </div>
+                    <div class="fullyCenterContent">
+                        <button class="newPriceButton" onclick="createFeatureRow()">افزودن تخفیف گروهی</button>
+                    </div>
                 </div>
             </div>
 
             <div class="whiteBox">
                 <div class="fullwidthDiv">
-                    <div class="boxTitlesTourCreation">تخفیف خرید گروهی</div>
-                    <div class="inboxHelpSubtitle">تخفیف‌های گروهی به خریداران ظرفیت‌های بالا اعمال می‌شود. شما می‌توانید با
-                        تعیین بازه‌های متفاوت تخفیف‌های متفاوتی اعمال نمایید.</div>
+                    <h2>تخفیف خرید گروهی</h2>
+                    <figcaption>تخفیف‌های گروهی به خریداران ظرفیت‌های بالا اعمال می‌شود. شما می‌توانید با
+                        تعیین بازه‌های متفاوت تخفیف‌های متفاوتی اعمال نمایید.</figcaption>
                     <div id="groupDiscountDiv"></div>
+                    <div class="fullyCenterContent">
+                        <button class="newPriceButton" onclick=" createDisCountCard()">افزودن تخفیف گروهی</button>
+                    </div>
                 </div>
             </div>
 
             <div class="whiteBox">
                 <div class="fullwidthDiv">
-                    <div class="boxTitlesTourCreation">تخفیف های لحظه اخری</div>
+                    <h2>تخفیف های لحظه اخری</h2>
                     <div id="lastDayesDiscounts" style="display: flex; flex-direction: column;"></div>
                     <div class="fullyCenterContent">
                         <button class="newPriceButton" onclick="addLastDayDiscount()">افزودن تخفیف لحظه آخری</button>
@@ -173,7 +177,7 @@
             </div>
 
 
-            <div class="row fullyCenterContent" style="padding: 15px;">
+            <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()">بازگشت به
                     مرحله قبل</button>
@@ -199,10 +203,10 @@
                 </div>
             </div>
 
-            <div class="col-md-2" style="text-align: left; position: relative">
-                <div class="deleteButton" style="position: relative; bottom: 0; left: 0; top: 0; width: 50px;"
+            <div>
+                <div class="deleteButton iconFullClose wholesaleDiscountLimitationBtn deleteBtnTourCreation "
                     onclick="deleteFeatureRow(##index##)">
-                    <i class="fa-light fa-trash-can"></i>
+
                 </div>
                 {{--                <button type="button" class="tourMoreFacilityDetailsBtn deleteBtnTourCreation"> --}}
                 {{--                    <i class="fa-light fa-trash-can"></i> --}}
@@ -232,14 +236,15 @@
                     placeholder="درصد تخفیف">
             </div>
             <div class="inline-block mg-tp-12 mg-rt-10">
-                <button type="button" class="wholesaleDiscountLimitationBtn verifyBtnTourCreation confirmDisCountButton"
+                <button type="button"
+                    class="wholesaleDiscountLimitationBtn verifyBtnTourCreation confirmDisCountButton plus2 hidden"
                     onclick="createDisCountCard()">
-                    <img src="{{ URL::asset('images/tourCreation/approve.png') }}">
+
                 </button>
                 <button type="button"
-                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation deleteDisCountButton hidden"
+                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation deleteDisCountButton iconFullClose "
                     onclick="deleteDisCountCard(##index##)">
-                    <img src="{{ URL::asset('images/tourCreation/delete.png') }}">
+
                 </button>
             </div>
         </div>

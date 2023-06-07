@@ -1,29 +1,30 @@
-body{
-    font-family: 'IRANSansWeb' !important;
+body {
+    font-family: "IRANSansWeb" !important;
     direction: rtl;
     text-align: right;
     background: #eaeaea;
 }
 
-input[type="checkbox"], input[type="radio"]{
+input[type="checkbox"],
+input[type="radio"] {
     display: inline-block;
 }
 
-.hidden{
+.hidden {
     display: none !important;
 }
-.row{
+.row {
     width: 100%;
     padding: 0;
     margin: 0;
 }
-.fullyCenterContent{
+.fullyCenterContent {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.loaderDiv{
+.loaderDiv {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -49,7 +50,7 @@ input[type="checkbox"], input[type="radio"]{
     /*background-color: var(--koochita-yellow)90;*/
 }
 
-.loaderDiv .processBar{
+.loaderDiv .processBar {
     max-width: 400px;
     width: 95%;
     height: 20px;
@@ -61,10 +62,10 @@ input[type="checkbox"], input[type="radio"]{
     position: relative;
     overflow: hidden;
 }
-.loaderDiv .processBar .percentBar{
+.loaderDiv .processBar .percentBar {
     z-index: 1;
 }
-.loaderDiv .processBar .bar{
+.loaderDiv .processBar .bar {
     right: 0;
     height: 100%;
     background: var(--koochita-yellow);
@@ -72,7 +73,7 @@ input[type="checkbox"], input[type="radio"]{
     border-radius: 20px;
 }
 
-.mainBodySection{
+.mainBodySection {
     position: fixed;
     width: calc(100% - 250px);
     height: calc(100vh - 60px);
@@ -82,17 +83,17 @@ input[type="checkbox"], input[type="radio"]{
     text-align: right;
     padding: 15px;
 }
-.mainBodySection > .row{
+.mainBodySection > .row {
     height: 100%;
 }
 /*.mainBodySection > div {*/
 /*    height: 100%;*/
 /*}*/
-.resizeImgClass{
+.resizeImgClass {
     width: 100%;
 }
 
-.newTicketCount{
+.newTicketCount {
     width: 20px;
     height: 20px;
     background: red;
@@ -106,7 +107,7 @@ input[type="checkbox"], input[type="radio"]{
     animation: glowTicketNumber 2s infinite;
 }
 
-.mainHeader{
+.mainHeader {
     background: white;
     width: 100%;
     height: 60px;
@@ -117,15 +118,15 @@ input[type="checkbox"], input[type="radio"]{
     align-items: center;
     padding: 0 20px;
 }
-.mainHeader .mainLogo{
+.mainHeader .mainLogo {
     height: 75%;
     width: auto;
     margin-left: auto;
 }
-.mainHeader .mainLogo img{
+.mainHeader .mainLogo img {
     height: 100%;
 }
-.mainHeader .headerButton{
+.mainHeader .headerButton {
     margin-left: 20px;
     font-size: 22px;
     width: 35px;
@@ -139,7 +140,7 @@ input[type="checkbox"], input[type="radio"]{
     background: #d3d3d378;
     position: relative;
 }
-.mainHeader .headerButton .newNum{
+.mainHeader .headerButton .newNum {
     position: absolute;
     left: -5px;
     bottom: -5px;
@@ -156,7 +157,7 @@ input[type="checkbox"], input[type="radio"]{
     animation: glowTicketNumber 2s infinite;
 }
 
-.mainHeader .businessName{
+.mainHeader .businessName {
     font-size: 22px;
     font-weight: bold;
     padding: 0px 20px;
@@ -168,18 +169,17 @@ input[type="checkbox"], input[type="radio"]{
     cursor: pointer;
     margin: 0px auto;
 }
-.mainHeader .businessName select{
+.mainHeader .businessName select {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-
-.mainHeader .userInfoSec{
+.mainHeader .userInfoSec {
     display: flex;
     margin-left: 30px;
 }
-.mainHeader .userInfoSec .userPic{
+.mainHeader .userInfoSec .userPic {
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -189,14 +189,14 @@ input[type="checkbox"], input[type="radio"]{
     border-radius: 50%;
     margin-left: 20px;
 }
-.mainHeader .userInfoSec .topDropDown{
+.mainHeader .userInfoSec .topDropDown {
     position: relative;
     display: flex;
     align-items: center;
     text-align: center;
     justify-content: center;
 }
-.mainHeader .userInfoSec .topDropDown .text{
+.mainHeader .userInfoSec .topDropDown .text {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -206,31 +206,31 @@ input[type="checkbox"], input[type="radio"]{
 /*    content: '\E04A';*/
 /*    font-family: 'Shazde_Regular' !important*/
 /*}*/
-.mainHeader .userInfoSec .topDropDown .dropDownMenu{
+.mainHeader .userInfoSec .topDropDown .dropDownMenu {
     position: absolute;
     display: flex;
     flex-direction: column;
     background: white;
     top: 100%;
     right: 0;
-    transition: .3s;
+    transition: 0.3s;
     max-height: 0;
     overflow: hidden;
     z-index: 1;
 }
-.mainHeader .userInfoSec .topDropDown .dropDownMenu .item{
+.mainHeader .userInfoSec .topDropDown .dropDownMenu .item {
     padding: 0 14px;
     margin-bottom: 5px;
     font-size: 17px;
     color: black;
     text-decoration: none;
 }
-.mainHeader .userInfoSec .topDropDown .dropDownMenu.open{
+.mainHeader .userInfoSec .topDropDown .dropDownMenu.open {
     max-height: 1000px;
     box-shadow: 0 3px 3px 1px #00000063;
 }
 
-.mainSidebar{
+.mainSidebar {
     background-color: white;
     position: fixed;
     right: 0;
@@ -240,20 +240,20 @@ input[type="checkbox"], input[type="radio"]{
 
     border-left: solid 1px var(--lightBordreGray);
 }
-.mainSidebar.hasSideProgressBar .progressBarSection{
+.mainSidebar.hasSideProgressBar .progressBarSection {
     display: block;
 }
 
-.mainSidebar .progressBarSection{
+.mainSidebar .progressBarSection {
     display: none;
     border-bottom: solid 1px var(--lightBordreGray);
     padding: 20px;
 }
-.mainSidebar .progressBarSection .text{
+.mainSidebar .progressBarSection .text {
     font-size: 15px;
     font-weight: bold;
 }
-.mainSidebar .progressBarSection .progressBarDiv{
+.mainSidebar .progressBarSection .progressBarDiv {
     width: 100%;
     height: 10px;
     position: relative;
@@ -262,7 +262,7 @@ input[type="checkbox"], input[type="radio"]{
     margin-top: 5px;
     overflow: hidden;
 }
-.mainSidebar .progressBarSection .progressBarDiv .full{
+.mainSidebar .progressBarSection .progressBarDiv .full {
     position: absolute;
     right: 0;
     background: var(--koochita-blue);
@@ -271,22 +271,21 @@ input[type="checkbox"], input[type="radio"]{
     border-radius: 30px;
 }
 
-
-.mainSidebar .sideMenuSection{
+.mainSidebar .sideMenuSection {
     height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     overflow: auto;
 }
-.mainSidebar.hasSideProgressBar .sideMenuSection{
+.mainSidebar.hasSideProgressBar .sideMenuSection {
     height: calc(100vh - 150px);
 }
-.mainSidebar .sideMenuSection .sideNavRow{
+.mainSidebar .sideMenuSection .sideNavRow {
     border-bottom: solid 1px var(--lightBordreGray);
-    transition: .3s;
+    transition: 0.3s;
     cursor: pointer;
 }
-.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader{
+.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader {
     font-size: 14px;
     padding: 10px 20px;
     display: flex;
@@ -294,7 +293,7 @@ input[type="checkbox"], input[type="radio"]{
     justify-content: space-between;
     color: #5a5a5a;
 }
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader{
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader {
     color: black;
 }
 /*.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader.hasBody:after{*/
@@ -302,14 +301,14 @@ input[type="checkbox"], input[type="radio"]{
 /*    transform: rotate(180deg);*/
 /*    font-family: 'Shazde_Regular' !important*/
 /*}*/
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader.hasBody:after{
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader.hasBody:after {
     transform: rotate(0deg);
 }
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody{
+.mainSidebar .sideMenuSection .sideNavRow .sideNavBody {
     display: none;
 }
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem{
-    transition: .3s;
+.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem {
+    transition: 0.3s;
     color: #0000007a;
     cursor: pointer;
     padding: 7px 30px 7px 20px;
@@ -319,7 +318,7 @@ input[type="checkbox"], input[type="radio"]{
     font-size: 12px;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem.selected,
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem:hover{
+.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem:hover {
     background: #0d665033;
     color: var(--koochita-green);
     font-weight: bold;
@@ -327,24 +326,22 @@ input[type="checkbox"], input[type="radio"]{
     border-radius: 10px;
 }
 
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody{
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody {
     display: flex;
     flex-direction: column;
     padding: 0;
 }
 
-
-.mainSidebar .sideMenuSection .sideNavRow.showInBottom{
+.mainSidebar .sideMenuSection .sideNavRow.showInBottom {
     margin-top: auto;
     margin-bottom: 0px;
     text-align: center;
 }
-.mainSidebar .sideMenuSection .sideNavRow.showInBottom .sideNavHeader{
+.mainSidebar .sideMenuSection .sideNavRow.showInBottom .sideNavHeader {
     justify-content: center;
     font-weight: bold;
     color: var(--koochita-red);
 }
-
 
 label {
     margin-bottom: 0;
@@ -359,7 +356,7 @@ label {
     /*margin-bottom: 100px;*/
 }
 
-.mainBackWhiteBody .head{
+.mainBackWhiteBody .head {
     font-weight: bold;
     font-size: 21px;
     border-bottom: solid 1px lightgray;
@@ -367,35 +364,33 @@ label {
     margin-bottom: 5px;
 }
 
-.mainBackWhiteBody .descriptions{
+.mainBackWhiteBody .descriptions {
     font-size: 15px;
     color: #2b2b2b;
 }
-.mainBackWhiteBody .descriptions.danger{
+.mainBackWhiteBody .descriptions.danger {
     color: red;
 }
 
-.buttonGroupBottom{
+.buttonGroupBottom {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     border-top: solid 1px var(--lightBordreGray);
     padding-top: 10px;
 }
-.buttonGroupBottom.center{
+.buttonGroupBottom.center {
     justify-content: center;
 }
 
-
-.doLoginButton{
+.doLoginButton {
     background: var(--koochita-light-green);
     border: none;
     box-shadow: 1px 1px 4px 2px #276761;
 }
-.doLoginButton:hover{
+.doLoginButton:hover {
     background: var(--koochita-light-green);
 }
-
 
 .notifAlertBP {
     width: fit-content;
@@ -413,18 +408,18 @@ label {
     padding: 10px;
     font-size: 1.2em;
     color: white;
-    transition: .5s;
+    transition: 0.5s;
 }
-.greenAlertBP{
+.greenAlertBP {
     background-color: var(--koochita-light-green);
 }
-.redAlertBP{
+.redAlertBP {
     background-color: #8b0000;
 }
-.topAlertBP{
+.topAlertBP {
     bottom: 0;
 }
-.rightAlertBP{
+.rightAlertBP {
     right: 1%;
     left: auto;
 }
@@ -435,7 +430,7 @@ label {
 .alertDarkBackBP {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
@@ -453,7 +448,11 @@ label {
 }
 .alertTitleBP {
     padding: 10px;
-    font-size: 1.2em;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 5px;
+    line-height: 32px;
+
     color: white;
     border-radius: 10px 10px 0 0;
 }
@@ -468,9 +467,9 @@ label {
     text-align: center;
 }
 .alertDescriptionBP {
-    font-size: 18px;
-    padding: 5px 0 25px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 30px;
 }
 .alertBtnBP {
     width: fit-content;
@@ -482,6 +481,7 @@ label {
     border: 1px solid transparent;
     border-radius: 5px;
     color: white;
+    margin-bottom: 5px;
 }
 .alertBtnBP:hover {
     opacity: 0.75;
@@ -496,9 +496,7 @@ label {
     margin-right: 15px;
 }
 
-
-
-.circleButton{
+.circleButton {
     border-radius: 50%;
     width: 35px;
     height: 35px;
@@ -509,27 +507,27 @@ label {
     cursor: pointer;
     border: none;
     box-shadow: 1px 1px 2px 1px #0000007d;
-    transition: .3s;
+    transition: 0.3s;
 }
-.circleButton:hover{
+.circleButton:hover {
     transform: scale(1.1);
 }
-.circleButton.deleteBut{
+.circleButton.deleteBut {
     background: red;
 }
-.circleButton.editBut{
+.circleButton.editBut {
     background: blue;
 }
-.circleButton.yellowBut{
+.circleButton.yellowBut {
     background: yellowgreen;
 }
 
-.followerModal .searchSec{
+.followerModal .searchSec {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 5px;
 }
-.followerModal .searchSec .inputSec{
+.followerModal .searchSec .inputSec {
     display: flex;
     align-items: center;
     background: #80808036;
@@ -549,31 +547,31 @@ label {
     padding-left: 5px;
 }
 
-.createTicketModal .modal-footer{
+.createTicketModal .modal-footer {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.createTicketModal .modal-footer > button{
+.createTicketModal .modal-footer > button {
     margin: 0px 5px;
     border-radius: 24px;
     padding: 5px 25px;
 }
-.createTicketModal .specLabel{
+.createTicketModal .specLabel {
     width: 110px;
     font-size: 14px;
 }
-.createTicketModal .specInput{
+.createTicketModal .specInput {
     color: black;
     background: #add8e645;
     border: none;
     border-radius: 25px;
     padding: 5px 15px;
 }
-.createTicketModal .specGroup{
+.createTicketModal .specGroup {
     display: flex;
 }
-.createTicketModal .addFile{
+.createTicketModal .addFile {
     background: var(--koochita-light-green);
     color: white;
     padding: 3px 10px;
@@ -582,11 +580,11 @@ label {
     align-items: center;
     cursor: pointer;
 }
-.createTicketModal .filesSection{
+.createTicketModal .filesSection {
     display: flex;
     flex-wrap: wrap;
 }
-.createTicketModal .filesSection .file{
+.createTicketModal .filesSection .file {
     align-items: center;
     width: 100%;
     justify-content: space-between;
@@ -596,7 +594,7 @@ label {
     padding: 4px 10px;
     border-radius: 20px;
 }
-.createTicketModal .filesSection .file .closeI{
+.createTicketModal .filesSection .file .closeI {
     cursor: pointer;
     color: red;
     background: white;
@@ -605,33 +603,31 @@ label {
     height: 20px;
     padding: 3px;
 }
-.createTicketModal .filesSection .file .name{
-
+.createTicketModal .filesSection .file .name {
 }
 
-
-.notificationHeader.off .newNum{
+.notificationHeader.off .newNum {
     display: none;
 }
-.notificationHeader.off .icOn{
+.notificationHeader.off .icOn {
     display: none;
 }
-.notificationHeader.off .icOff{
+.notificationHeader.off .icOff {
     display: block;
 }
 
-.notificationHeader.on .newNum{
+.notificationHeader.on .newNum {
     display: flex;
 }
-.notificationHeader.on .icOn{
+.notificationHeader.on .icOn {
     display: block;
     animation: notificationBelt 2s infinite;
 }
-.notificationHeader.on .icOff{
+.notificationHeader.on .icOff {
     display: none;
 }
 
-@media (max-width:766px) {
+@media (max-width: 766px) {
     .notifAlertBP {
         position: fixed;
         bottom: -30%;
@@ -639,7 +635,7 @@ label {
         border-radius: 10px;
     }
 
-    .topAlertBP{
+    .topAlertBP {
         bottom: 74px;
     }
 
@@ -652,8 +648,8 @@ label {
         width: 100px;
     }
 }
-@media (max-width:400px) {
-    .topAlertBP{
+@media (max-width: 400px) {
+    .topAlertBP {
         bottom: 67px;
     }
 }
@@ -703,11 +699,14 @@ label {
 }
 :root {
     --koochita-blue: #0076a3;
-    --koochita-light-green: #4dc7bc;
     --koochita-dark-green: #053a3e;
     --koochita-green: #0d6650;
-    --koochita-red: #720d19;
     --koochita-yellow: #fcc156;
-    --lightBordreGray: #d4d4d4;
+    --koochita-light-green: #4dc7bc;
+    --koochita-font: #444444;
+    --lightBordreGray: #707070;
+    --koochita-gray: #e5e5e5;
+    --koochita-red: #db3700;
+    --koochita-lightgray: #f8f8f8;
+    --koochita-shadow: #00000033;
 }
-

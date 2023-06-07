@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\Cities;
+use App\models\places\Place;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -52,5 +53,51 @@ class AjaxController extends Controller {
         echo json_encode($result);
         return;
     }
+
+    
+    public function searchSpecificKindPlace(){
+        $place = [];
+        if($_GET['kindPlaceId'] == 0){
+            $kindPlaceses = Place::whereNotNull('tableName')->where('mainSearch', 1)->get();
+            foreach ($kindPlaceses as $kindPlace){
+                if($kindPlace->id == 10 || $kindPlace->id == 11 || $kindPlace->id == 14)
+                    $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
+                else
+                    $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];
+                $pl = DB::table($kindPlace->tableName)->where('name', 'LIKE', '%' . $_GET["value"] . '%')->select($select)->get();
+                foreach ($pl as $item) {
+                    $item->kindPlaceId = $kindPlace->id;
+                    $item->fileName = $kindPlace->fileName;
+                    array_push($place, $item);
+                }
+            }
+        }
+        else {
+            $kindPlace = Place::find($_GET['kindPlaceId']);
+            if($kindPlace->id == 10 || $kindPlace->id == 11 || $kindPlace->id == 14)
+                $select = ['id', 'name', 'picNumber', 'cityId', 'file'];
+            else
+                $select = ['id', 'name', 'picNumber', 'cityId', 'file', 'C', 'D'];
+
+            $place = DB::table($kindPlace->tableName)->where('name', 'LIKE', '%' . $_GET["value"] . '%')->select($select)->get();
+            foreach ($place as $item) {
+                $item->kindPlaceId = $kindPlace->id;
+                $item->fileName = $kindPlace->fileName;
+            }
+        }
+
+        foreach ($place as $item){
+            $item->city = Cities::find($item->cityId);
+            if($item->city != null)
+                $item->state = $item->city->getState;
+
+            if(file_exists(__DIR__ . '/../../../../assets/_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber))
+                $item->pic = URL::asset('_images/'.$item->fileName.'/'.$item->file.'/l-'.$item->picNumber);
+            else
+                $item->pic = URL::asset('images/mainPics/noPicSite.jpg');
+        }
+        return response()->json(['status' => 'ok', 'result' => $place]);
+    }
+
 
 }

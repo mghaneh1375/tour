@@ -1,5 +1,4 @@
-
-.height100{
+.height100 {
     height: 100%;
 }
 .selected {
@@ -28,7 +27,7 @@
     height: auto !important;
 }
 
-.createBusinessPage .kindOfBusinessOwnerSection{
+.createBusinessPage .kindOfBusinessOwnerSection {
     width: 100%;
     height: 50px;
     border: 2px solid #7d7d7d;
@@ -38,7 +37,7 @@
     align-items: center;
     cursor: pointer;
 }
-.createBusinessPage .kindOfBusinessOwnerSection .inputSec{
+.createBusinessPage .kindOfBusinessOwnerSection .inputSec {
     width: 40px;
     border-left: 2px dashed black;
     height: 100%;
@@ -46,22 +45,21 @@
     justify-content: center;
     align-items: center;
 }
-.createBusinessPage .kindOfBusinessOwnerSection .content{
+.createBusinessPage .kindOfBusinessOwnerSection .content {
     display: flex;
     align-items: center;
     height: 100%;
     justify-content: center;
     margin-right: 10px;
 }
-.createBusinessPage .kindOfBusinessOwnerSection .content > i{
-
+.createBusinessPage .kindOfBusinessOwnerSection .content > i {
 }
-.createBusinessPage .kindOfBusinessOwnerSection .content > p{
+.createBusinessPage .kindOfBusinessOwnerSection .content > p {
     margin: 0;
     margin-right: 10px;
 }
 
-.createBusinessPage .businessType{
+.createBusinessPage .businessType {
     width: 100%;
     cursor: pointer;
     border: 2px solid #7d7d7d;
@@ -71,11 +69,11 @@
     justify-content: center;
     border-radius: 10px;
 }
-.createBusinessPage .businessType.disabled{
+.createBusinessPage .businessType.disabled {
     filter: grayscale(1);
-    opacity: .5;
+    opacity: 0.5;
 }
-.createBusinessPage .businessType .picSection{
+.createBusinessPage .businessType .picSection {
     float: right;
     width: 100px;
     height: 100px;
@@ -85,47 +83,47 @@
     overflow: hidden;
     border-radius: 10px;
 }
-.createBusinessPage .businessType .textSec{
+.createBusinessPage .businessType .textSec {
     width: calc(100% - 100px);
     padding-right: 20px;
 }
-.createBusinessPage .businessType .textSec h5{
+.createBusinessPage .businessType .textSec h5 {
     font-weight: bold;
     margin: 0px;
 }
-.createBusinessPage .businessType .textSec p{
+.createBusinessPage .businessType .textSec p {
     margin: 0px;
     color: gray;
     font-size: 13px;
     margin-top: 5px;
 }
 
-.createBusinessPage .createBusinessStep5 .numOfUserInBusiness{
+.createBusinessPage .createBusinessStep5 .numOfUserInBusiness {
     padding: 3px 0 10px 30px;
     font-size: 15px;
     width: 50%;
 }
 
-.shareHolderCard{
+.shareHolderCard {
     background-color: #fcc1560f;
     padding: 10px;
     border-radius: 5px;
     border: solid 1px var(--koochita-yellow);
     margin-bottom: 30px;
 }
-.shareHolderCard > .title{
+.shareHolderCard > .title {
     font-size: 19px;
     width: 100%;
     color: #aa0800;
     font-weight: bold;
     margin-bottom: 10px;
 }
-.shareHolderCard > .content{
+.shareHolderCard > .content {
     display: flex;
     justify-content: space-between;
 }
 
-.shareHolderCard .deleteButton{
+.shareHolderCard .deleteButton {
     cursor: pointer;
     background: var(--koochita-red);
     color: white;
@@ -136,17 +134,17 @@
     display: flex;
     margin-top: 10px;
 }
-.shareHolderCard .content .inputRow{
+.shareHolderCard .content .inputRow {
     width: 49%;
 }
-.shareHolderCard .content .picSec{
+.shareHolderCard .content .picSec {
     width: 49%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
 }
-.shareHolderCard .picSec .uploadPicSection{
+.shareHolderCard .picSec .uploadPicSection {
     height: 200px;
     width: 100%;
     border: solid 1px #c7c7c7;
@@ -159,13 +157,13 @@
     cursor: pointer;
     background-color: white;
 }
-.shareHolderCard .picSec > .title{
+.shareHolderCard .picSec > .title {
     color: var(--koochita-green);
     font-size: 12px;
     text-align: center;
     margin-bottom: 10px;
 }
-.shareHolderCard .uploadPicSection .labelForClick{
+.shareHolderCard .uploadPicSection .labelForClick {
     cursor: pointer;
     z-index: 99;
     font-weight: bold;
@@ -174,7 +172,7 @@
     width: 100%;
     color: black;
 }
-.shareHolderCard .uploadPicSection .uploadPic{
+.shareHolderCard .uploadPicSection .uploadPic {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -183,4 +181,7 @@
     font-size: 18px;
     color: black;
     opacity: 1;
+}
+.displayBlock {
+    display: block !important;
 }

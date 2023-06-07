@@ -199,11 +199,11 @@
 @section('body')
 
     <div class="mainBackWhiteBody">
-        <div class="head">ایجاد تور: مرحله چهارم</div>
+        <h1>ایجاد تور: مرحله چهارم</h1>
         <div style="margin-top: 20px">
             <div class="whiteBox">
                 <div id="tourKindChoseTitleTourCreation">
-                    <span>نوع تور خود را مشخص کنید.</span>
+                    <h2>نوع تور خود را مشخص کنید.</h2>
                     <span onclick="$('#tourKindDescriptionModal').toggle()" style="cursor: pointer;">آیا نیازمند راهنمایی
                         هستید؟</span>
                 </div>
@@ -217,12 +217,12 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="inboxHelpSubtitle">انتخاب حداکثر سه گزینه مجاز می‌باشد</div>
+                <figcaption>انتخاب حداکثر سه گزینه مجاز می‌باشد</figcaption>
             </div>
 
             <div class="whiteBox">
                 <div id="tourLevelChoseTitleTourCreation">
-                    <span>درجه سختی تور خود را مشخص کنید.</span>
+                    <h2>درجه سختی تور خود را مشخص کنید.</h2>
                     <span onclick="$('#tourDifficultDescriptionModal').toggle()" style="cursor: pointer;">آیا نیازمند
                         راهنمایی هستید؟</span>
                 </div>
@@ -236,7 +236,7 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="inboxHelpSubtitle">انتخاب گزینه‌های
+                <figcaption>انتخاب گزینه‌های
                     @foreach ($tourDifficult as $item)
                         @if ($item->alone == 0)
                             {{ $item->name }} ,
@@ -244,12 +244,12 @@
                     @endforeach
                     با گزینه‌های دیگر مجاز
                     می‌باشد.
-                </div>
+                </figcaption>
             </div>
 
             <div class="whiteBox">
                 <div id="concentrationChoseTitleTourCreation">
-                    <span>مناسب برای</span>
+                    <h2>مناسب برای</h2>
                     <span class="smallText">(حداکثر 2 مورد)</span>
                 </div>
                 <div class="concentrationChoseTourCreation" style="width: 100%">
@@ -264,7 +264,7 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="inboxHelpSubtitle">اگر تور شما برای مخاطبان فوق مناسب است، آن را انتخاب کنید.</div>
+                <figcaption>اگر تور شما برای مخاطبان فوق مناسب است، آن را انتخاب کنید.</figcaption>
             </div>
 
             {{--        <div class="whiteBox"> --}}
@@ -285,7 +285,7 @@
 
             <div class="whiteBox">
                 <div id="tourTypeChoseTitleTourCreation">
-                    <span>تیپ خود را مشخص کنید.</span>
+                    <h2>تیپ خود را مشخص کنید.</h2>
                     <span class="smallText">(حداکثر 3 مورد)</span>
                 </div>
                 <div class="tourTypeChoseChoseTourCreation">
@@ -300,7 +300,7 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="inboxHelpSubtitle">تیپ گردشگران خود را با انتخاب حداکثر سه گزینه‌ی فوق، انتخاب نمایید.</div>
+                <figcaption>تیپ گردشگران خود را با انتخاب حداکثر سه گزینه‌ی فوق، انتخاب نمایید.</figcaption>
             </div>
 
             {{--        <div class="whiteBox "> --}}
@@ -338,9 +338,9 @@
             {{--        </div> --}}
 
             <div class="whiteBox ">
-                <div class="boxTitlesTourCreation">چه انتظاری داشته باشیم</div>
-                <div class="inboxHelpSubtitle">به صورت کاملاً شفاف به مشتریان‌تان بگویید از تور شما چه انتظاری داشته باشند و
-                    با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</div>
+                <h2>چه انتظاری داشته باشیم</h2>
+                <figcaption>به صورت کاملاً شفاف به مشتریان‌تان بگویید از تور شما چه انتظاری داشته باشند و
+                    با چه چیزی روبرو می‌شوند - حداکثر 50 کلمه</figcaption>
                 <div class="inputBox fullwidthDiv height-150">
                     <textarea id="textExpectation" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"
                         placeholder="متن خود را وارد کنید"></textarea>
@@ -348,9 +348,9 @@
             </div>
 
             <div class="whiteBox ">
-                <div class="boxTitlesTourCreation">اطلاعات اختصاصی</div>
-                <div class="inboxHelpSubtitle">هر نوع اطلاعاتی که مختص تور شماست و دوست دارید مشتریان‌تان آن را بدانند در
-                    حداکثر 150 کلمه وارد نمایید</div>
+                <h2>اطلاعات اختصاصی</h2>
+                <figcaption>هر نوع اطلاعاتی که مختص تور شماست و دوست دارید مشتریان‌تان آن را بدانند در
+                    حداکثر 150 کلمه وارد نمایید</figcaption>
                 <div class="inputBox fullwidthDiv height-150">
                     <textarea id="specialInformation"
                         class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"
@@ -368,9 +368,9 @@
             {{--        </div> --}}
 
             <div class="whiteBox ">
-                <div class="boxTitlesTourCreation">محدودیت‌های سفر</div>
-                <div class="inboxHelpSubtitle"> هر نوع محدودیت که مشتریان شما در طول تور با ان مواجه می‌شوند و مجبور به
-                    رعایت آن می‌باشند را وارد نمایید</div>
+                <h2>محدودیت‌های سفر</h2>
+                <figcaption> هر نوع محدودیت که مشتریان شما در طول تور با ان مواجه می‌شوند و مجبور به
+                    رعایت آن می‌باشند را وارد نمایید</figcaption>
                 <div class="inputBox fullwidthDiv height-150">
                     <textarea id="tourLimit" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"
                         placeholder="متن خود را وارد کنید"></textarea>
@@ -378,11 +378,11 @@
             </div>
 
             <div class="whiteBox ">
-                <div class="boxTitlesTourCreation">چه همراه داشته باشیم</div>
-                <div class="inboxHelpSubtitle">به مشتریان‌تان کمک کنید تا بدانند چه چیزی همراه داشته باشند. موارد ضروری
-                    مواردی است که حتماً باید همراه باشد و موارد پیشنهادی به تجربه‌‌ی بهتر کمک می‌کند.</div>
-                <div class="inboxHelpSubtitle">ما لیست تمام موارد پیش‌بینی شده را در دسته‌بندی‌های مختلف آماده گرده‌ایم و
-                    شما تنها می‌بایست گزینه‌ی مورد نظر خود را گرفته و به داخل باکس مورد نظر خود بکشید.</div>
+                <h2>چه همراه داشته باشیم</h2>
+                <figcaption>به مشتریان‌تان کمک کنید تا بدانند چه چیزی همراه داشته باشند. موارد ضروری
+                    مواردی است که حتماً باید همراه باشد و موارد پیشنهادی به تجربه‌‌ی بهتر کمک می‌کند.</figcaption>
+                <figcaption>ما لیست تمام موارد پیش‌بینی شده را در دسته‌بندی‌های مختلف آماده گرده‌ایم و
+                    شما تنها می‌بایست گزینه‌ی مورد نظر خود را گرفته و به داخل باکس مورد نظر خود بکشید.</figcaption>
                 <div>
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default equipmentSection">
@@ -428,9 +428,9 @@
             </div>
 
             <div class="whiteBox ">
-                <div class="boxTitlesTourCreation">اگر عکسی دارید، آن را اضافه نمایید</div>
-                <div class="inboxHelpSubtitle">اگر از تورهای پیشین خود با همین موضوع عکسی دارید حتماً آن را با مشتریان خود
-                    به اشتراک بگذارید</div>
+                <h2>اگر عکسی دارید، آن را اضافه نمایید</h2>
+                <figcaption>اگر از تورهای پیشین خود با همین موضوع عکسی دارید حتماً آن را با مشتریان خود
+                    به اشتراک بگذارید</figcaption>
                 <div id="uploadImgDiv" class="fullwidthDiv">
                     <div id="picDiv0" style="display: inline-block; width: 23%; position: relative">
                         <input class="input-file" id="picsInput_0" name="pics[]" accept="image/*" type="file"
@@ -471,10 +471,10 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">شرایط کنسلی</div>
-                <div class="inboxHelpSubtitle">شرایط کنسلی تور خود را به اطلاع مسافران خود برسانید.</div>
+                <h2>شرایط کنسلی</h2>
+                <figcaption>شرایط کنسلی تور خود را به اطلاع مسافران خود برسانید.</figcaption>
                 <div class="tourGuiderQuestions mg-tp-15">
-                    <span>آیا تور شما دارای کنسلی می‌باشد؟</span>
+                    <p class="bold dispalyInline">آیا تور شما دارای کنسلی می‌باشد؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="isCancelAbel" value="1"
@@ -496,7 +496,7 @@
                 </div>
             </div>
 
-            <div class="row" style="padding: 15px;">
+            <div class="row" style="padding: 15px;flex-direction:row-reverse">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
             </div>
         </div>

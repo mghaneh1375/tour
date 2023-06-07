@@ -34,7 +34,7 @@ class AuthPanelBusinessController extends Controller
 
         $url = $_SERVER['REQUEST_URI'];
 
-        $fileVersions = 13;
+        $fileVersions = 14;
 
         return view('panelBusiness.pages.auth.login', compact(['authUrl', 'fileVersions']));
     }

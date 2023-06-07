@@ -116,9 +116,9 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic
     background-color: white;
     display: inline-block;
     width: 100%;
-    margin-bottom: 10px;
+
     direction: rtl;
-    padding: 25px 20px;
+    padding: 15px 20px;
     padding-top: 10px;
     border-bottom: solid 1px lightgray;
 }
@@ -203,12 +203,13 @@ DIV.ppr_rup.ppr_priv_hr_atf_north_star_nostalgic
     margin-bottom: 10px;
     font-weight: 700;
 }
-
+#termsAndConditionBtn {
+}
 #termsAndConditionBtn,
 #goToProfile {
     display: inline-block;
     background-color: var(--koochita-light-green);
-    /*width: 150px;*/
+    width: 150px;
     color: white;
     line-height: 2;
     font-size: 18px;
@@ -722,8 +723,8 @@ input[type="radio"]:checked + label span {
 }
 
 .nextStepBtnTourCreation {
-    float: left;
     background-color: var(--koochita-green);
+    float: left;
     color: white;
     line-height: 1.8;
     font-size: 15px;
@@ -992,7 +993,7 @@ input[type="radio"]:checked + label span {
 
 .placeNameAddingPlaceInputDiv > div.inputBoxText,
 .mainClassificationOfPlaceInputDiv > div.inputBoxText {
-    width: 15%;
+    width: 30%;
 }
 
 .placeNameAddingPlaceInputDiv > input.inputBoxInput {
@@ -1111,6 +1112,7 @@ input[type="radio"]:checked + label span {
 }
 
 .verifyBtnTourCreation {
+    cursor: pointer;
     left: 80px;
     background-color: var(--koochita-light-green);
 }
@@ -1151,10 +1153,11 @@ input[type="radio"]:checked + label span {
 }
 
 .wholesaleDiscountLimitationBtn {
+    color: white;
     border: 0;
     border-radius: 5px;
-    padding: 3px 17px;
-    font-size: 11px;
+    padding: 0px 10px;
+    font-size: 24px;
     box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -1575,8 +1578,8 @@ textarea {
 }
 
 .styled-select {
-    -moz-appearance: none; /* Firefox */
-    -webkit-appearance: none; /* Safari and Chrome */
+    /* -moz-appearance: none; Firefox */
+    /* -webkit-appearance: none; Safari and Chrome */
     height: 30px;
     padding-right: 5px;
 }
@@ -1621,9 +1624,11 @@ textarea {
 }
 .optionMultiSelect {
     cursor: pointer;
+    padding-right: 8px;
 }
 .optionMultiSelect:hover {
-    background: red;
+    background: var(--koochita-light-green);
+    color: white;
 }
 .searchResult {
     width: 85%;
@@ -1687,18 +1692,22 @@ textarea {
     background-color: var(--koochita-light-green) !important;
     color: white;
 }
-
+.inputBoxTour:hover {
+    background-color: #e1e1e1;
+}
 .inputBoxTour {
+    cursor: pointer;
     padding: 2px 7px;
     font-size: 0.8em;
     display: flex !important;
     border: 1px solid #cccccc;
     border-radius: 5px;
-    background-color: #ebebeb;
+    background-color: white;
     line-height: 30px;
     margin: 10px 0;
 }
 .inputBoxTour .inputBoxInput {
+    cursor: pointer;
     border: none;
     background: none;
     width: 100%;
@@ -1772,6 +1781,12 @@ textarea {
     border-top: solid 1px #80808066;
     background: white;
     border-radius: 10px;
+}
+.dateRow .fa-regular.open:before {
+    content: "\f106";
+}
+.dateRow .fa-regular:before {
+    content: "\f107";
 }
 .dateRow .title {
     font-weight: bold;
@@ -1861,10 +1876,61 @@ textarea {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 8px;
+    font-size: 7px;
     transition: 0.3s;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
+
+.modalBlackBack {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    background: #000000b8;
+    z-index: 1001;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+
+.modalBlackBack .closeModal {
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    font-size: 30px;
+    color: var(--koochita-light-green);
+    cursor: pointer;
+}
+.modalBlackBack.showModal {
+    display: flex;
+    opacity: 1;
+}
+#darkModal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    /*backdrop-filter: blur(2px);*/
+}
+
+.modalBody {
+    background: white;
+    padding: 25px;
+    direction: rtl;
+    position: relative;
+}
+
+.modalBlackBack.fullCenter {
+    align-items: center !important;
+}
+
 .dateRow .planSec .bod .sections .planDetSec .detail:hover {
     opacity: 0.8;
 }
@@ -2013,7 +2079,8 @@ textarea {
 }
 
 .errorList {
-    list-style-type: none;
+    padding: 0px 40px;
+    text-align: right;
 }
 .errorList li {
     margin: 10px 0px;
@@ -2047,9 +2114,8 @@ textarea {
 }
 
 .goToPrevStep {
-    margin-left: 10px;
-    background: none;
-    color: var(--koochita-red);
+    background-color: white !important;
+    color: red;
 }
 
 .mainDiv {
@@ -2073,6 +2139,7 @@ textarea {
     display: inline-block;
 }
 .inputBoxInput {
+    cursor: pointer;
     width: 65%;
     text-align: center;
     border: none;
@@ -2204,12 +2271,6 @@ textarea {
 }
 .tourKindIcons:hover {
     background: var(--koochita-light-green);
-}
-
-.goToPrevStep {
-    margin-left: 10px;
-    background: none;
-    color: var(--koochita-red);
 }
 
 .tourKind:hover {

@@ -76,7 +76,7 @@
                     <div class="inputBoxTextGeneralInfo inputBoxText">
                         <div class="importantFieldLabel">نام تور</div>
                     </div>
-                    <input id="tourName" class="inputBoxInput" type="text" name="name" placeholder="فارسی" required>
+                    <input id="tourName" class="inputBoxInput " type="text" name="name" placeholder="فارسی" required>
                 </div>
 
                 <div class="InlineTourInputBoxesMainDiv">
@@ -101,24 +101,24 @@
                         <input id="destKind" type="hidden" name="destKind">
                     </div>
                 </div>
-                <div class="inboxHelpSubtitle" style="width: 100%;">
+                <figcaption>
                     با وارد کردن نام شهر گزینه‌های موجود نمایش داده می‌شود تا از بین آن‌ها انتخاب نمایید. اگر نام شهر خود را
                     نیافتید از گزینه‌ی اضافه کردن استفاده نمایید. توجه کنید اگر مبدأ یا مقصد شما جاذبه می‌باشد، آن را وارد
                     نمایید.
-                </div>
+                </figcaption>
                 <div>
                     <input type="checkbox" id="sameSrcDestInput" name="sameSrcDestInput" onchange="srcDest()"
                         value="1" />
                     <label for="sameSrcDestInput">
                         <span></span>
-                        تور من شهرگردی است و مبدأ و مقصد آن یکی است.
+                        <p class="bold dispalyInline">تور من شهرگردی است و مبدأ و مقصد آن یکی است.</p>
                     </label>
                 </div>
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">روزهای تور</div>
-                <div class="inboxHelpSubtitle">تعداد روز و شب های تور خود را مشخص کنید.</div>
+                <h2>روزهای تور</h2>
+                <figcaption>تعداد روز و شب های تور خود را مشخص کنید.</figcaption>
 
                 <div class="row" style="display: flex; width: 100%">
                     <div class="inputBoxTour col-xs-3 mg-rt-10 relative-position float-right"
@@ -139,10 +139,10 @@
 
             <div class="whiteBox">
 
-                <div class="boxTitlesTourCreation" style="margin-top: 20px; padding-top: 10px;">زمان برگزاری</div>
+                <h2>زمان برگزاری</h2>
                 <div>
-                    <div class="inboxHelpSubtitle">تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را
-                        برای شما فراهم آوردیم تا بتوانید برای تور خود تاریخ های متفاوتی را تعریف کنید.</div>
+                    <figcaption>تاریخ شروع و پایان تور خود را وارد نمایید. توجه کنید که ما این امکان را
+                        برای شما فراهم آوردیم تا بتوانید برای تور خود تاریخ های متفاوتی را تعریف کنید.</figcaption>
                     <div id="notSameTimeCalendarDiv" style="display: flex; flex-direction: column">
                         <div>
                             <div class="inputBoxTour col-xs-3 relative-position float-right" style="margin-left: 60px;">
@@ -169,8 +169,8 @@
                         </div>
 
                         <div>
-                            <div class="inboxHelpSubtitle">اگر تور شما در بازه های مشابه برگزار می شود، شما می توانید از
-                                ابزار زیر به راحتی تاریخ ها را انتخاب کنید.</div>
+                            <figcaption>اگر تور شما در بازه های مشابه برگزار می شود، شما می توانید از
+                                ابزار زیر به راحتی تاریخ ها را انتخاب کنید.</figcaption>
                             <div style="display: flex; align-items: center; margin: 10px 0px;">
                                 تور من به صورت
                                 <div class="inputBoxGeneralInfo inputBoxTour" style="width: 100px; margin: 0px 10px;">
@@ -190,7 +190,7 @@
                             </div>
                         </div>
 
-                        <div class="inboxHelpSubtitle">تاریخ های دیگر تور</div>
+                        <figcaption>تاریخ های دیگر تور</figcaption>
 
                         <div id="calendar_1" class="calendarRow">
                             <div class="inputBoxTour col-xs-3 relative-position float-right" style="margin-left: 60px;">
@@ -213,15 +213,16 @@
                                 <input name="eDateNotSame[]" id="eDate_1" class="observer-example inputBoxInput" />
                             </div>
 
-                            <div class="inline-block mg-tp-12 mg-rt-10">
+                            <div class="inline-block  mg-rt-10">
                                 <button type="button" id="newCalendar_1"
-                                    class="wholesaleDiscountLimitationBtn verifyBtnTourCreation" onclick="newCalendar()">
-                                    <img src="{{ URL::asset('images/tourCreation/approve.png') }}">
+                                    class="wholesaleDiscountLimitationBtn verifyBtnTourCreation plus2"
+                                    onclick="newCalendar()">
+
                                 </button>
                                 <button type="button" id="deleteCalendar_1"
-                                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation"
+                                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation iconFullClose"
                                     onclick="deleteCalendar(1)" style="display: none;">
-                                    <img src="{{ URL::asset('images/tourCreation/delete.png') }}">
+
                                 </button>
                             </div>
                         </div>
@@ -231,7 +232,7 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">ظرفیت</div>
+                <h2>ظرفیت</h2>
                 <div>
                     <div class="col-xs-4 float-right" style="margin-left: 50px;">
                         <div class="inputBoxTour">
@@ -254,12 +255,12 @@
                     <div class="fullwidthDiv">
                         <input type="checkbox" name="anyCapacity" id="anyCapacity" value="1" />
                         <label for="anyCapacity"><span></span></label>
-                        <span id="tourCapacityCheckbox">با هر ظرفیتی تور برگزار می شود.</span>
+                        <p class="bold dispalyInline" id="tourCapacityCheckbox">با هر ظرفیتی تور برگزار می شود.</p>
                     </div>
                 </div>
 
                 <div class="nonGovernmentalTitleTourCreation">
-                    <span>آیا تور شما به صورت خصوصی برگزار می‌شود؟</span>
+                    <p class="bold dispalyInline">آیا تور شما به صورت خصوصی برگزار می‌شود؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="private" value="1" id="option2" autocomplete="off">بله
@@ -269,18 +270,18 @@
                                 checked>خیر
                         </label>
                     </div>
-                    <div class="inboxHelpSubtitle" style="margin-bottom: 20px; width: 100%">تورهای خصوصی برای گروه محدودی
-                        از مخاطبان برگزار می‌شوند و مخاطبا نمی‌توانند تجربه‌ای خصوصی داشته باشند.</div>
+                    <figcaption>تورهای خصوصی برای گروه محدودی
+                        از مخاطبان برگزار می‌شوند و مخاطبا نمی‌توانند تجربه‌ای خصوصی داشته باشند.</figcaption>
                 </div>
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">اطلاعات اضافی مورد نیاز از مسافر</div>
-                <div class="inboxHelpSubtitle">در این بخش شما می توانید تعیین کنید از مسافران خود چه اطلاعاتی علاوه بر [نام
-                    و نام خانوادگی ، تاریخ تولد و جنسیت] را نیاز دارید</div>
+                <h2>اطلاعات اضافی مورد نیاز از مسافر</h2>
+                <figcaption>در این بخش شما می توانید تعیین کنید از مسافران خود چه اطلاعاتی علاوه بر [نام
+                    و نام خانوادگی ، تاریخ تولد و جنسیت] را نیاز دارید</figcaption>
                 <div>
-                    <div style="font-weight: bold; margin-top: 10px;">برای صدور بلیت تور به چه اطلاعاتی اضافی از مسافران
-                        نیاز دارید؟</div>
+                    <h2 class="bold">برای صدور بلیت تور به چه اطلاعاتی اضافی از مسافران
+                        نیاز دارید؟</h2>
                     <div>
                         <input type="checkbox" id="userInfoNeed_faName" name="userInfoNeed[]" value="faName" checked />
                         <label for="userInfoNeed_faName" class="personInfosLabel" style="display: none">
@@ -328,7 +329,7 @@
                 </div>
 
                 <div class="nonGovernmentalTitleTourCreation" style="margin-top: 20px;">
-                    <span>آیا اطلاعات تک تک مسافرین مورد نیاز است؟</span>
+                    <p class="bold dispalyInline">آیا اطلاعات تک تک مسافرین مورد نیاز است؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="isAllUserInfo" value="1" autocomplete="off" checked>
@@ -343,7 +344,7 @@
             </div>
 
 
-            <div class="row" style="padding: 15px;">
+            <div class="row" style="padding: 15px; flex-direction:row-reverse">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
             </div>
         </div>
@@ -372,15 +373,15 @@
                 </div>
                 <input name="eDateNotSame[]" id="eDate_##number##" class="observer-example inputBoxInput" />
             </div>
-            <div class="inline-block mg-tp-12 mg-rt-10">
+            <div class="inline-block  mg-rt-10">
                 <button type="button" id="newCalendar_##number##"
-                    class="wholesaleDiscountLimitationBtn verifyBtnTourCreation" onclick="newCalendar()">
-                    <img src="{{ URL::asset('images/tourCreation/approve.png') }}">
+                    class="wholesaleDiscountLimitationBtn verifyBtnTourCreation plus2" onclick="newCalendar()">
+
                 </button>
                 <button type="button" id="deleteCalendar_##number##"
-                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation" onclick="deleteCalendar(##number##)"
-                    style="display: none;">
-                    <img src="{{ URL::asset('images/tourCreation/delete.png') }}">
+                    class="wholesaleDiscountLimitationBtn deleteBtnTourCreation iconFullClose"
+                    onclick="deleteCalendar(##number##)" style="display: none;">
+
                 </button>
             </div>
         </div>

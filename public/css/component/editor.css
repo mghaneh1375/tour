@@ -1,5 +1,3 @@
-
-
 /*2nd box of styles*/
 
 .epTitle {
@@ -20,6 +18,7 @@
 }
 
 .epInputBox {
+    cursor: pointer;
     width: 100%;
     display: inline-block;
     padding: 2px 7px;
@@ -34,10 +33,9 @@
     padding-left: 15px;
     border-left: 1px solid #d8d8d8;
     display: inline-block;
-    min-width: 90px
+    min-width: 90px;
 }
-.uploadPicInfoSection{
-
+.uploadPicInfoSection {
 }
 
 .epInputBoxInput {
@@ -55,7 +53,7 @@
 
 .epInputBoxRequired {
     display: inline-block;
-    position: relative
+    position: relative;
 }
 
 .epInputIconRequired {
@@ -71,7 +69,7 @@
     height: 120px;
     resize: none;
     border-radius: 5px;
-    background-color: #EEEEEE;
+    background-color: #eeeeee;
     padding: 8px;
 }
 
@@ -135,7 +133,7 @@
 
 .editSection > div:nth-child(1) > div:nth-child(1) {
     max-height: 600px;
-    overflow: auto
+    overflow: auto;
 }
 
 .ui_close_x {
@@ -185,7 +183,7 @@
 
 .itemRow .row .col-xs-7 div:last-child {
     margin: 10px 0;
-    text-align: justify
+    text-align: justify;
 }
 
 .photoTemplateTypeDesc {
@@ -211,7 +209,7 @@
 }
 
 .secondStepPolicyText {
-    padding: 0 5px 0 10px;;
+    padding: 0 5px 0 10px;
     text-align: justify;
     font-size: 8px;
     line-height: 2;
@@ -238,10 +236,11 @@
     font-weight: 700;
 }
 
-#rectanglePicUploadPhoto, #squarePicUploadPhoto  {
+#rectanglePicUploadPhoto,
+#squarePicUploadPhoto {
     transform: rotate(0deg);
 }
-.rectangularImgBox{
+.rectangularImgBox {
     width: 200px;
     max-height: 200px;
     overflow: hidden;
@@ -249,7 +248,7 @@
     justify-content: center;
     align-items: center;
 }
-.squareImgBox{
+.squareImgBox {
     width: 100px;
     height: 100px;
     display: flex;
@@ -276,7 +275,7 @@
     width: 100%;
     height: 100%;
     top: 0;
-    display: none
+    display: none;
 }
 
 #dropArea > .footer > div > div {
@@ -309,14 +308,13 @@
     left: 0;
 }
 
-
-.addPhotoBtn{
+.addPhotoBtn {
     font-size: 15px;
     padding: 10px;
     border-radius: 5px;
     border-color: var(--koochita-light-green) !important;
     background-color: var(--koochita-light-green) !important;
-    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, .25);
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.25);
     color: #fff;
     cursor: pointer;
 }
@@ -343,10 +341,8 @@
     display: inline-block;
 }
 
-
-
 .errorField {
-    background-color: #f26C4F;
+    background-color: #f26c4f;
 }
 
 .returnBtnEditPhoto {
@@ -361,10 +357,9 @@
 }
 
 .darkModalEditor {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(2px);
 }
-
 
 .footerTextBox {
     padding: 10px 15px;
@@ -378,7 +373,6 @@
     color: #0c0593;
 }
 
-
 /*succes styles*/
 
 .successScreen {
@@ -387,7 +381,7 @@
 
 .successTextBox {
     padding: 30px;
-    line-height: 25px
+    line-height: 25px;
 }
 
 .successText {
@@ -402,7 +396,6 @@
     text-align: center;
     margin-top: 10px;
 }
-
 
 .uploadNextPicBtnBox {
     width: 100%;
@@ -430,7 +423,7 @@
     cursor: pointer;
 }
 
-.uploadedImgDiv{
+.uploadedImgDiv {
     width: 100%;
     display: flex;
     top: 50%;
@@ -440,7 +433,7 @@
     flex-direction: row;
 }
 
-.uploadedImgShowDiv{
+.uploadedImgShowDiv {
     position: relative;
     display: flex;
     justify-content: center;
@@ -448,7 +441,7 @@
     overflow: hidden;
 }
 
-.uploadedImgPic{
+.uploadedImgPic {
     width: 100%;
 }
 
@@ -456,7 +449,7 @@
     margin: 20px 20px 0;
 }
 
-#photoEditor{
+#photoEditor {
     padding: 0;
     top: 5%;
     position: fixed;
@@ -468,13 +461,14 @@
     background: white;
 }
 
-#photoUploadHeader, .photoUploadHeader {
+#photoUploadHeader,
+.photoUploadHeader {
     color: white;
 }
-.whiteClose:before{
+.whiteClose:before {
     color: white;
 }
-.addPhotographerModal{
+.addPhotographerModal {
     z-index: 9991;
     position: fixed;
     width: 100%;
@@ -483,7 +477,7 @@
     right: 0px;
     background-color: #000000bf;
 }
-.closeAddPhotographer{
+.closeAddPhotographer {
     position: absolute;
     left: 10px;
     top: -3px;
@@ -513,7 +507,7 @@
     color: #000;
     font-size: 14px;
     line-height: 48px;
-    padding-right:14px;
+    padding-right: 14px;
     max-width: 65%;
     overflow: hidden;
     white-space: nowrap;
@@ -537,7 +531,7 @@
     cursor: pointer;
 }
 .photoUploader .headerBar .headerLink:before {
-    content: '';
+    content: "";
     position: absolute;
     top: 12px;
     right: 0;
@@ -545,11 +539,11 @@
     width: 1px;
     background: #ccc;
 }
-.inputUploadPhotosError{
+.inputUploadPhotosError {
     background: red !important;
     color: white !important;
 }
-.tickInputUploadPhotosError{
+.tickInputUploadPhotosError {
     border: solid 2px;
     border-radius: 5px;
     color: red;
@@ -624,7 +618,7 @@
     cursor: pointer;
     border: 1px solid;
     border-color: #e6e6e6 #ccc #ccc #e6e6e6;
-    box-shadow: 1px 1px 0 0 rgba(0,0,0,.07);
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.07);
 }
 .uploaderDlg .preview .editBtn:hover {
     text-decoration: none;
@@ -641,7 +635,7 @@
     height: 100%;
     width: 100%;
     text-align: center;
-    background: #F4F3F0;
+    background: #f4f3f0;
 }
 .uploaderDlg .preview .imgContainer:before {
     /* Vertical center trick */
@@ -674,14 +668,14 @@
     clear: both;
     margin: 6px 18px;
     padding: 6px;
-    background: #FFF;
+    background: #fff;
     border-width: 1px;
     border-style: solid;
-    border-color: #ECEAE2 #ECEAE2 #DDDBD0 #ECEAE2;
+    border-color: #eceae2 #eceae2 #dddbd0 #eceae2;
 }
 .uploaderDlg .uploadList .itemRow:after {
     /* Clearfix: Ensure that the columns are balanced */
-    content: '';
+    content: "";
     clear: both;
     display: table;
 }
@@ -699,7 +693,7 @@
     display: block;
 }
 .uploaderDlg .uploadList .itemRow.addMore {
-    border: 1px dashed #DDDBD0;
+    border: 1px dashed #dddbd0;
     padding: 18px;
     text-align: center;
 }
@@ -732,7 +726,7 @@
     margin-top: 6px;
 }
 .uploaderDlg .category .column.first {
-    border-right: 1px solid #E9E8E3;
+    border-right: 1px solid #e9e8e3;
     padding-right: 12px;
 }
 .uploaderDlg .category .column.second {
@@ -769,7 +763,7 @@
     width: 100%;
     padding: 0 6px;
     height: 36px;
-    font-size: 1.0em;
+    font-size: 1em;
     resize: none;
     box-sizing: border-box;
     display: block;
@@ -778,7 +772,7 @@
     border: 1px solid #dbdad5;
 }
 .uploaderDlg .description input:focus {
-    border: 2px solid #00AF87;
+    border: 2px solid #00af87;
     padding-left: 5px;
     outline: none;
     box-shadow: none;
@@ -825,7 +819,7 @@
 }
 /* Combined with font-size:0 on .startScreen, this trick vertically centers text */
 .uploaderDlg .infoScreen:before {
-    content: '';
+    content: "";
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -865,7 +859,7 @@
 }
 
 .uploaderDlg .startScreen .separator:before {
-    content: '';
+    content: "";
     position: absolute;
     margin-top: 8px;
     left: 20%;
@@ -887,17 +881,17 @@
 }
 
 .uploaderDlg .dragScreen {
-    border: 4px solid #00AF87;
+    border: 4px solid #00af87;
 }
 
 .uploaderDlg .invalidDragScreen {
-    border: 4px solid #F00;
+    border: 4px solid #f00;
 }
 
 .uploaderDlg .dropText {
     font-weight: bold;
     font-size: 14px;
-    color: #00AF87;
+    color: #00af87;
 }
 
 .uploaderDlg .dropImg {
@@ -914,17 +908,16 @@
     margin: 6px 18px;
 }
 
-
 .progressScreen .progressBar {
     width: 50%;
     height: 8px;
     padding: 2px;
-    background: #E9E8E3;
+    background: #e9e8e3;
     display: inline-block;
 }
 .progressScreen .progressBar .progress {
     width: 53px;
-    background: #00AF87;
+    background: #00af87;
     height: 100%;
 }
 .progressScreen .progressTitle {
@@ -969,7 +962,7 @@
 }
 .icon.clock:before,
 .icon.clock:after {
-    content: '';
+    content: "";
     position: absolute;
     background: #ccc;
 }
@@ -985,7 +978,6 @@
     width: 6.5%;
     height: 41.5%;
 }
-
 
 .guidelinesOverlayParent .guidelinesOverlay a {
     color: #069;
@@ -1003,7 +995,6 @@
     font-weight: bold;
 }
 
-
 .photoErrorOverlay {
     padding: 24px;
 }
@@ -1020,7 +1011,7 @@
 }
 
 .uploaderThanks.ui_modal {
-    background-color: #00AF87;
+    background-color: #00af87;
     padding: 36px;
 }
 .uploaderThanks .thanksOverlayInner {
@@ -1040,11 +1031,11 @@
 .uploaderThanks .thanksOverlayInner .thankyouInfo {
     margin: 10px 0 25px;
     opacity: 0.7;
-    font-size: 1.1670em;
+    font-size: 1.167em;
 }
 .uploaderThanks .thanksOverlayInner .thankyouCloseBtn {
     background-color: #fff;
-    color: #00AF87;
+    color: #00af87;
     padding: 9px 50px 8px;
     border-color: #fff #f4f3f0 #f4f3f0 #fff;
 }
@@ -1062,7 +1053,7 @@
     padding: 18px 18px 30px;
 }
 .photoUploadOverlay.tabletUploader .tipsLink {
-    font-size: 1.1670em;
+    font-size: 1.167em;
 }
 .photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .inner {
     width: inherit;
@@ -1070,12 +1061,20 @@
 .photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay {
     margin-top: 48px;
     text-align: left;
-    font-size: 1.1670em;
+    font-size: 1.167em;
 }
-.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay .listHdr {
+.photoUploadOverlay.tabletUploader
+    .uploaderDlg
+    .infoScreen
+    .guidelinesOverlay
+    .listHdr {
     margin: 0 0 6px;
 }
-.photoUploadOverlay.tabletUploader .uploaderDlg .infoScreen .guidelinesOverlay li {
+.photoUploadOverlay.tabletUploader
+    .uploaderDlg
+    .infoScreen
+    .guidelinesOverlay
+    li {
     margin: 2px 0 0 16px;
 }
 .photoUploadOverlay.tabletUploader .uploaderDlg .preview {
@@ -1085,7 +1084,8 @@
 .photoUploadOverlay.tabletUploader .uploaderDlg .preview .editBtn {
     width: 38px;
     height: 38px;
-    background: url('/img2/photolb/icon_editPhoto_2x.png') no-repeat center center #f0f0f0;
+    background: url("/img2/photolb/icon_editPhoto_2x.png") no-repeat center
+        center #f0f0f0;
     background-size: 38px 38px;
 }
 .photoUploadOverlay.tabletUploader .uploaderDlg .itemRow .action {
@@ -1117,7 +1117,11 @@
 .photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .progressText {
     display: none;
 }
-.photoUploadOverlay.tabletUploader .uploaderDlg .progressScreen .inner .ui_close_x {
+.photoUploadOverlay.tabletUploader
+    .uploaderDlg
+    .progressScreen
+    .inner
+    .ui_close_x {
     position: relative;
     display: inline-block;
     top: -5px;
@@ -1130,7 +1134,7 @@
     top: 45px !important;
 }
 
-.btnActionEditFrame{
+.btnActionEditFrame {
     min-width: 150px;
     display: flex;
     justify-content: flex-end;
@@ -1139,21 +1143,20 @@
     margin-top: 15px;
 }
 
-.photographerErrors{
+.photographerErrors {
     color: red;
     position: absolute;
     bottom: 0px;
     margin-bottom: 0px;
 }
 
-
-.mainPicUploadPercentDiv{
+.mainPicUploadPercentDiv {
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 99999;
 }
-.mainUploadProgressBar{
+.mainUploadProgressBar {
     position: absolute;
     bottom: 25%;
     background: #ffffffd1;
@@ -1164,7 +1167,7 @@
     display: flex;
     overflow: hidden;
 }
-.progressPercent{
+.progressPercent {
     width: 0%;
     background: var(--koochita-yellow);
     color: white;
@@ -1175,28 +1178,28 @@
 }
 
 @media (max-width: 1340px) {
-    #photoEditor{
+    #photoEditor {
         left: 20%;
         right: 20%;
     }
 }
 
 @media (max-width: 1120px) {
-    #photoEditor{
+    #photoEditor {
         left: 15%;
         right: 15%;
     }
 }
 
 @media (max-width: 960px) {
-    #photoEditor{
+    #photoEditor {
         left: 10%;
         right: 10%;
     }
 }
 
 @media (max-width: 850px) {
-    #photoEditor{
+    #photoEditor {
         left: 5%;
         right: 5%;
     }
@@ -1207,18 +1210,18 @@
 }
 
 @media (max-width: 767px) {
-    .uploadPicMainSection{
+    .uploadPicMainSection {
         flex-direction: column;
     }
-    #photoEditor .body_text{
+    #photoEditor .body_text {
         height: 100vh !important;
     }
 
-    .uploaderDlg .infoScreen{
+    .uploaderDlg .infoScreen {
         height: 70vh;
     }
 
-    .uploadPicInfoSection{
+    .uploadPicInfoSection {
         padding: 0 !important;
         margin-top: 15px !important;
     }
@@ -1235,7 +1238,7 @@
         display: none !important;
     }
 
-    #photoEditor{
+    #photoEditor {
         left: 0%;
         right: 0%;
         top: 0% !important;
@@ -1264,7 +1267,7 @@
     .uploaderDlg .startScreen .dragDropText {
         margin: 40px 30px 50px;
     }
-    .uploaderDlg .infoScreen .inner{
+    .uploaderDlg .infoScreen .inner {
         height: 70% !important;
     }
 
@@ -1279,32 +1282,31 @@
     .uploaderDlg .startScreen {
         height: 90vh;
     }
-    .secondFooterVerification{
+    .secondFooterVerification {
         width: 100%;
         display: flex;
         direction: ltr;
         justify-content: space-between;
         align-items: center;
     }
-    .photographerErrors{
+    .photographerErrors {
         position: relative;
     }
 
-
-    .editSection{
+    .editSection {
         right: 1%;
         left: 1%;
         width: 98%;
         top: 0px;
     }
 
-    .editReviewPicturesSection{
+    .editReviewPicturesSection {
         z-index: 9999;
     }
 }
 
 @media (max-width: 552px) {
-    .imageVerificationBtn{
+    .imageVerificationBtn {
         bottom: 10px;
     }
     .itemRow .row {
@@ -1326,16 +1328,16 @@
 }
 
 @media (max-width: 456px) {
-    .uploadPicCropLeftSection{
+    .uploadPicCropLeftSection {
         justify-content: center;
     }
-    #actions{
+    #actions {
         margin-top: 0px;
     }
-    .docs-buttons{
+    .docs-buttons {
         flex-wrap: wrap;
     }
-    .btnActionEditFrame{
+    .btnActionEditFrame {
         justify-content: space-evenly;
     }
 
@@ -1353,7 +1355,6 @@
 }
 
 @media (max-width: 370px) {
-
     .docs-buttons {
         display: inherit;
     }

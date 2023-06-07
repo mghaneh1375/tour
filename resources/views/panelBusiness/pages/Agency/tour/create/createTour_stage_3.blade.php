@@ -30,14 +30,14 @@
 @section('body')
 
     <div class="mainBackWhiteBody">
-        <div class="head">ایجاد تور: مرحله سوم</div>
+        <h1>ایجاد تور: مرحله سوم</h1>
         <div>
             <div class="menu whiteBox">
-                <div class="boxTitlesTourCreation">حمل و نقل اصلی</div>
-                <div class="mainTransportationHelpTourCreation">حمل و نقل اصلی مرتبط با انتقال مسافران از مبدأ به مقصد و
-                    بالعکس می‌باشد</div>
+                <h2>حمل و نقل اصلی</h2>
+                <figcaption>حمل و نقل اصلی مرتبط با انتقال مسافران از مبدأ به مقصد و
+                    بالعکس می‌باشد</figcaption>
                 <div id="tourTransportationResponsibility">
-                    <span>آیا حمل و نقل اصلی برعهده‌ی تور است؟</span>
+                    <p class="dispalyInline">آیا حمل و نقل اصلی برعهده‌ی تور است؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="isTransportTour" value="1"
@@ -123,8 +123,8 @@
                                         <div class="inputBoxText">
                                             <div class="importantFieldLabel">ساعت اتمام</div>
                                         </div>
-                                        <input id="eTime" type="text" class="inputBoxInput clock"
-                                            placeholder="00:00" readonly>
+                                        <input id="eTime" type="text" class="inputBoxInput clock" placeholder="00:00"
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="row" style="display: flex">
@@ -259,10 +259,10 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">حمل و نقل فرعی</div>
-                <div class="inboxHelpSubtitle">
+                <h2>حمل و نقل فرعی</h2>
+                <figcaption>
                     حمل و نقل فرعی مرتبط با انتقال مسافران در داخل مقصد و در طول برگزاری تور می‌باشد.
-                </div>
+                </figcaption>
 
                 <div class="row">
                     <div class="inputBoxTour col-md-12 relative-position" id="mainClassificationOfTransportationInputDiv">
@@ -287,7 +287,7 @@
 
                     </div>
                 </div>
-                <div class="inboxHelpSubtitle">در صورت وجود بیشتر از یک وسیله همه‌ی آن‌ها را انتخاب نمایید.</div>
+                <figcaption>در صورت وجود بیشتر از یک وسیله همه‌ی آن‌ها را انتخاب نمایید.</figcaption>
 
                 {{--            <div class="tourFoodOfferQuestions"> --}}
                 {{--                <span>آیا حمل و نقل فرعی تور شامل هزینه اضافه است؟</span> --}}
@@ -315,9 +315,9 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">وعده‌ی غذایی</div>
+                <h2>وعده‌ی غذایی</h2>
                 <div class="seperatorInWhiteSec">
-                    <span>آیا در طول مدت تور وعده‌ی غذایی ارائه می‌شود؟</span>
+                    <p class="dispalyInline bold">آیا در طول مدت تور وعده‌ی غذایی ارائه می‌شود؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="isMeal" value="1"
@@ -332,8 +332,10 @@
 
                 <div id="mealsDiv" style="display: none;">
                     <div class="seperatorInWhiteSec">
-                        <span>آیا وعده‌های غذایی تمام روزهای تور ارائه می‌شود و یا فقط در چند روز خاص قابل ارائه
-                            می‌باشد؟</span>
+                        <p class="bold dispalyInline">آیا وعده‌های غذایی تمام روزهای تور ارائه می‌شود و یا فقط در چند روز
+                            خاص قابل
+                            ارائه
+                            می‌باشد؟</p>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-secondary">
                                 <input type="radio" name="isMealsAllDay" value="0"
@@ -381,7 +383,7 @@
                         </div>
 
                         <div id="selectMealDays" style="display: none">
-                            <div class="inboxHelpSubtitle">روز هایی که وعده غذایی ارائه می شود را انتخاب کنید</div>
+                            <figcaption>روز هایی که وعده غذایی ارائه می شود را انتخاب کنید</figcaption>
                             <div>
                                 @for ($i = 1; $i <= $tour->day; $i++)
                                     <div style="display: inline-block;">
@@ -461,8 +463,8 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">زبان تور</div>
-                <div class="inboxHelpSubtitle">آیا تور شما به غیر از زبان فارسی، از زبان دیگری پشتیبانی می‌کند.</div>
+                <h2>زبان تور</h2>
+                <figcaption>آیا تور شما به غیر از زبان فارسی، از زبان دیگری پشتیبانی می‌کند.</figcaption>
                 <div class="inputBoxTour col-md-12 relative-position">
                     <div class="inputBoxText width-130"> زبان‌های دیگر</div>
                     <div class="select-side">
@@ -478,11 +480,11 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">راهنمای تور</div>
-                <div class="inboxHelpSubtitle"> نام راهنمای تور خود را وارد نمایید. این امر نقش مؤثری در اطمینان خاطر
-                    کاربران خواهد داشت.</div>
+                <h2>راهنمای تور</h2>
+                <figcaption> نام راهنمای تور خود را وارد نمایید. این امر نقش مؤثری در اطمینان خاطر
+                    کاربران خواهد داشت.</figcaption>
                 <div class="tourGuiderQuestions mg-tp-15">
-                    <span>آیا تور شما راهنما دارد؟</span>
+                    <p class="dispalyInline bold">آیا تور شما راهنما دارد؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="isTourGuide" value="1"
@@ -496,7 +498,7 @@
                 </div>
                 <div id="isTourGuidDiv">
                     <div class="tourGuiderQuestions mg-tp-15">
-                        <span>آیا راهنمای تور شما از افراد محلی منطقه می باشد؟</span>
+                        <p class="dispalyInline bold">آیا راهنمای تور شما از افراد محلی منطقه می باشد؟</p>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-secondary active">
                                 <input type="radio" name="isLocalTourGuide" value="1" checked>بلی
@@ -507,7 +509,7 @@
                         </div>
                     </div>
                     <div class="tourGuiderQuestions mg-tp-15">
-                        <span>آیا راهنمای تور شما تجربه‌ی مخصوصی برای افراد فراهم می‌آورد؟</span>
+                        <p class="dispalyInline bold">آیا راهنمای تور شما تجربه‌ی مخصوصی برای افراد فراهم می‌آورد؟</p>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-secondary active">
                                 <input type="radio" name="isSpecialTourGuid" value="1" checked>بلی
@@ -517,11 +519,11 @@
                             </label>
                         </div>
                     </div>
-                    <div class="inboxHelpSubtitle mg-tp-5" style="width: 100%">برخی از راهنمایان تور صرفاً گروه را هدایت
+                    <figcaption>برخی از راهنمایان تور صرفاً گروه را هدایت
                         می‌کنند اما برخی همراه با گردشگران در همه جا حضور می‌یابند و تجربه‌ی اختصاصی‌تری ایجاد می‌کنند.
-                    </div>
+                    </figcaption>
                     <div class="tourGuiderQuestions mg-tp-15">
-                        <span>آیا راهنمای تور شما هم اکنون مشخص است؟</span>
+                        <p class="dispalyInline bold">آیا راهنمای تور شما هم اکنون مشخص است؟</p>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-secondary active">
                                 <input type="radio" name="isTourGuidDefined" value="1"
@@ -536,7 +538,7 @@
 
                     <div id="isTourGuidDefinedDiv">
                         <div class="tourGuiderQuestions mg-tp-15">
-                            <span>آیا راهنمای تور شما دارای حساب کاربری کوچیتا می‌باشد؟</span>
+                            <p class="dispalyInline bold">آیا راهنمای تور شما دارای حساب کاربری کوچیتا می‌باشد؟</p>
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                 <label class="btn btn-secondary ">
                                     <input type="radio" name="isTourGuidInKoochita" value="1"
@@ -550,12 +552,12 @@
                         </div>
 
                         <div id="notKoochitaAccountDiv">
-                            <div class="inboxHelpSubtitle mg-tp-5">
+                            <figcaption>
                                 به راهنمای تور خدا توصیه کنید تا حساب خود را در کوچیتا ایجاد نماید و از مزایای آن بهره‌مند
                                 شود. برای ما راهنمایان تور دارای حساب کاربری از اهمیت بیشتری برخوردار هستند. پس از باز کردن
                                 حساب کاربری راهنمای تور شما می‌تواند با وارد کردن کد تور و پس از تأیید شما نام خود را به
                                 صفحه‌ی کاربریش اتصال دهد.
-                            </div>
+                            </figcaption>
                             <div class="inputBoxTour float-right col-md-2 mg-rt-50">
                                 <div class="inputBoxText width-45per">
                                     <div class="importantFieldLabel">جنسیت</div>
@@ -594,9 +596,9 @@
             </div>
 
             <div class="whiteBox">
-                <div class="boxTitlesTourCreation">تلفن پشتیبانی</div>
+                <h2>تلفن پشتیبانی</h2>
                 <div class="tourGuiderQuestions mg-tp-15">
-                    <span>آیا از شماره‌ی موجود در پروفایل خود استفاده می‌کنید؟</span>
+                    <p class="dispalyInline bold">آیا از شماره‌ی موجود در پروفایل خود استفاده می‌کنید؟</p>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="isBackUpPhone" value="0"
@@ -608,22 +610,24 @@
                         </label>
                     </div>
                 </div>
-                <div id="backUpPhoneDiv">
-                    <div class="inputBoxTour float-right col-md-3">
+                <div id="backUpPhoneDiv" style="display: flex!important; flex-direction:column">
+                    <div class="inputBoxTour  col-md-3">
                         <div class="inputBoxText">
                             <div class="importantFieldLabel">تلفن</div>
                         </div>
                         <input id="backUpPhone" class="inputBoxInput" type="text" placeholder="09XXXXXXXXX">
                     </div>
-                    <div class="inboxHelpSubtitle" style="width: 100%;">
+
+                    <figcaptionp>
                         شماره را همانگونه که با موبایل خود تماس می‌گیرید وارد نمایید. در صورت وجود بیش از یک شماره با
                         استفاده از - شماره‌ها را جدا نمایید.
-                    </div>
+                    </figcaptionp>
+
                 </div>
             </div>
 
 
-            <div class="row" style="padding: 15px;">
+            <div class="row rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="checkInput()">گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="goToPrevStep()">بازگشت
                     به مرحله قبل</button>

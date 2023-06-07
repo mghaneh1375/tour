@@ -5,11 +5,15 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/shazdeDesigns/tourCreation.css?v=' . $fileVersions) }}" />
 @endsection
-
+<style>
+    #goToProfile {
+        width: auto !important;
+    }
+</style>
 
 @section('body')
     <div class="mainBackWhiteBody">
-        <div class="head">ایجاد تور: مرحله پایانی</div>
+        <h1>ایجاد تور: مرحله پایانی</h1>
         <div class="whiteBox">
             <div>
                 <span>تمامی اطلاعات تور شما با موفقیت ثبت گردید و در حال بررسی می‌باشد. شما می‌توانید وضعیت تور خود را پیش
