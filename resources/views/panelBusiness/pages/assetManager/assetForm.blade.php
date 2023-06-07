@@ -224,7 +224,7 @@
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
-            url: 'https://boom.koochita.com/api/asset/' + assetId + "/form",
+            url: 'https://boom.bogenstudio.com/api/asset/' + assetId + "/form",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -299,7 +299,7 @@
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/form/' + formId,
-            url: 'https://boom.koochita.com/api/form/' + formId,
+            url: 'https://boom.bogenstudio.com/api/form/' + formId,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

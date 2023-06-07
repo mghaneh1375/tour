@@ -65,7 +65,7 @@
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/asset',
-            url: 'https://boom.koochita.com/api/asset',
+            url: 'https://boom.bogenstudio.com/api/asset',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
