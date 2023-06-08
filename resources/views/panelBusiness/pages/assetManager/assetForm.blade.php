@@ -1,6 +1,11 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    {{-- <script src="{::BASE_CDN_URL}/third-party/mapbox-gl-js/{::MAPBOX_JS_VERSION}/mapbox-gl.js"></script> --}}
+    {{-- <link href="{::BASE_CDN_URL}/third-party/mapbox-gl-js/{::MAPBOX_JS_VERSION}/mapbox-gl.css" rel="stylesheet" /> --}}
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    {{-- <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' /> --}}
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
@@ -25,6 +30,11 @@
         .btn-group>label {
             padding: 10px 8px;
         }
+
+        /* .mapboxgl-canvas {
+                width: 100% !important;
+                height: auto !important;
+            } */
     </style>
 @endsection
 
@@ -33,7 +43,8 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div id="formMake"></div>
-            <div id="boxMake"></div>
+            <div id="boxMake" style="display: flex; flex-wrap: wrap;"></div>
+
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">بازگشت به
@@ -98,6 +109,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="locMark">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" style="direction: rtl">
+                    <div class="fullwidthDiv">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div id="map" style="width: 100%; height: 500px"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer" style="text-align: center">
+                    <button id="goToForthStep" class="btn nextStepBtnTourCreation" data-dismiss="modal">تأیید</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -124,94 +154,10 @@
         let formId = '{{ $formId }}';
         let prevFromId = undefined;
         let nextFormId = undefined;
-
+        let x = " ";
+        let y = " ";
 
         function nextStep() {
-            dataToSend = {
-                tourType,
-                tourId: document.getElementById("tourId").value,
-                businessId: document.getElementById("businessId").value,
-                tourName: document.getElementById("tourName").value,
-                srcCityId: document.getElementById("srcCityId").value,
-                destPlaceId: document.getElementById("destPlaceId").value,
-                kindDest: document.getElementById("destKind").value,
-                sameSrcDestInput: document.getElementById("sameSrcDestInput").checked,
-                tourDay: parseInt(p2e(document.getElementById("tourDay").value)),
-                tourNight: parseInt(p2e(document.getElementById("tourNight").value)),
-                minCapacity: parseInt(
-                    p2e(document.getElementById("minCapacity").value)
-                ),
-                maxCapacity: parseInt(
-                    p2e(document.getElementById("maxCapacity").value)
-                ),
-                private: document.querySelector('input[name="private"]:checked').value,
-                anyCapacity: document.getElementById("anyCapacity").checked,
-                isAllUserInfoNeed: $('input[name="isAllUserInfo"]:checked').val(),
-                userInfoNeed: [
-                    ...document.querySelectorAll(
-                        'input[name="userInfoNeed[]"]:checked'
-                    ),
-                ].map((item) => item.value),
-                dates: [],
-            };
-
-            var errorText = "";
-            if (dataToSend.tourName.trim().length < 2)
-                errorText += "<li>نام تور خود را مشخص کنید.</li>";
-            if (!(dataToSend.srcCityId >= 1))
-                errorText += "<li>مبدا تور خود را مشخص کنید.</li>";
-            if (!(dataToSend.destPlaceId >= 1))
-                errorText += "<li>مقصد تور خود را مشخص کنید.</li>";
-            if (!(Number.isInteger(dataToSend.tourDay) && dataToSend.tourDay >= 0))
-                errorText += "<li>تعداد روزهای تور خود را مشخص کنید.</li>";
-            if (!(Number.isInteger(dataToSend.tourNight) && dataToSend.tourNight >= 0))
-                errorText += "<li>تعداد شب های تور خود را مشخص کنید.</li>";
-            if (!dataToSend.anyCapacity) {
-                if (
-                    !(
-                        Number.isInteger(dataToSend.minCapacity) &&
-                        dataToSend.minCapacity >= 0
-                    )
-                )
-                    errorText += "<li>حداقل ظرفیت تور خود را مشخص کنید.</li>";
-                if (
-                    !(
-                        Number.isInteger(dataToSend.maxCapacity) &&
-                        dataToSend.maxCapacity >= 0
-                    )
-                )
-                    errorText += "<li>حداکثر ظرفیت تور خود را مشخص کنید.</li>";
-            }
-
-            if (dataToSend.userInfoNeed.length == 0)
-                errorText += "<li>نمی توانید از مسافرین اطلاعاتی دریافت نکنید.</li>";
-
-            var sDate = "";
-            var eDate = "";
-            var sRows = $('input[name="sDateNotSame[]"]');
-            var eRows = $('input[name="eDateNotSame[]"]');
-            for (var i = 0; i < sRows.length; i++) {
-                if (
-                    $(sRows[i]).val().trim().length != 0 &&
-                    $(eRows[i]).val().trim().length != 0
-                ) {
-                    eDate = $(eRows[i]).val().trim();
-                    sDate = $(sRows[i]).val().trim();
-                    dataToSend.dates.push({
-                        sDate,
-                        eDate
-                    });
-                }
-            }
-
-            if (sDate.trim().length == 0 || eDate.trim().length == 0)
-                errorText += "<li>تاریخ تور را مشخص کنید.</li>";
-
-            if (errorText != "") {
-                errorText = `<ul class="errorList">${errorText}</ul>`;
-                openErrorAlertBP(errorText);
-            } else submitInputs();
-
             if (nextFormId !== undefined)
                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId;
         }
@@ -369,6 +315,19 @@
                                 '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
+                        } else if (res.fields[i].type == 'map') {
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                                '') + '"> ' + res.fields[i].name + '</div>';
+                            text += '</div>';
+                            text += '<div class="select-side locationIconTourCreation">';
+                            text += '<i class="ui_icon  locationIcon"></i>';
+                            text += '</div>';
+                            text += '<input type="text" id="' + res.fields[i].field_id +
+                                '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i].placeholder !=
+                                    null ?
+                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
+                                    .necessary == 1 ? 'required ' : '') + ' >';
                         } else if (res.fields[i].type == 'api') {
                             city = res.fields[i].options[0].replace('koochita', 'mykoochita').replace("https",
                                 "http");
@@ -430,7 +389,7 @@
 
                         text += '</div>';
                         if (res.fields[i].force_help != null) {
-                            text += '<figcaption> ' + res.fields[i].force_help + '';
+                            text += '<figcaption style="width: 100%;"> ' + res.fields[i].force_help + '';
                             text += '</figcaption>';
                         }
                         text += '';
@@ -492,6 +451,56 @@
         function chooseSrcCityModal() {
             $("#addCityModal").modal("show");
         }
+
+        $(document).on("click", ".mapMark", function() {
+            $("#locMark").modal("show");
+        });
+
+
+
+        $(document).ready(function() {
+            mapboxgl.setRTLTextPlugin(
+                'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+                null,
+            );
+
+            const map = new mapboxgl.Map({
+                container: 'map',
+                accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
+                style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
+                center: [51.4, 35.7],
+                zoom: 13,
+            });
+
+            var marker = undefined;
+
+            if (x !== undefined && y !== undefined) {
+                marker = new mapboxgl.Marker();
+                marker.setLngLat({
+                    lng: y,
+                    lat: x
+                }).addTo(map);
+            }
+
+            function addMarker(e) {
+
+                if (marker !== undefined)
+                    marker.remove();
+
+                //add marker
+                marker = new mapboxgl.Marker();
+                marker.setLngLat(e.lngLat).addTo(map);
+
+                x = e.lngLat.lat;
+                y = e.lngLat.lng;
+                console.log(x);
+                console.log(y);
+            }
+
+            map.on('click', addMarker);
+
+            console.log("ready!");
+        });
     </script>
 
 @stop

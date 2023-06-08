@@ -38,6 +38,6 @@ class AppServiceProvider extends ServiceProvider
         // if(config('app.env') !== 'local')
         //     $urlGenerator->forceScheme('https');
         // else if(config('app.env') == 'local')
-            $urlGenerator->forceScheme('https');
+            $urlGenerator->forceScheme('http');
     }
 }

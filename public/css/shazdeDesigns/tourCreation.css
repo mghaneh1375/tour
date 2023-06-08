@@ -1220,6 +1220,14 @@ input[type="radio"]:checked + label.tourBasicKindsCheckbox {
     color: var(--koochita-light-green) !important;
     font-size: 20px !important;
 }
+.locationIconTourCreation {
+    top: 3px !important;
+}
+
+.locationIconTourCreation > i {
+    color: var(--koochita-light-green) !important;
+    font-size: 20px !important;
+}
 
 .tourNthOccurrence {
     background-color: rgb(251, 193, 86);

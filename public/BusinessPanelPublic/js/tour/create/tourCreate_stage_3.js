@@ -1,43 +1,43 @@
-var inKoochita = 0 ;
+var inKoochita = 0;
 var isTransport = 1;
 var multiIsOpen = false;
 var chooseSideTransport = [];
 var language = [
-    'فارسی',
-    'انگلیسی',
-    'عربی',
-    'ترکی',
-    'چینی',
-    'کره ای',
-    'ژاپنی',
-    'اسپانیایی',
-    'آلمانی',
-    'فرانسوی',
-    'پرتغالی',
+    "فارسی",
+    "انگلیسی",
+    "عربی",
+    "ترکی",
+    "چینی",
+    "کره ای",
+    "ژاپنی",
+    "اسپانیایی",
+    "آلمانی",
+    "فرانسوی",
+    "پرتغالی",
 ];
 var languageChoose = [];
 var clockOptions = {
-    placement: 'left',
-    donetext: 'تایید',
+    placement: "left",
+    donetext: "تایید",
     autoclose: true,
 };
 
 var storeData = {
-    isTransportTour : tour.isTransport,
-    sTransportKind : tour.hasTransport ? tour.transports.sTransportId : 0,
-    eTransportKind : tour.hasTransport ? tour.transports.eTransportId : 0,
-    sTime : tour.hasTransport ? tour.transports.sTime : '',
-    eTime : tour.hasTransport ? tour.transports.eTime : '',
-    sAddress : tour.hasTransport ? tour.transports.sAddress : '',
-    eAddress : tour.hasTransport ? tour.transports.eAddress : '',
-    sLat :  tour.hasTransport ? tour.transports.sLatLng[0] : 0,
-    eLat : tour.hasTransport ? tour.transports.eLatLng[0] : 0,
-    sLng : tour.hasTransport ? tour.transports.sLatLng[1] : 0,
-    eLng : tour.hasTransport ? tour.transports.eLatLng[1] : 0,
-    sDescription : tour.hasTransport ? tour.transports.sDescription : '',
-    eDescription : tour.hasTransport ? tour.transports.eDescription : '',
+    isTransportTour: tour.isTransport,
+    sTransportKind: tour.hasTransport ? tour.transports.sTransportId : 0,
+    eTransportKind: tour.hasTransport ? tour.transports.eTransportId : 0,
+    sTime: tour.hasTransport ? tour.transports.sTime : "",
+    eTime: tour.hasTransport ? tour.transports.eTime : "",
+    sAddress: tour.hasTransport ? tour.transports.sAddress : "",
+    eAddress: tour.hasTransport ? tour.transports.eAddress : "",
+    sLat: tour.hasTransport ? tour.transports.sLatLng[0] : 0,
+    eLat: tour.hasTransport ? tour.transports.eLatLng[0] : 0,
+    sLng: tour.hasTransport ? tour.transports.sLatLng[1] : 0,
+    eLng: tour.hasTransport ? tour.transports.eLatLng[1] : 0,
+    sDescription: tour.hasTransport ? tour.transports.sDescription : "",
+    eDescription: tour.hasTransport ? tour.transports.eDescription : "",
 
-    sideTransport: tour.sideTransport != null ? tour.sideTransport : [] ,
+    sideTransport: tour.sideTransport != null ? tour.sideTransport : [],
     // isSideTransportCost: tour.sideTransportCost == null ? 0 : 1,
     // sideTransportCost: tour.sideTransportCost != null ? tour.sideTransportCost : '',
 
@@ -64,192 +64,256 @@ var storeData = {
     backUpPhone: tour.backupPhone,
 };
 
-function goToPrevStep(){
+function goToPrevStep() {
     openLoading(false, () => {
         location.href = prevStageUrl;
-    })
+    });
 }
-var showSection = (_id = '', _element, _fromJs = false) => {
+var showSection = (_id = "", _element, _fromJs = false) => {
     var _value = _element.value;
-    var name = _element.getAttribute('name');
+    var name = _element.getAttribute("name");
 
     _element.checked = true;
 
-    if(_fromJs) {
-        [...document.querySelectorAll(`input[name="${name}"]`)].map(item => item.parentElement.classList.remove('active'));
-        document.querySelector(`input[name="${name}"]:checked`).parentElement.classList.add('active');
+    if (_fromJs) {
+        [...document.querySelectorAll(`input[name="${name}"]`)].map((item) =>
+            item.parentElement.classList.remove("active")
+        );
+        document
+            .querySelector(`input[name="${name}"]:checked`)
+            .parentElement.classList.add("active");
     }
 
-    if(_id != '')
-        $(`#${_id}`).css('display', _value == 1 ? 'block' : 'none');
+    if (_id != "") $(`#${_id}`).css("display", _value == 1 ? "block" : "none");
 };
 
-function fillInputs(){
-    showSection('tourMainTransports', $(`input[name="isTransportTour"][value="${storeData.isTransportTour}"]`)[0], true);
+function fillInputs() {
+    showSection(
+        "tourMainTransports",
+        $(
+            `input[name="isTransportTour"][value="${storeData.isTransportTour}"]`
+        )[0],
+        true
+    );
 
-    $('#sTransport').val(storeData.sTransportKind);
-    $('#sTime').val(storeData.sTime);
-    $('#sAddress').val(storeData.sAddress);
-    $('#sDescription').val(storeData.sDescription);
-    $('#sLat').val(storeData.sLat);
-    $('#sLng').val(storeData.sLng);
+    $("#sTransport").val(storeData.sTransportKind);
+    $("#sTime").val(storeData.sTime);
+    $("#sAddress").val(storeData.sAddress);
+    $("#sDescription").val(storeData.sDescription);
+    $("#sLat").val(storeData.sLat);
+    $("#sLng").val(storeData.sLng);
 
-    $('#eTransport').val(storeData.eTransportKind);
-    $('#eTime').val(storeData.eTime);
-    $('#eAddress').val(storeData.eAddress);
-    $('#eDescription').val(storeData.eDescription);
-    $('#eLat').val(storeData.eLat);
-    $('#eLng').val(storeData.eLng);
+    $("#eTransport").val(storeData.eTransportKind);
+    $("#eTime").val(storeData.eTime);
+    $("#eAddress").val(storeData.eAddress);
+    $("#eDescription").val(storeData.eDescription);
+    $("#eLat").val(storeData.eLat);
+    $("#eLng").val(storeData.eLng);
 
-    storeData.sideTransport.map(item => chooseMultiSelectSideTransport(item));
+    storeData.sideTransport.map((item) => chooseMultiSelectSideTransport(item));
     // $('#sideTransportCost').val(numberWithCommas(storeData.sideTransportCost));
     // showSection('mainTransportCostDiv', $(`input[name="isCostForMainTransport"][value="${storeData.isSideTransportCost}"]`));
 
-    showSection('mealsDiv', $(`input[name="isMeal"][value="${storeData.isMeal}"]`)[0], true);
+    showSection(
+        "mealsDiv",
+        $(`input[name="isMeal"][value="${storeData.isMeal}"]`)[0],
+        true
+    );
 
     // $('#mealCost').val(numberWithCommas(storeData.mealMoreCost));
     // showSection('mealCostDiv', $(`input[name="isMealCost"][value="${storeData.isMealCost}"]`));
 
-    showSection('', $(`input[name="isMealsAllDay"][value="${storeData.isMealsAllDay}"]`)[0], true);
+    showSection(
+        "",
+        $(`input[name="isMealsAllDay"][value="${storeData.isMealsAllDay}"]`)[0],
+        true
+    );
     changeKindOfMeal(storeData.isMealsAllDay);
-    if(storeData.isMealsAllDay == 1)
-        storeData.allDayMeals.map(item => $(`input[name="meals[]"][value="${item}"]`).prop('checked', true));
-    else if(storeData.sepecificDayMeals){
-        for(var day = 1; day <= tour.day; day++) {
-            if(storeData.sepecificDayMeals[day - 1])
-                storeData.sepecificDayMeals[day - 1].map(item => $(`input[name="meals_day_${day}"][value="${item}"]`).prop('checked', true));
+    if (storeData.isMealsAllDay == 1)
+        storeData.allDayMeals.map((item) =>
+            $(`input[name="meals[]"][value="${item}"]`).prop("checked", true)
+        );
+    else if (storeData.sepecificDayMeals) {
+        for (var day = 1; day <= tour.day; day++) {
+            if (storeData.sepecificDayMeals[day - 1])
+                storeData.sepecificDayMeals[day - 1].map((item) =>
+                    $(`input[name="meals_day_${day}"][value="${item}"]`).prop(
+                        "checked",
+                        true
+                    )
+                );
         }
     }
 
-    if(storeData.otherLanguage)
-        storeData.otherLanguage.map(item => chooseLanguageMultiSelect(language.indexOf(item)));
+    if (storeData.otherLanguage)
+        storeData.otherLanguage.map((item) =>
+            chooseLanguageMultiSelect(language.indexOf(item))
+        );
 
-    showSection('isTourGuidDiv', $(`input[name="isTourGuide"][value="${storeData.hasTourGuid}"]`)[0], true);
-    showSection('', $(`input[name="isLocalTourGuide"][value="${storeData.isLocalTourGuide}"]`)[0]), true;
-    showSection('', $(`input[name="isSpecialTourGuid"][value="${storeData.isSpecialTourGuid}"]`)[0], true);
-    showSection('isTourGuidDefinedDiv', $(`input[name="isTourGuidDefined"][value="${storeData.isTourGuidDefined}"]`)[0], true);
-    showSection('', $(`input[name="isTourGuidInKoochita"][value="${storeData.isTourGuidInKoochita}"]`)[0], true);
+    showSection(
+        "isTourGuidDiv",
+        $(`input[name="isTourGuide"][value="${storeData.hasTourGuid}"]`)[0],
+        true
+    );
+    showSection(
+        "",
+        $(
+            `input[name="isLocalTourGuide"][value="${storeData.isLocalTourGuide}"]`
+        )[0]
+    ),
+        true;
+    showSection(
+        "",
+        $(
+            `input[name="isSpecialTourGuid"][value="${storeData.isSpecialTourGuid}"]`
+        )[0],
+        true
+    );
+    showSection(
+        "isTourGuidDefinedDiv",
+        $(
+            `input[name="isTourGuidDefined"][value="${storeData.isTourGuidDefined}"]`
+        )[0],
+        true
+    );
+    showSection(
+        "",
+        $(
+            `input[name="isTourGuidInKoochita"][value="${storeData.isTourGuidInKoochita}"]`
+        )[0],
+        true
+    );
 
     hasKoochitaAccount(storeData.isTourGuidInKoochita);
-    $('#tourGuidName').val(storeData.tourGuidName);
-    $('#tourGuidSex').val(storeData.tourGuidSex);
-    $('#tourGuidUserId').val(storeData.koochitaUserId);
-    $('#tourGuidKoochitaUsername').val(storeData.koochitaUserUsername);
+    $("#tourGuidName").val(storeData.tourGuidName);
+    $("#tourGuidSex").val(storeData.tourGuidSex);
+    $("#tourGuidUserId").val(storeData.koochitaUserId);
+    $("#tourGuidKoochitaUsername").val(storeData.koochitaUserUsername);
 
-    showSection('backUpPhoneDiv', $(`input[name="isBackUpPhone"][value="${storeData.isBackUpPhone}"]`)[0], true);
-    $('#backUpPhone').val(storeData.backUpPhone);
+    showSection(
+        "backUpPhoneDiv",
+        $(`input[name="isBackUpPhone"][value="${storeData.isBackUpPhone}"]`)[0],
+        true
+    );
+    $("#backUpPhone").val(storeData.backUpPhone);
 }
 
-function initLanguage(){
-    var text = '';
-    language.map((item, index) => text += `<div class="optionMultiSelect" id="multiSelectLanguage_${index}" onclick="chooseLanguageMultiSelect(${index})">${item}</div>`);
+function initLanguage() {
+    var text = "";
+    language.map(
+        (item, index) =>
+            (text += `<div class="optionMultiSelect" id="multiSelectLanguage_${index}" onclick="chooseLanguageMultiSelect(${index})">${item}</div>`)
+    );
     $("#multiSelectLanguage").html(text);
 }
 
-function openMultiSelect(_element){
-    if(multiIsOpen){
+function openMultiSelect(_element) {
+    if (multiIsOpen) {
         $(_element).next().hide();
         multiIsOpen = false;
-    }
-    else{
+    } else {
         $(_element).next().show();
         multiIsOpen = true;
     }
 }
 
-function chooseMultiSelectSideTransport(_id){
+function chooseMultiSelectSideTransport(_id) {
     var choose = 0;
-    var text = '';
+    var text = "";
 
-    for(i = 0; i < transports.length; i++){
-        if(transports[i].id == _id){
+    for (i = 0; i < transports.length; i++) {
+        if (transports[i].id == _id) {
             choose = transports[i];
             break;
         }
     }
 
-    if(choose != 0)
-        document.getElementById('multiSelectTransport_' + choose.id).style.display = 'none';
-
+    if (choose != 0)
+        document.getElementById(
+            "multiSelectTransport_" + choose.id
+        ).style.display = "none";
 
     text = `<div id="selectedMulti_${choose.id}" class="transportationKindChosenOnes col-md-2">
                 ${choose.name}
                 <i class="fa-regular fa-xmark" onclick="removeMultiSelectSideTransport(${choose.id})" style="color: red;"></i>
             </div>`;
-    $('#multiSelected').append(text);
+    $("#multiSelected").append(text);
 
-
-    if(chooseSideTransport.includes(0)){
+    if (chooseSideTransport.includes(0)) {
         index = chooseSideTransport.indexOf(0);
         chooseSideTransport[index] = choose.id;
-    }
-    else
-        chooseSideTransport[chooseSideTransport.length] = choose.id;
-
+    } else chooseSideTransport[chooseSideTransport.length] = choose.id;
 }
-function removeMultiSelectSideTransport(_id){
-    $('#selectedMulti_' + _id).remove();
-    document.getElementById('multiSelectTransport_' + _id).style.display = 'block';
-    if(chooseSideTransport.includes(_id)){
+function removeMultiSelectSideTransport(_id) {
+    $("#selectedMulti_" + _id).remove();
+    document.getElementById("multiSelectTransport_" + _id).style.display =
+        "block";
+    if (chooseSideTransport.includes(_id)) {
         index = chooseSideTransport.indexOf(_id);
         chooseSideTransport[index] = 0;
     }
 }
 
-function chooseLanguageMultiSelect(_index){
-    if(languageChoose.indexOf(language[_index]) == -1) {
+function chooseLanguageMultiSelect(_index) {
+    if (languageChoose.indexOf(language[_index]) == -1) {
         languageChoose[languageChoose.length] = language[_index];
-        $(`#multiSelectLanguage_${_index}`).css('display', 'none');
+        $(`#multiSelectLanguage_${_index}`).css("display", "none");
 
         var text = `<div id="selectedMultiLanguage_${_index}" class="transportationKindChosenOnes col-md-2">${language[_index]}
                         <i class="fa-regular fa-xmark" onclick="removeMultiSelectLanguage(${_index})" style="color: red;"></i>
                     </div>`;
-        $('#multiSelectedLanguage').append(text);
+        $("#multiSelectedLanguage").append(text);
     }
 }
-function removeMultiSelectLanguage(_index){
-    $('#selectedMultiLanguage_' + _index).remove();
-    $(`#multiSelectLanguage_${_index}`).css('display', 'block');
-    if(languageChoose.includes(language[_index])){
+function removeMultiSelectLanguage(_index) {
+    $("#selectedMultiLanguage_" + _index).remove();
+    $(`#multiSelectLanguage_${_index}`).css("display", "block");
+    if (languageChoose.includes(language[_index])) {
         var index = languageChoose.indexOf(language[_index]);
         languageChoose.splice(index, 1);
     }
 }
 
-function changeKindOfMeal(_value){
-    $('#selectKindOfMealAllDay').css('display', _value == 1 ? 'inline-block' : 'none');
-    $('#selectMealDays').css('display', _value == 1 ? 'none' : 'block');
+function changeKindOfMeal(_value) {
+    $("#selectKindOfMealAllDay").css(
+        "display",
+        _value == 1 ? "inline-block" : "none"
+    );
+    $("#selectMealDays").css("display", _value == 1 ? "none" : "block");
 }
 
-function hasKoochitaAccount(_value){
-    $('#notKoochitaAccountDiv').css('display', _value == 1 ? 'none' : 'block');
-    $('#haveKoochitaAccountDiv').css('display', _value == 1 ? 'block' : 'none');
+function hasKoochitaAccount(_value) {
+    $("#notKoochitaAccountDiv").css("display", _value == 1 ? "none" : "block");
+    $("#haveKoochitaAccountDiv").css("display", _value == 1 ? "block" : "none");
 }
 
 function openSearchKoochitaAccount() {
-    openKoochitaUserSearchModal('راهنمای تور خود را مشخص کنید', (_id, _username) => {
-        $('#tourGuidKoochitaUsername').val(_username);
-        $('#tourGuidUserId').val(_id);
-    })
+    openKoochitaUserSearchModal(
+        "راهنمای تور خود را مشخص کنید",
+        (_id, _username) => {
+            $("#tourGuidKoochitaUsername").val(_username);
+            $("#tourGuidUserId").val(_id);
+        }
+    );
 }
 
-function checkInput(_isMainStore = true){
-    var errorText = '';
+function checkInput(_isMainStore = true) {
+    var errorText = "";
 
     storeData = {
-        isTransportTour : $('input[name="isTransportTour"]:checked').val(),
-        sTransportKind : $('#sTransport').val(),
-        eTransportKind : $('#eTransport').val(),
-        sTime : $('#sTime').val(),
-        eTime : $('#eTime').val(),
-        sAddress : $('#sAddress').val(),
-        eAddress : $('#eAddress').val(),
-        sLat : $('#sLat').val(),
-        eLat : $('#eLat').val(),
-        sLng : $('#sLng').val(),
-        eLng : $('#eLng').val(),
-        sDescription : $('#sDescription').val(),
-        eDescription : $('#eDescription').val(),
+        isTransportTour: $('input[name="isTransportTour"]:checked').val(),
+        sTransportKind: $("#sTransport").val(),
+        eTransportKind: $("#eTransport").val(),
+        sTime: $("#sTime").val(),
+        eTime: $("#eTime").val(),
+        sAddress: $("#sAddress").val(),
+        eAddress: $("#eAddress").val(),
+        sLat: $("#sLat").val(),
+        eLat: $("#eLat").val(),
+        sLng: $("#sLng").val(),
+        eLng: $("#eLng").val(),
+        sDescription: $("#sDescription").val(),
+        eDescription: $("#eDescription").val(),
 
         sideTransport: chooseSideTransport,
         // isSideTransportCost: $('input[name="isCostForMainTransport"]:checked').val(),
@@ -268,122 +332,141 @@ function checkInput(_isMainStore = true){
         isLocalTourGuide: $('input[name="isLocalTourGuide"]:checked').val(),
         isSpecialTourGuid: $('input[name="isSpecialTourGuid"]:checked').val(),
         isTourGuidDefined: $('input[name="isTourGuidDefined"]:checked').val(),
-        isTourGuidInKoochita: $('input[name="isTourGuidInKoochita"]:checked').val(),
-        koochitaUserId: $('#tourGuidUserId').val(),
-        koochitaUserUsername: $('#tourGuidKoochitaUsername').val(),
-        tourGuidName: $('#tourGuidName').val(),
-        tourGuidSex: $('#tourGuidSex').val(),
+        isTourGuidInKoochita: $(
+            'input[name="isTourGuidInKoochita"]:checked'
+        ).val(),
+        koochitaUserId: $("#tourGuidUserId").val(),
+        koochitaUserUsername: $("#tourGuidKoochitaUsername").val(),
+        tourGuidName: $("#tourGuidName").val(),
+        tourGuidSex: $("#tourGuidSex").val(),
 
         isBackUpPhone: $('input[name="isBackUpPhone"]:checked').val(),
-        backUpPhone: $('#backUpPhone').val(),
+        backUpPhone: $("#backUpPhone").val(),
     };
 
-    if(storeData.isTransportTour == 1){
-        if(storeData.sTransportKind.trim().length == 0)
-            errorText += '<li>نوع وسیله رفت را مشخص کنید</li>';
+    if (storeData.isTransportTour == 1) {
+        if (storeData.sTransportKind.trim().length == 0)
+            errorText += "<li>نوع وسیله رفت را مشخص کنید</li>";
 
-        if(storeData.sTime.trim().length == 0)
-            errorText += '<li>ساعت رفت را مشخص کنید</li>';
+        if (storeData.sTime.trim().length == 0)
+            errorText += "<li>ساعت رفت را مشخص کنید</li>";
 
-        if(storeData.sAddress.trim().length == 0)
-            errorText += '<li>محل رفت را مشخص کنید</li>';
+        if (storeData.sAddress.trim().length == 0)
+            errorText += "<li>محل رفت را مشخص کنید</li>";
 
-        if(storeData.sLat == 0 || storeData.sLng == 0)
-            errorText += '<li>محل رفت را روی نقشه مشخص کنید</li>';
+        if (storeData.sLat == 0 || storeData.sLng == 0)
+            errorText += "<li>محل رفت را روی نقشه مشخص کنید</li>";
 
-        if(storeData.eTransportKind.trim().length == 0)
-            errorText += '<li>نوع وسیله برگشت را مشخص کنید</li>';
+        if (storeData.eTransportKind.trim().length == 0)
+            errorText += "<li>نوع وسیله برگشت را مشخص کنید</li>";
 
-        if(storeData.eTime.trim().length == 0)
-            errorText += '<li>ساعت برگشت را مشخص کنید</li>';
+        if (storeData.eTime.trim().length == 0)
+            errorText += "<li>ساعت برگشت را مشخص کنید</li>";
 
-        if(storeData.eAddress.trim().length == 0)
-            errorText += '<li>محل برگشت را مشخص کنید</li>';
+        if (storeData.eAddress.trim().length == 0)
+            errorText += "<li>محل برگشت را مشخص کنید</li>";
 
-        if(storeData.eLat == 0 || storeData.eLng == 0)
-            errorText += '<li>محل برگشت را روی نقشه مشخص کنید</li>';
+        if (storeData.eLat == 0 || storeData.eLng == 0)
+            errorText += "<li>محل برگشت را روی نقشه مشخص کنید</li>";
     }
 
-    if(storeData.isSideTransportCost == 1 && storeData.sideTransportCost.trim().length == 0)
-        errorText += '<li>هزینه ی اضافی حمل و نقل فرعی را مشخص کنید</li>';
+    if (
+        storeData.isSideTransportCost == 1 &&
+        storeData.sideTransportCost.trim().length == 0
+    )
+        errorText += "<li>هزینه ی اضافی حمل و نقل فرعی را مشخص کنید</li>";
 
-    if(storeData.isMeal == 1){
-        if(storeData.isMealsAllDay == 1){
+    if (storeData.isMeal == 1) {
+        if (storeData.isMealsAllDay == 1) {
             var meals = $('input[name="meals[]"]:checked');
-            for(var i = 0; i < meals.length; i++)
+            for (var i = 0; i < meals.length; i++)
                 storeData.allDayMeals.push($(meals[i]).val());
-        }
-        else{
-            for(var day = 1; day <= tour.day; day++){
-                storeData.sepecificDayMeals[day-1] = [];
+        } else {
+            for (var day = 1; day <= tour.day; day++) {
+                storeData.sepecificDayMeals[day - 1] = [];
                 var dayMeals = $(`input[name="meals_day_${day}"]:checked`);
-                for(var i = 0; i < dayMeals.length; i++)
-                    storeData.sepecificDayMeals[day-1].push($(dayMeals[i]).val());
+                for (var i = 0; i < dayMeals.length; i++)
+                    storeData.sepecificDayMeals[day - 1].push(
+                        $(dayMeals[i]).val()
+                    );
             }
         }
         // if(storeData.isMealCost == 1 && storeData.mealMoreCost.trim().length == 0)
         //     errorText += '<li>هزینه ی اضافی غذا را مشخص کنید</li>';
-
     }
 
-    if(storeData.hasTourGuid == 1){
-        if(storeData.isTourGuidDefined == 1){
-            if(storeData.isTourGuidInKoochita == 1 && storeData.koochitaUserId == 0)
-                errorText += '<li>نام کاربری راهنمای تور را مشخص کنید</li>';
-            else if(storeData.isTourGuidInKoochita == 0 && storeData.tourGuidName.trim().length == 0)
-                errorText += '<li>نام راهنمای تور را وارد کنید</li>';
+    if (storeData.hasTourGuid == 1) {
+        if (storeData.isTourGuidDefined == 1) {
+            if (
+                storeData.isTourGuidInKoochita == 1 &&
+                storeData.koochitaUserId == 0
+            )
+                errorText += "<li>نام کاربری راهنمای تور را مشخص کنید</li>";
+            else if (
+                storeData.isTourGuidInKoochita == 0 &&
+                storeData.tourGuidName.trim().length == 0
+            )
+                errorText += "<li>نام راهنمای تور را وارد کنید</li>";
         }
     }
 
-
-    if(_isMainStore) {
+    if (_isMainStore) {
         if (errorText.trim().length == 0) {
             openLoading();
             $.ajax({
-                type: 'POST',
+                type: "POST",
                 url: storeStageThreeURL,
                 data: {
                     _token: csrfTokenGlobal,
                     tourId: tour.id,
-                    data: JSON.stringify(storeData)
+                    data: JSON.stringify(storeData),
                 },
-                success: response => {
-                    if (response.status == 'ok') {
-                        localStorage.removeItem(`stageThreeTourCreation_${tour.id}`);
+                success: (response) => {
+                    if (response.status == "ok") {
+                        localStorage.removeItem(
+                            `stageThreeTourCreation_${tour.id}`
+                        );
                         location.href = nextStageUrl;
                     }
-                }
-            })
-        }
-        else
-            openErrorAlertBP(errorText);
-    }
-    else
-        localStorage.setItem(`stageThreeTourCreation_${tour.id}`, JSON.stringify(storeData));
+                },
+            });
+        } else openErrorAlertBP(errorText);
+    } else
+        localStorage.setItem(
+            `stageThreeTourCreation_${tour.id}`,
+            JSON.stringify(storeData)
+        );
 }
 
-function doLastUpdate(){
+function doLastUpdate() {
     storeData = JSON.parse(lastData);
     fillInputs();
 }
 
 var lastData = localStorage.getItem(`stageThreeTourCreation_${tour.id}`);
-if(!(lastData == false || lastData == null))
-    openWarningBP('بازگرداندن اطلاعات قبلی', doLastUpdate, 'بله قبلی را ادامه می دهم');
+if (!(lastData == false || lastData == null))
+    openWarningBP(
+        "بازگرداندن اطلاعات قبلی",
+        doLastUpdate,
+        "بله قبلی را ادامه می دهم"
+    );
 setInterval(() => checkInput(false), 5000);
 
-
-$(window).ready(() => {
-    $('.clock').clockpicker(clockOptions);
-    initLanguage();
-    fillInputs();
-}).on('click', e => {
-    var target = $(e.target);
-    if( multiIsOpen  && !target.is('.optionMultiSelect') && !target.is('.multiSelected'))
-        $('.multiselect').hide();
-});
-
-
+$(window)
+    .ready(() => {
+        $(".clock").clockpicker(clockOptions);
+        initLanguage();
+        fillInputs();
+    })
+    .on("click", (e) => {
+        var target = $(e.target);
+        if (
+            multiIsOpen &&
+            !target.is(".optionMultiSelect") &&
+            !target.is(".multiSelected")
+        )
+            $(".multiselect").hide();
+    });
 
 var map;
 var srcLatLng = tour.srcLatLng;
@@ -395,15 +478,15 @@ var mapIsOpen = false;
 
 var mainMap = null;
 
-function initMapIr(){
-    if(mainMap == null) {
+function initMapIr() {
+    if (mainMap == null) {
         mainMap = L.map("mapDiv", {
             minZoom: 1,
             maxZoom: 20,
             crs: L.CRS.EPSG3857,
             center: [32.42056639964595, 54.00537109375],
-            zoom: 6
-        }).on('click', e => {
+            zoom: 6,
+        }).on("click", (e) => {
             setMarkerToMap(e.latlng.lat, e.latlng.lng);
         });
         L.TileLayer.wmsHeader(
@@ -412,27 +495,26 @@ function initMapIr(){
                 layers: "Shiveh:Shiveh",
                 format: "image/png",
                 minZoom: 1,
-                maxZoom: 20
+                maxZoom: 20,
             },
             [
                 {
                     header: "x-api-key",
-                    value: window.mappIrToken
-                }
+                    value: window.MappIrToken,
+                },
             ]
         ).addTo(mainMap);
 
-        if(storeData.sLat != 0 && storeData.sLng != 0)
-            setMarkerToMap(storeData.sLat, storeData.sLng, 'src');
-        if(storeData.eLat != 0 && storeData.eLng != 0)
-            setMarkerToMap(storeData.eLat, storeData.eLng, 'dest');
-
+        if (storeData.sLat != 0 && storeData.sLng != 0)
+            setMarkerToMap(storeData.sLat, storeData.sLng, "src");
+        if (storeData.eLat != 0 && storeData.eLng != 0)
+            setMarkerToMap(storeData.eLat, storeData.eLng, "dest");
     }
 }
 
-function changeCenter(_kind){
+function changeCenter(_kind) {
     mapIsOpen = _kind;
-    $('#modalMap').modal('show');
+    $("#modalMap").modal("show");
     setTimeout(() => {
         initMapIr();
 
@@ -440,27 +522,32 @@ function changeCenter(_kind){
         var lng = 54.00537109375;
         var zoom = 6;
 
-        if(_kind === 'src'){
-            if(sMarker === 0 && tour.srcCityLocation.lat && tour.srcCityLocation.lng){
+        if (_kind === "src") {
+            if (
+                sMarker === 0 &&
+                tour.srcCityLocation.lat &&
+                tour.srcCityLocation.lng
+            ) {
                 lat = parseFloat(tour.srcCityLocation.lat);
                 lng = parseFloat(tour.srcCityLocation.lng);
                 zoom = 10;
-            }
-            else if(sMarker != 0){
-                lat = parseFloat(document.getElementById('sLat').value);
-                lng = parseFloat(document.getElementById('sLng').value);
+            } else if (sMarker != 0) {
+                lat = parseFloat(document.getElementById("sLat").value);
+                lng = parseFloat(document.getElementById("sLng").value);
                 zoom = 16;
             }
-        }
-        else{
-            if(eMarker === 0 && tour.destCityLocation.lat && tour.destCityLocation.lng){
+        } else {
+            if (
+                eMarker === 0 &&
+                tour.destCityLocation.lat &&
+                tour.destCityLocation.lng
+            ) {
                 lat = parseFloat(tour.destCityLocation.lat);
                 lng = parseFloat(tour.destCityLocation.lng);
                 zoom = 10;
-            }
-            else if(eMarker != 0){
-                lat = parseFloat(document.getElementById('eLat').value);
-                lng = parseFloat(document.getElementById('eLng').value);
+            } else if (eMarker != 0) {
+                lat = parseFloat(document.getElementById("eLat").value);
+                lng = parseFloat(document.getElementById("eLng").value);
                 zoom = 16;
             }
         }
@@ -468,21 +555,18 @@ function changeCenter(_kind){
     }, 500);
 }
 
-function setMarkerToMap(_lat, _lng, _type = mapIsOpen){
-    if(_type == 'src'){
-        if(sMarker != 0)
-            mainMap.removeLayer(sMarker);
+function setMarkerToMap(_lat, _lng, _type = mapIsOpen) {
+    if (_type == "src") {
+        if (sMarker != 0) mainMap.removeLayer(sMarker);
         sMarker = L.marker([_lat, _lng]).addTo(mainMap);
-        document.getElementById('sLat').value = parseFloat(_lat);
-        document.getElementById('sLng').value = parseFloat(_lng);
-    }
-    else{
-        if(eMarker != 0)
-            mainMap.removeLayer(eMarker);
+        document.getElementById("sLat").value = parseFloat(_lat);
+        document.getElementById("sLng").value = parseFloat(_lng);
+    } else {
+        if (eMarker != 0) mainMap.removeLayer(eMarker);
         eMarker = L.marker([_lat, _lng]).addTo(mainMap);
 
-        document.getElementById('eLat').value = parseFloat(_lat);
-        document.getElementById('eLng').value = parseFloat(_lng);
+        document.getElementById("eLat").value = parseFloat(_lat);
+        document.getElementById("eLng").value = parseFloat(_lng);
     }
 }
 

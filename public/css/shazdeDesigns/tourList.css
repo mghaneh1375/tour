@@ -1,25 +1,29 @@
 /*1st box of styles*/
 
-input[type="checkbox"], input[type="radio"] {
+input[type="checkbox"],
+input[type="radio"] {
     display: none !important;
 }
 
-input[type="checkbox"] + label, input[type="radio"] + label {
+input[type="checkbox"] + label,
+input[type="radio"] + label {
     color: #666666;
 }
 
-input[type="checkbox"] + label span, input[type="radio"] + label span {
+input[type="checkbox"] + label span,
+input[type="radio"] + label span {
     display: inline-block;
     width: 19px;
     height: 19px;
     margin: -2px 0 0 0;
     vertical-align: middle;
-    background: url('../../images/check_radio_sheet.png') left top no-repeat;
+    background: url("../../images/check_radio_sheet.png") left top no-repeat;
     cursor: pointer;
 }
 
-input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label span {
-    background: url('../../images/check_radio_sheet.png') -19px top no-repeat;
+input[type="checkbox"]:checked + label span,
+input[type="radio"]:checked + label span {
+    background: url("../../images/check_radio_sheet.png") -19px top no-repeat;
 }
 
 .moreItems {
@@ -56,19 +60,18 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 /*2nd box of styles*/
 
-
 .shTIcon {
     font-family: shazde_regular2 !important;
     font-size: 20px;
 }
 
 .passengerIcon:before {
-    content: '\E0DF';
+    content: "\E0DF";
     color: var(--koochita-light-green);
 }
 
 .minusPlusIcons {
-    font-family: 'Shazde_Regular2' !important;
+    font-family: "Shazde_Regular2" !important;
     font-size: 25px;
     line-height: 25px;
     color: #30b4a6;
@@ -78,11 +81,11 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 .plus:before {
-    content: '\E031';
+    content: "\E031";
 }
 
 .minus:before {
-    content: '\E034';
+    content: "\E034";
 }
 
 .calendarIcon {
@@ -90,16 +93,21 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     font-size: 22px;
     top: -2px;
 }
+.locationIcon {
+    color: #30b4a6 !important;
+    font-size: 22px;
+    top: -2px;
+}
 
 .searchBottomArrowIcone:before {
-    content: '\E04A';
+    content: "\E04A";
     position: absolute;
     top: 14px;
     cursor: pointer;
 }
 
 .searchTopArrowIcone:before {
-    content: '\E044';
+    content: "\E044";
     position: absolute;
     top: 14px;
     cursor: pointer;
@@ -110,7 +118,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 /*3rd box of styles*/
-
 
 .numBetweenMinusPlusBtn {
     float: left;
@@ -123,7 +130,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 .calenderBox {
     width: 22%;
     padding: 7px 8px;
-    border: 2px solid #E5E5E5;
+    border: 2px solid #e5e5e5;
     display: inline-block;
     position: absolute;
     right: 22%;
@@ -158,7 +165,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 .roomBox {
     width: 18%;
     padding: 5px 8px;
-    border: 2px solid #E5E5E5;
+    border: 2px solid #e5e5e5;
     display: inline-block;
     position: absolute;
     right: 46%;
@@ -212,7 +219,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 /*4th box of styles*/
 
-
 .childrenPopUpAlert {
     width: 100%;
     margin-bottom: 5px;
@@ -230,7 +236,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     top: 400px !important;
 }
 
-
 .filterGroupTitle {
     color: #963019 !important;
 }
@@ -239,9 +244,13 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 @font-face {
     font-weight: normal;
     font-style: normal;
-    font-family: 'shazdemosafer-tour';
-    src: url('../../fonts/shazdemosafer-tour.otf');
-    src: url('../../fonts/shazdemosafer-tour.otf') format('embedded-opentype'), url('../../fonts/shazdemosafer-tour.woff2?v003.200') format('woff2'), url('../../fonts/shazdemosafer-tour.woff?v003.200') format('woff'), url('../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200') format('truetype');
+    font-family: "shazdemosafer-tour";
+    src: url("../../fonts/shazdemosafer-tour.otf");
+    src: url("../../fonts/shazdemosafer-tour.otf") format("embedded-opentype"),
+        url("../../fonts/shazdemosafer-tour.woff2?v003.200") format("woff2"),
+        url("../../fonts/shazdemosafer-tour.woff?v003.200") format("woff"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200")
+            format("truetype");
 }
 
 #PAGE {
@@ -265,7 +274,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 #tourMainDiv {
-    max-width: 1580px !important
+    max-width: 1580px !important;
 }
 
 .tourMainDivHeading {
@@ -332,8 +341,10 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     border-left: 0;
 }
 
-#tourSearchDestinationPointBox > label, #tourSearchDestinationPointBox > label > input,
-#tourSearchInitiatePointBox > label > input, #tourSearchInitiatePointBox > label {
+#tourSearchDestinationPointBox > label,
+#tourSearchDestinationPointBox > label > input,
+#tourSearchInitiatePointBox > label > input,
+#tourSearchInitiatePointBox > label {
     cursor: text;
 }
 
@@ -351,7 +362,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     display: inline-block;
 }
 
-.rightFiltersCheckboxesMainDivs, .leftFiltersCheckboxesMainDivs {
+.rightFiltersCheckboxesMainDivs,
+.leftFiltersCheckboxesMainDivs {
     display: inline-block;
     width: 100%;
     margin-bottom: 0 !important;
@@ -373,7 +385,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 .rightFilterBarDivsHeading {
     padding-top: 10px !important;
     font-size: 14px !important;
-    overflow: inherit !important
+    overflow: inherit !important;
 }
 
 .rightFiltersCheckboxesDivs {
@@ -382,7 +394,8 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     margin-right: 0 !important;
 }
 
-.rightFiltersCheckboxesHidden, .lefFiltersCheckboxesHidden {
+.rightFiltersCheckboxesHidden,
+.lefFiltersCheckboxesHidden {
     display: none;
 }
 
@@ -410,7 +423,7 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     position: absolute;
     top: -18px;
     left: 7px;
-    color: #b1b1b1
+    color: #b1b1b1;
 }
 
 .destinationCityFiltersBoxNotation {
@@ -470,7 +483,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     display: inline-block;
     float: right;
     font-size: 11px;
-
 }
 
 .mainDivMiddleClassifyBars > span {
@@ -698,14 +710,14 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 
 .tourDetailsMoreInfoLeftBox > div > div {
     padding: 3px 0;
-
 }
 
 #mainDivMainBlock {
     position: relative;
 }
 
-.toggleTourDetailsMoreInfo, .toggleTourDetailsLessInfo {
+.toggleTourDetailsMoreInfo,
+.toggleTourDetailsLessInfo {
     position: absolute;
     bottom: -13px;
     left: 10px;
@@ -748,7 +760,6 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
     width: 33px;
     padding: 0 8px;
     color: white;
-
 }
 
 #discountBoxTour1 {
@@ -874,58 +885,58 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 #cityKindTour::before {
-    content: '\E0E0';
+    content: "\E0E0";
     font-family: shazdemosafer-tour;
     left: 13px;
 }
 
 #hikingKindTour::before {
-    content: '\E0E1';
+    content: "\E0E1";
     font-family: shazdemosafer-tour;
 }
 
 #villageKindTour::before {
-    content: '\E0E2';
+    content: "\E0E2";
     font-family: shazdemosafer-tour;
 }
 
 #adventureKindTour::before {
-    content: '\E0E3';
+    content: "\E0E3";
     font-family: shazdemosafer-tour;
 }
 
 #healthKindTour::before {
-    content: '\E0E4';
+    content: "\E0E4";
     font-family: shazdemosafer-tour;
 }
 
 #recreationalKindTour::before {
-    content: '\E0E5';
+    content: "\E0E5";
     font-family: shazdemosafer-tour;
 }
 
 #artisticKindTour::before {
-    content: '\E0E6';
+    content: "\E0E6";
     font-family: shazdemosafer-tour;
 }
 
 #sportsKindTour::before {
-    content: '\E0E7';
+    content: "\E0E7";
     font-family: shazdemosafer-tour;
 }
 
 #scientificKindTour::before {
-    content: '\E0E8';
+    content: "\E0E8";
     font-family: shazdemosafer-tour;
 }
 
 #culturalKindTour::before {
-    content: '\E0E9';
+    content: "\E0E9";
     font-family: shazdemosafer-tour;
 }
 
 #ProfessionalKindTour::before {
-    content: '\E0EA';
+    content: "\E0EA";
     font-family: shazdemosafer-tour;
 }
 
@@ -998,56 +1009,56 @@ input[type="checkbox"]:checked + label span, input[type="radio"]:checked + label
 }
 
 #easyLevelTour::before {
-    content: '\E0EC';
+    content: "\E0EC";
     font-family: shazdemosafer-tour;
     top: -10px;
     left: 1px;
 }
 
 #lightLevelTour::before {
-    content: '\E0ED';
+    content: "\E0ED";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: -1px;
 }
 
 #activeLevelTour::before {
-    content: '\E0F4';
+    content: "\E0F4";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 39px;
 }
 
 #hardLevelTour::before {
-    content: '\E0F5';
+    content: "\E0F5";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: -1px;
 }
 
 #professionalLevelTour::before {
-    content: '\E0EB';
+    content: "\E0EB";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 0;
 }
 
 #blindLevelTour::before {
-    content: '\E0F6';
+    content: "\E0F6";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: -4px;
 }
 
 #disabledLevelTour::before {
-    content: '\E0F8';
+    content: "\E0F8";
     font-family: shazdemosafer-tour;
     top: -8px;
     left: -1px;
 }
 
 #studentLevelTour::before {
-    content: '\E0EC';
+    content: "\E0EC";
     font-family: shazdemosafer-tour;
     top: -9px;
     left: 1px;

@@ -52,8 +52,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPanelBusinessWebRoutes()
     {
         Route::middleware('web')
-            //  ->domain('mybusiness.koochita.com')
-             ->domain('business.bogenstudio.com')
+             ->domain('mybusiness.koochita.com')
+            //  ->domain('business.bogenstudio.com')
             //  ->domain('businessPanel.localhost')
             ->namespace($this->namespace.'\PanelBusiness')
             ->group(base_path('routes/businessPanelRoutes.php'));
@@ -62,7 +62,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapTourWebRoutes()
     {
         Route::middleware('web')
-            ->domain('tour.bogenstudio.com')
+            // ->domain('tour.bogenstudio.com')
 //             ->domain('tour.'.env('ROUTURL'))
             ->namespace($this->namespace.'\Tour')
             ->group(base_path('routes/tourRoutes.php'));

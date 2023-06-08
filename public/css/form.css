@@ -171,3 +171,8 @@ figcaption {
     visibility: visible;
     opacity: 1;
 }
+.map-container {
+    height: 450px;
+    border-radius: 10px;
+    overflow: hidden;
+}
