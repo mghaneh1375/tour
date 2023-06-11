@@ -1,11 +1,13 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    {{-- <script src="{::BASE_CDN_URL}/third-party/mapbox-gl-js/{::MAPBOX_JS_VERSION}/mapbox-gl.js"></script> --}}
-    {{-- <link href="{::BASE_CDN_URL}/third-party/mapbox-gl-js/{::MAPBOX_JS_VERSION}/mapbox-gl.css" rel="stylesheet" /> --}}
+    <script src="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.js">
+    </script>
+    <link href="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.css"
+        rel="stylesheet" />
 
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
-    {{-- <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' /> --}}
+    {{-- <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' /> --}}
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
@@ -30,11 +32,6 @@
         .btn-group>label {
             padding: 10px 8px;
         }
-
-        /* .mapboxgl-canvas {
-                width: 100% !important;
-                height: auto !important;
-            } */
     </style>
 @endsection
 
@@ -113,7 +110,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body" style="direction: rtl">
-                    <div class="fullwidthDiv">
+                    <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div id="map" style="width: 100%; height: 500px"></div>
                         </div>
@@ -158,8 +155,33 @@
         let y = " ";
 
         function nextStep() {
-            if (nextFormId !== undefined)
-                window.location.href = '/asset/' + assetId + "/step/" + nextFormId;
+            var errorText = "";
+            storeData = {
+
+            }
+            var $inputs = $('.inputBoxTour :input');
+
+            // An array of just the ids...
+            var ids = {};
+
+            $inputs.each(function() {
+                ids[$(this).attr('name')] = {
+                    id: $(this).attr('id'),
+                    value: $(this).val()
+                }
+                if ($(this).attr('required'))
+                    if ($(this).val() == '') {
+                        // alert($(this).attr('name') + ' ' + 'پر شود ');
+                        errorText += '<ul class="errorList"> ';
+                        errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                        openErrorAlertBP(errorText);
+                    } else {
+                        (nextFormId !== undefined)
+                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId;
+                    }
+            });
+            console.log(ids);
+
         }
 
         function prevStep() {
@@ -256,7 +278,8 @@
                 var text = '';
                 if (res.status === 0) {
                     for (let i = 0; i < res.fields.length; i++) {
-                        text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[i]
+                        text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[
+                                i]
                             .half == 1 ? '50%' : '100%') + ';">';
                         text += '';
 
@@ -267,7 +290,8 @@
                                 text += '<label class="btn btn-secondary " for="' + res.fields[i].options[
                                     x] + '">' + res.fields[i].options[x] + '';
                                 text += '<input type="radio" name="' + res.fields[i].name + '" id="' + res
-                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ? 'required ' :
+                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ?
+                                        'required ' :
                                         '') + '>';
                                 text += '</label>';
 
@@ -279,8 +303,10 @@
                             for (let x = 0; x < res.fields[i].options.length; x++) {
                                 text += '<label class="btn btn-secondary " for="' + res.fields[i].options[
                                     x] + '">' + res.fields[i].options[x] + '';
-                                text += '<input type="checkbox" name="' + res.fields[i].name + '" id="' + res
-                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ? 'required ' :
+                                text += '<input type="checkbox" name="' + res.fields[i].name + '" id="' +
+                                    res
+                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ?
+                                        'required ' :
                                         '') + '>';
                                 text += '</label>';
 
@@ -288,11 +314,14 @@
                             text += '</div>';
                         } else if (res.fields[i].type == 'string') {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
                             text += '<input type="text" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
+                                '" class="inputBoxInput" name="' + res.fields[i].name + '" placeholder="' +
+                                (res
+                                    .fields[i].placeholder != null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else if (res.fields[i].type == 'time') {
@@ -301,39 +330,52 @@
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
-                            text += '<input type="text" id="' + res.fields[i].field_id +
-                                '" class="form-control clockP" placeholder="' + (res.fields[i].placeholder !=
+                            text += '<input type="text" name="' + res.fields[i].name + '" id="' + res
+                                .fields[i]
+                                .field_id +
+                                '" class="form-control clockP" placeholder="' + (res.fields[i]
+                                    .placeholder !=
                                     null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else if (res.fields[i].type == 'int') {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
-                            text += '<input type="number" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
+                            text += '<input type="number" name="' + res.fields[i].name + '" id="' + res
+                                .fields[
+                                    i].field_id +
+                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder !=
+                                    null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else if (res.fields[i].type == 'map') {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
                             text += '<div class="select-side locationIconTourCreation">';
                             text += '<i class="ui_icon  locationIcon"></i>';
                             text += '</div>';
-                            text += '<input type="text" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i].placeholder !=
+                            text += '<input type="text" name="' + res.fields[i].name + '" id="' + res
+                                .fields[i]
+                                .field_id +
+                                '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i]
+                                    .placeholder !=
                                     null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else if (res.fields[i].type == 'api') {
-                            city = res.fields[i].options[0].replace('koochita', 'mykoochita').replace("https",
+                            city = res.fields[i].options[0].replace('koochita', 'mykoochita').replace(
+                                "https",
                                 "http");
                             apiId = res.fields[i].field_id;
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
 
@@ -342,8 +384,10 @@
                             //         '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                             //         .necessary == 1 ? 'required ' : '') + ' onkeyup="searchCityName(this)" >';
 
-                            text += '<input value=" " type="text" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
+                            text += '<input value="" type="text" id="' + res.fields[i].field_id +
+                                '" class="inputBoxInput" name="' + res.fields[i].name + '" placeholder="' +
+                                (res
+                                    .fields[i].placeholder != null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') +
                                 ' onclick="chooseSrcCityModal()" >';
@@ -352,37 +396,44 @@
                             text += '</div>';
                         } else if (res.fields[i].type == 'textarea') {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
-                            text += '<textarea  id="' + res.fields[i].field_id +
+                            text += '<textarea name="' + res.fields[i].name + '" id="' + res.fields[i]
+                                .field_id +
                                 '" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
                                 (res.fields[i].placeholder != null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' ></textarea>';
                         } else if (res.fields[i].type == 'calendar') {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
                             text += '<div class="select-side calendarIconTourCreation">';
                             text += '<i class="ui_icon calendar calendarIcon"></i>';
                             text += '</div>';
-                            text += ' <input name="sDateNotSame[]" id="' + res.fields[i].field_id +
+                            text += ' <input name="' + res.fields[i].name + '" name="sDateNotSame[]" id="' +
+                                res
+                                .fields[i].field_id +
                                 '" class="observer-example inputBoxInput"type="text" placeholder="' + (res
                                     .fields[i].placeholder != null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                             text += '';
                             calenderId = res.fields[i].field_id;
-                            console.log(calenderId);
                         } else {
                             text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ? ' importantFieldLabel' :
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
                             text += '</div>';
-                            text += '<input type="' + res.fields[i].type + '" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
+                            text += '<input name="' + res.fields[i].name + '" type="' + res.fields[i].type +
+                                '" id="' + res.fields[i].field_id +
+                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder !=
+                                    null ?
                                     '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         }
@@ -399,7 +450,6 @@
                     $('#boxMake').empty().append(text);
                     $(".clockP").clockpicker(clockOptions);
                     $(".observer-example").datepicker(datePickerOptions);
-                    console.log("mooz");
                 }
             }
         });
@@ -466,7 +516,7 @@
 
             const map = new mapboxgl.Map({
                 container: 'map',
-                accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
+                // accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
                 style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
                 center: [51.4, 35.7],
                 zoom: 13,
@@ -499,7 +549,6 @@
 
             map.on('click', addMarker);
 
-            console.log("ready!");
         });
     </script>
 
