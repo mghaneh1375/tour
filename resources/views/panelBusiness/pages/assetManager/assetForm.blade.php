@@ -1,13 +1,13 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    <script src="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.js">
+    {{-- <script src="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.js">
     </script>
     <link href="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.css"
-        rel="stylesheet" />
+        rel="stylesheet" /> --}}
 
-    {{-- <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' /> --}}
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
@@ -153,34 +153,108 @@
         let nextFormId = undefined;
         let x = " ";
         let y = " ";
+        let userAssetId = parseInt('{{ $userAssetId }}');
+        let isInFirstStep = false;
+
+        function storePic(userAssetId, fields) {
+            var fileStore = new FormData();
+            fileStore.append('pic', $("#" + fields[1].id)[0].files[0]);
+            $.ajax({
+                type: 'post',
+                url: 'http://myeghamat.com/api/user_asset/' + userAssetId + "/set_asset_pic/" + fields[1].id,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                    "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                },
+                data: fileStore,
+                success: function(res) {
+                    if (res.status === "0") {
+                        console.log('pic ok');
+                    } else {
+                        console.log('pic Nok');
+                    }
+                }
+            });
+        }
+
+
+        function storeData(fields) {
+
+            if (fields.length == 0) {
+                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                return;
+            }
+
+            if (firstStepFormId) {
+
+                if (userAssetId === -1) {
+                    // todo: call store asset api
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://myeghamat.com/api/asset/1/user_asset',
+                        headers: {
+                            'Accept': 'application/json',
+                            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                        },
+                        data: fields[0],
+                        success: function(res) {
+                            if (res.status === "0") {
+                                userAssetId = res.id;
+                                storePic(userAssetId, fields);
+                            } else {
+                                console.log('store NOk');
+                            }
+                        }
+
+                    });
+                } else {
+
+                }
+                // todp: call update asset api
+                // check if form has img, call set pic api
+            } else {
+                // todo: call set form filed data api
+            }
+        }
 
         function nextStep() {
-            var errorText = "";
-            storeData = {
 
-            }
+            var errorText = "";
             var $inputs = $('.inputBoxTour :input');
 
             // An array of just the ids...
-            var ids = {};
+            var fields = [];
 
             $inputs.each(function() {
-                ids[$(this).attr('name')] = {
-                    id: $(this).attr('id'),
-                    value: $(this).val()
-                }
-                if ($(this).attr('required'))
-                    if ($(this).val() == '') {
-                        // alert($(this).attr('name') + ' ' + 'پر شود ');
+
+                if ($(this).attr('data-change') === '0')
+                    return;
+
+                if ($(this).attr('required')) {
+                    if ($(this).val() === '') {
                         errorText += '<ul class="errorList"> ';
                         errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
-                        openErrorAlertBP(errorText);
-                    } else {
-                        (nextFormId !== undefined)
-                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId;
                     }
+                }
+
+                fields.push({
+                    id: $(this).attr('id'),
+                    data: $(this).val()
+                });
             });
-            console.log(ids);
+
+            console.log(fields);
+            console.log(errorText);
+            console.log(nextFormId);
+
+            if (errorText.length > 0)
+                openErrorAlertBP(errorText);
+            else {
+                if (nextFormId !== undefined)
+                    storeData(fields);
+            }
 
         }
 
@@ -200,10 +274,21 @@
             },
             success: function(res) {
                 var html = '';
+
                 if (res.status === 0) {
                     for (let i = 0; i < res.forms.length; i++) {
 
+                        if (i == 0)
+                            firstStepFormId = res.forms[i].id;
+
                         if (res.forms[i].id == formId) {
+
+                            if (i == 0)
+                                isInFirstStep = true;
+                            else if (userAssetId === -1)
+                                window.location.href = '/asset/' + assetId + "/step/" + firstStepFormId;
+
+
                             html += '<h1>' + res.forms[i].name + '</h1>';
                             html += '<div style="margin-top: 20px">';
                             html += '<h4>' + res.forms[i].description + '</h4>';
@@ -264,197 +349,6 @@
             }
         }
 
-        $.ajax({
-            type: 'get',
-            // url: 'http://myeghamat.com/api/form/' + formId,
-            url: 'https://boom.bogenstudio.com/api/form/' + formId,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiODcyZjc0YjI4MDcwNjVkOTAzYjBkMGUzYTM3ZGZlZTc1ZjE2OTQ5NzQzYjhlNzhiMjdjNzkyN2Y0YzE3NjEyZjk3Y2Y1MTY3YTkzYjhhYmYiLCJpYXQiOjE2ODYxNDQzMTYuODMxMjU1LCJuYmYiOjE2ODYxNDQzMTYuODMxMjU4LCJleHAiOjE3MTc3NjY3MTYuODI3MTc2LCJzdWIiOiIxNCIsInNjb3BlcyI6W119.ZhLHb_mQTKpyC-YbAEogNL-kV4mpOGdvxApdFAZYJxtBsapF6LQy75AdQINDuy_pbA3D2ZsxKcvhnnPZcFyROmN-HrHK5DphDDkgIAYHIGo-pM6Oe0Z1etpwpzNVQPpG2yqY-A-n9mXK9ElfXuKsyVl70N2nYFXDbTwJile2N8Mh898MQj6vGQAqnbwCs6SUun94eLGt0cte38BEn5-4zWSsDkddGBIDQMaQXyC5wbCs1n_GITA0RtWE04fDlagowZ1SBLQ5uaS5WS2Eu_VLkdYlp3H9-Derg20QcLqqAtSrQzumYrf8_JNfGkkxdAudakIf0oN3lCvvGQJc3yvupnjMlizgBfjO5Gov-JSi58BEe6Dlyh1PH_aHclUMApNqs_GF4znGtlM7vivz56eNJfb7pdiF8DyMVrvgE73CQbqBf71R02D6LuoG6uSuiBvCg7fgprx592kjX3IHZPlRUhO7ecHChPC2A2D9wI8T08l536CceLnySWcD7o_iv-gk1JoJuY_9gfgSkRdumgxQKdXLPCvRCHGeRysLZSJupbh_6VugYBTA2oBRxDuVWKm7msks0XHvRYkc7hwx74EdqygJuVC6ejs_AY3QFHFTXJ2hvTLb5Kf5hJVhPT7xjHnagkiA-PSenc8OfCS-xASDE2woyTdoERSLMHVDJdUQ7h8"
-            },
-            success: function(res) {
-
-                var text = '';
-                if (res.status === 0) {
-                    for (let i = 0; i < res.fields.length; i++) {
-                        text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[
-                                i]
-                            .half == 1 ? '50%' : '100%') + ';">';
-                        text += '';
-
-                        if (res.fields[i].type == 'radio') {
-                            text += '<p>' + res.fields[i].name + '</p>';
-                            text += '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
-                            for (let x = 0; x < res.fields[i].options.length; x++) {
-                                text += '<label class="btn btn-secondary " for="' + res.fields[i].options[
-                                    x] + '">' + res.fields[i].options[x] + '';
-                                text += '<input type="radio" name="' + res.fields[i].name + '" id="' + res
-                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ?
-                                        'required ' :
-                                        '') + '>';
-                                text += '</label>';
-
-                            }
-                            text += '</div>';
-                        } else if (res.fields[i].type == 'checkbox') {
-                            text += '<p>' + res.fields[i].name + '</p>';
-                            text += '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
-                            for (let x = 0; x < res.fields[i].options.length; x++) {
-                                text += '<label class="btn btn-secondary " for="' + res.fields[i].options[
-                                    x] + '">' + res.fields[i].options[x] + '';
-                                text += '<input type="checkbox" name="' + res.fields[i].name + '" id="' +
-                                    res
-                                    .fields[i].options[x] + '" ' + (res.fields[i].necessary == 1 ?
-                                        'required ' :
-                                        '') + '>';
-                                text += '</label>';
-
-                            }
-                            text += '</div>';
-                        } else if (res.fields[i].type == 'string') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<input type="text" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" name="' + res.fields[i].name + '" placeholder="' +
-                                (res
-                                    .fields[i].placeholder != null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                        } else if (res.fields[i].type == 'time') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
-                            text += '<div class=" name' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<input type="text" name="' + res.fields[i].name + '" id="' + res
-                                .fields[i]
-                                .field_id +
-                                '" class="form-control clockP" placeholder="' + (res.fields[i]
-                                    .placeholder !=
-                                    null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                        } else if (res.fields[i].type == 'int') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<input type="number" name="' + res.fields[i].name + '" id="' + res
-                                .fields[
-                                    i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder !=
-                                    null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                        } else if (res.fields[i].type == 'map') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<div class="select-side locationIconTourCreation">';
-                            text += '<i class="ui_icon  locationIcon"></i>';
-                            text += '</div>';
-                            text += '<input type="text" name="' + res.fields[i].name + '" id="' + res
-                                .fields[i]
-                                .field_id +
-                                '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i]
-                                    .placeholder !=
-                                    null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                        } else if (res.fields[i].type == 'api') {
-                            city = res.fields[i].options[0].replace('koochita', 'mykoochita').replace(
-                                "https",
-                                "http");
-                            apiId = res.fields[i].field_id;
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-
-                            // text += '<input value=" " type="text" id="' + res.fields[i].field_id +
-                            //     '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
-                            //         '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                            //         .necessary == 1 ? 'required ' : '') + ' onkeyup="searchCityName(this)" >';
-
-                            text += '<input value="" type="text" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" name="' + res.fields[i].name + '" placeholder="' +
-                                (res
-                                    .fields[i].placeholder != null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') +
-                                ' onclick="chooseSrcCityModal()" >';
-
-                            text += '<div id="apiItemList" class"hidden">';
-                            text += '</div>';
-                        } else if (res.fields[i].type == 'textarea') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<textarea name="' + res.fields[i].name + '" id="' + res.fields[i]
-                                .field_id +
-                                '" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
-                                (res.fields[i].placeholder != null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' ></textarea>';
-                        } else if (res.fields[i].type == 'calendar') {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<div class="select-side calendarIconTourCreation">';
-                            text += '<i class="ui_icon calendar calendarIcon"></i>';
-                            text += '</div>';
-                            text += ' <input name="' + res.fields[i].name + '" name="sDateNotSame[]" id="' +
-                                res
-                                .fields[i].field_id +
-                                '" class="observer-example inputBoxInput"type="text" placeholder="' + (res
-                                    .fields[i].placeholder != null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                            text += '';
-                            calenderId = res.fields[i].field_id;
-                        } else {
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                            text += '<div class="' + (res.fields[i].necessary == 1 ?
-                                ' importantFieldLabel' :
-                                '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
-                            text += '<input name="' + res.fields[i].name + '" type="' + res.fields[i].type +
-                                '" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder !=
-                                    null ?
-                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                                    .necessary == 1 ? 'required ' : '') + ' >';
-                        }
-
-                        text += '</div>';
-                        if (res.fields[i].force_help != null) {
-                            text += '<figcaption style="width: 100%;"> ' + res.fields[i].force_help + '';
-                            text += '</figcaption>';
-                        }
-                        text += '';
-                        text += '';
-                        text += '';
-                    }
-                    $('#boxMake').empty().append(text);
-                    $(".clockP").clockpicker(clockOptions);
-                    $(".observer-example").datepicker(datePickerOptions);
-                }
-            }
-        });
-
-
         function searchCityName(_element) {
             var value = $(_element).val().trim();
             if (value.length > 1) {
@@ -506,48 +400,331 @@
             $("#locMark").modal("show");
         });
 
+        function buildFormHtml(res) {
 
+            let text = "";
+            let needSearchCityModal = false;
+
+            for (let i = 0; i < res.fields.length; i++) {
+
+                text += '<div class="relative-position inputBoxTour" style="width: ' + (
+                    res
+                    .fields[
+                        i]
+                    .half == 1 ? '50%' : '100%') + ';">';
+                text += '';
+
+                if (res.fields[i].type == 'radio') {
+                    text += '<p>' + res.fields[i].name + '</p>';
+                    text +=
+                        '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
+                    for (let x = 0; x < res.fields[i].options.length; x++) {
+                        text += '<label class="btn btn-secondary " for="' + res.fields[
+                                i]
+                            .options[
+                                x] + '">' + res.fields[i].options[x] + '';
+                        text += '<input type="radio" name="' + res.fields[i].name +
+                            '" id="' +
+                            res
+                            .fields[i].options[x] + '" ' + (res.fields[i].necessary ==
+                                1 ?
+                                'required ' :
+                                '') + '>';
+                        text += '</label>';
+
+                    }
+                    text += '</div>';
+                } else if (res.fields[i].type == 'checkbox') {
+                    text += '<p>' + res.fields[i].name + '</p>';
+                    text +=
+                        '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
+                    for (let x = 0; x < res.fields[i].options.length; x++) {
+                        text += '<label class="btn btn-secondary " for="' + res.fields[
+                                i]
+                            .options[
+                                x] + '">' + res.fields[i].options[x] + '';
+                        text += '<input type="checkbox" name="' + res.fields[i].name +
+                            '" id="' +
+                            res
+                            .fields[i].options[x] + '" ' + (res.fields[i].necessary ==
+                                1 ?
+                                'required ' :
+                                '') + '>';
+                        text += '</label>';
+
+                    }
+                    text += '</div>';
+                } else if (res.fields[i].type == 'string') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+
+                    text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') + '" value="' + (
+                            res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                            '') + '" id="' + res.fields[i].field_id +
+                        '" class="inputBoxInput" name="' + res.fields[i].name +
+                        '" placeholder="' +
+                        (res
+                            .fields[i].placeholder != null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                } else if (res.fields[i].type == 'time') {
+                    text +=
+                        '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
+                    text += '<div class=" name' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                            '') + '" name="' + res.fields[i].name +
+                        '" id="' + res
+                        .fields[i]
+                        .field_id +
+                        '" class="form-control clockP" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                } else if (res.fields[i].type == 'int') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<input type="number" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
+                            '' :
+                            '') + '" name="' + res.fields[i].name +
+                        '" id="' + res
+                        .fields[
+                            i].field_id +
+                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                } else if (res.fields[i].type == 'file') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') + '" type="file" value="' + (
+                            res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                            '') + '" name="' + res.fields[i].name +
+                        '" id="' + res
+                        .fields[
+                            i].field_id +
+                        '" class="inputBoxInput file" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '<div><img src="' + res.fields[i].data + '" class="" alt="25"></div>';
+                } else if (res.fields[i].type == 'map') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<div class="select-side locationIconTourCreation">';
+                    text += '<i class="ui_icon  locationIcon"></i>';
+                    text += '</div>';
+                    text += '<input type="text" name="' + res.fields[i].name +
+                        '" id="' + res
+                        .fields[i]
+                        .field_id +
+                        '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                } else if (res.fields[i].type == 'api') {
+                    needSearchCityModal = true;
+                    city = res.fields[i].options[0].replace('koochita', 'mykoochita')
+                        .replace(
+                            "https",
+                            "http");
+                    apiId = res.fields[i].field_id;
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+
+                    // text += '<input value=" " type="text" id="' + res.fields[i].field_id +
+                    //     '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
+                    //         '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
+                    //         .necessary == 1 ? 'required ' : '') + ' onkeyup="searchCityName(this)" >';
+
+                    text += '<input value="" type="text" id="' + res.fields[i]
+                        .field_id +
+                        '" class="inputBoxInput" name="' + res.fields[i].name +
+                        '" placeholder="' +
+                        (res
+                            .fields[i].placeholder != null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') +
+                        ' onclick="chooseSrcCityModal()" >';
+
+                    text += '<div id="apiItemList" class"hidden">';
+                    text += '</div>';
+                } else if (res.fields[i].type == 'textarea') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<textarea name="' + res.fields[i].name + '" id="' + res
+                        .fields[i]
+                        .field_id +
+                        '" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
+                        (res.fields[i].placeholder != null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' ></textarea>';
+                } else if (res.fields[i].type == 'calendar') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<div class="select-side calendarIconTourCreation">';
+                    text += '<i class="ui_icon calendar calendarIcon"></i>';
+                    text += '</div>';
+                    text += ' <input name="' + res.fields[i].name +
+                        '" name="sDateNotSame[]" id="' +
+                        res
+                        .fields[i].field_id +
+                        '" class="observer-example inputBoxInput"type="text" placeholder="' +
+                        (
+                            res
+                            .fields[i].placeholder != null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '';
+                    calenderId = res.fields[i].field_id;
+                } else {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<input name="' + res.fields[i].name + '" type="' + res
+                        .fields[i]
+                        .type +
+                        '" id="' + res.fields[i].field_id +
+                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                }
+
+                text += '</div>';
+                if (res.fields[i].force_help != null) {
+                    text += '<figcaption style="width: 100%;"> ' + res.fields[i]
+                        .force_help +
+                        '';
+                    text += '</figcaption>';
+                }
+                text += '';
+                text += '';
+                text += '';
+            }
+            $('#boxMake').empty().append(text);
+            $(".clockP").clockpicker(clockOptions);
+            $(".observer-example").datepicker(datePickerOptions);
+            if (!needSearchCityModal)
+                $("#addCityModal").remove();
+        }
 
         $(document).ready(function() {
-            mapboxgl.setRTLTextPlugin(
-                'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-                null,
-            );
 
-            const map = new mapboxgl.Map({
-                container: 'map',
-                // accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
-                style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
-                center: [51.4, 35.7],
-                zoom: 13,
+
+            $(document).on('change', 'input', function() {
+                $(this).attr('data-change', '1');
             });
 
-            var marker = undefined;
-
-            if (x !== undefined && y !== undefined) {
-                marker = new mapboxgl.Marker();
-                marker.setLngLat({
-                    lng: y,
-                    lat: x
-                }).addTo(map);
+            if (userAssetId != -1) {
+                $.ajax({
+                    type: 'get',
+                    url: 'http://myeghamat.com/api/form/' + formId + '/' + userAssetId,
+                    headers: {
+                        'Accept': 'application/json',
+                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        var text = '';
+                        if (res.status === 0) {
+                            buildFormHtml(res);
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: 'get',
+                    // url: 'http://myeghamat.com/api/form/' + formId,
+                    url: 'https://boom.bogenstudio.com/api/form/' + formId,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiODcyZjc0YjI4MDcwNjVkOTAzYjBkMGUzYTM3ZGZlZTc1ZjE2OTQ5NzQzYjhlNzhiMjdjNzkyN2Y0YzE3NjEyZjk3Y2Y1MTY3YTkzYjhhYmYiLCJpYXQiOjE2ODYxNDQzMTYuODMxMjU1LCJuYmYiOjE2ODYxNDQzMTYuODMxMjU4LCJleHAiOjE3MTc3NjY3MTYuODI3MTc2LCJzdWIiOiIxNCIsInNjb3BlcyI6W119.ZhLHb_mQTKpyC-YbAEogNL-kV4mpOGdvxApdFAZYJxtBsapF6LQy75AdQINDuy_pbA3D2ZsxKcvhnnPZcFyROmN-HrHK5DphDDkgIAYHIGo-pM6Oe0Z1etpwpzNVQPpG2yqY-A-n9mXK9ElfXuKsyVl70N2nYFXDbTwJile2N8Mh898MQj6vGQAqnbwCs6SUun94eLGt0cte38BEn5-4zWSsDkddGBIDQMaQXyC5wbCs1n_GITA0RtWE04fDlagowZ1SBLQ5uaS5WS2Eu_VLkdYlp3H9-Derg20QcLqqAtSrQzumYrf8_JNfGkkxdAudakIf0oN3lCvvGQJc3yvupnjMlizgBfjO5Gov-JSi58BEe6Dlyh1PH_aHclUMApNqs_GF4znGtlM7vivz56eNJfb7pdiF8DyMVrvgE73CQbqBf71R02D6LuoG6uSuiBvCg7fgprx592kjX3IHZPlRUhO7ecHChPC2A2D9wI8T08l536CceLnySWcD7o_iv-gk1JoJuY_9gfgSkRdumgxQKdXLPCvRCHGeRysLZSJupbh_6VugYBTA2oBRxDuVWKm7msks0XHvRYkc7hwx74EdqygJuVC6ejs_AY3QFHFTXJ2hvTLb5Kf5hJVhPT7xjHnagkiA-PSenc8OfCS-xASDE2woyTdoERSLMHVDJdUQ7h8"
+                    },
+                    success: function(res) {
+                        buildFormHtml(res);
+                    }
+                });
             }
+            // mapboxgl.setRTLTextPlugin(
+            //     'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+            //     null,
+            // );
 
-            function addMarker(e) {
+            // const map = new mapboxgl.Map({
+            //     container: 'map',
+            //     accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
+            //     style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
+            //     center: [51.4, 35.7],
+            //     zoom: 13,
+            // });
 
-                if (marker !== undefined)
-                    marker.remove();
+            // var marker = undefined;
 
-                //add marker
-                marker = new mapboxgl.Marker();
-                marker.setLngLat(e.lngLat).addTo(map);
+            // if (x !== undefined && y !== undefined) {
+            //     marker = new mapboxgl.Marker();
+            //     marker.setLngLat({
+            //         lng: y,
+            //         lat: x
+            //     }).addTo(map);
+            // }
 
-                x = e.lngLat.lat;
-                y = e.lngLat.lng;
-                console.log(x);
-                console.log(y);
-            }
+            // function addMarker(e) {
 
-            map.on('click', addMarker);
+            //     if (marker !== undefined)
+            //         marker.remove();
+
+            //     //add marker
+            //     marker = new mapboxgl.Marker();
+            //     marker.setLngLat(e.lngLat).addTo(map);
+
+            //     x = e.lngLat.lat;
+            //     y = e.lngLat.lng;
+            //     console.log(x);
+            //     console.log(y);
+            // }
+
+            // map.on('click', addMarker);
 
         });
     </script>

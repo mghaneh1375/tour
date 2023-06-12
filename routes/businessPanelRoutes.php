@@ -32,9 +32,9 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         
         Route::view('createForm', 'panelBusiness.pages.assetManager.createForm');
     
-        Route::get('asset/{assetId}/step/{formId}', function($assetId, $formId) {
+        Route::get('asset/{assetId}/step/{formId}/{userAssetId?}', function($assetId, $formId, $userAssetId=-1) {
             $states = State::all();
-            return view('panelBusiness.pages.assetManager.assetForm', compact('assetId', 'formId', 'states'));
+            return view('panelBusiness.pages.assetManager.assetForm', compact('assetId', 'formId', 'userAssetId', 'states'));
         });
 
         Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
