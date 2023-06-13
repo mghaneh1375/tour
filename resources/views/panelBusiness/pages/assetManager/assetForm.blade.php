@@ -155,6 +155,7 @@
         let y = " ";
         let userAssetId = parseInt('{{ $userAssetId }}');
         let isInFirstStep = false;
+        var radioSet = '';
 
         function storePic(userAssetId, fields) {
             var fileStore = new FormData();
@@ -187,7 +188,7 @@
                 return;
             }
 
-            if (firstStepFormId) {
+            if (isInFirstStep) {
 
                 if (userAssetId === -1) {
                     // todo: call store asset api
@@ -210,12 +211,50 @@
 
                     });
                 } else {
-
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://myeghamat.com/api/user_forms_data/' + userAssetId,
+                        headers: {
+                            'Accept': 'application/json',
+                            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                        },
+                        data: fields[0],
+                        success: function(res) {
+                            if (res.status === "0") {
+                                console.log("save shode");
+                            } else {
+                                console.log('store NOk');
+                            }
+                        }
+                    });
+                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                 }
                 // todp: call update asset api
                 // check if form has img, call set pic api
             } else {
-                // todo: call set form filed data api
+                $.ajax({
+                    type: 'post',
+                    url: 'http://myeghamat.com/api/user_forms_data/' + userAssetId,
+                    headers: {
+                        'Accept': 'application/json',
+                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                    },
+                    data: {
+                        data: fields.map(e => {
+                            return {
+                                id: e.id,
+                                data: e.data
+                            }
+                        })
+                    },
+                    success: function(res) {
+                        if (res.status === "0") {
+                            console.log("save shode");
+                        } else {
+                            console.log('store NOk');
+                        }
+                    }
+                });
             }
         }
 
@@ -226,16 +265,39 @@
 
             // An array of just the ids...
             var fields = [];
+            var radioFields = [];
 
             $inputs.each(function() {
 
                 if ($(this).attr('data-change') === '0')
                     return;
 
-                if ($(this).attr('required')) {
-                    if ($(this).val() === '') {
-                        errorText += '<ul class="errorList"> ';
-                        errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                if ($(this).attr('type') === 'radio') {
+
+                    let id = $(this).attr('id');
+
+                    let tmp = radioFields.find(e => e.id == id);
+                    if (tmp === undefined) {
+                        tmp = {
+                            id: id,
+                            hasSelected: false,
+                            name: $(this).attr('name')
+                        };
+                        radioFields.push(tmp);
+                    }
+
+                    if (!$(this).is(':checked'))
+                        return;
+                    else
+                        tmp.hasSelected = true;
+
+                } else {
+
+                    if ($(this).attr('required')) {
+                        if ($(this).val() === '') {
+                            errorText += '<ul class="errorList"> ';
+                            errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                        }
                     }
                 }
 
@@ -246,14 +308,21 @@
             });
 
             console.log(fields);
-            console.log(errorText);
-            console.log(nextFormId);
 
-            if (errorText.length > 0)
+            radioFields.forEach(e => {
+                if (!e.hasSelected) {
+                    errorText += '<ul class="errorList"> ';
+                    errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                }
+            });
+
+            if (errorText.length > 0 && 1 == 2)
                 openErrorAlertBP(errorText);
             else {
-                if (nextFormId !== undefined)
+                if (nextFormId !== undefined) {
+                    console.log('moooz');
                     storeData(fields);
+                }
             }
 
         }
@@ -419,17 +488,13 @@
                     text +=
                         '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="btn btn-secondary " for="' + res.fields[
-                                i]
-                            .options[
-                                x] + '">' + res.fields[i].options[x] + '';
-                        text += '<input type="radio" name="' + res.fields[i].name +
-                            '" id="' +
-                            res
-                            .fields[i].options[x] + '" ' + (res.fields[i].necessary ==
-                                1 ?
-                                'required ' :
-                                '') + '>';
+                        text += '<label class="btn btn-secondary " for="' + res.fields[i].options[x] + '">' + res
+                            .fields[i]
+                            .options[x] + '';
+                        text += '<input type="radio" value="' + res.fields[i].options[x] + '" name="' + res.fields[
+                                i].name +
+                            '" id="' + res.fields[i].field_id +
+                            '" ' + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
                         text += '</label>';
 
                     }
@@ -461,7 +526,8 @@
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
 
-                    text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') + '" value="' + (
+                    text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
+                        '" value="' + (
                             res.fields[i].data != null ? '' + res.fields[i].data + '' :
                             '') + '" id="' + res.fields[i].field_id +
                         '" class="inputBoxInput" name="' + res.fields[i].name +
@@ -478,7 +544,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
+                            '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
                         .fields[i]
@@ -513,7 +580,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') + '" type="file" value="' + (
+                    text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') +
+                        '" type="file" value="' + (
                             res.fields[i].data != null ? '' + res.fields[i].data + '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
