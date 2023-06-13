@@ -488,7 +488,8 @@
                     text +=
                         '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="btn btn-secondary ' + (res.fields[i].data != null ? 'active' : '') +
+                        text += '<label class="btn btn-secondary ' + (res.fields[i].data == res.fields[i].options[x] ?
+                                'active' : '') +
                             '" for="' + res.fields[i].options[x] + '">' + res
                             .fields[i]
                             .options[x] + '';
