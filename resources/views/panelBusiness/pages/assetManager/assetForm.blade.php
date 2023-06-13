@@ -488,7 +488,8 @@
                     text +=
                         '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="btn btn-secondary " for="' + res.fields[i].options[x] + '">' + res
+                        text += '<label class="btn btn-secondary ' + (res.fields[i].data != null ? 'active' : '') +
+                            '" for="' + res.fields[i].options[x] + '">' + res
                             .fields[i]
                             .options[x] + '';
                         text += '<input type="radio" value="' + res.fields[i].options[x] + '" name="' + res.fields[
@@ -508,7 +509,8 @@
                                 i]
                             .options[
                                 x] + '">' + res.fields[i].options[x] + '';
-                        text += '<input type="checkbox" name="' + res.fields[i].name +
+                        text += '<input type="checkbox" name="' + res
+                            .fields[i].name +
                             '" id="' +
                             res
                             .fields[i].options[x] + '" ' + (res.fields[i].necessary ==
@@ -527,9 +529,8 @@
                     text += '</div>';
 
                     text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
-                        '" value="' + (
-                            res.fields[i].data != null ? '' + res.fields[i].data + '' :
-                            '') + '" id="' + res.fields[i].field_id +
+                        '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') + '" id="' + res
+                        .fields[i].field_id +
                         '" class="inputBoxInput" name="' + res.fields[i].name +
                         '" placeholder="' +
                         (res
@@ -650,7 +651,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<textarea name="' + res.fields[i].name + '" id="' + res
+                    text += '<textarea value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') +
+                        '" name="' + res.fields[i].name + '" id="' + res
                         .fields[i]
                         .field_id +
                         '" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
@@ -667,7 +669,8 @@
                     text += '<div class="select-side calendarIconTourCreation">';
                     text += '<i class="ui_icon calendar calendarIcon"></i>';
                     text += '</div>';
-                    text += ' <input name="' + res.fields[i].name +
+                    text += ' <input value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') +
+                        '" name="' + res.fields[i].name +
                         '" name="sDateNotSame[]" id="' +
                         res
                         .fields[i].field_id +
