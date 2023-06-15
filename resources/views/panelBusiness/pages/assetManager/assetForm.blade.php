@@ -156,6 +156,7 @@
         let userAssetId = parseInt('{{ $userAssetId }}');
         let isInFirstStep = false;
         var radioSet = '';
+        var z;
 
         function storePic(userAssetId, fields) {
             var fileStore = new FormData();
@@ -204,9 +205,7 @@
                             if (res.status === "0") {
                                 userAssetId = res.id;
                                 storePic(userAssetId, fields);
-                            } else {
-                                console.log('store NOk');
-                            }
+                            } else {}
                         }
 
                     });
@@ -251,7 +250,7 @@
                         if (res.status === "0") {
                             console.log("save shode");
                         } else {
-                            console.log('store NOk');
+                            console.log('store NNOk');
                         }
                     }
                 });
@@ -266,11 +265,42 @@
             // An array of just the ids...
             var fields = [];
             var radioFields = [];
+            var checkBoxFields = [];
 
             $inputs.each(function() {
-
+                if ($(this).attr('id') === 'selectStateForSelectCity')
+                    return;
+                if ($(this).attr('id') === 'inputSearchCity')
+                    return;
                 if ($(this).attr('data-change') === '0')
                     return;
+                if ($(this).hasClass('mapMark')) {
+                    $(this).val(z);
+                }
+                if ($(this).attr('type') === 'checkbox') {
+                    let checkId = $(this).attr('id');
+                    let tmp = checkBoxFields.find(e => e.id == id);
+                    if (tmp === undefined) {
+                        tmp = {
+                            id: checkId,
+                            hasSelected: false,
+                            name: $(this).attr('name')
+                        };
+                        radioFields.push(tmp);
+                    }
+                    if (!$(this).is(':checked'))
+                        return;
+                    else
+                        tmp.hasSelected = true;
+                } else {
+
+                    if ($(this).attr('required')) {
+                        if ($(this).val() === '') {
+                            errorText += '<ul class="errorList"> ';
+                            errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                        }
+                    }
+                }
 
                 if ($(this).attr('type') === 'radio') {
 
@@ -310,6 +340,12 @@
             console.log(fields);
 
             radioFields.forEach(e => {
+                if (!e.hasSelected) {
+                    errorText += '<ul class="errorList"> ';
+                    errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                }
+            });
+            checkBoxFields.forEach(e => {
                 if (!e.hasSelected) {
                     errorText += '<ul class="errorList"> ';
                     errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
@@ -489,8 +525,7 @@
                         '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         text += '<label class="btn btn-secondary ' + (res.fields[i].data == res.fields[i].options[x] ?
-                                'active' : '') +
-                            '" for="' + res.fields[i].options[x] + '">' + res
+                                'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res
                             .fields[i]
                             .options[x] + '';
                         text += '<input type="radio" value="' + res.fields[i].options[x] + '" name="' + res.fields[
@@ -506,18 +541,14 @@
                     text +=
                         '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="btn btn-secondary " for="' + res.fields[
+                        text += '<label class="btn btn-secondary ' + (res.fields[i].data == res.fields[i].options[x] ?
+                                'active' : '') + '" for="' + res.fields[
                                 i]
                             .options[
                                 x] + '">' + res.fields[i].options[x] + '';
-                        text += '<input type="checkbox" name="' + res
-                            .fields[i].name +
-                            '" id="' +
-                            res
-                            .fields[i].options[x] + '" ' + (res.fields[i].necessary ==
-                                1 ?
-                                'required ' :
-                                '') + '>';
+                        text += '<input type="checkbox" value="' + res.fields[i].options[x] + '" name="' + res.fields[i]
+                            .name + '" id="' + res.fields[i].field_id +
+                            '" ' + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
                         text += '</label>';
 
                     }
@@ -546,7 +577,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
+                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                            '') + '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
@@ -565,6 +597,25 @@
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
                     text += '<input type="number" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
+                            '' :
+                            '') + '" name="' + res.fields[i].name +
+                        '" id="' + res
+                        .fields[
+                            i].field_id +
+                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                            .placeholder !=
+                            null ?
+                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                            .fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >';
+                } else if (res.fields[i].type == 'float') {
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<input type="number" step="0.01" value="' + (res.fields[i].data != null ? '' + res.fields[i]
+                            .data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
@@ -597,6 +648,7 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '<div><img src="' + res.fields[i].data + '" class="" alt="25"></div>';
                 } else if (res.fields[i].type == 'map') {
+                    callMap();
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -720,6 +772,49 @@
                 $("#addCityModal").remove();
         }
 
+        function callMap() {
+            mapboxgl.setRTLTextPlugin(
+                'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+                null,
+            );
+
+            const map = new mapboxgl.Map({
+                container: 'map',
+                accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
+                style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
+                center: [51.4, 35.7],
+                zoom: 13,
+            });
+
+            var marker = undefined;
+
+            if (x !== undefined && y !== undefined) {
+                marker = new mapboxgl.Marker();
+                marker.setLngLat({
+                    lng: y,
+                    lat: x
+                }).addTo(map);
+            }
+
+            function addMarker(e) {
+
+                if (marker !== undefined)
+                    marker.remove();
+
+                //add marker
+                marker = new mapboxgl.Marker();
+                marker.setLngLat(e.lngLat).addTo(map);
+
+                x = e.lngLat.lat;
+                y = e.lngLat.lng;
+                z = x + " " + y;
+                console.log(z);
+                console.log(x);
+                console.log(y);
+            }
+
+            map.on('click', addMarker);
+        }
         $(document).ready(function() {
 
 
@@ -758,46 +853,6 @@
                     }
                 });
             }
-            // mapboxgl.setRTLTextPlugin(
-            //     'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-            //     null,
-            // );
-
-            // const map = new mapboxgl.Map({
-            //     container: 'map',
-            //     accessToken: "pk.eyJ1Ijoic29saXNoIiwiYSI6ImNsZGExdmJ5bjBkemQzcHN6NzVhbXJidXcifQ.s8Crrxn4TRmtd8pZ5M3Sww",
-            //     style: 'https://api.parsimap.ir/styles/parsimap-streets-v11?key=p1c7661f1a3a684079872cbca20c1fb8477a83a92f',
-            //     center: [51.4, 35.7],
-            //     zoom: 13,
-            // });
-
-            // var marker = undefined;
-
-            // if (x !== undefined && y !== undefined) {
-            //     marker = new mapboxgl.Marker();
-            //     marker.setLngLat({
-            //         lng: y,
-            //         lat: x
-            //     }).addTo(map);
-            // }
-
-            // function addMarker(e) {
-
-            //     if (marker !== undefined)
-            //         marker.remove();
-
-            //     //add marker
-            //     marker = new mapboxgl.Marker();
-            //     marker.setLngLat(e.lngLat).addTo(map);
-
-            //     x = e.lngLat.lat;
-            //     y = e.lngLat.lng;
-            //     console.log(x);
-            //     console.log(y);
-            // }
-
-            // map.on('click', addMarker);
-
         });
     </script>
 
