@@ -164,6 +164,9 @@
             var radioSet = '';
             var z;
             var modal = false;
+            var roomNum = -1;
+            let token =
+                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA";
 
             function storePic(userAssetId, fields) {
                 var fileStore = new FormData();
@@ -175,7 +178,7 @@
                     contentType: false,
                     headers: {
                         'Accept': 'application/json',
-                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                        "Authorization": token
                     },
                     data: fileStore,
                     success: function(res) {
@@ -205,7 +208,7 @@
                             url: 'http://myeghamat.com/api/asset/1/user_asset',
                             headers: {
                                 'Accept': 'application/json',
-                                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                                "Authorization": token
                             },
                             data: fields[0],
                             success: function(res) {
@@ -222,7 +225,7 @@
                             url: 'http://myeghamat.com/api/user_forms_data/' + userAssetId,
                             headers: {
                                 'Accept': 'application/json',
-                                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                                "Authorization": token
                             },
                             data: fields[0],
                             success: function(res) {
@@ -243,7 +246,7 @@
                         url: 'http://myeghamat.com/api/user_forms_data/' + userAssetId,
                         headers: {
                             'Accept': 'application/json',
-                            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                            "Authorization": token
                         },
                         data: {
                             data: fields.map(e => {
@@ -532,12 +535,14 @@
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
-                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                        "Authorization": token
                     },
                     success: function(res) {
                         buildFormHtml(res, 'listMake', true);
                         tourPicUrl = 'http://myeghamat.com/api/user_asset/' + userAssetId +
-                            '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/31';
+                            '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomNum;
+                        deleteTourPicUrl = 'http://myeghamat.com/api/' +
+                            'user_sub_asset/31/delete_pic_from_gallery_sub/' + picId;
                         picCardSample = $('#picCardSample').html();
                         $('#picCardSample').remove();
 
@@ -562,11 +567,12 @@
                     $('#formModal').empty().append(html);
                 }
                 for (let i = 0; i < res.fields.length; i++) {
-                    text += '<div class="relative-position inputBoxTour" style="width: ' + (
-                        res
-                        .fields[
-                            i]
-                        .half == 1 ? '50%' : '100%') + ';">';
+                    if (res.fields[i].type !== 'listview')
+                        text += '<div class="relative-position inputBoxTour" style="width: ' + (
+                            res
+                            .fields[
+                                i]
+                            .half == 1 ? '50%' : '100%') + ';">';
                     text += '';
 
                     if (res.fields[i].type == 'radio') {
@@ -669,27 +675,27 @@
                                 .fields[i]
                                 .necessary == 1 ? 'required ' : '') + ' >';
                     } else if (res.fields[i].type == 'listview') {
+
                         for (let x = 0; x < res.fields[i].options.length; x++) {
                             subAssetId = res.fields[i].options[x];
                         }
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                        text += '<div class="' + (res.fields[i].necessary == 1 ?
-                            ' importantFieldLabel' :
-                            '') + '"> ' + res.fields[i].name + '</div>';
-                        text += '</div>';
-                        text += '<input type="number" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
-                                '' :
-                                '') + '" name="' + res.fields[i].name +
-                            '" id="' + res
-                            .fields[
-                                i].field_id +
-                            '" class="inputBoxInput" placeholder="' + (res.fields[i]
-                                .placeholder !=
-                                null ?
-                                '' + res.fields[i].placeholder + '' : '') + '"' + (res
-                                .fields[i]
-                                .necessary == 1 ? 'required ' : '') + ' >';
+                        for (let y = 0; y < res.fields[i].items.length; y++) {
 
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
+                                '') + '"> ' + res.fields[i].name + '</div>';
+                            text += '</div>';
+                            text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
+                                '" value="' + res.fields[i].items[y].fields[0].key_ + '" id="' + res
+                                .fields[i].field_id +
+                                '" class="inputBoxInput" name="' + res.fields[i].name +
+                                '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' :
+                                    '') +
+                                '"' + (res
+                                    .fields[i]
+                                    .necessary == 1 ? 'required ' : '') + ' >';
+                        }
                     } else if (res.fields[i].type == 'gallery') {
                         picId = res.fields[i].field_id;
 
@@ -999,7 +1005,7 @@
                         url: 'http://myeghamat.com/api/form/' + formId + '/' + userAssetId,
                         headers: {
                             'Accept': 'application/json',
-                            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA"
+                            "Authorization": token
                         },
                         success: function(res) {
                             console.log(res);
@@ -1030,6 +1036,7 @@
             var picId;
             var subAssetId;
             var tourPicUrl = '';
+            var deleteTourPicUrl = '';
             var uploadProcess = false;
             var uploadProcessId = null;
             var uploadedPics = [];
@@ -1060,7 +1067,6 @@
                         uploadedName: input.files[0].name,
                         process: 0,
                     });
-                    console.log(picQueue);
                     checkUpload();
                 }
             }
@@ -1074,12 +1080,11 @@
                             index = _index;
                         }
                     });
-
+                    console.log(picQueue);
                     if (index != null) {
                         uploadProcess = true;
                         uploadProcessId = picQueue[index].id;
                         var file = document.getElementById(`picsInput_${uploadProcessId}`).files;
-
                         uploadLargeFile(tourPicUrl, file[0], {
                                 //tourId: tour.id
                             }, uploadPicResult,
@@ -1090,6 +1095,7 @@
             }
 
             function uploadPicResult(_status, _fileName = '') {
+                console.log(_fileName);
                 var element = $(`#picHover_${uploadProcessId}`);
                 var porcIndex = null;
                 picQueue.map((item, index) => {
@@ -1104,25 +1110,27 @@
 
                     uploadProcessId = null;
                     uploadProcess = false;
+                }
+                // else if (_status == 'error') {
+                //     picQueue[porcIndex].process = -1;
+                //     element.find('.process').addClass('hidden');
+                //     element.find('.warningIcon').removeClass('hidden');
+                //     uploadProcessId = null;
+                //     uploadProcess = false;
+                //     setTimeout(checkUpload, 200);
+                // } else if (_status == 'cancelUpload') {
+                //     element.find('.process').addClass('hidden');
+                //     $('#picDiv' + uploadProcessId).remove();
+                //     picQueue.splice(porcIndex, 1);
+                //     uploadProcessId = null;
+                //     uploadProcess = false;
+                //     setTimeout(checkUpload, 200);
+                // } else if (_status == 'queue') {
 
-                    checkUpload();
-                } else if (_status == 'error') {
-                    picQueue[porcIndex].process = -1;
-                    element.find('.process').addClass('hidden');
-                    element.find('.warningIcon').removeClass('hidden');
-                    uploadProcessId = null;
-                    uploadProcess = false;
-                    setTimeout(checkUpload, 200);
-                } else if (_status == 'cancelUpload') {
-                    element.find('.process').addClass('hidden');
-                    $('#picDiv' + uploadProcessId).remove();
-                    picQueue.splice(porcIndex, 1);
-                    uploadProcessId = null;
-                    uploadProcess = false;
-                    setTimeout(checkUpload, 200);
-                } else if (_status == 'queue')
-                    setTimeout(checkUpload, 200);
+                //     setTimeout(checkUpload, 200);
+                // } 
                 else {
+
                     picQueue[porcIndex].uploadedName = _fileName;
                     element.find('.processCounter').text(_status + '%');
                 }
@@ -1154,10 +1162,12 @@
                 $.ajax({
                     type: 'DELETE',
                     url: deleteTourPicUrl,
+                    headers: {
+                        "Authorization": token
+                    },
                     data: {
-                        _token: csrfTokenGlobal,
-                        tourId: tour.id,
-                        fileName: _fileName,
+                        // tourId: tour.id,
+                        pic: _fileName,
                     }
                 })
             }

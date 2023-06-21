@@ -19,13 +19,17 @@ function uploadLargeFile(_url, _files, _data, _callBackFunction, jt = null) {
         readerLargeFileUploadedInJsFile = new FileReader();
         dataAddedLargeFileUploadedInJsFile = JSON.stringify(_data);
         jwtToken = jt;
-        if (jt != null) upload_fileLargeFile2();
-        else upload_fileLargeFile(0, 0);
+        if (jt != null) {
+            upload_fileLargeFile2();
+        } else {
+            upload_fileLargeFile(0, 0);
+        }
         return true;
     } else _callBackFunction("queue");
 }
 
 function upload_fileLargeFile(start, _fileName) {
+    console.log("upload_fileLargeFile");
     let isLast = false;
     let next_slice = start + sliceSizeLargeFileUploadedInJsFile + 1;
     let blob = fileLargeFileUploadedInJsFile.slice(start, next_slice);
@@ -134,28 +138,17 @@ function upload_fileLargeFile2() {
         success: function (response) {
             if (response.status == "0") {
                 errorCountInLargeFileUploadedInJsFile = 5;
-                callBackFunctionLargeFileUploadedInJsFile(
-                    40,
-                    "",
-                    response.result
-                );
+                callBackFunctionLargeFileUploadedInJsFile(40, "");
                 setTimeout(() => {
-                    callBackFunctionLargeFileUploadedInJsFile(
-                        60,
-                        "",
-                        response.result
-                    );
+                    callBackFunctionLargeFileUploadedInJsFile(60, "");
                     setTimeout(() => {
-                        callBackFunctionLargeFileUploadedInJsFile(
-                            90,
-                            "",
-                            response.result
-                        );
+                        callBackFunctionLargeFileUploadedInJsFile(90, "");
                         setTimeout(() => {
+                            let namePic = response.data.split("_");
+                            inProcessLargeFileUploadedInJsFile = false;
                             callBackFunctionLargeFileUploadedInJsFile(
                                 "done",
-                                "salam",
-                                response.result
+                                namePic[namePic.length - 1]
                             );
                         }, 1000);
                     }, 1000);
