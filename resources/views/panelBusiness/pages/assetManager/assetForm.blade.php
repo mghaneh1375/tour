@@ -567,14 +567,8 @@
                     $('#formModal').empty().append(html);
                 }
                 for (let i = 0; i < res.fields.length; i++) {
-                    if (res.fields[i].type !== 'listview')
-                        text += '<div class="relative-position inputBoxTour" style="width: ' + (
-                            res
-                            .fields[
-                                i]
-                            .half == 1 ? '50%' : '100%') + ';">';
-                    text += '';
-
+                    text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[i].half == 1 ? '50%' :
+                        '100%') + ';flex-direction: ' + (res.fields[i].type == 'listview' ? ' column' : '') + '">';
                     if (res.fields[i].type == 'radio') {
                         text += '<p>' + res.fields[i].name + '</p>';
                         text +=
@@ -582,11 +576,9 @@
                         for (let x = 0; x < res.fields[i].options.length; x++) {
                             text += '<label class="btn btn-secondary ' + (res.fields[i].data == res.fields[i].options[x] ?
                                     'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res
-                                .fields[i]
-                                .options[x] + '';
+                                .fields[i].options[x] + '';
                             text += '<input type="radio" value="' + res.fields[i].options[x] + '" name="' + res.fields[
-                                    i].name +
-                                '" id="' + res.fields[i].field_id +
+                                    i].name + '" id="' + res.fields[i].field_id +
                                 '" ' + (res.fields[i].data == res.fields[i].options[x] ?
                                     'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
                             text += '</label>';
@@ -608,8 +600,7 @@
                             let isSelected = data.indexOf(res.fields[i].options[x]) !== -1;
 
 
-                            text += '<label class="btn btn-secondary ' + (isSelected ?
-                                    'active' : '') + '" for="' + res.fields[
+                            text += '<label class="btn btn-secondary ' + (isSelected ? 'active' : '') + '" for="' + res.fields[
                                     i]
                                 .options[
                                     x] + '">' + res.fields[i].options[x] + '';
@@ -675,26 +666,97 @@
                                 .fields[i]
                                 .necessary == 1 ? 'required ' : '') + ' >';
                     } else if (res.fields[i].type == 'listview') {
-
                         for (let x = 0; x < res.fields[i].options.length; x++) {
                             subAssetId = res.fields[i].options[x];
                         }
                         for (let y = 0; y < res.fields[i].items.length; y++) {
-
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div style="display:flex;flex-direction: column">';
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText inputBoxTour">';
                             text += '<div class="' + (res.fields[i].necessary == 1 ?
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
-                            text += '</div>';
                             text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
-                                '" value="' + res.fields[i].items[y].fields[0].key_ + '" id="' + res
-                                .fields[i].field_id +
+                                '" value="' + res.fields[i].items[y].fields[0].key_ + '" id="' + res.fields[i].items[y].id +
                                 '" class="inputBoxInput" name="' + res.fields[i].name +
                                 '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' :
                                     '') +
                                 '"' + (res
                                     .fields[i]
                                     .necessary == 1 ? 'required ' : '') + ' >';
+                            text += '</div>';
+
+
+                            text += '<div id="uploadImgDiv" class="fullwidthDiv">';
+                            text += '<div id="picDiv0" style="display: inline-block; width: 23%; position: relative">';
+                            text +=
+                                '<input class="input-file" id="picsInput_0" name="pics[]" accept="image/*" type="file" onchange="readURL(this, 0);" style="display: none">';
+                            text += '<div id="picHover_0" class="uploadHover hidden">';
+                            text += '<div class="tickIcon hidden"></div>';
+                            text += '<div class="warningIcon hidden"> اشکال در بارگذاری</div>';
+                            text += '<div class="process">';
+                            text += '<div class="lds-ring">';
+                            text += '<div></div>';
+                            text += '<div></div>';
+                            text += '</div>';
+                            text += '<div class="processCounter">0%</div>';
+                            text += '</div>';
+                            text += '<div class="hoverInfos">';
+                            text += '<div class="cancelButton closeIconWithCircle" onclick="deleteThisPic(0)">حذف عکس</div>';
+                            text += '</div>';
+                            text += '</div>';
+                            text +=
+                                '<label tabindex="0" for="picsInput_0" class="input-file-trigger"style="position: relative; width: 100%; margin: 0px;">';
+                            text +=
+                                '<div class="imgUploadsTourCreation imgAddDivTourCreation uploadImgCenter" style="width: 100%">';
+                            text += '<div id="addPic0" class="addPicText" style="width: 100%">';
+                            text += ' <img src="{{ URL::asset('images/tourCreation/add.png') }}">';
+                            text += '<b>اضافه کنید</b>';
+                            text += '</div>';
+                            text += '<div id="showPic0" class="imgUploadsTourCreation hidden" style="width: 100%;">';
+                            text += ' <img id="imgPic0" class="resizeImgClass" onload="fitThisImg(this)">';
+                            text += '</div>';
+                            text += '</div>';
+                            text += ' </label>';
+                            text += '</div>';
+                            text += '</div>';
+                            text += '<div id="picCardSample" style="display: none;">';
+                            text +=
+                                '<div id="picDiv##index##" data-value="##index##" style="display: inline-block; width: 23%; position: relative">';
+                            text +=
+                                '<input class="input-file" id="picsInput_##index##" type="file" accept="image/*"onchange="readURL(this, ##index##)" style="display: none">';
+                            text += '<div id="picHover_##index##" class="uploadHover hidden">';
+                            text += '<div class="tickIcon hidden"></div>';
+                            text += '<div class="warningIcon hidden"> اشکال در بارگذاری</div>';
+                            text += '<div class="process">';
+                            text += '<div class="lds-ring">';
+                            text += '<div></div>';
+                            text += '<div></div>';
+                            text += '<div></div>';
+                            text += '<div></div>';
+                            text += '</div>';
+                            text += '<div class="processCounter">0%</div>';
+                            text += '</div>';
+                            text += '<div class="hoverInfos">';
+                            text +=
+                                '<div class="cancelButton closeIconWithCircle" onclick="deleteThisPic(##index##)">حذف عکس</div>';
+                            text += '</div>';
+                            text += '</div>';
+                            text +=
+                                '<label tabindex="##index##" for="picsInput_##index##" class="input-file-trigger"style="position: relative; width: 100%; margin: 0px;">';
+                            text +=
+                                '<div class="imgUploadsTourCreation imgAddDivTourCreation uploadImgCenter" style="width: 100%">';
+                            text += '<div id="addPic##index##" class="addPicText" style="width: 100%">';
+                            text += '<img src="{{ URL::asset('images/tourCreation/add.png') }}">';
+                            text += ' <b>اضافه کنید</b>';
+                            text += '</div>';
+                            text += '<div id="showPic##index##" class="imgUploadsTourCreation hidden" style="width: 100%;">';
+                            text += '<img id="imgPic##index##" class="resizeImgClass" src="" onload="fitThisImg(this)">';
+                            text += '</div>';
+                            text += '</div>';
+                            text += ' </label>';
+                            text += '</div>';
+                            text += '</div>';
+                            text += '</div>';
                         }
                     } else if (res.fields[i].type == 'gallery') {
                         picId = res.fields[i].field_id;
