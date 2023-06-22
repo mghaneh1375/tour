@@ -127,7 +127,7 @@ function upload_fileLargeFile2() {
         data: data,
         processData: false,
         contentType: false,
-        headers: { Authorization: "Bearer " + jwtToken },
+        headers: { Authorization: jwtToken },
         error: function (jqXHR, textStatus, errorThrown) {
             errorCountInLargeFileUploadedInJsFile--;
             if (errorCountInLargeFileUploadedInJsFile <= 0) {
@@ -137,6 +137,7 @@ function upload_fileLargeFile2() {
         },
         success: function (response) {
             if (response.status == "0") {
+                roomNum = response.id;
                 errorCountInLargeFileUploadedInJsFile = 5;
                 callBackFunctionLargeFileUploadedInJsFile(40, "");
                 setTimeout(() => {
@@ -148,7 +149,8 @@ function upload_fileLargeFile2() {
                             inProcessLargeFileUploadedInJsFile = false;
                             callBackFunctionLargeFileUploadedInJsFile(
                                 "done",
-                                namePic[namePic.length - 1]
+                                namePic[namePic.length - 1],
+                                roomNum
                             );
                         }, 1000);
                     }, 1000);
