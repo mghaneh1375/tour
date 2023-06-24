@@ -143,8 +143,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer" style="text-align: center">
-                    <button onclick="nextStep()" id="goToForthStep" class="btn nextStepBtnTourCreation"
-                        data-dismiss="modal">تأیید</button>
+                    <button onclick="saveModal()" id="addModal" class="btn nextStepBtnTourCreation">تأیید</button>
                 </div>
 
             </div>
@@ -220,66 +219,26 @@
                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                 return;
             }
-            if (modal) {
-                console.log(fields);
-                // $.ajax({
-                //     type: 'post',
-                //     url: url + '/asset/1/user_asset/' + userAssetId,
-                //     headers: {
-                //         'Accept': 'application/json',
-                //         "Authorization": token
-                //     },
-                //     data: fields[0],
-                //     success: function(res) {
-                //         if (res.status === "0") {
-                //             userAssetId = res.id;
-                //             storePic(userAssetId, fields);
-                //         } else {}
-                //     }
+            if (isInFirstStep) {
 
-                // });
-            } else {
-                if (isInFirstStep) {
+                if (userAssetId === -1) {
+                    // todo: call store asset api
+                    $.ajax({
+                        type: 'post',
+                        url: url + '/asset/1/user_asset',
+                        headers: {
+                            'Accept': 'application/json',
+                            "Authorization": token
+                        },
+                        data: fields[0],
+                        success: function(res) {
+                            if (res.status === "0") {
+                                userAssetId = res.id;
+                                storePic(userAssetId, fields);
+                            } else {}
+                        }
 
-                    if (userAssetId === -1) {
-                        // todo: call store asset api
-                        $.ajax({
-                            type: 'post',
-                            url: url + '/asset/1/user_asset',
-                            headers: {
-                                'Accept': 'application/json',
-                                "Authorization": token
-                            },
-                            data: fields[0],
-                            success: function(res) {
-                                if (res.status === "0") {
-                                    userAssetId = res.id;
-                                    storePic(userAssetId, fields);
-                                } else {}
-                            }
-
-                        });
-                    } else {
-                        $.ajax({
-                            type: 'post',
-                            url: url + '/user_forms_data/' + userAssetId,
-                            headers: {
-                                'Accept': 'application/json',
-                                "Authorization": token
-                            },
-                            data: fields[0],
-                            success: function(res) {
-                                if (res.status === "0") {
-                                    console.log("save shode");
-                                } else {
-                                    console.log('store NOk');
-                                }
-                            }
-                        });
-                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
-                    }
-                    // todp: call update asset api
-                    // check if form has img, call set pic api
+                    });
                 } else {
                     $.ajax({
                         type: 'post',
@@ -288,29 +247,47 @@
                             'Accept': 'application/json',
                             "Authorization": token
                         },
-                        data: {
-                            data: fields.map(e => {
-                                return {
-                                    id: e.id,
-                                    data: e.data
-                                }
-                            })
-                        },
+                        data: fields[0],
                         success: function(res) {
-                            if (res.status === 0) {
+                            if (res.status === "0") {
                                 console.log("save shode");
-                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                    userAssetId;
                             } else {
-                                console.log('store NNOk');
+                                console.log('store NOk');
                             }
                         }
                     });
-
+                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                 }
+                // todp: call update asset api
+                // check if form has img, call set pic api
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: url + '/user_forms_data/' + userAssetId,
+                    headers: {
+                        'Accept': 'application/json',
+                        "Authorization": token
+                    },
+                    data: {
+                        data: fields.map(e => {
+                            return {
+                                id: e.id,
+                                data: e.data
+                            }
+                        })
+                    },
+                    success: function(res) {
+                        if (res.status === 0) {
+                            console.log("save shode");
+                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
+                        } else {
+                            console.log('store NNOk');
+                        }
+                    }
+                });
+
             }
-
-
         }
 
         function nextStep() {
@@ -570,6 +547,149 @@
 
         function saveModal() {
 
+            var errorText = "";
+
+
+
+            var $inputs = $('#redirectList :input');
+            // An array of just the ids...
+            var fields = [];
+            var radioFields = [];
+            var checkBoxFields = [];
+
+            $inputs.each(function() {
+                if ($(this).attr('id') === 'selectStateForSelectCity')
+                    return;
+                if ($(this).attr('id') === 'inputSearchCity')
+                    return;
+                if ($(this).attr('data-change') === '0')
+                    return;
+                if ($(this).hasClass('mapMark')) {
+                    $(this).val(z);
+                }
+                if ($(this).hasClass('input-file')) {
+                    return;
+                }
+
+                if ($(this).attr('type') === 'checkbox') {
+
+                    let checkName = $(this).attr('name');
+                    let tmp = checkBoxFields.find(e => e.name == checkName);
+
+                    if (tmp === undefined) {
+
+                        let tmpArr = [];
+                        $("input[type='checkbox'][name='" + checkName + "']:checked").each(function() {
+                            tmpArr.push($(this).val());
+                        });
+
+                        tmp = {
+                            id: $(this).attr('data-id'),
+                            hasSelected: tmpArr.length > 0,
+                            name: checkName,
+                            value: tmpArr.join("_"),
+                            isRequired: $(this).attr('required')
+                        };
+                        checkBoxFields.push(tmp);
+                    }
+
+                    return;
+
+                }
+                if ($(this).attr('type') === 'radio') {
+
+                    let id = $(this).attr('id');
+
+                    let tmp = radioFields.find(e => e.id == id);
+                    if (tmp === undefined) {
+                        tmp = {
+                            id: id,
+                            hasSelected: false,
+                            name: $(this).attr('name'),
+                            isRequired: $(this).attr('required')
+                        };
+                        radioFields.push(tmp);
+                    }
+
+                    if (!$(this).is(':checked'))
+                        return;
+                    else
+                        tmp.hasSelected = true;
+
+                } else {
+
+                    if ($(this).attr('required')) {
+                        if ($(this).val() === '') {
+                            errorText += '<ul class="errorList"> ';
+                            errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' +
+                                "</li></ul>";
+                        }
+                    }
+                }
+
+                fields.push({
+                    id: $(this).attr('id'),
+                    data: $(this).val()
+                });
+            });
+            radioFields.forEach(e => {
+                if (e.isRequired && !e.hasSelected) {
+                    errorText += '<ul class="errorList"> ';
+                    errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                }
+            });
+            checkBoxFields.forEach(e => {
+
+                if (e.isRequired && !e.hasSelected) {
+                    errorText += '<ul class="errorList"> ';
+                    errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                } else {
+
+                    fields.push({
+                        id: e.id,
+                        data: e.value
+                    });
+                }
+            });
+            console.log(errorText);
+            if (errorText.length > 0) {
+                console.log('mooz');
+                openErrorAlertBP(errorText);
+            } else {
+                storeDataModal(fields);
+                console.log(fields);
+                $('#addModal').attr("data-dismiss", "modal");
+                // if (nextFormId !== undefined) {
+                //     storeData(fields);
+                // }
+            }
+        }
+
+        function storeDataModal(fields) {
+            console.log(fields[0]);
+            $.ajax({
+                type: 'post',
+                url: url + '/user_forms_data/' + userAssetId,
+                headers: {
+                    'Accept': 'application/json',
+                    "Authorization": token
+                },
+
+                data: {
+                    data: fields,
+                    sub_asset_id: subAssetId,
+                    user_sub_asset_id: roomNum
+
+                },
+
+                success: function(res) {
+                    if (res.status === "0") {
+                        userAssetId = res.id;
+                        storePic(userAssetId, fields);
+                    } else {}
+                }
+
+            });
         }
 
         function openModal(x) {
@@ -715,6 +835,7 @@
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
+                    console.log(res.fields);
                     for (let y = 0; y < res.fields[i].items.length; y++) {
                         text += '<div style="display:flex;flex-direction: column">';
                         text += '<div class="inputBoxTextGeneralInfo inputBoxText inputBoxTour">';
@@ -1127,9 +1248,8 @@
         }
 
         function uploadPicResult(_status, _fileName = '', _roomNum = '') {
-            console.log(_fileName);
-            roomNum = _roomNum;
-            console.log(roomNum);
+
+
             var element = $(`#picHover_${uploadProcessId}`);
             var porcIndex = null;
             picQueue.map((item, index) => {
@@ -1137,6 +1257,11 @@
                     porcIndex = index;
             });
             if (_status == 'done') {
+                roomNum = _roomNum;
+                tourPicUrl = url + '/user_asset/' + userAssetId +
+                    '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomNum;
+                console.log(roomNum);
+                console.log(_fileName);
                 picQueue[porcIndex].process = 2;
                 element.find('.process').addClass('hidden');
                 element.find('.tickIcon').removeClass('hidden');

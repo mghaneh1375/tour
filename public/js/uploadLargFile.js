@@ -138,6 +138,7 @@ function upload_fileLargeFile2() {
         success: function (response) {
             if (response.status == "0") {
                 roomNum = response.id;
+                console.log(roomNum);
                 errorCountInLargeFileUploadedInJsFile = 5;
                 callBackFunctionLargeFileUploadedInJsFile(40, "");
                 setTimeout(() => {
