@@ -205,6 +205,7 @@
                 success: function(res) {
                     if (res.status === "0") {
                         console.log('pic ok');
+                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     } else {
                         console.log('pic Nok');
                     }
@@ -251,12 +252,13 @@
                         success: function(res) {
                             if (res.status === "0") {
                                 console.log("save shode");
+                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                    userAssetId;
                             } else {
                                 console.log('store NOk');
                             }
                         }
                     });
-                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                 }
                 // todp: call update asset api
                 // check if form has img, call set pic api
@@ -279,11 +281,15 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                userAssetId;
+                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                            //     userAssetId;
                         } else {
+                            showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
                         }
+                    },
+                    error: function(rejected) {
+                        errorAjax(rejected);
                     }
                 });
 
@@ -842,14 +848,9 @@
                         text += '<div class="' + (res.fields[i].necessary == 1 ?
                             ' importantFieldLabel' :
                             '') + '"> ' + res.fields[i].name + '</div>';
-                        text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
-                            '" value="' + res.fields[i].items[y].fields[0].key_ + '" id="' + res.fields[i].items[y].id +
-                            '" class="inputBoxInput" name="' + res.fields[i].name +
-                            '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' :
-                                '') +
-                            '"' + (res
-                                .fields[i]
-                                .necessary == 1 ? 'required ' : '') + ' >';
+                        text += '<div id="' + res.fields[i].items[y].id + '" class="inputBoxInput">';
+                        text += '' + res.fields[i].items[y].fields[1].val + '';
+                        text += '</div>';
                         text += '</div>';
                         text += '</div>';
                     }
@@ -982,7 +983,8 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
-                    text += '<div><img src="' + res.fields[i].data + '" class="" alt="25"></div>';
+                    text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ? '' :
+                        'displayNone') + '"></div>';
                 } else if (res.fields[i].type == 'map') {
                     callMap();
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
