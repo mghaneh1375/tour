@@ -255,8 +255,12 @@
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                     userAssetId;
                             } else {
+                                showSuccessNotifiBP(res.err, 'right', '#ac0020');
                                 console.log('store NOk');
                             }
+                        },
+                        error: function(rejected) {
+                            errorAjax(rejected);
                         }
                     });
                 }
@@ -307,6 +311,7 @@
             var checkBoxFields = [];
 
             $inputs.each(function() {
+
                 if ($(this).attr('id') === 'selectStateForSelectCity')
                     return;
                 if ($(this).attr('id') === 'inputSearchCity')
@@ -319,10 +324,10 @@
 
 
                 if ($(this).attr('type') === 'checkbox') {
-
                     let checkName = $(this).attr('name');
                     let tmp = checkBoxFields.find(e => e.name == checkName);
-
+                    console.log(tmp);
+                    console.log(checkBoxFields);
                     if (tmp === undefined) {
 
                         let tmpArr = [];
@@ -339,9 +344,8 @@
                         };
                         checkBoxFields.push(tmp);
                     }
-
+                    console.log('mozz');
                     return;
-
                 }
                 if ($(this).attr('type') === 'radio') {
 
@@ -372,7 +376,10 @@
                         }
                     }
                 }
-
+                if ($(this).val() == "" || null || undefined) {
+                    console.log('mooz');
+                    return;
+                }
                 fields.push({
                     id: $(this).attr('id'),
                     data: $(this).val()
@@ -385,16 +392,19 @@
                 }
             });
             checkBoxFields.forEach(e => {
-
-                if (e.isRequired && !e.hasSelected) {
-                    errorText += '<ul class="errorList"> ';
-                    errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                if (!e.isRequired && !e.hasSelected) {
+                    return
                 } else {
+                    if (e.isRequired && !e.hasSelected) {
+                        errorText += '<ul class="errorList"> ';
+                        errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                    } else {
 
-                    fields.push({
-                        id: e.id,
-                        data: e.value
-                    });
+                        fields.push({
+                            id: e.id,
+                            data: e.value
+                        });
+                    }
                 }
             });
 
@@ -825,7 +835,9 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input type="number" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
+                    text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i].data != null ?
+                            '' +
+                            res.fields[i].data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
@@ -1094,7 +1106,7 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                 }
                 text += '</div>';
-                if (res.fields[i].force_help != null) {
+                if (res.fields[i].force_help !== null || '') {
                     text += '<figcaption style="width: 100%;"> ' + res.fields[i]
                         .force_help +
                         '';
@@ -1188,6 +1200,15 @@
             }
         });
 
+        function isNumber(evt) {
+
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
         var assetRoom = -1;
         var picId;
         var subAssetId;

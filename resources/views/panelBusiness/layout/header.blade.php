@@ -1,12 +1,12 @@
-<div class="mainHeader">
+{{-- <div class="mainHeader">
     <div class="mainLogo">
         <img src="{{URL::asset('images/icons/mainLogo.png')}}" alt="koochita">
     </div>
 
-    @if(isset($businessName))
+    @if (isset($businessName))
         <div class="businessName">
             <select onchange="changeBusinessPanelManagementHeader(this.value)">
-                @foreach($allOtherYourBusinessForHeader as $item)
+                @foreach ($allOtherYourBusinessForHeader as $item)
                     <option value="{{$item->id}}" {{$item->name === $businessName ? 'selected' : ''}}>{{$item->name}}</option>
                 @endforeach
             </select>
@@ -19,17 +19,17 @@
         </script>
     @endif
 
-    @if(auth()->check())
+    @if (auth()->check())
         <a href="#" class="headerButton notificationHeader {{$newNotificationCount > 0 ? 'on' : 'off'}}" title="اعلانات">
             <i class="fa-regular fa-bell icOff"></i>
             <i class="fa-regular fa-bell-on icOn"></i>
             <div class="newNum">{{$newNotificationCount}}</div>
         </a>
 
-        @if(auth()->user()->level == 0)
+        @if (auth()->user()->level == 0)
             <a href="{{route('ticket.page')}}" class="headerButton" title="پشتیبانی">
                 <i class="fa-solid fa-headset"></i>
-                @if($newTicketCount != 0)
+                @if ($newTicketCount != 0)
                     <div class="newNum">{{$newTicketCount}}</div>
                 @endif
             </a>
@@ -52,4 +52,4 @@
             </div>
         </div>
     @endif
-</div>
+</div> --}}
