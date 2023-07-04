@@ -10,25 +10,45 @@
 @font-face {
     font-weight: normal;
     font-style: normal;
-    font-family: 'Shazde_Regular2';
-    src: url('../../fonts/shazdemosafer/Shazdemosafer.eot?v003.200');
-    src: url('../../fonts/shazdemosafer/Shazdemosafer.eot?v003.200#iefix') format('embedded-opentype'),
-    url('../../fonts/shazdemosafer/Shazdemosafer.woff2?v003.200') format('woff2'),
-    url('../../fonts/shazdemosafer/Shazdemosafer.woff?v003.200') format('woff'),
-    url('../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200') format('truetype'),
-    url('') format('svg');
+    font-family: "Segoe";
+    src: url("../../fonts/segoesc.eot?v003.200");
+    src: url("../../fonts/segoesc.eot?v003.200#iefix")
+            format("embedded-opentype"),
+        url("../../fonts/segoesc.woff2?v003.200") format("woff2"),
+        url("../../fonts/segoesc.woff?v003.200") format("woff"),
+        url("../../fonts/segoesc.ttf?v003.200") format("truetype"),
+        url("") format("svg");
+}
+@font-face {
+    font-weight: normal;
+    font-style: normal;
+    font-family: "Shazde_Regular2";
+    src: url("../../fonts/shazdemosafer/Shazdemosafer.eot?v003.200");
+    src: url("../../fonts/shazdemosafer/Shazdemosafer.eot?v003.200#iefix")
+            format("embedded-opentype"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.woff2?v003.200")
+            format("woff2"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.woff?v003.200")
+            format("woff"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200")
+            format("truetype"),
+        url("") format("svg");
 }
 
 @font-face {
     font-weight: normal;
     font-style: normal;
-    font-family: 'Shazde_Regular';
-    src: url('../../fonts/shazdemosafer/Shazdemosafer_Regular.eot?v003.200');
-    src: url('../../fonts/shazdemosafer/Shazdemosafer_Regular.eot?v003.200#iefix') format('embedded-opentype'),
-    url('../../fonts/shazdemosafer/Shazdemosafer_Regular.woff2?v003.200') format('woff2'),
-    url('../../fonts/shazdemosafer/Shazdemosafer_Regular.woff?v003.200') format('woff'),
-    url('../../fonts/shazdemosafer/Shazdemosafer_Regular.ttf?v003.200') format('truetype'),
-    url('') format('svg');
+    font-family: "Shazde_Regular";
+    src: url("../../fonts/shazdemosafer/Shazdemosafer_Regular.eot?v003.200");
+    src: url("../../fonts/shazdemosafer/Shazdemosafer_Regular.eot?v003.200#iefix")
+            format("embedded-opentype"),
+        url("../../fonts/shazdemosafer/Shazdemosafer_Regular.woff2?v003.200")
+            format("woff2"),
+        url("../../fonts/shazdemosafer/Shazdemosafer_Regular.woff?v003.200")
+            format("woff"),
+        url("../../fonts/shazdemosafer/Shazdemosafer_Regular.ttf?v003.200")
+            format("truetype"),
+        url("") format("svg");
 }
 
 /*@font-face {*/
@@ -85,51 +105,60 @@
 /*}*/
 
 @font-face {
-    font-family: 'IRANSansWeb';
+    font-family: "IRANSansWeb";
     font-style: normal;
     font-weight: normal;
-    src: url('../../fonts/eot/IRANSansWeb(FaNum).eot');
-    src: url('../../fonts/eot/IRANSansWeb(FaNum).eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
-    url('../../fonts/woff2/IRANSansWeb(FaNum).woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
-    url('../../fonts/woff/IRANSansWeb(FaNum).woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-    url('../../fonts/ttf/IRANSansWeb(FaNum).ttf') format('truetype');
+    src: url("../../fonts/eot/IRANSansWeb(FaNum).eot");
+    src: url("../../fonts/eot/IRANSansWeb(FaNum).eot?#iefix")
+            format("embedded-opentype"),
+        /* IE6-8 */ url("../../fonts/woff2/IRANSansWeb(FaNum).woff2")
+            format("woff2"),
+        /* FF39+,Chrome36+, Opera24+*/
+            url("../../fonts/woff/IRANSansWeb(FaNum).woff") format("woff"),
+        /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+            url("../../fonts/ttf/IRANSansWeb(FaNum).ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'enFonts';
+    font-family: "enFonts";
     font-style: normal;
     font-weight: normal;
-    src: url('../../fonts/en/enFont1.woff2');
-}
-
-@font-face {
-    font-weight: normal;
-    font-style: normal;
-    font-family: 'shazdemosafer-tour';
-    src: url('../../fonts/shazdemosafer-tour.otf');
-    src: url('../../fonts/shazdemosafer-tour.otf') format('embedded-opentype'),
-    url('../../fonts/shazdemosafer-tour.woff2?v003.200') format('woff2'),
-    url('../../fonts/shazdemosafer-tour.woff?v003.200') format('woff'),
-    url('../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200') format('truetype');
+    src: url("../../fonts/en/enFont1.woff2");
 }
 
 @font-face {
     font-weight: normal;
     font-style: normal;
-    font-family: 'Glyphicons Halflings';
-    src: url('../../fonts/glyphicons-halflings-regular.eot');
-    src: url('../../fonts/glyphicons-halflings-regular.eot') format('embedded-opentype'),
-    url('../../fonts/glyphicons-halflings-regular.woff2?v003.200') format('woff2'),
-    url('../../fonts/glyphicons-halflings-regular.woff?v003.200') format('woff'),
-    url('../../fonts/glyphicons-halflings-regular.ttf?v003.200') format('truetype');
+    font-family: "shazdemosafer-tour";
+    src: url("../../fonts/shazdemosafer-tour.otf");
+    src: url("../../fonts/shazdemosafer-tour.otf") format("embedded-opentype"),
+        url("../../fonts/shazdemosafer-tour.woff2?v003.200") format("woff2"),
+        url("../../fonts/shazdemosafer-tour.woff?v003.200") format("woff"),
+        url("../../fonts/shazdemosafer/Shazdemosafer.ttf?v003.200")
+            format("truetype");
+}
+
+@font-face {
+    font-weight: normal;
+    font-style: normal;
+    font-family: "Glyphicons Halflings";
+    src: url("../../fonts/glyphicons-halflings-regular.eot");
+    src: url("../../fonts/glyphicons-halflings-regular.eot")
+            format("embedded-opentype"),
+        url("../../fonts/glyphicons-halflings-regular.woff2?v003.200")
+            format("woff2"),
+        url("../../fonts/glyphicons-halflings-regular.woff?v003.200")
+            format("woff"),
+        url("../../fonts/glyphicons-halflings-regular.ttf?v003.200")
+            format("truetype");
 }
 
 @font-face {
     font-family: Shin;
-    src: url('../../fonts/shin.ttf');
+    src: url("../../fonts/shin.ttf");
 }
 
 @font-face {
     font-family: Afsane;
-    src: url('../../fonts/AFSANEH.ttf');
+    src: url("../../fonts/AFSANEH.ttf");
 }

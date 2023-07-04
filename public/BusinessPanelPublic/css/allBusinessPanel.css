@@ -76,7 +76,7 @@ input[type="radio"] {
 .mainBodySection {
     position: fixed;
     width: calc(100% - 250px);
-    height: calc(100vh - 60px);
+    height: calc(100vh - 0px);
     left: 0;
     top: 60px;
     direction: rtl;
@@ -85,6 +85,16 @@ input[type="radio"] {
 }
 .mainBodySection > .row {
     height: 100%;
+}
+.userName {
+    position: absolute;
+    right: 53px;
+    border-radius: 20px 0 0 20px;
+    width: 75%;
+    padding-top: 5px;
+    padding-right: 30px;
+    height: 33px;
+    box-shadow: 2px 3px 10px 2px rgba(0, 0, 0, 0.25);
 }
 /*.mainBodySection > div {*/
 /*    height: 100%;*/
@@ -205,9 +215,20 @@ input[type="radio"] {
     margin-left: 30px;
 }
 .userInfoSec {
-    padding: 10px 0px;
+    padding: 15px 10px;
+    align-items: center;
     display: flex;
     margin-left: 30px;
+}
+.circle {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
 }
 .mainHeader .userInfoSec .userPic {
     overflow: hidden;
@@ -224,10 +245,11 @@ input[type="radio"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    margin-left: 20px;
+    border: 3px solid #db3700;
+    z-index: 10;
 }
 .mainHeader .userInfoSec .topDropDown {
     position: relative;
@@ -277,7 +299,8 @@ input[type="radio"] {
     width: 250px;
     height: 100%;
 
-    border-left: solid 1px var(--lightBordreGray);
+    /* border-left: solid 1px var(--lightBordreGray); */
+    /* Rectangle 2 */
 }
 .mainSidebar.hasSideProgressBar .progressBarSection {
     display: block;
@@ -311,30 +334,56 @@ input[type="radio"] {
 }
 
 .mainSidebar .sideMenuSection {
-    background-color: white;
+    background-color: #ffffff;
     height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     overflow: auto;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
 }
+
 .mainSidebar.hasSideProgressBar .sideMenuSection {
     height: calc(100vh - 150px);
 }
 .mainSidebar .sideMenuSection .sideNavRow {
+    padding: 0px 10px;
     border-bottom: solid 1px var(--lightBordreGray);
     transition: 0.3s;
-    cursor: pointer;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavHeader {
     font-size: 14px;
     padding: 10px 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    color: #d4d4d4;
+}
+.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader svg path {
+    fill: #d4d4d4;
+}
+.mainSidebar .sideMenuSection .sideNavRow.able .sideNavHeader {
+    font-size: 14px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
     color: #5a5a5a;
 }
+.mainSidebar .sideMenuSection .sideNavRow.able .sideNavHeader svg path {
+    fill: #5a5a5a;
+}
 .mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader {
-    color: black;
+    color: #ffff;
+    background-color: #db3700;
+    fill: white;
+}
+
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader svg path {
+    fill: white;
 }
 /*.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader.hasBody:after{*/
 /*    content: '\E044';*/
@@ -348,8 +397,9 @@ input[type="radio"] {
     display: none;
 }
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem {
+    background-color: #ffffff !important;
     transition: 0.3s;
-    color: #0000007a;
+    color: #0000007a !important;
     cursor: pointer;
     padding: 7px 30px 7px 20px;
     font-weight: bold;
@@ -357,16 +407,54 @@ input[type="radio"] {
     margin: 3px 5px;
     font-size: 12px;
 }
+
+.mainSidebar .sideMenuSection .sideNavRow.able .sideNavBody .sideNavItem a {
+    background-color: #ffffff !important;
+    transition: 0.3s;
+    color: #0000007a !important;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 10px;
+    margin: 3px 5px;
+    font-size: 12px;
+}
+
 .mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem.selected,
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem:hover {
-    background: #0d665033;
-    color: var(--koochita-green);
+.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem :hover {
+    background-color: #db3700;
+    color: #db3700 !important;
     font-weight: bold;
     text-decoration: none;
     border-radius: 10px;
+    fill: #db3700 !important;
+}
+.mainSidebar
+    .sideMenuSection
+    .sideNavRow
+    .sideNavBody
+    .sideNavItem:hover
+    svg
+    path {
+    fill: #db3700;
+}
+.mainSidebar .sideMenuSection .sideNavRow.able .selected,
+.mainSidebar .sideMenuSection .sideNavRow.able :hover {
+    background-color: #db3700;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 10px;
+    fill: white;
+    cursor: pointer;
+}
+
+.mainSidebar .sideMenuSection .sideNavRow.able .selected svg path,
+.mainSidebar .sideMenuSection .sideNavRow.able :hover svg path {
+    fill: white;
 }
 
 .mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody {
+    background-color: white !important;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -667,13 +755,15 @@ label {
     display: none;
 }
 .logoBox {
-    margin-bottom: 40px;
+    margin-bottom: 15px;
     position: relative;
     width: 100%;
-    height: 94px;
+    height: 83px;
     background: #ffffff;
 }
 .typeLogo {
+    font-family: "segoe" !important;
+    font-size: 20px;
     align-items: center;
     display: flex;
     justify-content: center;

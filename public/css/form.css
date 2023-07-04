@@ -41,6 +41,17 @@ figcaption {
 .rowReverse {
     flex-direction: row-reverse;
 }
+.paddingRight10 {
+    padding-right: 10px;
+}
+.backOrang {
+    background-color: #db3700;
+}
+.aligenCenter {
+    align-items: center;
+    display: flex;
+}
+
 @media (min-width: 990px) {
     h1 {
         font-size: 22px;
