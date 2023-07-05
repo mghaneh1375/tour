@@ -23,7 +23,9 @@ input[type="radio"] {
     justify-content: center;
     align-items: center;
 }
-
+.displayFlex {
+    display: flex;
+}
 .loaderDiv {
     position: fixed;
     width: 100%;
