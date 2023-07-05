@@ -78,7 +78,6 @@ input[type="radio"] {
     width: calc(100% - 250px);
     height: calc(100vh - 0px);
     left: 0;
-    top: 60px;
     direction: rtl;
     text-align: right;
     padding: 15px;
@@ -376,20 +375,15 @@ input[type="radio"] {
 .mainSidebar .sideMenuSection .sideNavRow.able .sideNavHeader svg path {
     fill: #5a5a5a;
 }
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader {
+.mainSidebar .sideMenuSection .sideNavRow.open.able .sideNavHeader {
     color: #ffff;
     background-color: #db3700;
     fill: white;
 }
 
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader svg path {
+.mainSidebar .sideMenuSection .sideNavRow.open.able .sideNavHeader svg path {
     fill: white;
 }
-/*.mainSidebar .sideMenuSection .sideNavRow .sideNavHeader.hasBody:after{*/
-/*    content: '\E044';*/
-/*    transform: rotate(180deg);*/
-/*    font-family: 'Shazde_Regular' !important*/
-/*}*/
 .mainSidebar .sideMenuSection .sideNavRow.open .sideNavHeader.hasBody:after {
     transform: rotate(0deg);
 }
@@ -401,11 +395,45 @@ input[type="radio"] {
     transition: 0.3s;
     color: #0000007a !important;
     cursor: pointer;
-    padding: 7px 30px 7px 20px;
+    padding: 7px 0px 7px 20px;
     font-weight: bold;
     border-radius: 10px;
     margin: 3px 5px;
     font-size: 12px;
+}
+
+.mainSidebar .sideMenuSection .sideNavRow.able .selected,
+.mainSidebar .sideMenuSection .sideNavRow.able :hover {
+    background-color: #db3700;
+    color: #ffffff;
+    text-decoration: none;
+    /* border-radius: 10px; */
+    fill: white;
+    cursor: pointer !important;
+}
+
+.mainSidebar .sideMenuSection .sideNavRow.able .selected svg path,
+.mainSidebar .sideMenuSection .sideNavRow.able :hover svg path {
+    fill: white;
+}
+
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody {
+    background-color: white !important;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody ul {
+    background-color: white !important;
+    color: #5a5a5a;
+}
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody ul li {
+    background-color: white !important;
+    color: #5a5a5a;
+}
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody ul li:hover {
+    background-color: white !important;
+    color: #db3700;
 }
 
 .mainSidebar .sideMenuSection .sideNavRow.able .sideNavBody .sideNavItem a {
@@ -419,45 +447,8 @@ input[type="radio"] {
     font-size: 12px;
 }
 
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem.selected,
-.mainSidebar .sideMenuSection .sideNavRow .sideNavBody .sideNavItem :hover {
-    background-color: #db3700;
+.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody ul li:hover a {
     color: #db3700 !important;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 10px;
-    fill: #db3700 !important;
-}
-.mainSidebar
-    .sideMenuSection
-    .sideNavRow
-    .sideNavBody
-    .sideNavItem:hover
-    svg
-    path {
-    fill: #db3700;
-}
-.mainSidebar .sideMenuSection .sideNavRow.able .selected,
-.mainSidebar .sideMenuSection .sideNavRow.able :hover {
-    background-color: #db3700;
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 10px;
-    fill: white;
-    cursor: pointer;
-}
-
-.mainSidebar .sideMenuSection .sideNavRow.able .selected svg path,
-.mainSidebar .sideMenuSection .sideNavRow.able :hover svg path {
-    fill: white;
-}
-
-.mainSidebar .sideMenuSection .sideNavRow.open .sideNavBody {
-    background-color: white !important;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
 }
 
 .mainSidebar .sideMenuSection .sideNavRow.showInBottom {
@@ -474,14 +465,14 @@ input[type="radio"] {
 label {
     margin-bottom: 0;
 }
+
 .mainBackWhiteBody {
     background: white;
-    border: solid 1px var(--lightBordreGray);
+    border-radius: 20px;
     box-shadow: 0 0 4px 1px #cccccc;
     padding: 10px;
     overflow: auto;
     max-height: 100%;
-    /*margin-bottom: 100px;*/
 }
 
 .mainBackWhiteBody .head {
@@ -832,7 +823,12 @@ label {
         transform: rotate(45deg);
     }
 }
-
+a:any-link {
+    cursor: unset !important;
+}
+a:hover {
+    text-decoration: none;
+}
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;

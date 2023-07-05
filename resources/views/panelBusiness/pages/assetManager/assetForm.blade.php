@@ -156,6 +156,7 @@
 
     <script>
         var datePickerOptions = {
+            changeYear: true,
             numberOfMonths: 1,
             showButtonPanel: true,
             language: "fa",
@@ -562,11 +563,7 @@
         });
 
         function saveModal() {
-
             var errorText = "";
-
-
-
             var $inputs = $('#redirectList :input');
             // An array of just the ids...
             var fields = [];
@@ -675,6 +672,7 @@
                 storeDataModal(fields);
                 console.log(fields);
                 $('#addModal').attr("data-dismiss", "modal");
+                location.reload();
                 // if (nextFormId !== undefined) {
                 //     storeData(fields);
                 // }
@@ -816,7 +814,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' + res
+                            .fields[i].data + '' :
                             '') + '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
@@ -1007,7 +1006,8 @@
                     text += '<div class="select-side locationIconTourCreation">';
                     text += '<i class="ui_icon  locationIcon"></i>';
                     text += '</div>';
-                    text += '<input type="text" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' + res
+                            .fields[i].data + '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
                         .fields[i]
@@ -1020,6 +1020,7 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                 } else if (res.fields[i].type == 'api') {
                     needSearchCityModal = true;
+
                     city = res.fields[i].options[0].replace('koochita', 'mykoochita')
                         .replace(
                             "https",
@@ -1046,7 +1047,7 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') +
-                        ' onclick="chooseSrcCityModal()" >';
+                        ' onclick="chooseSrcCityModal()" onkeydown="return false;">';
 
                     text += '<div id="apiItemList" class"hidden">';
                     text += '</div>';
@@ -1074,7 +1075,8 @@
                     text += '<div class="select-side calendarIconTourCreation">';
                     text += '<i class="ui_icon calendar calendarIcon"></i>';
                     text += '</div>';
-                    text += ' <input value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') +
+                    text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[i]
+                            .data + '' : '') +
                         '" name="' + res.fields[i].name +
                         '" name="sDateNotSame[]" id="' +
                         res
@@ -1162,8 +1164,6 @@
             map.on('click', addMarker);
         }
         $(document).ready(function() {
-
-
             $(document).on('change', 'input', function() {
                 $(this).attr('data-change', '1');
             });

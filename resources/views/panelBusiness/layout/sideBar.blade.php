@@ -103,37 +103,39 @@
                         {{-- <i class="fas fa-angle-down"></i> --}}
                     </div>
                     <div class="sideNavBody">
+                        <ul class="">
+                            <li>
+                                <div class="sideNavItem aligenCenter">
 
-                        <div class="sideNavItem aligenCenter">
-                            <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="5" cy="5" r="5" fill="#2A2A2A" />
-                            </svg>
-                            <a href="{{ route('businessPanel.create') }}" class="paddingRight10">
-                                ایجاد کسب و
-                                کارجدید</a>
-                        </div>
+                                    <a href="{{ route('businessPanel.create') }}">
+                                        ایجاد کسب و
+                                        کارجدید</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="sideNavItem aligenCenter">
 
-                        <div class="sideNavItem aligenCenter">
-                            <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="5" cy="5" r="5" fill="#2A2A2A" />
-                            </svg>
-                            <a href="{{ route('businessPanel.myBusinesses') }} "class="paddingRight10">کسب و کارهای
-                                من</a>
-                        </div>
-                        <div class="sideNavItem aligenCenter">
-                            <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="5" cy="5" r="5" fill="#2A2A2A" />
-                            </svg>
-                            <a href="{{ route('businessPanel.completeUserInfo') }}" class="paddingRight10">تغییر
-                                اطلاعات
-                                فردی</a>
-                        </div>
+                                    <a href="{{ route('businessPanel.myBusinesses') }} ">کسب و
+                                        کارهای
+                                        من</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="sideNavItem aligenCenter">
+
+                                    <a href="{{ route('businessPanel.completeUserInfo') }}">تغییر
+                                        اطلاعات
+                                        فردی</a>
+                                </div>
+                            </li>
+
+                        </ul>
                     </div>
                 </div>
             @endif
         @endif
         @if (auth()->check())
-            <div class="sideNavRow ">
+            <div class="sideNavRow">
                 <a href="#" class="item aligenCenter sideNavHeader">
                     <svg width="15" height="16" viewBox="0 0 15 16"xmlns="http://www.w3.org/2000/svg">
                         <path
