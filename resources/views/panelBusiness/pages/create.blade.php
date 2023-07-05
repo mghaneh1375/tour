@@ -80,7 +80,9 @@
                         </div>
 
                         <div class="col-xs-12 fullyCenterContent" style="margin-top: 10px;">
-                            <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
+                            {{-- <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button> --}}
+                            <button onclick="document.location.href = '/createForm?isHaghighi='+isHaghighi "
+                                class="btn btn-success">مرحله بعد</button>
                         </div>
 
                     </div>
@@ -667,6 +669,14 @@
         </script>
 
         <script>
+            isHaghighi = true;
+
+            if (!$('#hoghoghi').is(':checked')) {
+                isHaghighi = false
+            }
+            if (!$('#haghighi').is(':checked')) {
+                isHaghighi = false
+            }
             @if (isset($business))
                 openLoading();
                 currentPage = parseInt('{{ $step }}');

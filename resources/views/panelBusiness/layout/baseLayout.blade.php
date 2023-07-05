@@ -15,7 +15,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/fonts.css?v=' . $fileVersions) }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
     <link rel="icon" href="{{ URL::asset('images/icons/KOFAV0.svg') }}" sizes="any" type="image/svg+xml">
     <link rel="apple-touch-icon-precomposed" href="{{ URL::asset('images/icons/KOFAV0.svg') }}" sizes="any"
         type="image/svg+xml">
