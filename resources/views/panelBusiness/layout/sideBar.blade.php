@@ -5,14 +5,6 @@
             Business
         </div>
     </div>
-    <div class="progressBarSection">
-        <div class="text">
-            <span id="sideProgressBarNumber">0%</span> کامل شده
-        </div>
-        <div class="progressBarDiv">
-            <div id="sideProgressBarFull" class="full"></div>
-        </div>
-    </div>
 
     <div class="sideMenuSection">
         @if (isset($businessName))

@@ -47,8 +47,8 @@
 
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">گام بعدی</button>
-                <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">بازگشت به
-                    مرحله قبل</button>
+                <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">مرحله
+                    قبل</button>
             </div>
 
         </div>
@@ -143,7 +143,8 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer" style="text-align: center">
-                    <button onclick="saveModal()" id="addModal" class="btn nextStepBtnTourCreation">تأیید</button>
+                    <button onclick="saveModal()" value="Submit" id="addModal"
+                        class="btn nextStepBtnTourCreation">تأیید</button>
                 </div>
 
             </div>
@@ -156,6 +157,7 @@
 
     <script>
         var datePickerOptions = {
+            yearRange: "-100:+0",
             changeYear: true,
             numberOfMonths: 1,
             showButtonPanel: true,
@@ -312,7 +314,7 @@
             var checkBoxFields = [];
 
             $inputs.each(function() {
-
+                $(this).parent().removeClass('errorInput');
                 if ($(this).attr('id') === 'selectStateForSelectCity')
                     return;
                 if ($(this).attr('id') === 'inputSearchCity')
@@ -374,6 +376,7 @@
                         if ($(this).val() === '') {
                             errorText += '<ul class="errorList"> ';
                             errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                            $(this).parent().addClass('errorInput');
                         }
                     }
                 }
@@ -450,8 +453,23 @@
                             else if (userAssetId === -1)
                                 window.location.href = '/asset/' + assetId + "/step/" + firstStepFormId;
 
-
-                            html += '<h1>' + res.forms[i].name + '</h1>';
+                            html +=
+                                '<div style="display:flex; border-bottom: solid 1px lightgray;padding-bottom: 10px;justify-content: space-between; ">';
+                            html +=
+                                '<div><h1 >' +
+                                res.forms[i].name + '</h1> </div>';
+                            html += '<div>';
+                            html += '<div class="progressBarSection">';
+                            html += '<div class="text">';
+                            html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
+                            html += '</div>';
+                            html += '<div class="progressBarDiv">';
+                            html += '<div id="sideProgressBarFull" class="full"></div>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '';
+                            html += '</div>';
+                            html += '</div>';
                             html += '<div style="margin-top: 20px">';
                             html += '<h4>' + res.forms[i].description + '</h4>';
                             html += '<div>';
@@ -750,27 +768,32 @@
                 text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[i].half == 1 ? '50%' :
                     '100%') + ';flex-direction: ' + (res.fields[i].type == 'listview' ? ' column' : '') + '">';
                 if (res.fields[i].type == 'radio') {
-                    text += '<p>' + res.fields[i].name + '</p>';
-                    text +=
-                        '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="btn btn-secondary ' + (res.fields[i].data == res.fields[i].options[x] ?
+                        text += '<label class="cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
                                 'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res
                             .fields[i].options[x] + '';
-                        text += '<input type="radio" value="' + res.fields[i].options[x] + '" name="' + res.fields[
+                        text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
+                            '" name="' + res
+                            .fields[
                                 i].name + '" id="' + res.fields[i].field_id +
                             '" ' + (res.fields[i].data == res.fields[i].options[x] ?
                                 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
                         text += '</label>';
 
                     }
-                    text += '</div>';
+
                 } else if (res.fields[i].type == 'checkbox') {
 
-                    text += '<p>' + res.fields[i].name + '</p>';
-                    text +=
-                        '<div class="btn-group btn-group-toggle" data-toggle="buttons">';
-
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' :
+                        '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
                     let data = res.fields[i].data !== null && res.fields[i].data != '' ?
                         res.fields[i].data.split("_") : [];
 
@@ -780,18 +803,19 @@
                         let isSelected = data.indexOf(res.fields[i].options[x]) !== -1;
 
 
-                        text += '<label class="btn btn-secondary ' + (isSelected ? 'active' : '') + '" for="' + res.fields[
+                        text += '<label class="mg-rt-6 cursorPointer ' + (isSelected ? 'active' : '') + '" for="' + res
+                            .fields[
                                 i]
                             .options[
                                 x] + '">' + res.fields[i].options[x] + '';
-                        text += '<input type="checkbox" value="' + res.fields[i].options[x] + '" name="' + res.fields[i]
+                        text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
+                            '" name="' + res.fields[i]
                             .name + '"  data-id="' + res.fields[i].field_id +
                             '" ' + (isSelected ?
                                 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
                         text += '</label>';
 
                     }
-                    text += '</div>';
                 } else if (res.fields[i].type == 'string') {
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?

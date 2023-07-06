@@ -49,31 +49,63 @@
             <div class="col-md-12">
 
                 <div class="mainBackWhiteBody">
-                    <h1>نوع ارائه دهنده</h1>
+                    <h1 style="border-bottom: solid 1px lightgray;padding-bottom: 10px;">نوع ارائه دهنده</h1>
                     <div style="margin-top: 20px">
                         <h4>کسب و کار خود را چگونه توصیف می کنید؟</h4>
                         <p>با استفاده از این اطلاعات، ما دسترسی های مناسب تری برای شما ایجاد می کنیم.</p>
 
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-12">
                             <label for="hoghoghi" class="kindOfBusinessOwnerSection">
                                 <div class="inputSec">
                                     <input id="hoghoghi" type="radio" name="haghHogh" style="display: block;">
                                 </div>
                                 <div class="content">
-                                    <i class="fa fa-users"></i>
+                                    <svg width="20" height="16" viewBox="0 0 20 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_68_180)">
+                                            <path opacity="0.4"
+                                                d="M3.99012 5C5.36173 5 6.48395 3.875 6.48395 2.5C6.48395 1.125 5.36173 0 3.99012 0C2.61852 0 1.4963 1.125 1.4963 2.5C1.4963 3.875 2.61852 5 3.99012 5ZM15.9605 5C17.3321 5 18.4543 3.875 18.4543 2.5C18.4543 1.125 17.3321 0 15.9605 0C14.5889 0 13.4667 1.125 13.4667 2.5C13.4667 3.875 14.5889 5 15.9605 5ZM17.2074 6H15.2747C14.8694 6 14.4954 6.09375 14.1525 6.25C14.1836 6.4375 14.2148 6.59375 14.2148 6.75C14.2148 7.8125 13.8096 8.75 13.1861 9.5H19.3895C19.7012 9.5 19.9506 9.25 19.9506 8.90625C19.9506 7.3125 18.7349 6 17.2074 6ZM5.79815 6.25C5.45525 6.09375 5.08117 6 4.67593 6H2.74321C1.21574 6 0 7.3125 0 8.90625C0 9.25 0.249383 9.5 0.561111 9.5H6.76451C6.14105 8.75 5.7358 7.8125 5.7358 6.75C5.7358 6.59375 5.76697 6.40625 5.79815 6.25Z"
+                                                fill="#0076A3" />
+                                            <path
+                                                d="M9.97542 10C11.7523 10 13.2174 8.53125 13.2174 6.75C13.2174 4.96875 11.7523 3.5 9.97542 3.5C8.16739 3.5 6.73344 4.96875 6.73344 6.75C6.73344 8.53125 8.16739 10 9.97542 10ZM11.5341 11H8.41678C5.9853 11 3.99023 12.875 3.99023 15.1562C3.99023 15.625 4.39548 16 4.86307 16H15.0878C15.5554 16 15.9606 15.625 15.9606 15.1562C15.9606 12.875 13.9655 11 11.5341 11Z"
+                                                fill="#0076A3" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_68_180">
+                                                <rect width="19.9506" height="16" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+
                                     <p>ما یک کسب و کار هستیم. (شخصیت حقوقی)</p>
                                 </div>
                             </label>
                         </div>
 
-                        <div class="col-xs-12 col-md-6" style="margin-top: 10px">
+                        <div class="col-xs-12 col-md-12" style="margin-top: 10px">
 
                             <label for="haghighi" class="kindOfBusinessOwnerSection">
                                 <div class="inputSec">
                                     <input id="haghighi" type="radio" name="haghHogh" style="display: block;">
                                 </div>
                                 <div class="content">
-                                    <i class="fa fa-user"></i>
+                                    <svg width="14" height="16" viewBox="0 0 14 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_68_174)">
+                                            <path opacity="0.4"
+                                                d="M11 4C11 6.21875 9.21875 8 7 8C4.78125 8 3 6.21875 3 4C3 1.78125 4.78125 0 7 0C9.21875 0 11 1.78125 11 4Z"
+                                                fill="#0076A3" />
+                                            <path
+                                                d="M8.59375 9.60001H5.40625C2.4375 9.60001 0 12.0375 0 15.0063C0 15.6 0.5 16.1 1.09375 16.1H12.9062C13.5 16.1 14 15.6 14 15.0063C14 12.0375 11.5625 9.60001 8.59375 9.60001Z"
+                                                fill="#0076A3" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_68_174">
+                                                <rect width="14" height="16" fill="white" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+
                                     <p>من یک شخص و یا گروه هستم. (شخصیت حقیقی)</p>
                                 </div>
                             </label>

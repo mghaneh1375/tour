@@ -413,6 +413,9 @@ input[type="radio"] {
     fill: white;
     cursor: pointer !important;
 }
+.mainSidebar .sideMenuSection .sideNavRow.able a:hover {
+    color: #db3700 !important;
+}
 
 .mainSidebar .sideMenuSection .sideNavRow.able .selected svg path,
 .mainSidebar .sideMenuSection .sideNavRow.able :hover svg path {
@@ -454,7 +457,8 @@ input[type="radio"] {
 }
 
 .mainSidebar .sideMenuSection .sideNavRow.showInBottom {
-    margin-top: auto;
+    position: absolute;
+    bottom: 0;
     margin-bottom: 0px;
     text-align: center;
 }
@@ -723,6 +727,9 @@ label {
     width: 20px;
     height: 20px;
     padding: 3px;
+}
+.cursorPointer {
+    cursor: pointer;
 }
 .createTicketModal .filesSection .file .name {
 }
