@@ -64,6 +64,7 @@
     @endif
 
     <div class="mainBodySection">
+
         @yield('body')
     </div>
 

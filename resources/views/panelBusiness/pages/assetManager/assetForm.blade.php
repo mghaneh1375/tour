@@ -11,14 +11,11 @@
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-    <script type="text/javascript" src="http://example.com/image-uploader.min.js"></script>
     <script defer src="{{ URL::asset('js/uploadLargFile.js?v=' . $fileVersions) }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/clockpicker.css?v=2') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/theme2/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/shazdeDesigns/tourCreation.css?v=11') }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
-    <link rel="stylesheet" href="{{ URL::asset('css/pages/localShops/mainLocalShops.css?v=' . $fileVersions) }}">
-    <link rel="stylesheet" href="{{ URL::asset('css/pages/business.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/common.css?v=' . $fileVersions) }}" />
     <style>
@@ -43,8 +40,6 @@
         <div class="whiteBox">
             <div id="formMake"></div>
             <div id="boxMake" style="display: flex; flex-wrap: wrap;"></div>
-
-
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">گام بعدی</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">مرحله
@@ -187,6 +182,9 @@
         var z;
         var modal = false;
         var roomNum = -1;
+        var allForm = 0;
+        var formComplite = 0;
+        var percent;
         let url = "https://boom.bogenstudio.com/api";
         let token =
             'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDhiNzBhYWRiM2VkY2ExMjdhOTc5YTQ3ZGE3YWE3ODYzNzBmYzBhZWY0OWYxYTA0NjFjNjAxYTc5NzcxMTg2YmI0OGUxNTllYzU2NTkwYjkiLCJpYXQiOjE2ODczNTk4NTguMzc3NTQ1LCJuYmYiOjE2ODczNTk4NTguMzc3NTUsImV4cCI6MTcxODk4MjI1OC4zNjcyMzYsInN1YiI6IjI0Iiwic2NvcGVzIjpbXX0.WG_3APY-VKbeWPy-wJHILH6yB-AACKX0Nz_Hb0VzBFnMJ12fwQ905-5mFEdydRUOU1y0pCofBi6nnUUyCY9FAq-IcXSvyLi7pN1FD2Ogw8mqokjAMBX-kDM9rEFpYarcEo6O4whZeJauO5uhpyLMT1eb-OnH_IBnoe_tL9m8ljNehjvdoUzNywan_a-8SYktJTRj8Y0wsKDG7H-oHwVr4ZVNmIbQxGLqiKv00r-nuP5tQi5Oj5ssJuFVrV4Vw2T8S3-NpC-sDa8zaBQdbTMri6awg3SF77-66FScH4dxFii3O6Qe3Li_szJuwMt8m2X7peMIdYc4s-LZsLo1IINyfysJESjGuuyzOONJruK5W6XSUoOlo5jFIDZYSGkfBsEYfxKCLDHt7flmjT27ryjabJXwhirwwHo2gKDKQzH0GonECaJRyuOzpJElb2be3awivNR_28FKia39g7WCtrdlVpQqdZ-7VlHCQwU7lT5VbR-1cgSKpVjdWeeW0aMUuy2cRO_Lzzqven1QxSvwsiwu3Nw3MeiOZSg2Gwq2SK0z4C-iJFrFTN8qP16ezYETDdStNiUU8pVYtV1HkxplDuFzsaori8qmeXbe6MoFC7k2_OnAz05_vRpGdsXdT1yQPV4xUnOvUbLDj83foJbm3QuKfNDaOOuxlogchLQLwJW-p8E';
@@ -257,6 +255,7 @@
                                 console.log("save shode");
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                     userAssetId;
+
                             } else {
                                 showSuccessNotifiBP(res.err, 'right', '#ac0020');
                                 console.log('store NOk');
@@ -288,8 +287,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                            //     userAssetId;
+                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
@@ -442,7 +441,7 @@
 
                 if (res.status === 0) {
                     for (let i = 0; i < res.forms.length; i++) {
-
+                        allForm = res.forms.length;
                         if (i == 0)
                             firstStepFormId = res.forms[i].id;
 
@@ -458,7 +457,7 @@
                             html +=
                                 '<div><h1 >' +
                                 res.forms[i].name + '</h1> </div>';
-                            html += '<div>';
+                            html += '<div style="width: 25%;">';
                             html += '<div class="progressBarSection">';
                             html += '<div class="text">';
                             html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
@@ -471,13 +470,9 @@
                             html += '</div>';
                             html += '</div>';
                             html += '<div style="margin-top: 20px">';
-                            html += '<h4>' + res.forms[i].description + '</h4>';
+                            html += '<p>' + res.forms[i].description + '</p>';
                             html += '<div>';
-                            html += '<p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>';
-                            html +=
-                                '<p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند';
-                            html +=
-                                'اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم.</p>';
+                            html += '<p>' + res.forms[i].notice + '</p>';
                             html += '</div>';
                             html += '</div>';
                             html += '';
@@ -486,6 +481,7 @@
                             html += '';
                             html += '';
                             html += '';
+
                             if (i > 0)
                                 prevFromId = res.forms[i - 1].id;
 
@@ -497,7 +493,11 @@
 
                     }
                 }
+
                 $('#formMake').empty().append(html);
+                formComplite = formId - 1;
+                percent = (formComplite / allForm) * 100;
+                updateSideProgressBar(percent);
             }
         });
 
@@ -1183,6 +1183,7 @@
                 x = e.lngLat.lat;
                 y = e.lngLat.lng;
                 z = x + " " + y;
+                $('.mapMark').val(z);
             }
 
             map.on('click', addMarker);
@@ -1223,6 +1224,11 @@
                 });
             }
         });
+
+        function updateSideProgressBar(_percent) {
+            $("#sideProgressBarNumber").text(_percent + "%");
+            $("#sideProgressBarFull").css("width", _percent + "%");
+        }
 
         function isNumber(evt) {
 

@@ -14,8 +14,6 @@
     src: url("../../fonts/segoesc.eot?v003.200");
     src: url("../../fonts/segoesc.eot?v003.200#iefix")
             format("embedded-opentype"),
-        url("../../fonts/segoesc.woff2?v003.200") format("woff2"),
-        url("../../fonts/segoesc.woff?v003.200") format("woff"),
         url("../../fonts/segoesc.ttf?v003.200") format("truetype"),
         url("") format("svg");
 }

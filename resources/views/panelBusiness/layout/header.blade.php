@@ -1,9 +1,21 @@
-{{-- <div class="mainHeader">
-    <div class="mainLogo">
-        <img src="{{URL::asset('images/icons/mainLogo.png')}}" alt="koochita">
+<div class="blackLayer">
+
+</div>
+<div class="mainHeader">
+    <div>
+        <button class="menuBtn" onclick="openNav()">
+            mozzzz
+        </button>
+        <div class="logoBoxheader">
+            <img style="width: 100%" src="{{ URL::asset('images/icons/mainLogo.png') }}" alt="koochita">
+            <div class="typeLogo">
+                Business
+            </div>
+
+        </div>
     </div>
 
-    @if (isset($businessName))
+    {{-- @if (isset($businessName))
         <div class="businessName">
             <select onchange="changeBusinessPanelManagementHeader(this.value)">
                 @foreach ($allOtherYourBusinessForHeader as $item)
@@ -51,5 +63,19 @@
                 </div>
             </div>
         </div>
-    @endif
-</div> --}}
+    @endif --}}
+</div>
+<script>
+    function openNav() {
+        $('#mainSideBar').css("width", "250px");
+        $('.blackLayer').css("display", "block");
+        // $('#mainSideBar').addClass('sideNav');
+    }
+    $(document).mouseup(function(e) {
+        if ($(e.target).closest("#mainSideBar").length ===
+            0) {
+            $("#mainSideBar").css("width", "0px");
+            $('.blackLayer').css("display", "none");
+        }
+    });
+</script>
