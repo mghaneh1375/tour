@@ -1249,7 +1249,7 @@ input[type="radio"]:checked + label.tourBasicKindsCheckbox {
 }
 
 textarea {
-    resize: none;
+    resize: auto;
 }
 
 .panel-group {
@@ -1708,8 +1708,9 @@ textarea {
     color: white;
 }
 .inputBoxTour:hover {
-    background: #e1e1e1 !important;
+    background: #ffffff;
     border: 1px solid #d5d5d5;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
 }
 .inputBoxTour:focus-within {
@@ -1730,6 +1731,9 @@ textarea {
     margin: 10px 0;
 }
 .inputBoxTour .inputBoxInput {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 30px;
     cursor: pointer;
     border: none;
     background: none;
@@ -1743,6 +1747,16 @@ textarea {
 }
 .inputBoxTour .inputBoxText {
     border-left: 1px solid #d8d8d8;
+    padding-left: 10px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+}
+.inputBoxAdd {
+    color: #0076a3;
+    border-right: 1px solid #d8d8d8;
     padding-left: 10px;
     width: auto;
     display: flex;

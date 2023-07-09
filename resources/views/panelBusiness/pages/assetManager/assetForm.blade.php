@@ -10,6 +10,7 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
+    <script src="https://unpkg.com/jalali-moment/dist/jalali-moment.browser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
     <script defer src="{{ URL::asset('js/uploadLargFile.js?v=' . $fileVersions) }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/clockpicker.css?v=2') }}" />
@@ -41,7 +42,7 @@
             <div id="formMake"></div>
             <div id="boxMake" style="display: flex; flex-wrap: wrap;"></div>
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
-                <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">گام بعدی</button>
+                <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">مرحله بعد</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">مرحله
                     قبل</button>
             </div>
@@ -51,19 +52,17 @@
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="addCityModal">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="addCityModal" style="top:100px !important;">
+        <div class="modal-dialog modal-lg" style="max-width: 500px !important">
             <div class="modal-content">
-                <div class="modal-body" style="direction: rtl">
+                <div class="modal-body" style="direction: rtl ;border-bottom: 1px solid #707070;">
                     <div class="fullwidthDiv">
                         <div class="addPlaceGeneralInfoTitleTourCreation">
                             شهر مورد نظر خود را اضافه کنید
                         </div>
-                        <button type="button" class="closee" data-dismiss="modal"
-                            style="border: none; background: none; float: left">&times;</button>
                     </div>
 
-                    <div class="row" style="display: flex; justify-content: space-between">
+                    <div class="row" style="display: flex;flex-direction: column;">
                         <div class="inputBoxTour col-xs-5 relative-position mainClassificationOfPlaceInputDiv">
                             <div class="inputBoxText" style="min-width: 60px;">
                                 <div>
@@ -82,7 +81,10 @@
                                 @endforeach
                             </select>
                         </div>
-
+                        <div>
+                            <p>ابتدا نام استان را انتخاب نماید. پس از وارد کردن نام شهر منتظر بمانید و از طریق لیست
+                                نمایش داده شده نام شهر مدنظر خود را وارد کنید</p>
+                        </div>
                         <div class="inputBoxTour col-xs-5 relative-position placeNameAddingPlaceInputDiv">
                             <div class="inputBoxText" style="min-width: 60px;">
                                 <div>
@@ -90,6 +92,7 @@
                                     <span>*</span>
                                 </div>
                             </div>
+
                             <input id="inputSearchCity" class="inputBoxInput text-align-right" type="text"
                                 placeholder="انتخاب کنید" onkeyup="searchForCity(this)" />
                             <div class="searchResult"></div>
@@ -98,8 +101,12 @@
                 </div>
 
                 <!-- Modal footer -->
-                <div class="modal-footer" style="text-align: center">
-                    <button id="goToForthStep" class="btn nextStepBtnTourCreation" data-dismiss="modal">تأیید</button>
+                <div class="modal-footerrow fullyCenterContent rowReverse SpaceBetween"
+                    style="padding: 15px; text-align: center">
+                    <button style="width: 20%;" id="goToForthStep" class="btn nextStepBtnTourCreation"
+                        data-dismiss="modal">تأیید</button>
+                    <button style="width: 20%;" class="btn nextStepBtnTourCreation goToPrevStep"
+                        data-dismiss="modal">انصراف</button>
                 </div>
 
             </div>
@@ -154,6 +161,7 @@
         var datePickerOptions = {
             yearRange: "-100:+0",
             changeYear: true,
+            changeMonth: true,
             numberOfMonths: 1,
             showButtonPanel: true,
             language: "fa",
@@ -184,7 +192,11 @@
         var roomNum = -1;
         var allForm = 0;
         var formComplite = 0;
+        var ageVal;
+        var itemsVal = null;
         var percent;
+        var addId = null;
+        var calenderId = null;
         let url = "https://boom.bogenstudio.com/api";
         let token =
             'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDhiNzBhYWRiM2VkY2ExMjdhOTc5YTQ3ZGE3YWE3ODYzNzBmYzBhZWY0OWYxYTA0NjFjNjAxYTc5NzcxMTg2YmI0OGUxNTllYzU2NTkwYjkiLCJpYXQiOjE2ODczNTk4NTguMzc3NTQ1LCJuYmYiOjE2ODczNTk4NTguMzc3NTUsImV4cCI6MTcxODk4MjI1OC4zNjcyMzYsInN1YiI6IjI0Iiwic2NvcGVzIjpbXX0.WG_3APY-VKbeWPy-wJHILH6yB-AACKX0Nz_Hb0VzBFnMJ12fwQ905-5mFEdydRUOU1y0pCofBi6nnUUyCY9FAq-IcXSvyLi7pN1FD2Ogw8mqokjAMBX-kDM9rEFpYarcEo6O4whZeJauO5uhpyLMT1eb-OnH_IBnoe_tL9m8ljNehjvdoUzNywan_a-8SYktJTRj8Y0wsKDG7H-oHwVr4ZVNmIbQxGLqiKv00r-nuP5tQi5Oj5ssJuFVrV4Vw2T8S3-NpC-sDa8zaBQdbTMri6awg3SF77-66FScH4dxFii3O6Qe3Li_szJuwMt8m2X7peMIdYc4s-LZsLo1IINyfysJESjGuuyzOONJruK5W6XSUoOlo5jFIDZYSGkfBsEYfxKCLDHt7flmjT27ryjabJXwhirwwHo2gKDKQzH0GonECaJRyuOzpJElb2be3awivNR_28FKia39g7WCtrdlVpQqdZ-7VlHCQwU7lT5VbR-1cgSKpVjdWeeW0aMUuy2cRO_Lzzqven1QxSvwsiwu3Nw3MeiOZSg2Gwq2SK0z4C-iJFrFTN8qP16ezYETDdStNiUU8pVYtV1HkxplDuFzsaori8qmeXbe6MoFC7k2_OnAz05_vRpGdsXdT1yQPV4xUnOvUbLDj83foJbm3QuKfNDaOOuxlogchLQLwJW-p8E';
@@ -323,7 +335,17 @@
                 if ($(this).hasClass('mapMark')) {
                     $(this).val(z);
                 }
+                if ($(this).attr('id') == calenderId) {
+                    underAgeValidate($(this).val());
+                    if (ageVal === true) {
+                        return
+                    } else {
+                        errorText += '<ul class="errorList"> ';
+                        errorText += "<li> سن کمتر از ۱۸ سال است</li></ul>";
+                        $(this).parent().addClass('errorInput');
 
+                    }
+                }
 
                 if ($(this).attr('type') === 'checkbox') {
                     let checkName = $(this).attr('name');
@@ -470,7 +492,7 @@
                             html += '</div>';
                             html += '</div>';
                             html += '<div style="margin-top: 20px">';
-                            html += '<p>' + res.forms[i].description + '</p>';
+                            html += '<p class="bold">' + res.forms[i].description + '</p>';
                             html += '<div>';
                             html += '<p>' + res.forms[i].notice + '</p>';
                             html += '</div>';
@@ -565,12 +587,38 @@
             // if (document.getElementById("sameSrcDestInput").checked)
             //     $("#destPlaceId").val(_id);
         }
+        $('#addCityModal').on('hidden.bs.modal', function(e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end();
+        })
 
         function selectApi(_element) {
             $("#addCityModal").removeClass("displayBlock");
             $('#apiItemList').addClass('hidden');
             $("#${apiId}").val($(_element).text());
         }
+
+        function underAgeValidate(birthday) {
+            var myAge = parseInt(birthday.replaceAll("/", ""));
+            let today = new Date().toLocaleDateString('fa-IR-u-nu-latn', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                formatMatcher: 'basic'
+            });
+            var todayInt = parseInt(today.replaceAll("/", ""));
+            if (todayInt - myAge > 18000) {
+                return ageVal = true;
+            } else {
+                return ageVal = false;
+            }
+        }
+
 
         function chooseSrcCityModal() {
             $("#addCityModal").modal("show");
@@ -748,6 +796,22 @@
             });
         }
 
+        function addPhone() {
+            var errorText = "";
+            // $('.inputBoxAdd').after('<div id="space"></div>');
+            itemsVal = $("#" + addId).val();
+            if (itemsVal.length > 7) {
+                console.log(itemsVal);
+                $("#input-" + addId + "-items").append('<div id="itemsAdd">' + itemsVal + '</div>');
+                $("#" + addId).val('')
+            } else {
+                console.log('mooz');
+                errorText += '<ul class="errorList"> ';
+                errorText += "<li> تلفن حداقل باید 8 رقم باشد</li></ul>";
+                openErrorAlertBP(errorText);
+            }
+        }
+
         function buildFormHtml(res, resultBox, modal) {
 
             let text = "";
@@ -765,7 +829,8 @@
                 $('#formModal').empty().append(html);
             }
             for (let i = 0; i < res.fields.length; i++) {
-                text += '<div class="relative-position inputBoxTour" style="width: ' + (res.fields[i].half == 1 ? '50%' :
+                text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    .half == 1 ? '49%' :
                     '100%') + ';flex-direction: ' + (res.fields[i].type == 'listview' ? ' column' : '') + '">';
                 if (res.fields[i].type == 'radio') {
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -853,6 +918,8 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                 } else if (res.fields[i].type == 'int') {
+                    addId = res.fields[i].field_id;
+                    // itemsVal = res.fields[i].data;
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -863,15 +930,19 @@
                             res.fields[i].data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
-                        '" id="' + res
-                        .fields[
-                            i].field_id +
-                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                        '" id="' + res.fields[i].field_id + '" class="inputBoxInput" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    if (res.fields[i].multiple === 1) {
+
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxAdd">';
+                        text += '<div class="plus2" style="font-size: 18px;font-weight: bold;"></div>';
+                        text += '<div style="font-size: 14px;" onclick="addPhone()"> اضافه کن</div>';
+                        text += '</div>';
+                    }
                 } else if (res.fields[i].type == 'listview') {
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
@@ -1028,7 +1099,11 @@
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
                     text += '<div class="select-side locationIconTourCreation">';
-                    text += '<i class="ui_icon  locationIcon"></i>';
+                    text +=
+                        '<svg width="33" height="22" viewBox="0 0 33 22" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                    text +=
+                        '<path d ="M15.2925 12.1671V17.4579C15.2945 17.6484 15.3324 17.8369 15.4041 18.0134L15.9594 19.0496C16.0049 19.1487 16.0779 19.2328 16.1698 19.2916C16.2616 19.3505 16.3685 19.3818 16.4776 19.3818C16.5867 19.3818 16.6935 19.3505 16.7854 19.2916C16.8772 19.2328 16.9502 19.1487 16.9958 19.0496L17.5511 18.0134C17.6235 17.8371 17.6608 17.6484 17.6611 17.4579V12.1671C16.8786 12.3159 16.075 12.3159 15.2925 12.1671ZM16.4779 0.440002C13.5475 0.452322 11.1821 2.838 11.1944 5.76796C11.2067 8.69792 13.5919 11.0636 16.5219 11.0513C19.4519 11.0389 21.8177 8.65326 21.8054 5.7233C21.7933 2.8105 19.4351 0.452322 16.5219 0.440002H16.4779ZM16.4779 3.40032C15.8513 3.40481 15.2517 3.65569 14.8085 4.09873C14.3654 4.54176 14.1144 5.14137 14.1098 5.76796C14.1113 5.84674 14.0971 5.92503 14.068 5.99825C14.0389 6.07148 13.9955 6.13816 13.9404 6.19441C13.8852 6.25066 13.8193 6.29534 13.7467 6.32585C13.674 6.35635 13.596 6.37206 13.5173 6.37206C13.4385 6.37206 13.3605 6.35635 13.2878 6.32585C13.2152 6.29534 13.1493 6.25066 13.0941 6.19441C13.039 6.13816 12.9956 6.07148 12.9665 5.99825C12.9374 5.92503 12.9232 5.84674 12.9247 5.76796C12.9254 4.82584 13.3 3.92252 13.9662 3.25638C14.6324 2.59025 15.5358 2.21577 16.4779 2.21518C16.6331 2.21817 16.7809 2.28192 16.8896 2.39272C16.9983 2.50352 17.0592 2.65254 17.0592 2.80775C17.0592 2.96296 16.9983 3.11198 16.8896 3.22278C16.7809 3.33359 16.6331 3.39733 16.4779 3.40032Z"';
+                    text += 'fill = "#4DC7BC" / > < /svg>';
                     text += '</div>';
                     text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' + res
                             .fields[i].data + '' :
@@ -1131,7 +1206,11 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                 }
+
                 text += '</div>';
+                if (res.fields[i].multiple === 1) {
+                    text += '<div id="input-' + res.fields[i].field_id + '-items" class=""></div>';
+                }
                 if (res.fields[i].force_help !== null || '') {
                     text += '<figcaption style="width: 100%;"> ' + res.fields[i]
                         .force_help +

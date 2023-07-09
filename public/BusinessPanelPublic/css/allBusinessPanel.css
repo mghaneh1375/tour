@@ -416,10 +416,11 @@ input[type="radio"] {
     fill: white;
     cursor: pointer !important;
 }
-.mainSidebar .sideMenuSection .sideNavRow.able a:hover {
+/* .mainSidebar .sideMenuSection .sideNavRow.able a:hover {
     color: #db3700 !important;
+} */
+.itemsAdd {
 }
-
 .mainSidebar .sideMenuSection .sideNavRow.able .selected svg path,
 .mainSidebar .sideMenuSection .sideNavRow.able :hover svg path {
     fill: white;
