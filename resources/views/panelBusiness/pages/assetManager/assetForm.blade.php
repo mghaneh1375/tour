@@ -182,6 +182,7 @@
         let formId = '{{ $formId }}';
         let prevFromId = undefined;
         let nextFormId = undefined;
+        var moreItems = [];
         let x = " ";
         let y = " ";
         let userAssetId = parseInt('{{ $userAssetId }}');
@@ -195,6 +196,7 @@
         var ageVal;
         var itemsVal = null;
         var percent;
+        var multiple = false;
         var addId = null;
         var calenderId = null;
         let url = "https://boom.bogenstudio.com/api";
@@ -332,9 +334,9 @@
                     return;
                 if ($(this).attr('data-change') === '0')
                     return;
-                if ($(this).hasClass('mapMark')) {
-                    $(this).val(z);
-                }
+                // if ($(this).hasClass('mapMark')) {
+                //     $(this).val(z);
+                // }
                 if ($(this).attr('id') == calenderId) {
                     underAgeValidate($(this).val());
                     if (ageVal === true) {
@@ -346,14 +348,19 @@
 
                     }
                 }
-
+                if ($(this).hasClass('phone')) {
+                    if (multiple) {
+                        fields.push({
+                            id: $(this).attr('id'),
+                            data: moreItems.join("_")
+                        });
+                        return;
+                    }
+                }
                 if ($(this).attr('type') === 'checkbox') {
                     let checkName = $(this).attr('name');
                     let tmp = checkBoxFields.find(e => e.name == checkName);
-                    console.log(tmp);
-                    console.log(checkBoxFields);
                     if (tmp === undefined) {
-
                         let tmpArr = [];
                         $("input[type='checkbox'][name='" + checkName + "']:checked").each(function() {
                             tmpArr.push($(this).val());
@@ -796,13 +803,17 @@
             });
         }
 
+
         function addPhone() {
             var errorText = "";
             // $('.inputBoxAdd').after('<div id="space"></div>');
             itemsVal = $("#" + addId).val();
             if (itemsVal.length > 7) {
-                console.log(itemsVal);
-                $("#input-" + addId + "-items").append('<div id="itemsAdd">' + itemsVal + '</div>');
+                moreItems.push(itemsVal);
+                $("#input-" + addId + "-items").append(
+                    '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                    ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
+                    itemsVal + '</div></div>');
                 $("#" + addId).val('')
             } else {
                 console.log('mooz');
@@ -811,6 +822,15 @@
                 openErrorAlertBP(errorText);
             }
         }
+
+        function deleteItems(itemVal, el) {
+            console.log(itemVal);
+            moreItems = moreItems.filter((x) => x !== String(itemVal))
+            $(el).parent().remove();
+            console.log(moreItems);
+        }
+        var initMap = false;
+        var callInitMap = false;
 
         function buildFormHtml(res, resultBox, modal) {
 
@@ -930,17 +950,17 @@
                             res.fields[i].data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
-                        '" id="' + res.fields[i].field_id + '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                        '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     if (res.fields[i].multiple === 1) {
-
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxAdd">';
+                        multiple = true;
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxAdd "onclick="addPhone()">';
                         text += '<div class="plus2" style="font-size: 18px;font-weight: bold;"></div>';
-                        text += '<div style="font-size: 14px;" onclick="addPhone()"> اضافه کن</div>';
+                        text += '<div style="font-size: 14px;" > اضافه کن</div>';
                         text += '</div>';
                     }
                 } else if (res.fields[i].type == 'listview') {
@@ -1092,7 +1112,7 @@
                     text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ? '' :
                         'displayNone') + '"></div>';
                 } else if (res.fields[i].type == 'map') {
-                    callMap();
+
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1105,7 +1125,10 @@
                         '<path d ="M15.2925 12.1671V17.4579C15.2945 17.6484 15.3324 17.8369 15.4041 18.0134L15.9594 19.0496C16.0049 19.1487 16.0779 19.2328 16.1698 19.2916C16.2616 19.3505 16.3685 19.3818 16.4776 19.3818C16.5867 19.3818 16.6935 19.3505 16.7854 19.2916C16.8772 19.2328 16.9502 19.1487 16.9958 19.0496L17.5511 18.0134C17.6235 17.8371 17.6608 17.6484 17.6611 17.4579V12.1671C16.8786 12.3159 16.075 12.3159 15.2925 12.1671ZM16.4779 0.440002C13.5475 0.452322 11.1821 2.838 11.1944 5.76796C11.2067 8.69792 13.5919 11.0636 16.5219 11.0513C19.4519 11.0389 21.8177 8.65326 21.8054 5.7233C21.7933 2.8105 19.4351 0.452322 16.5219 0.440002H16.4779ZM16.4779 3.40032C15.8513 3.40481 15.2517 3.65569 14.8085 4.09873C14.3654 4.54176 14.1144 5.14137 14.1098 5.76796C14.1113 5.84674 14.0971 5.92503 14.068 5.99825C14.0389 6.07148 13.9955 6.13816 13.9404 6.19441C13.8852 6.25066 13.8193 6.29534 13.7467 6.32585C13.674 6.35635 13.596 6.37206 13.5173 6.37206C13.4385 6.37206 13.3605 6.35635 13.2878 6.32585C13.2152 6.29534 13.1493 6.25066 13.0941 6.19441C13.039 6.13816 12.9956 6.07148 12.9665 5.99825C12.9374 5.92503 12.9232 5.84674 12.9247 5.76796C12.9254 4.82584 13.3 3.92252 13.9662 3.25638C14.6324 2.59025 15.5358 2.21577 16.4779 2.21518C16.6331 2.21817 16.7809 2.28192 16.8896 2.39272C16.9983 2.50352 17.0592 2.65254 17.0592 2.80775C17.0592 2.96296 16.9983 3.11198 16.8896 3.22278C16.7809 3.33359 16.6331 3.39733 16.4779 3.40032Z"';
                     text += 'fill = "#4DC7BC" / > < /svg>';
                     text += '</div>';
-                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' + res
+                    text += '<input onkeydown="return false;" type="text" value="' +
+                        (res
+                            .fields[i]
+                            .data != null ? '' + res
                             .fields[i].data + '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
@@ -1209,7 +1232,8 @@
 
                 text += '</div>';
                 if (res.fields[i].multiple === 1) {
-                    text += '<div id="input-' + res.fields[i].field_id + '-items" class=""></div>';
+                    text += '<div id="input-' + res.fields[i].field_id +
+                        '-items" style="display: flex;flex-direction: row;"></div>';
                 }
                 if (res.fields[i].force_help !== null || '') {
                     text += '<figcaption style="width: 100%;"> ' + res.fields[i]
@@ -1224,9 +1248,18 @@
             if (!needSearchCityModal) {
                 $("#addCityModal").remove();
             }
+            $("#" + addId).on('keypress', function(e) {
+                if (e.which == 13) {
+                    addPhone();
+                }
+            });
+
         }
 
         function callMap() {
+
+            initMap = true;
+
             mapboxgl.setRTLTextPlugin(
                 'https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
                 null,
@@ -1267,9 +1300,18 @@
 
             map.on('click', addMarker);
         }
+
         $(document).ready(function() {
             $(document).on('change', 'input', function() {
                 $(this).attr('data-change', '1');
+            });
+
+            $(document).on('click', '.mapMark', function() {
+                if (!initMap) {
+                    setTimeout(() => {
+                        callMap();
+                    }, 500);
+                }
             });
 
             if (userAssetId != -1) {

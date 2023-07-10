@@ -133,7 +133,7 @@ function upload_fileLargeFile2() {
             if (errorCountInLargeFileUploadedInJsFile <= 0) {
                 inProcessLargeFileUploadedInJsFile = false;
                 callBackFunctionLargeFileUploadedInJsFile("error");
-            } else upload_fileLargeFile(start, _fileName);
+            } else upload_fileLargeFile(0, 0);
         },
         success: function (response) {
             if (response.status == "0") {
