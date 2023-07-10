@@ -301,8 +301,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                userAssetId;
+                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                            //     userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
@@ -317,10 +317,8 @@
         }
 
         function nextStep() {
-
             var errorText = "";
             var $inputs = $('.inputBoxTour :input');
-
             // An array of just the ids...
             var fields = [];
             var radioFields = [];
@@ -337,15 +335,16 @@
                 // if ($(this).hasClass('mapMark')) {
                 //     $(this).val(z);
                 // }
-                if ($(this).attr('id') == calenderId) {
-                    underAgeValidate($(this).val());
-                    if (ageVal === true) {
-                        return
-                    } else {
-                        errorText += '<ul class="errorList"> ';
-                        errorText += "<li> سن کمتر از ۱۸ سال است</li></ul>";
-                        $(this).parent().addClass('errorInput');
-
+                if ($(this).attr('id') === calenderId) {
+                    if ($(this).val() !== '') {
+                        underAgeValidate($(this).val());
+                        if (ageVal === true) {
+                            return
+                        } else {
+                            errorText += '<ul class="errorList"> ';
+                            errorText += "<li> سن کمتر از ۱۸ سال است</li></ul>";
+                            $(this).parent().addClass('errorInput');
+                        }
                     }
                 }
                 if ($(this).hasClass('phone')) {
@@ -375,7 +374,7 @@
                         };
                         checkBoxFields.push(tmp);
                     }
-                    console.log('mozz');
+
                     return;
                 }
                 if ($(this).attr('type') === 'radio') {
@@ -407,10 +406,6 @@
                             $(this).parent().addClass('errorInput');
                         }
                     }
-                }
-                if ($(this).val() == "" || null || undefined) {
-                    console.log('mooz');
-                    return;
                 }
                 fields.push({
                     id: $(this).attr('id'),
@@ -453,7 +448,7 @@
 
         function prevStep() {
             if (prevFromId !== undefined)
-                window.location.href = '/asset/' + assetId + "/step/" + prevFromId;
+                window.location.href = '/asset/' + assetId + "/step/" + prevFromId + "/" + userAssetId;
         }
 
         $.ajax({
@@ -469,7 +464,9 @@
                 var html = '';
 
                 if (res.status === 0) {
+
                     for (let i = 0; i < res.forms.length; i++) {
+                        formExist = i;
                         allForm = res.forms.length;
                         if (i == 0)
                             firstStepFormId = res.forms[i].id;
@@ -524,8 +521,7 @@
                 }
 
                 $('#formMake').empty().append(html);
-                formComplite = formId - 1;
-                percent = (formComplite / allForm) * 100;
+                percent = (formExist / allForm) * 100;
                 updateSideProgressBar(percent);
             }
         });

@@ -354,7 +354,6 @@ input[type="radio"] {
     height: calc(100vh - 150px);
 }
 .mainSidebar .sideMenuSection .sideNavRow {
-    padding: 0px 10px;
     border-bottom: solid 1px var(--lightBordreGray);
     transition: 0.3s;
 }
