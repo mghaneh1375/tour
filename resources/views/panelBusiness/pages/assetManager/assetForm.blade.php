@@ -42,7 +42,8 @@
             <div id="formMake"></div>
             <div id="boxMake" style="display: flex; flex-wrap: wrap;"></div>
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
-                <button class="btn nextStepBtnTourCreation" type="button" onclick="nextStep()">مرحله بعد</button>
+                <button class="btn nextStepBtnTourCreation nextPageVal" type="button" onclick="nextStep()">مرحله
+                    بعد</button>
                 <button class="btn nextStepBtnTourCreation goToPrevStep" type="button" onclick="prevStep()">مرحله
                     قبل</button>
             </div>
@@ -301,8 +302,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                            //     userAssetId;
+                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
@@ -513,7 +514,10 @@
 
                             if (i < res.forms.length - 1)
                                 nextFormId = res.forms[i + 1].id;
-
+                            if (nextFormId == undefined) {
+                                $('.nextPageVal').empty().append("ثبت نهایی")
+                            }
+                            console.log(nextFormId);
                             break;
                         }
 
@@ -1298,6 +1302,7 @@
         }
 
         $(document).ready(function() {
+
             $(document).on('change', 'input', function() {
                 $(this).attr('data-change', '1');
             });
