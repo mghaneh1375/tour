@@ -196,6 +196,7 @@
         var formComplite = 0;
         var ageVal;
         var itemsVal = null;
+        var multipleVal = false;
         var percent;
         var multiple = false;
         var addId = null;
@@ -302,8 +303,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                userAssetId;
+                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                            //     userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
@@ -350,11 +351,20 @@
                 }
                 if ($(this).hasClass('phone')) {
                     if (multiple) {
-                        fields.push({
-                            id: $(this).attr('id'),
-                            data: moreItems.join("_")
-                        });
-                        return;
+                        if (moreItems.length > 0) {
+                            fields.push({
+                                id: $(this).attr('id'),
+                                data: moreItems.join("_")
+                            });
+                            if ($(this).attr('required')) {
+                                if (moreItems.length < 1) {
+                                    errorText += '<ul class="errorList"> ';
+                                    errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                                    $(this).parent().addClass('errorInput');
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
                 if ($(this).attr('type') === 'checkbox') {
@@ -399,7 +409,6 @@
                         tmp.hasSelected = true;
 
                 } else {
-
                     if ($(this).attr('required')) {
                         if ($(this).val() === '') {
                             errorText += '<ul class="errorList"> ';
@@ -448,8 +457,11 @@
         }
 
         function prevStep() {
-            if (prevFromId !== undefined)
+            if (prevFromId !== undefined) {
                 window.location.href = '/asset/' + assetId + "/step/" + prevFromId + "/" + userAssetId;
+            } else {
+                window.location.href = '/createForm?isHaghighi=';
+            }
         }
 
         $.ajax({
@@ -511,18 +523,16 @@
 
                             if (i > 0)
                                 prevFromId = res.forms[i - 1].id;
-
                             if (i < res.forms.length - 1)
                                 nextFormId = res.forms[i + 1].id;
                             if (nextFormId == undefined) {
                                 $('.nextPageVal').empty().append("ثبت نهایی")
                             }
-                            console.log(nextFormId);
                             break;
                         }
 
                     }
-                }
+                } else {}
 
                 $('#formMake').empty().append(html);
                 percent = (formExist / allForm) * 100;
@@ -803,18 +813,40 @@
             });
         }
 
+        var oneItems = false;
 
         function addPhone() {
             var errorText = "";
             // $('.inputBoxAdd').after('<div id="space"></div>');
             itemsVal = $("#" + addId).val();
             if (itemsVal.length > 7) {
-                moreItems.push(itemsVal);
-                $("#input-" + addId + "-items").append(
-                    '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
-                    ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
-                    itemsVal + '</div></div>');
-                $("#" + addId).val('')
+                let x = true;
+
+                if (moreItems.length === 1 && oneItems) {
+                    oneItems = false;
+                    moreItems = [];
+
+                } else {
+
+                    moreItems.forEach((item) => {
+
+                        if (item === itemsVal) {
+                            x = false
+                            errorText += '<ul class="errorList"> ';
+                            errorText += "<li> شماره تلفن تکراری است</li></ul>";
+                            openErrorAlertBP(errorText);
+                        }
+                    })
+                }
+                if (x) {
+                    moreItems.push(itemsVal);
+                    console.log(moreItems);
+                    $("#input-" + addId + "-items").append(
+                        '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                        ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
+                        itemsVal + '</div></div>');
+                    $("#" + addId).val('')
+                }
             } else {
                 console.log('mooz');
                 errorText += '<ul class="errorList"> ';
@@ -940,22 +972,42 @@
                 } else if (res.fields[i].type == 'int') {
                     addId = res.fields[i].field_id;
                     // itemsVal = res.fields[i].data;
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                    text += '<div class="' + (res.fields[i].necessary == 1 ?
-                        ' importantFieldLabel' :
-                        '') + '"> ' + res.fields[i].name + '</div>';
-                    text += '</div>';
-                    text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i].data != null ?
-                            '' +
-                            res.fields[i].data +
-                            '' :
-                            '') + '" name="' + res.fields[i].name +
-                        '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' + (res.fields[i]
-                            .placeholder !=
-                            null ?
-                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
-                            .fields[i]
-                            .necessary == 1 ? 'required ' : '') + ' >';
+                    moreItems = res.fields[i].data !== null && res.fields[i].data != '' ?
+                        res.fields[i].data.split("_") : [];
+                    console.log(moreItems);
+                    if (moreItems.length < 2) {
+                        oneItems = true;
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        text += '<div class="' + (res.fields[i].necessary == 1 ?
+                            ' importantFieldLabel' :
+                            '') + '"> ' + res.fields[i].name + '</div>';
+                        text += '</div>';
+                        text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i].data !=
+                                null ?
+                                '' +
+                                res.fields[i].data +
+                                '' :
+                                '') + '" name="' + res.fields[i].name +
+                            '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' + (res.fields[
+                                    i]
+                                .placeholder !=
+                                null ?
+                                '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                                .fields[i]
+                                .necessary == 1 ? 'required ' : '') + ' >';
+                    } else {
+                        multipleVal = true;
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        text += '<div class="' + (res.fields[i].necessary == 1 ?
+                            ' importantFieldLabel' :
+                            '') + '"> ' + res.fields[i].name + '</div>';
+                        text += '</div>';
+                        text += '<input type="text" onkeypress="return isNumber(event)" name="' + res.fields[i].name +
+                            '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' +
+                            (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                                .fields[i].necessary == 1 ? 'required ' : '') + ' >';
+
+                    }
                     if (res.fields[i].multiple === 1) {
                         multiple = true;
                         text += '<div class="inputBoxTextGeneralInfo inputBoxAdd "onclick="addPhone()">';
@@ -1229,11 +1281,22 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                 }
-
                 text += '</div>';
-                if (res.fields[i].multiple === 1) {
+                if (res.fields[i].multiple === 1 || multipleVal) {
                     text += '<div id="input-' + res.fields[i].field_id +
-                        '-items" style="display: flex;flex-direction: row;"></div>';
+                        '-items" style="display: flex;flex-direction: row;">';
+                    if (multipleVal) {
+                        for (x = 0; x < moreItems.length; x++) {
+                            itemsVal = moreItems[x];
+                            text += '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                                ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
+                                moreItems[x] + '';
+                            text += '</div>';
+                            text += '</div>';
+                        }
+                        multipleVal = false;
+                    }
+                    text += '</div>';
                 }
                 if (res.fields[i].force_help !== null || '') {
                     text += '<figcaption style="width: 100%;"> ' + res.fields[i]

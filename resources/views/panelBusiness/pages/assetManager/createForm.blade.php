@@ -93,9 +93,7 @@
                     }
                 }
                 $('#hotel').empty().append(html);
-                console.log('====================================');
-                console.log(res);
-                console.log('====================================');
+
             }
         });
     </script>

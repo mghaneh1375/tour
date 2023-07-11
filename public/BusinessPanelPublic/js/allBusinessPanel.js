@@ -101,11 +101,8 @@ function fitThisImg(_element) {
 
 function errorAjax(reject) {
     closeLoading();
-    console.log("sib");
     if (reject.status === 422) {
-        console.log("moz");
         var errors = JSON.parse(reject.responseText).errors;
-
         var errMsg = "";
         $.each(errors, function (key, val) {
             errMsg += val + "<br/>";
