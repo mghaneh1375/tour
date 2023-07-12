@@ -40,7 +40,7 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div id="formMake"></div>
-            <div id="boxMake" style="display: flex; flex-wrap: wrap;"></div>
+            <div id="boxMake" style="display: flex; flex-wrap: wrap;flex-direction:;"></div>
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation nextPageVal" type="button" onclick="nextStep()">مرحله
                     بعد</button>
@@ -191,6 +191,7 @@
         var radioSet = '';
         var z;
         var modal = false;
+        var redirector = false;
         var roomNum = -1;
         var allForm = 0;
         var formComplite = 0;
@@ -749,7 +750,6 @@
             });
             console.log(errorText);
             if (errorText.length > 0) {
-                console.log('mooz');
                 openErrorAlertBP(errorText);
             } else {
                 storeDataModal(fields);
@@ -840,7 +840,6 @@
                 }
                 if (x) {
                     moreItems.push(itemsVal);
-                    console.log(moreItems);
                     $("#input-" + addId + "-items").append(
                         '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
                         ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
@@ -848,7 +847,6 @@
                     $("#" + addId).val('')
                 }
             } else {
-                console.log('mooz');
                 errorText += '<ul class="errorList"> ';
                 errorText += "<li> تلفن حداقل باید 8 رقم باشد</li></ul>";
                 openErrorAlertBP(errorText);
@@ -881,10 +879,12 @@
                 $('#formModal').empty().append(html);
             }
             for (let i = 0; i < res.fields.length; i++) {
-                text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                    .half == 1 ? '49%' :
-                    '100%') + ';flex-direction: ' + (res.fields[i].type == 'listview' ? ' column' : '') + '">';
+                //  ' + (res.fields[i].half == 1 ? '49%' : '100%') + '
+
                 if (res.fields[i].type == 'radio') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -903,9 +903,11 @@
                         text += '</label>';
 
                     }
-
+                    text += '</div>';
                 } else if (res.fields[i].type == 'checkbox') {
-
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -933,7 +935,11 @@
                         text += '</label>';
 
                     }
+                    text += '</div>';
                 } else if (res.fields[i].type == 'string') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -948,7 +954,11 @@
                         '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'time') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text +=
                         '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
                     text += '<div class=" name' + (res.fields[i].necessary == 1 ?
@@ -969,7 +979,11 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'int') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     addId = res.fields[i].field_id;
                     // itemsVal = res.fields[i].data;
                     moreItems = res.fields[i].data !== null && res.fields[i].data != '' ?
@@ -1015,24 +1029,59 @@
                         text += '<div style="font-size: 14px;" > اضافه کن</div>';
                         text += '</div>';
                     }
+                    text += '</div>';
                 } else if (res.fields[i].type == 'listview') {
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
-                    console.log(res.fields);
-                    for (let y = 0; y < res.fields[i].items.length; y++) {
-                        text += '<div style="display:flex;flex-direction: column">';
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText inputBoxTour">';
-                        text += '<div class="' + (res.fields[i].necessary == 1 ?
-                            ' importantFieldLabel' :
-                            '') + '"> ' + res.fields[i].name + '</div>';
-                        text += '<div id="' + res.fields[i].items[y].id + '" class="inputBoxInput">';
-                        text += '' + res.fields[i].items[y].fields[1].val + '';
+                    if (res.fields[i].items.length <= 1) {
+                        text += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
+                        text += '';
+                    } else {
+                        roomCount = res.fields[i].items.length;
+                        text += '<div style="width:100%;align-items: baseline;" class="row">';
+                        text += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
+                        text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        text +=
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
+                        text += '<input class"inputBoxInput" type="text" style="width:100%;border:0px">';
                         text += '</div>';
                         text += '</div>';
                         text += '</div>';
+                        for (let y = 0; y < res.fields[i].items.length; y++) {
+                            text +=
+                                '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%; order:' +
+                                (res
+                                    .fields[i].type == 'listview' ? '2' : '') + '">';
+                            text += '<div class="row" >';
+                            text += '<div class="col-md-5 .col-sm-5"style="padding: 0px!important;"> <img src="' + res
+                                .fields[i]
+                                .items[y].fields[0].val +
+                                '" alt="Girl in a jacket" max-width="100%" height="100%">';
+                            text += '</div>';
+                            text +=
+                                '<div class="col-md-7 .col-sm-5 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
+                            text += '<div>';
+                            text += '<div class="colorOrag bold"> نام اتاق</div>';
+                            text += '<div class="bold">' + res.fields[i].items[y].fields[1].val + ' </div>';
+                            text += '<div class="colorOrag bold">تعداد اتاق</div>';
+                            text += '</div>';
+                            text += '<div class="row SpaceBetween">';
+                            text +=
+                                '<div class="backOrang colorWhite editBtn"> <i class="editIcon iconStyle"></i>ویرایش</div>';
+                            text +=
+                                '<div class="colorWhite backBlue editBtn"><i class="trashIcon iconStyle"></i> حذف</div>';
+                            text += '</div>';
+                            text += '</div>';
+                            text += '</div>';
+                            text += '</div>';
+                        }
                     }
                 } else if (res.fields[i].type == 'gallery') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     picId = res.fields[i].field_id;
 
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1040,11 +1089,11 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<div id="uploadImgDiv" class="fullwidthDiv">';
+                    text += '<div id="uploadImgDiv" class="fullwidthDiv"style="padding:10px">';
                     text += '<div id="picDiv0" style="display: inline-block; width: 23%; position: relative">';
                     text +=
                         '<input class="input-file" id="picsInput_0" name="pics[]" accept="image/*" type="file" onchange="readURL(this, 0);" style="display: none">';
-                    text += '<div id="picHover_0" class="uploadHover hidden">';
+                    text += '<div id="picHover_0" class="uploadHover hidden" >';
                     text += '<div class="tickIcon hidden"></div>';
                     text += '<div class="warningIcon hidden"> اشکال در بارگذاری</div>';
                     text += '<div class="process">';
@@ -1111,19 +1160,28 @@
                     text += '</div>';
                     text += '</div>';
                     text += '</div>';
-
-                } else if (res.fields[i].type == 'redirector') {
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
-                    text += '<div class="' + (res.fields[i].necessary == 1 ?
-                        ' importantFieldLabel' :
-                        '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
+                } else if (res.fields[i].type == 'redirector') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width:30%; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    redirector = true;
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-
-                        text += '<button type="button" onclick="openModal(' + res.fields[i].options[x] +
-                            ')">اضافه کردن</button>';
+                        text += '<div class="row" onclick="openModal(' + res.fields[i].options[x] +
+                            ')" style="display: flex;align-items: center;">';
+                        text +=
+                            '<div class="col-md-4 col-sm-4" style="padding:8px;"><svg max-width="100%" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                        text +=
+                            '<path d="M126.999 58.6058V68.3794C127.017 69.6463 126.785 70.9044 126.317 72.0816C125.848 73.2588 125.152 74.332 124.269 75.2399C123.386 76.1478 122.332 76.8726 121.168 77.3727C120.004 77.8728 118.753 78.1385 117.487 78.1545H78.1727V117.224C78.2068 119.782 77.2236 122.249 75.4395 124.082C73.6554 125.916 71.2165 126.965 68.6592 126.999H58.5794C57.313 127.017 56.0556 126.785 54.8791 126.316C53.7025 125.847 52.6298 125.151 51.7224 124.267C50.815 123.384 50.0906 122.33 49.5908 121.166C49.0909 120.001 48.8254 118.75 48.8094 117.483C48.8094 117.397 48.8094 117.311 48.8094 117.225V78.1545H9.75752C7.20048 78.1846 4.73619 77.1975 2.90655 75.4103C1.07691 73.6231 0.0317299 71.1821 0.000855259 68.6241C0.000855259 68.5529 0.000855259 68.4832 0.000855259 68.4135V58.6058C-0.0331826 56.0475 0.949974 53.5805 2.73408 51.7473C4.51818 49.9142 6.95711 48.865 9.51441 48.8306H48.8272V9.76127C48.8111 8.49437 49.0449 7.23672 49.5151 6.06028C49.9854 4.88384 50.6829 3.81169 51.5677 2.90517C52.4526 1.99865 53.5074 1.27554 54.6719 0.777209C55.8363 0.278878 57.0876 0.0151043 58.354 0.000976567C58.4296 0.000976567 58.5023 0.000976567 58.5838 0.000976567H68.3538C69.6203 -0.0170586 70.8778 0.214871 72.0546 0.683497C73.2313 1.15212 74.3042 1.84825 75.2118 2.73205C76.1193 3.61585 76.8438 4.66999 77.3437 5.83415C77.8437 6.99831 78.1093 8.24966 78.1253 9.5166C78.1253 9.60261 78.1253 9.68861 78.1253 9.77462V48.8514H117.18C119.736 48.8042 122.207 49.7744 124.048 51.5488C125.889 53.3232 126.951 55.7565 126.999 58.3136C126.999 58.4115 126.999 58.5079 126.999 58.6058Z" fill="#444444"/> </svg>';
+                        text += '</div>';
+                        text += '<div class="col-md-8 col-sm-8" >';
+                        text += '<div> اتاق جدیدی اضافه کنید';
+                        text += '</div>';
+                        text += '</div>';
                     }
                 } else if (res.fields[i].type == 'float') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1142,7 +1200,11 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'file') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1163,8 +1225,11 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ? '' :
                         'displayNone') + '"></div>';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'map') {
-
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1192,7 +1257,11 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'api') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     needSearchCityModal = true;
 
                     city = res.fields[i].options[0].replace('koochita', 'mykoochita')
@@ -1225,7 +1294,11 @@
 
                     text += '<div id="apiItemList" class"hidden">';
                     text += '</div>';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'textarea') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1240,7 +1313,11 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >' + (res.fields[i].data != null ? '' + res.fields[i]
                             .data + '' : '') + '</textarea>';
+                    text += '</div>';
                 } else if (res.fields[i].type == 'calendar') {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1264,7 +1341,11 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '';
                     calenderId = res.fields[i].field_id;
+                    text += '</div>';
                 } else {
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1280,8 +1361,9 @@
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
+                    text += '</div>';
                 }
-                text += '</div>';
+
                 if (res.fields[i].multiple === 1 || multipleVal) {
                     text += '<div id="input-' + res.fields[i].field_id +
                         '-items" style="display: flex;flex-direction: row;">';
@@ -1298,14 +1380,16 @@
                     }
                     text += '</div>';
                 }
-                if (res.fields[i].force_help !== null || '') {
-                    text += '<figcaption style="width: 100%;"> ' + res.fields[i]
-                        .force_help +
-                        '';
+                if (res.fields[i].force_help && res.fields[i].force_help !== "") {
+                    text += '<figcaption style="width: 100%;"> ' + res.fields[i].force_help + '';
                     text += '</figcaption>';
                 }
             }
             $('#' + resultBox).empty().append(text);
+            // if (redirector) {
+            //     console.log("redirector");
+            //     $('#' + resultBox).css("flex-direction", "row-reverse");
+            // }
             $(".clockP").clockpicker(clockOptions);
             $(".observer-example").datepicker(datePickerOptions);
             if (!needSearchCityModal) {

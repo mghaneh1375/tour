@@ -418,6 +418,7 @@ input[type="radio"] {
 /* .mainSidebar .sideMenuSection .sideNavRow.able a:hover {
     color: #db3700 !important;
 } */
+
 .itemsAdd {
     border: 1px solid #d5d5d5;
     border-radius: 5px;
@@ -660,6 +661,12 @@ label {
 .circleButton.editBut {
     background: blue;
 }
+.editBtn {
+    padding: 0 9px;
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+}
 .circleButton.yellowBut {
     background: yellowgreen;
 }
@@ -760,7 +767,6 @@ label {
 .notificationHeader.off .icOff {
     display: inline-block;
 }
-
 .notificationHeader.on .newNum {
     display: flex;
 }

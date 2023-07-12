@@ -47,8 +47,26 @@ figcaption {
 .backOrang {
     background-color: #db3700;
 }
+.backBlue {
+    background-color: #0076a3;
+}
+.iconStyle {
+    font-style: normal;
+    padding-left: 4px;
+    font-size: 18px;
+}
+.colorOrag {
+    color: #db3700;
+}
+.colorWhite {
+    color: white;
+}
 .aligenCenter {
     align-items: center;
+    display: flex;
+}
+.flexDirectionCol {
+    flex-direction: column;
     display: flex;
 }
 
