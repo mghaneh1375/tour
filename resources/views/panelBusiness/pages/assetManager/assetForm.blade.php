@@ -184,6 +184,7 @@
         let prevFromId = undefined;
         let nextFormId = undefined;
         var moreItems = [];
+        var roomName = [];
         let x = " ";
         let y = " ";
         let userAssetId = parseInt('{{ $userAssetId }}');
@@ -192,6 +193,7 @@
         var z;
         var modal = false;
         var redirector = false;
+        var oneItems = false;
         var roomNum = -1;
         var allForm = 0;
         var formComplite = 0;
@@ -813,7 +815,7 @@
             });
         }
 
-        var oneItems = false;
+
 
         function addPhone() {
             var errorText = "";
@@ -1045,13 +1047,16 @@
                         text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                         text +=
                             '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
-                        text += '<input class"inputBoxInput" type="text" style="width:100%;border:0px">';
+                        text +=
+                            '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
+                        text += '<div id="searchResult"></div>';
                         text += '</div>';
                         text += '</div>';
                         text += '</div>';
                         for (let y = 0; y < res.fields[i].items.length; y++) {
+                            roomName.push(res.fields[i].items[y].fields[1].val);
                             text +=
-                                '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%; order:' +
+                                '<div class="relative-position inputBoxTour boxRoom" style=" order:' +
                                 (res
                                     .fields[i].type == 'listview' ? '2' : '') + '">';
                             text += '<div class="row" >';
@@ -1067,7 +1072,7 @@
                             text += '<div class="bold">' + res.fields[i].items[y].fields[1].val + ' </div>';
                             text += '<div class="colorOrag bold">تعداد اتاق</div>';
                             text += '</div>';
-                            text += '<div class="row SpaceBetween">';
+                            text += '<div class="row SpaceBetween" style="padding-bottom: 5px;">';
                             text +=
                                 '<div class="backOrang colorWhite editBtn"> <i class="editIcon iconStyle"></i>ویرایش</div>';
                             text +=
@@ -1162,7 +1167,7 @@
                     text += '</div>';
                     text += '</div>';
                 } else if (res.fields[i].type == 'redirector') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width:30%; order:' + (res
+                    text += '<div class="relative-position inputBoxTour boxRoom" style="order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     redirector = true;
                     for (let x = 0; x < res.fields[i].options.length; x++) {
@@ -1402,6 +1407,41 @@
             });
 
         }
+        var t = null;
+
+        function fillInput(x) {
+            $("#searchInput").val(x);
+            $("#searchResult").empty();
+        }
+        $(document).on('keyup', '#searchInput', function() {
+            console.log(this.value.length);
+            $("#searchResult").empty();
+            filteredData = [];
+            if (this.value.length > 1) {
+
+                searchVal = $(this).val();
+                const filteredData = []
+                roomName.forEach(sentence => {
+                    let words = sentence.split(" ")
+                    words.forEach((word, index) => {
+                        if (word.match(searchVal)) {
+                            filteredData.push(sentence)
+                        }
+                    })
+
+                })
+                for (i = 0; i < filteredData.length; i++) {
+                    t = filteredData[i];
+                    console.log(t);
+                    $("#searchResult").append('<div onclick="fillInput(\'' + filteredData[i] + '\')">' +
+                        filteredData[i] +
+                        '</div>');
+                }
+            } else {
+                $("#searchResult").empty();
+            }
+
+        });
 
         function callMap() {
 
