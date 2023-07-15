@@ -24,6 +24,10 @@
             top: unset;
         }
 
+        input::file-selector-button {
+            display: none;
+        }
+
         input[type="checkbox"],
         input[type="radio"] {
             display: unset !important;
@@ -209,9 +213,7 @@
         var callInitMap = false;
 
         let url = "https://boom.bogenstudio.com/api";
-        let token =
-            'Bearer ' + localStorage.getItem("token");
-
+        let token = 'Bearer ' + localStorage.getItem("token");
 
         function storePic(userAssetId, fields) {
             var fileStore = new FormData();
@@ -236,7 +238,6 @@
                 }
             });
         }
-
 
         function storeData(fields) {
             console.log(fields);
@@ -310,8 +311,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             console.log("save shode");
-                            // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                            //     userAssetId;
+                            window.locationp.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
                             console.log('store NNOk');
@@ -343,6 +344,10 @@
                     return;
                 if ($(this).attr('data-change') === '0')
                     return;
+                if (!$(this).attr('required') && $(this).val() === '') {
+                    console.log($(this).attr('id'));
+                    return;
+                }
                 // if ($(this).hasClass('mapMark')) {
                 //     $(this).val(z);
                 // }
@@ -368,7 +373,8 @@
                             if ($(this).attr('required')) {
                                 if (moreItems.length < 1) {
                                     errorText += '<ul class="errorList"> ';
-                                    errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
+                                    errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' +
+                                        "</li></ul>";
                                     $(this).parent().addClass('errorInput');
                                 }
                             }
@@ -472,11 +478,12 @@
                 window.location.href = '/createForm?isHaghighi=';
             }
         }
-
+        openLoading();
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
             url: url + '/asset/' + assetId + "/form",
+            complete: closeLoading,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -805,10 +812,12 @@
         function openModal(x) {
             $("#listAdd").modal("show");
             modal = true;
+            openLoading();
             $.ajax({
                 type: 'get',
                 // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
                 url: url + '/form/' + x,
+                complete: closeLoading,
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -889,16 +898,17 @@
                 //  ' + (res.fields[i].half == 1 ? '49%' : '100%') + '
 
                 if (res.fields[i].type == 'radio') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
+                        .half == 1 ? '49%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
+                        text += '<label class="cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[
+                                    x] ?
                                 'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res
                             .fields[i].options[x] + '';
                         text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
@@ -912,9 +922,9 @@
                     }
                     text += '</div>';
                 } else if (res.fields[i].type == 'checkbox') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
+                        .half == 1 ? '49%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -934,7 +944,8 @@
                                 i]
                             .options[
                                 x] + '">' + res.fields[i].options[x] + '';
-                        text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
+                        text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[
+                                x] +
                             '" name="' + res.fields[i]
                             .name + '"  data-id="' + res.fields[i].field_id +
                             '" ' + (isSelected ?
@@ -944,9 +955,9 @@
                     }
                     text += '</div>';
                 } else if (res.fields[i].type == 'string') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
+                        .half == 1 ? '49%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -957,22 +968,24 @@
                         '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') + '" id="' + res
                         .fields[i].field_id +
                         '" class="inputBoxInput" name="' + res.fields[i].name +
-                        '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' : '') +
+                        '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' :
+                            '') +
                         '"' + (res
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
                 } else if (res.fields[i].type == 'time') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
+                        .half == 1 ? '49%' : '100%') + ';">';
                     text +=
                         '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
                     text += '<div class=" name' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' + res
+                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' +
+                            res
                             .fields[i].data + '' :
                             '') + '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
                             '' :
@@ -988,12 +1001,13 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
                 } else if (res.fields[i].type == 'int') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
+                        .half == 1 ? '49%' : '100%') + ';">';
                     addId = res.fields[i].field_id;
                     // itemsVal = res.fields[i].data;
-                    moreItems = res.fields[i].data !== null && res.fields[i].data != '' ?
+                    moreItems = res.fields[i].data !== null && res.fields[i].data != '' && res.fields[i].multiple ===
+                        1 ?
                         res.fields[i].data.split("_") : [];
                     if (moreItems.length < 2) {
                         oneItems = true;
@@ -1002,13 +1016,15 @@
                             ' importantFieldLabel' :
                             '') + '"> ' + res.fields[i].name + '</div>';
                         text += '</div>';
-                        text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i].data !=
+                        text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i]
+                                .data !=
                                 null ?
                                 '' +
                                 res.fields[i].data +
                                 '' :
                                 '') + '" name="' + res.fields[i].name +
-                            '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' + (res.fields[
+                            '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' + (res
+                                .fields[
                                     i]
                                 .placeholder !=
                                 null ?
@@ -1040,17 +1056,20 @@
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
-                    if (res.fields[i].items.length <= 1) {
+                    console.log(res.fields[i].items.length);
+                    if (res.fields[i].items.length < 1) {
+
                         elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
                         elm += '';
                     } else {
                         roomCount = res.fields[i].items.length;
+                        sameRoom = res.fields[i].items[3];
                         elm += '<div style="width:100%;align-items: baseline;" class="row">';
                         elm += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
                         elm += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق </div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
                         elm += '<div id="searchResult"></div>';
@@ -1064,10 +1083,11 @@
                                 (res
                                     .fields[i].type == 'listview' ? '2' : '') + '">';
                             text += '<div class="row" >';
-                            text += '<div class="col-md-5 .col-sm-5"style="padding: 0px!important;"> <img src="' + res
+                            text +=
+                                '<div class="col-md-5 .col-sm-5"style="padding: 0px!important;"> <img src="' + res
                                 .fields[i]
                                 .items[y].fields[0].val +
-                                '" alt="Girl in a jacket" max-width="100%" height="100%">';
+                                '" style="height: 100%; width: 100%;object-fit: contain;">';
                             text += '</div>';
                             text +=
                                 '<div class="col-md-7 .col-sm-5 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
@@ -1088,7 +1108,8 @@
                         }
                     }
                 } else if (res.fields[i].type == 'gallery') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     picId = res.fields[i].field_id;
@@ -1188,7 +1209,8 @@
                         text += '</div>';
                     }
                 } else if (res.fields[i].type == 'float') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1196,7 +1218,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input type="number" step="0.01" value="' + (res.fields[i].data != null ? '' + res.fields[i]
+                    text += '<input type="number" step="0.01" value="' + (res.fields[i].data != null ? '' + res.fields[
+                                i]
                             .data +
                             '' :
                             '') + '" name="' + res.fields[i].name +
@@ -1210,10 +1233,12 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
-                } else if (res.fields[i].type == 'file') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                } else if (res.fields[i].type.toLowerCase() == 'file') {
+                    text +=
+                        '<div class="relative-position inputBoxTour SpaceBetween" style="align-items: center;margin-left: 10px; width: ' +
+                        (
+                            res.fields[i]
+                            .half == 1 ? '49%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1221,25 +1246,37 @@
                     text += '</div>';
                     fileId = res.fields[i].field_id;
                     text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') +
-                        '" type="file" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
-                            '') + '" name="' + res.fields[i].name +
-                        '" id="' + res
-                        .fields[i].field_id +
-                        '" class="inputBoxInput file" placeholder="' + (res.fields[i]
-                            .placeholder !=
-                            null ?
-                            '' + res.fields[i].placeholder + '' : '') + '"' + (res
-                            .fields[i]
-                            .necessary == 1 ? 'required ' : '') + ' style="display:none">';
-                    text += '  <button class="fileBtn" style="display:block;width:120px; height:30px;" onclick="$(\'#' +
-                        fileId +
-                        '\').click()">Your text here</button>';
-                    text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ?
-                        '' :
-                        'displayNone') + '"></div>';
+                        '" type="file" style=" display:' + (res.fields[i].data != null ? 'none' : '') +
+                        '"  id="' + res.fields[i].field_id + '" class=" inputBoxInput file"' + (res.fields[i]
+                            .necessary ==
+                            1 ? 'required ' : '') + '>';
+                    if (res.fields[i].data != null) {
+                        text += '<label for="' + res.fields[i].field_id + '">' + (res.fields[i].data != null ? '' + res
+                            .fields[i].data + '' : '') + '</label>';
+                        text += '<div style="display:flex;align-items: center;">';
+                        text += '<a class="colorBlack" href="https://boom.bogenstudio.com/storage/' + res.fields[i].data +
+                            '" target="_blank">';
+                        text +=
+                            '<div class="colorBlack editBtn borderLeft borderRight" ><i class="fa fa-eye iconStyle"></i>';
+
+                        text += '</div>';
+                        text += '</a>';
+                        text += '<div class="colorBlack editBtn borderLeft" ><i class="trashIcon iconStyle"></i></div>';
+                        text +=
+                            '  <button class="fileBtn cursorPointer" style="display:block;width:120px; height:30px;" onclick="$(\'#' +
+                            fileId + '\').click()">تغییر فایل</button>';
+                        text += '</div>';
+                    } else {
+                        text +=
+                            '  <button class="fileBtn cursorPointer" style="display:block;width:120px; height:30px;" onclick="$(\'#' +
+                            fileId +
+                            '\').click()">انتخاب فایل</button>';
+                    }
+
                     text += '</div>';
                 } else if (res.fields[i].type == 'map') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1271,7 +1308,8 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
                 } else if (res.fields[i].type == 'api') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     needSearchCityModal = true;
@@ -1308,7 +1346,8 @@
                     text += '</div>';
                     text += '</div>';
                 } else if (res.fields[i].type == 'textarea') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1323,11 +1362,13 @@
                         (res.fields[i].placeholder != null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
-                            .necessary == 1 ? 'required ' : '') + ' >' + (res.fields[i].data != null ? '' + res.fields[i]
+                            .necessary == 1 ? 'required ' : '') + ' >' + (res.fields[i].data != null ? '' + res.fields[
+                                i]
                             .data + '' : '') + '</textarea>';
                     text += '</div>';
                 } else if (res.fields[i].type == 'calendar') {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1338,7 +1379,8 @@
                     text += '<div class="select-side calendarIconTourCreation">';
                     text += '<i class="ui_icon calendar calendarIcon"></i>';
                     text += '</div>';
-                    text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[i]
+                    text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[
+                                i]
                             .data + '' : '') +
                         '" name="' + res.fields[i].name +
                         '" name="sDateNotSame[]" id="' +
@@ -1355,7 +1397,8 @@
                     calenderId = res.fields[i].field_id;
                     text += '</div>';
                 } else {
-                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res.fields[i]
+                    text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
+                        .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1397,7 +1440,7 @@
                 }
             }
             $('#' + resultBox).empty().append(text);
-            $('#searchForm').empty().append(html);
+            $('#searchForm').empty().append(elm);
             // if (redirector) {
             //     console.log("redirector");
             //     $('#' + resultBox).css("flex-direction", "row-reverse");
@@ -1509,9 +1552,11 @@
             });
 
             if (userAssetId != -1) {
+                openLoading();
                 $.ajax({
                     type: 'get',
                     url: url + '/form/' + formId + '/' + userAssetId,
+                    complete: closeLoading,
                     headers: {
                         'Accept': 'application/json',
                         "Authorization": token
@@ -1529,10 +1574,12 @@
                     }
                 });
             } else {
+                openLoading();
                 $.ajax({
                     type: 'get',
                     // url: 'http://myeghamat.com/api/form/' + formId,
                     url: url + '/form/' + formId,
+                    complete: closeLoading,
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',

@@ -674,6 +674,13 @@ label {
     margin-left: 10px !important;
     width: 30%;
 }
+.fileBtn {
+    margin-right: 5px;
+    background-color: #0076a3;
+    color: white;
+    text-align: center;
+    border: none;
+}
 #searchResult {
     padding-right: 10px;
     width: 80%;
@@ -769,6 +776,12 @@ label {
     cursor: pointer;
 }
 .createTicketModal .filesSection .file .name {
+}
+.borderLeft {
+    border-left: 1px solid #d8d8d8;
+}
+.borderRight {
+    border-right: 1px solid #d8d8d8;
 }
 
 .notificationHeader.off .newNum {

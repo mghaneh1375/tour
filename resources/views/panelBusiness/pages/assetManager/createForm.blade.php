@@ -61,11 +61,12 @@
         function startProcess() {
             window.location.href = '/asset/' + selectedAssetId + "/step/" + firstStepFormId;
         }
-
+        openLoading();
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/asset',
             url: 'https://boom.bogenstudio.com/api/asset',
+            complete: closeLoading,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
