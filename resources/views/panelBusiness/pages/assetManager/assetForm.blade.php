@@ -921,7 +921,7 @@
 
                     }
                     text += '</div>';
-                } else if (res.fields[i].type == 'checkbox') {
+                } else if (res.fields[i].type.toLowerCase() == 'checkbox') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
@@ -954,7 +954,7 @@
 
                     }
                     text += '</div>';
-                } else if (res.fields[i].type == 'string') {
+                } else if (res.fields[i].type.toLowerCase() == 'string') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
@@ -974,7 +974,7 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
-                } else if (res.fields[i].type == 'time') {
+                } else if (res.fields[i].type.toLowerCase() == 'time') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
@@ -1000,7 +1000,7 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
-                } else if (res.fields[i].type == 'int') {
+                } else if (res.fields[i].type.toLowerCase() == 'int') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
@@ -1052,7 +1052,7 @@
                         text += '</div>';
                     }
                     text += '</div>';
-                } else if (res.fields[i].type == 'listview') {
+                } else if (res.fields[i].type.toLowerCase() == 'listview') {
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
@@ -1107,7 +1107,7 @@
                             text += '</div>';
                         }
                     }
-                } else if (res.fields[i].type == 'gallery') {
+                } else if (res.fields[i].type.toLowerCase() == 'gallery') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
@@ -1191,7 +1191,7 @@
                     text += '</div>';
                     text += '</div>';
                     text += '</div>';
-                } else if (res.fields[i].type == 'redirector') {
+                } else if (res.fields[i].type.toLowerCase() == 'redirector') {
                     text += '<div class="relative-position inputBoxTour boxRoom" style="order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     redirector = true;
@@ -1208,7 +1208,7 @@
                         text += '</div>';
                         text += '</div>';
                     }
-                } else if (res.fields[i].type == 'float') {
+                } else if (res.fields[i].type.toLowerCase() == 'float') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
@@ -1274,7 +1274,7 @@
                     }
 
                     text += '</div>';
-                } else if (res.fields[i].type == 'map') {
+                } else if (res.fields[i].type.toLowerCase() == 'map') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
@@ -1307,7 +1307,7 @@
                             .fields[i]
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
-                } else if (res.fields[i].type == 'api') {
+                } else if (res.fields[i].type.toLowerCase() == 'api') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
@@ -1345,7 +1345,7 @@
                     text += '<div id="apiItemList" class"hidden">';
                     text += '</div>';
                     text += '</div>';
-                } else if (res.fields[i].type == 'textarea') {
+                } else if (res.fields[i].type.toLowerCase() == 'textarea') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
@@ -1366,7 +1366,7 @@
                                 i]
                             .data + '' : '') + '</textarea>';
                     text += '</div>';
-                } else if (res.fields[i].type == 'calendar') {
+                } else if (res.fields[i].type.toLowerCase() == 'calendar') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
