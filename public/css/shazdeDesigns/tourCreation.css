@@ -731,6 +731,11 @@ input[type="radio"]:checked + label span {
     font-size: 15px;
     margin: 0px;
 }
+.fileBtn {
+    background-color: #0076a3;
+    color: white;
+    text-align: center;
+}
 .nextStepBtnTourCreation:hover {
     background-color: #00bbe9 !important;
     color: white !important;

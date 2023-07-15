@@ -40,6 +40,7 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div id="formMake"></div>
+            <div id="searchForm"></div>
             <div id="boxMake" style="display: flex; flex-wrap: wrap;flex-direction:;"></div>
             <div class="row fullyCenterContent rowReverse SpaceBetween" style="padding: 15px;">
                 <button class="btn nextStepBtnTourCreation nextPageVal" type="button" onclick="nextStep()">مرحله
@@ -139,7 +140,7 @@
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div id="formModal"></div>
-                            <div id="redirectList" style="width: 100%; height: 500px"></div>
+                            <div id="redirectList" style="width: 100%; height: 360px"></div>
                         </div>
                     </div>
                 </div>
@@ -188,26 +189,29 @@
         let x = " ";
         let y = " ";
         let userAssetId = parseInt('{{ $userAssetId }}');
-        let isInFirstStep = false;
         var radioSet = '';
         var z;
+        var allForm = 0;
+        var roomNum = -1;
+        var formComplite = 0;
+        var ageVal;
+        var percent;
+        let isInFirstStep = false;
+        var itemsVal = null;
+        var addId = null;
+        var calenderId = null;
         var modal = false;
         var redirector = false;
         var oneItems = false;
-        var roomNum = -1;
-        var allForm = 0;
-        var formComplite = 0;
-        var ageVal;
-        var itemsVal = null;
         var multipleVal = false;
-        var percent;
         var multiple = false;
-        var addId = null;
-        var calenderId = null;
+        var initMap = false;
+        var callInitMap = false;
+
         let url = "https://boom.bogenstudio.com/api";
         let token =
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDhiNzBhYWRiM2VkY2ExMjdhOTc5YTQ3ZGE3YWE3ODYzNzBmYzBhZWY0OWYxYTA0NjFjNjAxYTc5NzcxMTg2YmI0OGUxNTllYzU2NTkwYjkiLCJpYXQiOjE2ODczNTk4NTguMzc3NTQ1LCJuYmYiOjE2ODczNTk4NTguMzc3NTUsImV4cCI6MTcxODk4MjI1OC4zNjcyMzYsInN1YiI6IjI0Iiwic2NvcGVzIjpbXX0.WG_3APY-VKbeWPy-wJHILH6yB-AACKX0Nz_Hb0VzBFnMJ12fwQ905-5mFEdydRUOU1y0pCofBi6nnUUyCY9FAq-IcXSvyLi7pN1FD2Ogw8mqokjAMBX-kDM9rEFpYarcEo6O4whZeJauO5uhpyLMT1eb-OnH_IBnoe_tL9m8ljNehjvdoUzNywan_a-8SYktJTRj8Y0wsKDG7H-oHwVr4ZVNmIbQxGLqiKv00r-nuP5tQi5Oj5ssJuFVrV4Vw2T8S3-NpC-sDa8zaBQdbTMri6awg3SF77-66FScH4dxFii3O6Qe3Li_szJuwMt8m2X7peMIdYc4s-LZsLo1IINyfysJESjGuuyzOONJruK5W6XSUoOlo5jFIDZYSGkfBsEYfxKCLDHt7flmjT27ryjabJXwhirwwHo2gKDKQzH0GonECaJRyuOzpJElb2be3awivNR_28FKia39g7WCtrdlVpQqdZ-7VlHCQwU7lT5VbR-1cgSKpVjdWeeW0aMUuy2cRO_Lzzqven1QxSvwsiwu3Nw3MeiOZSg2Gwq2SK0z4C-iJFrFTN8qP16ezYETDdStNiUU8pVYtV1HkxplDuFzsaori8qmeXbe6MoFC7k2_OnAz05_vRpGdsXdT1yQPV4xUnOvUbLDj83foJbm3QuKfNDaOOuxlogchLQLwJW-p8E';
-        // "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNDNjNWY4YzE0NGQ3YmE5NjNlMzNlYjUxNGQwZjQxODFjZGEwZmUzOTdkMDdhNDYyOGNhNDIwYmQ3OTM5M2FjMjRhNGEyM2VkMWZhMDlmMDEiLCJpYXQiOjE2ODY1NTQzOTQuODk5OTcyLCJuYmYiOjE2ODY1NTQzOTQuODk5OTc3LCJleHAiOjE3MTgxNzY3OTQuNzA0ODg2LCJzdWIiOiIyNCIsInNjb3BlcyI6W119.mZ46Gw-eW5rTBSeT7O7-sUYDyWJAMbMTmslvH9NWHb70wN5svyaUSirhIP9nCU8boiMubFcRC1KOi3WVn5CuUhbtkxmyO9M88CkodEu3DYwLFHg0soc5kCLLHuSJ6juKuVRgl5CtYacFHaRFSPhsnN_RRbf3EF3ooUeFgZlxU8gO3QK0yeBYoiCG4TlJMpQh5rx3iBxqwzKUsTxfXMRyt2ijK-dZtvbUhHIFXzx7aNkn-IRH0S-p2gCrTgifHIorWyLstk1clTTLYmNghrfVPDNXAjtK7wrUc-jFY-2yLIIqRzClTX1OvkSdOiBlrGHUZt7MrlcjgFkP0AxkNQ26WkDJ2fwPadlxa_Wr_mUv8zQ7rUvPGTt2Wt0xxQip9HHJL4aUsHN-9X44UQ501rKnWC-tHFBnMnpXi6pZED8zG0cd-MfYxNZ_xGwgO1-jrpGYvZ1zXR3RDoy33dd7MyA5pOfUDXlVqUYmpuNR3_MsSJGIFWm3G0MGLH1KdVD8ho_Kd2Wiqnq9N6uXICgKHrdmSFR87QNDfTowg-b3Ok_1BQR42CCpW7cHEPI5jIPSy5_v4fsxqzwzNfSNf3VkhZ9LorMA-OCzmaVXsJQpChvsfSwkVTXb4NpDJtEKb9E5JAHb3boxPVDB6RDFNMqHS_RKbcXQmo8xgep8qXKDFOQ2QcA";
+            'Bearer ' + localStorage.getItem("token");
+
 
         function storePic(userAssetId, fields) {
             var fileStore = new FormData();
@@ -246,7 +250,7 @@
                     // todo: call store asset api
                     $.ajax({
                         type: 'post',
-                        url: url + '/asset/1/user_asset',
+                        url: url + '/asset/' + assetId + '/user_asset',
                         headers: {
                             'Accept': 'application/json',
                             "Authorization": token
@@ -332,6 +336,8 @@
             $inputs.each(function() {
                 $(this).parent().removeClass('errorInput');
                 if ($(this).attr('id') === 'selectStateForSelectCity')
+                    return;
+                if ($(this).attr('id') === 'searchForm')
                     return;
                 if ($(this).attr('id') === 'inputSearchCity')
                     return;
@@ -540,6 +546,11 @@
                 $('#formMake').empty().append(html);
                 percent = (formExist / allForm) * 100;
                 updateSideProgressBar(percent);
+            },
+            error: function(request, status, error) {
+                if (request.status === 404) {
+                    window.location.href = '/404';
+                }
             }
         });
 
@@ -815,23 +826,18 @@
             });
         }
 
-
-
         function addPhone() {
             var errorText = "";
             // $('.inputBoxAdd').after('<div id="space"></div>');
             itemsVal = $("#" + addId).val();
             if (itemsVal.length > 7) {
                 let x = true;
-
-                if (moreItems.length === 1 && oneItems) {
+                if (moreItems.length < 2 && oneItems) {
                     oneItems = false;
                     moreItems = [];
 
                 } else {
-
                     moreItems.forEach((item) => {
-
                         if (item === itemsVal) {
                             x = false
                             errorText += '<ul class="errorList"> ';
@@ -861,13 +867,12 @@
             $(el).parent().remove();
             console.log(moreItems);
         }
-        var initMap = false;
-        var callInitMap = false;
 
         function buildFormHtml(res, resultBox, modal) {
 
             let text = "";
             let html = "";
+            let elm = "";
             let needSearchCityModal = false;
 
             if (modal) {
@@ -990,7 +995,6 @@
                     // itemsVal = res.fields[i].data;
                     moreItems = res.fields[i].data !== null && res.fields[i].data != '' ?
                         res.fields[i].data.split("_") : [];
-                    console.log(moreItems);
                     if (moreItems.length < 2) {
                         oneItems = true;
                         text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
@@ -1037,22 +1041,22 @@
                         subAssetId = res.fields[i].options[x];
                     }
                     if (res.fields[i].items.length <= 1) {
-                        text += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
-                        text += '';
+                        elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
+                        elm += '';
                     } else {
                         roomCount = res.fields[i].items.length;
-                        text += '<div style="width:100%;align-items: baseline;" class="row">';
-                        text += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
-                        text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                        text +=
+                        elm += '<div style="width:100%;align-items: baseline;" class="row">';
+                        elm += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
+                        elm += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
+                        elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        elm +=
                             '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
-                        text +=
+                        elm +=
                             '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
-                        text += '<div id="searchResult"></div>';
-                        text += '</div>';
-                        text += '</div>';
-                        text += '</div>';
+                        elm += '<div id="searchResult"></div>';
+                        elm += '</div>';
+                        elm += '</div>';
+                        elm += '</div>';
                         for (let y = 0; y < res.fields[i].items.length; y++) {
                             roomName.push(res.fields[i].items[y].fields[1].val);
                             text +=
@@ -1215,20 +1219,23 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
+                    fileId = res.fields[i].field_id;
                     text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') +
-                        '" type="file" value="' + (
-                            res.fields[i].data != null ? '' + res.fields[i].data + '' :
+                        '" type="file" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' :
                             '') + '" name="' + res.fields[i].name +
                         '" id="' + res
-                        .fields[
-                            i].field_id +
+                        .fields[i].field_id +
                         '" class="inputBoxInput file" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
-                            .necessary == 1 ? 'required ' : '') + ' >';
-                    text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ? '' :
+                            .necessary == 1 ? 'required ' : '') + ' style="display:none">';
+                    text += '  <button class="fileBtn" style="display:block;width:120px; height:30px;" onclick="$(\'#' +
+                        fileId +
+                        '\').click()">Your text here</button>';
+                    text += '<div><img src="' + res.fields[i].data + '" class="' + (res.fields[i].data != undefined ?
+                        '' :
                         'displayNone') + '"></div>';
                     text += '</div>';
                 } else if (res.fields[i].type == 'map') {
@@ -1368,7 +1375,6 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
                 }
-
                 if (res.fields[i].multiple === 1 || multipleVal) {
                     text += '<div id="input-' + res.fields[i].field_id +
                         '-items" style="display: flex;flex-direction: row;">';
@@ -1391,6 +1397,7 @@
                 }
             }
             $('#' + resultBox).empty().append(text);
+            $('#searchForm').empty().append(html);
             // if (redirector) {
             //     console.log("redirector");
             //     $('#' + resultBox).css("flex-direction", "row-reverse");
@@ -1412,13 +1419,12 @@
         function fillInput(x) {
             $("#searchInput").val(x);
             $("#searchResult").empty();
+            $("#boxMake").empty();
         }
         $(document).on('keyup', '#searchInput', function() {
-            console.log(this.value.length);
             $("#searchResult").empty();
             filteredData = [];
             if (this.value.length > 1) {
-
                 searchVal = $(this).val();
                 const filteredData = []
                 roomName.forEach(sentence => {
@@ -1515,6 +1521,11 @@
                         if (res.status === 0) {
                             buildFormHtml(res, 'boxMake', false);
                         }
+                    },
+                    error: function(request, status, error) {
+                        if (request.status === 404) {
+                            window.location.href = '/404';
+                        }
                     }
                 });
             } else {
@@ -1529,6 +1540,11 @@
                     },
                     success: function(res) {
                         buildFormHtml(res, 'boxMake', false);
+                    },
+                    error: function(request, status, error) {
+                        if (request.status === 404) {
+                            window.location.href = '/404';
+                        }
                     }
                 });
             }

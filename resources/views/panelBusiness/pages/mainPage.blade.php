@@ -154,4 +154,42 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let phone = '{{ Auth::user()->phone }}';
+
+        if (localStorage.getItem("token") === undefined ||
+            localStorage.getItem("token") === null ||
+            localStorage.getItem("token") === '') {
+
+            $.ajax({
+                type: 'post',
+                url: 'https://boom.bogenstudio.com/api/activation_code',
+                data: {
+                    'phone': phone
+                },
+                success: function(res) {
+                    console.log('====================================');
+                    console.log(res);
+                    console.log('====================================');
+
+                    $.ajax({
+                        type: 'post',
+                        url: 'https://boom.bogenstudio.com/api/login',
+                        data: {
+                            'phone': phone,
+                            'verification_code': '1111'
+                        },
+                        success: function(res) {
+
+                            if (res.status == '0') {
+                                localStorage.setItem('token', res.access_token);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
 @endsection
