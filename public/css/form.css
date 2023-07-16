@@ -36,6 +36,7 @@ figcaption {
     margin-top: 20px;
 }
 .SpaceBetween {
+    display: flex;
     justify-content: space-between;
 }
 .rowReverse {

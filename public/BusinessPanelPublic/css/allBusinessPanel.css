@@ -127,7 +127,7 @@ input[type="radio"] {
     border-bottom: solid 1px var(--lightBordreGray);
     display: none;
     align-items: center;
-    padding: 0 20px;
+    padding: 0px 10px 0 0px;
 }
 .mainHeader .mainLogo {
     height: 75%;
@@ -842,6 +842,20 @@ label {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
 }
+#boxMake {
+    flex-wrap: wrap;
+    display: flex;
+}
+.formTitle {
+    display: flex;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.formTitleProgress {
+    width: 40%;
+}
 
 @media (max-width: 766px) {
     .notifAlertBP {
@@ -868,24 +882,48 @@ label {
         width: 100px;
     }
 }
+@media only screen and (max-width: 1350px) and (min-width: 800px) {
+    .boxRoom {
+        width: 50%;
+    }
+}
 @media (max-width: 800px) {
+    .formTitleProgress {
+        width: 100%;
+    }
+    .formTitle {
+        flex-direction: column;
+    }
+    #boxMake {
+        flex-wrap: wrap;
+    }
+    .inputBoxTour {
+        width: 100% !important;
+    }
     #mainSideBar {
+        top: 75px;
+        margin-right: 5px;
         z-index: 100;
         transition: 0.5s;
         width: 0px;
+        border-radius: 20px;
     }
     .mainBodySection {
         width: 100%;
         top: 60px;
     }
     .mainHeader {
+        z-index: 100;
+        position: relative;
         display: block;
     }
     .menuBtn {
-        display: block;
-        position: absolute;
-        top: 10px;
-        right: 10px;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+        background-color: var(--koochita-red);
+        height: 60px;
+        position: relative;
         z-index: 100;
     }
     .logoBox {
@@ -895,14 +933,15 @@ label {
         display: none;
     }
     .sideMenuSection {
-        border-radius: 0 !important;
-        -webkit-border-radius: 0 !important;
-        -moz-border-radius: 0 !important;
-        -ms-border-radius: 0 !important;
-        -o-border-radius: 0 !important;
     }
 }
 @media (min-width: 801px) {
+    .blackLayer {
+        display: none !important;
+    }
+    .userName {
+        display: block !important;
+    }
     #mainSideBar {
         width: 250px !important;
     }

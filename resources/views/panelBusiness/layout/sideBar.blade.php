@@ -100,8 +100,7 @@
                                 <div class="sideNavItem aligenCenter">
 
                                     <a href="{{ route('businessPanel.create') }}">
-                                        ایجاد کسب و
-                                        کارجدید</a>
+                                        ایجاد کسب وکارجدید</a>
                                 </div>
                             </li>
                             <li>

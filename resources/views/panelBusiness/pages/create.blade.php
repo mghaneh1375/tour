@@ -702,6 +702,9 @@
 
         <script>
             isHaghighi = true;
+            openLoading();
+
+            setTimeout(closeLoading, 1000);
 
             if (!$('#hoghoghi').is(':checked')) {
                 isHaghighi = false
