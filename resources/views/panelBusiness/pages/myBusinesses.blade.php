@@ -39,32 +39,32 @@
                 @else
                     <center>
                         <table class="table table-striped">
-                            <tr style="background: var(--koochita-yellow)">
+                            <tr style="background: #D4D4D4">
                                 <th>ردیف</th>
+                                <th>عملیات</th>
                                 <th>نام کسب و کار</th>
                                 <th>نوع کسب و کار</th>
-                                <th>تاریخ ایجاد</th>
                                 <th>وضعیت</th>
-                                <th>عملیات</th>
-                                <th></th>
+                                <th>تاریخ ایجاد</th>
+
                             </tr>
                             <?php $i = 1; ?>
                             @foreach ($businesses as $business)
                                 <tr id="tr_{{ $business->id }}">
                                     <td>{{ $i }}</td>
-                                    <td>{{ $business->name }}</td>
-                                    <td>{{ $business->type }}</td>
-                                    <td>{{ $business->createBusinessDate }}</td>
                                     @if ($business->readyForCheck)
+                                        <td>{{ $business->name }}</td>
+                                        <td>{{ $business->type }}</td>
                                         <td>در حال بررسی</td>
                                     @elseif($business->finalStatus)
-                                        <td>تایید شده</td>
                                         <td>
                                             <a href="{{ route('businessManagement.panel', ['business' => $business->id]) }}"
-                                                class="btn btn-success" style="font-size: 10px;">رفتن به پنل مدیریت</a>
+                                                class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل مدیریت</a>
                                         </td>
+                                        <td>{{ $business->name }}</td>
+                                        <td>{{ $business->type }}</td>
+                                        <td>تایید شده</td>
                                     @elseif(!$business->problem)
-                                        <td>در حال ویرایش/تکمیل توسط کاربر</td>
                                         <td>
                                             <a href="{{ route('businessPanel.edit', ['business' => $business]) }}"
                                                 title="ویرایش اطلاعات" class="btn btn-primary circleButton">
@@ -75,20 +75,25 @@
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
                                         </td>
+                                        <td>{{ $business->name }}</td>
+                                        <td>{{ $business->type }}</td>
+                                        <td>در حال ویرایش/تکمیل توسط کاربر</td>
                                     @elseif($business->problem)
-                                        <td>اعلام نقص شده</td>
                                         <td>
                                             <a href="{{ route('businessPanel.edit', ['business' => $business]) }}"
-                                                title="اصلاح نواقص" class="btn btn-warning circleButton">
-                                                <i class="fa-solid fa-file-pen"></i>
-                                            </a>
+                                                class="btn btnError" style="font-size: 10px;">تکمیل اطلاعات </a>
                                             <a class="btn btn-danger circleButton"
                                                 onclick="deleteBusiness('{{ $business->id }}')" title="حذف">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
                                         </td>
+                                        <td>{{ $business->name }}</td>
+                                        <td>{{ $business->type }}</td>
+                                        <td>اعلام نقص شده</td>
                                     @endif
 
+
+                                    <td>{{ $business->createBusinessDate }}</td>
                                 </tr>
                                 <?php $i++; ?>
                             @endforeach
@@ -115,12 +120,10 @@
                         alert('شما اجازه حذف کسب و کار خود را ندارید. با پشتیبانی تماس بگیرید.');
                     else {
                         alert('خطا در پاک کردن');
-                        console.log(res);
                     }
                 },
                 error: err => {
                     alert('خطا در پاک کردن');
-                    console.log(err);
                 }
             });
         }

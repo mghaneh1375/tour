@@ -243,8 +243,12 @@
 
         function storeData(fields) {
             if (fields.length == 0) {
-                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
-                return;
+                if (nextFormId !== undefined) {
+                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                    return;
+                } else {
+                    window.location.href = "{{ route('businessPanel.myBusinesses') }} "
+                }
             }
             if (isInFirstStep) {
                 if (userAssetId === -1) {
@@ -325,8 +329,12 @@
                     },
                     success: function(res) {
                         if (res.status === 0) {
-                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                userAssetId;
+                            if (nextFormId !== undefined) {
+                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                    userAssetId;
+                            } else {
+                                window.location.href = "{{ route('businessPanel.myBusinesses') }} "
+                            }
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
 
@@ -477,9 +485,7 @@
                 openErrorAlertBP(errorText);
             else {
                 storeData(fields);
-                // if (nextFormId !== undefined) {
-                //     storeData(fields);
-                // }
+
             }
 
         }
@@ -555,7 +561,8 @@
                             if (i < res.forms.length - 1)
                                 nextFormId = res.forms[i + 1].id;
                             if (nextFormId == undefined) {
-                                $('.nextPageVal').empty().append("ثبت نهایی")
+                                $('.nextPageVal').empty().append("ثبت نهایی");
+
                             }
                             break;
                         }
@@ -894,15 +901,16 @@
         }
 
         function deleteFromListview(id, el) {
-            openLoading();
+            // openLoading();
             $.ajax({
                 type: 'DELETE',
-                complete: closeLoading,
+                // complete: closeLoading,
                 url: url + '/user_sub_asset/' + id,
                 headers: {
                     "Authorization": token
                 },
             })
+            location.reload();
             $(el).parent().parent().parent().parent().remove();
         }
 
@@ -916,15 +924,18 @@
 
             openModal(() => {
 
+                picInput = 1;
+
                 data.fields.forEach((e, index) => {
 
                     if (e.type === 'gallery') {
                         for (let u = 0; u < e.val.length; u++)
                             setImg(e.val[u], u);
 
-                    }
-
-                    $("input[name='" + e.key_ + "']").val(e.val);
+                    } else if (e.type === 'textarea') {
+                        $("textarea[name='" + e.key_ + "']").val(e.val);
+                    } else
+                        $("input[name='" + e.key_ + "']").val(e.val);
                 });
 
             });
@@ -953,8 +964,6 @@
                 $('#formModal').empty().append(html);
             }
             for (let i = 0; i < res.fields.length; i++) {
-                //  ' + (res.fields[i].half == 1 ? '49%' : '100%') + '
-
                 if (res.fields[i].type.toLowerCase() == 'radio') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i].half == 1 ? '49%' : '100%') + ';">';
@@ -1019,7 +1028,8 @@
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<input onkeydown="return false;" type="text" value="' + (res.fields[i].data != null ? '' +
+                    text += '<input style="border: none;" onkeydown="return false;" type="text" value="' + (res.fields[i]
+                            .data != null ? '' +
                             res
                             .fields[i].data + '' :
                             '') + '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data +
@@ -1091,6 +1101,7 @@
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
+                    console.log(res.fields[i].items.length);
                     if (res.fields[i].items.length < 1) {
 
                         elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
@@ -1130,11 +1141,6 @@
                                 }
                                 if (res.fields[i].items[y].fields[m].type == 'gallery') {
                                     img = res.fields[i].items[y].fields[m].val[0];
-                                    text +=
-                                        '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;"> <img src="' +
-                                        img +
-                                        '" style="height: 100%; width: 100%;object-fit: contain;">';
-                                    text += '</div>';
                                 }
                                 if (res.fields[i].items[y].fields[m].type == 'textarea') {}
                                 if (res.fields[i].items[y].fields[m].type == 'int') {
@@ -1142,6 +1148,11 @@
                                 }
                             }
 
+                            text +=
+                                '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;"> <img src="' +
+                                img +
+                                '" style="height: 100%; width: 100%;object-fit: contain;">';
+                            text += '</div>';
                             text +=
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
                             text += '<div>';
@@ -1503,7 +1514,7 @@
                 }
             }
             $('#' + resultBox).empty().append(text);
-            $('#searchForm').empty().append(elm);
+            $('#searchForm').append(elm);
             $(".clockP").clockpicker(clockOptions);
             $(".observer-example").datepicker(datePickerOptions);
             if (!needSearchCityModal) {

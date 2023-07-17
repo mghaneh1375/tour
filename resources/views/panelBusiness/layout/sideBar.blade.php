@@ -79,7 +79,7 @@
                     </div>
                 @endif
                 <div id="lastItemOfSideMenu" class="sideNavRow able showInBottom">
-                    <a href="{{ route('businessPanel.myBusinesses') }}" class="sideNavHeader hasBody">
+                    <a href="{{ route('businessPanel.panel') }}" class="sideNavHeader hasBody">
                         <span>بازگشت به مدیریت کسب و کار</span>
                     </a>
                 </div>
@@ -106,7 +106,7 @@
                             <li>
                                 <div class="sideNavItem aligenCenter">
 
-                                    <a href="{{ route('businessPanel.myBusinesses') }} ">کسب و
+                                    <a href="{{ route('businessPanel.panel') }} ">کسب و
                                         کارهای
                                         من</a>
                                 </div>

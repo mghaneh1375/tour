@@ -667,6 +667,16 @@ label {
     font-size: 13px;
     align-items: center;
 }
+.btnSuccess {
+    cursor: pointer !important;
+    color: white;
+    background-color: #0076a3;
+}
+.btnError {
+    cursor: pointer !important;
+    background-color: #db3700;
+    color: white;
+}
 .circleButton.yellowBut {
     background: yellowgreen;
 }
@@ -816,6 +826,15 @@ label {
     width: 20%;
     height: 64px;
     background: #ffffff;
+}
+.stepView {
+    background: #fcffff;
+    border: 1px solid #444444;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    width: fit-content;
+    cursor: pointer;
 }
 .typeLogo {
     font-family: "segoe" !important;
@@ -986,9 +1005,9 @@ label {
         transform: rotate(45deg);
     }
 }
-a:any-link {
+/* a:any-link {
     cursor: unset !important;
-}
+} */
 a:hover {
     text-decoration: none;
 }
