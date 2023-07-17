@@ -36,8 +36,8 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Tehran');
 
         // if(config('app.env') !== 'local')
-            // $urlGenerator->forceScheme('https');
+            $urlGenerator->forceScheme('https');
         // else if(config('app.env') == 'local')
-            $urlGenerator->forceScheme('http');
+            // $urlGenerator->forceScheme('http');
     }
 }

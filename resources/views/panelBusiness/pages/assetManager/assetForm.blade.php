@@ -197,7 +197,6 @@
         var radioSet = '';
         var z;
         var allForm = 0;
-        var roomNum = -1;
         var formComplite = 0;
         var ageVal;
         var percent;
@@ -205,7 +204,7 @@
         var itemsVal = null;
         var addId = null;
         var fileId = null;
-        var roomId = null;
+        var roomId = -1;
         var calenderId = null;
         var modal = false;
         var redirector = false;
@@ -223,7 +222,6 @@
             openLoading();
             var fileStore = new FormData();
             fileStore.append('pic', $("#" + fileId)[0].files[0]);
-            console.log(fileStore);
             $.ajax({
                 type: 'post',
                 url: url + '/user_asset/' + userAssetId + "/set_asset_pic/" + fileId,
@@ -237,17 +235,13 @@
                 data: fileStore,
                 success: function(res) {
                     if (res.status === "0") {
-                        console.log('pic ok');
                         window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
-                    } else {
-                        console.log('pic Nok');
-                    }
+                    } else {}
                 }
             });
         }
 
         function storeData(fields) {
-            console.log(fields);
             if (fields.length == 0) {
                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                 return;
@@ -274,10 +268,7 @@
 
                     });
                 } else {
-                    console.log(fields);
-                    console.log('asb');
                     if (fields[0].id == fileId) {
-                        console.log('zard');
                         storePic(userAssetId, fields);
                     } else {
                         openLoading();
@@ -294,7 +285,7 @@
                             },
                             success: function(res) {
                                 if (res.status === "0") {
-                                    console.log("save shode");
+
                                     if (fields[1]) {
                                         storePic(userAssetId, fields);
                                     }
@@ -303,7 +294,7 @@
 
                                 } else {
                                     showSuccessNotifiBP(res.err, 'right', '#ac0020');
-                                    console.log('store NOk');
+
                                 }
                             },
                             error: function(rejected) {
@@ -334,12 +325,11 @@
                     },
                     success: function(res) {
                         if (res.status === 0) {
-                            console.log("save shode");
                             window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                 userAssetId;
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
-                            console.log('store NNOk');
+
                         }
                     },
                     error: function(rejected) {
@@ -369,7 +359,6 @@
                 if ($(this).attr('data-change') === '0')
                     return;
                 if (!$(this).attr('required') && $(this).val() === '') {
-                    console.log($(this).attr('id'));
                     return;
                 }
                 // if ($(this).hasClass('mapMark')) {
@@ -450,7 +439,6 @@
                 }
                 if ($(this).attr('required')) {
                     if ($(this).val() === '') {
-                        console.log($(this));
                         errorText += '<ul class="errorList"> ';
                         errorText += "<li> " + $(this).attr('name') + ' ' + 'پر شود ' + "</li></ul>";
                         $(this).parent().addClass('errorInput');
@@ -794,14 +782,12 @@
                     });
                 }
             });
-            console.log(errorText);
             if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
             } else {
                 storeDataModal(fields);
-                console.log(fields);
                 $('#addModal').attr("data-dismiss", "modal");
-                // location.reload();
+                location.reload();
                 // if (nextFormId !== undefined) {
                 //     storeData(fields);
                 // }
@@ -822,7 +808,7 @@
                 data: {
                     data: fields,
                     sub_asset_id: subAssetId,
-                    user_sub_asset_id: roomNum
+                    user_sub_asset_id: roomId
 
                 },
 
@@ -837,6 +823,8 @@
         }
 
         function openModal(callBack = undefined) {
+            if (callBack === undefined)
+                roomId = -1;
             $("#listAdd").modal("show");
             modal = true;
             openLoading();
@@ -853,7 +841,7 @@
                 success: function(res) {
                     buildFormHtml(res, 'redirectList', true);
                     tourPicUrl = url + '/user_asset/' + userAssetId +
-                        '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomNum;
+                        '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomId;
                     deleteTourPicUrl = url + '/' + 'user_sub_asset/' + roomId +
                         '/delete_pic_from_gallery_sub/' + picId;
                     picCardSample = $('#picCardSample').html();
@@ -915,22 +903,27 @@
                     "Authorization": token
                 },
             })
-            console.log(id);
-            console.log(el);
-
             $(el).parent().parent().parent().parent().remove();
         }
 
         let allData;
 
         function editSubAsset(i, y) {
-            console.log(allData);
-            console.log(i);
-            console.log(y);
+
+
             let data = allData.fields[i].items[y];
+            roomId = allData.fields[i].items[y].id;
+
             openModal(() => {
 
                 data.fields.forEach((e, index) => {
+
+                    if (e.type === 'gallery') {
+                        for (let u = 0; u < e.val.length; u++)
+                            setImg(e.val[u], u);
+
+                    }
+
                     $("input[name='" + e.key_ + "']").val(e.val);
                 });
 
@@ -941,7 +934,8 @@
 
         function buildFormHtml(res, resultBox, modal) {
 
-            allData = res;
+            if (!modal)
+                allData = res;
 
             let text = "";
             let html = "";
@@ -1108,59 +1102,60 @@
                         elm += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
                         elm += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+
                         elm +=
                             '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق </div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
+
                         elm += '<div id="searchResult"></div>';
                         elm += '</div>';
                         elm += '</div>';
                         elm += '</div>';
                         for (let y = 0; y < res.fields[i].items.length; y++) {
+
+                            let name, img, count, rId;
+                            rId = res.fields[i].items[y].id;
+
+                            text +=
+                                '<div class="relative-position inputBoxTour boxRoom" style="order: 2">';
+
+                            text += '<div class="row" >';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
-                                console.log(res.fields[i].items[y].fields[m]);
-                                roomId = res.fields[i].items[y].id;
+
                                 if (res.fields[i].items[y].fields[m].type == 'string') {
                                     roomName.push(res.fields[i].items[y].fields[m].val);
-                                    console.log(roomId);
-                                    console.log('asbbb');
+                                    name = res.fields[i].items[y].fields[m].val;
+
                                 }
                                 if (res.fields[i].items[y].fields[m].type == 'gallery') {
-                                    console.log(roomId);
-                                    console.log('aa');
+                                    img = res.fields[i].items[y].fields[m].val[0];
+                                    text +=
+                                        '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;"> <img src="' +
+                                        img +
+                                        '" style="height: 100%; width: 100%;object-fit: contain;">';
+                                    text += '</div>';
                                 }
-                                if (res.fields[i].items[y].fields[m].type == 'textarea') {
-                                    console.log(roomId);
-                                    console.log('bbb');
-                                }
+                                if (res.fields[i].items[y].fields[m].type == 'textarea') {}
                                 if (res.fields[i].items[y].fields[m].type == 'int') {
-                                    console.log(roomId);
-                                    console.log('ccc');
+                                    count = res.fields[i].items[y].fields[m].val;
                                 }
                             }
-                            text +=
-                                '<div class="relative-position inputBoxTour boxRoom" style=" order:' +
-                                (res
-                                    .fields[i].type == 'listview' ? '2' : '') + '">';
-                            text += '<div class="row" >';
-                            text +=
-                                '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;"> <img src="' + res
-                                .fields[i].items[y].fields.val +
-                                '" style="height: 100%; width: 100%;object-fit: contain;">';
-                            text += '</div>';
+
                             text +=
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
                             text += '<div>';
                             text += '<div class="colorOrag bold"> نام اتاق</div>';
-                            text += '<div class="bold">' + roomName[y] + ' </div>';
+                            text += '<div class="bold">' + name + ' </div>';
                             text += '<div class="colorOrag bold">تعداد اتاق</div>';
+                            text += '<div class="bold">' + count + ' </div>';
                             text += '</div>';
                             text += '<div class="row SpaceBetween" style="padding-bottom: 5px;">';
                             text +=
                                 '<div class="backOrang colorWhite editBtn"onclick="editSubAsset(\'' + i + '\', \'' + y +
                                 '\')"> <i class="editIcon iconStyle"></i>ویرایش</div>';
                             text +=
-                                '<div class="colorWhite backBlue editBtn" onclick="deleteFromListview(' + roomId +
+                                '<div class="colorWhite backBlue editBtn" onclick="deleteFromListview(' + rId +
                                 ',this)"><i class="trashIcon iconStyle"></i> حذف</div>';
                             text += '</div>';
                             text += '</div>';
@@ -1438,8 +1433,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'calendar') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
-                        .fields[i].type == 'listview' ? '2' : '') + '">';
+                        .half == 1 ? '49%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1510,10 +1504,6 @@
             }
             $('#' + resultBox).empty().append(text);
             $('#searchForm').empty().append(elm);
-            // if (redirector) {
-            //     console.log("redirector");
-            //     $('#' + resultBox).css("flex-direction", "row-reverse");
-            // }
             $(".clockP").clockpicker(clockOptions);
             $(".observer-example").datepicker(datePickerOptions);
             if (!needSearchCityModal) {
@@ -1550,7 +1540,6 @@
                 })
                 for (i = 0; i < filteredData.length; i++) {
                     t = filteredData[i];
-                    console.log(t);
                     $("#searchResult").append('<div onclick="fillInput(\'' + filteredData[i] + '\')">' +
                         filteredData[i] +
                         '</div>');
@@ -1692,6 +1681,33 @@
         var picInput = 1;
         var picCardSample = '';
 
+        function setImg(src, _index) {
+
+            var text = picCardSample;
+            text = text.replace(new RegExp('##index##', 'g'), picInput);
+
+            $('#picHover_' + _index).removeClass('hidden');
+            $('#showPic' + _index).removeClass('hidden');
+            $('#addPic' + _index).addClass('hidden');
+            picInput++;
+
+            $('#imgPic' + _index).attr('src', src);
+            $('#uploadImgDiv').append(text);
+
+            picQueue.push({
+                id: _index,
+                uploadedName: src,
+                process: 2,
+                index: _index
+            });
+
+            var element = $(`#picHover_${_index}`);
+
+            element.find('.process').addClass('hidden');
+            element.find('.tickIcon').removeClass('hidden');
+
+        }
+
         function readURL(input, _index) {
 
             if (input.files && input.files[0]) {
@@ -1741,7 +1757,7 @@
             }
         }
 
-        function uploadPicResult(_status, _fileName = '', _roomNum = '') {
+        function uploadPicResult(_status, _fileName = '', _roomId = '') {
 
 
             var element = $(`#picHover_${uploadProcessId}`);
@@ -1751,11 +1767,11 @@
                     porcIndex = index;
             });
             if (_status == 'done') {
-                roomNum = _roomNum;
+
+                roomId = _roomId;
                 tourPicUrl = url + '/user_asset/' + userAssetId +
-                    '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomNum;
-                console.log(roomNum);
-                console.log(_fileName);
+                    '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomId;
+
                 picQueue[porcIndex].process = 2;
                 element.find('.process').addClass('hidden');
                 element.find('.tickIcon').removeClass('hidden');
