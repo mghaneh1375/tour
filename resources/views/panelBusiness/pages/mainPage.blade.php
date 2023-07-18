@@ -118,16 +118,17 @@
                 <div class="cardsSection">
                     @if (count($myBusiness) == 0)
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="">
                                 <img style="max-width: 100%" src="{{ URL::asset('images/icons/newsrv0102.png') }}"
                                     alt="">
                             </div>
-                            <div class="col-md-7">
-                                <p>هیچ کسب و کاری موجود نیست. اولین کسب و کار خود را در کوچیتا <a
-                                        style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد</a>
-                                    کنید.
-                                    اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a style="cursor: pointer !important;"
-                                        href=" {{ route('ticket.page') }}">پشتیبانی</a>
+                            <div class="col-md-9">
+                                <p style="font-size:18px; color:#707070 ">هیچ کسب و کاری موجود نیست. اولین کسب و کار خود را
+                                    در کوچیتا <a
+                                        style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد</a>کنید.
+                                </p>
+                                <p style="font-size:14px; color:#707070"> اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a
+                                        style="cursor: pointer !important;"href=" {{ route('ticket.page') }}">پشتیبانی</a>
                                     مشکل خود را با ما درمیان بگذارید.
                                 </p>
                             </div>

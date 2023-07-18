@@ -73,13 +73,15 @@
                 if (res.status === "0") {
                     if (res.assets.length < 1) {
                         html += '<div class="row">';
-                        html += '<div class="col-md-3">';
+                        html += '<div class="">';
                         html +=
                             '<img style="max-width: 100%" src="{{ URL::asset('images/icons/newsrv0102.png') }}" alt="">';
                         html += '</div>';
-                        html += '<div class="col-md-7">';
+                        html += '<div class="col-md-9">';
                         html +=
-                            '<p>هیچ کسب و کاری موجود نیست. اولین کسب و کار خود را در کوچیتا <a style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد</a>کنید. اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a style="cursor: pointer !important;"href=" {{ route('ticket.page') }}"> پشتیبانی </a>مشکل خود را با ما درمیان بگذارید.</p>';
+                            '<p style="font-size:18px; color:#707070 ">هیچ کسب و کاری موجود نیست. اولین کسب و کار خود رادر کوچیتا <a style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد</a>کنید.</p>';
+                        html +=
+                            '<p style="font-size:14px; color:#707070"> اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a style="cursor: pointer !important;"href=" {{ route('ticket.page') }}">پشتیبانی</a>مشکل خود را با ما درمیان بگذارید.</p>';
                         html += '</div>';
                         html += '</div>';
                     } else {
@@ -166,18 +168,6 @@
                                 asset_Id + ' )">';
                             text += '' + res.forms[i].name + '';
                             text += '</div>';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            text += '';
-                            console.log(res.forms[i]);
                         }
                     } else {}
 

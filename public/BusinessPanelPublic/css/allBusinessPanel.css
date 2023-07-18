@@ -836,6 +836,9 @@ label {
     width: fit-content;
     cursor: pointer;
 }
+.stepView:hover {
+    background-color: #dfdfdf;
+}
 .typeLogo {
     font-family: "segoe" !important;
     font-size: 20px;

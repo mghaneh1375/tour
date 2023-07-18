@@ -1724,7 +1724,7 @@ textarea {
     cursor: pointer;
     padding: 2px 7px;
     font-size: 0.8em;
-    display: flex !important;
+    display: flex;
     border: 1px solid #cccccc;
     border-radius: 5px;
     background-color: white;

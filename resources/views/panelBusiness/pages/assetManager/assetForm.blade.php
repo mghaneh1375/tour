@@ -247,7 +247,7 @@
                     window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
-                    window.location.href = "{{ route('businessPanel.myBusinesses') }} "
+                    window.location.href = "{{ route('businessPanel.panel') }} "
                 }
             }
             if (isInFirstStep) {
@@ -360,7 +360,7 @@
                 $(this).parent().removeClass('errorInput');
                 if ($(this).attr('id') === 'selectStateForSelectCity')
                     return;
-                if ($(this).attr('id') === 'searchForm')
+                if ($(this).attr('id') === 'searchInput')
                     return;
                 if ($(this).attr('id') === 'inputSearchCity')
                     return;
@@ -952,7 +952,6 @@
             let html = "";
             let elm = "";
             let needSearchCityModal = false;
-
             if (modal) {
                 html += '<h1>' + res.form.name + '</h1>';
                 html += '<div style="margin-top: 20px">';
@@ -1101,7 +1100,6 @@
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
                     }
-                    console.log(res.fields[i].items.length);
                     if (res.fields[i].items.length < 1) {
 
                         elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
@@ -1115,11 +1113,9 @@
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
 
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق </div>';
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
-
-                        elm += '<div id="searchResult"></div>';
                         elm += '</div>';
                         elm += '</div>';
                         elm += '</div>';
@@ -1129,7 +1125,8 @@
                             rId = res.fields[i].items[y].id;
 
                             text +=
-                                '<div class="relative-position inputBoxTour boxRoom" style="order: 2">';
+                                '<div id="subAsset_' + rId +
+                                '" class="relative-position inputBoxTour boxRoom" style="order: 2">';
 
                             text += '<div class="row" >';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
@@ -1157,7 +1154,7 @@
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
                             text += '<div>';
                             text += '<div class="colorOrag bold"> نام اتاق</div>';
-                            text += '<div class="bold">' + name + ' </div>';
+                            text += '<div class="bold roomName">' + name + ' </div>';
                             text += '<div class="colorOrag bold">تعداد اتاق</div>';
                             text += '<div class="bold">' + count + ' </div>';
                             text += '</div>';
@@ -1525,40 +1522,37 @@
                     addPhone();
                 }
             });
-
+            document.getElementById("searchInput").addEventListener("search", function(event) {
+                $("#searchInput").keyup();
+            });
         }
         var t = null;
 
-        function fillInput(x) {
-            $("#searchInput").val(x);
-            $("#searchResult").empty();
-            $("#boxMake").empty();
-        }
         $(document).on('keyup', '#searchInput', function() {
-            $("#searchResult").empty();
-            filteredData = [];
-            if (this.value.length > 1) {
-                searchVal = $(this).val();
-                const filteredData = []
-                roomName.forEach(sentence => {
-                    let words = sentence.split(" ")
-                    words.forEach((word, index) => {
-                        if (word.match(searchVal)) {
-                            filteredData.push(sentence)
-                        }
-                    })
 
-                })
-                for (i = 0; i < filteredData.length; i++) {
-                    t = filteredData[i];
-                    $("#searchResult").append('<div onclick="fillInput(\'' + filteredData[i] + '\')">' +
-                        filteredData[i] +
-                        '</div>');
-                }
-            } else {
-                $("#searchResult").empty();
-            }
+            let searchForLabel = $(this).prev().text();
+            var value = this.value.toLowerCase().trim();
+            $(".boxRoom:not(:last-child)").addClass('hidden');
 
+            allData.fields.forEach((e, index) => {
+
+                if (e.type !== 'listview')
+                    return;
+
+                e.items.forEach((ee, index2) => {
+
+                    ee.fields.forEach((eee, index3) => {
+
+                        if (eee.key_ !== searchForLabel)
+                            return;
+
+                        if (eee.val.indexOf(value) !== -1)
+                            $("#subAsset_" + ee.id).removeClass('hidden');
+                    });
+
+                });
+
+            });
         });
 
         function callMap() {
