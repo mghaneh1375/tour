@@ -160,14 +160,13 @@
                     </a>
                 </div>
             @endif
-            <div class="sideNavRow able">
+            <div class="sideNavRow able logOut" onclick="clearLocalStorage()">
                 <a href="{{ route('businessPanel.doLogOut') }}" class="item aligenCenter sideNavHeader">
                     <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 10V8H7V6.00208H12V4L15 7L12 10ZM11 9V13H6V16L0 13V0H11V5H10V1H2L6 3V12H10V9H11Z"
                             fill="#5a5a5a" />
                     </svg>
-
                     <div class="paddingRight10">خروج</div>
                 </a>
             </div>
@@ -177,6 +176,9 @@
 </div>
 
 <script>
+    function clearLocalStorage() {
+        localStorage.clear();
+    }
     // function createNewMenuSideBar(_data) {
     //     var subHtml = '';
     //     _data.sub.map(item => subHtml += `<a href="${item.url}" class="sideNavItem ${item.selected == 1 ? 'selected' : ''}">

@@ -539,7 +539,7 @@ label {
     width: fit-content;
     text-align: center;
     position: fixed;
-    bottom: -30%;
+    bottom: -100%;
     right: auto;
     left: auto;
     direction: rtl;
@@ -882,7 +882,7 @@ label {
 @media (max-width: 766px) {
     .notifAlertBP {
         position: fixed;
-        bottom: -30%;
+        bottom: -100%;
         z-index: 9999;
         border-radius: 10px;
         -webkit-border-radius: 10px;

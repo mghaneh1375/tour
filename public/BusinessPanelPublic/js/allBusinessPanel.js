@@ -162,20 +162,45 @@ function closeLoading() {
 
 function showSuccessNotifiBP(_msg, _side = "right", _color = "#0076ac") {
     var element = $("#successNotifiAlertBP");
-    element
-        .empty()
-        .append("<p>" + _msg + "</p>")
-        .addClass("topAlertBP")
-        .css("background", _color)
-        .addClass(_side == "right" ? "rightAlertBP" : "leftAlertBP");
-    setTimeout(function () {
-        element.removeClass("topAlertBP");
-        setTimeout(
-            () =>
-                element.removeClass("leftAlertBP").removeClass("rightAlertBP"),
-            1000
-        );
-    }, 5000);
+
+    if (typeof _msg === "object") {
+        element.empty();
+        for (let i = 0; i < 10; i++) {
+            element
+                .append("<p>" + _msg[i] + "</p>")
+                .addClass("topAlertBP")
+                .css("background", _color)
+                .addClass(_side == "right" ? "rightAlertBP" : "leftAlertBP");
+
+            setTimeout(function () {
+                element.removeClass("topAlertBP");
+                setTimeout(
+                    () =>
+                        element
+                            .removeClass("leftAlertBP")
+                            .removeClass("rightAlertBP"),
+                    1000
+                );
+            }, 5000);
+        }
+    } else {
+        element
+            .append("<p>" + _msg + "</p>")
+            .addClass("topAlertBP")
+            .css("background", _color)
+            .addClass(_side == "right" ? "rightAlertBP" : "leftAlertBP");
+
+        setTimeout(function () {
+            element.removeClass("topAlertBP");
+            setTimeout(
+                () =>
+                    element
+                        .removeClass("leftAlertBP")
+                        .removeClass("rightAlertBP"),
+                1000
+            );
+        }, 5000);
+    }
 }
 
 function openWarningBP(_text, _callBack = false, _okText = "بسیار خب") {

@@ -1,17 +1,14 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    {{-- <script src="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.js">
-    </script>
-    <link href="https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/parsimap-geocoder/v1.0.0/parsimap-geocoder.css"
-        rel="stylesheet" /> --}}
-
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
     <script src={{ URL::asset('js/clockpicker.js') }}></script>
     <script src="https://unpkg.com/jalali-moment/dist/jalali-moment.browser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
+    <script src="{{ asset('js/newck/ckeditor5/ckeditorUpload.js') }}"></script>
+    <script src="{{ asset('js/newck/ckeditor5/ckeditor.js') }}"></script>
     <script defer src="{{ URL::asset('js/uploadLargFile.js?v=' . $fileVersions) }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/clockpicker.css?v=2') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/theme2/bootstrap-datepicker.css') }}">
@@ -20,6 +17,14 @@
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/common.css?v=' . $fileVersions) }}" />
     <style>
+        input[type="search"]::-webkit-search-cancel-button:hover {
+            cursor: pointer;
+        }
+
+        .textEditor {
+            width: 100%;
+        }
+
         .mainBodySection {
             top: unset;
         }
@@ -35,6 +40,10 @@
 
         .btn-group>label {
             padding: 10px 8px;
+        }
+
+        .whiteBox {
+            border-bottom: unset;
         }
     </style>
 @endsection
@@ -140,7 +149,7 @@
     <div class="modal fade" id="listAdd">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-body" style="direction: rtl">
+                <div class="modal-body" style="direction: rtl;overflow: auto;">
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div id="formModal"></div>
@@ -193,6 +202,7 @@
         var subAsset = [];
         let x = " ";
         let y = " ";
+        var userFormDataId = null;
         let userAssetId = parseInt('{{ $userAssetId }}');
         var radioSet = '';
         var z;
@@ -201,16 +211,20 @@
         var ageVal;
         var percent;
         let isInFirstStep = false;
+        var listview = false;
         var itemsVal = null;
         var addId = null;
         var fileId = null;
         var roomId = -1;
         var calenderId = null;
+        var ckeditorId = null;
+        var ckeditorId = null;
         var modal = false;
         var redirector = false;
         var subAssetFromId = null;
         var oneItems = false;
         var multipleVal = false;
+        var ckeditorExist = false;
         var multiple = false;
         var initMap = false;
         var callInitMap = false;
@@ -247,7 +261,8 @@
                     window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
-                    window.location.href = "{{ route('businessPanel.panel') }} "
+                    lastPage();
+                    // window.location.href = "{{ route('businessPanel.panel') }} "
                 }
             }
             if (isInFirstStep) {
@@ -297,7 +312,7 @@
                                         userAssetId;
 
                                 } else {
-                                    showSuccessNotifiBP(res.err, 'right', '#ac0020');
+                                    showSuccessNotifiBP(res.errs, 'right', '#ac0020');
 
                                 }
                             },
@@ -333,7 +348,7 @@
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                     userAssetId;
                             } else {
-                                window.location.href = "{{ route('businessPanel.myBusinesses') }} "
+                                lastPage();
                             }
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
@@ -348,6 +363,35 @@
             }
         }
 
+        function lastPage() {
+            openLoading();
+            $.ajax({
+                type: 'put',
+                complete: closeLoading,
+                url: url + '/user_asset/' + userAssetId + '/updateStatus',
+                headers: {
+                    'Accept': 'application/json',
+                    "Authorization": token
+                },
+
+                success: function(res) {
+                    console.log(res);
+                    if (res.status === "0") {
+
+
+
+                    } else {
+                        showSuccessNotifiBP(res.errs, 'right', '#ac0020');
+
+                    }
+                },
+                error: function(rejected) {
+                    errorAjax(rejected);
+                }
+            });
+
+        }
+
         function nextStep() {
             var errorText = "";
             var $inputs = $('.inputBoxTour :input');
@@ -355,7 +399,14 @@
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
-
+            if (ckeditorExist) {
+                const editorData = editor.getData();
+                fields.push({
+                    id: ckeditorId,
+                    data: editorData
+                });
+                console.log(fields);
+            }
             $inputs.each(function() {
                 $(this).parent().removeClass('errorInput');
                 if ($(this).attr('id') === 'selectStateForSelectCity')
@@ -572,6 +623,7 @@
 
                 $('#formMake').empty().append(html);
                 percent = (formExist / allForm) * 100;
+                percent = Math.ceil(percent);
                 updateSideProgressBar(percent);
             },
             error: function(request, status, error) {
@@ -847,8 +899,8 @@
                 },
                 success: function(res) {
                     buildFormHtml(res, 'redirectList', true);
-                    tourPicUrl = url + '/user_asset/' + userAssetId +
-                        '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomId;
+                    tourPicUrl = url + '/user_asset/' + userAssetId + '/add_pic_to_gallery_sub/' + picId + '/' +
+                        subAssetId + '/' + roomId;
                     deleteTourPicUrl = url + '/' + 'user_sub_asset/' + roomId +
                         '/delete_pic_from_gallery_sub/' + picId;
                     picCardSample = $('#picCardSample').html();
@@ -1017,6 +1069,24 @@
                         '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' : '') +
                         '"' + (res.fields[i].necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
+                } else if (res.fields[i].type.toLowerCase() == 'ckeditor') {
+                    ckeditorExist = true;
+                    userFormDataId = res.fields[i].user_form_data_id;
+                    ckeditorId = res.fields[i].field_id;
+                    text +=
+                        '<div  class=" relative-position inputBoxTour" style="margin-left: 10px; width: ' +
+                        (res
+                            .fields[i]
+                            .half == 1 ? '49%' : '100%') + ';">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="' + (res.fields[i].necessary == 1 ?
+                        ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
+                    text += '</div>';
+                    text += '<div id="ck' + ckeditorId + '" class="textEditor">';
+                    text += res.fields[i].data;
+                    text += '</div>';
+                    text += '</div>';
+
                 } else if (res.fields[i].type.toLowerCase() == 'time') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
@@ -1105,6 +1175,7 @@
                         elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
                         elm += '';
                     } else {
+                        listview = true;
                         roomCount = res.fields[i].items.length;
                         sameRoom = res.fields[i].items[4];
                         elm += '<div style="width:100%;align-items: baseline;" class="row">';
@@ -1322,8 +1393,7 @@
                                 res.fields[i].data != null ? '' + res
                                 .fields[i].data + '' : '') + '</label>';
                         text += '<div style="display:flex;align-items: center;">';
-                        text += '<a class="colorBlack" href="https://boom.bogenstudio.com/storage/' + res.fields[i].data +
-                            '" target="_blank">';
+                        text += '<a class="colorBlack" href="' + res.fields[i].data + '" target="_blank">';
                         text +=
                             '<div class="colorBlack editBtn borderLeft borderRight" ><i class="fa fa-eye iconStyle"></i>';
 
@@ -1450,14 +1520,10 @@
                     text += '<div class="select-side calendarIconTourCreation">';
                     text += '<i class="ui_icon calendar calendarIcon"></i>';
                     text += '</div>';
-                    text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[
-                                i]
-                            .data + '' : '') +
-                        '" name="' + res.fields[i].name +
-                        '" name="sDateNotSame[]" id="' +
-                        res
-                        .fields[i].field_id +
-                        '" class="observer-example inputBoxInput"type="text" placeholder="' +
+                    text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[i]
+                            .data + '' : '') + '" name="' + res.fields[i].name + '" name="sDateNotSame[]" id="' +
+                        res.fields[i].field_id +
+                        '" class="observer-example inputBoxInput" type="text" style="direction: ltr;" placeholder="' +
                         (
                             res
                             .fields[i].placeholder != null ?
@@ -1511,6 +1577,9 @@
                 }
             }
             $('#' + resultBox).empty().append(text);
+            if (ckeditorExist) {
+                ckeditor(ckeditorId);
+            }
             $('#searchForm').append(elm);
             $(".clockP").clockpicker(clockOptions);
             $(".observer-example").datepicker(datePickerOptions);
@@ -1522,9 +1591,12 @@
                     addPhone();
                 }
             });
-            document.getElementById("searchInput").addEventListener("search", function(event) {
-                $("#searchInput").keyup();
-            });
+            if (listview) {
+
+                document.getElementById("searchInput").addEventListener("search", function(event) {
+                    $("#searchInput").keyup();
+                });
+            }
         }
         var t = null;
 
@@ -1774,9 +1846,10 @@
             if (_status == 'done') {
 
                 roomId = _roomId;
-                tourPicUrl = url + '/user_asset/' + userAssetId +
-                    '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId + '/' + roomId;
-
+                tourPicUrl = url + '/user_asset/' + userAssetId + '/add_pic_to_gallery_sub/' + picId + '/' + subAssetId +
+                    '/' + roomId;
+                deleteTourPicUrl = url + '/' + 'user_sub_asset/' + roomId +
+                    '/delete_pic_from_gallery_sub/' + picId;
                 picQueue[porcIndex].process = 2;
                 element.find('.process').addClass('hidden');
                 element.find('.tickIcon').removeClass('hidden');
@@ -1870,6 +1943,63 @@
             element.find('.tickIcon').removeClass('hidden');
 
         });
+
+        function ckeditor(ckeditorId_) {
+            BalloonBlockEditor.create(document.querySelector('#ck' + ckeditorId), {
+                    placeholder: 'متن سفرنامه خود را اینجا وارد کنید...',
+                    toolbar: {
+                        items: [
+                            'bold',
+                            'italic',
+                            'link',
+                            'highlight'
+                        ]
+                    },
+                    language: 'fa',
+                    blockToolbar: [
+                        'blockQuote',
+                        'heading',
+                        'indent',
+                        'outdent',
+                        'numberedList',
+                        'bulletedList',
+                        'insertTable',
+                        'imageUpload',
+                        'undo',
+                        'redo'
+                    ],
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells'
+                        ]
+                    },
+                    licenseKey: '',
+                })
+                .then(editor => {
+                    window.editor = editor;
+
+                    let token = 'Bearer ' + localStorage.getItem("token");
+
+                    window.uploaderClass = editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+
+                        return new MyUploadAdapter(loader, 'https://boom.bogenstudio.com/api/ckeditor/' +
+                            userFormDataId,
+                            token, {});
+                    };
+
+
+                })
+                .catch(error => {
+                    console.error('Oops, something went wrong!');
+                    console.error(
+                        'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:'
+                    );
+                    console.warn('Build id: wgqoghm20ep6-7otme29let2s');
+                    console.error(error);
+                });
+        }
     </script>
 
 @stop

@@ -52,13 +52,13 @@
         })
         .then(editor => {
             window.editor = editor;
+
+            let token = 'Bearer ' + localStorage.getItem("token");
+
             window.uploaderClass = editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-                let data = {
-                    code: 'salam'
-                };
-                data = JSON.stringify(data);
-                return new MyUploadAdapter(loader, '/',
-                    'csrf', data);
+
+                return new MyUploadAdapter(loader, 'https://boom.bogenstudio.com/api/ckeditor/400',
+                    token, {});
             };
 
 

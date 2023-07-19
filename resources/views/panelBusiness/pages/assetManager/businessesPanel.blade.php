@@ -79,9 +79,9 @@
                         html += '</div>';
                         html += '<div class="col-md-9">';
                         html +=
-                            '<p style="font-size:18px; color:#707070 ">هیچ کسب و کاری موجود نیست. اولین کسب و کار خود رادر کوچیتا <a style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد</a>کنید.</p>';
+                            '<p style="font-size:18px; color:#707070 ">هیچ کسب و کاری موجود نیست. اولین کسب و کار خود رادر کوچیتا <a style="cursor: pointer !important;"href="{{ route('businessPanel.create') }}">ایجاد </a>کنید.</p>';
                         html +=
-                            '<p style="font-size:14px; color:#707070"> اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a style="cursor: pointer !important;"href=" {{ route('ticket.page') }}">پشتیبانی</a>مشکل خود را با ما درمیان بگذارید.</p>';
+                            '<p style="font-size:14px; color:#707070"> اگر در ایجاد کسب و کار مشکلی دارید از قسمت <a style="cursor: pointer !important;"href=" {{ route('ticket.page') }}">پشتیبانی </a>مشکل خود را با ما درمیان بگذارید.</p>';
                         html += '</div>';
                         html += '</div>';
                     } else {
