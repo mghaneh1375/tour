@@ -2,8 +2,14 @@
 
 <head>
 
-    <script src="{{ asset('js/ckeditor5/ckeditorUpload.js') }}"></script>
-    <script src="{{ asset('js/ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/newck/ckeditor5/ckeditorUpload.js') }}"></script>
+    <script src="{{ asset('js/newck/ckeditor5/ckeditor.js') }}"></script>
+
+    <style>
+        #safarnamehText {
+            width: calc(100% - 200px) !important;
+        }
+    </style>
 
 </head>
 
@@ -48,7 +54,7 @@
             window.editor = editor;
             window.uploaderClass = editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                 let data = {
-                    code: {{ $code }}
+                    code: 'salam'
                 };
                 data = JSON.stringify(data);
                 return new MyUploadAdapter(loader, '/',
