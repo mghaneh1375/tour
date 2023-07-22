@@ -4,6 +4,14 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/shazdeDesigns/tourCreation.css?v=11') }}" />
     <title>کسب و کارهای من</title>
     <style>
+        .btn:hover {
+            color: white;
+        }
+
+        .whiteBox {
+            border-bottom: unset;
+        }
+
         td {
             padding: 7px;
             min-width: 150px;
@@ -114,6 +122,22 @@
                                         res.assets[i][z].id + ',this)" title="حذف">';
                                     html += '<i class="fa-solid fa-trash"></i></a>';
                                     html += '</td>';
+                                } else if (res.assets[i][z].status === "در حال بررسی برای تایید") {
+                                    html +=
+                                        '<td><a href="{{ route('ticket.page') }}" class="btn btnSuccess" style="font-size: 10px;width:60%;">';
+                                    html += 'پشتیبانی';
+                                    html += '</a>';
+                                    html += '</td>';
+                                } else if (res.assets[i][z].status === "رد شده") {
+                                    html += '<td style="display:flex;">';
+                                    html +=
+                                        '<div class="btn btnError" style="font-size: 10px;margin-left: 5px;" onclick="fillForm(' +
+                                        assetId + ',' + usreId + ')">تکمیل اطلاعات </div>';
+                                    html +=
+                                        '<a href="{{ route('ticket.page') }}" class="btn btnAlert" style="font-size: 10px;">';
+                                    html += 'هشدارها';
+                                    html += '</a>';
+                                    html += '</td>';
                                 } else {
                                     html +=
                                         '<td><a href="#"class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل مدیریت</a></td>';
@@ -196,6 +220,7 @@
                 },
             })
             $(el).parent().parent().remove();
+            location.reload();
         }
     </script>
 @endsection

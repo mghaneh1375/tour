@@ -261,8 +261,8 @@
                     window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
+                    console.log('moooooz');
                     lastPage();
-                    // window.location.href = "{{ route('businessPanel.panel') }} "
                 }
             }
             if (isInFirstStep) {
@@ -322,13 +322,9 @@
                         });
                     }
                 }
-                // todp: call update asset api
-                // check if form has img, call set pic api
             } else {
-                openLoading();
                 $.ajax({
                     type: 'post',
-                    complete: closeLoading,
                     url: url + '/user_forms_data/' + userAssetId,
                     headers: {
                         'Accept': 'application/json',
@@ -348,16 +344,17 @@
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                     userAssetId;
                             } else {
+                                console.log('mooz');
                                 lastPage();
                             }
                         } else {
                             showSuccessNotifiBP(res.err, 'right', '#ac0020');
-
                         }
                     },
-                    error: function(rejected) {
-                        errorAjax(rejected);
-                    }
+                    // error: function(rejected) {
+                    //     errorAjax(rejected);
+                    //     console.log(rejected);
+                    // }
                 });
 
             }
@@ -378,7 +375,7 @@
                     console.log(res);
                     if (res.status === "0") {
 
-
+                        window.location.href = "{{ route('businessPanel.panel') }} "
 
                     } else {
                         showSuccessNotifiBP(res.errs, 'right', '#ac0020');
@@ -395,7 +392,6 @@
         function nextStep() {
             var errorText = "";
             var $inputs = $('.inputBoxTour :input');
-            // An array of just the ids...
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
@@ -760,6 +756,9 @@
                 if ($(this).hasClass('input-file')) {
                     return;
                 }
+                if (!$(this).attr('required') && $(this).val() === '') {
+                    return;
+                }
 
                 if ($(this).attr('type') === 'checkbox') {
 
@@ -846,7 +845,6 @@
             } else {
                 storeDataModal(fields);
                 $('#addModal').attr("data-dismiss", "modal");
-                location.reload();
                 // if (nextFormId !== undefined) {
                 //     storeData(fields);
                 // }
@@ -854,10 +852,8 @@
         }
 
         function storeDataModal(fields) {
-            openLoading();
             $.ajax({
                 type: 'post',
-                complete: closeLoading,
                 url: url + '/user_forms_data/' + userAssetId,
                 headers: {
                     'Accept': 'application/json',
@@ -872,10 +868,19 @@
                 },
 
                 success: function(res) {
-                    if (res.status === "0") {
-                        userAssetId = res.id;
-                        storePic(userAssetId, fields);
-                    } else {}
+                    if (res.status === 0) {
+                        console.log(res.status);
+                        // userAssetId = res.id;
+                        // storePic(userAssetId, fields);
+                        location.reload();
+                    } else {
+                        console.log(res.status);
+                    }
+                },
+                error: function(request, status, error) {
+                    if (request.status === 500) {
+                        showSuccessNotifiBP('خطایی در سرور به جود آمده است', 'right', '#ac0020');
+                    }
                 }
 
             });
@@ -1083,7 +1088,10 @@
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
                     text += '<div id="ck' + ckeditorId + '" class="textEditor">';
-                    text += res.fields[i].data;
+                    if (res.fields[i].data !== null) {
+
+                        text += res.fields[i].data;
+                    }
                     text += '</div>';
                     text += '</div>';
 
@@ -1216,10 +1224,14 @@
                                 }
                             }
 
-                            text +=
-                                '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;"> <img src="' +
-                                img +
-                                '" style="height: 100%; width: 100%;object-fit: contain;">';
+                            text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
+                            console.log(img);
+                            if (img === undefined || img === 'https://boom.bogenstudio.com/../storage/default.png') {
+                                text +=
+                                    '<div style="height: 100%;align-items: center;display: flex;"><i class="boomIcon" style="font-size: 130px;font-style: unset;"></i></div>';
+                            } else {
+                                text += '<img src="' + img + '" style="height: 100%; width: 100%;object-fit: contain;">';
+                            }
                             text += '</div>';
                             text +=
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';

@@ -672,6 +672,11 @@ label {
     color: white;
     background-color: #0076a3;
 }
+.btnAlert {
+    cursor: pointer !important;
+    color: white;
+    background-color: #707070;
+}
 .btnError {
     cursor: pointer !important;
     background-color: #db3700;
