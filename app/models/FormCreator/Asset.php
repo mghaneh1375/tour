@@ -23,7 +23,6 @@ use phpDocumentor\Reflection\Types\Null_;
  * @method static Builder|Asset newQuery()
  * @method static Builder|Asset query()
  * @method static Builder|Asset whereId($value)
- * @method static Builder|Asset whereSuperId($value)
  * @method static Builder|Asset whereViewIndex($value)
  * @method static Builder|Asset whereHidden($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\models\Form[] $forms
@@ -41,10 +40,10 @@ class Asset extends BaseModel
     protected  $connection = 'formDB';
     public $timestamps = false;
 
-    protected $maps = [
-        'super_id' => 'super_id'
-    ];
-
+    public function superId($id) {
+        return $this->where('super_id', $id);
+    }
+    
     public function forms() {
         return $this->hasMany(Form::class);
     }
