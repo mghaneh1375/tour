@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\models\UserSubAsset;
+use App\models\FormCreator\UserSubAsset;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +38,7 @@ class UserSubAssetExist implements Rule
             return $this->allowFirst;
 
         $uId = Auth::user()->id;
-        if(UserSubAsset::whereUserId($uId)->whereId($value)->whereAssetId($this->assetId)->count() > 0)
+        if(UserSubAsset::where('user_id', $uId)->whereId($value)->where('asset_id',$this->assetId)->count() > 0)
             return true;
 
         return false;

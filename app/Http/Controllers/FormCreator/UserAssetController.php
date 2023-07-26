@@ -137,7 +137,7 @@ class UserAssetController extends Controller
 
             $isSubAsset = ($form->asset->super_id != -1);
             if($isSubAsset) {
-                $tmp = UserSubAsset::whereUserId($userId)->whereAssetId($form->asset->id)->whereUserAssetId($userAsset->id)->first();
+                $tmp = UserSubAsset::where('user_id', $userId)->where('asset_id', $form->asset->id)->where('user_asset_id', $userAsset->id)->first();
                 $userAssetId = ($tmp == null) ? -1 : $tmp->id;
             }
             else
@@ -154,7 +154,7 @@ class UserAssetController extends Controller
         //     'forms' => $forms
         // ]);
 
-        return view('report.field', ['forms' => $forms]);
+        return view('formCreator.report.field', ['forms' => $forms]);
     }
 
     /**
@@ -310,7 +310,7 @@ class UserAssetController extends Controller
                     $itr->delete();
                 }
 
-                $assets = Asset::whereSuperId($userAsset->asset_id)->get();
+                $assets = Asset::where('super_id',$userAsset->asset_id)->get();
                 foreach ($assets as $asset) {
                     $userSubAssets = $asset->user_sub_assets;
                     foreach ($userSubAssets as $userSubAsset)

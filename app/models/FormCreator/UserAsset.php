@@ -27,8 +27,6 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|UserAsset newModelQuery()
  * @method static Builder|UserAsset newQuery()
  * @method static Builder|UserAsset query()
- * @method static Builder|UserAsset whereAssetId($value)
- * @method static Builder|UserAsset whereUserId($value)
  * @method static Builder|UserAsset whereStatus($value)
  * @method static Builder|UserAsset whereId($value)
  * @method static Builder|UserAsset whereCreatedAt($value)

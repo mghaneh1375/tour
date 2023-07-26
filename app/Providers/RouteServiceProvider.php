@@ -54,7 +54,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapFormCreatorWebRoutes()
     {
         Route::middleware('web')
-             ->domain('myboom.com')
+             ->domain('myboom2.com')
             //  ->domain('business.bogenstudio.com')
             //  ->domain('businessPanel.localhost')
             ->namespace($this->namespace.'\FormCreator')

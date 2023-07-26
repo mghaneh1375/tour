@@ -5,8 +5,8 @@ namespace App\models;
 
 use App\Http\Controllers\PanelBusiness\MainPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
-use App\models\Business\Business;
-use App\models\Reviews\ReviewPic;
+use App\models\FormCreator\Business\Business;
+use App\models\FormCreator\Reviews\ReviewPic;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Notifications\Notifiable;
@@ -226,7 +226,7 @@ class User extends Authenticatable{
         if($user == null || $user->parent == -1)
             return;
 
-        $businesses = Business::whereUserId($parentId)->get();
+        $businesses = Business::where('user_id',$parentId)->get();
         foreach ($businesses as $business)
             Business::deleteBusiness($business);
 

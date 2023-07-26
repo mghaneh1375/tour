@@ -44,7 +44,7 @@ class UserSubAssetController extends Controller
             ]);
         }
 
-        $data = UserFormsData::whereUserId($uId)->whereFieldId($form_field->id)
+        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
             ->whereUserAssetId($userSubAsset->id)->whereIsSubAsset(true)->first();
 
         if($data == null || !in_array($image->id, explode('_', $data->data))) {
@@ -119,7 +119,7 @@ class UserSubAssetController extends Controller
         ]);
 
         $uId = Auth::user()->id;
-        $data = UserFormsData::whereUserId($uId)->whereFieldId($form_field->id)
+        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
             ->whereUserAssetId($userSubAsset->id)->whereIsSubAsset(true)->first();
 
         if($data == null) {

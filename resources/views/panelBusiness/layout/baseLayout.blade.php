@@ -68,11 +68,47 @@
         @yield('body')
     </div>
 
+    <div id="removeModal" class="modal fade" role="dialog">
 
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">آیا از حذف این آیتم اطمینان دارید؟</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="closeRemoveModalBtn" type="button" class="btn btn-default"
+                        data-dismiss="modal">انصراف</button>
+                    <input onclick="doRemove()" type="submit" class="btn btn-success" value="تایید">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
     @yield('modals')
 
     <script>
         const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+
+        function remove(id) {
+            selectedFormRemoveId = id;
+        }
+
+        function doRemove() {
+            $.ajax({
+                type: 'delete',
+                url: delUrl + selectedFormRemoveId,
+                success: function(res) {
+                    if (res.status === "0") {
+                        $("#tr_" + selectedFormRemoveId).remove();
+                        $("#closeRemoveModalBtn").click();
+                    }
+                }
+            });
+        }
     </script>
 
     @yield('script')

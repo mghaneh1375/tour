@@ -40,7 +40,7 @@ class Asset extends BaseModel
     protected  $connection = 'formDB';
     public $timestamps = false;
 
-    public function superId($id) {
+    public function scopeSuperId($id) {
         return $this->where('super_id', $id);
     }
     

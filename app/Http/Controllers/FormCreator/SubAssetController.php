@@ -15,7 +15,7 @@ use Illuminate\Validation\Rule;
 class SubAssetController extends Controller {
 
     public function index(Asset $asset) {
-        return view('asset', ['assets' => Asset::whereSuperId($asset->id)->get()]);
+        return view('asset', ['assets' => Asset::where('super_id',$asset->id)->get()]);
     }
 
     /**
@@ -139,7 +139,7 @@ class SubAssetController extends Controller {
                 foreach ($userAssets as $userAsset)
                     UserAssetController::destroy($userAsset);
 
-                $subAssets = Asset::whereSuperId($asset->id)->get();
+                $subAssets = Asset::where('super_id',$asset->id)->get();
                 foreach ($subAssets as $subAsset)
                     AssetController::destroy($subAsset);
             }

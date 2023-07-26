@@ -1,70 +1,59 @@
-@extends('layouts.structure')
+@extends('panelBusiness.layout.baseLayout')
 
-@section('header')
+@section('head')
     @parent
-
-    <script>
-        var delUrl = '{{url('asset')}}' + "/";
-    </script>
 @stop
 
-@section('content')
+@section('body')
 
-    <div class="col-md-1"></div>
+    <div class="mainBackWhiteBody">
+        <div class="whiteBox">
+            <div class="main-sparkline8-hd">
+                <h1>assets</h1>
+            </div>
+            <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن asset جدید</button>
 
-    <div class="col-md-10">
-        <div class="sparkline8-list shadow-reset mg-tb-30">
-            <div class="sparkline8-hd">
-                <div class="main-sparkline8-hd">
-                    <h1>assets</h1>
-                </div>
+            <div style="direction: rtl" class="col-xs-12">
+                <table class="table table-striped">
+                    <thead style="background: var(--koochita-yellow);">
+                        <tr>
+                            <td>نام</td>
+                            <td>حالت نمایش</td>
+                            <td>تصویر</td>
+                            <td>تصویر ایجاد</td>
+                            <td>اولویت نمایش</td>
+                            <td>Hidden</td>
+                            <td>عملیات</td>
+                        </tr>
+                    </thead>
+                    @foreach ($assets as $asset)
+                        <tr id="tr_{{ $asset->id }}">
+                            <td>{{ $asset->name }}</td>
+                            <td>{{ $asset->mode }}</td>
+                            <td><img src="{{ URL::asset('assets/' . $asset->pic) }}"></td>
+                            <td><img src="{{ URL::asset('assets/' . $asset->create_pic) }}"></td>
+                            <td>{{ $asset->view_index }}</td>
+                            <td>{{ $asset->hidden ? 'Hidden' : 'Visible' }}</td>
+                            <td>
+                                <a class="btn btn-success" href="{{ url('asset/' . $asset->id . '/form') }}">ویرایش
+                                    فرم ها</a>
+                                <button data-toggle="modal" data-target="#editModal"
+                                    onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}')"
+                                    class="btn btn-primary">ویرایش asset</button>
+                                <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
+                                    onclick="remove('{{ $asset->id }}')">حذف</button>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </table>
             </div>
 
-            <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
-
-                <center class="row">
-
-                    <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن asset جدید</button>
-
-                    <div style="direction: rtl" class="col-xs-12">
-                        <table>
-                            <tr>
-                                <td>نام</td>
-                                <td>حالت نمایش</td>
-                                <td>تصویر</td>
-                                <td>تصویر ایجاد</td>
-                                <td>اولویت نمایش</td>
-                                <td>Hidden</td>
-                                <td>عملیات</td>
-                            </tr>
-                            @foreach($assets as $asset)
-
-                                <tr id="tr_{{$asset->id}}">
-                                    <td>{{$asset->name}}</td>
-                                    <td>{{$asset->mode}}</td>
-                                    <td><img src="{{URL::asset('assets/' . $asset->pic)}}"></td>
-                                    <td><img src="{{URL::asset('assets/' . $asset->create_pic)}}"></td>
-                                    <td>{{$asset->view_index}}</td>
-                                    <td>{{($asset->hidden) ? "Hidden" : "Visible"}}</td>
-                                    <td>
-                                        <a class="btn btn-success" href="{{url('asset/' . $asset->id . '/form')}}">ویرایش فرم ها</a>
-                                        <button data-toggle="modal" data-target="#editModal" onclick="editAsset('{{$asset->id}}', '{{$asset->hidden}}', '{{$asset->mode}}', '{{$asset->view_index}}', '{{$asset->name}}')" class="btn btn-primary">ویرایش asset</button>
-                                        <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger" onclick="remove('{{$asset->id}}')">حذف</button>
-                                    </td>
-                                </tr>
-
-                            @endforeach
-
-                        </table>
-                    </div>
-
-                </center>
-
-            </div>
         </div>
     </div>
+@endsection
 
-    <div class="col-xs-1"></div>
+@section('modals')
 
     <div id="editModal" class="modal fade" role="dialog">
 
@@ -133,7 +122,7 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="post" action="{{url('asset')}}" enctype="multipart/form-data">
+                <form method="post" action="{{ url('asset') }}" enctype="multipart/form-data">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن asset</h4>
@@ -185,22 +174,23 @@
 
         </div>
     </div>
+@endsection
 
+@section('script')
     <script>
+        var delUrl = '{{ url('asset') }}' + "/";
 
         function editAsset(id, h, m, vi, n) {
 
-            $("#editForm").attr("action", "{{url('asset/')}}" + "/" + id + "/edit");
+            $("#editForm").attr("action", "{{ url('asset/') }}" + "/" + id + "/edit");
             $("#name").val(n);
             $("#view_index").val(vi);
             $("#mode").val(m);
 
-            if(h == 1)
+            if (h == 1)
                 $("#hidden").prop("checked", true);
             else
                 $("#hidden").prop("checked", false);
         }
-
     </script>
-
 @stop

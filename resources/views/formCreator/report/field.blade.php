@@ -1,4 +1,4 @@
-@extends('layouts.structure')
+@extends('formCreator.layouts.structure')
 
 @section('header')
     @parent
@@ -22,9 +22,8 @@
 
                     <div style="direction: rtl" class="col-xs-12">
 
-                        @foreach($forms as $form)
-
-                            <h3 style="margin-top: 20px">{{$form->name}}</h3>
+                        @foreach ($forms as $form)
+                            <h3 style="margin-top: 20px">{{ $form->name }}</h3>
 
                             <table>
                                 <tr>
@@ -33,19 +32,23 @@
                                     <td>پاسخ</td>
                                 </tr>
 
-                                @foreach($form->fields as $field)
+                                @foreach ($form->fields as $field)
                                     <tr>
-                                        <td>{{$field->name}}</td>
-                                        <td>{{$field->type}}</td>
+                                        <td>{{ $field->name }}</td>
+                                        <td>{{ $field->type }}</td>
                                         <td>
-                                            @if($field->data == null || empty($field->data))
+                                            @if ($field->data == null || empty($field->data))
                                                 پاسخی ثبت نشده است
                                             @else
-                                                @if($field->type == "MAP")
-                                                    <?php $tmp = explode('_', $field->data); $lat = $tmp[0]; $lng = $tmp[1]; ?>
-                                                    <a target="_blank" href="https://www.google.com/maps/?q={{$lat}},{{$lng}}">کلیک کنید</a>
+                                                @if ($field->type == 'MAP')
+                                                    <?php $tmp = explode('_', $field->data);
+                                                    $lat = $tmp[0];
+                                                    $lng = $tmp[1]; ?>
+                                                    <a target="_blank"
+                                                        href="https://www.google.com/maps/?q={{ $lat }},{{ $lng }}">کلیک
+                                                        کنید</a>
                                                 @else
-                                                    {{$field->data}}
+                                                    {{ $field->data }}
                                                 @endif
                                             @endif
                                         </td>
@@ -53,7 +56,6 @@
                                 @endforeach
 
                             </table>
-
                         @endforeach
                     </div>
 
@@ -108,7 +110,8 @@
                     <h3>آیا از حذف دارایی کاربر اطمینان دارید؟</h3>
                 </div>
                 <div class="modal-footer">
-                    <button id="closeRemoveModalBtn" type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <button id="closeRemoveModalBtn" type="button" class="btn btn-default"
+                        data-dismiss="modal">انصراف</button>
                     <input onclick="doRemove()" type="submit" class="btn btn-success" value="تایید">
                 </div>
             </div>
@@ -117,7 +120,6 @@
     </div>
 
     <script>
-
         var selectedId = -1;
 
         function remove(id) {
@@ -128,9 +130,9 @@
 
             $.ajax({
                 type: "DELETE",
-                url: '{{url('user_asset')}}' + "/" + selectedId,
-                success: function (res) {
-                    if(res.status == "0") {
+                url: '{{ url('user_asset') }}' + "/" + selectedId,
+                success: function(res) {
+                    if (res.status == "0") {
                         $("#tr_" + selectedId).remove();
                         $("#closeRemoveModalBtn").click();
                     }
@@ -148,13 +150,13 @@
 
             $.ajax({
                 type: 'post',
-                url: '{{url('setAssetStatus')}}' + "/" + selectedId,
+                url: '{{ url('setAssetStatus') }}' + "/" + selectedId,
                 data: {
                     'status': newStatus
                 },
-                success: function (res) {
+                success: function(res) {
 
-                    if(res.status == "0") {
+                    if (res.status == "0") {
                         $("#closeModalBtn").click();
                         $("#status_" + selectedId).empty().append(newStatus);
                     }
@@ -162,7 +164,6 @@
             });
 
         }
-
     </script>
 
 @stop

@@ -61,12 +61,12 @@ class AssetController extends Controller {
     public function indexAPI() {
         return response()->json([
             'status' => 0,
-            'assets' => AssetDigest::collection(Asset::whereSuperId(-1)->orderBy('view_index', 'asc')->get())
+            'assets' => AssetDigest::collection(Asset::where('super_id',-1)->orderBy('view_index', 'asc')->get())
         ]);
     }
 
     public function index() {
-        return view('asset', ['assets' => Asset::whereSuperId(-1)->get()]);
+        return view('formCreator.asset', ['assets' => Asset::where('super_id', -1)->get()]);
     }
 
     /**
@@ -199,7 +199,7 @@ class AssetController extends Controller {
                 foreach ($userAssets as $userAsset)
                     UserAssetController::destroy($userAsset);
 
-                $subAssets = Asset::whereSuperId($asset->id)->get();
+                $subAssets = Asset::where('super_id',$asset->id)->get();
                 foreach ($subAssets as $subAsset)
                     AssetController::destroy($subAsset);
             }

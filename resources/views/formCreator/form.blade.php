@@ -1,21 +1,17 @@
-@extends('layouts.structure')
+@extends('panelBusiness.layout.baseLayout')
 
-@section('header')
+@section('head')
     @parent
 
     <script>
-        var delUrl = '{{url('form')}}' + "/";
+        var delUrl = '{{ url('form') }}' + "/";
     </script>
 
 @stop
 
-@section('content')
-
-    <div class="col-md-1"></div>
-
-    <div class="col-md-10">
-        <div class="sparkline8-list shadow-reset mg-tb-30">
-
+@section('body')
+    <div class="mainBackWhiteBody">
+        <div class="whiteBox">
             <div class="sparkline8-hd">
                 <div class="main-sparkline8-hd">
                     <h1>
@@ -24,54 +20,49 @@
                         <span> | </span>
                         <span>&nbsp;&nbsp;&nbsp;</span>
                         <span>asset</span>
-                        <span>{{$asset->name}}</span>
-                        <span onclick="document.location.href = '{{url('asset')}}'" class="back">بازگشت</span>
+                        <span>{{ $asset->name }}</span>
+                        <span onclick="document.location.href = '{{ url('asset') }}'" class="back">بازگشت</span>
                     </h1>
                 </div>
             </div>
+            <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن فرم جدید</button>
 
-            <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
+            <div style="direction: rtl" class="col-xs-12">
+                <table class="table table-striped">
+                    <thead style="background: var(--koochita-yellow);">
+                        <tr>
+                            <td>گام</td>
+                            <td>نام</td>
+                            <td>توضیح</td>
+                            <td>تذکر</td>
+                            <td>عملیات</td>
+                        </tr>
+                    </thead>
+                    @foreach ($asset->forms as $form)
+                        <tr id="tr_{{ $form->id }}">
+                            <td>{{ $form->step }}</td>
+                            <td>{{ $form->name }}</td>
+                            <td>{{ $form->description }}</td>
+                            <td>{{ $form->notice }}</td>
+                            <td>
+                                <a class="btn btn-success" href="{{ url('form/' . $form->id . '/form_field') }}">ویرایش فیلد
+                                    ها</a>
+                                <button data-toggle="modal" data-target="#editModal"
+                                    onclick="editForm('{{ $form->id }}')" class="btn btn-primary">ویرایش
+                                    فرم</button>
+                                <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
+                                    onclick="remove('{{ $form->id }}')">حذف</button>
+                            </td>
+                        </tr>
+                    @endforeach
 
-                <center class="row">
-
-                    <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن فرم جدید</button>
-
-                    <div style="direction: rtl" class="col-xs-12">
-                        <table>
-                            <tr>
-                                <td>گام</td>
-                                <td>نام</td>
-                                <td>توضیح</td>
-                                <td>تذکر</td>
-                                <td>عملیات</td>
-                            </tr>
-                            @foreach($asset->forms as $form)
-
-                                <tr id="tr_{{$form->id}}">
-                                    <td>{{$form->step}}</td>
-                                    <td>{{$form->name}}</td>
-                                    <td>{{$form->description}}</td>
-                                    <td>{{$form->notice}}</td>
-                                    <td>
-                                        <a class="btn btn-success" href="{{url('form/' . $form->id . '/form_field')}}">ویرایش فیلد ها</a>
-                                        <button data-toggle="modal" data-target="#editModal" onclick="editForm('{{$form->id}}', '{{$form->name}}', '{{$form->description}}', '{{$form->notice}}', '{{$form->step}}')" class="btn btn-primary">ویرایش فرم</button>
-                                        <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger" onclick="remove('{{$form->id}}')">حذف</button>
-                                    </td>
-                                </tr>
-
-                            @endforeach
-
-                        </table>
-                    </div>
-
-                </center>
-
+                </table>
             </div>
+
         </div>
     </div>
-
-    <div class="col-xs-1"></div>
-
+@endsection
+@section('modals')
     <div id="editModal" class="modal fade" role="dialog">
 
         <div class="modal-dialog">
@@ -120,7 +111,7 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="post" action="{{url('asset/' . $asset->id . '/form')}}">
+                <form method="post" action="{{ url('asset/' . $asset->id . '/form') }}">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن فرم</h4>
@@ -158,17 +149,20 @@
 
         </div>
     </div>
-
+@endsection
+@section('script')
     <script>
+        var forms = {!! json_encode($asset->forms) !!};
 
-        function editForm(id, n, d, not, s) {
-            $("#editForm").attr("action", "{{url('form/')}}" + "/" + id + "/edit");
-            $("#name").val(n);
-            $("#description").val(d);
-            $("#notice").val(not);
-            $("#step").val(s);
+        function editForm(id) {
+            items = forms.filter(x => x.id == id);
+            for (let i = 0; i < items.length; i++) {
+                $("#editForm").attr("action", "{{ url('form/') }}" + "/" + items[i].id + "/edit");
+                $("#name").val(items[i].name);
+                $("#description").val(items[i].description);
+                $("#notice").val(items[i].notice);
+                $("#step").val(items[i].step);
+            }
         }
-
     </script>
-
 @stop

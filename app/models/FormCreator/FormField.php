@@ -37,8 +37,9 @@ class FormField extends Model
 {
 
 
-    protected $fillable = ['name', 'placeholder', 'force_help', 'limitation', 'help', 'necessary', 'type', 'form_id'];
+    protected $fillable = ['name', 'placeholder', 'force_help', 'limitation', 'help','rtl', 'necessary', 'type', 'form_id'];
     public $timestamps = false;
+    public $table = 'form_fields';
     
     protected  $connection = 'formDB';
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\FormCreator;
 
 use App\Http\Controllers\Controller;
-
+    
 use App\models\FormCreator\Asset;
 use App\models\FormCreator\Form;
 use App\models\FormCreator\FormField;
@@ -47,7 +47,7 @@ class FormController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index(Asset $asset) {
-        return view('form', ['asset' => $asset]);
+        return view('formCreator.form', ['asset' => $asset]);
     }
 
     /**
@@ -134,7 +134,7 @@ class FormController extends Controller
                 if($form->name == "اطلاعات مالک") {
                     if($fields[0]->data == null || empty($fields[0]->data)) {
                         foreach ($fields as $field) {
-                            $data = UserFormsData::whereUserId($userId)->whereFieldId($field->field_id)->select('data')->first();
+                            $data = UserFormsData::where('user_id',$userId)->whereFieldId($field->field_id)->select('data')->first();
                             if($data != null && !empty($data))
                                 $field->data = $data->data;
                             else
@@ -214,10 +214,10 @@ class FormController extends Controller
                     if($userSubAsset == null)
                         $subAssets = [];
                     else
-                        $subAssets = UserSubAsset::whereUserId($userId)->whereAssetId($field->options[0])->whereUserAssetId($userSubAsset->id)->select("id")->get();
+                        $subAssets = UserSubAsset::where('user_id',$userId)->whereAssetId($field->options[0])->whereUserAssetId($userSubAsset->id)->select("id")->get();
                 }
                 else
-                    $subAssets = UserSubAsset::whereUserId($userId)->whereAssetId($field->options[0])->whereUserAssetId($userAsset->id)->select("id")->get();
+                    $subAssets = UserSubAsset::where('user_id',$userId)->whereAssetId($field->options[0])->whereUserAssetId($userAsset->id)->select("id")->get();
 
                     // todo: thinking pic = false
                 $pic = true;
