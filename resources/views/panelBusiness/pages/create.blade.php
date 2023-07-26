@@ -112,9 +112,9 @@
                         </div>
 
                         <div class="col-xs-12 fullyCenterContent" style="margin-top: 10px;">
-                            {{-- <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button> --}}
-                            <button onclick="document.location.href = '/createForm?isHaghighi='+isHaghighi "
-                                class="btn btn-success">مرحله بعد</button>
+                            <button onclick="goToPage(1, 10)" class="btn btn-success">مرحله بعد</button>
+                            {{-- <button onclick="document.location.href = '/createForm?isHaghighi='+isHaghighi "
+                                class="btn btn-success">مرحله بعد</button> --}}
                         </div>
 
                     </div>
