@@ -1,37 +1,36 @@
-@extends('formCreator.layouts.structure')
+@extends('panelBusiness.layout.baseLayout')
 
-@section('header')
+@section('head')
     @parent
 @stop
 
-@section('content')
+@section('body')
 
-    <div class="col-md-1"></div>
 
-    <div class="col-md-10">
-        <div class="sparkline8-list shadow-reset mg-tb-30">
-            <div class="sparkline8-hd">
-                <div class="main-sparkline8-hd">
-                    <h1>پاسخ های کاربر</h1>
+    <div class="mainBackWhiteBody">
+        <div class="whiteBox">
+
+            <div class="sparkline8-list shadow-reset mg-tb-30">
+                <div class="sparkline8-hd">
+                    <div class="main-sparkline8-hd">
+                        <h1>پاسخ های کاربر</h1>
+                    </div>
                 </div>
-            </div>
 
-            <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
-
-                <center class="row">
-
+                <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
                     <div style="direction: rtl" class="col-xs-12">
 
                         @foreach ($forms as $form)
                             <h3 style="margin-top: 20px">{{ $form->name }}</h3>
 
-                            <table>
-                                <tr>
-                                    <td>سوال</td>
-                                    <td>نوع سوال</td>
-                                    <td>پاسخ</td>
-                                </tr>
-
+                            <table class="table table-striped">
+                                <thead style="background: var(--koochita-yellow);">
+                                    <tr>
+                                        <td>سوال</td>
+                                        <td>نوع سوال</td>
+                                        <td>پاسخ</td>
+                                    </tr>
+                                </thead>
                                 @foreach ($form->fields as $field)
                                     <tr>
                                         <td>{{ $field->name }}</td>
@@ -59,14 +58,15 @@
                         @endforeach
                     </div>
 
-                </center>
 
+
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-xs-1"></div>
-
+@endsection
+@section('modals')
     <div id="editModal" class="modal fade" role="dialog">
 
         <div class="modal-dialog">
@@ -118,7 +118,8 @@
 
         </div>
     </div>
-
+@endsection
+@section('script')
     <script>
         var selectedId = -1;
 

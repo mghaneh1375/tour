@@ -144,7 +144,7 @@ class SubAssetController extends Controller {
                     AssetController::destroy($subAsset);
             }
             else {
-                $userSubAssets = UserSubAsset::whereAssetId($asset->id)->get();
+                $userSubAssets = UserSubAsset::where('asset_id',$asset->id)->get();
                 foreach ($userSubAssets as $userSubAsset)
                     UserSubAssetController::destroy($userSubAsset);
             }

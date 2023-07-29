@@ -54,6 +54,8 @@ class FormFieldController extends Controller
             }
             else
                 $field->limitation = "محدودیتی موجود نیست";
+                
+            $field->editUrl = route('form_field.update', ['form_field' => $field->id]);
         }
 
         return view('FormCreator.field', ['form' => $form,
@@ -165,7 +167,8 @@ class FormFieldController extends Controller
      * @param  \App\models\FormField  $formField
      * @return \Illuminate\Http\Response
      */
-     public function update(Request $request, FormField $formField){
+     public function update(Request $request, FormField $form_field){
+        
         $request->validate([
             "name" => "required",
             "type" => ["required", Rule::in(["STRING", "INT", "CHECKBOX", "RADIO", "REDIRECTOR",
@@ -173,59 +176,59 @@ class FormFieldController extends Controller
             "help" => ["nullable", "max:1000"],
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
-            "err" => ["nullable", "max:1000"]
+            "err" => ["nullable", "max:1000"],
+            "limitations" => 'nullable|array'
         ]);
         
-        $field = $formField;
-        $field->name = $request["name"];
-        $field->type = $request["type"];
+        $form_field->name = $request["name"];
+        $form_field->type = $request["type"];
 
         if($request->has("necessary") && $request["necessary"] == "1")
-            $field->necessary = true;
+            $form_field->necessary = true;
         else
-            $field->necessary = false;
+            $form_field->necessary = false;
 
         if($request->has("half") && $request["half"] == "1")
-            $field->half = true;
+            $form_field->half = true;
          else
-            $field->half = false;
+            $form_field->half = false;
 
         if($request->has("rtl") && $request["rtl"] == "1")
-            $field->rtl = true;
+            $form_field->rtl = true;
         else
-            $field->rtl = false;
+            $form_field->rtl = false;
 
         if($request->has("multiple") && $request["multiple"] == "1")
-            $field->multiple = true;
+            $form_field->multiple = true;
         else
-            $field->multiple = false;
+            $form_field->multiple = false;
 
-        $field->help = $request["help"];
-        $field->err = $request["err"];
-        $field->force_help = $request["force_help"];
-        $field->placeholder = $request["placeholder"];
+        $form_field->help = $request["help"];
+        $form_field->err = $request["err"];
+        $form_field->force_help = $request["force_help"];
+        $form_field->placeholder = $request["placeholder"];
 
-        if($field->type == "LISTVIEW") {
+        if($form_field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
-                Asset::whereId($request["subAsset"])->where('super_id',$formField-> form->asset_id)->count() > 0)
-                $field->options = "sub_" . $request["subAsset"];
+                Asset::whereId($request["subAsset"])->where('super_id',$form_field-> form->asset_id)->count() > 0)
+                $form_field->options = "sub_" . $request["subAsset"];
             else
                 dd("خطا در ورودی");
         }
 
-        elseif($field->type == "REDIRECTOR") {
+        elseif($form_field->type == "REDIRECTOR") {
 
             if($request->has("form") &&
-                Form::whereId($request["form"])->whereAssetId($formField->form->asset_id)->count() > 0)
-                $field->options = "form_" . $request["form"];
+                Form::whereId($request["form"])->where('asset_id',$form_field->form->asset_id)->count() > 0)
+                $form_field->options = "form_" . $request["form"];
             else
                 dd("خطا در ورودی");
         }
 
-        else if($field->type == "CHECKBOX" || $field->type == "RADIO" ||
-            $field->type == "API") {
+        else if($form_field->type == "CHECKBOX" || $form_field->type == "RADIO" ||
+            $form_field->type == "API") {
             if($request->has("options") && !empty($request["options"]))
-                $field->options = $request["options"];
+                $form_field->options = $request["options"];
             else
                 return response()->json([
                     'status' => 'nok',
@@ -249,12 +252,12 @@ class FormFieldController extends Controller
                 else if($limit == 1 && $request->has("charCount"))
                     $str .= "1:" . $request["charCount"];
             }
-            $field->limitation = $str;
+            $form_field->limitation = $str;
         }
         else
-            $field->limitation = null;
+            $form_field->limitation = null;
 
-        $field->save();
+        $form_field->save();
 
         return response()->json([
             'status' => 'ok'
@@ -269,24 +272,25 @@ class FormFieldController extends Controller
      * @param  \App\models\FormField  $formField
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function destroy(FormField $formField) {
+    public static function destroy(FormField $form_field) {
 
-        dd($formField->id);
 
-        if($formField->type == "FILE" || $formField->type == "GALLERY") {
 
-            $data = UserFormsData::whereFieldId($formField->id)->get();
+        if($form_field->type == "FILE" || $form_field->type == "GALLERY") {
 
-//            foreach ($data as $itr) {
-//                if(file_exists(__DIR__ . '/../../../public/storage/' . ))
-//            }
+            $data = UserFormsData::where('field_id',$form_field->id)->get();
+
+        //    foreach ($data as $itr) {
+        //        if(file_exists(__DIR__ . '/../../../public/storage/' . ))
+        //    }
 
         }
 
-        $formField->delete();
 
-        return response()->json([
-            "status" => "0"
-        ]);
+        $form_field->delete();
+
+       return response()->json([
+            'status' => 'ok'
+        ]);;
     }
 }

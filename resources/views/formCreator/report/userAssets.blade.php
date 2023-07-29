@@ -33,28 +33,29 @@
                             <?php $i = 1; ?>
                             @foreach ($userAssets as $asset)
                                 {{-- onclick="document.location.href = '{{ route('businessPanel.getSpecificUnChecked', ['business' => $request->id]) }}'" --}}
-                                <tr id="tr_{{ $asset->id }}" style="cursor: pointer">
+                                <tr id="tr_{{ $asset['id'] }}" style="cursor: pointer">
                                     <td>{{ $i }}</td>
-                                    <td>{{ $asset->title }}</td>
-                                    <td>{{ $asset->asset->name }}</td>
+                                    <td>{{ $asset['title'] }}</td>
+                                    <td>{{ $asset['assetName'] }}</td>
+                                    <td>{{ $asset['username'] }}</td>
                                     <td>last_name </td>
-                                    <td>username</td>
-                                    <td>phone</td>
-                                    <td id="status_{{ $asset->id }}"> {{ $asset->status }} </td>
-                                    <td>{{ $asset->created_at }} </td>
-                                    <td>{{ $asset->updated_at }} </td>
+                                    <td>{{ $asset['phone'] }}</td>
+                                    <td id="status_{{ $asset['id'] }}"> {{ $asset['status'] }} </td>
+                                    <td>{{ $asset['createdAt'] }} </td>
+                                    <td>{{ $asset['updatedAt'] }} </td>
                                     <td>
-                                        <a class="btn btn-success" href="{{ url('user_asset/' . $asset->id) }}">مشاهده
+                                        <a class="btn btn-success" href="{{ url('user_asset/' . $asset['id']) }}">مشاهده
                                             پاسخ
                                             کاربر</a>
 
-                                        @if ($asset->status != 'INIT')
+                                        @if ($asset['status'] != 'INIT')
                                             <button data-toggle="modal" data-target="#editModal"
-                                                onclick="changeStatus('{{ $asset->id }}')" class="btn btn-primary">تغییر
+                                                onclick="changeStatus('{{ $asset['id'] }}')" class="btn btn-primary">تغییر
                                                 وضعیت</button>
                                         @endif
 
-                                        <button class="btn btn-danger" onclick="remove('{{ $asset->id }}')">حذف</button>
+                                        <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
+                                            onclick="remove('{{ $asset['id'] }}')">حذف</button>
                                     </td>
                                 </tr>
                                 <?php $i++; ?>
@@ -96,7 +97,6 @@
 
         </div>
     </div>
-
     <div id="removeModal" class="modal fade" role="dialog">
 
         <div class="modal-dialog">
@@ -104,16 +104,15 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">حذف دارایی کاربر</h4>
+                    <h4 class="modal-title">آیا از حذف این آیتم اطمینان دارید؟</h4>
                 </div>
-                <div class="modal-body">
-                    <h3>آیا از حذف دارایی کاربر اطمینان دارید؟</h3>
-                </div>
+
                 <div class="modal-footer">
                     <button id="closeRemoveModalBtn" type="button" class="btn btn-default"
                         data-dismiss="modal">انصراف</button>
                     <input onclick="doRemove()" type="submit" class="btn btn-success" value="تایید">
                 </div>
+
             </div>
 
         </div>
@@ -214,6 +213,8 @@
                     if (res.status == "0") {
                         $("#closeModalBtn").click();
                         $("#status_" + selectedId).empty().append(newStatus);
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
                 }
             });

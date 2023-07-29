@@ -364,7 +364,7 @@
                                     value="1">
                             </div>
 
-                            <div id="charCountDiv" class="hidden">
+                            <div id="charCountDivAdd" class="hidden">
                                 <label for="charCount">تعداد کاراکتر مورد نظر</label>
                                 <input id="charCount" type="number" name="charCount">
                             </div>
@@ -464,6 +464,7 @@
         }
 
         function updateFields() {
+            change();
             console.log(limitations);
             $.ajax({
                 type: 'put',
@@ -490,6 +491,7 @@
                     }
                 }
             });
+            location.reload();
         }
 
         function changeType(val) {
@@ -518,10 +520,14 @@
         }
 
         function changeCharLimit() {
-            if ($("#minChar").prop("checked"))
-                $("#charCountDiv").removeClass("hidden");
-            else
-                $("#charCountDiv").addClass("hidden");
+            console.log('moz');
+            if ($("#minChar").prop('checked', true)) {
+                console.log('asb');
+                $("#charCountDivAdd").removeClass("hidden");
+            } else {
+                console.log('khar');
+                $("#charCountDivAdd").addClass("hidden");
+            }
         }
 
         function changeCharLimitEdit() {

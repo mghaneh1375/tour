@@ -28,22 +28,22 @@ class UserAssetController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Asset $asset) {
+
         return response()->json([
             "status" => "0",
             "assets" => UserAssetDigest::collection($asset->user_assets()->where('user_id', Auth::user()->id)->get())
         ]);
     }
-
     public function all(Request $request) {
-
+        
         $assets = Asset::all();
         $output = [];
         $uId = Auth::user()->id;
-
+        
         foreach($assets as $asset) {
-
+            
             $userAssets = $asset->user_assets()->where('user_id', $uId)->get();
-
+            
             if(count($userAssets) == 0)
                 continue;
 
@@ -52,7 +52,7 @@ class UserAssetController extends Controller
             
             foreach($tmp as $itr) {
                 $itr['asset'] = $asset->name;
-                $itr['assetId'] = $asset->id;
+                $itr['asset_id'] = $asset->id;
                 array_push($arr, $itr);
             }
 
@@ -72,8 +72,8 @@ class UserAssetController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Asset $asset, Request $request)
-    {
+    public function store(Asset $asset, Request $request){
+        
         $form_fields = $asset->forms()->where("step", 1)->first()->form_fields()->select("id")->get();
 
         $request->validate([
@@ -127,10 +127,8 @@ class UserAssetController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show(UserAsset $userAsset) {
-
         
         $forms = $userAsset->asset->forms()->where("step", ">", 1)->get();
-        
         $userId = $userAsset->user_id;
 
         foreach ($forms as $form) {
@@ -224,6 +222,7 @@ class UserAssetController extends Controller
     }
 
     private function checkAsset($asset, $userFormsData, $userAssetId) {
+        
 
         $forms = $asset->forms;
         $errs = [];
@@ -240,7 +239,7 @@ class UserAssetController extends Controller
                 if($field->type == 'LISTVIEW') {
 
                     $subAssetId = explode('_', $field->options)[1];
-                    if(UserSubAsset::whereAssetId($subAssetId)->whereUserAssetId($userAssetId)->count() == 0)
+                    if(UserSubAsset::where('asset_id',$subAssetId)->where('user_asset_id',$userAssetId)->count() == 0)
                         array_push($errs, $form->name . " : " . $field->name);
 
                     continue;
@@ -288,7 +287,6 @@ class UserAssetController extends Controller
     public static function destroy(UserAsset $userAsset) {
 
         try {
-
             DB::transaction(function () use ($userAsset) {
 
                 $pic = $userAsset->pic;
@@ -298,9 +296,8 @@ class UserAssetController extends Controller
                     if (file_exists(__DIR__ . '/../../../storage/app/public/' . $pic))
                         unlink(__DIR__ . '/../../../storage/app/public/' . $pic);
                 }
-
-                $userFormsData = UserFormsData::whereUserAssetId($userAsset->id)->whereIsSubAsset(false)->get();
-
+                $userFormsData = UserFormsData::where('user_asset_id',$userAsset->id)->where('is_sub_asset',false)->get();
+            
                 foreach ($userFormsData as $itr) {
                     if (strpos($itr->data, "assets/") !== false &&
                         file_exists(__DIR__ . '/../../../storage/app/' . $itr->data)) {
@@ -309,14 +306,17 @@ class UserAssetController extends Controller
 
                     $itr->delete();
                 }
-
+                
                 $assets = Asset::where('super_id',$userAsset->asset_id)->get();
+                            
                 foreach ($assets as $asset) {
                     $userSubAssets = $asset->user_sub_assets;
-                    foreach ($userSubAssets as $userSubAsset)
+                    if($userSubAssets !== null){
+                        foreach ($userSubAssets as $userSubAsset)
                         UserSubAssetController::destroy($userSubAsset);
+                    }
                 }
-
+                
                 $userAsset->delete();
             });
 
@@ -326,7 +326,6 @@ class UserAssetController extends Controller
 
         }
         catch (\Exception $x) {}
-
         return response()->json([
             "status" => "-1"
         ]);

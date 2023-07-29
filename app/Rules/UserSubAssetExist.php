@@ -38,7 +38,7 @@ class UserSubAssetExist implements Rule
             return $this->allowFirst;
 
         $uId = Auth::user()->id;
-        if(UserSubAsset::where('user_id', $uId)->whereId($value)->where('asset_id',$this->assetId)->count() > 0)
+        if(UserSubAsset::where('user_id', $uId)->where('id',$value)->where('asset_id',$this->assetId)->count() > 0)
             return true;
 
         return false;

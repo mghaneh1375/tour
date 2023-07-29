@@ -35,7 +35,6 @@ use Illuminate\Support\Facades\DB;
  */
 class UserAsset extends Model
 {
-
     protected $fillable = ['user_id', 'asset_id', 'status'];
     public $table = "user_assets";
     protected  $connection = 'formDB';

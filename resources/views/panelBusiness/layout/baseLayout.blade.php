@@ -2,6 +2,65 @@
 <html lang="fa">
 
 <head>
+    <style>
+        .dropdown-item {
+            text-align: right;
+        }
+
+        .main-sparkline8-hd {
+            direction: rtl;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .calendar>table {
+            width: 100%;
+        }
+
+        .clickable {
+            cursor: pointer;
+            color: #d1b676;
+        }
+
+        .btn-success,
+        .btn-primary {
+            color: white !important;
+        }
+
+        .modal-header {
+            direction: rtl !important;
+        }
+
+        #myModal {
+            width: 40%;
+            padding: 20px;
+            left: 30%;
+            top: 200px;
+            direction: rtl;
+        }
+
+        #myModal .modal-content {
+            padding: 30px;
+        }
+
+        .green {
+            background-color: #31a033 !important;
+            color: white !important;
+        }
+
+        .red {
+            background-color: #ca0e0e !important;
+            color: white !important;
+        }
+
+        .back {
+            float: left;
+            color: #ca0e0e;
+            cursor: pointer;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,6 +127,7 @@
         @yield('body')
     </div>
 
+    @yield('modals')
     <div id="removeModal" class="modal fade" role="dialog">
 
         <div class="modal-dialog">
@@ -88,7 +148,6 @@
 
         </div>
     </div>
-    @yield('modals')
 
     <script>
         const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
@@ -98,6 +157,7 @@
         }
 
         function doRemove() {
+            console.log('asd');
             $.ajax({
                 type: 'delete',
                 url: delUrl + selectedFormRemoveId,

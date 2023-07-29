@@ -68,7 +68,7 @@
                     <div class="modal-body">
 
                         <center>
-                            <p>Hidden</p>
+                            <label for="hidden">Hidden</label>
                             <input type="checkbox" id="hidden" name="hidden">
                         </center>
 

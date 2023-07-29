@@ -140,7 +140,7 @@ class UserFormController extends Controller
             $field = $id;
             $data = $d['data'];
 
-            $user_data = UserFormsData::where('field_id',$field)->where('user_id',$uId)->whereUserAssetId($userAssetId)->firstOr(function () use ($field, $data, $uId, $userAssetId, $isSubAsset) {
+            $user_data = UserFormsData::where('field_id',$field)->where('user_id',$uId)->where('user_asset_id',$userAssetId)->firstOr(function () use ($field, $data, $uId, $userAssetId, $isSubAsset) {
 
                 $user_data = new UserFormsData();
                 $user_data->field_id = $field;
@@ -317,7 +317,7 @@ class UserFormController extends Controller
         $formFieldId = $form_field->id;
         $userAssetId = $userAsset->id;
 
-        $userFormData = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)->whereUserAssetId($userAssetId)->whereIsSubAsset(false)->firstOr(function () use ($uId, $formFieldId, $path, $userAssetId) {
+        $userFormData = UserFormsData::where('user_id', $uId)->where('field_id',$form_field->id)->where('user_asset_id',$userAssetId)->where('is_sub_asset',false)->firstOr(function () use ($uId, $formFieldId, $path, $userAssetId) {
             $user_data = new UserFormsData();
             $user_data->field_id = $formFieldId;
             $user_data->user_id = $uId;

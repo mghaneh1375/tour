@@ -158,6 +158,7 @@
             items = forms.filter(x => x.id == id);
             for (let i = 0; i < items.length; i++) {
                 $("#editForm").attr("action", "{{ url('form/') }}" + "/" + items[i].id + "/edit");
+                console.log($("#editForm").attr("action", "{{ url('form/') }}" + "/" + items[i].id + "/edit"));
                 $("#name").val(items[i].name);
                 $("#description").val(items[i].description);
                 $("#notice").val(items[i].notice);

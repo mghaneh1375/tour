@@ -66,7 +66,7 @@ class FormController extends Controller
             'notice' => ['nullable', 'max:1000'],
         ]);
 
-        if(Form::whereAssetId($asset->id)->whereStep($request["step"])->count() > 0)
+        if(Form::where('asset_id',$asset->id)->where('step',$request["step"])->count() > 0)
             dd("گام باید منحصر به فرد باشد");
 
         $form = new Form();
@@ -96,14 +96,14 @@ class FormController extends Controller
 
         if($userAssetId != -1) {
             if ($isSubAsset) {
-                $userSubAsset = UserSubAsset::whereId($userAssetId)->first();
+                $userSubAsset = UserSubAsset::where('id',$userAssetId)->first();
                 if ($userSubAsset == null)
                     return response()->json([
                         "status" => -1
                     ]);
             }
             else {
-                $userAsset = UserAsset::whereId($userAssetId)->first();
+                $userAsset = UserAsset::where('id',$userAssetId)->first();
                 if ($userAsset == null)
                     return response()->json([
                         "status" => -1
@@ -208,16 +208,16 @@ class FormController extends Controller
 
             else if($field->type == "listview") {
 
-                $field->formId = Form::whereAssetId($field->options[0])->where('step', 1)->first()->id;
+                $field->formId = Form::where('asset_id',$field->options[0])->where('step', 1)->first()->id;
 
                 if($isSubAsset) {
                     if($userSubAsset == null)
                         $subAssets = [];
                     else
-                        $subAssets = UserSubAsset::where('user_id',$userId)->whereAssetId($field->options[0])->whereUserAssetId($userSubAsset->id)->select("id")->get();
+                        $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id',$field->options[0])->where('user_asset_id',$userSubAsset->id)->select("id")->get();
                 }
                 else
-                    $subAssets = UserSubAsset::where('user_id',$userId)->whereAssetId($field->options[0])->whereUserAssetId($userAsset->id)->select("id")->get();
+                    $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id',$field->options[0])->where('user_asset_id',$userAsset->id)->select("id")->get();
 
                     // todo: thinking pic = false
                 $pic = true;
@@ -358,7 +358,7 @@ class FormController extends Controller
 
 
         if($form->step != $request["step"] &&
-            Form::whereAssetId($form->asset_id)->whereStep($request["step"])->count() > 0)
+            Form::where('asset_id',$form->asset_id)->where('step',$request["step"])->count() > 0)
             dd("گام باید منحصر به فرد باشد");
 
         $form->name = $request["name"];
