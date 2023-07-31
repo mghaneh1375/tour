@@ -107,7 +107,7 @@ class AssetController extends Controller {
             'create_pic' => $Image2,
         ]);
 
-        return Redirect::to('asset');
+        return Redirect::route('asset.index');
     }
 
     /**
@@ -173,7 +173,7 @@ class AssetController extends Controller {
         }
 
         $asset->save();
-        return Redirect::to('asset');
+        return Redirect::route('asset.index');
     }
 
     /**

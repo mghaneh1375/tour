@@ -55,7 +55,7 @@
                             <td>{{ $asset->view_index }}</td>
                             <td>{{ $asset->hidden ? 'عدم نمایش' : 'قابل نمایش' }}</td>
                             <td>
-                                <a class="btn btn-success " href="{{ url('asset/' . $asset->id . '/form') }}"
+                                <a class="btn btn-success " href="{{ route('asset.form.index', ['asset' => $asset->id]) }}"
                                     data-placement="top" title="ویرایش فرم ها"><span
                                         class="	glyphicon glyphicon-cog"></span></a>
                                 <button data-toggle="modal" data-target="#editModal"
