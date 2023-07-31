@@ -93,6 +93,8 @@
         </div>
     </div>
 
+
+    @yield('script')
     <script>
         const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
 
@@ -101,23 +103,23 @@
         }
 
         function doRemove() {
-            console.log('asd');
             $.ajax({
                 type: 'delete',
                 url: delUrl + selectedFormRemoveId,
                 success: function(res) {
-                    if (res.status === "0") {
+                    if (res.status === "0" || res.status === "ok") {
                         $("#tr_" + selectedFormRemoveId).remove();
-                        $("#closeRemoveModalBtn").click();
+                        $('#removeModal').modal('toggle');
+                        // $("#closeRemoveModalBtn").click();
+                        showSuccessNotifiBP('عملیات با نوفقیت انجام شد', 'right', '#053a3e');
                     } else {
-                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                        if (res.msg !== undefined && err.length > 1)
+                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
                 }
             });
         }
     </script>
-
-    @yield('script')
 
 </body>
 

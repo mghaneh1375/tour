@@ -154,11 +154,11 @@
     <script>
         $(document).ready(function() {
             setTimeout(function() {
-                asb = $("#err").text();
-                console.log(asb);
-                if (asb !== undefined)
-                    showSuccessNotifiBP(asb, 'right', '#ac0020');
-            }, 1000);
+                err = $("#err").text();
+                console.log(err);
+                if (err !== undefined && err.length > 1)
+                    showSuccessNotifiBP(err, 'right', '#ac0020');
+            }, 500);
         });
         var forms = {!! json_encode($asset->forms) !!};
 
