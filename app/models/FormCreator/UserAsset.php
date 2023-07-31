@@ -2,10 +2,8 @@
 
 namespace App\models\FormCreator;
 
-use App\User;
+use App\models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +31,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|UserAsset whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class UserAsset extends Model
+class UserAsset extends FormCreatorBaseModel
 {
     protected $fillable = ['user_id', 'asset_id', 'status'];
     public $table = "user_assets";
@@ -46,7 +44,7 @@ class UserAsset extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->setConnection('mysql')->belongsTo(User::class);
     }
 
     public function user_forms_data() {

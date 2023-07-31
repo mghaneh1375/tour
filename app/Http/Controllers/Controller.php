@@ -123,4 +123,9 @@ class Controller extends BaseController
         $created = gregorian_to_jalali($created[0], $created[1], $created[2]);
         return $created[0] . '/' . $created[1] . '/' . $created[2];
     }
+
+    public static $COMMON_ERRS = [
+        'view_index.unique' => "اولویت نمایش باید منحصر به فرد باشد",
+        'pic.required' => 'لطفا تصویر را بارگذاری فرمایید'
+    ];
 }

@@ -2,12 +2,11 @@
 
 namespace App\models\FormCreator;
 
-use App\User;
+use App\models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\FormField
+ * App\models\FormCreator\FormField
  *
  * @property int $id
  * @property int $user_id
@@ -17,22 +16,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $is_sub_asset
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\models\FormField $form_field
- * @property-read \App\models\UserAsset $user_asset
- * @property-read \App\User $user
+ * @property-read \App\models\FormCreator\FormField $form_field
+ * @property-read \App\models\FormCreator\UserAsset $user_asset
+ * @property-read \App\models\User $user
  * @method static Builder|UserFormsData newModelQuery()
  * @method static Builder|UserFormsData newQuery()
  * @method static Builder|UserFormsData query()
- * @method static Builder|UserFormsData whereFieldId($value)
- * @method static Builder|UserFormsData whereUserId($value)
- * @method static Builder|UserFormsData whereIsSubAsset($value)
- * @method static Builder|UserFormsData whereUserAssetId($value)
  * @method static Builder|UserFormsData whereId($value)
  * @method static Builder|UserFormsData whereCreatedAt($value)
  * @method static Builder|UserFormsData whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class UserFormsData extends Model
+class UserFormsData extends FormCreatorBaseModel
 {
     protected $fillable = ['user_id', 'form_id', 'data', 'user_asset_id'];
     public $table = "user_forms_data";
@@ -45,7 +40,7 @@ class UserFormsData extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->setConnection('mysql')->belongsTo(User::class);
     }
 
     public function user_asset()

@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Form whereStep($value)
  * @mixin \Eloquent
  */
-class Form extends Model
+class Form extends FormCreatorBaseModel
 {
 
     protected $fillable = ['name', 'description', 'notice', 'step', 'asset_id'];

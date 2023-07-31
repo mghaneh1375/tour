@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserAssetId($value)
  * @mixin \Eloquent
  */
-class Notification extends Model
+class Notification extends FormCreatorBaseModel
 {
 
     protected $fillable = ['msg', 'user_asset_id', 'seen'];

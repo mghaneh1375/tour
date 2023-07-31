@@ -37,8 +37,8 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $asset['title'] }}</td>
                                     <td>{{ $asset['assetName'] }}</td>
+                                    <td>{{ $asset['name'] }}</td>
                                     <td>{{ $asset['username'] }}</td>
-                                    <td>last_name </td>
                                     <td>{{ $asset['phone'] }}</td>
                                     <td id="status_{{ $asset['id'] }}"> {{ $asset['status'] }} </td>
                                     <td>{{ $asset['createdAt'] }} </td>

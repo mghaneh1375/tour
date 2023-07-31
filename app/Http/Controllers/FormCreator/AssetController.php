@@ -80,32 +80,32 @@ class AssetController extends Controller {
         $request->validate([
             'name' => 'required',
             "mode" => ['required', Rule::in(["FULL", "HALF", "2/3", "1/3"])],
-            'pic' => 'image',
-            'create_pic' => 'image',
+            'pic' => 'required|image',
+            'create_pic' => 'required|image',
             'view_index' => 'required|integer|min:1|unique:formDB.assets,view_index'
-        ], ['view_index.unique' => "اولویت نمایش باید منحصر به فرد باشد"]);
+        ], self::$COMMON_ERRS);
 
-        $asset = new Asset();
-        $asset->name = $request["name"];
-        $asset->mode = $request["mode"];
-        // todo : camel snake problem
-        $asset->view_index = $request["view_index"];
-        $asset->hidden = ($request->has("hidden")) ? true : false;
 
         $t = time();
-
+        
         $file = $request->file('pic');
         $Image = $t . '.' . $request->file('pic')->extension();
         $destenationpath = __DIR__ . '/../../../public/assets';
         $file->move($destenationpath, $Image);
-        $asset->pic = $Image;
 
         $file = $request->file('create_pic');
-        $Image = ($t + 200) . '.' . $request->file("create_pic")->extension();
+        $Image2 = ($t + 200) . '.' . $request->file("create_pic")->extension();
         $destenationpath = __DIR__ . '/../../../public/assets';
-        $file->move($destenationpath, $Image);
-        $asset->create_pic = $Image;
-        $asset->save();
+        $file->move($destenationpath, $Image2);
+
+        Asset::create([
+            'name' => $request["name"],
+            'mode' => $request["mode"],
+            'view_index' => $request["view_index"],
+            'hidden' => ($request->has("hidden")) ? true : false,
+            'pic' => $Image,
+            'create_pic' => $Image2,
+        ]);
 
         return Redirect::to('asset');
     }
@@ -134,7 +134,7 @@ class AssetController extends Controller {
             'name' => 'required',
             "mode" => 'required|in:FULL,HALF,2/3,1/3',
             'view_index' => 'required|integer|min:1'
-        ]);
+        ], self::$COMMON_ERRS);
 
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];

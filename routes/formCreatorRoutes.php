@@ -1,46 +1,47 @@
 <?php
 
 use App\Http\Controllers\FormCreator\AdminController;
+use App\Http\Controllers\FormCreator\AssetController;
 use App\Http\Controllers\FormCreator\ReportController;
 use App\Http\Controllers\FormCreator\UserAssetController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('login', [AuthController::class, 'signIn'])->name("login");
 // Route::post('doLogin', [AuthController::class, 'doLogin'])->name("doLogin");
+// Route::get('/', [AuthController::class, 'signIn']);
 
-Route::group(['middleware' => ['BusinessPanelShareData']], function() {
+Route::get('notifications', [AdminController::class, 'notifications'])->name("notifications");
 
-    Route::get('home', [ReportController::class, 'index'])->name("home");
-    // Route::get('/', [AuthController::class, 'signIn']);
+Route::group(['prefix' => 'asset'], function() {
 
-    Route::get('notifications', [AdminController::class, 'notifications'])->name("notifications");
+    Route::get('/', [AssetController::class, 'index'])->name('asset.index');
 
-    Route::resource('asset', AssetController::class)->except('update', "edit", "create");
-    Route::post("asset/{asset}/edit", [AssetController::class, 'edit']);
+    Route::get('/{asset}', [AssetController::class, 'show'])->name('asset.show');
 
-    Route::resource('asset.form', FormController::class)->shallow()->except('update', 'create');
-    Route::resource('form.form_field', FormFieldController::class)->shallow()->except('show', 'create');
-    Route::resource('asset.subAsset', SubAssetController::class)->shallow()->except('update', 'create');
+    Route::post('/', [AssetController::class, 'store'])->name('asset.store');
 
-    Route::group(["prefix" => "report", "middleware" => ['auth', 'adminAccess']], function () {
+    Route::post("/{asset}/edit", [AssetController::class, 'edit'])->name('asset.update');
 
-        Route::get('/', [ReportController::class, 'index']);
-
-    });
-
-    // , "middleware" => ['auth', 'adminAccess']
-    Route::group(["prefix" => "user_asset/{userAsset}"], function () {
-
-        Route::get('/', [UserAssetController::class, 'show']);
-        Route::delete('/', [UserAssetController::class, 'destroy']);
-
-    });
-
-    Route::group(["middleware" => ['auth', 'adminAccess']], function () {
-
-        Route::post('setAssetStatus/{userAsset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');
-        Route::get('logout', [AuthController::class, 'signOut'])->name('logout');
-
-    });
+    Route::delete('/{asset}', [AssetController::class, 'destroy'])->name('asset.destroy');
 
 });
+
+
+Route::resource('asset.form', FormController::class)->shallow()->except('update', 'create');
+Route::resource('form.form_field', FormFieldController::class)->shallow()->except('show', 'create');
+Route::resource('asset.subAsset', SubAssetController::class)->shallow()->except('update', 'create');
+
+Route::group(["prefix" => "report"], function () {
+
+    Route::get('/', [ReportController::class, 'index'])->name('report.index');
+
+});
+
+Route::group(["prefix" => "user_asset/{userAsset}"], function () {
+
+    Route::get('/', [UserAssetController::class, 'show']);
+    Route::delete('/', [UserAssetController::class, 'destroy']);
+
+});
+
+Route::post('setAssetStatus/{userAsset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');

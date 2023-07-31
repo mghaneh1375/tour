@@ -145,7 +145,7 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="post" action="{{ url('asset') }}" enctype="multipart/form-data">
+                <form method="post" action="{{ route('asset.store') }}" enctype="multipart/form-data">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن دارایی</h4>
@@ -212,11 +212,11 @@
             }, 1000);
         });
 
-        var delUrl = '{{ url('asset') }}' + "/";
+        var delUrl = '{{ route('asset.index') }}' + "/";
 
         function editAsset(id, h, m, vi, n) {
 
-            $("#editForm").attr("action", "{{ url('asset/') }}" + "/" + id + "/edit");
+            $("#editForm").attr("action", "{{ route('asset.index') }}" + "/" + id + "/edit");
             $("#name").val(n);
             $("#view_index").val(vi);
             $("#mode").val(m);

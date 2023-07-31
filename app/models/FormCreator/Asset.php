@@ -5,7 +5,7 @@ namespace App\models\FormCreator;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * App\Asset
+ * App\models\FormCreator\Asset
  *
  * @property int $id
  * @property string $name
@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Asset newQuery()
  * @method static Builder|Asset query()
  * @method static Builder|Asset whereId($value)
- * @method static Builder|Asset whereViewIndex($value)
  * @method static Builder|Asset whereHidden($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\models\Form[] $forms
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\models\UserAsset[] $user_assets
@@ -29,10 +28,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $forms_count
  * @mixin \Eloquent
  */
-class Asset extends BaseModel
+class Asset extends FormCreatorBaseModel
 {
 
-    protected $fillable = ['name', 'create_pic', 'super_id'];
+    protected $fillable = ['name', 'create_pic', 'pic', 'hidden', 'mode', 'super_id', 'view_index'];
     protected $hidden = [];
     protected  $connection = 'formDB';
     public $timestamps = false;

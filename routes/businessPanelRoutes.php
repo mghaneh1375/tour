@@ -14,7 +14,8 @@ use App\models\State;
 use Illuminate\Support\Facades\Route;
 
 
-    Route::view('salam', 'test.salam');
+Route::view('salam', 'test.salam');
+
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
     Route::get('/loginPage', [AuthPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
     Route::get('/loginWithGoogle', [AuthPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
@@ -25,6 +26,10 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
     Route::post('/doLogin', [AuthPanelBusinessController::class, 'doLogin'])->name('businessPanel.doLogin');
 });
 
+
+Route::middleware(['adminAccess', 'BusinessPanelShareData'])->prefix('boom')
+    ->group(base_path('routes/formCreatorRoutes.php'));
+    
 
 Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Image wherePath($value)
  * @mixin \Eloquent
  */
-class Image extends Model
+class Image extends FormCreatorBaseModel
 {
     protected  $connection = 'formDB';
     protected $fillable = ['name', 'description', 'path'];

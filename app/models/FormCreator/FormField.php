@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Http;
  * @method static Builder|FormField whereId($value)
  * @mixin \Eloquent
  */
-class FormField extends Model
+class FormField extends FormCreatorBaseModel
 {
 
 

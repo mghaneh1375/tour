@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|State withoutTrashed()
  * @mixin \Eloquent
  */
-class State extends Model
+class State extends FormCreatorBaseModel
 {
 
     protected $fillable = ['name'];

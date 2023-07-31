@@ -132,9 +132,7 @@ class UserAssetController extends Controller
 
         foreach ($forms as $form) {
 
-            // todo: review later
-            // $isSubAsset = ($form->asset->super_id != -1);
-            $isSubAsset = false;
+            $isSubAsset = ($form->asset->super_id != -1);
             
             if($isSubAsset) {
                 $tmp = UserSubAsset::where('user_id', $userId)->where('asset_id', $form->asset->id)->where('user_asset_id', $user_asset->id)->first();

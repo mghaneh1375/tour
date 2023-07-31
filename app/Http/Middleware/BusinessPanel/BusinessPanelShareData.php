@@ -21,8 +21,6 @@ class BusinessPanelShareData
     public function handle($request, Closure $next)
     {
         $fileVersions = 12;
-        $user = User::where('level', 2)->first();
-        Auth::login($user);
 
         if(\auth()->check()) {
             $userInfo = auth()->user();

@@ -42,23 +42,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapFormCreatorWebRoutes();
-
         $this->mapPanelBusinessWebRoutes();
 
         $this->mapApiRoutes();
 
         $this->mapTourWebRoutes();
-    }
-
-    protected function mapFormCreatorWebRoutes()
-    {
-        Route::middleware('web')
-             ->domain('myboom2.com')
-            //  ->domain('business.bogenstudio.com')
-            //  ->domain('businessPanel.localhost')
-            ->namespace($this->namespace.'\FormCreator')
-            ->group(base_path('routes/formCreatorRoutes.php'));
     }
 
 

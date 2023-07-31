@@ -15,7 +15,8 @@ class UserAssetResource extends JsonResource
      */
     public function toArray($request)
     {
-        // $user = $this->user;
+        
+        $user = $this->user;
 
         return [
             'id' => $this->id,
@@ -24,10 +25,11 @@ class UserAssetResource extends JsonResource
             'assetName' => $this->asset->name,
             'status' => ($this->status == "INIT") ? "در حال ساخت" : (($this->status == "PENDING") ? "در حال بررسی برای تایید" : (($this->status == "REJECT") ? "رد شده" : "تایید شده")),
             "title" => $this->title,
-            "phone" => "09330014345",
+            "phone" => $user != null ? $user->phone : '',
             "createdAt" => Controller::convertDate($this->created_at),
             "updatedAt" => Controller::convertDate($this->updated_at),
-            "username" => "اصغر ناصری",
+            "username" => $user == null ? '' : $user->username,
+            'name' => $user == null ? '' : $user->first_name . ' ' . $user->last_name,
         ];
     }
 }
