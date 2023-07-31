@@ -45,9 +45,9 @@
             <div class="sideNavRow able">
                 <div class="sideNavHeader hasBody">
                     <span>مدیریت</span>
-                    <i class="fas fa-angle-down"></i>
+                    <i style="margin-right: 5px" class="fas fa-angle-down"></i>
                 </div>
-                <div class="sideNavBody">
+                <div class="sideNavBody" style="padding: 10px 20px;">
                     <a href="{{ route('businessPanel.contracts') }}" class="sideNavItem">متن قرارداد ها</a>
                     <a href="{{ route('businessPanel.getUnChecked') }}" class="sideNavItem">درخواست های تعیین تکلیف
                         نشده</a>

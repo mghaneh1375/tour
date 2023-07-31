@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\models\FormCreator\Notification;
 use App\models\FormCreator\UserAsset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller {
@@ -32,7 +33,7 @@ class AdminController extends Controller {
     }
 
     public function notifications() {
-        \DB::update("update notifications set seen = true where 1");
-        return view('notifications', ['notifications' => Notification::orderBy('id', 'desc')->get()]);
+        DB::update("update notifications set seen = true where 1");
+        return view('formCreator.notifications', ['notifications' => Notification::orderBy('id', 'desc')->get()]);
     }
 }

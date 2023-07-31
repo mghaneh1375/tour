@@ -36,16 +36,18 @@
 
                             <span>{{ $form->name }}</span>
                             <span onclick="document.location.href = '{{ url('asset/' . $form->asset->id . '/form') }}'"
-                                class="back">بازگشت</span>
+                                class="back" data-placement="left" title="برگشت"><span
+                                    class="glyphicon glyphicon-arrow-left"></span></span>
                         </h1>
                     </div>
                 </div>
 
                 <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
-                    <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن فیلد
-                        جدید</button>
+                    <button data-toggle="modal" data-target="#addModal"
+                        class="btn btn-success"data-placement="top"title="افزودن فیلد جدید"><span
+                            class="	glyphicon glyphicon-plus"></span></button>
 
-                    <div style="direction: rtl; overflow: auto" class="col-xs-12">
+                    <div style="direction: rtl; overflow: auto;padding-top:5px">
                         <table class="table table-striped">
                             <thead style="background: var(--koochita-yellow);">
                                 <tr>
@@ -76,12 +78,14 @@
                                     <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
                                     <td>{{ $field->multiple }}</td>
-                                    <td>
+                                    <td style="width:13%">
                                         <button data-toggle="modal" data-target="#editModal"
                                             onclick="editForm('{{ $field->id }}', '{{ $field->rtl ? 'rtl' : 'ltr' }}','{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}', '{{ $field->editUrl }}')"
-                                            class="btn btn-primary">ویرایش فیلد</button>
+                                            class="btn btn-primary"data-placement="top" title="ویرایش فبلد"> <span
+                                                class="glyphicon glyphicon-edit"></span></button>
                                         <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
-                                            onclick="remove('{{ $field->id }}')">حذف</button>
+                                            onclick="remove('{{ $field->id }}')"data-placement="top"title="حذف"><span
+                                                class="glyphicon glyphicon-trash"></span></button>
                                     </td>
                                 </tr>
                             @endforeach

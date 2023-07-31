@@ -2,65 +2,7 @@
 <html lang="fa">
 
 <head>
-    <style>
-        .dropdown-item {
-            text-align: right;
-        }
 
-        .main-sparkline8-hd {
-            direction: rtl;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .calendar>table {
-            width: 100%;
-        }
-
-        .clickable {
-            cursor: pointer;
-            color: #d1b676;
-        }
-
-        .btn-success,
-        .btn-primary {
-            color: white !important;
-        }
-
-        .modal-header {
-            direction: rtl !important;
-        }
-
-        #myModal {
-            width: 40%;
-            padding: 20px;
-            left: 30%;
-            top: 200px;
-            direction: rtl;
-        }
-
-        #myModal .modal-content {
-            padding: 30px;
-        }
-
-        .green {
-            background-color: #31a033 !important;
-            color: white !important;
-        }
-
-        .red {
-            background-color: #ca0e0e !important;
-            color: white !important;
-        }
-
-        .back {
-            float: left;
-            color: #ca0e0e;
-            cursor: pointer;
-        }
-    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -72,7 +14,9 @@
     <meta property="og:url" content="{{ Request::url() }}" />
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/fonts.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
     <link rel="icon" href="{{ URL::asset('images/icons/KOFAV0.svg') }}" sizes="any" type="image/svg+xml">
@@ -165,6 +109,8 @@
                     if (res.status === "0") {
                         $("#tr_" + selectedFormRemoveId).remove();
                         $("#closeRemoveModalBtn").click();
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
                 }
             });

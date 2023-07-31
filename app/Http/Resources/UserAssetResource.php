@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserAssetResource extends JsonResource
@@ -24,8 +25,8 @@ class UserAssetResource extends JsonResource
             'status' => ($this->status == "INIT") ? "در حال ساخت" : (($this->status == "PENDING") ? "در حال بررسی برای تایید" : (($this->status == "REJECT") ? "رد شده" : "تایید شده")),
             "title" => $this->title,
             "phone" => "09330014345",
-            "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at,
+            "createdAt" => Controller::convertDate($this->created_at),
+            "updatedAt" => Controller::convertDate($this->updated_at),
             "username" => "اصغر ناصری",
         ];
     }

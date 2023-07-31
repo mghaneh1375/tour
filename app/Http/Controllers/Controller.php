@@ -109,4 +109,18 @@ class Controller extends BaseController
         //     return -1;
         // }
     }
+    
+
+    public static function convertDate($created) {
+
+        include_once 'jdate.php';
+
+        if(count(explode(' ', $created)) == 2)
+            $created = explode('-', explode(' ', $created)[0]);
+        else
+            $created = explode('-', $created);
+
+        $created = gregorian_to_jalali($created[0], $created[1], $created[2]);
+        return $created[0] . '/' . $created[1] . '/' . $created[2];
+    }
 }

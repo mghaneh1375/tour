@@ -2,11 +2,7 @@
 
 namespace App\models\FormCreator;
 
-use App\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * App\Asset
@@ -36,7 +32,8 @@ use phpDocumentor\Reflection\Types\Null_;
 class Asset extends BaseModel
 {
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'create_pic', 'super_id'];
+    protected $hidden = [];
     protected  $connection = 'formDB';
     public $timestamps = false;
 

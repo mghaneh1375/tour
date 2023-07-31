@@ -24,7 +24,7 @@ class AssetController extends Controller {
             "param" => "required"
         ]);
 
-        $res = DB::connection("mysql2")->select("select name from state where name like '%" . $request["param"] . "%'");
+        $res = DB::connection("formDB")->select("select name from state where name like '%" . $request["param"] . "%'");
 
         if($res != null && count($res) > 0) {
             $res = $res[0];
@@ -50,7 +50,7 @@ class AssetController extends Controller {
             "lng" => "required"
         ]);
 
-        DB::connection("mysql2")->update ("update cities set checked = true, x = " . $request["lat"] . ", y = " . $request["lng"] . " where id = " . $request["id"]);
+        DB::connection("formDB")->update ("update cities set checked = true, x = " . $request["lat"] . ", y = " . $request["lng"] . " where id = " . $request["id"]);
     }
 
     /**
@@ -82,12 +82,13 @@ class AssetController extends Controller {
             "mode" => ['required', Rule::in(["FULL", "HALF", "2/3", "1/3"])],
             'pic' => 'image',
             'create_pic' => 'image',
-            'view_index' => 'required|integer|min:1|unique:assets,view_index'
-        ]);
+            'view_index' => 'required|integer|min:1|unique:formDB.assets,view_index'
+        ], ['view_index.unique' => "اولویت نمایش باید منحصر به فرد باشد"]);
 
         $asset = new Asset();
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];
+        // todo : camel snake problem
         $asset->view_index = $request["view_index"];
         $asset->hidden = ($request->has("hidden")) ? true : false;
 
@@ -139,8 +140,10 @@ class AssetController extends Controller {
         $asset->mode = $request["mode"];
 
         if($asset->view_index != $request["view_index"] &&
-            Asset::whereViewIndex($request["view_index"])->count() > 0)
-            dd("اولویت نمایش باید منحصر به فرد باشد");
+            Asset::where('view_index',$request["view_index"])->count() > 0)
+            return redirect::route('asset.index')->withErrors([
+                'message' => "اولویت نمایش باید منحصر به فرد باشد"
+            ]);
 
         $asset->view_index = $request["view_index"];
         $asset->hidden = ($request->has("hidden")) ? true : false;

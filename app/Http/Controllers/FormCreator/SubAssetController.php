@@ -15,7 +15,7 @@ use Illuminate\Validation\Rule;
 class SubAssetController extends Controller {
 
     public function index(Asset $asset) {
-        return view('asset', ['assets' => Asset::where('super_id',$asset->id)->get()]);
+        return view('formCreator.asset', ['assets' => Asset::where('super_id',$asset->id)->get()]);
     }
 
     /**
@@ -72,15 +72,16 @@ class SubAssetController extends Controller {
         $request->validate([
             'name' => 'required',
             "mode" => 'required|in:FULL,HALF,2/3,1/3',
-            'view_index' => 'required|integer|min:1'
-        ]);
+            'view_index' => 'required|integer|min:1|unique:formDB.forms,asstes|min:1'
+        ],['view_index.unique' => "اولویت نمایش باید منحصر به فرد باشد"]);
+
 
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];
 
-        if($asset->view_index != $request["view_index"] &&
-            Asset::whereViewIndex($request["view_index"])->count() > 0)
-            dd("اولویت نمایش باید منحصر به فرد باشد");
+        // if($asset->view_index != $request["view_index"] &&
+        //     Asset::whereViewIndex($request["view_index"])->count() > 0)
+        //     dd("اولویت نمایش باید منحصر به فرد باشد");
 
         $asset->view_index = $request["view_index"];
         $asset->hidden = ($request->has("hidden")) ? true : false;

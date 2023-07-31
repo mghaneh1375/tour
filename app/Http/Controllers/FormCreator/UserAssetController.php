@@ -28,7 +28,6 @@ class UserAssetController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Asset $asset) {
-
         return response()->json([
             "status" => "0",
             "assets" => UserAssetDigest::collection($asset->user_assets()->where('user_id', Auth::user()->id)->get())
@@ -126,20 +125,23 @@ class UserAssetController extends Controller
      * @param  \App\models\UserAsset  $userAsset
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function show(UserAsset $userAsset) {
+    public function show(UserAsset $user_asset) {
         
-        $forms = $userAsset->asset->forms()->where("step", ">", 1)->get();
-        $userId = $userAsset->user_id;
+        $forms = $user_asset->asset->forms()->where("step", ">", 1)->get();
+        $userId = $user_asset->user_id;
 
         foreach ($forms as $form) {
 
-            $isSubAsset = ($form->asset->super_id != -1);
+            // todo: review later
+            // $isSubAsset = ($form->asset->super_id != -1);
+            $isSubAsset = false;
+            
             if($isSubAsset) {
-                $tmp = UserSubAsset::where('user_id', $userId)->where('asset_id', $form->asset->id)->where('user_asset_id', $userAsset->id)->first();
+                $tmp = UserSubAsset::where('user_id', $userId)->where('asset_id', $form->asset->id)->where('user_asset_id', $user_asset->id)->first();
                 $userAssetId = ($tmp == null) ? -1 : $tmp->id;
             }
             else
-                $userAssetId = $userAsset->id;
+                $userAssetId = $user_asset->id;
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                 $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);

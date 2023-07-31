@@ -28,7 +28,8 @@ Route::group(['middleware' => ['BusinessPanelShareData']], function() {
 
     });
 
-    Route::group(["prefix" => "user_asset/{userAsset}", "middleware" => ['auth', 'adminAccess']], function () {
+    // , "middleware" => ['auth', 'adminAccess']
+    Route::group(["prefix" => "user_asset/{userAsset}"], function () {
 
         Route::get('/', [UserAssetController::class, 'show']);
         Route::delete('/', [UserAssetController::class, 'destroy']);

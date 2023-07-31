@@ -21,13 +21,18 @@
                         <span>&nbsp;&nbsp;&nbsp;</span>
                         <span>asset</span>
                         <span>{{ $asset->name }}</span>
-                        <span onclick="document.location.href = '{{ url('asset') }}'" class="back">بازگشت</span>
+                        <span onclick="document.location.href = '{{ url('asset') }}'" class="back" data-placement="left"
+                            title="برگشت"><span class="glyphicon glyphicon-arrow-left"></span></span>
                     </h1>
                 </div>
             </div>
-            <button data-toggle="modal" data-target="#addModal" class="btn btn-success">افزودن فرم جدید</button>
-
-            <div style="direction: rtl" class="col-xs-12">
+            <button data-toggle="modal" data-target="#addModal"
+                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><span
+                    class="	glyphicon glyphicon-plus"></span></button>
+            @if ($errors->any())
+                {!! implode('', $errors->all('<div id="err" class="hidden">:message</div>')) !!}
+            @endif
+            <div style="direction: rtl;padding-top:5px">
                 <table class="table table-striped">
                     <thead style="background: var(--koochita-yellow);">
                         <tr>
@@ -44,14 +49,17 @@
                             <td>{{ $form->name }}</td>
                             <td>{{ $form->description }}</td>
                             <td>{{ $form->notice }}</td>
-                            <td>
-                                <a class="btn btn-success" href="{{ url('form/' . $form->id . '/form_field') }}">ویرایش فیلد
-                                    ها</a>
+                            <td style="width:15%">
+                                <a class="btn btn-success mgbtn5"
+                                    href="{{ url('form/' . $form->id . '/form_field') }}"data-placement="top"
+                                    title="ویرایش فیلدها"><span class="	glyphicon glyphicon-cog"></span></a>
                                 <button data-toggle="modal" data-target="#editModal"
-                                    onclick="editForm('{{ $form->id }}')" class="btn btn-primary">ویرایش
-                                    فرم</button>
-                                <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
-                                    onclick="remove('{{ $form->id }}')">حذف</button>
+                                    onclick="editForm('{{ $form->id }}')"
+                                    class="btn btn-primary mgbtn5"data-placement="top" title="ویرایش فرم"> <span
+                                        class="glyphicon glyphicon-edit"></span></button>
+                                <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger mgbtn5"
+                                    onclick="remove('{{ $form->id }}')"data-placement="top"title="حذف"><span
+                                        class="glyphicon glyphicon-trash"></span></button>
                             </td>
                         </tr>
                     @endforeach
@@ -118,25 +126,17 @@
                     </div>
                     <div class="modal-body">
 
-                        <center>
-                            <p>نام</p>
-                            <input type="text" name="name">
-                        </center>
+                        <label for="name" style="text-align: center">نام</label>
+                        <input type="text" name="name" style="width:50%">
 
-                        <center>
-                            <p>توضیح</p>
-                            <textarea name="description"></textarea>
-                        </center>
+                        <p for="description" style="text-align: center">توضیح</p>
+                        <textarea name="description" style="width:100%;line-height: 3;"></textarea>
 
-                        <center>
-                            <p>تذکر</p>
-                            <textarea name="notice"></textarea>
-                        </center>
+                        <p for="notice" style="text-align: center">تذکر</p>
+                        <textarea name="notice" style="width:100%;line-height: 3;"></textarea>
 
-                        <center>
-                            <p>گام</p>
-                            <input type="number" id="step" name="step">
-                        </center>
+                        <label for="step" style="text-align: center">گام</label>
+                        <input type="number" id="step" name="step" style="width:50%">
 
                     </div>
 
@@ -152,6 +152,14 @@
 @endsection
 @section('script')
     <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                asb = $("#err").text();
+                console.log(asb);
+                if (asb !== undefined)
+                    showSuccessNotifiBP(asb, 'right', '#ac0020');
+            }, 1000);
+        });
         var forms = {!! json_encode($asset->forms) !!};
 
         function editForm(id) {

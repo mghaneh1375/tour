@@ -940,6 +940,10 @@ label {
     color: #ca0e0e;
     cursor: pointer;
 }
+.mgbtn5 {
+    margin-left: 5px;
+    margin-top: 5px;
+}
 @media (max-width: 766px) {
     .notifAlertBP {
         position: fixed;

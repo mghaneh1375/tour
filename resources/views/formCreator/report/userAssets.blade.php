@@ -44,18 +44,23 @@
                                     <td>{{ $asset['createdAt'] }} </td>
                                     <td>{{ $asset['updatedAt'] }} </td>
                                     <td>
-                                        <a class="btn btn-success" href="{{ url('user_asset/' . $asset['id']) }}">مشاهده
-                                            پاسخ
-                                            کاربر</a>
+                                        <a class="btn btn-success btn-default btn-sm mgbtn5" data-placement="top"
+                                            title="مشاهده پاسخ کاربر" href="{{ url('user_asset/' . $asset['id']) }}">
+                                            <span class="glyphicon glyphicon-eye-open"></span></a>
 
-                                        @if ($asset['status'] != 'INIT')
-                                            <button data-toggle="modal" data-target="#editModal"
-                                                onclick="changeStatus('{{ $asset['id'] }}')" class="btn btn-primary">تغییر
-                                                وضعیت</button>
+                                        @if ($asset['status'] != 'در حال ساخت')
+                                            <button data-toggle="modal" data-target="#editModal"data-placement="top"
+                                                title="تغییروضعیت"
+                                                onclick="changeStatus('{{ $asset['id'] }}','{{ $asset['status'] }}')"
+                                                class="btn btn-primary btn-default btn-sm mgbtn5">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
                                         @endif
 
-                                        <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
-                                            onclick="remove('{{ $asset['id'] }}')">حذف</button>
+                                        <button data-toggle="modal" data-target="#removeModal"
+                                            class="btn btn-default btn-sm  btn-danger mgbtn5"
+                                            onclick="remove('{{ $asset['id'] }}')" data-placement="top"
+                                            title="حذف"><span class="glyphicon glyphicon-trash"></span></button>
                                     </td>
                                 </tr>
                                 <?php $i++; ?>
@@ -82,9 +87,9 @@
                     <center>
                         <p>وضعیت مورد نظر</p>
                         <select id="status" name="status">
-                            <option value="PENDING">PENDING</option>
-                            <option value="REJECT">REJECT</option>
-                            <option value="CONFIRM">CONFIRM</option>
+                            <option value="PENDING"> در حال بررسی </option>
+                            <option value="REJECT">رد شده</option>
+                            <option value="CONFIRM"> تایید شده </option>
                         </select>
                     </center>
 
@@ -191,18 +196,29 @@
                     if (res.status == "0") {
                         $("#tr_" + selectedId).remove();
                         $("#closeRemoveModalBtn").click();
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
                 }
             });
         }
 
-        function changeStatus(id) {
+        function changeStatus(id, state) {
             selectedId = id;
+            if (state === 'رد شده') {
+                selectedState = 'REJECT';
+            } else if (state === 'تایید شده') {
+                selectedState = 'CONFIRM';
+            } else {
+                selectedState = 'PENDING';
+            }
+            $("#status").val(selectedState).change();
         }
 
         function doChangeStatus() {
-            console.log('mooz');
+
             var newStatus = $("#status").val();
+            var newStatusFa = $("#status option:selected").text();
             $.ajax({
                 type: 'post',
                 url: '{{ url('setAssetStatus') }}' + "/" + selectedId,
@@ -212,7 +228,7 @@
                 success: function(res) {
                     if (res.status == "0") {
                         $("#closeModalBtn").click();
-                        $("#status_" + selectedId).empty().append(newStatus);
+                        $("#status_" + selectedId).empty().append(newStatusFa);
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
