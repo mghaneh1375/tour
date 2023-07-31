@@ -51,6 +51,8 @@
                     <a href="{{ route('businessPanel.contracts') }}" class="sideNavItem">متن قرارداد ها</a>
                     <a href="{{ route('businessPanel.getUnChecked') }}" class="sideNavItem">درخواست های تعیین تکلیف
                         نشده</a>
+                    <a href="{{ route('asset.index') }}" class="sideNavItem">فرم ها</a>
+                    <a href="{{ route('report.index') }}" class="sideNavItem">گزارش ها</a>
                 </div>
             </div>
 

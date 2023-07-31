@@ -184,7 +184,7 @@
                             <input type="file" name="pic">
                         </div>
 
-                        <div class="modalForm">
+                        <div class="modalFormp">
                             <p>تصویر ایجاد مورد نظر</p>
                             <input type="file" name="create_pic">
                         </div>
@@ -207,7 +207,7 @@
             setTimeout(function() {
                 err = $("#err").text();
                 console.log(err.length);
-                if (err.length > 1)
+                if (err !== undefined && err.length > 1)
                     showSuccessNotifiBP(err, 'right', '#ac0020');
             }, 1000);
         });

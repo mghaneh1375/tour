@@ -18,7 +18,9 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div class="sparkline8-list shadow-reset mg-tb-30">
-
+                @if ($errors->any())
+                    {!! implode('', $errors->all('<div id="err" class="hidden">:message</div>')) !!}
+                @endif
                 <div class="sparkline8-hd">
                     <div class="main-sparkline8-hd">
                         <h1>
@@ -382,12 +384,19 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 @endsection
 @section('script')
     <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                err = $("#err").text();
+                console.log(err);
+                if (err !== undefined && err.length > 1)
+                    showSuccessNotifiBP(err, 'right', '#ac0020');
+            }, 500);
+        });
         let url;
         var charCount;
         var limitations = [];
@@ -489,9 +498,11 @@
                 },
                 success: function(res) {
                     if (res.status === "ok") {
+                        showSuccessNotifiBP('عملیات با نوفقیت انجام شد', 'right', '#053a3e');
                         console.log('ok');
                     } else {
                         console.log('mooz');
+                        showSuccessNotifiBP('عملیات با موفقیت انجام نشد', 'right', '#ac0020');
                     }
                 }
             });
