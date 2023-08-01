@@ -122,7 +122,7 @@ class FormFieldController extends Controller
         elseif($field->type == "REDIRECTOR") {
 
             if($request->has("form") &&
-                Form::whereId($request["form"])->whereAssetId($form->asset_id)->count() > 0)
+                Form::whereId($request["form"])->where('asset_id',$form->asset_id)->count() > 0)
                 $field->options = "form_" . $request["form"];
             else
                 dd("خطا در ورودی");

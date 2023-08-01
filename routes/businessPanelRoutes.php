@@ -35,7 +35,7 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 
     Route::middleware(['BusinessPanelShareData'])->group( function () {
         
-        Route::view('createForm', 'panelBusiness.pages.assetManager.createForm');
+        Route::view('createForm', 'panelBusiness.pages.assetManager.createForm')->name('createForm');
     
         Route::get('asset/{assetId}/step/{formId}/{userAssetId?}', function($assetId, $formId, $userAssetId=-1) {
             $states = State::all();

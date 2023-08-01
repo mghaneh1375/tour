@@ -15,8 +15,8 @@
     <meta property="og:site_name" content="سامانه جامع گردشگری کوچیتا" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> --}}
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/fonts.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
     <link rel="icon" href="{{ URL::asset('images/icons/KOFAV0.svg') }}" sizes="any" type="image/svg+xml">

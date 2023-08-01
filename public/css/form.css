@@ -39,6 +39,12 @@ figcaption {
     display: flex;
     justify-content: space-between;
 }
+/* .SpaceBetween::before {
+    content: unset !important;
+}
+.SpaceBetween::after {
+    content: unset !important;
+} */
 .rowReverse {
     flex-direction: row-reverse;
 }

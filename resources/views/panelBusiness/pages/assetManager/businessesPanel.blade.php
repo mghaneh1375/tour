@@ -107,6 +107,7 @@
                             html += '<th>تاریخ ایجاد</th>';
                             html += '</tr>';
                             for (let z = 0; z < res.assets[i].length; z++) {
+                                console.log(res);
                                 usreId = res.assets[i][z].id;
                                 itemsCount = z + 1;
                                 assetId = res.assets[i][z].assetId;
