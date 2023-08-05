@@ -261,7 +261,6 @@
                     window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
-                    console.log('moooooz');
                     lastPage();
                 }
             }
