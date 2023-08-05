@@ -111,7 +111,7 @@
                         $("#tr_" + selectedFormRemoveId).remove();
                         $('#removeModal').modal('toggle');
                         // $("#closeRemoveModalBtn").click();
-                        showSuccessNotifiBP('عملیات با نوفقیت انجام شد', 'right', '#053a3e');
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
                         if (res.msg !== undefined && err.length > 1)
                             showSuccessNotifiBP(res.msg, 'right', '#ac0020');

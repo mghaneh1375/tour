@@ -498,10 +498,8 @@
                 },
                 success: function(res) {
                     if (res.status === "ok") {
-                        showSuccessNotifiBP('عملیات با نوفقیت انجام شد', 'right', '#053a3e');
-                        console.log('ok');
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
-                        console.log('mooz');
                         showSuccessNotifiBP('عملیات با موفقیت انجام نشد', 'right', '#ac0020');
                     }
                 }
