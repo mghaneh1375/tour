@@ -90,12 +90,12 @@ class AssetController extends Controller {
         
         $file = $request->file('pic');
         $Image = $t . '.' . $request->file('pic')->extension();
-        $destenationpath = __DIR__ . '/../../../public/assets';
+        $destenationpath = __DIR__ . '/../../../../public/assets';
         $file->move($destenationpath, $Image);
 
         $file = $request->file('create_pic');
         $Image2 = ($t + 200) . '.' . $request->file("create_pic")->extension();
-        $destenationpath = __DIR__ . '/../../../public/assets';
+        $destenationpath = __DIR__ . '/../../../../public/assets';
         $file->move($destenationpath, $Image2);
 
         Asset::create([
@@ -150,24 +150,24 @@ class AssetController extends Controller {
 
         if($request->has("pic") && !empty($_FILES["pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../public/assets/' . $asset->pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->pic);
+            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->pic);
 
             $file = $request->file('pic');
             $Image = time() . '.' . $request->file('pic')->extension();
-            $destenationpath = __DIR__ . '/../../../public/assets';
+            $destenationpath = __DIR__ . '/../../../../public/assets';
             $file->move($destenationpath, $Image);
             $asset->pic = $Image;
         }
 
         if($request->has("create_pic") && !empty($_FILES["create_pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../public/assets/' . $asset->create_pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->create_pic);
+            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
 
             $file = $request->file('create_pic');
             $Image = time() . '.' . $request->file("create_pic")->extension();
-            $destenationpath = __DIR__ . '/../../../public/assets';
+            $destenationpath = __DIR__ . '/../../../../public/assets';
             $file->move($destenationpath, $Image);
             $asset->create_pic = $Image;
         }
@@ -186,11 +186,11 @@ class AssetController extends Controller {
 
         DB::transaction(function () use ($asset) {
 
-            if (file_exists(__DIR__ . '/../../../public/assets/' . $asset->create_pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->create_pic);
+            if (file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
 
-            if (file_exists(__DIR__ . '/../../../public/assets/' . $asset->pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->pic);
+            if (file_exists(__DIR__ . '/../../../../public/assets/' . $asset->pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->pic);
 
             $forms = $asset->forms;
             foreach ($forms as $form)

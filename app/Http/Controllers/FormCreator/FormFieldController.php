@@ -58,7 +58,7 @@ class FormFieldController extends Controller
             $field->editUrl = route('form_field.update', ['form_field' => $field->id]);
         }
 
-        return view('FormCreator.field', ['form' => $form,
+        return view('formCreator.field', ['form' => $form,
             'subAssets' => Asset::where('super_id',$form->asset_id)->get(),
             'forms' => $form->asset->forms
         ]);
@@ -76,7 +76,7 @@ class FormFieldController extends Controller
         $request->validate([
             "name" => "required",
             "type" => ["required", Rule::in(["STRING", "INT", "CHECKBOX", "RADIO", "REDIRECTOR",
-                "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API"])],
+                "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API", "CKEDITOR"])],
             "help" => ["nullable", "max:1000"],
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
@@ -158,7 +158,7 @@ class FormFieldController extends Controller
             $field->limitation = null;
 
         $field->save();
-        return Redirect::to("form/" . $form->id . '/form_field');
+        return Redirect::route('form.form_field.index', ['form' => $form->id]);
     }
 
     /**
@@ -168,11 +168,12 @@ class FormFieldController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function update(Request $request, FormField $form_field){
+         
         
         $request->validate([
             "name" => "required",
             "type" => ["required", Rule::in(["STRING", "INT", "CHECKBOX", "RADIO", "REDIRECTOR",
-                "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API"])],
+                "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API", "CKEDITOR"])],
             "help" => ["nullable", "max:1000"],
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],

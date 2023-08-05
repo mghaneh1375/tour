@@ -3,7 +3,7 @@
 @section('head')
     @parent
     <script>
-        var delUrl = "{{ url('form_field') }}" + "/";
+        var delUrl = "{{ url('boom/form_field') }}" + "/";
     </script>
     <style>
         textarea {
@@ -37,7 +37,8 @@
                             <span>&nbsp;&nbsp;&nbsp;</span>
 
                             <span>{{ $form->name }}</span>
-                            <span onclick="document.location.href = '{{ url('asset/' . $form->asset->id . '/form') }}'"
+                            <span
+                                onclick="document.location.href = '{{ route('asset.form.index', ['asset' => $form->asset->id]) }}'"
                                 class="back" data-placement="left" title="برگشت"><span
                                     class="glyphicon glyphicon-arrow-left"></span></span>
                         </h1>
@@ -254,7 +255,7 @@
         <div class="modal-dialog" style="width: 80% !important;">
 
             <div class="modal-content">
-                <form method="post" action="{{ url('form/' . $form->id . '/form_field') }}">
+                <form method="post" action="{{ route('form.form_field.store', ['form' => $form->id]) }}">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن فیلد</h4>
@@ -405,7 +406,7 @@
 
         function editForm(id, dr, half, u) {
             items = forms.filter(x => x.id == id);
-            console.log(items);
+
             for (let i = 0; i < items.length; i++) {
                 url = u;
                 $('textarea').empty();
@@ -456,29 +457,33 @@
         }
 
         function change() {
+
+            limitations = [];
+
             if ($('#nid').is(':checked') && $('#minChar').is(':checked')) {
-                limitations = [];
+
                 limitations.push($('#nid').val());
                 limitations.push($('#minChar').val());
-                console.log(limitations);
+
             } else if ($('#nid').is(':checked')) {
-                limitations = [];
+
                 limitations.push($('#nid').val());
-                console.log(limitations);
+
             } else if ($('#minChar').is(':checked')) {
-                limitations = [];
+
                 limitations.push($('#minChar').val());
-                console.log(limitations);
+
             } else {
-                limitations = [];
+
                 limitations.push(nothing);
-                console.log(limitations);
+
             }
         }
 
         function updateFields() {
+
             change();
-            console.log(limitations);
+
             $.ajax({
                 type: 'put',
                 url: url,
@@ -499,12 +504,12 @@
                 success: function(res) {
                     if (res.status === "ok") {
                         showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        location.reload();
                     } else {
                         showSuccessNotifiBP('عملیات با موفقیت انجام نشد', 'right', '#ac0020');
                     }
                 }
             });
-            location.reload();
         }
 
         function changeType(val) {

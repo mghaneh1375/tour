@@ -4,7 +4,7 @@
     @parent
 
     <script>
-        var delUrl = '{{ url('form') }}' + "/";
+        var delUrl = '{{ url('boom/form') }}' + "/";
     </script>
 
 @stop
@@ -21,8 +21,8 @@
                         <span>&nbsp;&nbsp;&nbsp;</span>
                         <span>asset</span>
                         <span>{{ $asset->name }}</span>
-                        <span onclick="document.location.href = '{{ url('asset') }}'" class="back" data-placement="left"
-                            title="برگشت"><span class="glyphicon glyphicon-arrow-left"></span></span>
+                        <span onclick="document.location.href = '{{ route('asset.index') }}'" class="back"
+                            data-placement="left" title="برگشت"><span class="glyphicon glyphicon-arrow-left"></span></span>
                     </h1>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                             <td>{{ $form->notice }}</td>
                             <td style="width:15%">
                                 <a class="btn btn-success mgbtn5"
-                                    href="{{ url('form/' . $form->id . '/form_field') }}"data-placement="top"
+                                    href="{{ route('form.form_field.index', ['form' => $form->id]) }}"data-placement="top"
                                     title="ویرایش فیلدها"><span class="	glyphicon glyphicon-cog"></span></a>
                                 <button data-toggle="modal" data-target="#editModal"
                                     onclick="editForm('{{ $form->id }}')"
@@ -76,7 +76,7 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="get" id="editForm">
+                <form method="post" id="editForm">
 
                     <div class="modal-header">
                         <h4 class="modal-title">ویرایش فرم</h4>
@@ -119,7 +119,7 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="post" action="{{ url('asset/' . $asset->id . '/form') }}">
+                <form method="post" action="{{ route('asset.form.store', ['asset' => $asset->id]) }}">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن فرم</h4>
@@ -155,7 +155,6 @@
         $(document).ready(function() {
             setTimeout(function() {
                 err = $("#err").text();
-                console.log(err);
                 if (err !== undefined && err.length > 1)
                     showSuccessNotifiBP(err, 'right', '#ac0020');
             }, 500);
@@ -165,8 +164,7 @@
         function editForm(id) {
             items = forms.filter(x => x.id == id);
             for (let i = 0; i < items.length; i++) {
-                $("#editForm").attr("action", "{{ url('form/') }}" + "/" + items[i].id + "/edit");
-                console.log($("#editForm").attr("action", "{{ url('form/') }}" + "/" + items[i].id + "/edit"));
+                $("#editForm").attr("action", "{{ url('boom/form/') }}" + "/" + items[i].id + "/edit");
                 $("#name").val(items[i].name);
                 $("#description").val(items[i].description);
                 $("#notice").val(items[i].notice);

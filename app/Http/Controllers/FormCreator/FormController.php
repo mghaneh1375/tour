@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 class FormController extends Controller
 {
@@ -61,7 +62,10 @@ class FormController extends Controller
 
         $request->validate([
             "name" => "required",
-            'step' => 'required|integer|unique:formDB.forms,step|min:1',
+            'step' => ['bail', 'required', 'integer', 'min:1', 
+                Rule::unique('formDB.forms')->where(function ($query) use($asset, $request) {
+                return $query->where('asset_id', $asset->id)->where('step', $request['step']);
+              })],
             'description' => ['nullable', 'max:1000'],
             'notice' => ['nullable', 'max:1000'],
         ],['step.unique' => "گام باید منحصر به فرد باشد"]);
@@ -80,7 +84,7 @@ class FormController extends Controller
 
         $form->save();
 
-        return Redirect::to('asset/' . $asset->id . '/form');
+        return Redirect::route('asset.form.index', ['asset' => $asset->id]);
     }
 
     /**
@@ -351,9 +355,15 @@ class FormController extends Controller
      */
     public function edit(Request $request, Form $form) {
 
+        $asset = $form->asset;
+
         $request->validate([
             "name" => "required",
-            'step' => 'required|integer|max:10|unique:formDB.forms,step|min:1',
+            'step' => ['bail', 'required', 'integer', 'min:1', 
+                Rule::unique('formDB.forms')->where(function ($query) use($asset, $request, $form) {
+                return $query->where('asset_id', $asset->id)->where('step', $request['step'])
+                ->where('id', '!=' , $form->id);
+              })],
             'description' => ['nullable', 'max:1000'],
             'notice' => ['nullable', 'max:1000'],
         ],['step.unique' => "گام باید منحصر به فرد باشد"]);
@@ -368,7 +378,7 @@ class FormController extends Controller
         $form->step = $request["step"];
         $form->save();
 
-        return Redirect::to("asset/" . $form->asset_id . "/form");
+        return Redirect::route("asset.form.index", ['asset' => $asset->id]);
     }
 
     /**
