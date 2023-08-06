@@ -19,15 +19,6 @@ use Illuminate\Support\Facades\URL;
 
 class UserFormController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -40,8 +31,8 @@ class UserFormController extends Controller
 
         $request->validate([
             "data" => "required|array",
-            "data.*.id" => ["bail", "required", "integer", "exists:form_fields,id"],
-            "sub_asset_id" => ['nullable', "exists:assets,id"],
+            "data.*.id" => ["bail", "required", "integer", "exists:formDB.form_fields,id"],
+            "sub_asset_id" => ['nullable', "exists:formDB.assets,id"],
             "user_sub_asset_id" => ['nullable', new UserSubAssetExist(($request->has("sub_asset_id") ? $request["sub_asset_id"] : -1), true)]
         ]);
 
@@ -190,8 +181,8 @@ class UserFormController extends Controller
     public function storeSub(UserSubAsset $user_sub_asset, Request $request) {
 
         $request->validate([
-            "id" => ["bail", "required", "exists:form_fields,id"],
-            "sub_sub_asset_id" => ['nullable', "exists:assets,id"],
+            "id" => ["bail", "required", "exists:formDB.form_fields,id"],
+            "sub_sub_asset_id" => ['nullable', "exists:formDB.assets,id"],
             "user_sub_sub_asset_id" => ['nullable', new UserSubAssetExist(($request->has("sub_sub_asset_id") ? $request["sub_sub_asset_id"] : -1), true)]
         ]);
 
@@ -300,9 +291,9 @@ class UserFormController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function set_pic(UserAsset $userAsset, FormField $form_field, Request $request) {
+    public function set_pic(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-        if(!$userAsset->is_in_form($form_field->id, true)) {
+        if(!$user_asset->is_in_form($form_field->id, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -315,7 +306,7 @@ class UserFormController extends Controller
         $uId = Auth::user()->id;
         $path = $request->pic->store('public');
         $formFieldId = $form_field->id;
-        $userAssetId = $userAsset->id;
+        $userAssetId = $user_asset->id;
 
         $userFormData = UserFormsData::where('user_id', $uId)->where('field_id',$form_field->id)->where('user_asset_id',$userAssetId)->where('is_sub_asset',false)->firstOr(function () use ($uId, $formFieldId, $path, $userAssetId) {
             $user_data = new UserFormsData();
@@ -358,9 +349,10 @@ class UserFormController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function set_asset_pic(UserAsset $userAsset, FormField $form_field, Request $request) {
+    public function set_asset_pic(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-        if(!$userAsset->is_in_form($form_field->id, true)) {
+
+        if(!$user_asset->is_in_form($form_field->id, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -373,11 +365,11 @@ class UserFormController extends Controller
         $path = $request->pic->store('public');
         $oldPath = null;
 
-        if($userAsset->pic != null)
-            $oldPath = __DIR__ . '/../../../storage/app/public/' . $userAsset->pic;
+        if($user_asset->pic != null)
+            $oldPath = __DIR__ . '/../../../storage/app/public/' . $user_asset->pic;
 
-        $userAsset->pic = str_replace("public/", "", $path);
-        $userAsset->save();
+        $user_asset->pic = str_replace("public/", "", $path);
+        $user_asset->save();
 
         if($oldPath != null && file_exists($oldPath))
             unlink($oldPath);
@@ -388,20 +380,9 @@ class UserFormController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\models\UserFormsData  $userFormsData
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserFormsData $userFormsData)
-    {
-        //
-    }
+    public function delete_pic_from_gallery(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-    public function delete_pic_from_gallery(UserAsset $userAsset, FormField $form_field, Request $request) {
-
-        if(!$userAsset->is_in_form($form_field->id, false, true)) {
+        if(!$user_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -412,8 +393,8 @@ class UserFormController extends Controller
         ]);
 
         $uId = Auth::user()->id;
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
-            ->whereUserAssetId($userAsset->id)->whereIsSubAsset(false)->first();
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
+            ->where('user_asset_id', $user_asset->id)->where('is_sub_asset', false)->first();
 
         if($data == null) {
             return response()->json([
@@ -488,9 +469,9 @@ class UserFormController extends Controller
         ]);
     }
 
-    public function add_pic_to_gallery(UserAsset $userAsset, FormField $form_field, Request $request) {
+    public function add_pic_to_gallery(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-        if(!$userAsset->is_in_form($form_field->id, false, true)) {
+        if(!$user_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -501,11 +482,11 @@ class UserFormController extends Controller
         ]);
 
         $uId = Auth::user()->id;
-        $userAssetId = $userAsset->id;
+        $userAssetId = $user_asset->id;
         $fieldId = $form_field->id;
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($fieldId)
-            ->whereUserAssetId($userAssetId)->whereIsSubAsset(false)
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $fieldId)
+            ->where('user_asset_id', $userAssetId)->where('is_sub_asset', false)
             ->firstOr(function () use ($uId, $fieldId, $userAssetId) {
                 $data = new UserFormsData();
                 $data->data = '';
@@ -559,9 +540,9 @@ class UserFormController extends Controller
 
     }
 
-    public function add_video_to_gallery(UserAsset $userAsset, FormField $form_field, Request $request) {
+    public function add_video_to_gallery(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-        if(!$userAsset->is_in_form($form_field->id, false, true)) {
+        if(!$user_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -584,11 +565,11 @@ class UserFormController extends Controller
         }
 
         $uId = Auth::user()->id;
-        $userAssetId = $userAsset->id;
+        $userAssetId = $user_asset->id;
         $fieldId = $form_field->id;
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($fieldId)
-            ->whereUserAssetId($userAssetId)->whereIsSubAsset(false)
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $fieldId)
+            ->where('user_asset_id', $userAssetId)->where('is_sub_asset', false)
             ->firstOr(function () use ($uId, $fieldId, $userAssetId) {
                 $data = new UserFormsData();
                 $data->data = '';
@@ -642,7 +623,7 @@ class UserFormController extends Controller
 
     }
 
-    public function add_pic_to_gallery_sub(UserAsset $userAsset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
+    public function add_pic_to_gallery_sub(UserAsset $user_asset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
 
         $uId = Auth::user()->id;
 
@@ -656,12 +637,14 @@ class UserFormController extends Controller
             $userSubAsset = new UserSubAsset();
             $userSubAsset->user_id = $uId;
             $userSubAsset->asset_id = $sub_asset->id;
-            $userSubAsset->user_asset_id = $userAsset->id;
+            $userSubAsset->user_asset_id = $user_asset->id;
             $userSubAsset->save();
             $user_sub_asset_id = $userSubAsset->id;
         }
         else
-            $userSubAsset = UserSubAsset::whereId($user_sub_asset_id)->where('user_id', $uId)->whereAssetId($sub_asset->id)->first();
+            $userSubAsset = UserSubAsset::whereId($user_sub_asset_id)
+                ->where('user_id', $uId)
+                ->where('asset_id', $sub_asset->id)->first();
 
         if($userSubAsset == null) {
             return response()->json([
@@ -681,8 +664,8 @@ class UserFormController extends Controller
 
         $fieldId = $form_field->id;
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($fieldId)
-            ->whereUserAssetId($user_sub_asset_id)->whereIsSubAsset(true)
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $fieldId)
+            ->where('user_asset_id', $user_sub_asset_id)->where('is_sub_asset', true)
             ->firstOr(function () use ($uId, $fieldId, $user_sub_asset_id) {
                 $data = new UserFormsData();
                 $data->user_id = $uId;
@@ -737,7 +720,7 @@ class UserFormController extends Controller
 
     }
 
-    public function add_video_to_gallery_sub(UserAsset $userAsset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
+    public function add_video_to_gallery_sub(UserAsset $user_asset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
 
         $uId = Auth::user()->id;
 
@@ -763,12 +746,12 @@ class UserFormController extends Controller
             $userSubAsset = new UserSubAsset();
             $userSubAsset->user_id = $uId;
             $userSubAsset->asset_id = $sub_asset->id;
-            $userSubAsset->user_asset_id = $userAsset->id;
+            $userSubAsset->user_asset_id = $user_asset->id;
             $userSubAsset->save();
             $user_sub_asset_id = $userSubAsset->id;
         }
         else
-            $userSubAsset = UserSubAsset::whereId($user_sub_asset_id)->where('user_id', $uId)->whereAssetId($sub_asset->id)->first();
+            $userSubAsset = UserSubAsset::whereId($user_sub_asset_id)->where('user_id', $uId)->where('asset_id', $sub_asset->id)->first();
 
         if($userSubAsset == null) {
             return response()->json([
@@ -788,8 +771,8 @@ class UserFormController extends Controller
 
         $fieldId = $form_field->id;
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($fieldId)
-            ->whereUserAssetId($user_sub_asset_id)->whereIsSubAsset(true)
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $fieldId)
+            ->where('user_asset_id', $user_sub_asset_id)->where('is_sub_asset', true)
             ->firstOr(function () use ($uId, $fieldId, $user_sub_asset_id) {
                 $data = new UserFormsData();
                 $data->user_id = $uId;
@@ -844,9 +827,9 @@ class UserFormController extends Controller
 
     }
 
-    public function edit_pic_gallery(UserAsset $userAsset, FormField $form_field, $curr_file, Request $request) {
+    public function edit_pic_gallery(UserAsset $user_asset, FormField $form_field, $curr_file, Request $request) {
 
-        if(!$userAsset->is_in_form($form_field->id, false, true)) {
+        if(!$user_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -866,8 +849,8 @@ class UserFormController extends Controller
             ]);
         }
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
-            ->whereUserAssetId($userAsset->id)->whereIsSubAsset(false)->first();
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
+            ->where('user_asset_id', $user_asset->id)->where('is_sub_asset', false)->first();
 
         if($data == null || !in_array($image->id, explode('_', $data->data))) {
             return response()->json([

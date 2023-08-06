@@ -244,7 +244,6 @@
                 contentType: false,
                 headers: {
                     'Accept': 'application/json',
-                    "Authorization": token
                 },
                 data: fileStore,
                 success: function(res) {
@@ -274,7 +273,6 @@
                         url: url + '/asset/' + assetId + '/user_asset',
                         headers: {
                             'Accept': 'application/json',
-                            "Authorization": token
                         },
                         data: fields[0],
                         success: function(res) {
@@ -296,7 +294,6 @@
                             url: url + '/user_asset/' + userAssetId,
                             headers: {
                                 'Accept': 'application/json',
-                                "Authorization": token
                             },
                             data: {
                                 'data': fields[0].data
@@ -327,7 +324,6 @@
                     url: url + '/user_forms_data/' + userAssetId,
                     headers: {
                         'Accept': 'application/json',
-                        "Authorization": token
                     },
                     data: {
                         data: fields.map(e => {
@@ -367,7 +363,6 @@
                 url: url + '/user_asset/' + userAssetId + '/updateStatus',
                 headers: {
                     'Accept': 'application/json',
-                    "Authorization": token
                 },
 
                 success: function(res) {
@@ -552,7 +547,6 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                "Authorization": token
             },
             success: function(res) {
                 var html = '';
@@ -856,7 +850,6 @@
                 url: url + '/user_forms_data/' + userAssetId,
                 headers: {
                     'Accept': 'application/json',
-                    "Authorization": token
                 },
 
                 data: {
@@ -899,7 +892,6 @@
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    "Authorization": token
                 },
                 success: function(res) {
                     buildFormHtml(res, 'redirectList', true);
@@ -961,12 +953,9 @@
             $.ajax({
                 type: 'DELETE',
                 // complete: closeLoading,
-                url: url + '/user_sub_asset/' + id,
-                headers: {
-                    "Authorization": token
-                },
+                url: url + '/user_sub_asset/' + id
             })
-            location.reload();
+            // location.reload();
             $(el).parent().parent().parent().parent().remove();
         }
 
@@ -1704,8 +1693,7 @@
                     url: url + '/form/' + formId + '/' + userAssetId,
                     complete: closeLoading,
                     headers: {
-                        'Accept': 'application/json',
-                        "Authorization": token
+                        'Accept': 'application/json'
                     },
                     success: function(res) {
                         var text = '';
@@ -1728,8 +1716,6 @@
                     complete: closeLoading,
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        "Authorization": token
                     },
                     success: function(res) {
                         buildFormHtml(res, 'boxMake', false);
@@ -1922,9 +1908,6 @@
                 type: 'DELETE',
                 complete: closeLoading,
                 url: deleteTourPicUrl,
-                headers: {
-                    "Authorization": token
-                },
                 data: {
                     // tourId: tour.id,
                     pic: _fileName,

@@ -18,13 +18,13 @@ use Illuminate\Support\Facades\URL;
 class UserSubAssetController extends Controller
 {
 
-    public function __construct() {
-        $this->authorizeResource(UserSubAsset::class);
-    }
+    public function edit_pic_gallery_sub(UserSubAsset $user_sub_asset, FormField $form_field, $curr_file, Request $request) {
 
-    public function edit_pic_gallery_sub(UserSubAsset $userSubAsset, FormField $form_field, $curr_file, Request $request) {
 
-        if(!$userSubAsset->is_in_form($form_field->id, false, true)) {
+        if($request->user()->id != $user_sub_asset->user_id)
+            return abort(401);
+            
+        if(!$user_sub_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
             ]);
@@ -44,8 +44,8 @@ class UserSubAssetController extends Controller
             ]);
         }
 
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
-            ->whereUserAssetId($userSubAsset->id)->whereIsSubAsset(true)->first();
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
+            ->where('user_asset_id', $user_sub_asset->id)->where('is_sub_asset', true)->first();
 
         if($data == null || !in_array($image->id, explode('_', $data->data))) {
             return response()->json([
@@ -71,8 +71,8 @@ class UserSubAssetController extends Controller
 
         $path = $request->pic->store('public');
 
-        if(file_exists(__DIR__ . '/../../../storage/app/public/' . $image->path))
-            unlink(__DIR__ . '/../../../storage/app/public/' . $image->path);
+        if(file_exists(__DIR__ . '/../../../../storage/app/public/' . $image->path))
+            unlink(__DIR__ . '/../../../../storage/app/public/' . $image->path);
 
         $image->path = str_replace("public/", "", $path);
         $image->name = ($request->has("name")) ? $request["name"] : null;
@@ -106,9 +106,12 @@ class UserSubAssetController extends Controller
     }
 
 
-    public function delete_pic_from_gallery_sub(UserSubAsset $userSubAsset, FormField $form_field, Request $request) {
+    public function delete_pic_from_gallery_sub(UserSubAsset $user_sub_asset, FormField $form_field, Request $request) {
 
-        if(!$userSubAsset->is_in_form($form_field->id, false, true)) {
+        if($request->user()->id != $user_sub_asset->user_id)
+            return abort(401);
+
+        if(!$user_sub_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -2
             ]);
@@ -119,8 +122,8 @@ class UserSubAssetController extends Controller
         ]);
 
         $uId = Auth::user()->id;
-        $data = UserFormsData::where('user_id', $uId)->whereFieldId($form_field->id)
-            ->whereUserAssetId($userSubAsset->id)->whereIsSubAsset(true)->first();
+        $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
+            ->where('user_asset_id', $user_sub_asset->id)->where('is_sub_asset', true)->first();
 
         if($data == null) {
             return response()->json([
@@ -147,8 +150,8 @@ class UserSubAssetController extends Controller
         foreach ($vals as $itr) {
             if(!$find && $itr == $image->id) {
                 $find = true;
-                if(file_exists(__DIR__ . '/../../../storage/app/public/' . $pic))
-                    unlink(__DIR__ . '/../../../storage/app/public/' . $pic);
+                if(file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
+                    unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
                 $image->delete();
             }
             else {
@@ -210,7 +213,7 @@ class UserSubAssetController extends Controller
             ]);
         }
 
-        $formIds = Form::whereAssetId($form->asset_id)->select("id")->get();
+        $formIds = Form::where('asset_id', $form->asset_id)->select("id")->get();
         $ids = [];
         $counter = 0;
         foreach ($formIds as $formId)
@@ -226,101 +229,40 @@ class UserSubAssetController extends Controller
 
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\models\UserSubAsset  $userSubAsset
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserSubAsset $userSubAsset)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\models\UserSubAsset  $userSubAsset
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserSubAsset $userSubAsset)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\models\UserSubAsset  $userSubAsset
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserSubAsset $userSubAsset)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param UserSubAsset $user_sub_asset
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function destroy(UserSubAsset $user_sub_asset) {
+    public static function destroy(UserSubAsset $user_sub_asset, Request $request) {
+
+
+        if($request->user()->id != $user_sub_asset->user_id)
+            return abort(401);
 
         try {
 
             DB::transaction(function () use ($user_sub_asset) {
 
-                $userFormsData = UserFormsData::whereUserAssetId($user_sub_asset->id)->whereIsSubAsset(true)->get();
+                $userFormsData = UserFormsData::where('user_asset_id', $user_sub_asset->id)->where('is_sub_asset', true)->get();
 
                 foreach ($userFormsData as $itr) {
 
                     $type = strtolower($itr->form_field->type);
 
                     if(
-                        ($type == "file" && file_exists(__DIR__ . '/../../../storage/app/' . $itr->data)) ||
+                        ($type == "file" && file_exists(__DIR__ . '/../../../../storage/app/' . $itr->data)) ||
                         $type == "gallery"
                     ) {
                         if($type == "file")
-                            unlink(__DIR__ . '/../../../storage/app/' . $itr->data);
+                            unlink(__DIR__ . '/../../../../storage/app/' . $itr->data);
                         else {
                             $str = explode('_', $itr->data);
                             foreach ($str as $itrItr) {
                                 $tmp = Image::whereId($itrItr)->first();
                                 if($tmp != null) {
-                                    if(file_exists(__DIR__ . '/../../../storage/app/' . $tmp->path))
-                                        unlink(__DIR__ . '/../../../storage/app/' . $tmp->path);
+                                    if(file_exists(__DIR__ . '/../../../../storage/app/' . $tmp->path))
+                                        unlink(__DIR__ . '/../../../../storage/app/' . $tmp->path);
                                     $tmp->delete();
                                 }
                             }

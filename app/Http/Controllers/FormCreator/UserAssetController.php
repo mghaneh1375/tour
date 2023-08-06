@@ -76,7 +76,7 @@ class UserAssetController extends Controller
         $form_fields = $asset->forms()->where("step", 1)->first()->form_fields()->select("id")->get();
 
         $request->validate([
-            "id" => ["required", "exists:form_fields,id", new InForm($form_fields)],
+            "id" => ["required", "exists:formDB.form_fields,id", new InForm($form_fields)],
             "data" => ["required"]
         ]);
 
@@ -162,7 +162,7 @@ class UserAssetController extends Controller
      * @param  \App\models\UserAsset  $userAsset
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UserAsset $userAsset, Request $request) {
+    public function update(UserAsset $user_asset, Request $request) {
 
         $request->validate([
             "data" => "required"
@@ -170,7 +170,7 @@ class UserAssetController extends Controller
 
         $title = $request["data"];
 
-        if($userAsset->title == $title) {
+        if($user_asset->title == $title) {
             return response()->json([
                 "status" => "0"
             ]);
@@ -199,8 +199,8 @@ class UserAssetController extends Controller
         //     ]);
         // }
 
-        $userAsset->title = $title;
-        $userAsset->save();
+        $user_asset->title = $title;
+        $user_asset->save();
 
         return response()->json([
             "status" => "0"
@@ -255,11 +255,11 @@ class UserAssetController extends Controller
         return $errs;
     }
 
-    public function updateStatus(UserAsset $userAsset) {
+    public function updateStatus(UserAsset $user_asset) {
         
-        $userFormsData = $userAsset->user_forms_data()->get();
+        $userFormsData = $user_asset->user_forms_data()->get();
         
-        $errs = $this->checkAsset($userAsset->asset, $userFormsData, $userAsset->id);
+        $errs = $this->checkAsset($user_asset->asset, $userFormsData, $user_asset->id);
 
         if(count($errs) > 0) {
             return response()->json([
@@ -269,8 +269,8 @@ class UserAssetController extends Controller
         }
         
 
-        $userAsset->status = "PENDING";
-        $userAsset->save();
+        $user_asset->status = "PENDING";
+        $user_asset->save();
 
         return response()->json([
             "status" => "0"
@@ -284,40 +284,39 @@ class UserAssetController extends Controller
      * @param  \App\models\UserAsset  $userAsset
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function destroy(UserAsset $userAsset) {
+    public static function destroy(UserAsset $user_asset, Request $request) {
 
         try {
-            DB::transaction(function () use ($userAsset) {
+            DB::transaction(function () use ($user_asset, $request) {
 
-                $pic = $userAsset->pic;
+                $pic = $user_asset->pic;
 
                 if($pic != null) {
 
-                    if (file_exists(__DIR__ . '/../../../storage/app/public/' . $pic))
-                        unlink(__DIR__ . '/../../../storage/app/public/' . $pic);
+                    if (file_exists(__DIR__ . '/../../../../storage/app/public/' . $pic))
+                        unlink(__DIR__ . '/../../../../storage/app/public/' . $pic);
                 }
-                $userFormsData = UserFormsData::where('user_asset_id',$userAsset->id)->where('is_sub_asset',false)->get();
+                $userFormsData = UserFormsData::where('user_asset_id',$user_asset->id)->where('is_sub_asset',false)->get();
             
                 foreach ($userFormsData as $itr) {
                     if (strpos($itr->data, "assets/") !== false &&
-                        file_exists(__DIR__ . '/../../../storage/app/' . $itr->data)) {
-                        unlink(__DIR__ . '/../../../storage/app/' . $itr->data);
+                        file_exists(__DIR__ . '/../../../../storage/app/' . $itr->data)) {
+                        unlink(__DIR__ . '/../../../../storage/app/' . $itr->data);
                     }
 
                     $itr->delete();
                 }
                 
-                $assets = Asset::where('super_id',$userAsset->asset_id)->get();
+                $assets = Asset::where('super_id', $user_asset->asset_id)->get();
                             
                 foreach ($assets as $asset) {
                     $userSubAssets = $asset->user_sub_assets;
                     if($userSubAssets !== null){
-                        foreach ($userSubAssets as $userSubAsset)
-                        UserSubAssetController::destroy($userSubAsset);
+                        foreach ($userSubAssets as $userSubAsset) UserSubAssetController::destroy($userSubAsset, $request);
                     }
                 }
                 
-                $userAsset->delete();
+                $user_asset->delete();
             });
 
             return response()->json([

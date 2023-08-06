@@ -11,21 +11,21 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller {
 
-    public function setAssetStatus(Request $request, UserAsset $userAsset) {
+    public function setAssetStatus(Request $request, UserAsset $user_asset) {
 
         $request->validate([
             'status' => ['required', Rule::in(['PENDING', 'REJECT', 'CONFIRM'])],
         ]);
 
-        if($userAsset->status == "INIT") {
+        if($user_asset->status == "INIT") {
             return response()->json([
                 "status" => -1,
                 "msg" => "در حال حاضر مجاز به انجام چنین عملیاتی نیستید."
             ]);
         }
 
-        $userAsset->status = $request["status"];
-        $userAsset->save();
+        $user_asset->status = $request["status"];
+        $user_asset->save();
         return response()->json([
             "status" => 0
         ]);

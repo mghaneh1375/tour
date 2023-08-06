@@ -68,9 +68,9 @@ Route::group(["prefix" => "report"], function () {
 
 });
 
-Route::group(["prefix" => "user_asset/{userAsset}"], function () {
+Route::group(["prefix" => "user_asset/{user_asset}"], function () {
 
-    Route::get('/', [UserAssetController::class, 'show']);
+    Route::get('/', [UserAssetController::class, 'show'])->name('user_asset.show');
     Route::delete('/', [UserAssetController::class, 'destroy']);
 
 });

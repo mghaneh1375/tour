@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Form newModelQuery()
  * @method static Builder|Form newQuery()
  * @method static Builder|Form query()
- * @method static Builder|Form whereAssetId($value)
+ * @method static Builder|Form where('asset_id', $value)
  * @method static Builder|Form whereId($value)
  * @method static Builder|Form whereStep($value)
  * @mixin \Eloquent

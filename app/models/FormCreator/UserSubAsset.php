@@ -58,14 +58,14 @@ class UserSubAsset extends FormCreatorBaseModel
 
         $uId = Auth::user()->id;
         if($is_pic)
-            return (DB::select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
+            return (DB::connection('formDB')->select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
                     "and u.user_id = " . $uId . " and f.id = ff.form_id and ff.type = 'FILE' and ff.id = " . $form_field_id)[0]->countNum > 0);
 
         if($gallery)
-            return (DB::select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
+            return (DB::connection('formDB')->select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
                     "and u.user_id = " . $uId . " and f.id = ff.form_id and ff.type = 'GALLERY' and ff.id = " . $form_field_id)[0]->countNum > 0);
 
-        return (DB::select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
+        return (DB::connection('formDB')->select("select count(*) as countNum from user_sub_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
                 "and u.user_id = " . $uId . " and f.id = ff.form_id and ff.id = " . $form_field_id)[0]->countNum > 0);
     }
 

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSeen($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserAssetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification where('user_asset_id', $value)
  * @mixin \Eloquent
  */
 class Notification extends FormCreatorBaseModel

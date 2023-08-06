@@ -2,6 +2,11 @@
 
 @section('head')
     @parent
+
+
+    <script>
+        let delUrl = '{{ url('boom/user_asset') . '/' }}';
+    </script>
 @stop
 
 @section('body')
@@ -9,7 +14,7 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div class="head">درخواست های تعیین تکلیف نشده</div>
-            @if (1 == 3)
+            @if (count($userAssets) == 0)
                 <p>درخواستی موجود نیست</p>
             @else
                 <div>
@@ -45,7 +50,8 @@
                                     <td>{{ $asset['updatedAt'] }} </td>
                                     <td>
                                         <a class="btn btn-success btn-default btn-sm mgbtn5" data-placement="top"
-                                            title="مشاهده پاسخ کاربر" href="{{ url('user_asset/' . $asset['id']) }}">
+                                            title="مشاهده پاسخ کاربر"
+                                            href="{{ route('user_asset.show', ['user_asset' => $asset['id']]) }}">
                                             <span class="glyphicon glyphicon-eye-open"></span></a>
 
                                         @if ($asset['status'] != 'در حال ساخت')
@@ -221,7 +227,7 @@
             var newStatusFa = $("#status option:selected").text();
             $.ajax({
                 type: 'post',
-                url: '{{ url('setAssetStatus') }}' + "/" + selectedId,
+                url: '{{ url('boom/setAssetStatus') }}' + "/" + selectedId,
                 data: {
                     'status': newStatus
                 },

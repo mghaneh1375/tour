@@ -4,6 +4,8 @@ use App\Http\Controllers\FormCreator\AssetController;
 use App\Http\Controllers\FormCreator\FormController;
 use App\Http\Controllers\FormCreator\FormFieldController;
 use App\Http\Controllers\FormCreator\UserAssetController;
+use App\Http\Controllers\FormCreator\UserFormController;
+use App\Http\Controllers\FormCreator\UserSubAssetController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["prefix" => "ckeditor"], function () {
@@ -29,7 +31,8 @@ Route::get("form/{form}/{userAssetId}", [FormController::class, "showAPI"]);
 Route::apiResource('form_field', FormFieldController::class);
 Route::apiResource('user_forms_data', UserFormController::class)->except("store");
 
-Route::post("user_forms_data/{user_asset}", [UserFormController::class, 'store'])->middleware('can:update,user_asset');
+// ->middleware('can:update,user_asset')
+Route::post("user_forms_data/{user_asset}", [UserFormController::class, 'store']);
 
 Route::post("user_sub_forms_data/{user_sub_asset}", [UserFormController::class, 'storeSub']);
 
@@ -45,7 +48,9 @@ Route::group(['prefix' => 'asset/{asset}'], function() {
 
 Route::get("get_sub_asset/{form}", [UserSubAssetController::class, "sub_asset"]);
 
-Route::group(["prefix" => "user_asset/{user_asset}", "middleware" => ['can:update,user_asset']], function () {
+Route::group(["prefix" => "user_asset/{user_asset}"], function () {
+
+    Route::delete("/", [UserAssetController::class, "destroy"]);
 
     Route::put("updateStatus", [UserAssetController::class, "updateStatus"]);
 
@@ -66,7 +71,9 @@ Route::group(["prefix" => "user_asset/{user_asset}", "middleware" => ['can:updat
     Route::post("edit_pic_gallery/{form_field}/{curr_file}", [UserFormController::class, 'edit_pic_gallery']);
 });
 
-Route::group(['prefix' => "user_sub_asset/{user_sub_asset}", "middleware" => ['can:update,user_sub_asset']], function () {
+
+
+Route::group(['prefix' => "user_sub_asset/{user_sub_asset}"], function () {
 
     Route::delete('/', [UserSubAssetController::class, 'destroy']);
 

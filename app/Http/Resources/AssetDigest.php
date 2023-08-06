@@ -20,7 +20,7 @@ class AssetDigest extends JsonResource
     public function toArray($request)
     {
 
-        $forms = Form::whereAssetId($this->id)->orderBy("step", "asc")->select("id")->get();
+        $forms = Form::where('asset_id', $this->id)->orderBy("step", "asc")->select("id")->get();
         $formIds = [];
         $counter = 0;
         foreach ($forms as $form)

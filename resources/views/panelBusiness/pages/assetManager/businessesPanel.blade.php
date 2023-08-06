@@ -59,7 +59,7 @@
 @endsection
 @section('script')
     <script>
-        let url = "https://boom.bogenstudio.com/api";
+        let url = '{{ route('formCreator.root') }}';
         let token = 'Bearer ' + localStorage.getItem("token");
         var assetId = null;
         var step = null;
@@ -67,7 +67,6 @@
         openLoading();
         $.ajax({
             type: 'get',
-            // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
             url: url + '/asset/user_assets',
             complete: closeLoading,
             headers: {
@@ -175,7 +174,6 @@
             openLoading();
             $.ajax({
                 type: 'get',
-                // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
                 url: url + '/asset/' + asset_Id + "/form",
                 complete: closeLoading,
                 headers: {
@@ -219,9 +217,11 @@
                 headers: {
                     "Authorization": token
                 },
+                success: function(res) {
+                    if (res.status == '0')
+                        location.reload();
+                }
             })
-            $(el).parent().parent().remove();
-            location.reload();
         }
     </script>
 @endsection
