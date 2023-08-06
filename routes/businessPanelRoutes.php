@@ -30,6 +30,8 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
 Route::middleware(['adminAccess', 'BusinessPanelShareData'])->prefix('boom')
     ->group(base_path('routes/formCreatorRoutes.php'));
     
+Route::middleware(['auth'])->prefix('formCreator')
+    ->group(base_path('routes/formCreatorAPIRoutes.php'));
 
 Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
 

@@ -229,7 +229,7 @@
         var initMap = false;
         var callInitMap = false;
 
-        let url = "https://boom.bogenstudio.com/api";
+        let url = '{{ route('formCreator.root') }}';
         let token = 'Bearer ' + localStorage.getItem("token");
 
         function storePic(userAssetId, fields) {
