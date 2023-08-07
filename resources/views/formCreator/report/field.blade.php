@@ -16,8 +16,9 @@
                         <h1>پاسخ های کاربر
 
 
-                            <span data-placement="left" title="برگشت" onclick="document.location.href = '{{ url('home') }}'"
-                                class="back"><span class="glyphicon glyphicon-arrow-left"></span></span>
+                            <span data-placement="left" title="برگشت"
+                                onclick="document.location.href = '{{ route('report.index') }}'" class="back"><span
+                                    class="glyphicon glyphicon-arrow-left"></span></span>
                         </h1>
                     </div>
 

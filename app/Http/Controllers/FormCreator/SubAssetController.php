@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 class SubAssetController extends Controller {
 
     public function index(Asset $asset) {
-        return view('formCreator.asset', ['assets' => Asset::where('super_id',$asset->id)->get(), 'subAsset' => true]);
+        return view('formCreator.asset', ['assets' => Asset::where('super_id',$asset->id)->get(), 
+            'assetId' => $asset->id, 'subAsset' => true
+        ]);
     }
 
     /**
@@ -23,7 +25,7 @@ class SubAssetController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request) {
+    public function store(Asset $asset, Request $request) {
 
         $request->validate([
             'name' => 'required',
@@ -38,6 +40,7 @@ class SubAssetController extends Controller {
         $asset->mode = $request["mode"];
         $asset->view_index = $request["view_index"];
         $asset->hidden = ($request->has("hidden")) ? true : false;
+        $asset->super_id = $asset->id;
 
         $t = time();
 
@@ -54,7 +57,7 @@ class SubAssetController extends Controller {
         $asset->create_pic = $Image;
         $asset->save();
 
-        return Redirect::to('asset');
+        return Redirect::route('asset.sub_asset.index', ['asset' => $asset->id]);
     }
 
   
@@ -66,47 +69,49 @@ class SubAssetController extends Controller {
      * @param  \App\models\Asset  $asset
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function edit(Request $request, Asset $asset) {
+    public function edit(Request $request, Asset $asset, Asset $sub_asset) {
 
         $request->validate([
             'name' => 'required',
             "mode" => 'required|in:FULL,HALF,2/3,1/3',
-            'view_index' => 'required|integer|min:1|unique:formDB.forms,asstes|min:1'
-        ],['view_index.unique' => "اولویت نمایش باید منحصر به فرد باشد"]);
+            'view_index' => 'required|integer|min:1',
+            'pic' => 'nullable|image',
+            'create_pic' => 'nullable|image',
+        ]);
 
 
-        $asset->name = $request["name"];
-        $asset->mode = $request["mode"];
+        $sub_asset->name = $request["name"];
+        $sub_asset->mode = $request["mode"];
 
-        $asset->view_index = $request["view_index"];
-        $asset->hidden = ($request->has("hidden")) ? true : false;
+        $sub_asset->view_index = $request["view_index"];
+        $sub_asset->hidden = ($request->has("hidden")) ? true : false;
 
         if($request->has("pic") && !empty($_FILES["pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->pic))
-                unlink(__DIR__ . '/../../../../public/assets/' . $asset->pic);
+            if(!empty($sub_asset->pic) && file_exists(__DIR__ . '/../../../../public/assets/' . $sub_asset->pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $sub_asset->pic);
 
             $file = $request->file('pic');
             $Image = time() . '.' . $request->file('pic')->extension();
             $destenationpath = __DIR__ . '/../../../../public/assets';
             $file->move($destenationpath, $Image);
-            $asset->pic = $Image;
+            $sub_asset->pic = $Image;
         }
 
         if($request->has("create_pic") && !empty($_FILES["create_pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
-                unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
+            if(!empty($sub_asset->create_pic) && file_exists(__DIR__ . '/../../../../public/assets/' . $sub_asset->create_pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $sub_asset->create_pic);
 
             $file = $request->file('create_pic');
             $Image = time() . '.' . $request->file("create_pic")->extension();
             $destenationpath = __DIR__ . '/../../../public/assets';
             $file->move($destenationpath, $Image);
-            $asset->create_pic = $Image;
+            $sub_asset->create_pic = $Image;
         }
 
-        $asset->save();
-        return Redirect::to('asset');
+        $sub_asset->save();
+        return Redirect::route('asset.sub_asset.index', ['asset' => $asset->id]);
     }
 
     /**
