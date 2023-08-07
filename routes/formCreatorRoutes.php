@@ -39,6 +39,8 @@ Route::group(['prefix' => 'asset'], function() {
     
         Route::post('/', [SubAssetController::class, 'store'])->name('asset.sub_asset.store');
     
+        Route::post('/{sub_asset}/edit', [SubAssetController::class, 'edit'])->name('asset.sub_asset.update');
+
     });
 
 

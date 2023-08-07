@@ -14,7 +14,11 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div class="main-sparkline8-hd">
-                <h1>دارایی</h1>
+                @if ($subAsset)
+                    <h1>زیر دارایی</h1>
+                @else
+                    <h1>دارایی</h1>
+                @endif
             </div>
 
             @if ($errors->any())
@@ -59,11 +63,14 @@
                                     data-placement="top" title="ویرایش فرم ها"><span
                                         class="	glyphicon glyphicon-eye-open"></span></a>
 
-                                <a class="btn btn-info "
-                                    href="{{ route('asset.sub_asset.index', ['asset' => $asset->id]) }}"
-                                    data-placement="top" title="ویرایش زیردارایی ها">
-                                    <span class="glyphicon glyphicon-list"></span>
-                                </a>
+                                @if (!$subAsset)
+                                    <a class="btn btn-info "
+                                        href="{{ route('asset.sub_asset.index', ['asset' => $asset->id]) }}"
+                                        data-placement="top" title="ویرایش زیردارایی ها">
+                                        <span class="glyphicon glyphicon-list"></span>
+                                    </a>
+                                @endif
+
                                 <button data-toggle="modal" data-target="#editModal"
                                     onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}')"
                                     class="btn btn-primary" data-placement="top" title="ویرایش دارایی"> <span
@@ -151,7 +158,9 @@
         <div class="modal-dialog">
 
             <div class="modal-content">
-                <form method="post" action="{{ route('asset.store') }}" enctype="multipart/form-data">
+                <form method="post"
+                    action="{{ $subAsset ? route('asset.sub_asset.store', ['asset' => $assetId]) : route('asset.store') }}"
+                    enctype="multipart/form-data">
 
                     <div class="modal-header">
                         <h4 class="modal-title">افزودن دارایی</h4>
@@ -222,7 +231,9 @@
 
         function editAsset(id, h, m, vi, n) {
 
-            $("#editForm").attr("action", "{{ route('asset.index') }}" + "/" + id + "/edit");
+            $("#editForm").attr("action",
+                "{{ $subAsset ? route('asset.index') . '/' . $assetId . '/subAsset' : route('asset.index') }}" + "/" +
+                id + "/edit");
             $("#name").val(n);
             $("#view_index").val(vi);
             $("#mode").val(m);
