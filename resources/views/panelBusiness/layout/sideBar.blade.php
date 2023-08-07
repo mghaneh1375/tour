@@ -99,29 +99,21 @@
                     <div class="sideNavBody">
                         <ul class="">
                             <li>
-                                <div class="sideNavItem aligenCenter">
-
-                                    <a href="{{ route('createForm') }}">
-                                        ایجاد کسب وکارجدید</a>
-                                    {{-- <a href="{{ route('businessPanel.create') }}">
+                                <a class="sideNavItem aligenCenter" href="{{ route('createForm') }}">
+                                    ایجاد کسب وکارجدید</a>
+                                {{-- <a href="{{ route('businessPanel.create') }}">
                                         ایجاد کسب وکارجدید</a> --}}
-                                </div>
                             </li>
                             <li>
-                                <div class="sideNavItem aligenCenter">
-
-                                    <a href="{{ route('businessPanel.panel') }} ">کسب و
-                                        کارهای
-                                        من</a>
-                                </div>
+                                <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.panel') }} ">کسب و
+                                    کارهای
+                                    من</a>
                             </li>
                             <li>
-                                <div class="sideNavItem aligenCenter">
-
-                                    <a href="{{ route('businessPanel.completeUserInfo') }}">تغییر
-                                        اطلاعات
-                                        فردی</a>
-                                </div>
+                                <a class="sideNavItem aligenCenter"
+                                    href="{{ route('businessPanel.completeUserInfo') }}">تغییر
+                                    اطلاعات
+                                    فردی</a>
                             </li>
 
                         </ul>

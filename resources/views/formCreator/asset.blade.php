@@ -22,8 +22,7 @@
             @endif
 
             <button data-toggle="modal" data-target="#addModal"
-                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><span
-                    class="	glyphicon glyphicon-plus"></span></button>
+                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><i class="plus2 iconStyle"></i></button>
 
             <div style="direction: rtl;padding-top:5px">
                 <table class="table table-striped">
@@ -58,14 +57,13 @@
 
                                 <a class="btn btn-success " href="{{ route('asset.form.index', ['asset' => $asset->id]) }}"
                                     data-placement="top" title="ویرایش فرم ها"><span
-                                        class="	glyphicon glyphicon-cog"></span></a>
+                                        class="	glyphicon glyphicon-eye-open"></span></a>
 
                                 <a class="btn btn-info "
                                     href="{{ route('asset.sub_asset.index', ['asset' => $asset->id]) }}"
                                     data-placement="top" title="ویرایش زیردارایی ها">
                                     <span class="glyphicon glyphicon-list"></span>
                                 </a>
-
                                 <button data-toggle="modal" data-target="#editModal"
                                     onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}')"
                                     class="btn btn-primary" data-placement="top" title="ویرایش دارایی"> <span

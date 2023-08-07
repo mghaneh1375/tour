@@ -28,6 +28,33 @@ class FormFieldController extends Controller
                 $field->type = $field->type . "<br/>" . "گزینه ها: " . "<br/>" . $field->options;
             else if($field->type == "API")
                 $field->type = $field->type . "<br/>" . "مشخصات سرویس دهنده: " . "<br/>" . $field->options;
+            else if($field->type == "STRING")
+                $field->type = 'رشته حروف';
+            else if($field->type == "FLOAT")
+                $field->type = 'عدد اعشاری';
+            else if($field->type == "INT")
+                $field->type = 'عدد صحیح';
+            else if($field->type == "MAP")
+                $field->type = 'مختصات جغرافیایی';
+            else if($field->type == "CALENDAR")
+                $field->type = 'تاریخ';
+            else if($field->type == "TIME")
+                $field->type = 'ساعت';
+            else if($field->type == "TEXTAREA")
+                $field->type = 'متن بلند';
+            else if($field->type == "GALLERY")
+                $field->type = 'گالری';
+            else if($field->type == "LISTVIEW")
+                $field->type = 'لیستی از sub assets'; 
+            else if($field->type == "RADIO")
+                $field->type = 'انتخاب یک گزینه از میان گزینه های موجود';
+            else if($field->type == "CHECKBOX")
+                $field->type = 'انتخاب چند گزینه از میان گزینه های موجود';
+            else if($field->type == "FILE")
+                $field->type = 'تک عکس';
+            else if($field->type == "REDIRECTOR")
+                $field->type = 'هدایت گر به فرم دیگر';
+                 
 
 
             $limitations = $field->limitation;
@@ -264,9 +291,6 @@ class FormFieldController extends Controller
             'status' => 'ok'
         ]);
     }
-
-   
-
     /**
      * Remove the specified resource from storage.
      *
