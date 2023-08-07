@@ -127,7 +127,8 @@ class UserAssetController extends Controller
      */
     public function show(UserAsset $user_asset) {
         
-        $forms = $user_asset->asset->forms()->where("step", ">", 1)->get();
+        $asset = $user_asset->asset;
+        $forms = $asset->forms()->where("step", ">", 1)->get();
         $userId = $user_asset->user_id;
 
         foreach ($forms as $form) {
@@ -152,7 +153,9 @@ class UserAssetController extends Controller
         //     'forms' => $forms
         // ]);
 
-        return view('formCreator.report.field', ['forms' => $forms]);
+        return view('formCreator.report.field', [
+            'forms' => $forms, 'id' => $user_asset->id, 'status' => $user_asset->status
+        ]);
     }
 
     /**

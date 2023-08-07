@@ -14,7 +14,11 @@
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div class="main-sparkline8-hd">
-                <h1>دارایی</h1>
+                <h1>دارایی
+                    <span onclick="document.location.href = '{{ route('asset.index') }}'" class="back" data-placement="left"
+                        title="برگشت"><span class="glyphicon glyphicon-arrow-left"></span></span>
+                </h1>
+
             </div>
 
             @if ($errors->any())
@@ -22,7 +26,8 @@
             @endif
 
             <button data-toggle="modal" data-target="#addModal"
-                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><i class="plus2 iconStyle"></i></button>
+                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><i
+                    class="plus2 iconStyle"></i></button>
 
             <div style="direction: rtl;padding-top:5px">
                 <table class="table table-striped">
@@ -96,44 +101,45 @@
                     </div>
                     <div class="modal-body">
 
-                        <center>
-                            <label for="hidden">Hidden</label>
-                            <input type="checkbox" id="hidden" name="hidden">
-                        </center>
+                        <div class="modalForm">
+                            <label for="hidden">عدم نمایش</label>
+                            <input type="checkbox" name="hidden" id="hidden">
+                        </div>
 
-                        <center>
-                            <p>نام</p>
+                        <div class="modalForm">
+                            <label for="name">نام</label>
                             <input type="text" id="name" name="name">
-                        </center>
+                        </div>
 
-                        <center>
-                            <p>حالت نمایش</p>
+                        <div class="modalForm">
+                            <label for="mode">حالت نمایش</label>
                             <select id="mode" name="mode">
-                                <option value="FULL">FULL</option>
-                                <option value="HALF">HALF</option>
+                                <option value="FULL">تمام صفحه</option>
+                                <option value="HALF">نیمه صفحه </option>
                                 <option value="2/3">2/3</option>
                                 <option value="1/3">1/3</option>
                             </select>
-                        </center>
+                        </div>
 
-                        <center>
-                            <p>اولویت نمایش</p>
+                        <div class="modalForm">
+                            <label for="view_index">اولویت نمایش</label>
                             <input type="number" id="view_index" name="view_index">
-                        </center>
+                        </div>
 
                         <div style="border-bottom: 2px dashed black">
                             <p>در صورتی که قصد تغییر تصویر یا تصویر ایجاد را دارید قسمت زیر را بررسی کنید.</p>
                         </div>
 
-                        <div>
-                            <p>تصویر مورد نظر</p>
+                        <div class="modalForm">
+                            <label for="pic">تصویر مورد نظر</label>
                             <input type="file" name="pic">
                         </div>
 
-                        <div>
+                        <div class="modalFormp">
                             <p>تصویر ایجاد مورد نظر</p>
                             <input type="file" name="create_pic">
                         </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -179,11 +185,9 @@
                             </select>
                         </div>
                         <div class="modalForm">
-
                             <label for="view_index">اولویت نمایش</label>
                             <input type="number" name="view_index">
                         </div>
-
 
                         <div class="modalForm">
                             <label for="pic">تصویر مورد نظر</label>

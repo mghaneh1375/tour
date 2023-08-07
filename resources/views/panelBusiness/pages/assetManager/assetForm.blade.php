@@ -953,10 +953,18 @@
             $.ajax({
                 type: 'DELETE',
                 // complete: closeLoading,
-                url: url + '/user_sub_asset/' + id
+                url: url + '/user_sub_asset/' + id,
+                success: function(res) {
+                    if (res.status === "0" || res.status === "ok") {
+                        $(el).parent().parent().parent().parent().remove();
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                    } else {
+                        if (res.msg !== undefined && err.length > 1)
+                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    }
+                }
             })
             // location.reload();
-            $(el).parent().parent().parent().parent().remove();
         }
 
         let allData;

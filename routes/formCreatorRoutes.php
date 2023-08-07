@@ -84,4 +84,4 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
 
 });
 
-Route::post('setAssetStatus/{userAsset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');
+Route::post('setAssetStatus/{user_asset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');

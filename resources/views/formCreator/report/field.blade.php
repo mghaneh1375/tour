@@ -21,6 +21,11 @@
                         </h1>
                     </div>
 
+                    <button data-toggle="modal" data-target="#editModal"data-placement="top" title="تغییروضعیت"
+                        onclick="changeStatus('{{ $status }}')" class="btn btn-primary btn-default btn-sm mgbtn5">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+
                     <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
                         <div style="direction: rtl" class="col-xs-12">
 
@@ -126,6 +131,9 @@
     @endsection
     @section('script')
         <script>
+            $(document).ready(function() {
+                console.log(selectedId);
+            })
             var selectedId = -1;
 
             function remove(id) {
@@ -148,8 +156,8 @@
                 });
             }
 
-            function changeStatus(id) {
-                selectedId = id;
+            function changeStatus(state) {
+                $("#status").val(state).change();
             }
 
             function doChangeStatus() {
@@ -158,7 +166,7 @@
 
                 $.ajax({
                     type: 'post',
-                    url: '{{ url('setAssetStatus') }}' + "/" + selectedId,
+                    url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
                     data: {
                         'status': newStatus
                     },
