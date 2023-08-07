@@ -55,9 +55,17 @@
                             <td>{{ $asset->view_index }}</td>
                             <td>{{ $asset->hidden ? 'عدم نمایش' : 'قابل نمایش' }}</td>
                             <td>
+
                                 <a class="btn btn-success " href="{{ route('asset.form.index', ['asset' => $asset->id]) }}"
                                     data-placement="top" title="ویرایش فرم ها"><span
                                         class="	glyphicon glyphicon-cog"></span></a>
+
+                                <a class="btn btn-info "
+                                    href="{{ route('asset.sub_asset.index', ['asset' => $asset->id]) }}"
+                                    data-placement="top" title="ویرایش زیردارایی ها">
+                                    <span class="glyphicon glyphicon-list"></span>
+                                </a>
+
                                 <button data-toggle="modal" data-target="#editModal"
                                     onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}')"
                                     class="btn btn-primary" data-placement="top" title="ویرایش دارایی"> <span

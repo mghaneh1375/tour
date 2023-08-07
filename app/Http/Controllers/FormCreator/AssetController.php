@@ -66,7 +66,7 @@ class AssetController extends Controller {
     }
 
     public function index() {
-        return view('formCreator.asset', ['assets' => Asset::where('super_id', -1)->get()]);
+        return view('formCreator.asset', ['assets' => Asset::where('super_id', -1)->get(), 'subAsset' => false]);
     }
 
     /**
@@ -108,17 +108,6 @@ class AssetController extends Controller {
         ]);
 
         return Redirect::route('asset.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\models\Asset  $asset
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Asset $asset)
-    {
-
     }
 
     /**
@@ -182,9 +171,9 @@ class AssetController extends Controller {
      * @param  \App\models\Asset  $asset
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function destroy(Asset $asset) {
+    public static function destroy(Asset $asset, Request $request) {
 
-        DB::transaction(function () use ($asset) {
+        DB::transaction(function () use ($asset, $request) {
 
             if (file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
                 unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
@@ -200,17 +189,17 @@ class AssetController extends Controller {
 
                 $userAssets = $asset->user_assets();
                 foreach ($userAssets as $userAsset)
-                    UserAssetController::destroy($userAsset);
+                    UserAssetController::destroy($userAsset, $request);
 
                 $subAssets = Asset::where('super_id',$asset->id)->get();
                 foreach ($subAssets as $subAsset)
-                    AssetController::destroy($subAsset);
+                    AssetController::destroy($subAsset, $request);
             
             }
             else {
                 $userSubAssets = UserSubAsset::where('asset_id',$asset->id)->get();
                 foreach ($userSubAssets as $userSubAsset)
-                    UserSubAssetController::destroy($userSubAsset);
+                    UserSubAssetController::destroy($userSubAsset, $request);
             }
 
             $asset->delete();

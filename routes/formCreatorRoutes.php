@@ -5,6 +5,7 @@ use App\Http\Controllers\FormCreator\AssetController;
 use App\Http\Controllers\FormCreator\FormController;
 use App\Http\Controllers\FormCreator\FormFieldController;
 use App\Http\Controllers\FormCreator\ReportController;
+use App\Http\Controllers\FormCreator\SubAssetController;
 use App\Http\Controllers\FormCreator\UserAssetController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,16 @@ Route::group(['prefix' => 'asset'], function() {
     
     });
     
+    Route::group(['prefix' => '/{asset}/subAsset'], function() {
+
+        Route::get('/', [SubAssetController::class, 'index'])->name('asset.sub_asset.index');
+    
+        Route::post('/', [SubAssetController::class, 'store'])->name('asset.sub_asset.store');
+    
+    });
+
+
+    Route::resource('asset.subAsset', SubAssetController::class)->shallow()->except('update', 'create');
 
 });
 
@@ -59,8 +70,6 @@ Route::group(['prefix' => 'form_field/{form_field}'], function() {
 
 });
 
-// Route::resource('form.form_field', FormFieldController::class)->shallow()->except('show', 'create');
-Route::resource('asset.subAsset', SubAssetController::class)->shallow()->except('update', 'create');
 
 Route::group(["prefix" => "report"], function () {
 

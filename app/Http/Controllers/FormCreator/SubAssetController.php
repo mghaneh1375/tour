@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\FormCreator;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AssetDigest;
 use App\models\FormCreator\Asset;
 use App\models\FormCreator\UserSubAsset;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ use Illuminate\Validation\Rule;
 class SubAssetController extends Controller {
 
     public function index(Asset $asset) {
-        return view('formCreator.asset', ['assets' => Asset::where('super_id',$asset->id)->get()]);
+        return view('formCreator.asset', ['assets' => Asset::where('super_id',$asset->id)->get(), 'subAsset' => true]);
     }
 
     /**
@@ -44,13 +43,13 @@ class SubAssetController extends Controller {
 
         $file = $request->file('pic');
         $Image = $t . '.' . $request->file('pic')->extension();
-        $destenationpath = __DIR__ . '/../../../public/assets';
+        $destenationpath = __DIR__ . '/../../../../public/assets';
         $file->move($destenationpath, $Image);
         $asset->pic = $Image;
 
         $file = $request->file('create_pic');
         $Image = ($t + 200) . '.' . $request->file("create_pic")->extension();
-        $destenationpath = __DIR__ . '/../../../public/assets';
+        $destenationpath = __DIR__ . '/../../../../public/assets';
         $file->move($destenationpath, $Image);
         $asset->create_pic = $Image;
         $asset->save();
@@ -79,29 +78,25 @@ class SubAssetController extends Controller {
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];
 
-        // if($asset->view_index != $request["view_index"] &&
-        //     Asset::whereViewIndex($request["view_index"])->count() > 0)
-        //     dd("اولویت نمایش باید منحصر به فرد باشد");
-
         $asset->view_index = $request["view_index"];
         $asset->hidden = ($request->has("hidden")) ? true : false;
 
         if($request->has("pic") && !empty($_FILES["pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../public/assets/' . $asset->pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->pic);
+            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->pic);
 
             $file = $request->file('pic');
             $Image = time() . '.' . $request->file('pic')->extension();
-            $destenationpath = __DIR__ . '/../../../public/assets';
+            $destenationpath = __DIR__ . '/../../../../public/assets';
             $file->move($destenationpath, $Image);
             $asset->pic = $Image;
         }
 
         if($request->has("create_pic") && !empty($_FILES["create_pic"]["name"])) {
 
-            if(file_exists(__DIR__ . '/../../../public/assets/' . $asset->create_pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->create_pic);
+            if(file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
 
             $file = $request->file('create_pic');
             $Image = time() . '.' . $request->file("create_pic")->extension();
@@ -120,15 +115,15 @@ class SubAssetController extends Controller {
      * @param  \App\models\Asset  $asset
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function destroy(Asset $asset) {
+    public static function destroy(Asset $asset, Request $request) {
 
-        DB::transaction(function () use ($asset) {
+        DB::transaction(function () use ($asset, $request) {
 
-            if (file_exists(__DIR__ . '/../../../public/assets/' . $asset->create_pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->create_pic);
+            if (file_exists(__DIR__ . '/../../../../public/assets/' . $asset->create_pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->create_pic);
 
-            if (file_exists(__DIR__ . '/../../../public/assets/' . $asset->pic))
-                unlink(__DIR__ . '/../../../public/assets/' . $asset->pic);
+            if (file_exists(__DIR__ . '/../../../../public/assets/' . $asset->pic))
+                unlink(__DIR__ . '/../../../../public/assets/' . $asset->pic);
 
             $forms = $asset->forms;
             foreach ($forms as $form)
@@ -138,16 +133,16 @@ class SubAssetController extends Controller {
 
                 $userAssets = $asset->user_assets();
                 foreach ($userAssets as $userAsset)
-                    UserAssetController::destroy($userAsset);
+                    UserAssetController::destroy($userAsset, $request);
 
                 $subAssets = Asset::where('super_id',$asset->id)->get();
                 foreach ($subAssets as $subAsset)
-                    AssetController::destroy($subAsset);
+                    AssetController::destroy($subAsset, $request);
             }
             else {
                 $userSubAssets = UserSubAsset::where('asset_id',$asset->id)->get();
                 foreach ($userSubAssets as $userSubAsset)
-                    UserSubAssetController::destroy($userSubAsset);
+                    UserSubAssetController::destroy($userSubAsset, $request);
             }
 
             $asset->delete();
