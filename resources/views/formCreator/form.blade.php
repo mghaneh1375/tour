@@ -27,8 +27,8 @@
                 </div>
             </div>
             <button data-toggle="modal" data-target="#addModal"
-                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><span
-                    class="	glyphicon glyphicon-plus"></span></button>
+                class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><i
+                    class="plus2 iconStyle"></i></button>
             @if ($errors->any())
                 {!! implode('', $errors->all('<div id="err" class="hidden">:message</div>')) !!}
             @endif
@@ -52,7 +52,7 @@
                             <td style="width:15%">
                                 <a class="btn btn-success mgbtn5"
                                     href="{{ route('form.form_field.index', ['form' => $form->id]) }}"data-placement="top"
-                                    title="ویرایش فیلدها"><span class="	glyphicon glyphicon-cog"></span></a>
+                                    title="ویرایش فیلدها"><span class="	glyphicon glyphicon-eye-open"></span></a>
                                 <button data-toggle="modal" data-target="#editModal"
                                     onclick="editForm('{{ $form->id }}')"
                                     class="btn btn-primary mgbtn5"data-placement="top" title="ویرایش فرم"> <span

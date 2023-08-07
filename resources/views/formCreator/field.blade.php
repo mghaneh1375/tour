@@ -47,8 +47,8 @@
 
                 <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
                     <button data-toggle="modal" data-target="#addModal"
-                        class="btn btn-success"data-placement="top"title="افزودن فیلد جدید"><span
-                            class="	glyphicon glyphicon-plus"></span></button>
+                        class="btn btn-success"data-placement="top"title="افزودن فیلد جدید"><i
+                            class="plus2 iconStyle"></i></button>
 
                     <div style="direction: rtl; overflow: auto;padding-top:5px">
                         <table class="table table-striped">
@@ -57,14 +57,14 @@
                                     <td>نام</td>
                                     <td>ضروری</td>
                                     <td>متن ارور</td>
-                                    <td>Help</td>
+                                    <td>متن کمک</td>
                                     <td>Force Help</td>
                                     <td>نوع</td>
                                     <td>محدودیت</td>
                                     <td>tooltip</td>
                                     <td>نوع چینش</td>
                                     <td>نوع نمایش</td>
-                                    <td>multiple</td>
+                                    <td>چند ورودی</td>
                                     <td>عملیات</td>
                                 </tr>
                             </thead>
@@ -80,7 +80,7 @@
                                     <td>{{ $field->placeholder }}</td>
                                     <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
-                                    <td>{{ $field->multiple }}</td>
+                                    <td>{{ $field->multiple ? 'بله' : 'خیر' }}</td>
                                     <td style="width:13%">
                                         <button data-toggle="modal" data-target="#editModal"
                                             onclick="editForm('{{ $field->id }}', '{{ $field->rtl ? 'rtl' : 'ltr' }}','{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}', '{{ $field->editUrl }}')"
@@ -348,7 +348,13 @@
                                 <option value="1">بله</option>
                             </select>
                         </center>
-
+                        <center>
+                            <p>نوع چینش</p>
+                            <select id="editDr" name="direction">
+                                <option value="0">ltr</option>
+                                <option value="1">rtl</option>
+                            </select>
+                        </center>
                         <center>
                             <p>آیا این فیلد کل عرض را بگیرد؟</p>
                             <select name="half">
