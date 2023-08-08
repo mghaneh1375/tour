@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $user_id
  * @property int $field_id
  * @property int $user_asset_id
+ * @property boolean $status
  * @property string $data
+ * @property string $err_text
  * @property boolean $is_sub_asset
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

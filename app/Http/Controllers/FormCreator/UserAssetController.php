@@ -8,6 +8,7 @@ use App\models\FormCreator\Asset;
 use App\models\FormCreator\UserAsset;
 use App\models\FormCreator\UserFormsData;
 use App\models\FormCreator\UserSubAsset;
+use App\models\Ticket;
 use App\Rules\InForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -145,7 +146,7 @@ class UserAssetController extends Controller
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                 $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
-            })->select(['user_forms_data.id', 'name', 'type', 'data', 'status'])->get();
+            })->select(['user_forms_data.id', 'err_text', 'name', 'type', 'data', 'status'])->get();
             
             foreach($form->fields as $itr) {
                 if(isset($itr->id))
@@ -167,10 +168,15 @@ class UserAssetController extends Controller
     public function setFieldStatus(UserFormsData $user_form_data, Request $request) {
 
         $request->validate([
-            'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])]
+            'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])],
+            'err_text' => 'nullable|string|min:2'
         ]);
 
         $user_form_data->status = $request['status'];
+        
+        if($request['status'] == 'REJECT' && $request->has('err_text'))
+            $user_form_data->err_text = $request['err_text'];
+
         $user_form_data->save();
 
         return response(['status' => '0']);
@@ -280,8 +286,9 @@ class UserAssetController extends Controller
     public function updateStatus(UserAsset $user_asset) {
         
         $userFormsData = $user_asset->user_forms_data()->get();
+        $asset = $user_asset->asset;
         
-        $errs = $this->checkAsset($user_asset->asset, $userFormsData, $user_asset->id);
+        $errs = $this->checkAsset($asset, $userFormsData, $user_asset->id);
 
         if(count($errs) > 0) {
             return response()->json([
@@ -290,8 +297,25 @@ class UserAssetController extends Controller
             ]);
         }
         
-
         $user_asset->status = "PENDING";
+
+        if($user_asset->ticket_id == null) {
+            $newTicket = new Ticket();
+            $newTicket->userId = $user_asset->user_id;
+            $newTicket->adminSeen = 0;
+            $newTicket->adminId = 0;
+            $newTicket->seen = 1;
+
+            $newTicket->subject = 'درخواست بررسی فرم ' . $asset->name . ' ' . $user_asset->title;
+            $newTicket->parentId = null;
+            $newTicket->businessId = $user_asset->id;
+
+            $newTicket->msg = 'درخواست بررسی فرم ' . $asset->name . ' ' . $user_asset->title;
+            $newTicket->save();
+
+            $user_asset->ticket_id = $newTicket->id;
+        }
+        
         $user_asset->save();
 
         return response()->json([
