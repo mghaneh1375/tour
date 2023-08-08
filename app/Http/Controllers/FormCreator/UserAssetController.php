@@ -145,8 +145,12 @@ class UserAssetController extends Controller
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                 $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
-            })->select(['name', 'type', 'data', 'status'])->get();
-
+            })->select(['user_forms_data.id', 'name', 'type', 'data', 'status'])->get();
+            
+            foreach($form->fields as $itr) {
+                if(isset($itr->id))
+                    $itr->update_status_url = route('setFieldStatus', ['user_form_data' => $itr->id]);
+            }
         }
 
         return view('formCreator.report.field', [
@@ -168,6 +172,7 @@ class UserAssetController extends Controller
         ]);
 
         $user_form_data->status = $request['status'];
+        $user_form_data->save();
 
         if($request['status'] == 'REJECT' && $request->has('err_text'))
             $user_form_data->err_text = $request['err_text'];
