@@ -5,17 +5,12 @@
 @stop
 
 @section('body')
-
-
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
-
             <div class="sparkline8-list shadow-reset mg-tb-30">
                 <div class="sparkline8-hd">
                     <div class="main-sparkline8-hd">
                         <h1>پاسخ های کاربر
-
-
                             <span data-placement="left" title="برگشت"
                                 onclick="document.location.href = '{{ route('report.index') }}'" class="back"><span
                                     class="glyphicon glyphicon-arrow-left"></span></span>
@@ -40,6 +35,8 @@
                                             <td>نوع سوال</td>
                                             <td>پاسخ</td>
                                             <td>وضعیت</td>
+                                            <td>عملیات</td>
+
                                         </tr>
                                     </thead>
                                     @foreach ($form->fields as $field)
@@ -63,128 +60,85 @@
                                                 @endif
                                             </td>
                                             <td>{{ $field->status }}</td>
+                                            <td><a class="btn btn-success " href="" data-placement="top"
+                                                    title="تایید شده"><span class="	glyphicon glyphicon-ok"></span></a>
+                                                <a class="btn btn-danger " href="" data-placement="top"
+                                                    title="رد شده"><span class="	glyphicon glyphicon-remove"></span></a>
+                                            </td>
+
                                         </tr>
                                     @endforeach
 
                                 </table>
                             @endforeach
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
         </div>
-
-    @endsection
-    @section('modals')
-        <div id="editModal" class="modal fade" role="dialog">
-
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h4 class="modal-title">تغییر وضعیت</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <center>
-                            <p>وضعیت مورد نظر</p>
-                            <select id="status" name="status">
-                                <option value="PENDING"> در حال بررسی برای تایید </option>
-                                <option value="REJECT">رد شده</option>
-                                <option value="CONFIRM"> تایید شده </option>
-                            </select>
-                        </center>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button id="closeModalBtn" type="button" class="btn btn-default"
-                            data-dismiss="modal">انصراف</button>
-                        <input onclick="doChangeStatus()" type="submit" class="btn btn-success" value="تایید">
-                    </div>
+    </div>
+@endsection
+@section('modals')
+    <div id="editModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">تغییر وضعیت</h4>
                 </div>
+                <div class="modal-body">
 
-            </div>
-        </div>
+                    <center>
+                        <p>وضعیت مورد نظر</p>
+                        <select id="status" name="status">
+                            <option value="PENDING"> در حال بررسی برای تایید </option>
+                            <option value="REJECT">رد شده</option>
+                            <option value="CONFIRM"> تایید شده </option>
+                        </select>
+                    </center>
 
-        <div id="removeModal" class="modal fade" role="dialog">
-
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h4 class="modal-title">حذف دارایی کاربر</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h3>آیا از حذف دارایی کاربر اطمینان دارید؟</h3>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="closeRemoveModalBtn" type="button" class="btn btn-default"
-                            data-dismiss="modal">انصراف</button>
-                        <input onclick="doRemove()" type="submit" class="btn btn-success" value="تایید">
-                    </div>
                 </div>
-
+                <div class="modal-footer">
+                    <button id="closeModalBtn" type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <input onclick="doChangeStatus()" type="submit" class="btn btn-success" value="تایید">
+                </div>
             </div>
+
         </div>
-    @endsection
-    @section('script')
-        <script>
-            $(document).ready(function() {
-                console.log(selectedId);
-            })
-            var selectedId = -1;
+    </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            console.log(selectedId);
+        })
+        var selectedId = -1;
 
-            function remove(id) {
-                selectedId = id;
-            }
+        function changeStatus(state) {
+            $("#status").val(state).change();
+        }
 
-            function doRemove() {
+        function doChangeStatus() {
 
-                $.ajax({
-                    type: "DELETE",
-                    url: '{{ url('user_asset') }}' + "/" + selectedId,
-                    success: function(res) {
-                        if (res.status == "0") {
-                            $("#tr_" + selectedId).remove();
-                            $("#closeRemoveModalBtn").click();
-                        } else {
-                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                        }
+            var newStatus = $("#status").val();
+
+            $.ajax({
+                type: 'post',
+                url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
+                data: {
+                    'status': newStatus
+                },
+                success: function(res) {
+
+                    if (res.status == "0") {
+                        $("#closeModalBtn").click();
+                        $("#status_" + selectedId).empty().append(newStatus);
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
-                });
-            }
+                }
+            });
 
-            function changeStatus(state) {
-                $("#status").val(state).change();
-            }
+        }
+    </script>
 
-            function doChangeStatus() {
-
-                var newStatus = $("#status").val();
-
-                $.ajax({
-                    type: 'post',
-                    url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
-                    data: {
-                        'status': newStatus
-                    },
-                    success: function(res) {
-
-                        if (res.status == "0") {
-                            $("#closeModalBtn").click();
-                            $("#status_" + selectedId).empty().append(newStatus);
-                        } else {
-                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                        }
-                    }
-                });
-
-            }
-        </script>
-
-    @stop
+@stop

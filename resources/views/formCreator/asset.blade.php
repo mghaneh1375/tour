@@ -10,7 +10,6 @@
 @stop
 
 @section('body')
-
     <div class="mainBackWhiteBody">
         <div class="whiteBox">
             <div class="main-sparkline8-hd">
@@ -25,11 +24,9 @@
                 @endif
 
             </div>
-
             @if ($errors->any())
                 {!! implode('', $errors->all('<div id="err" class="hidden">:message</div>')) !!}
             @endif
-
             <button data-toggle="modal" data-target="#addModal"
                 class="btn btn-success"data-placement="top"title="افزودن دارایی جدید"><i
                     class="plus2 iconStyle"></i></button>
