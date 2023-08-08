@@ -5,6 +5,8 @@ namespace App\Http\Controllers\FormCreator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserAssetDigest;
 use App\models\FormCreator\Asset;
+use App\models\FormCreator\Form;
+use App\models\FormCreator\Image;
 use App\models\FormCreator\UserAsset;
 use App\models\FormCreator\UserFormsData;
 use App\models\FormCreator\UserSubAsset;
@@ -13,6 +15,7 @@ use App\Rules\InForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rule;
 
 class UserAssetController extends Controller
@@ -146,16 +149,140 @@ class UserAssetController extends Controller
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                 $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
-            })->select(['user_forms_data.id', 'err_text', 'name', 'type', 'data', 'status'])->get();
+            })->select(['user_forms_data.id', 'err_text', 'name', 'type', 'options', 'data', 'status'])->get();
             
             foreach($form->fields as $itr) {
+
                 if(isset($itr->id))
                     $itr->update_status_url = route('setFieldStatus', ['user_form_data' => $itr->id]);
+
+
+                if($itr->type == "LISTVIEW") {
+
+                    $isSubAsset = ($form->asset->super_id != -1);
+                    $userSubAsset = null;
+                    $userAsset = null;
+
+                    if ($isSubAsset) {
+                        $userSubAsset = UserSubAsset::where('id',$userAssetId)->first();
+                        if ($userSubAsset == null)
+                            continue;
+                    }
+                    else {
+                        $userAsset = UserAsset::where('id',$userAssetId)->first();
+                        if ($userAsset == null)
+                            continue;
+                    }
+    
+                    if($isSubAsset) {
+                        if($userSubAsset == null)
+                            $subAssets = [];
+                        else
+                            $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id',$itr->options[0])->where('user_asset_id',$userSubAsset->id)->select("id")->get();
+                    }
+                    else
+                        $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id', $itr->options[0])->where('user_asset_id',$userAsset->id)->select("id")->get();
+    
+                        // todo: thinking pic = false
+                    $pic = true;
+    
+                    foreach ($subAssets as $subAsset) {
+    
+                        $subAsset->fields = DB::connection("formDB")->select("select lower(ff.type) as type from assets a, forms f, form_fields ff, user_forms_data u where " .
+                            " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
+                            " u.user_asset_id = " . $subAsset->id
+                        );
+    
+                        foreach ($subAsset->fields as $ff) {
+                            if($ff->type == "file") {
+                                $pic = true;
+                                break;
+                            }
+                            else if($ff->type == "gallery") {
+                                $pic = true;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+
+                    if($pic) {
+                        foreach ($subAssets as $subAsset) {
+    
+                            $subAsset->fields = DB::connection("formDB")->select("select lower(ff.type) as type, ff.name as key_, u.data as val from assets a, forms f, form_fields ff, user_forms_data u where " .
+                                " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
+                                " u.user_asset_id = " . $subAsset->id
+                            );
+    
+                            foreach ($subAsset->fields as $ff) {
+                                if ($ff->type == "file")
+                                    $ff->val = asset("storage/" . str_replace('public/', '', $ff->val));
+                                else if ($ff->type == "gallery") {
+    
+                                    $images = explode('_', $ff->val);
+                                    $vals = [];
+    
+                                    foreach($images as $image) {
+                                        $img = Image::whereId($image)->first();
+                                        if ($img == null)
+                                            array_push($vals, URL::asset('../storage/default.png'));
+                                        else
+                                            array_push($vals, URL::asset("storage/" . $img->path));
+                                    }
+                                    
+                                    $ff->val = $vals;
+                                }
+                            }
+                        }
+                    }
+                    else {
+    
+                        $supers = [];
+                        $counter1 = 0;
+    
+                        foreach ($subAssets as $subAsset) {
+    
+                            $subAsset->fields = DB::connection("formDB")->select("select ff.placeholder, ff.name as key_, u.data as val, f.name as superKey from".
+                                " assets a, forms f, form_fields ff, user_forms_data u where " .
+                                " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
+                                " u.user_asset_id = " . $subAsset->id ." order by ff.id asc"
+                            );
+    
+                            $output = [];
+                            $counter2 = 0;
+    
+                            foreach ($subAsset->fields as $ff) {
+                                if(array_search($ff->superKey, $supers) == false) {
+                                    $supers[$counter1++] = $ff->superKey;
+                                    $output[$counter2++] = ["type" => "super", "key_" => $ff->superKey, "val" => $ff->superKey];
+                                }
+                            }
+    
+                            foreach ($subAsset->fields as $ff) {
+                                if(strpos($ff->placeholder, "تومان") !== false)
+                                    $output[$counter2++] = ["type" => $ff->superKey, "key_" => $ff->key_, "val" => $ff->val . " تومان"];
+                                else
+                                    $output[$counter2++] = ["type" => $ff->superKey, "key_" => $ff->key_, "val" => $ff->val];
+                            }
+    
+                            $subAsset->fields = $output;
+                        }
+    
+                    }
+    
+                    $itr->items = $subAssets;
+                }
+                           
             }
         }
 
+        dd($forms);
+
         return view('formCreator.report.field', [
-            'forms' => $forms, 'id' => $user_asset->id, 'status' => $user_asset->status
+            'forms' => $forms, 
+            'id' => $user_asset->id, 
+            'status' => $user_asset->status,
+            'err_text' => $user_asset->err_text
         ]);
     }
 
@@ -315,7 +442,7 @@ class UserAssetController extends Controller
 
             $user_asset->ticket_id = $newTicket->id;
         }
-        
+
         $user_asset->save();
 
         return response()->json([

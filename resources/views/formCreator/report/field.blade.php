@@ -17,6 +17,7 @@
                         </h1>
                     </div>
 
+                    {{ $err_text }}
                     <button data-toggle="modal" data-target="#editModal"data-placement="top" title="تغییروضعیت"
                         onclick="changeStatus('{{ $status }}')" class="btn btn-primary btn-default btn-sm mgbtn5">
                         <span class="glyphicon glyphicon-edit"></span>

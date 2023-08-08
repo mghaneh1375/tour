@@ -29,7 +29,7 @@ class UserAssetResource extends JsonResource
             "createdAt" => Controller::convertDate($this->created_at),
             "updatedAt" => Controller::convertDate($this->updated_at),
             "username" => $user == null ? '' : $user->username,
-            'name' => $user == null ? '' : $user->first_name . ' ' . $user->last_name,
+            'name' => $user == null ? '' : $user->first_name . ' ' . $user->last_name
         ];
     }
 }
