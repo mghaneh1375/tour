@@ -35,6 +35,7 @@
                                             <td>نوع سوال</td>
                                             <td>پاسخ</td>
                                             <td>وضعیت</td>
+                                            <td>توضیحات خطا</td>
                                             <td>عملیات</td>
 
                                         </tr>
@@ -67,6 +68,9 @@
                                                 @else
                                                     در حال بررسی برای تایید
                                                 @endif
+                                            </td>
+                                            <td>
+                                                {{ $field->err_text }}
                                             </td>
                                             <td>
                                                 <div class="btn btn-success "
@@ -111,7 +115,7 @@
                     <center id="errBox" class="hidden"style="margin-top: 10px;">
 
                         <p style="margin: 0;">علت رد شدن</p>
-                        <textarea type="textarea" placeholder="اختیاری"></textarea>
+                        <textarea id="rejecedText" type="textarea" placeholder="اختیاری"></textarea>
                     </center>
 
                 </div>
@@ -132,7 +136,7 @@
                 <div class="modal-body">
                     <center style="margin-top: 10px;">
                         <p style="margin: 0;">علت رد شدن</p>
-                        <textarea type="textarea" placeholder="اختیاری"></textarea>
+                        <textarea id="errText" type="textarea" placeholder="اختیاری"></textarea>
                     </center>
                 </div>
                 <div class="modal-footer">
@@ -173,11 +177,13 @@
         function rejectReq() {
             console.log(rejectUrl);
             console.log(rejectId);
+            errText = $('#errText').val()
             $.ajax({
                 type: 'post',
                 url: rejectUrl,
                 data: {
-                    'status': 'REJECT'
+                    'status': 'REJECT',
+                    'err_text': errText
                 },
                 success: function(res) {
 
@@ -186,6 +192,7 @@
                         $("#" + rejectId).empty().append(newStatus);
                         $('#rejectText').modal('toggle');
                         showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        location.reload();
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
@@ -196,12 +203,13 @@
         function doChangeStatus() {
 
             var newStatus = $("#status").val();
-
+            errText = $('#rejecedText').val()
             $.ajax({
                 type: 'post',
                 url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
                 data: {
-                    'status': newStatus
+                    'status': newStatus,
+                    'err_text': errText
                 },
                 success: function(res) {
 
