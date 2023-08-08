@@ -87,3 +87,5 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
 });
 
 Route::post('setAssetStatus/{user_asset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');
+
+Route::post('setFieldStatus/{user_form_data}', [UserAssetController::class, 'setFieldStatus'])->name('setFieldStatus');

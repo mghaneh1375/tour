@@ -160,7 +160,7 @@ class UserAssetController extends Controller
      *
      * @param  \App\models\UserFormsData $user_form_data
      */
-    public function setStatus(UserFormsData $user_form_data, Request $request) {
+    public function setFieldStatus(UserFormsData $user_form_data, Request $request) {
 
         $request->validate([
             'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])]

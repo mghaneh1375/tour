@@ -26,6 +26,11 @@ class AdminController extends Controller {
 
         $user_asset->status = $request["status"];
         $user_asset->save();
+
+        DB::connection('formDB')->update('update user_forms_data set status = "' . $request["status"] . 
+            '" where status = "PENDING" and user_asset_id = ' . $user_asset->id);
+        
+
         return response()->json([
             "status" => 0
         ]);
