@@ -133,7 +133,7 @@ class FormController extends Controller
             else {
                 $fields = $form->form_fields()->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                     $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
-                })->select(['form_fields.id as field_id', 'user_forms_data.id as user_form_data_id', 'multiple', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'data', 'help', 'force_help', 'options'])->get();
+                })->select(['form_fields.id as field_id', 'user_forms_data.status', 'user_forms_data.err_text', 'user_forms_data.id as user_form_data_id', 'multiple', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'data', 'help', 'force_help', 'options'])->get();
 
                 if($form->name == "اطلاعات مالک") {
                     if($fields[0]->data == null || empty($fields[0]->data)) {

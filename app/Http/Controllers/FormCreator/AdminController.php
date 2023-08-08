@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\models\FormCreator\Notification;
 use App\models\FormCreator\UserAsset;
 use App\models\Ticket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -34,46 +35,43 @@ class AdminController extends Controller {
         $newTicket = null;
         $parent = null;
 
+        $adminId = $request->id;
+
         if($user_asset->ticket_id != null) {
 
-            Ticket::firstOrCreate(['parentId', $user_asset->ticket_id], [
-                'userId' => $user_asset->id,
-                'parentId' =>  $user_asset->user_id
+            $msg = '';
+
+            if($request['status'] == "CONFIRM")
+                $msg = 'درخواست شما با موفقیت تایید گردید';
+            else if($request['status'] == "REJECT") {
+                $msg = 'درخواست شما به دلایل زیر رد گردید ' . '<br/>';
+                if($request->has('err_text'))
+                    $msg .= $request['err_text'];
+            }
+
+            $newTicket = Ticket::firstOrCreate(['parentId', $user_asset->ticket_id], [
+                'userId' => $user_asset->user_id,
+                'parentId' =>  $user_asset->ticket_id,
+                'adminId' => $adminId,
+                'businessId' => $user_asset->id
             ]);
 
-            // if( == 0) {
+            $parent = $newTicket->parentId;
 
-            //     $newTicket = new Ticket();
-            //     $newTicket->userId = $parent->userId;
-            //     $newTicket->adminId = \auth()->user()->id;
+            $newTicket->adminSeen = 1;
+            $newTicket->seen = 0;
+            $newTicket->msg = $msg;
 
-            // }
+            $newTicket->save();
 
-
+            $parent->updated_at = Carbon::now();
+            $parent->save();
 
         }
         
 
-        if($request['status'] == 'REJECT') {
-            
-            if($request->has('err_text'))
-                $user_asset->err_text = $request['err_text'];
-
-        //     $newTicket->adminSeen = 1;
-        //     $newTicket->seen = 0;
-        //     $newTicket->parentId = $parent->id;
-        //     $newTicket->businessId = $parent->businessId;
-        //     $newTicket->msg = $request->description ?? null;
-        //     if($request->has("file")) {
-        //         $newTicket->fileName = $request->file('file')->getClientOriginalName();
-        //         $path = $request->file->store('public/tickets');
-        //         $path = str_replace('public/', '', $path);
-        //         $newTicket->file = $path;
-        //     }
-        //     $newTicket->save();
-
-        //     $parent->updated_at = Carbon::now();
-        //     $parent->save();
+        if($request['status'] == 'REJECT' && $request->has('err_text')) {   
+            $user_asset->err_text = $request['err_text'];
         }
         
         $user_asset->save();
