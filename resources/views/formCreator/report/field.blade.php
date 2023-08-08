@@ -59,11 +59,24 @@
                                                     {{-- @endif --}}
                                                 @endif
                                             </td>
-                                            <td>{{ $field->status }}</td>
-                                            <td><a class="btn btn-success " href="" data-placement="top"
-                                                    title="تایید شده"><span class="	glyphicon glyphicon-ok"></span></a>
-                                                <a class="btn btn-danger " href="" data-placement="top"
-                                                    title="رد شده"><span class="	glyphicon glyphicon-remove"></span></a>
+                                            <td id="{{ $field->id }}">
+                                                @if ($field->status = 'CONFIRM')
+                                                    تایید شده
+                                                @elseif($field->status = 'REJECT')
+                                                    رد شده
+                                                @else
+                                                    در حال بررسی برای تایید
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="btn btn-success "
+                                                    onclick="changeAnswStatus('{{ $field->update_status_url }}', 'CONFIRM',{{ $field->id }})"
+                                                    data-placement="top" title="تایید شده"><span
+                                                        class="	glyphicon glyphicon-ok"></span></div>
+                                                <div class="btn btn-danger "
+                                                    onclick="changeAnswStatus('{{ $field->update_status_url }}', 'REJECT',{{ $field->id }})"
+                                                    data-placement="top" title="رد شده"><span
+                                                        class="	glyphicon glyphicon-remove"></span></div>
                                             </td>
 
                                         </tr>
@@ -132,6 +145,27 @@
                     if (res.status == "0") {
                         $("#closeModalBtn").click();
                         $("#status_" + selectedId).empty().append(newStatus);
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    }
+                }
+            });
+
+        }
+
+        function changeAnswStatus(url, newStatus, id) {
+
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: {
+                    'status': newStatus
+                },
+                success: function(res) {
+
+                    if (res.status == "0") {
+
+                        $("#" + id).empty().append(newStatus);
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
