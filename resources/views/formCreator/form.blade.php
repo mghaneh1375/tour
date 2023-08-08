@@ -83,10 +83,8 @@
                     </div>
                     <div class="modal-body">
 
-                        <center>
-                            <p>نام</p>
-                            <input type="text" id="name" name="name">
-                        </center>
+                        <label for="name" style="text-align: center">نام</label>
+                        <input type="text" name="name" id="name" style="width:50%">
 
                         <center>
                             <p>توضیح</p>
