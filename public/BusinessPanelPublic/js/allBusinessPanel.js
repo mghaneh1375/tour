@@ -162,9 +162,8 @@ function closeLoading() {
 
 function showSuccessNotifiBP(_msg, _side = "right", _color = "#0076ac") {
     var element = $("#successNotifiAlertBP");
-
+    $(element).empty();
     if (typeof _msg === "object") {
-        element.empty();
         for (let i = 0; i < _msg.length; i++) {
             element
                 .append("<p>" + _msg[i] + "</p>")
