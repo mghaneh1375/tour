@@ -163,10 +163,14 @@ class UserAssetController extends Controller
     public function setFieldStatus(UserFormsData $user_form_data, Request $request) {
 
         $request->validate([
-            'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])]
+            'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])],
+            'err_text' => 'nullable|string|min:2'
         ]);
 
         $user_form_data->status = $request['status'];
+
+        if($request['status'] == 'REJECT' && $request->has('err_text'))
+            $user_form_data->err_text = $request['err_text'];
 
         return response(['status' => '0']);
     }
