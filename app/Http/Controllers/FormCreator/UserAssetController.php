@@ -136,6 +136,8 @@ class UserAssetController extends Controller
         $forms = $asset->forms()->where("step", ">", 1)->get();
         $userId = $user_asset->user_id;
 
+        $arr = [];
+
         foreach ($forms as $form) {
 
             $isSubAsset = ($form->asset->super_id != -1);
@@ -159,7 +161,10 @@ class UserAssetController extends Controller
 
                 if($itr->type == "LISTVIEW") {
 
-                    $isSubAsset = ($form->asset->super_id != -1);
+                    $subFormAssetId = explode('_', $itr->options)[1];
+                    $subForm = Asset::find($subFormAssetId);
+
+                    $isSubAsset = ($subForm->super_id != -1);
                     $userSubAsset = null;
                     $userAsset = null;
 
@@ -269,14 +274,16 @@ class UserAssetController extends Controller
                         }
     
                     }
-    
+                    dd($subAssets);
                     $itr->items = $subAssets;
                 }
                            
             }
+
+            array_push($arr, $form->fields);
         }
 
-        dd($forms);
+        dd($arr);
 
         return view('formCreator.report.field', [
             'forms' => $forms, 
