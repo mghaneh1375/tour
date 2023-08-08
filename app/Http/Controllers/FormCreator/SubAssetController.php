@@ -32,30 +32,31 @@ class SubAssetController extends Controller {
             "mode" => ['required', Rule::in(["FULL", "HALF", "2/3", "1/3"])],
             'pic' => 'image',
             'create_pic' => 'image',
-            'view_index' => 'required|integer|min:1|unique:assets,view_index'
+            'view_index' => 'required|integer|min:1'
         ]);
 
-        $asset = new Asset();
-        $asset->name = $request["name"];
-        $asset->mode = $request["mode"];
-        $asset->view_index = $request["view_index"];
-        $asset->hidden = ($request->has("hidden")) ? true : false;
-        $asset->super_id = $asset->id;
+        $newAsset = new Asset();
+        $newAsset->name = $request["name"];
+        $newAsset->mode = $request["mode"];
+        $newAsset->view_index = $request["view_index"];
+        $newAsset->hidden = ($request->has("hidden")) ? true : false;
+        $newAsset->super_id = $asset->id;
 
+        $destenationpath = __DIR__ . '/../../../../public/assets';
         $t = time();
 
         $file = $request->file('pic');
         $Image = $t . '.' . $request->file('pic')->extension();
-        $destenationpath = __DIR__ . '/../../../../public/assets';
+        
         $file->move($destenationpath, $Image);
-        $asset->pic = $Image;
+        $newAsset->pic = $Image;
 
         $file = $request->file('create_pic');
         $Image = ($t + 200) . '.' . $request->file("create_pic")->extension();
-        $destenationpath = __DIR__ . '/../../../../public/assets';
+        
         $file->move($destenationpath, $Image);
-        $asset->create_pic = $Image;
-        $asset->save();
+        $newAsset->create_pic = $Image;
+        $newAsset->save();
 
         return Redirect::route('asset.sub_asset.index', ['asset' => $asset->id]);
     }
@@ -86,14 +87,17 @@ class SubAssetController extends Controller {
         $sub_asset->view_index = $request["view_index"];
         $sub_asset->hidden = ($request->has("hidden")) ? true : false;
 
+        $destenationpath = __DIR__ . '/../../../../public/assets';
+        $t = time();
+
         if($request->has("pic") && !empty($_FILES["pic"]["name"])) {
 
             if(!empty($sub_asset->pic) && file_exists(__DIR__ . '/../../../../public/assets/' . $sub_asset->pic))
                 unlink(__DIR__ . '/../../../../public/assets/' . $sub_asset->pic);
 
             $file = $request->file('pic');
-            $Image = time() . '.' . $request->file('pic')->extension();
-            $destenationpath = __DIR__ . '/../../../../public/assets';
+            $Image = $t . '.' . $request->file('pic')->extension();
+            
             $file->move($destenationpath, $Image);
             $sub_asset->pic = $Image;
         }
@@ -103,11 +107,11 @@ class SubAssetController extends Controller {
             if(!empty($sub_asset->create_pic) && file_exists(__DIR__ . '/../../../../public/assets/' . $sub_asset->create_pic))
                 unlink(__DIR__ . '/../../../../public/assets/' . $sub_asset->create_pic);
 
-            $file = $request->file('create_pic');
-            $Image = time() . '.' . $request->file("create_pic")->extension();
-            $destenationpath = __DIR__ . '/../../../public/assets';
-            $file->move($destenationpath, $Image);
-            $sub_asset->create_pic = $Image;
+            $newF = $request->create_pic;
+            $newImage = ($t + 200) . '.' . $newF->extension();
+            
+            $newF->move($destenationpath, $newImage);
+            $sub_asset->create_pic = $newImage;
         }
 
         $sub_asset->save();

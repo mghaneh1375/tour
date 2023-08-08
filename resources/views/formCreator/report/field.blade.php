@@ -34,6 +34,7 @@
                                             <td>سوال</td>
                                             <td>نوع سوال</td>
                                             <td>پاسخ</td>
+                                            <td>وضعیت</td>
                                         </tr>
                                     </thead>
                                     @foreach ($form->fields as $field)
@@ -56,6 +57,7 @@
                                                     {{-- @endif --}}
                                                 @endif
                                             </td>
+                                            <td>{{ $field->status }}</td>
                                         </tr>
                                     @endforeach
 
