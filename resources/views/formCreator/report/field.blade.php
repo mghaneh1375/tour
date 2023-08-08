@@ -60,9 +60,9 @@
                                                 @endif
                                             </td>
                                             <td id="{{ $field->id }}">
-                                                @if ($field->status = 'CONFIRM')
+                                                @if ($field->status == 'CONFIRM')
                                                     تایید شده
-                                                @elseif($field->status = 'REJECT')
+                                                @elseif($field->status == 'REJECT')
                                                     رد شده
                                                 @else
                                                     در حال بررسی برای تایید
@@ -73,8 +73,8 @@
                                                     onclick="changeAnswStatus('{{ $field->update_status_url }}', 'CONFIRM',{{ $field->id }})"
                                                     data-placement="top" title="تایید شده"><span
                                                         class="	glyphicon glyphicon-ok"></span></div>
-                                                <div class="btn btn-danger "
-                                                    onclick="changeAnswStatus('{{ $field->update_status_url }}', 'REJECT',{{ $field->id }})"
+                                                <div class="btn btn-danger " data-toggle="modal" data-target="#rejectText"
+                                                    onclick="reject('{{ $field->update_status_url }}',{{ $field->id }})"
                                                     data-placement="top" title="رد شده"><span
                                                         class="	glyphicon glyphicon-remove"></span></div>
                                             </td>
@@ -102,11 +102,16 @@
 
                     <center>
                         <p>وضعیت مورد نظر</p>
-                        <select id="status" name="status">
+                        <select id="status" name="status" onchange="changeState()">
                             <option value="PENDING"> در حال بررسی برای تایید </option>
                             <option value="REJECT">رد شده</option>
                             <option value="CONFIRM"> تایید شده </option>
                         </select>
+                    </center>
+                    <center id="errBox" class="hidden"style="margin-top: 10px;">
+
+                        <p style="margin: 0;">علت رد شدن</p>
+                        <textarea type="textarea" placeholder="اختیاری"></textarea>
                     </center>
 
                 </div>
@@ -118,9 +123,31 @@
 
         </div>
     </div>
+    <div id="rejectText" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">توضیح علت رد شدن</h4>
+                </div>
+                <div class="modal-body">
+                    <center style="margin-top: 10px;">
+                        <p style="margin: 0;">علت رد شدن</p>
+                        <textarea type="textarea" placeholder="اختیاری"></textarea>
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModalBtn" type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <input onclick="rejectReq()" type="submit" class="btn btn-success" value="تایید">
+                </div>
+            </div>
+
+        </div>
+    </div>
 @endsection
 @section('script')
     <script>
+        var rejectUrl;
+        var rejectId;
         $(document).ready(function() {
             console.log(selectedId);
         })
@@ -128,6 +155,42 @@
 
         function changeStatus(state) {
             $("#status").val(state).change();
+        }
+
+        function changeState() {
+            if ($("#status").val() == 'REJECT') {
+                $("#errBox").removeClass('hidden');
+            } else {
+                $("#errBox").addClass('hidden');
+            }
+        }
+
+        function reject(url, id) {
+            rejectUrl = url;
+            rejectId = id;
+        }
+
+        function rejectReq() {
+            console.log(rejectUrl);
+            console.log(rejectId);
+            $.ajax({
+                type: 'post',
+                url: rejectUrl,
+                data: {
+                    'status': 'REJECT'
+                },
+                success: function(res) {
+
+                    if (res.status == "0") {
+                        newStatus = 'رد شده';
+                        $("#" + rejectId).empty().append(newStatus);
+                        $('#rejectText').modal('toggle');
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    }
+                }
+            });
         }
 
         function doChangeStatus() {
@@ -145,6 +208,7 @@
                     if (res.status == "0") {
                         $("#closeModalBtn").click();
                         $("#status_" + selectedId).empty().append(newStatus);
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
@@ -164,8 +228,13 @@
                 success: function(res) {
 
                     if (res.status == "0") {
-
+                        if (newStatus === 'CONFIRM') {
+                            newStatus = 'تایید شده';
+                        } else {
+                            newStatus = 'رد شده';
+                        }
                         $("#" + id).empty().append(newStatus);
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }

@@ -235,6 +235,7 @@
                     if (res.status == "0") {
                         $("#closeModalBtn").click();
                         $("#status_" + selectedId).empty().append(newStatusFa);
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
