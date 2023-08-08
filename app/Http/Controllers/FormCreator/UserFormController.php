@@ -929,37 +929,4 @@ class UserFormController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\models\UserFormsData  $userFormsData
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserFormsData $userFormsData)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\models\UserFormsData  $userFormsData
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserFormsData $userFormsData)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\models\UserFormsData  $userFormsData
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UserFormsData $userFormsData)
-    {
-        //
-    }
 }

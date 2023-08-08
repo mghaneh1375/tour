@@ -21,8 +21,10 @@
                         <span>&nbsp;&nbsp;&nbsp;</span>
                         <span>asset</span>
                         <span>{{ $asset->name }}</span>
-                        <span onclick="document.location.href = '{{ route('asset.index') }}'" class="back"
-                            data-placement="left" title="برگشت"><span class="glyphicon glyphicon-arrow-left"></span></span>
+                        <span
+                            onclick="document.location.href = '{{ $asset->super_id == -1 ? route('asset.index') : route('asset.sub_asset.index', ['asset' => $asset->super_id]) }}'"
+                            class="back" data-placement="left" title="برگشت"><span
+                                class="glyphicon glyphicon-arrow-left"></span></span>
                     </h1>
                 </div>
             </div>

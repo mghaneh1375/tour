@@ -12,6 +12,7 @@ use App\Rules\InForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class UserAssetController extends Controller
 {
@@ -144,19 +145,32 @@ class UserAssetController extends Controller
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                 $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
-            })->select(['name', 'type', 'data'])->get();
+            })->select(['name', 'type', 'data', 'status'])->get();
 
         }
-
-        // return response()->json([
-        //     'status' => '0',
-        //     'forms' => $forms
-        // ]);
 
         return view('formCreator.report.field', [
             'forms' => $forms, 'id' => $user_asset->id, 'status' => $user_asset->status
         ]);
     }
+
+
+    /**
+     * Set status of specified resource.
+     *
+     * @param  \App\models\UserFormsData $user_form_data
+     */
+    public function setStatus(UserFormsData $user_form_data, Request $request) {
+
+        $request->validate([
+            'status' => ['required', Rule::in(['REJECT', 'CONFIRM', 'PENDING'])]
+        ]);
+
+        $user_form_data->status = $request['status'];
+
+        return response(['status' => '0']);
+    }
+
 
     /**
      * Update the specified resource in storage.
