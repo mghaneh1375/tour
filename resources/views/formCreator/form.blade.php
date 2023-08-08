@@ -88,20 +88,14 @@
                         <label for="name" style="text-align: center">نام</label>
                         <input type="text" name="name" id="name" style="width:50%">
 
-                        <center>
-                            <p>توضیح</p>
-                            <textarea id="description" name="description"></textarea>
-                        </center>
+                        <p for="description" style="text-align: center">توضیح</p>
+                        <textarea name="description" id="description" style="width:100%;line-height: 3;"></textarea>
 
-                        <center>
-                            <p>تذکر</p>
-                            <textarea id="notice" name="notice"></textarea>
-                        </center>
+                        <p for="notice" style="text-align: center">تذکر</p>
+                        <textarea name="notice" id="notice" style="width:100%;line-height: 3;"></textarea>
 
-                        <center>
-                            <p>گام</p>
-                            <input type="number" id="step" name="step">
-                        </center>
+                        <label for="step" style="text-align: center">گام</label>
+                        <input type="number" id="step" name="step" style="width:50%">
 
                     </div>
                     <div class="modal-footer">

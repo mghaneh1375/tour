@@ -35,6 +35,8 @@
                                             <td>نوع سوال</td>
                                             <td>پاسخ</td>
                                             <td>وضعیت</td>
+                                            <td>عملیات</td>
+
                                         </tr>
                                     </thead>
                                     @foreach ($form->fields as $field)
@@ -58,6 +60,12 @@
                                                 @endif
                                             </td>
                                             <td>{{ $field->status }}</td>
+                                            <td><a class="btn btn-success " href="" data-placement="top"
+                                                    title="تایید شده"><span class="	glyphicon glyphicon-ok"></span></a>
+                                                <a class="btn btn-danger " href="" data-placement="top"
+                                                    title="رد شده"><span class="	glyphicon glyphicon-remove"></span></a>
+                                            </td>
+
                                         </tr>
                                     @endforeach
 

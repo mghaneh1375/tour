@@ -168,22 +168,22 @@
 
                     <center>
                         <p>tooltip</p>
-                        <textarea id="editPlaceholder" name="placeholder" placeholder="هنوز محتوایی وارد نشده است"></textarea>
+                        <textarea id="editPlaceholder" style="width:100%;" name="placeholder" placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
 
                     <center>
                         <p>متن ارور</p>
-                        <textarea id="editErr" name="err" placeholder="هنوز محتوایی وارد نشده است"></textarea>
+                        <textarea id="editErr" name="err" style="width:100%;" placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
 
                     <center>
                         <p>متن کمک</p>
-                        <textarea id="editHelp" name="help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
+                        <textarea id="editHelp" style="width:100%;" name="help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
 
                     <center>
                         <p>force help</p>
-                        <textarea id="editForceHelp" name="force_help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
+                        <textarea id="editForceHelp" style="width:100%;" name="force_help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
 
                     <center>
@@ -315,22 +315,22 @@
 
                         <center>
                             <p>tooltip</p>
-                            <textarea name="placeholder"></textarea>
+                            <textarea name="placeholder" style="width:100%;"></textarea>
                         </center>
 
                         <center>
                             <p>متن ارور</p>
-                            <textarea name="err"></textarea>
+                            <textarea name="err" style="width:100%;"></textarea>
                         </center>
 
                         <center>
                             <p>متن کمک</p>
-                            <textarea name="help"></textarea>
+                            <textarea name="help"style="width:100%;"></textarea>
                         </center>
 
                         <center>
                             <p>force help</p>
-                            <textarea name="force_help"></textarea>
+                            <textarea name="force_help" style="width:100%;"></textarea>
                         </center>
 
                         <center>
@@ -373,8 +373,8 @@
 
                             <div>
                                 <label for="minChar">محدودیت تعداد کاراکتر</label>
-                                <input id="minChar" type="checkbox" onchange="changeCharLimit()" name="limitations[]"
-                                    value="1">
+                                <input id="minChar" class="minCharadd" type="checkbox" onchange="changeCharLimit()"
+                                    name="limitations[]" value="1">
                             </div>
 
                             <div id="charCountDivAdd" class="hidden">
@@ -399,7 +399,6 @@
         $(document).ready(function() {
             setTimeout(function() {
                 err = $("#err").text();
-                console.log(err);
                 if (err !== undefined && err.length > 1)
                     showSuccessNotifiBP(err, 'right', '#ac0020');
             }, 500);
@@ -463,26 +462,16 @@
         }
 
         function change() {
-
             limitations = [];
-
             if ($('#nid').is(':checked') && $('#minChar').is(':checked')) {
-
                 limitations.push($('#nid').val());
                 limitations.push($('#minChar').val());
-
             } else if ($('#nid').is(':checked')) {
-
                 limitations.push($('#nid').val());
-
             } else if ($('#minChar').is(':checked')) {
-
                 limitations.push($('#minChar').val());
-
             } else {
-
                 limitations.push(nothing);
-
             }
         }
 
@@ -544,12 +533,9 @@
         }
 
         function changeCharLimit() {
-            console.log('moz');
-            if ($("#minChar").prop('checked', true)) {
-                console.log('asb');
+            if ($(".minCharadd").prop("checked")) {
                 $("#charCountDivAdd").removeClass("hidden");
             } else {
-                console.log('khar');
                 $("#charCountDivAdd").addClass("hidden");
             }
         }
@@ -559,19 +545,15 @@
                 limitations = [];
                 limitations.push($('#nid').val());
                 limitations.push($('#minChar').val());
-                console.log(limitations);
             } else if ($('#nid').is(':checked')) {
                 limitations = [];
                 limitations.push($('#nid').val());
-                console.log(limitations);
             } else if ($('#minChar').is(':checked')) {
                 limitations = [];
                 limitations.push($('#minChar').val());
-                console.log(limitations);
             } else {
                 limitations = [];
                 limitations.push(nothing);
-                console.log(limitations);
             }
 
             if ($("#minChar").prop("checked")) {
