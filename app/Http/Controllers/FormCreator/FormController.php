@@ -249,7 +249,7 @@ class FormController extends Controller
                 if($pic) {
                     foreach ($subAssets as $subAsset) {
 
-                        $subAsset->fields = DB::connection("formDB")->select("select lower(ff.type) as type, ff.name as key_, u.data as val from assets a, forms f, form_fields ff, user_forms_data u where " .
+                        $subAsset->fields = DB::connection("formDB")->select("select lower(ff.type) as type, u.err_text, u.status, ff.name as key_, u.data as val from assets a, forms f, form_fields ff, user_forms_data u where " .
                             " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
                             " u.user_asset_id = " . $subAsset->id
                         );

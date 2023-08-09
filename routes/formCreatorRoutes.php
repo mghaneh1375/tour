@@ -7,6 +7,7 @@ use App\Http\Controllers\FormCreator\FormFieldController;
 use App\Http\Controllers\FormCreator\ReportController;
 use App\Http\Controllers\FormCreator\SubAssetController;
 use App\Http\Controllers\FormCreator\UserAssetController;
+use App\Http\Controllers\FormCreator\UserSubAssetController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -43,8 +44,6 @@ Route::group(['prefix' => 'asset'], function() {
 
     });
 
-
-    Route::resource('asset.subAsset', SubAssetController::class)->shallow()->except('update', 'create');
 
 });
 
@@ -85,6 +84,9 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
     Route::delete('/', [UserAssetController::class, 'destroy']);
 
 });
+
+
+Route::get('/user_sub_asset/{user_sub_asset}', [UserSubAssetController::class, 'show'])->name('user_sub_asset.show');
 
 Route::post('setAssetStatus/{user_asset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');
 

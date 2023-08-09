@@ -62,6 +62,7 @@
                                     <td>نوع</td>
                                     <td>محدودیت</td>
                                     <td>tooltip</td>
+                                    <td>منتخب</td>
                                     <td>نوع چینش</td>
                                     <td>نوع نمایش</td>
                                     <td>چند ورودی</td>
@@ -78,6 +79,7 @@
                                     <td>{!! html_entity_decode($field->type) !!}</td>
                                     <td>{!! html_entity_decode($field->limitation) !!}</td>
                                     <td>{{ $field->placeholder }}</td>
+                                    <td>{{ $field->presenter ? 'بله' : 'خیر' }}</td>
                                     <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
                                     <td>{{ $field->multiple ? 'بله' : 'خیر' }}</td>
@@ -201,6 +203,15 @@
                             <option value="1">بله</option>
                         </select>
                     </center>
+
+                    <center>
+                        <p>آیا فیلد منتخب است؟</p>
+                        <select id="editPresenter" name="presenter">
+                            <option value="0">خیر</option>
+                            <option value="1">بله</option>
+                        </select>
+                    </center>
+
                     <center>
                         <p>نوع چینش</p>
                         <select id="editDr" name="direction">
@@ -348,6 +359,15 @@
                                 <option value="1">بله</option>
                             </select>
                         </center>
+
+                        <center>
+                            <p>آیا فیلد منتخب است؟</p>
+                            <select name="presenter">
+                                <option value="0">خیر</option>
+                                <option value="1">بله</option>
+                            </select>
+                        </center>
+
                         <center>
                             <p>نوع چینش</p>
                             <select id="editDr" name="direction">
@@ -433,6 +453,7 @@
                 $("#editNecessary").val(items[i].necessary);
                 $("#editMultiple").val(items[i].multiple);
                 $("#editHalf").val(items[i].half);
+                $("#editPresenter").val(items[i].presenter);
                 $("#editDr").val(items[i].rtl);
                 $("#editPlaceholder").append(items[i].placeholder);
                 $("#editErr").append(items[i].err);
@@ -491,6 +512,7 @@
                     err: $("#editErr").val(),
                     necessary: $("#editNecessary").val(),
                     half: $("#editHalf").val(),
+                    presenter: $("#editPresenter").val(),
                     multiple: $("#editMultiple").val(),
                     rtl: $("#editDr").val(),
                     limitations: limitations,

@@ -46,19 +46,36 @@
                                             <td>{{ $field->name }}</td>
                                             <td>{{ $field->type }}</td>
                                             <td>
-                                                @if ($field->data == null || empty($field->data))
-                                                    پاسخی ثبت نشده است
+                                                @if ($field->type === 'LISTVIEW')
+                                                    @foreach ($field->items as $item)
+                                                        @foreach ($item['data'] as $f)
+                                                            @if ($f->type === 'gallery')
+                                                                @foreach ($f->val as $img)
+                                                                    <img src="{{ $img }}" width="100px" />
+                                                                @endforeach
+                                                            @else
+                                                                {{ $f->key_ . ' : ' . $f->val }}
+                                                            @endif
+                                                        @endforeach
+                                                        <a
+                                                            href="{{ route('user_sub_asset.show', ['user_sub_asset' => $item['id']]) }}">see
+                                                            more</a>
+                                                    @endforeach
                                                 @else
-                                                    {{-- @if ($field->type == 'MAP')
-                                                        <?php $tmp = explode('_', $field->data);
-                                                        $lat = $tmp[0];
-                                                        $lng = $tmp[1]; ?>
-                                                        <a target="_blank"
-                                                            href="https://www.google.com/maps/?q={{ $lat }},{{ $lng }}">کلیک
-                                                            کنید</a>
-                                                    @else --}}
-                                                    {{ $field->data }}
-                                                    {{-- @endif --}}
+                                                    @if ($field->data == null || empty($field->data))
+                                                        پاسخی ثبت نشده است
+                                                    @else
+                                                        {{-- @if ($field->type == 'MAP')
+                                                            <?php $tmp = explode('_', $field->data);
+                                                            $lat = $tmp[0];
+                                                            $lng = $tmp[1]; ?>
+                                                            <a target="_blank"
+                                                                href="https://www.google.com/maps/?q={{ $lat }},{{ $lng }}">کلیک
+                                                                کنید</a>
+                                                        @else --}}
+                                                        {{ $field->data }}
+                                                        {{-- @endif --}}
+                                                    @endif
                                                 @endif
                                             </td>
                                             <td id="{{ $field->id }}">

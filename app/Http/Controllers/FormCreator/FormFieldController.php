@@ -107,7 +107,10 @@ class FormFieldController extends Controller
             "help" => ["nullable", "max:1000"],
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
-            "err" => ["nullable", "max:1000"]
+            "err" => ["nullable", "max:1000"],
+            'presenter' => 'nullable|boolean',
+            'rtl' => 'nullable|boolean',
+            'half' => 'nullable|boolean',
         ]);
 
         $field = new FormField();
@@ -205,7 +208,10 @@ class FormFieldController extends Controller
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
             "err" => ["nullable", "max:1000"],
-            "limitations" => 'nullable|array'
+            "limitations" => 'nullable|array',
+            'presenter' => 'nullable|boolean',
+            'rtl' => 'nullable|boolean',
+            'half' => 'nullable|boolean',
         ]);
         
         $form_field->name = $request["name"];
@@ -215,6 +221,11 @@ class FormFieldController extends Controller
             $form_field->necessary = true;
         else
             $form_field->necessary = false;
+
+        if($request->has("presenter") && $request["presenter"] == "1")
+            $form_field->presenter = true;
+        else
+            $form_field->presenter = false;
 
         if($request->has("half") && $request["half"] == "1")
             $form_field->half = true;

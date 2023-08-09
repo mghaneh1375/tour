@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $seen
  * @property boolean $adminSeen
  * @property boolean $close
+ * @property boolean $isForBusiness
  * @property string|null $msg
  * @property string|null $file
  * @property string|null $subject

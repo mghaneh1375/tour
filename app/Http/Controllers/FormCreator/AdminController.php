@@ -49,14 +49,15 @@ class AdminController extends Controller {
                     $msg .= $request['err_text'];
             }
 
-            $newTicket = Ticket::firstOrCreate(['parentId', $user_asset->ticket_id], [
+            $newTicket = Ticket::firstOrCreate(['parentId' => $user_asset->ticket_id], [
                 'userId' => $user_asset->user_id,
                 'parentId' =>  $user_asset->ticket_id,
                 'adminId' => $adminId,
-                'businessId' => $user_asset->id
+                'businessId' => $user_asset->id,
+                'isForBusiness' => false
             ]);
 
-            $parent = $newTicket->parentId;
+            $parent = Ticket::find($newTicket->parentId);
 
             $newTicket->adminSeen = 1;
             $newTicket->seen = 0;

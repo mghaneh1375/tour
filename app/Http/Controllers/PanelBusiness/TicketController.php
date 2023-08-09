@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PanelBusiness;
 
 use App\Http\Controllers\Controller;
 use App\models\Business\Business;
+use App\models\FormCreator\UserAsset;
 use App\models\Ticket;
 use App\User;
 use Carbon\Carbon;
@@ -20,7 +21,9 @@ class TicketController extends Controller {
             if($tic->businessId == 0)
                 $tic->businessName = 'آزاد';
             else
-                $tic->businessName = Business::find($tic->businessId)->name;
+                $tic->businessName = $tic->isForBusiness ? 
+                    Business::find($tic->businessId)->name : 
+                    UserAsset::find($tic->businessId)->title;
 
             $time = $tic->updated_at->format('H:i');
             $date = verta($tic->updated_at)->format('Y/m/d');
@@ -145,11 +148,14 @@ class TicketController extends Controller {
                             ->orderByDesc('tickets.updated_at')
                             ->get();
         foreach($tickets as $tic){
+
             $tic->hasNew = Ticket::where('parentId', $tic->id)->where('adminSeen', 0)->count();
             if($tic->businessId == 0)
                 $tic->businessName = 'آزاد';
             else
-                $tic->businessName = Business::find($tic->businessId)->name;
+                $tic->businessName = $tic->isForBusiness ? 
+                    Business::find($tic->businessId)->name : 
+                    UserAsset::find($tic->businessId)->title;
 
             $time = $tic->updated_at->format('H:i');
             $date = verta($tic->updated_at)->format('Y/m/d');

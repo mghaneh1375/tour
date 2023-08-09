@@ -28,7 +28,7 @@ Route::get('asset/{asset}/form', [FormController::class, 'indexAPI']);
 Route::get('form/{form}', [FormController::class, 'showAPI']);
 Route::get("form/{form}/{userAssetId}", [FormController::class, "showAPI"]);
 
-Route::apiResource('form_field', FormFieldController::class);
+// Route::apiResource('form_field', FormFieldController::class);
 Route::apiResource('user_forms_data', UserFormController::class)->except("store");
 
 // ->middleware('can:update,user_asset')

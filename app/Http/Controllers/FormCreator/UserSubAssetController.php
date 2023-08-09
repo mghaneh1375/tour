@@ -18,12 +18,51 @@ use Illuminate\Support\Facades\URL;
 class UserSubAssetController extends Controller
 {
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\models\UserAsset  $userAsset
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function show(UserSubAsset $user_sub_asset) {
+        
+        $asset = $user_sub_asset->asset;
+        
+        $forms = $asset->forms;
+        
+        $userId = $user_sub_asset->user_id;
+
+        $userAssetId = $user_sub_asset->id;
+
+        foreach ($forms as $form) {
+
+            $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $userAssetId) {
+                $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', true)->where('user_asset_id', $userAssetId);
+            })->select(['user_forms_data.id', 'err_text', 'name', 'type', 'options', 'data', 'status'])->get();
+            
+            foreach($form->fields as $itr) {
+
+                if(isset($itr->id))
+                    $itr->update_status_url = route('setFieldStatus', ['user_form_data' => $itr->id]);
+                           
+            }
+        }
+
+        return view('formCreator.report.field', [
+            'forms' => $forms, 
+            'id' => $user_sub_asset->id, 
+            'status' => $user_sub_asset->status,
+            'err_text' => $user_sub_asset->err_text
+        ]);
+    }
+
     public function edit_pic_gallery_sub(UserSubAsset $user_sub_asset, FormField $form_field, $curr_file, Request $request) {
 
 
         if($request->user()->id != $user_sub_asset->user_id)
             return abort(401);
-            
+
         if(!$user_sub_asset->is_in_form($form_field->id, false, true)) {
             return response()->json([
                 "status" => -1
