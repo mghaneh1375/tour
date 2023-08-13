@@ -191,6 +191,7 @@
         var ajaxVar = null;
         var city = null;
         var apiId = null;
+        let allData;
         var dataToSend;
         let assetId = '{{ $assetId }}';
         let firstStepFormId;
@@ -719,11 +720,9 @@
             }
         }
 
-
         function chooseSrcCityModal() {
             $("#addCityModal").modal("show");
         }
-
         $(document).on("click", ".mapMark", function() {
             $("#locMark").modal("show");
         });
@@ -967,8 +966,6 @@
             // location.reload();
         }
 
-        let allData;
-
         function editSubAsset(i, y) {
 
 
@@ -1024,12 +1021,14 @@
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
+                        text += '<label class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' :
+                            '') + ' cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
                             'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res.fields[i].options[x] + '';
                         text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
                             '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
                             '" ' + (res.fields[i].data == res.fields[i].options[x] ?
-                                'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') + '>';
+                                'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '')
+                        '>';
                         text += '</label>';
 
                     }
@@ -1045,7 +1044,8 @@
                         res.fields[i].data.split("_") : [];
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         let isSelected = data.indexOf(res.fields[i].options[x]) !== -1;
-                        text += '<label class="mg-rt-6 cursorPointer ' + (isSelected ? 'active' : '') + '" for="' + res
+                        text += '<label class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                            ' mg-rt-6 cursorPointer ' + (isSelected ? 'active' : '') + '" for="' + res
                             .fields[i].options[x] + '">' + res.fields[i].options[x] + '';
                         text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
                             '" name="' + res.fields[i].name + '"  data-id="' + res.fields[i].field_id +
@@ -1066,7 +1066,8 @@
                     text += '<input type="text" data-change="' + (res.fields[i].data != null ? '0' : '1') +
                         '" value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') + '" id="' + res
                         .fields[i].field_id +
-                        '" class="inputBoxInput" name="' + res.fields[i].name +
+                        '" class="inputBoxInput ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') + '" name="' +
+                        res.fields[i].name +
                         '" placeholder="' + (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' : '') +
                         '"' + (res.fields[i].necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
@@ -1083,7 +1084,8 @@
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-                    text += '<div id="ck' + ckeditorId + '" class="textEditor">';
+                    text += '<div id="ck' + ckeditorId + '" class="textEditor' + (res.fields[i].status == 'REJECT' ?
+                        'errorInput' : '') + '">';
                     if (res.fields[i].data !== null) {
 
                         text += res.fields[i].data;
@@ -1111,7 +1113,8 @@
                         '" id="' + res
                         .fields[i]
                         .field_id +
-                        '" class="form-control clockP" placeholder="' + (res.fields[i]
+                        '" class="form-control clockP ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        '" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
@@ -1141,7 +1144,8 @@
                                 res.fields[i].data +
                                 '' :
                                 '') + '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
-                            '" class="inputBoxInput phone" placeholder="' + (res
+                            '" class="inputBoxInput phone ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                            '" placeholder="' + (res
                                 .fields[
                                     i]
                                 .placeholder !=
@@ -1190,18 +1194,24 @@
                         elm +=
                             '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
                         elm +=
-                            '<input id="searchInput" class"inputBoxInput" type="search" style="width:100%;border:0px;position:relative;">';
+                            '<input id="searchInput" class"inputBoxInput " type="search" style="width:100%;border:0px;position:relative;">';
                         elm += '</div>';
                         elm += '</div>';
                         elm += '</div>';
                         for (let y = 0; y < res.fields[i].items.length; y++) {
 
-                            let name, img, count, rId;
+                            let name, img, count, rId, roomStatus;
                             rId = res.fields[i].items[y].id;
 
+                            for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
+                                if (res.fields[i].items[y].fields[m].status == 'REJECT') {
+                                    roomStatus = false;
+                                }
+                            }
                             text +=
                                 '<div id="subAsset_' + rId +
-                                '" class="relative-position inputBoxTour boxRoom" style="order: 2">';
+                                '" class=" ' + (roomStatus ? 'errorInput' : '') +
+                                'relative-position inputBoxTour boxRoom" style="order: 2">';
 
                             text += '<div class="row" >';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
@@ -1221,7 +1231,6 @@
                             }
 
                             text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
-                            console.log(img);
                             if (img === undefined || img === 'https://boom.bogenstudio.com/../storage/default.png') {
                                 text +=
                                     '<div style="height: 100%;align-items: center;display: flex;"><i class="boomIcon" style="font-size: 130px;font-style: unset;"></i></div>';
@@ -1370,7 +1379,8 @@
                         '" id="' + res
                         .fields[
                             i].field_id +
-                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                        '" class="inputBoxInput ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        '" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
@@ -1392,7 +1402,8 @@
                     text += '<input data-change="' + (res.fields[i].data != null ? '0' : '1') +
                         '" type="file" name="' + res.fields[i].name + '" style=" display:' + (res.fields[i].data != null ?
                             'none' : '') +
-                        '"  id="' + res.fields[i].field_id + '" class=" inputBoxInput file"' + (res.fields[i]
+                        '"  id="' + res.fields[i].field_id + '" class=" inputBoxInput file ' + (res.fields[i].status ==
+                            'REJECT' ? 'errorInput' : '') + '"' + (res.fields[i]
                             .necessary ==
                             1 ? 'required ' : '') + '>';
                     if (res.fields[i].data != null) {
@@ -1450,7 +1461,8 @@
                         '" id="' + res
                         .fields[i]
                         .field_id +
-                        '" class="inputBoxInput mapMark" placeholder="' + (res.fields[i]
+                        '" class="inputBoxInput mapMark ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        '" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
@@ -1508,7 +1520,8 @@
                     text += '<textarea name="' + res.fields[i].name + '" id="' + res
                         .fields[i]
                         .field_id +
-                        '" class="inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
+                        '" class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        'inputBoxInput fullwidthDiv text-align-right full-height textareaInForDescription"  placeholder="' +
                         (res.fields[i].placeholder != null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
                             .fields[i]
@@ -1531,7 +1544,8 @@
                     text += ' <input onkeydown="return false;" value="' + (res.fields[i].data != null ? '' + res.fields[i]
                             .data + '' : '') + '" name="' + res.fields[i].name + '" name="sDateNotSame[]" id="' +
                         res.fields[i].field_id +
-                        '" class="observer-example inputBoxInput" type="text" style="direction: ltr;" placeholder="' +
+                        '" class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        'observer-example inputBoxInput" type="text" style="direction: ltr;" placeholder="' +
                         (
                             res
                             .fields[i].placeholder != null ?
@@ -1555,7 +1569,8 @@
                         .fields[i]
                         .type +
                         '" id="' + res.fields[i].field_id +
-                        '" class="inputBoxInput" placeholder="' + (res.fields[i]
+                        '" class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                        'inputBoxInput" placeholder="' + (res.fields[i]
                             .placeholder !=
                             null ?
                             '' + res.fields[i].placeholder + '' : '') + '"' + (res
@@ -1569,7 +1584,7 @@
                     if (multipleVal) {
                         for (x = 0; x < moreItems.length; x++) {
                             itemsVal = moreItems[x];
-                            text += '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                            text += '<div class="itemsAdd "><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
                                 ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
                                 moreItems[x] + '';
                             text += '</div>';
@@ -1579,8 +1594,12 @@
                     }
                     text += '</div>';
                 }
-                if (res.fields[i].force_help && res.fields[i].force_help !== "") {
+                if (res.fields[i].force_help !== null && res.fields[i].force_help !== "") {
                     text += '<figcaption style="width: 100%;"> ' + res.fields[i].force_help + '';
+                    text += '</figcaption>';
+                }
+                if (res.fields[i].err_text != null && res.fields[i].err_text !== "") {
+                    text += '<figcaption style="width: 100%;"> ' + res.fields[i].err_text + '';
                     text += '</figcaption>';
                 }
             }

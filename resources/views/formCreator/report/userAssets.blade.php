@@ -37,6 +37,7 @@
                             {{-- <td><img width="100px" src="{{ URL::asset('storage/' . $asset->pic) }}"></td> --}}
                             <?php $i = 1; ?>
                             @foreach ($userAssets as $asset)
+                                {{-- {{ dd($asset) }} --}}
                                 {{-- onclick="document.location.href = '{{ route('businessPanel.getSpecificUnChecked', ['business' => $request->id]) }}'" --}}
                                 <tr id="tr_{{ $asset['id'] }}" style="cursor: pointer">
                                     <td>{{ $i }}</td>
@@ -92,11 +93,16 @@
 
                     <center>
                         <p>وضعیت مورد نظر</p>
-                        <select id="status" name="status">
+                        <select id="status" name="status" onchange="changeState()">
                             <option value="PENDING"> در حال بررسی </option>
                             <option value="REJECT">رد شده</option>
                             <option value="CONFIRM"> تایید شده </option>
                         </select>
+                    </center>
+                    <center id="errBox" class="hidden"style="margin-top: 10px;">
+
+                        <p style="margin: 0;">علت رد شدن</p>
+                        <textarea id="rejecedText" type="textarea" placeholder="اختیاری"></textarea>
                     </center>
 
                 </div>
@@ -193,6 +199,14 @@
             selectedId = id;
         }
 
+        function changeState() {
+            if ($("#status").val() == 'REJECT') {
+                $("#errBox").removeClass('hidden');
+            } else {
+                $("#errBox").addClass('hidden');
+            }
+        }
+
         function doRemove() {
 
             $.ajax({
@@ -215,6 +229,7 @@
                 selectedState = 'REJECT';
             } else if (state === 'تایید شده') {
                 selectedState = 'CONFIRM';
+
             } else {
                 selectedState = 'PENDING';
             }
@@ -222,14 +237,15 @@
         }
 
         function doChangeStatus() {
-
+            errText = $('#rejecedText').val()
             var newStatus = $("#status").val();
             var newStatusFa = $("#status option:selected").text();
             $.ajax({
                 type: 'post',
                 url: '{{ url('boom/setAssetStatus') }}' + "/" + selectedId,
                 data: {
-                    'status': newStatus
+                    'status': newStatus,
+                    'err_text': errText
                 },
                 success: function(res) {
                     if (res.status == "0") {

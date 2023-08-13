@@ -86,8 +86,8 @@
                                     <td style="width:13%">
                                         <button data-toggle="modal" data-target="#editModal"
                                             onclick="editForm('{{ $field->id }}', '{{ $field->rtl ? 'rtl' : 'ltr' }}','{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}', '{{ $field->editUrl }}')"
-                                            class="btn btn-primary"data-placement="top" title="ویرایش فبلد"> <span
-                                                class="glyphicon glyphicon-edit"></span></button>
+                                            class="btn btn-primary"data-placement="top" title="ویرایش فبلد">
+                                            <span class="glyphicon glyphicon-edit"></span></button>
                                         <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
                                             onclick="remove('{{ $field->id }}')"data-placement="top"title="حذف"><span
                                                 class="glyphicon glyphicon-trash"></span></button>
@@ -433,12 +433,14 @@
             items = forms.filter(x => x.id == id);
 
             for (let i = 0; i < items.length; i++) {
+                console.log(items[i]);
                 url = u;
+
+
+
                 $('textarea').empty();
                 $('input:checkbox').removeAttr('checked');
-                console.log();
                 if (items[i].type.indexOf('RADIO') > -1) {
-
                     $("#editType").val('RADIO');
                     $("#options").removeClass('hidden');
                     $("textarea[name='options']").append();
@@ -446,7 +448,11 @@
                     $("#editType").val('CHECKBOX');
                     $("#options").removeClass('hidden');
                 } else {
-                    $("#editType").val(items[i].type);
+                    $("#editType option").each(function() {
+                        if ($(this).text() === items[i].type) {
+                            $(this).attr('selected', true);
+                        }
+                    });
                 }
 
                 $("#editName").val(items[i].name);
