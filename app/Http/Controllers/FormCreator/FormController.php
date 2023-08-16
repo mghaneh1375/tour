@@ -31,7 +31,6 @@ class FormController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexAPI(Asset $asset) {
-
         return response()->json([
             "status" => 0,
             "forms" => $asset->forms()->orderBy('step', 'asc')->get()
@@ -149,7 +148,7 @@ class FormController extends Controller
             }
         }
         else {
-            $fields = $form->form_fields()->select(['form_fields.id as field_id', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'help', 'force_help', 'multiple', 'options'])->get();
+            $fields = $form->form_fields()->select(['form_fields.id as field_id', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'help', 'force_help', 'multiple', 'options','key_'])->get();
         }
 
         foreach($fields as $field) {

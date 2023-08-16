@@ -45,7 +45,7 @@
                             <td>عملیات</td>
                         </tr>
                     </thead>
-                    @foreach ($asset->forms as $form)
+                    @foreach ($asset->forms()->orderBy('step', 'asc')->get() as $form)
                         <tr id="tr_{{ $form->id }}">
                             <td>{{ $form->step }}</td>
                             <td>{{ $form->name }}</td>

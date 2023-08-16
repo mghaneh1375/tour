@@ -122,14 +122,19 @@
                     <h4 class="modal-title">افزودن فیلد</h4>
                 </div>
                 <div class="modal-body">
+                    <div style="display: flex;flex-wrap: wrap;justify-content: space-evenly;margin-bottom:20px">
+                        <div>
+                            <label for="name">نام</label>
+                            <input id="editName" type="text" name="name">
+                        </div>
+                        <div>
+                            <label for="key">کلید</label>
+                            <input id="editKey" type="text" name="key">
+                        </div>
+                    </div>
 
-                    <center>
-                        <p>نام</p>
-                        <input id="editName" type="text" name="name">
-                    </center>
-
-                    <center>
-                        <p>نوع ورودی</p>
+                    <center style="margin-bottom:10px">
+                        <label for="type">نوع ورودی</label>
                         <select id="editType" name="type" onchange="changeType(this.options[this.selectedIndex].text)">
                             <option value="INT">عدد صحیح</option>
                             <option value="FLOAT">عدد اعشاری</option>
@@ -150,7 +155,7 @@
                     </center>
 
                     <center id="subAssets" class="hidden subAssets">
-                        <p>sub asset مورد نظر</p>
+                        <label for="subAsset">sub asset مورد نظر</label>
                         <select name="subAsset">
                             <option value="-1">انتخاب کنید</option>
                             @foreach ($subAssets as $subAsset)
@@ -160,7 +165,7 @@
                     </center>
 
                     <center id="forms" class="hidden forms">
-                        <p>فرم مورد نظر</p>
+                        <label for="form">فرم مورد نظر</label>
                         <select name="form">
                             <option value="-1">انتخاب کنید</option>
                             @foreach ($forms as $f)
@@ -174,7 +179,7 @@
 
                     <center id="options" class="hidden options">
                         <p id="optionsLabel" class="optionsLabel"></p>
-                        <textarea name="options"></textarea>
+                        <textarea id="showOptions" style="width:100%;" name="options"></textarea>
                     </center>
 
                     <center>
@@ -196,13 +201,10 @@
                         <p>force help</p>
                         <textarea id="editForceHelp" style="width:100%;" name="force_help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
-                    <center style="margin-bottom: 10px;">
-                        <p>کلید</p>
-                        <input id="editKey" type="text" name="key">
-                    </center>
 
-                    <div style="display: flex;flex-wrap: wrap;">
-                        <div style="display: flex;width: 51%;justify-content: space-between;margin-left:5px">
+                    <div style="display: flex;flex-wrap: wrap;margin-top:10px">
+                        <div
+                            style="display: flex;width: 51%;justify-content: space-between;margin-left:5px;margin-bottom:5px">
                             <label for="necessary">آیا پر کردن این فیلد اجباری است؟</label>
                             <select id="editNecessary" name="necessary">
                                 <option value="1">بله</option>
@@ -210,14 +212,15 @@
                             </select>
                         </div>
 
-                        <div style="display: flex;width: 45%;justify-content: space-between;">
+                        <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
                             <label for="presenter">آیا فیلد منتخب است؟</label>
                             <select id="editPresenter" name="presenter">
                                 <option value="0">خیر</option>
                                 <option value="1">بله</option>
                             </select>
                         </div>
-                        <div style="display: flex;width: 51%;justify-content: space-between;margin-left:5px">
+                        <div
+                            style="display: flex;width: 51%;justify-content: space-between;margin-left:5px;margin-bottom:5px">
                             <label for="multiple">آیا کاربر می تواند چند ورودی داشته باشد؟</label>
                             <select id="editMultiple" name="multiple">
                                 <option value="0">خیر</option>
@@ -225,7 +228,7 @@
                             </select>
                             </span>
                         </div>
-                        <div style="display: flex;width: 45%;justify-content: space-between;">
+                        <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
                             <label for="direction">نوع چینش</label>
                             <select id="editDr" name="direction">
                                 <option value="0">ltr</option>
@@ -234,7 +237,7 @@
                         </div>
 
 
-                        <div style="display: flex;width: 51%;justify-content: space-between;">
+                        <div style="display: flex;width: 51%;justify-content: space-between;margin-bottom:5px">
                             <label for="half">آیا این فیلد کل عرض را بگیرد؟</label>
                             <select id="editHalf"name="half">
                                 <option value="1">بله</option>
@@ -242,27 +245,29 @@
                             </select>
                         </div>
                     </div>
-                    <center>
-                        <p>محدودیت ها</p>
+                    <div style="display: flex;align-items: center;margin-top:10px">
+                        <label style="margin-left: 25px;">محدودیت ها</label>
 
                         <div>
-                            <label for="nid">صحت سنجی کد ملی</label>
-                            <input id="nid" type="checkbox" onchange="change()" name="limitations[]"
-                                value="9">
+                            <div>
+                                <label for="nid">صحت سنجی کد ملی</label>
+                                <input id="nid" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="9">
+                            </div>
+
+                            <div>
+                                <label for="minChar">محدودیت تعداد کاراکتر</label>
+                                <input id="minChar" type="checkbox" onchange="changeCharLimitEdit()"
+                                    name="limitations[]" value="1">
+                            </div>
+
+                            <div id="charCountDiv" class="hidden">
+                                <label for="charCount">تعداد کاراکتر مورد نظر</label>
+                                <input id="charCount" type="number" name="charCount">
+                            </div>
                         </div>
 
-                        <div>
-                            <label for="minChar">محدودیت تعداد کاراکتر</label>
-                            <input id="minChar" type="checkbox" onchange="changeCharLimitEdit()" name="limitations[]"
-                                value="1">
-                        </div>
-
-                        <div id="charCountDiv" class="hidden">
-                            <label for="charCount">تعداد کاراکتر مورد نظر</label>
-                            <input id="charCount" type="number" name="charCount">
-                        </div>
-
-                    </center>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -287,13 +292,20 @@
                     </div>
                     <div class="modal-body">
 
-                        <center>
-                            <p>نام</p>
-                            <input type="text" name="name">
-                        </center>
+                        <div style="display: flex;flex-wrap: wrap;justify-content: space-evenly;margin-bottom:20px">
+                            <div>
+                                <label for="name">نام</label>
+                                <input type="text" name="name">
+                            </div>
+                            <div>
+                                <label for="key">کلید</label>
+                                <input type="text" name="key">
+                            </div>
+                        </div>
 
-                        <center>
-                            <p>نوع ورودی</p>
+
+                        <center style="margin-bottom:10px">
+                            <label for="type">نوع ورودی</label>
                             <select name="type" onchange="changeType(this.options[this.selectedIndex].text)">
                                 <option value="INT">عدد صحیح</option>
                                 <option value="FLOAT">عدد اعشاری</option>
@@ -314,7 +326,7 @@
                         </center>
 
                         <center id="subAssets" class="hidden subAssets">
-                            <p>sub asset مورد نظر</p>
+                            <label for="subAsset">sub asset مورد نظر</label>
                             <select name="subAsset">
                                 <option value="-1">انتخاب کنید</option>
                                 @foreach ($subAssets as $subAsset)
@@ -324,7 +336,7 @@
                         </center>
 
                         <center id="forms" class="hidden forms">
-                            <p>فرم مورد نظر</p>
+                            <label for="form">فرم مورد نظر</label>
                             <select name="form">
                                 <option value="-1">انتخاب کنید</option>
                                 @foreach ($forms as $f)
@@ -334,8 +346,8 @@
                         </center>
 
                         <center id="options" class="options hidden">
-                            <p id="optionsLabel" class="optionsLabel"></p>
-                            <textarea name="options"></textarea>
+                            <label for="options" id="optionsLabel" class="optionsLabel"></label>
+                            <textarea name="options" style="width: 100%"></textarea>
                         </center>
 
                         <center>
@@ -357,69 +369,73 @@
                             <p>force help</p>
                             <textarea name="force_help" style="width:100%;"></textarea>
                         </center>
-                        <center>
-                            <p>کلید</p>
-                            <input type="text" name="key_">
-                        </center>
-                        <center>
-                            <p>آیا پر کردن این فیلد اجباری است؟</p>
-                            <select name="necessary">
-                                <option value="1">بله</option>
-                                <option value="0">خیر</option>
-                            </select>
-                        </center>
 
-                        <center>
-                            <p>آیا کاربر می تواند چند ورودی داشته باشد؟</p>
-                            <select name="multiple">
-                                <option value="0">خیر</option>
-                                <option value="1">بله</option>
-                            </select>
-                        </center>
+                        <div style="display: flex;flex-wrap: wrap;margin-top:10px">
+                            <div
+                                style="display: flex;width: 51%;justify-content: space-between;margin-left:5px;margin-bottom:5px">
+                                <label for="necessary">آیا پر کردن این فیلد اجباری است؟</label>
+                                <select name="necessary">
+                                    <option value="1">بله</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                            </div>
 
-                        <center>
-                            <p>آیا فیلد منتخب است؟</p>
-                            <select name="presenter">
-                                <option value="0">خیر</option>
-                                <option value="1">بله</option>
-                            </select>
-                        </center>
+                            <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
+                                <label for="presenter">آیا فیلد منتخب است؟</label>
+                                <select name="presenter">
+                                    <option value="0">خیر</option>
+                                    <option value="1">بله</option>
+                                </select>
+                            </div>
+                            <div
+                                style="display: flex;width: 51%;justify-content: space-between;margin-left:5px;margin-bottom:5px">
+                                <label for="multiple">آیا کاربر می تواند چند ورودی داشته باشد؟</label>
+                                <select name="multiple">
+                                    <option value="0">خیر</option>
+                                    <option value="1">بله</option>
+                                </select>
+                                </span>
+                            </div>
+                            <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
+                                <label for="direction">نوع چینش</label>
+                                <select name="direction">
+                                    <option value="0">ltr</option>
+                                    <option value="1">rtl</option>
+                                </select>
+                            </div>
 
-                        <center>
-                            <p>نوع چینش</p>
-                            <select id="editDr" name="direction">
-                                <option value="0">ltr</option>
-                                <option value="1">rtl</option>
-                            </select>
-                        </center>
-                        <center>
-                            <p>آیا این فیلد کل عرض را بگیرد؟</p>
-                            <select name="half">
-                                <option value="0">بله</option>
-                                <option value="1">خیر</option>
-                            </select>
-                        </center>
 
-                        <center>
-                            <p>محدودیت ها</p>
+                            <div style="display: flex;width: 51%;justify-content: space-between;margin-bottom:5px">
+                                <label for="half">آیا این فیلد کل عرض را بگیرد؟</label>
+                                <select name="half">
+                                    <option value="1">بله</option>
+                                    <option value="0">خیر</option>
+                                </select>
+                            </div>
+                        </div>
 
+                        <div style="display: flex;align-items: center;margin-top:10px">
+                            <label style="margin-left: 25px;">محدودیت ها</label>
                             <div>
-                                <label for="nid">صحت سنجی کد ملی</label>
-                                <input id="nid" type="checkbox" name="limitations[]" value="9">
+
+                                <div>
+                                    <label for="nid">صحت سنجی کد ملی</label>
+                                    <input id="nid" type="checkbox" name="limitations[]" value="9">
+                                </div>
+
+                                <div>
+                                    <label for="minChar">محدودیت تعداد کاراکتر</label>
+                                    <input id="minChar" class="minCharadd" type="checkbox"
+                                        onchange="changeCharLimit()" name="limitations[]" value="1">
+                                </div>
+
+                                <div id="charCountDivAdd" class="hidden">
+                                    <label for="charCount">تعداد کاراکتر مورد نظر</label>
+                                    <input id="charCount" type="number" name="charCount">
+                                </div>
                             </div>
 
-                            <div>
-                                <label for="minChar">محدودیت تعداد کاراکتر</label>
-                                <input id="minChar" class="minCharadd" type="checkbox" onchange="changeCharLimit()"
-                                    name="limitations[]" value="1">
-                            </div>
-
-                            <div id="charCountDivAdd" class="hidden">
-                                <label for="charCount">تعداد کاراکتر مورد نظر</label>
-                                <input id="charCount" type="number" name="charCount">
-                            </div>
-
-                        </center>
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -494,11 +510,13 @@
                 $("#editHelp").append(items[i].help);
                 $("#editKey").val(items[i].key_);
                 $("#editForceHelp").append(items[i].force_help);
+                $("#showOptions").append(items[i].options);
                 limitations = items[i].limitation;
                 if (limitations.indexOf('ملی') > -1 && limitations.indexOf('کاراکتر') != -1) {
                     $('#nid').prop('checked', true);
                     $('#minChar').prop('checked', true);
                     str = limitations.replace(/[^\d.]/g, '');
+                    console.log(str);
                     total = parseInt(str, 10);
                     $("#charCount").val(total);
                     $("#charCountDiv").removeClass("hidden");
@@ -508,6 +526,7 @@
                     $('#minChar').prop('checked', true);
                     $("#charCountDiv").removeClass("hidden");
                     str = limitations.replace(/[^\d.]/g, '');
+                    console.log(str);
                     total = parseInt(str, 10);
                     $("#charCount").val(total);
                 } else {
@@ -566,6 +585,7 @@
         }
 
         function changeType(val) {
+            $("#showOptions").empty();
             $(".optionsLabel").empty();
             $(".subAssets").addClass('hidden');
             $(".forms").addClass('hidden');
