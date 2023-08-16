@@ -34,7 +34,6 @@ class UserSubAssetController extends Controller
         $userId = $user_sub_asset->user_id;
 
         $userAssetId = $user_sub_asset->id;
-
         foreach ($forms as $form) {
 
             $form->fields = $form->form_fields()->where("type", "!=", "REDIRECTOR")->leftJoin("user_forms_data", function ($join) use ($userId, $userAssetId) {

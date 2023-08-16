@@ -211,8 +211,8 @@ class FormController extends Controller
             }
 
             else if($field->type == "listview") {
-
-                $field->formId = Form::where('asset_id',$field->options[0])->where('step', 1)->first()->id;
+                
+                // $field->formId = Form::where('asset_id',$field->options[0])->where('step', 1)->first()->id;
 
                 if($isSubAsset) {
                     if($userSubAsset == null)

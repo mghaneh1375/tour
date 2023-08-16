@@ -44,6 +44,7 @@
 @section('script')
     <script script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        let url = '{{ route('formCreator.root') }}';
         let selectedAssetId;
         let firstStepFormId;
 
@@ -65,7 +66,7 @@
         $.ajax({
             type: 'get',
             // url: 'http://myeghamat.com/api/asset',
-            url: 'https://boom.bogenstudio.com/api/asset',
+            url: url + '/asset',
             complete: closeLoading,
             headers: {
                 'Accept': 'application/json',

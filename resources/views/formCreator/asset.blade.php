@@ -56,8 +56,10 @@
                             @else
                                 <td>1/3 </td>
                             @endif
-                            <td><img src="{{ URL::asset('assets/' . $asset->pic) }}"></td>
-                            <td><img src="{{ URL::asset('assets/' . $asset->create_pic) }}"></td>
+                            <td style="width: 100px"><img style="width:100%"
+                                    src="{{ URL::asset('assets/' . $asset->pic) }}"></td>
+                            <td style="width: 100px"><img style="width:100%"
+                                    src="{{ URL::asset('assets/' . $asset->create_pic) }}"></td>
                             <td>{{ $asset->view_index }}</td>
                             <td>{{ $asset->hidden ? 'عدم نمایش' : 'قابل نمایش' }}</td>
                             <td>

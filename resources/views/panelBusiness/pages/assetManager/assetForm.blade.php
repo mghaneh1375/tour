@@ -211,6 +211,7 @@
         var formComplite = 0;
         var ageVal;
         var percent;
+        var filePic = false;
         let isInFirstStep = false;
         var listview = false;
         var itemsVal = null;
@@ -248,6 +249,7 @@
                 },
                 data: fileStore,
                 success: function(res) {
+                    console.log(res);
                     if (res.status === "0") {
                         window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     } else {}
@@ -279,8 +281,16 @@
                         success: function(res) {
                             if (res.status === "0") {
                                 userAssetId = res.id;
-                                storePic(userAssetId, fields);
-                            } else {}
+                                console.log(filePic);
+                                if (filePic) {
+                                    storePic(userAssetId, fields);
+                                } else {
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                        userAssetId;
+                                }
+                            } else {
+
+                            }
                         }
 
                     });
@@ -302,11 +312,13 @@
                             success: function(res) {
                                 if (res.status === "0") {
 
-                                    if (fields[1]) {
+                                    if (filePic) {
                                         storePic(userAssetId, fields);
+                                    } else {
+                                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                            "/" +
+                                            userAssetId;
                                     }
-                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                        userAssetId;
 
                                 } else {
                                     showSuccessNotifiBP(res.errs, 'right', '#ac0020');
@@ -340,7 +352,6 @@
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
                                     userAssetId;
                             } else {
-                                console.log('mooz');
                                 lastPage();
                             }
                         } else {
@@ -487,6 +498,11 @@
                         tmp.hasSelected = true;
 
                 }
+                if ($(this).attr('type') === 'file') {
+                    if ($(this).val() === '') {
+                        filePic = true;
+                    }
+                }
                 if ($(this).attr('required')) {
                     if ($(this).val() === '') {
                         errorText += '<ul class="errorList"> ';
@@ -599,8 +615,10 @@
 
                             if (i > 0)
                                 prevFromId = res.forms[i - 1].id;
-                            if (i < res.forms.length - 1)
+                            if (i < res.forms.length - 1) {
                                 nextFormId = res.forms[i + 1].id;
+                                console.log(nextFormId);
+                            }
                             if (nextFormId == undefined) {
                                 $('.nextPageVal').empty().append("ثبت نهایی");
 
@@ -861,9 +879,12 @@
                 success: function(res) {
                     if (res.status === 0) {
                         console.log(res.status);
-                        // userAssetId = res.id;
-                        // storePic(userAssetId, fields);
-                        location.reload();
+                        userAssetId = res.id;
+                        console.log(userAssetId);
+                        if (filePic) {
+                            storePic(userAssetId, fields);
+                        }
+                        // location.reload();
                     } else {
                         console.log(res.status);
                     }
@@ -1177,22 +1198,27 @@
                 } else if (res.fields[i].type.toLowerCase() == 'listview') {
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
+                        console.log(res.fields[i].name);
+                        subAsserName = res.fields[i].name;
                     }
+                    console.log('1');
                     if (res.fields[i].items.length < 1) {
-
-                        elm += '<div style="width:100%;">هنوز اتاقی تعریف نشده است.</div>';
+                        console.log('2');
+                        elm += '<div style="width:100%;">هنوز ' + subAsserName + ' تعریف نشده است.</div>';
                         elm += '';
                     } else {
                         listview = true;
                         roomCount = res.fields[i].items.length;
                         sameRoom = res.fields[i].items[4];
                         elm += '<div style="width:100%;align-items: baseline;" class="row">';
-                        elm += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' اتاق موجود است.</div>';
+                        elm += '<div style="padding-left:10px">در حال حاضر ' + roomCount + ' ' + subAsserName +
+                            ' موجود است.</div>';
                         elm += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: 30%;"';
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
 
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام اتاق</div>';
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام ' +
+                            subAsserName + '</div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput " type="search" style="width:100%;border:0px;position:relative;">';
                         elm += '</div>';
@@ -1219,31 +1245,36 @@
                                 if (res.fields[i].items[y].fields[m].type == 'string') {
                                     roomName.push(res.fields[i].items[y].fields[m].val);
                                     name = res.fields[i].items[y].fields[m].val;
+                                    nameKey = res.fields[i].items[y].fields[m].key_;
 
-                                }
-                                if (res.fields[i].items[y].fields[m].type == 'gallery') {
-                                    img = res.fields[i].items[y].fields[m].val[0];
                                 }
                                 if (res.fields[i].items[y].fields[m].type == 'textarea') {}
                                 if (res.fields[i].items[y].fields[m].type == 'int') {
                                     count = res.fields[i].items[y].fields[m].val;
+                                    countKey = res.fields[i].items[y].fields[m].key_;
                                 }
                             }
 
                             text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
+                            for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
+                                if (res.fields[i].items[y].fields[m].type == 'gallery') {
+                                    img = res.fields[i].items[y].fields[m].val[0];
+                                }
+                            }
                             if (img === undefined || img === 'https://boom.bogenstudio.com/../storage/default.png') {
                                 text +=
                                     '<div style="height: 100%;align-items: center;display: flex;"><i class="boomIcon" style="font-size: 130px;font-style: unset;"></i></div>';
                             } else {
-                                text += '<img src="' + img + '" style="height: 100%; width: 100%;object-fit: contain;">';
+                                text += '<img src="' + img +
+                                    '" style="height: 100%; width: 100%;object-fit: contain;">';
                             }
                             text += '</div>';
                             text +=
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
                             text += '<div>';
-                            text += '<div class="colorOrag bold"> نام اتاق</div>';
+                            text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
                             text += '<div class="bold roomName">' + name + ' </div>';
-                            text += '<div class="colorOrag bold">تعداد اتاق</div>';
+                            text += '<div class="colorOrag bold">تعداد ' + subAsserName + '</div>';
                             text += '<div class="bold">' + count + ' </div>';
                             text += '</div>';
                             text += '<div class="row SpaceBetween" style="padding-bottom: 5px;">';

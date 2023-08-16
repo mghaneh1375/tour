@@ -47,8 +47,8 @@
 
                 <div class="sparkline8-graph dashone-comment messages-scrollbar dashtwo-messages">
                     <button data-toggle="modal" data-target="#addModal"
-                        class="btn btn-success"data-placement="top"title="افزودن فیلد جدید"><i
-                            class="plus2 iconStyle"></i></button>
+                        class="btn btn-success"data-placement="top"title="افزودن فیلد جدید"><i class="plus2 iconStyle"
+                            onclick="changeType(' ') "></i></button>
 
                     <div style="direction: rtl; overflow: auto;padding-top:5px">
                         <table class="table table-striped">
@@ -124,7 +124,7 @@
 
                     <center>
                         <p>نوع ورودی</p>
-                        <select id="editType" name="type" onchange="changeType(this.value)">
+                        <select id="editType" name="type" onchange="changeType(this.options[this.selectedIndex].text)">
                             <option value="INT">عدد صحیح</option>
                             <option value="FLOAT">عدد اعشاری</option>
                             <option value="STRING">رشته حروف</option>
@@ -143,7 +143,7 @@
                         </select>
                     </center>
 
-                    <center id="subAssets" class="hidden">
+                    <center id="subAssets" class="hidden subAssets">
                         <p>sub asset مورد نظر</p>
                         <select name="subAsset">
                             <option value="-1">انتخاب کنید</option>
@@ -153,18 +153,21 @@
                         </select>
                     </center>
 
-                    <center id="forms" class="hidden">
+                    <center id="forms" class="hidden forms">
                         <p>فرم مورد نظر</p>
                         <select name="form">
                             <option value="-1">انتخاب کنید</option>
                             @foreach ($forms as $f)
                                 <option value="{{ $f->id }}">{{ $f->name }}</option>
                             @endforeach
+                            @foreach ($subAssets as $subAsset)
+                                <option value="{{ $subAsset->id }}">{{ $subAsset->name }}</option>
+                            @endforeach
                         </select>
                     </center>
 
-                    <center id="options" class="hidden">
-                        <p id="optionsLabel"></p>
+                    <center id="options" class="hidden options">
+                        <p id="optionsLabel" class="optionsLabel"></p>
                         <textarea name="options"></textarea>
                     </center>
 
@@ -280,7 +283,7 @@
 
                         <center>
                             <p>نوع ورودی</p>
-                            <select name="type" onchange="changeType(this.value)">
+                            <select name="type" onchange="changeType(this.options[this.selectedIndex].text)">
                                 <option value="INT">عدد صحیح</option>
                                 <option value="FLOAT">عدد اعشاری</option>
                                 <option value="STRING">رشته حروف</option>
@@ -299,7 +302,7 @@
                             </select>
                         </center>
 
-                        <center id="subAssets" class="hidden">
+                        <center id="subAssets" class="hidden subAssets">
                             <p>sub asset مورد نظر</p>
                             <select name="subAsset">
                                 <option value="-1">انتخاب کنید</option>
@@ -309,7 +312,7 @@
                             </select>
                         </center>
 
-                        <center id="forms" class="hidden">
+                        <center id="forms" class="hidden forms">
                             <p>فرم مورد نظر</p>
                             <select name="form">
                                 <option value="-1">انتخاب کنید</option>
@@ -319,8 +322,8 @@
                             </select>
                         </center>
 
-                        <center id="options" class="hidden">
-                            <p id="optionsLabel"></p>
+                        <center id="options" class="options hidden">
+                            <p id="optionsLabel" class="optionsLabel"></p>
                             <textarea name="options"></textarea>
                         </center>
 
@@ -433,26 +436,35 @@
             items = forms.filter(x => x.id == id);
 
             for (let i = 0; i < items.length; i++) {
-                console.log(items[i]);
                 url = u;
-
-
-
+                $('#editType option').attr('selected', false);
+                // $("#editType option").attr('selected', false);
                 $('textarea').empty();
                 $('input:checkbox').removeAttr('checked');
-                if (items[i].type.indexOf('RADIO') > -1) {
-                    $("#editType").val('RADIO');
-                    $("#options").removeClass('hidden');
-                    $("textarea[name='options']").append();
-                } else if (items[i].type.indexOf('CHECKBOX') > -1) {
-                    $("#editType").val('CHECKBOX');
-                    $("#options").removeClass('hidden');
-                } else {
-                    $("#editType option").each(function() {
-                        if ($(this).text() === items[i].type) {
-                            $(this).attr('selected', true);
-                        }
-                    });
+                // if (items[i].type.indexOf('RADIO') > -1) {
+                //     $("#editType").val('RADIO');
+                //     $("#options").removeClass('hidden');
+                //     $("textarea[name='options']").append();
+                // } else if (items[i].type.indexOf('CHECKBOX') > -1) {
+                //     $("#editType").val('CHECKBOX');
+                //     $("#options").removeClass('hidden');
+                // } else {
+                // }
+
+                $("#editType option").each(function() {
+                    if ($(this).text() === items[i].type) {
+                        console.log(items[i].type);
+                        changeType($(this).text());
+                        $(this).attr('selected', true);
+                    } else {
+                        return;
+                    }
+
+                });
+                if (items[i].type.indexOf('API') > -1) {
+                    console.log('123');
+                    changeType('API');
+                    $('#editType option[value="API"]').attr('selected', true);
                 }
 
                 $("#editName").val(items[i].name);
@@ -482,8 +494,8 @@
                     total = parseInt(str, 10);
                     $("#charCount").val(total);
                 } else {
-                    nothing = items[i].limitation;
-                    limitations.push(nothing);
+                    // console.log(limitations);
+                    // limitations.push('محدودیتی موجود نیست');
                 }
             }
         }
@@ -536,28 +548,30 @@
         }
 
         function changeType(val) {
+            $(".optionsLabel").empty();
+            $(".subAssets").addClass('hidden');
+            $(".forms").addClass('hidden');
+            $(".options").addClass('hidden');
+            if (val === "لیستی از sub assets") {
+                $(".subAssets").removeClass('hidden');
+                return;
+            } else if (val === "هدایت گر به فرم دیگر") {
+                $(".forms").removeClass('hidden');
+            } else if (val === "انتخاب چند گزینه از میان گزینه های موجود" || val ===
+                "انتخاب یک گزینه از میان گزینه های موجود" || val === 'API') {
+                console.log('api');
+                $(".options").removeClass('hidden');
 
-            if (val === "LISTVIEW")
-                $("#subAssets").removeClass('hidden');
-            else
-                $("#subAssets").addClass('hidden');
-
-            if (val === "REDIRECTOR")
-                $("#forms").removeClass('hidden');
-            else
-                $("#forms").addClass('hidden');
-
-            if (val === "CHECKBOX" || val === "RADIO" || val === "API")
-                $("#options").removeClass('hidden');
-            else
-                $("#options").addClass('hidden');
-
-            if (val === "CHECKBOX" || val === "RADIO")
-                $("#optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
-            else if (val === "API")
-                $("#optionsLabel").text(
+            } else if (val === "انتخاب چند گزینه از میان گزینه های موجود" || val ===
+                "انتخاب یک گزینه از میان گزینه های موجود") {
+                $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
+            } else if (val === "API") {
+                $(".optionsLabel").text(
                     "آدرس url، سرویس دهنده را وارد نمایید. نام کاربری و رمزعبور جهت اتصال به سرویس دهنده را با علامت _ از هم جدا کنید و وارد نمایید"
                 );
+            } else {
+                // $("#editType option").attr('selected', false);
+            }
         }
 
         function changeCharLimit() {
