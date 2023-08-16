@@ -1237,23 +1237,23 @@
                             text +=
                                 '<div id="subAsset_' + rId +
                                 '" class=" ' + (roomStatus ? 'errorInput' : '') +
-                                'relative-position inputBoxTour boxRoom" style="order: 2">';
+                                'relative-position inputBoxTour boxRoom" style="order: 2;min-height: 150px;">';
 
                             text += '<div class="row" >';
-                            for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
+                            // for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
 
-                                if (res.fields[i].items[y].fields[m].type == 'string') {
-                                    roomName.push(res.fields[i].items[y].fields[m].val);
-                                    name = res.fields[i].items[y].fields[m].val;
-                                    nameKey = res.fields[i].items[y].fields[m].key_;
+                            //     if (res.fields[i].items[y].fields[m].type == 'string') {
+                            //         roomName.push(res.fields[i].items[y].fields[m].val);
+                            //         name = res.fields[i].items[y].fields[m].val;
+                            //         nameKey = res.fields[i].items[y].fields[m].key_;
 
-                                }
-                                if (res.fields[i].items[y].fields[m].type == 'textarea') {}
-                                if (res.fields[i].items[y].fields[m].type == 'int') {
-                                    count = res.fields[i].items[y].fields[m].val;
-                                    countKey = res.fields[i].items[y].fields[m].key_;
-                                }
-                            }
+                            //     }
+                            //     if (res.fields[i].items[y].fields[m].type == 'textarea') {}
+                            //     if (res.fields[i].items[y].fields[m].type == 'int') {
+                            //         count = res.fields[i].items[y].fields[m].val;
+                            //         countKey = res.fields[i].items[y].fields[m].key_;
+                            //     }
+                            // }
 
                             text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
@@ -1272,10 +1272,16 @@
                             text +=
                                 '<div class="col-md-7 col-sm-7 col-7 flexDirectionCol SpaceBetween" style="padding-left:0px;">';
                             text += '<div>';
-                            text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
-                            text += '<div class="bold roomName">' + name + ' </div>';
-                            text += '<div class="colorOrag bold">تعداد ' + subAsserName + '</div>';
-                            text += '<div class="bold">' + count + ' </div>';
+                            for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
+                                if (res.fields[i].items[y].fields[m].type !== 'gallery') {
+                                    name = res.fields[i].items[y].fields[m].val;
+                                    nameKey = res.fields[i].items[y].fields[m].key_;
+                                    text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
+                                    text += '<div class="bold roomName">' + name + ' </div>';
+                                    // text += '<div class="colorOrag bold">تعداد ' + subAsserName + '</div>';
+                                    // text += '<div class="bold">' + count + ' </div>';
+                                }
+                            }
                             text += '</div>';
                             text += '<div class="row SpaceBetween" style="padding-bottom: 5px;">';
                             text +=

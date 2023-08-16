@@ -66,6 +66,7 @@
                                     <td>نوع چینش</td>
                                     <td>نوع نمایش</td>
                                     <td>چند ورودی</td>
+                                    <td>کلید</td>
                                     <td>عملیات</td>
                                 </tr>
                             </thead>
@@ -83,6 +84,7 @@
                                     <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
                                     <td>{{ $field->multiple ? 'بله' : 'خیر' }}</td>
+                                    <td>{{ $field->key_ }}</td>
                                     <td style="width:13%">
                                         <button data-toggle="modal" data-target="#editModal"
                                             onclick="editForm('{{ $field->id }}', '{{ $field->rtl ? 'rtl' : 'ltr' }}','{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}', '{{ $field->editUrl }}')"
@@ -189,6 +191,10 @@
                     <center>
                         <p>force help</p>
                         <textarea id="editForceHelp" style="width:100%;" name="force_help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
+                    </center>
+                    <center>
+                        <p>کلید</p>
+                        <input id="editKey" type="text" name="key">
                     </center>
 
                     <center>
@@ -346,7 +352,10 @@
                             <p>force help</p>
                             <textarea name="force_help" style="width:100%;"></textarea>
                         </center>
-
+                        <center>
+                            <p>کلید</p>
+                            <input type="text" name="key_">
+                        </center>
                         <center>
                             <p>آیا پر کردن این فیلد اجباری است؟</p>
                             <select name="necessary">
@@ -535,6 +544,7 @@
                     rtl: $("#editDr").val(),
                     limitations: limitations,
                     charCount: $("#charCount").val(),
+                    key_: $("#editKey").val(),
                 },
                 success: function(res) {
                     if (res.status === "ok") {
