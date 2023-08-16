@@ -105,6 +105,7 @@ class FormFieldController extends Controller
             "type" => ["required", Rule::in(["STRING", "INT", "CHECKBOX", "RADIO", "REDIRECTOR",
                 "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API", "CKEDITOR"])],
             "help" => ["nullable", "max:1000"],
+            "key_" => "nullable",
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
             "err" => ["nullable", "max:1000"],
@@ -117,6 +118,7 @@ class FormFieldController extends Controller
         $field->form_id = $form->id;
         $field->name = $request["name"];
         $field->type = $request["type"];
+        
 
         if($request->has("necessary") && $request["necessary"] == "1")
             $field->necessary = true;
@@ -140,6 +142,7 @@ class FormFieldController extends Controller
         $field->err = $request["err"];
         $field->force_help = $request["force_help"];
         $field->placeholder = $request["placeholder"];
+        $field->key_ = $request["key_"];
 
         if($field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
@@ -205,6 +208,7 @@ class FormFieldController extends Controller
             "type" => ["required", Rule::in(["STRING", "INT", "CHECKBOX", "RADIO", "REDIRECTOR",
                 "CALENDAR", "FILE", "LISTVIEW", "GALLERY", "MAP", "TIME", "FLOAT", "TEXTAREA", "API", "CKEDITOR"])],
             "help" => ["nullable", "max:1000"],
+            "key_" => "nullable",
             "placeholder" => ["nullable", "max:1000"],
             "force_help" => ["nullable", "max:1000"],
             "err" => ["nullable", "max:1000"],
@@ -216,6 +220,7 @@ class FormFieldController extends Controller
         
         $form_field->name = $request["name"];
         $form_field->type = $request["type"];
+        
 
         if($request->has("necessary") && $request["necessary"] == "1")
             $form_field->necessary = true;
@@ -246,6 +251,7 @@ class FormFieldController extends Controller
         $form_field->err = $request["err"];
         $form_field->force_help = $request["force_help"];
         $form_field->placeholder = $request["placeholder"];
+        $form_field->key_ = $request["key_"];
 
         if($form_field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
