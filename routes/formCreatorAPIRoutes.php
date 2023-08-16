@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormCreator\AssetController;
+use App\Http\Controllers\FormCreator\CKEditor;
 use App\Http\Controllers\FormCreator\FormController;
 use App\Http\Controllers\FormCreator\FormFieldController;
 use App\Http\Controllers\FormCreator\UserAssetController;

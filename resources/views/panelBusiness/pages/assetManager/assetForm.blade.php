@@ -2042,7 +2042,7 @@
 
                     window.uploaderClass = editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
 
-                        return new MyUploadAdapter(loader, 'https://boom.bogenstudio.com/api/ckeditor/' +
+                        return new MyUploadAdapter(loader, url + '/ckeditor/' +
                             userFormDataId,
                             token, {});
                     };
