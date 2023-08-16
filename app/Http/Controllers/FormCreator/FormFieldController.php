@@ -40,6 +40,8 @@ class FormFieldController extends Controller
                 $field->type = 'تاریخ';
             else if($field->type == "TIME")
                 $field->type = 'ساعت';
+            else if($field->type == "CKEDITOR")
+                $field->type = 'CKEDITOR';
             else if($field->type == "TEXTAREA")
                 $field->type = 'متن بلند';
             else if($field->type == "GALLERY")

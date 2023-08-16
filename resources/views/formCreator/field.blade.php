@@ -11,6 +11,10 @@
             height: 100px;
             overflow: auto;
         }
+
+        label {
+            font-size: 13px;
+        }
     </style>
 @stop
 
@@ -192,51 +196,52 @@
                         <p>force help</p>
                         <textarea id="editForceHelp" style="width:100%;" name="force_help"placeholder="هنوز محتوایی وارد نشده است"></textarea>
                     </center>
-                    <center>
+                    <center style="margin-bottom: 10px;">
                         <p>کلید</p>
                         <input id="editKey" type="text" name="key">
                     </center>
 
-                    <center>
-                        <p>آیا پر کردن این فیلد اجباری است؟</p>
-                        <select id="editNecessary" name="necessary">
-                            <option value="1">بله</option>
-                            <option value="0">خیر</option>
-                        </select>
-                    </center>
+                    <div style="display: flex;flex-wrap: wrap;">
+                        <div style="display: flex;width: 51%;justify-content: space-between;margin-left:5px">
+                            <label for="necessary">آیا پر کردن این فیلد اجباری است؟</label>
+                            <select id="editNecessary" name="necessary">
+                                <option value="1">بله</option>
+                                <option value="0">خیر</option>
+                            </select>
+                        </div>
 
-                    <center>
-                        <p>آیا کاربر می تواند چند ورودی داشته باشد؟</p>
-                        <select id="editMultiple" name="multiple">
-                            <option value="0">خیر</option>
-                            <option value="1">بله</option>
-                        </select>
-                    </center>
+                        <div style="display: flex;width: 45%;justify-content: space-between;">
+                            <label for="presenter">آیا فیلد منتخب است؟</label>
+                            <select id="editPresenter" name="presenter">
+                                <option value="0">خیر</option>
+                                <option value="1">بله</option>
+                            </select>
+                        </div>
+                        <div style="display: flex;width: 51%;justify-content: space-between;margin-left:5px">
+                            <label for="multiple">آیا کاربر می تواند چند ورودی داشته باشد؟</label>
+                            <select id="editMultiple" name="multiple">
+                                <option value="0">خیر</option>
+                                <option value="1">بله</option>
+                            </select>
+                            </span>
+                        </div>
+                        <div style="display: flex;width: 45%;justify-content: space-between;">
+                            <label for="direction">نوع چینش</label>
+                            <select id="editDr" name="direction">
+                                <option value="0">ltr</option>
+                                <option value="1">rtl</option>
+                            </select>
+                        </div>
 
-                    <center>
-                        <p>آیا فیلد منتخب است؟</p>
-                        <select id="editPresenter" name="presenter">
-                            <option value="0">خیر</option>
-                            <option value="1">بله</option>
-                        </select>
-                    </center>
 
-                    <center>
-                        <p>نوع چینش</p>
-                        <select id="editDr" name="direction">
-                            <option value="0">ltr</option>
-                            <option value="1">rtl</option>
-                        </select>
-                    </center>
-
-                    <center>
-                        <p>آیا این فیلد کل عرض را بگیرد؟</p>
-                        <select id="editHalf"name="half">
-                            <option value="1">بله</option>
-                            <option value="0">خیر</option>
-                        </select>
-                    </center>
-
+                        <div style="display: flex;width: 51%;justify-content: space-between;">
+                            <label for="half">آیا این فیلد کل عرض را بگیرد؟</label>
+                            <select id="editHalf"name="half">
+                                <option value="1">بله</option>
+                                <option value="0">خیر</option>
+                            </select>
+                        </div>
+                    </div>
                     <center>
                         <p>محدودیت ها</p>
 
@@ -445,10 +450,12 @@
             items = forms.filter(x => x.id == id);
 
             for (let i = 0; i < items.length; i++) {
+                console.log(items);
                 url = u;
                 $('#editType option').attr('selected', false);
                 // $("#editType option").attr('selected', false);
                 $('textarea').empty();
+                $('inpt').empty();
                 $('input:checkbox').removeAttr('checked');
                 // if (items[i].type.indexOf('RADIO') > -1) {
                 //     $("#editType").val('RADIO');
@@ -485,6 +492,7 @@
                 $("#editPlaceholder").append(items[i].placeholder);
                 $("#editErr").append(items[i].err);
                 $("#editHelp").append(items[i].help);
+                $("#editKey").val(items[i].key_);
                 $("#editForceHelp").append(items[i].force_help);
                 limitations = items[i].limitation;
                 if (limitations.indexOf('ملی') > -1 && limitations.indexOf('کاراکتر') != -1) {
