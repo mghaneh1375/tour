@@ -53,6 +53,12 @@ class UserAsset extends FormCreatorBaseModel
         return $this->hasMany(UserFormsData::class, 'user_asset_id', 'id');
     }
 
+    public function get_presenter_data() {
+        return DB::connection('formDB')->select('select fd.data, ff.key_, ff.name from user_forms_data fd, form_fields ff where fd.user_asset_id = ' . $this->id . 
+            ' and ff.id = fd.field_id and ff.presenter = true'
+        );
+    }
+
     public function is_in_form($form_field_id, $is_pic = false, $gallery = false) {
 
         $uId = Auth::user()->id;

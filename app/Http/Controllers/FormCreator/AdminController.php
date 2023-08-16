@@ -15,6 +15,7 @@ class AdminController extends Controller {
 
     public function setAssetStatus(Request $request, UserAsset $user_asset) {
 
+        
         $request->validate([
             'status' => ['required', Rule::in(['PENDING', 'REJECT', 'CONFIRM'])],
             'err_text' => 'nullable|string|min:2'
@@ -67,6 +68,40 @@ class AdminController extends Controller {
 
             $parent->updated_at = Carbon::now();
             $parent->save();
+
+        }
+
+        if($request['status'] == "CONFIRM") {
+
+            $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
+            
+            $data = [
+                'userId' => $user_asset->user_id,
+                'mysqlId' => $user_asset->id,
+                'title' => $user_asset->title,
+                'image' => $user_asset->pic,
+                'createdAt' => Carbon::now()
+            ];
+
+            $subData = [];
+
+            $representerData = $user_asset->get_presenter_data();
+            foreach($representerData as $itr) {
+                $subData[$itr->key_] = $itr->data;
+            }
+
+            dd($subData);
+
+            $data['data'] = $subData;
+
+            $payload = json_encode( $data );
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            dd($result);
 
         }
         
