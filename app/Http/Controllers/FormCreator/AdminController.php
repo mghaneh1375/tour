@@ -79,7 +79,7 @@ class AdminController extends Controller {
                 'userId' => $user_asset->user_id,
                 'mysqlId' => $user_asset->id,
                 'title' => $user_asset->title,
-                'image' => $user_asset->pic,
+                'image' => asset('storage/' . $user_asset->pic),
                 'createdAt' => Carbon::now()
             ];
 
@@ -90,18 +90,14 @@ class AdminController extends Controller {
                 $subData[$itr->key_] = $itr->data;
             }
 
-            dd($subData);
-
             $data['data'] = $subData;
 
             $payload = json_encode( $data );
             curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
             curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            $result = curl_exec($ch);
+            curl_exec($ch);
             curl_close($ch);
-
-            dd($result);
 
         }
         
