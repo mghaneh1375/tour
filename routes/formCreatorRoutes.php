@@ -90,4 +90,6 @@ Route::get('/user_sub_asset/{user_sub_asset}', [UserSubAssetController::class, '
 
 Route::post('setAssetStatus/{user_asset}', [AdminController::class, 'setAssetStatus'])->name('setAssetStatus');
 
+Route::post('setPlaceId/{user_asset}', [AdminController::class, 'setPlaceId'])->name('setPlaceId');
+
 Route::post('setFieldStatus/{user_form_data}', [UserAssetController::class, 'setFieldStatus'])->name('setFieldStatus');

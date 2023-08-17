@@ -13,6 +13,21 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller {
 
+
+    public function setPlaceId(Request $request, UserAsset $user_asset) {
+
+        $request->validate([
+            'place_id' => ['required', 'string']
+        ]);
+
+        $user_asset->place_id = $request['place_id'];
+        $user_asset->save();
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
     public function setAssetStatus(Request $request, UserAsset $user_asset) {
 
         
@@ -27,6 +42,68 @@ class AdminController extends Controller {
                 "msg" => "در حال حاضر مجاز به انجام چنین عملیاتی نیستید."
             ]);
         }
+
+
+        if($request['status'] == "CONFIRM") {
+
+            if($user_asset->place_id == null) {
+
+                $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
+            
+                $data = [
+                    'userId' => $user_asset->user_id,
+                    'businessId' => $user_asset->id,
+                    'title' => $user_asset->title,
+                    'image' => asset('storage/' . $user_asset->pic),
+                    'createdAt' => Carbon::now()
+                ];
+    
+                $subData = [];
+    
+                $representerData = $user_asset->get_presenter_data();
+                foreach($representerData as $itr) {
+                    $subData[$itr->key_] = $itr->data;
+                }
+    
+                $data['data'] = $subData;
+    
+                $payload = json_encode( $data );
+                curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+                curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+                curl_exec($ch);
+                curl_close($ch);
+
+            }
+
+            $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
+            
+            $data = [
+                'userId' => $user_asset->user_id,
+                'businessId' => $user_asset->id,
+                'title' => $user_asset->title,
+                'image' => asset('storage/' . $user_asset->pic),
+                'createdAt' => Carbon::now()
+            ];
+
+            $subData = [];
+
+            $representerData = $user_asset->get_presenter_data();
+            foreach($representerData as $itr) {
+                $subData[$itr->key_] = $itr->data;
+            }
+
+            $data['data'] = $subData;
+
+            $payload = json_encode( $data );
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_exec($ch);
+            curl_close($ch);
+
+        }
+        
 
         $user_asset->status = $request["status"];
 
@@ -70,37 +147,6 @@ class AdminController extends Controller {
             $parent->save();
 
         }
-
-        if($request['status'] == "CONFIRM") {
-
-            $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
-            
-            $data = [
-                'userId' => $user_asset->user_id,
-                'mysqlId' => $user_asset->id,
-                'title' => $user_asset->title,
-                'image' => asset('storage/' . $user_asset->pic),
-                'createdAt' => Carbon::now()
-            ];
-
-            $subData = [];
-
-            $representerData = $user_asset->get_presenter_data();
-            foreach($representerData as $itr) {
-                $subData[$itr->key_] = $itr->data;
-            }
-
-            $data['data'] = $subData;
-
-            $payload = json_encode( $data );
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            curl_exec($ch);
-            curl_close($ch);
-
-        }
-        
 
         if($request['status'] == 'REJECT' && $request->has('err_text')) {   
             $user_asset->err_text = $request['err_text'];

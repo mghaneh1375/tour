@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $user_id
  * @property int $ticket_id
  * @property int $asset_id
+ * @property string $place_id
  * @property string $status
  * @property string $title
  * @property string $err_text
@@ -35,7 +36,7 @@ use Illuminate\Support\Facades\DB;
  */
 class UserAsset extends FormCreatorBaseModel
 {
-    protected $fillable = ['user_id', 'asset_id', 'status', 'ticket_id'];
+    protected $fillable = ['user_id', 'asset_id', 'status', 'ticket_id', 'place_id'];
     public $table = "user_assets";
     protected  $connection = 'formDB';
 
