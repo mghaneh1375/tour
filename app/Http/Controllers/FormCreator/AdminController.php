@@ -20,11 +20,36 @@ class AdminController extends Controller {
             'place_id' => ['required', 'string']
         ]);
 
+        $ch = curl_init( "http://127.0.0.1:8088/api/place/checkIdExist/" + $request['place_id'] );
+
+        curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'GET' );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+        $result = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        if($httpcode != 200)
+            return response()->json([
+                'status' => '1',
+                'msg' => 'داده وارد شده معتبر نمی باشد'
+            ]);
+
+        $result = json_decode($result);
+        
+        if($result->status == 'nok')
+            return response()->json([
+                'status' => '1',
+                'msg' => $result->msg
+            ]);
+
         $user_asset->place_id = $request['place_id'];
         $user_asset->save();
 
         return response()->json([
-            'status' => 'ok'
+            'status' => '0'
         ]);
     }
 
@@ -48,60 +73,94 @@ class AdminController extends Controller {
 
             if($user_asset->place_id == null) {
 
-                $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
+                $ch = curl_init( "http://127.0.0.1:8088/api/place/addPlace" );
             
                 $data = [
-                    'userId' => $user_asset->user_id,
-                    'businessId' => $user_asset->id,
-                    'title' => $user_asset->title,
-                    'image' => asset('storage/' . $user_asset->pic),
-                    'createdAt' => Carbon::now()
+                    'name' => $user_asset->title,
+                    'pic' => asset('storage/' . $user_asset->pic),
                 ];
-    
-                $subData = [];
     
                 $representerData = $user_asset->get_presenter_data();
                 foreach($representerData as $itr) {
-                    $subData[$itr->key_] = $itr->data;
+                    
+                    if($itr->key_ == 'geo') {
+                        $d = explode(' ', $itr->data);
+                        $data['c'] = $d[0];
+                        $data['d'] = $d[1];
+                    }
+                    else if($itr->key_ == 'city') {
+                        $d = explode('__', $itr->data);
+                        $data['state'] = $d[0];
+                        $data['city'] = $d[1];
+                    }
+                    else
+                        $data[$itr->key_] = $itr->data;
                 }
     
-                $data['data'] = $subData;
-    
                 $payload = json_encode( $data );
+                // dd($payload);
                 curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
                 curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
                 curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-                curl_exec($ch);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+
+                $result = curl_exec($ch);
+                $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
                 curl_close($ch);
 
+                if($httpcode != 200)
+                    return response()->json([
+                        'status' => '1',
+                        'msg' => 'داده وارد شده معتبر نمی باشد'
+                    ]);
+
+
+                $result = json_decode($result);
+                
+                if($result->status == 'nok')
+                    return response()->json([
+                        'status' => '1',
+                        'msg' => $result->msg
+                    ]);
+            
+                $placeId = $result->id;
             }
+            else
+                $placeId = $user_asset->place_id;
 
             $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
             
             $data = [
                 'userId' => $user_asset->user_id,
                 'businessId' => $user_asset->id,
-                'title' => $user_asset->title,
-                'image' => asset('storage/' . $user_asset->pic),
-                'createdAt' => Carbon::now()
+                'placeId' => $placeId
             ];
-
-            $subData = [];
-
-            $representerData = $user_asset->get_presenter_data();
-            foreach($representerData as $itr) {
-                $subData[$itr->key_] = $itr->data;
-            }
-
-            $data['data'] = $subData;
 
             $payload = json_encode( $data );
             curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
             curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
             curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            curl_exec($ch);
+
+            $result = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            
             curl_close($ch);
 
+            if($httpcode != 200)
+            return response()->json([
+                'status' => '1',
+                'msg' => 'خطا در سامانه اتاق ها'
+            ]);
+
+            $result = json_decode($result);
+                
+            if($result->status == 'nok')
+                return response()->json([
+                    'status' => '1',
+                    'msg' => $result->msg
+                ]);
+        
         }
         
 
