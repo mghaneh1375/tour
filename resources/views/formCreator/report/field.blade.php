@@ -21,6 +21,10 @@
                         onclick="changeStatus('{{ $status }}')" class="btn btn-primary btn-default btn-sm mgbtn5">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
+                    <button data-toggle="modal" data-target=""data-placement="top" title="تغییروضعیت" onclick="chooseBoom()"
+                        class="btn btn-primary btn-default btn-sm mgbtn5">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
                     <div style="padding-top: 10px;">
                         <figcaption style="font-size: 17px">
                             {{ $err_text }}
@@ -168,107 +172,177 @@
 
         </div>
     </div>
-@endsection
-@section('script')
-    <script>
-        var rejectUrl;
-        var rejectId;
-        $(document).ready(function() {
-            console.log(selectedId);
-        })
-        var selectedId = -1;
+    <div class="modal fade" id="addCityModal" style="top:100px !important;">
+        <div class="modal-dialog modal-lg" style="max-width: 500px !important">
+            <div class="modal-content">
+                <div class="modal-body" style="direction: rtl ;border-bottom: 1px solid #707070;">
+                    <div class="fullwidthDiv">
+                        <div class="addPlaceGeneralInfoTitleTourCreation">
+                            اقامتگاه مورد نظر خود را اضافه کنید
+                        </div>
+                    </div>
 
-        function changeStatus(state) {
-            $("#status").val(state).change();
-        }
+                    <div class="row" style="display: flex;flex-direction: column;">
+                        <div class="inputBoxTour col-xs-5 relative-position mainClassificationOfPlaceInputDiv">
 
-        function changeState() {
-            if ($("#status").val() == 'REJECT') {
-                $("#errBox").removeClass('hidden');
-            } else {
-                $("#errBox").addClass('hidden');
+                            <div class="inputBoxTour col-xs-5 relative-position placeNameAddingPlaceInputDiv">
+                                <div class="inputBoxText" style="min-width: 60px;">
+                                    <div>
+                                        نام اقامتگاه
+                                        <span>*</span>
+                                    </div>
+                                </div>
+
+                                <input id="inputSearchCity" class="inputBoxInput text-align-right" type="text"
+                                    placeholder="انتخاب کنید" onkeyup="searchForBoom(this)" />
+                                <div class="searchResult"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footerrow fullyCenterContent rowReverse SpaceBetween"
+                        style="padding: 15px; text-align: center">
+                        <button style="width: 20%;" id="goToForthStep" class="btn nextStepBtnTourCreation"
+                            data-dismiss="modal">تأیید</button>
+                        <button style="width: 20%;" class="btn nextStepBtnTourCreation goToPrevStep"
+                            data-dismiss="modal">انصراف</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @endsection
+    @section('script')
+        <script>
+            function chooseBoom() {
+                $("#addCityModal").modal("show");
             }
-        }
 
-        function reject(url, id) {
-            rejectUrl = url;
-            rejectId = id;
-        }
+            function searchForBoom(_element) {
 
-        function rejectReq() {
-            errText = $('#errText').val()
-            $.ajax({
-                type: 'post',
-                url: rejectUrl,
-                data: {
-                    'status': 'REJECT',
-                    'err_text': errText
-                },
-                success: function(res) {
+                var value = $(_element).val().trim();
+                if (value.length < 3)
+                    return;
 
-                    if (res.status == "0") {
-                        newStatus = 'رد شده';
-                        $("#" + rejectId).empty().append(newStatus);
-                        $('#rejectText').modal('toggle');
-                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                        location.reload();
-                    } else {
-                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                openLoading();
+
+                let params = new URLSearchParams();
+
+                params.append("placeMode", "boom");
+                params.append("key", "خاطره");
+
+                $.ajax({
+                    type: 'get',
+                    url: 'https://koochita-server.bogenstudio.com/api/place/totalSearch?' + params.toString(),
+                    complete: closeLoading,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    success: function(res) {
+                        console.log(res);
                     }
+                });
+            }
+            var rejectUrl;
+            var rejectId;
+            $(document).ready(function() {
+                console.log(selectedId);
+            })
+            var selectedId = -1;
+
+            function changeStatus(state) {
+                $("#status").val(state).change();
+            }
+
+            function changeState() {
+                if ($("#status").val() == 'REJECT') {
+                    $("#errBox").removeClass('hidden');
+                } else {
+                    $("#errBox").addClass('hidden');
                 }
-            });
-        }
+            }
 
-        function doChangeStatus() {
+            function reject(url, id) {
+                rejectUrl = url;
+                rejectId = id;
+            }
 
-            var newStatus = $("#status").val();
-            errText = $('#rejecedText').val()
-            $.ajax({
-                type: 'post',
-                url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
-                data: {
-                    'status': newStatus,
-                    'err_text': errText
-                },
-                success: function(res) {
+            function rejectReq() {
+                errText = $('#errText').val()
+                $.ajax({
+                    type: 'post',
+                    url: rejectUrl,
+                    data: {
+                        'status': 'REJECT',
+                        'err_text': errText
+                    },
+                    success: function(res) {
 
-                    if (res.status == "0") {
-                        $("#closeModalBtn").click();
-                        $("#status_" + selectedId).empty().append(newStatus);
-                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                    } else {
-                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                    }
-                }
-            });
-
-        }
-
-        function changeAnswStatus(url, newStatus, id) {
-
-            $.ajax({
-                type: 'post',
-                url: url,
-                data: {
-                    'status': newStatus
-                },
-                success: function(res) {
-
-                    if (res.status == "0") {
-                        if (newStatus === 'CONFIRM') {
-                            newStatus = 'تایید شده';
-                        } else {
+                        if (res.status == "0") {
                             newStatus = 'رد شده';
+                            $("#" + rejectId).empty().append(newStatus);
+                            $('#rejectText').modal('toggle');
+                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                            location.reload();
+                        } else {
+                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                         }
-                        $("#" + id).empty().append(newStatus);
-                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                    } else {
-                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
-                }
-            });
+                });
+            }
 
-        }
-    </script>
+            function doChangeStatus() {
 
-@stop
+                var newStatus = $("#status").val();
+                errText = $('#rejecedText').val()
+                $.ajax({
+                    type: 'post',
+                    url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
+                    data: {
+                        'status': newStatus,
+                        'err_text': errText
+                    },
+                    success: function(res) {
+
+                        if (res.status == "0") {
+                            $("#closeModalBtn").click();
+                            $("#status_" + selectedId).empty().append(newStatus);
+                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        } else {
+                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                        }
+                    }
+                });
+
+            }
+
+            function changeAnswStatus(url, newStatus, id) {
+
+                $.ajax({
+                    type: 'post',
+                    url: url,
+                    data: {
+                        'status': newStatus
+                    },
+                    success: function(res) {
+
+                        if (res.status == "0") {
+                            if (newStatus === 'CONFIRM') {
+                                newStatus = 'تایید شده';
+                            } else {
+                                newStatus = 'رد شده';
+                            }
+                            $("#" + id).empty().append(newStatus);
+                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        } else {
+                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                        }
+                    }
+                });
+
+            }
+        </script>
+
+    @stop
