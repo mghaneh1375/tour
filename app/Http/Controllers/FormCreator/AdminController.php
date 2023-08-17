@@ -85,11 +85,11 @@ class AdminController extends Controller {
                     
                     if($itr->key_ == 'geo') {
                         $d = explode(' ', $itr->data);
-                        $data['c'] = $d[0];
-                        $data['d'] = $d[1];
+                        $data['c'] = (double)$d[0];
+                        $data['d'] = (double)$d[1];
                     }
                     else if($itr->key_ == 'city') {
-                        $d = explode('__', $itr->data);
+                        $d = explode('$$', $itr->data);
                         $data['state'] = $d[0];
                         $data['city'] = $d[1];
                     }
@@ -125,6 +125,9 @@ class AdminController extends Controller {
                     ]);
             
                 $placeId = $result->id;
+                
+                $user_asset->place_id = $placeId;
+                $user_asset->save();
             }
             else
                 $placeId = $user_asset->place_id;
