@@ -2,6 +2,25 @@
 
 @section('head')
     @parent
+    <link rel="stylesheet" href="{{ URL::asset('css/pages/localShops/mainLocalShops.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" href="{{ URL::asset('css/pages/business.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/common.css?v=' . $fileVersions) }}" />
+    <style>
+        .businessType {
+            width: 100%;
+            cursor: pointer;
+            border: 2px solid #7d7d7d;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px
+        }
+    </style>
 @stop
 
 @section('body')
@@ -21,8 +40,9 @@
                         onclick="changeStatus('{{ $status }}')" class="btn btn-primary btn-default btn-sm mgbtn5">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-                    <button data-toggle="modal" data-target=""data-placement="top" title="تغییروضعیت" onclick="chooseBoom()"
-                        class="btn btn-primary btn-default btn-sm mgbtn5">
+                    <button data-toggle="modal" data-target=""data-placement="top" title="تخصیص بوم گردی از سامانه کوچیتا"
+                        onclick="chooseBoom()"
+                        class="btn btn-primary btn-default btn-sm mgbtn5 "style="background-color: orange;border-color:orange">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
                     <div style="padding-top: 10px;">
@@ -165,14 +185,15 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button id="closeModalBtn" type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <button id="closeModalBtn" type="button" class="btn btn-default"
+                        data-dismiss="modal">انصراف</button>
                     <input onclick="rejectReq()" type="submit" class="btn btn-success" value="تایید">
                 </div>
             </div>
 
         </div>
     </div>
-    <div class="modal fade" id="addCityModal" style="top:100px !important;">
+    <div class="modal fade" id="addCityModal" style="top:30px !important;">
         <div class="modal-dialog modal-lg" style="max-width: 500px !important">
             <div class="modal-content">
                 <div class="modal-body" style="direction: rtl ;border-bottom: 1px solid #707070;">
@@ -182,19 +203,16 @@
                         </div>
                     </div>
 
-                    <div class="row" style="display: flex;flex-direction: column;">
+                    <div class="row" style="display: flex;flex-direction: column;padding-top: 10px;">
                         <div class="inputBoxTour col-xs-5 relative-position mainClassificationOfPlaceInputDiv">
 
                             <div class="inputBoxTour col-xs-5 relative-position placeNameAddingPlaceInputDiv">
                                 <div class="inputBoxText" style="min-width: 60px;">
-                                    <div>
-                                        نام اقامتگاه
-                                        <span>*</span>
-                                    </div>
+
                                 </div>
 
                                 <input id="inputSearchCity" class="inputBoxInput text-align-right" type="text"
-                                    placeholder="انتخاب کنید" onkeyup="searchForBoom(this)" />
+                                    placeholder="نام اقامتگاه" onkeyup="searchForBoom(this)" />
                                 <div class="searchResult"></div>
                             </div>
                         </div>
@@ -203,146 +221,192 @@
                     <!-- Modal footer -->
                     <div class="modal-footerrow fullyCenterContent rowReverse SpaceBetween"
                         style="padding: 15px; text-align: center">
-                        <button style="width: 20%;" id="goToForthStep" class="btn nextStepBtnTourCreation"
-                            data-dismiss="modal">تأیید</button>
-                        <button style="width: 20%;" class="btn nextStepBtnTourCreation goToPrevStep"
-                            data-dismiss="modal">انصراف</button>
+                        <button style="width: 20%;" id="DoneProcess" onclick="setWork()" class="btn btn-success"
+                            disabled>تأیید</button>
+                        <button style="width: 20%;" class="btn btn-danger" data-dismiss="modal">انصراف</button>
                     </div>
 
                 </div>
             </div>
         </div>
-    @endsection
-    @section('script')
-        <script>
-            function chooseBoom() {
-                $("#addCityModal").modal("show");
+    </div>
+@endsection
+@section('script')
+    <script>
+        var rejectUrl;
+        var rejectId;
+        var selectedId = -1;
+
+        function chooseBoom() {
+            $("#addCityModal").modal("show");
+        }
+        $(document).on("click", ".businessType", function() {
+            if (!this.getAttribute('disabled')) {
+                $(".businessType").removeClass('selected');
+                $(this).addClass("selected");
+                selectedWork = $(this).attr('data-id');
+                $("#DoneProcess").removeAttr('disabled');
             }
+        });
 
-            function searchForBoom(_element) {
-
-                var value = $(_element).val().trim();
-                if (value.length < 3)
-                    return;
-
-                openLoading();
-
-                let params = new URLSearchParams();
-
-                params.append("placeMode", "boom");
-                params.append("key", "خاطره");
-
-                $.ajax({
-                    type: 'get',
-                    url: 'https://koochita-server.bogenstudio.com/api/place/totalSearch?' + params.toString(),
-                    complete: closeLoading,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    success: function(res) {
-                        console.log(res);
+        function setWork() {
+            $.ajax({
+                type: 'post',
+                url: '{{ route('setPlaceId', ['user_asset' => $id]) }}',
+                data: {
+                    'place_id': selectedWork,
+                },
+                success: function(res) {
+                    console.log(res.status);
+                    if (res.status === "0") {
+                        $('#addCityModal').attr("data-dismiss", "modal");
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                    } else {
+                        showSuccessNotifiBP('عملیات انجام نشد', 'right', '#ac0020');
                     }
-                });
-            }
-            var rejectUrl;
-            var rejectId;
-            $(document).ready(function() {
-                console.log(selectedId);
-            })
-            var selectedId = -1;
-
-            function changeStatus(state) {
-                $("#status").val(state).change();
-            }
-
-            function changeState() {
-                if ($("#status").val() == 'REJECT') {
-                    $("#errBox").removeClass('hidden');
-                } else {
-                    $("#errBox").addClass('hidden');
                 }
+            });
+        }
+
+        function searchForBoom(_element) {
+
+            var value = $(_element).val().trim();
+            if (value.length < 3)
+                return;
+
+            openLoading();
+
+            let params = new URLSearchParams();
+
+            params.append("placeMode", "boom");
+            params.append("key", value);
+            let html = "";
+            $.ajax({
+                type: 'get',
+                url: 'https://koochita-server.bogenstudio.com/api/place/totalSearch?' + params.toString(),
+                complete: closeLoading,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                success: function(res) {
+                    console.log(res.data.places);
+                    for (let i = 0; i < res.data.places.length; i++) {
+                        console.log(res.data.places[i].city_name);
+                        html += '<div class="row businessType cursorPointer" data-id="' + res.data.places[i]
+                            .id +
+                            '" style="padding-top: 5px;padding-bottom: 5px;">';
+                        html += '<div class="col-md-4 col-sm-4 col-4">';
+                        html += '<img src="' + res.data.places[i].pic +
+                            '" style="height: 105px; width: 100%;object-fit: contain;">';
+                        html += '</div>';
+                        html += '<div class="col-md-8 col-sm-8 col-8">';
+                        html += '<div>';
+                        html += '' + res.data.places[i].target_name + 'در ' + res.data.places[i].city_name +
+                            'در ' + res.data.places[i].state_name + '';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    $('.searchResult').empty().append(html);
+                }
+            });
+        }
+        $(document).ready(function() {
+            console.log(selectedId);
+        })
+
+        function changeStatus(state) {
+            $("#status").val(state).change();
+        }
+
+        function changeState() {
+            if ($("#status").val() == 'REJECT') {
+                $("#errBox").removeClass('hidden');
+            } else {
+                $("#errBox").addClass('hidden');
             }
+        }
 
-            function reject(url, id) {
-                rejectUrl = url;
-                rejectId = id;
-            }
+        function reject(url, id) {
+            rejectUrl = url;
+            rejectId = id;
+        }
 
-            function rejectReq() {
-                errText = $('#errText').val()
-                $.ajax({
-                    type: 'post',
-                    url: rejectUrl,
-                    data: {
-                        'status': 'REJECT',
-                        'err_text': errText
-                    },
-                    success: function(res) {
+        function rejectReq() {
+            errText = $('#errText').val()
+            $.ajax({
+                type: 'post',
+                url: rejectUrl,
+                data: {
+                    'status': 'REJECT',
+                    'err_text': errText
+                },
+                success: function(res) {
 
-                        if (res.status == "0") {
+                    if (res.status == "0") {
+                        newStatus = 'رد شده';
+                        $("#" + rejectId).empty().append(newStatus);
+                        $('#rejectText').modal('toggle');
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        location.reload();
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    }
+                }
+            });
+        }
+
+        function doChangeStatus() {
+
+            var newStatus = $("#status").val();
+            errText = $('#rejecedText').val()
+            $.ajax({
+                type: 'post',
+                url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
+                data: {
+                    'status': newStatus,
+                    'err_text': errText
+                },
+                success: function(res) {
+
+                    if (res.status == "0") {
+                        $("#closeModalBtn").click();
+                        $("#status_" + selectedId).empty().append(newStatus);
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
+                    }
+                }
+            });
+
+        }
+
+        function changeAnswStatus(url, newStatus, id) {
+
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: {
+                    'status': newStatus
+                },
+                success: function(res) {
+
+                    if (res.status == "0") {
+                        if (newStatus === 'CONFIRM') {
+                            newStatus = 'تایید شده';
+                        } else {
                             newStatus = 'رد شده';
-                            $("#" + rejectId).empty().append(newStatus);
-                            $('#rejectText').modal('toggle');
-                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                            location.reload();
-                        } else {
-                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                         }
+                        $("#" + id).empty().append(newStatus);
+                        showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                    } else {
+                        showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }
-                });
-            }
+                }
+            });
 
-            function doChangeStatus() {
+        }
+    </script>
 
-                var newStatus = $("#status").val();
-                errText = $('#rejecedText').val()
-                $.ajax({
-                    type: 'post',
-                    url: '{{ route('setAssetStatus', ['user_asset' => $id]) }}',
-                    data: {
-                        'status': newStatus,
-                        'err_text': errText
-                    },
-                    success: function(res) {
-
-                        if (res.status == "0") {
-                            $("#closeModalBtn").click();
-                            $("#status_" + selectedId).empty().append(newStatus);
-                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                        } else {
-                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                        }
-                    }
-                });
-
-            }
-
-            function changeAnswStatus(url, newStatus, id) {
-
-                $.ajax({
-                    type: 'post',
-                    url: url,
-                    data: {
-                        'status': newStatus
-                    },
-                    success: function(res) {
-
-                        if (res.status == "0") {
-                            if (newStatus === 'CONFIRM') {
-                                newStatus = 'تایید شده';
-                            } else {
-                                newStatus = 'رد شده';
-                            }
-                            $("#" + id).empty().append(newStatus);
-                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
-                        } else {
-                            showSuccessNotifiBP(res.msg, 'right', '#ac0020');
-                        }
-                    }
-                });
-
-            }
-        </script>
-
-    @stop
+@stop

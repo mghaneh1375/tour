@@ -1265,8 +1265,7 @@
                                 text +=
                                     '<div style="height: 100%;align-items: center;display: flex;"><i class="boomIcon" style="font-size: 130px;font-style: unset;"></i></div>';
                             } else {
-                                text += '<img src="' + img +
-                                    '" style="height: 100%; width: 100%;object-fit: contain;">';
+                                text += '<img src="' + img + '" style="height: 100%; width: 100%;object-fit: contain;">';
                             }
                             text += '</div>';
                             text +=

@@ -20,7 +20,7 @@ class AdminController extends Controller {
             'place_id' => ['required', 'string']
         ]);
 
-        $ch = curl_init( "http://127.0.0.1:8088/api/place/checkIdExist/" + $request['place_id'] );
+        $ch = curl_init( "https://koochita-server.bogenstudio.com/api/place/checkIdExist/" . $request['place_id'] );
 
         curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'GET' );
         curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
