@@ -153,10 +153,11 @@ class AdminController extends Controller {
             curl_close($ch);
 
             if($httpcode != 200)
-            return response()->json([
-                'status' => '1',
-                'msg' => 'خطا در سامانه اتاق ها'
-            ]);
+                return response()->json([
+                    'status' => '1',
+                    'msg' => 'خطا در سامانه اتاق ها',
+                    'errCode' => $httpcode
+                ]);
 
             $result = json_decode($result);
                 
