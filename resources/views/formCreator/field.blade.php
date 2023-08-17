@@ -558,6 +558,7 @@
                 type: 'put',
                 url: url,
                 data: {
+                    options: $("#showOptions").val(),
                     name: $("#editName").val(),
                     type: $("#editType").val(),
                     help: $("#editHelp").val(),

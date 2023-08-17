@@ -230,7 +230,8 @@
         var multiple = false;
         var initMap = false;
         var callInitMap = false;
-
+        var cityName;
+        var stateName;
         let url = '{{ route('formCreator.root') }}';
         let token = 'Bearer ' + localStorage.getItem("token");
 
@@ -249,7 +250,6 @@
                 },
                 data: fileStore,
                 success: function(res) {
-                    console.log(res);
                     if (res.status === "0") {
                         window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     } else {}
@@ -281,7 +281,6 @@
                         success: function(res) {
                             if (res.status === "0") {
                                 userAssetId = res.id;
-                                console.log(filePic);
                                 if (filePic) {
                                     storePic(userAssetId, fields);
                                 } else {
@@ -360,7 +359,6 @@
                     },
                     // error: function(rejected) {
                     //     errorAjax(rejected);
-                    //     console.log(rejected);
                     // }
                 });
 
@@ -378,7 +376,6 @@
                 },
 
                 success: function(res) {
-                    console.log(res);
                     if (res.status === "0") {
 
                         window.location.href = "{{ route('businessPanel.panel') }} "
@@ -407,7 +404,6 @@
                     id: ckeditorId,
                     data: editorData
                 });
-                console.log(fields);
             }
             $inputs.each(function() {
                 $(this).parent().removeClass('errorInput');
@@ -606,18 +602,14 @@
                             html += '<p>' + res.forms[i].notice + '</p>';
                             html += '</div>';
                             html += '</div>';
-                            html += '';
-                            html += '';
-                            html += '';
-                            html += '';
-                            html += '';
+
                             html += '';
 
                             if (i > 0)
                                 prevFromId = res.forms[i - 1].id;
                             if (i < res.forms.length - 1) {
                                 nextFormId = res.forms[i + 1].id;
-                                console.log(nextFormId);
+
                             }
                             if (nextFormId == undefined) {
                                 $('.nextPageVal').empty().append("ثبت نهایی");
@@ -643,6 +635,7 @@
 
         function searchForCity(_element) {
             var stateId = $("#selectStateForSelectCity").val();
+            cityName = $("#selectStateForSelectCity option[value=" + stateId + "]").text();
             var value = $(_element).val().trim();
             var citySrcInput = $(_element);
             citySrcInput.next().empty();
@@ -699,6 +692,7 @@
 
         function selectThisCityForSrc(_element, _id) {
             $("#" + apiId).val($(_element).text());
+            stateName = $(_element).text();
             $("#srcCityId").val(_id);
             $("#addCityModal").modal("hide");
             $(_element).parent().empty();
@@ -878,16 +872,12 @@
 
                 success: function(res) {
                     if (res.status === 0) {
-                        console.log(res.status);
                         userAssetId = res.id;
-                        console.log(userAssetId);
                         if (filePic) {
                             storePic(userAssetId, fields);
                         }
                         // location.reload();
-                    } else {
-                        console.log(res.status);
-                    }
+                    } else {}
                 },
                 error: function(request, status, error) {
                     if (request.status === 500) {
@@ -1198,12 +1188,9 @@
                 } else if (res.fields[i].type.toLowerCase() == 'listview') {
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         subAssetId = res.fields[i].options[x];
-                        console.log(res.fields[i].name);
                         subAsserName = res.fields[i].name;
                     }
-                    console.log('1');
                     if (res.fields[i].items.length < 1) {
-                        console.log('2');
                         elm += '<div style="width:100%;">هنوز ' + subAsserName + ' تعریف نشده است.</div>';
                         elm += '';
                     } else {
