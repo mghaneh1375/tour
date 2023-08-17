@@ -2,6 +2,11 @@
 
 @section('head')
     @parent
+    <link rel="stylesheet" href="{{ URL::asset('css/pages/localShops/mainLocalShops.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" href="{{ URL::asset('css/pages/business.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/form.css?v=' . $fileVersions) }}" />
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/common.css?v=' . $fileVersions) }}" />
 @stop
 
 @section('body')
@@ -165,14 +170,15 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button id="closeModalBtn" type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <button id="closeModalBtn" type="button" class="btn btn-default"
+                        data-dismiss="modal">انصراف</button>
                     <input onclick="rejectReq()" type="submit" class="btn btn-success" value="تایید">
                 </div>
             </div>
 
         </div>
     </div>
-    <div class="modal fade" id="addCityModal" style="top:100px !important;">
+    <div class="modal fade" id="addCityModal" style="top:30px !important;">
         <div class="modal-dialog modal-lg" style="max-width: 500px !important">
             <div class="modal-content">
                 <div class="modal-body" style="direction: rtl ;border-bottom: 1px solid #707070;">
@@ -182,19 +188,16 @@
                         </div>
                     </div>
 
-                    <div class="row" style="display: flex;flex-direction: column;">
+                    <div class="row" style="display: flex;flex-direction: column;padding-top: 10px;">
                         <div class="inputBoxTour col-xs-5 relative-position mainClassificationOfPlaceInputDiv">
 
                             <div class="inputBoxTour col-xs-5 relative-position placeNameAddingPlaceInputDiv">
                                 <div class="inputBoxText" style="min-width: 60px;">
-                                    <div>
-                                        نام اقامتگاه
-                                        <span>*</span>
-                                    </div>
+
                                 </div>
 
                                 <input id="inputSearchCity" class="inputBoxInput text-align-right" type="text"
-                                    placeholder="انتخاب کنید" onkeyup="searchForBoom(this)" />
+                                    placeholder="نام اقامتگاه" onkeyup="searchForBoom(this)" />
                                 <div class="searchResult"></div>
                             </div>
                         </div>
@@ -203,10 +206,9 @@
                     <!-- Modal footer -->
                     <div class="modal-footerrow fullyCenterContent rowReverse SpaceBetween"
                         style="padding: 15px; text-align: center">
-                        <button style="width: 20%;" id="goToForthStep" class="btn nextStepBtnTourCreation"
-                            data-dismiss="modal">تأیید</button>
-                        <button style="width: 20%;" class="btn nextStepBtnTourCreation goToPrevStep"
-                            data-dismiss="modal">انصراف</button>
+                        <button style="width: 20%;" id="DoneProcess" onclick="setWork()" class="btn btn-success"
+                            data-dismiss="modal" disabled>تأیید</button>
+                        <button style="width: 20%;" class="btn btn-danger" data-dismiss="modal">انصراف</button>
                     </div>
 
                 </div>
@@ -217,6 +219,32 @@
         <script>
             function chooseBoom() {
                 $("#addCityModal").modal("show");
+            }
+            $(document).on("click", ".businessType", function() {
+                if (!this.getAttribute('disabled')) {
+                    $(".businessType").removeClass('selected');
+                    $(this).addClass("selected");
+                    selectedWork = $(this).attr('data-id');
+                    $("#DoneProcess").removeAttr('disabled');
+                }
+            });
+
+            function setWork() {
+                $.ajax({
+                    type: 'post',
+                    url: '{{ route('setPlaceId', ['user_asset' => $id]) }}',
+                    data: {
+                        'place_id': selectedWork,
+                    },
+                    success: function(res) {
+                        console.log(res.status);
+                        if (res.status === "0") {
+                            showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        } else {
+                            showSuccessNotifiBP('عملیات انجام نشد', 'right', '#ac0020');
+                        }
+                    }
+                });
             }
 
             function searchForBoom(_element) {
@@ -231,7 +259,7 @@
 
                 params.append("placeMode", "boom");
                 params.append("key", "خاطره");
-
+                let html = "";
                 $.ajax({
                     type: 'get',
                     url: 'https://koochita-server.bogenstudio.com/api/place/totalSearch?' + params.toString(),
@@ -241,7 +269,33 @@
                         'Content-Type': 'application/json',
                     },
                     success: function(res) {
-                        console.log(res);
+                        console.log(res.data.places);
+                        for (let i = 0; i < res.data.places.length; i++) {
+                            console.log(res.data.places[i].city_name);
+                            html += '<div class="row businessType" data-id="' + res.data.places[i].id +
+                                '" style="padding-top: 10px;padding-bottom: 10px;">';
+                            html += '<div class="col-md-4 col-sm-4 col-4">';
+                            html += '<img src="' + res.data.places[i].pic +
+                                '" style="height: 105px; width: 100%;object-fit: contain;">';
+                            html += '</div>';
+                            html += '<div class="col-md-8 col-sm-8 col-8">';
+                            html += '<div>';
+                            html += '' + res.data.places[i].target_name + 'در ' + res.data.places[i].city_name +
+                                'در ' + res.data.places[i].state_name + '';
+                            html += '';
+                            html += '';
+                            html += '';
+                            html += '</div>';
+                            html += '';
+                            html += '';
+                            html += '';
+                            html += '';
+                            html += '';
+                            html += '';
+                            html += '</div>';
+                            html += '</div>';
+                        }
+                        $('.searchResult').empty().append(html);
                     }
                 });
             }
