@@ -348,8 +348,8 @@
                     success: function(res) {
                         if (res.status === 0) {
                             if (nextFormId !== undefined) {
-                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                    userAssetId;
+                                // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                //     userAssetId;
                             } else {
                                 lastPage();
                             }
@@ -471,6 +471,13 @@
                         checkBoxFields.push(tmp);
                     }
 
+                    return;
+                }
+                if ($(this).attr('type') === 'API') {
+                    fields.push({
+                        id: $(this).attr('id'),
+                        data: stateName + '$$' + cityName
+                    });
                     return;
                 }
                 if ($(this).attr('type') === 'radio') {
@@ -692,6 +699,7 @@
 
         function selectThisCityForSrc(_element, _id) {
             $("#" + apiId).val($(_element).text());
+            // $("#" + apiId).append($(_element).text());
             stateName = $(_element).text();
             $("#srcCityId").val(_id);
             $("#addCityModal").modal("hide");
@@ -1411,6 +1419,7 @@
                             .necessary == 1 ? 'required ' : '') + ' >';
                     text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'file') {
+                    filePic = true;
                     text +=
                         '<div class="relative-position inputBoxTour SpaceBetween" style="align-items: center;margin-left: 10px; width: ' +
                         (

@@ -123,6 +123,7 @@
                         // $("#closeRemoveModalBtn").click();
                         showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
                     } else {
+                        console.log('nok');
                         if (res.msg !== undefined && err.length > 1)
                             showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }

@@ -399,6 +399,7 @@ class UserAssetController extends Controller
     public static function destroy(UserAsset $user_asset, Request $request) {
 
         try {
+            
             DB::transaction(function () use ($user_asset, $request) {
 
                 $pic = $user_asset->pic;
@@ -420,23 +421,26 @@ class UserAssetController extends Controller
                 }
                 
                 $assets = Asset::where('super_id', $user_asset->asset_id)->get();
-                            
+                
                 foreach ($assets as $asset) {
+                    
                     $userSubAssets = $asset->user_sub_assets;
                     if($userSubAssets !== null){
-                        foreach ($userSubAssets as $userSubAsset) UserSubAssetController::destroy($userSubAsset, $request);
+                        foreach ($userSubAssets as $userSubAsset)
+                        UserSubAssetController::destroy($userSubAsset, $request);
                     }
                 }
                 
                 $user_asset->delete();
             });
-
             return response()->json([
                 "status" => "0"
             ]);
 
         }
-        catch (\Exception $x) {}
+        catch (\Exception $x) {
+            // dd($x->getMessage());
+        }
         return response()->json([
             "status" => "-1"
         ]);
