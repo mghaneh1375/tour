@@ -11,59 +11,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- favicon
-                    ============================================ -->
+                        ============================================ -->
         <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('img/favicon.png') }}">
         <!-- Google Fonts
-                    ============================================ -->
+                        ============================================ -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
         <!-- Bootstrap CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}">
         <!-- Bootstrap CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/font-awesome.min.css') }}">
 
         <!-- adminpro icon CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/adminpro-custon-icon.css') }}">
 
         <!-- meanmenu icon CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/meanmenu.min.css') }}">
 
         <!-- mCustomScrollbar CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/jquery.mCustomScrollbar.min.css') }}">
 
         <!-- animate CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/animate.css') }}">
 
         <!-- jvectormap CSS
-                    ============================================ -->
+                        ============================================ -->
         {{--        <link rel="stylesheet" href="{{URL::asset('css/jvectormap/jquery-jvectormap-2.0.3.css')}}"> --}}
 
         <!-- normalize CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/data-table/bootstrap-table.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('css/data-table/bootstrap-editable.css') }}">
 
         <!-- normalize CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/normalize.css') }}">
         <!-- charts CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/c3.min.css') }}">
         <!-- style CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
         <!-- responsive CSS
-                    ============================================ -->
+                        ============================================ -->
         <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}">
 
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <!-- modernizr JS
-                    ============================================ -->
+                        ============================================ -->
         <script src="{{ URL::asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
         <script src="{{ URL::asset('js/jquery.min.js') }}"></script>
 
@@ -270,47 +270,47 @@
 
         @section('reminder')
             <!-- jquery
-                ============================================ -->
+                    ============================================ -->
             <script src="{{ URL::asset('js/vendor/jquery-1.11.3.min.js') }}"></script>
             <!-- bootstrap JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
             <!-- meanmenu JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/jquery.meanmenu.js') }}"></script>
             <!-- mCustomScrollbar JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
             <!-- sticky JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/jquery.sticky.js') }}"></script>
             <!-- scrollUp JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/jquery.scrollUp.min.js') }}"></script>
             <!-- scrollUp JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/wow/wow.min.js') }}"></script>
             <!-- counterup JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/counterup/jquery.counterup.min.js') }}"></script>
             <script src="{{ URL::asset('js/counterup/waypoints.min.js') }}"></script>
             <script src="{{ URL::asset('js/counterup/counterup-active.js') }}"></script>
             <!-- jvectormap JS
-                    ============================================ -->
+                        ============================================ -->
             {{-- <script src="{{URL::asset('js/jvectormap/jquery-jvectormap-2.0.2.min.js')}}"></script> --}}
             {{-- <script src="{{URL::asset('js/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script> --}}
             {{-- <script src="{{URL::asset('js/jvectormap/jvectormap-active.js')}}"></script> --}}
             <!-- peity JS
-                        ============================================ -->
+                            ============================================ -->
             <script src="{{ URL::asset('js/peity/jquery.peity.min.js') }}"></script>
             <script src="{{ URL::asset('js/peity/peity-active.js') }}"></script>
             <!-- sparkline JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/sparkline/jquery.sparkline.min.js') }}"></script>
             <script src="{{ URL::asset('js/sparkline/sparkline-active.js') }}"></script>
 
             <!-- data table JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/data-table/bootstrap-table.js') }}"></script>
             <script src="{{ URL::asset('js/data-table/tableExport.js') }}"></script>
             <script src="{{ URL::asset('js/data-table/data-table-active.js') }}"></script>
@@ -320,7 +320,7 @@
             <script src="{{ URL::asset('js/data-table/colResizable-1.5.source.js') }}"></script>
             <script src="{{ URL::asset('js/data-table/bootstrap-table-export.js') }}"></script>
             <!-- main JS
-                    ============================================ -->
+                        ============================================ -->
             <script src="{{ URL::asset('js/main.js') }}"></script>
 
             <script type="text/javascript">
