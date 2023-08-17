@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller {
 
+    private static $KOOCHITA_SERVER = "https://koochita-server.bogenstudio.com/api/";
 
     public function setPlaceId(Request $request, UserAsset $user_asset) {
 
@@ -20,7 +21,7 @@ class AdminController extends Controller {
             'place_id' => ['required', 'string']
         ]);
 
-        $ch = curl_init( "https://koochita-server.bogenstudio.com/api/place/checkIdExist/" . $request['place_id'] );
+        $ch = curl_init( self::$KOOCHITA_SERVER . "place/checkIdExist/" . $request['place_id'] );
 
         curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'GET' );
         curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
@@ -73,7 +74,7 @@ class AdminController extends Controller {
 
             if($user_asset->place_id == null) {
 
-                $ch = curl_init( "http://127.0.0.1:8088/api/place/addPlace" );
+                $ch = curl_init( self::$KOOCHITA_SERVER ."place/addPlace" );
             
                 $data = [
                     'name' => $user_asset->title,

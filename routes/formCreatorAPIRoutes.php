@@ -53,6 +53,8 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
 
     Route::delete("/", [UserAssetController::class, "destroy"]);
 
+    Route::put('/', [UserAssetController::class, 'update'])->name('user_asset.update');
+    
     Route::put("updateStatus", [UserAssetController::class, "updateStatus"]);
 
     Route::post("set_asset_pic/{form_field}", [UserFormController::class, 'set_asset_pic']);
