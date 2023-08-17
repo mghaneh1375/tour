@@ -134,7 +134,7 @@ class AdminController extends Controller {
             else
                 $placeId = $user_asset->place_id;
 
-            $ch = curl_init( self::$ROOM_SERVER . "/boom/system/store" );
+            $ch = curl_init( self::$ROOM_SERVER . "boom/system/store" );
             
             $data = [
                 'userId' => $user_asset->user_id,
