@@ -53,9 +53,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPanelBusinessWebRoutes()
     {
         Route::middleware('web')
-            ->domain('myboom2.com')
+            // ->domain('myboom2.com')
             //  ->domain('mybusiness.koochita.com')
-            //  ->domain('business.bogenstudio.com')
+             ->domain('business.bogenstudio.com')
             //  ->domain('businessPanel.localhost')
             ->namespace($this->namespace.'\PanelBusiness')
             ->group(base_path('routes/businessPanelRoutes.php'));
