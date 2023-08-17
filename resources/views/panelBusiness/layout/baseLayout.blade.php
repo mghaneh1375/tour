@@ -48,9 +48,9 @@
 
     <script>
         $.ajaxSetup({
-            xhrFields: {
-                withCredentials: true
-            },
+            // xhrFields: {
+            //     withCredentials: true
+            // },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
