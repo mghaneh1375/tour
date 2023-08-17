@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 class AdminController extends Controller {
 
     private static $KOOCHITA_SERVER = "https://koochita-server.bogenstudio.com/api/";
+    private static $ROOM_SERVER = "http://193.151.137.75/api/";
 
     public function setPlaceId(Request $request, UserAsset $user_asset) {
 
@@ -133,7 +134,7 @@ class AdminController extends Controller {
             else
                 $placeId = $user_asset->place_id;
 
-            $ch = curl_init( "http://127.0.0.1:8080/api/boom/system/store" );
+            $ch = curl_init( self::$ROOM_SERVER . "/boom/system/store" );
             
             $data = [
                 'userId' => $user_asset->user_id,
