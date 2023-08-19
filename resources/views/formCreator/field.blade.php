@@ -473,17 +473,20 @@
                 $('textarea').empty();
                 $('inpt').empty();
                 $('input:checkbox').removeAttr('checked');
-                // if (items[i].type.indexOf('RADIO') > -1) {
-                //     $("#editType").val('RADIO');
-                //     $("#options").removeClass('hidden');
-                //     $("textarea[name='options']").append();
-                // } else if (items[i].type.indexOf('CHECKBOX') > -1) {
-                //     $("#editType").val('CHECKBOX');
-                //     $("#options").removeClass('hidden');
-                // } else {
-                // }
+                if (items[i].type.indexOf('RADIO') > -1) {
+                    console.log('khar');
+                    $("#editType").val('RADIO');
+                    $("#options").removeClass('hidden');
+                    $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
+                    $("textarea[name='options']").append();
+                } else if (items[i].type.indexOf('CHECKBOX') > -1) {
+                    $("#editType").val('CHECKBOX');
+                    $("#options").removeClass('hidden');
+                    $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
+                } else {}
 
                 $("#editType option").each(function() {
+                    console.log(items[i].type);
                     if ($(this).text() === items[i].type) {
                         console.log(items[i].type);
                         changeType($(this).text());
@@ -586,6 +589,7 @@
         }
 
         function changeType(val) {
+            console.log(val);
             $("#showOptions").empty();
             $(".optionsLabel").empty();
             $(".subAssets").addClass('hidden');
@@ -596,19 +600,18 @@
                 return;
             } else if (val === "هدایت گر به فرم دیگر") {
                 $(".forms").removeClass('hidden');
-            } else if (val === "انتخاب چند گزینه از میان گزینه های موجود" || val ===
-                "انتخاب یک گزینه از میان گزینه های موجود" || val === 'API') {
+            } else if (val === 'API') {
                 console.log('api');
                 $(".options").removeClass('hidden');
-
-            } else if (val === "انتخاب چند گزینه از میان گزینه های موجود" || val ===
-                "انتخاب یک گزینه از میان گزینه های موجود") {
-                $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
-            } else if (val === "API") {
                 $(".optionsLabel").text(
                     "آدرس url، سرویس دهنده را وارد نمایید. نام کاربری و رمزعبور جهت اتصال به سرویس دهنده را با علامت _ از هم جدا کنید و وارد نمایید"
                 );
-            } else {
+
+            } else if (val === "انتخاب چند گزینه از میان گزینه های موجود" || val ===
+                "انتخاب یک گزینه از میان گزینه های موجود") {
+                $(".options").removeClass('hidden');
+                $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
+            } else if (val === "API") {} else {
                 // $("#editType option").attr('selected', false);
             }
         }

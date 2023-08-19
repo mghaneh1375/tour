@@ -21,6 +21,7 @@
 
             <div class="mainBackWhiteBody">
                 <div class="head">کسب و کارهای من</div>
+
                 @if (count($businesses) == 0)
                     <div class="row">
                         <div class="col-md-3">
@@ -48,11 +49,13 @@
                                 <th>تاریخ ایجاد</th>
 
                             </tr>
+
                             <?php $i = 1; ?>
                             @foreach ($businesses as $business)
                                 <tr id="tr_{{ $business->id }}">
                                     <td>{{ $i }}</td>
                                     @if ($business->readyForCheck)
+                                        <td> در حال بررسی </td>
                                         <td>{{ $business->name }}</td>
                                         <td>{{ $business->type }}</td>
                                         <td>در حال بررسی</td>

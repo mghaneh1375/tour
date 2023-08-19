@@ -101,8 +101,10 @@
                             <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('createForm') }}">
                                     ایجاد کسب وکارجدید</a>
-                                {{-- <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.create') }}">
-                                    هییت مدیر</a> --}}
+                            </li>
+                            <li>
+                                <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.create') }}">
+                                    هییت مدیر</a>
                             </li>
                             <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.panel') }} ">کسب و
