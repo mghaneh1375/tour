@@ -85,7 +85,7 @@
                                     <td>{!! html_entity_decode($field->limitation) !!}</td>
                                     <td>{{ $field->placeholder }}</td>
                                     <td>{{ $field->presenter ? 'بله' : 'خیر' }}</td>
-                                    <td>{{ $field->rtl ? 'ltr' : 'rtl' }}</td>
+                                    <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
                                     <td>{{ $field->multiple ? 'بله' : 'خیر' }}</td>
                                     <td>{{ $field->key_ }}</td>
@@ -398,7 +398,7 @@
                             </div>
                             <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
                                 <label for="direction">نوع چینش</label>
-                                <select name="direction">
+                                <select name="rtl">
                                     <option value="1">rtl</option>
                                     <option value="0">ltr</option>
                                 </select>
