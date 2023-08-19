@@ -348,13 +348,19 @@
                     success: function(res) {
                         if (res.status === 0) {
                             if (nextFormId !== undefined) {
-                                // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                //     userAssetId;
+                                if (filePic) {
+                                    storePic(userAssetId, fields);
+                                } else {
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                        "/" +
+                                        userAssetId;
+                                }
+
                             } else {
                                 lastPage();
                             }
                         } else {
-                            showSuccessNotifiBP(res.err, 'right', '#ac0020');
+                            showSuccessNotifiBP(res.errs, 'right', '#ac0020');
                         }
                     },
                     // error: function(rejected) {

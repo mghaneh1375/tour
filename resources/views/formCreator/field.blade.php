@@ -466,7 +466,6 @@
             items = forms.filter(x => x.id == id);
 
             for (let i = 0; i < items.length; i++) {
-                console.log(items);
                 url = u;
                 $('#editType option').attr('selected', false);
                 // $("#editType option").attr('selected', false);
@@ -474,7 +473,6 @@
                 $('inpt').empty();
                 $('input:checkbox').removeAttr('checked');
                 if (items[i].type.indexOf('RADIO') > -1) {
-                    console.log('khar');
                     $("#editType").val('RADIO');
                     $("#options").removeClass('hidden');
                     $(".optionsLabel").text("گزینه های مدنظر (گزینه های خود را با علامت '_' از هم جدا کنید");
@@ -486,9 +484,7 @@
                 } else {}
 
                 $("#editType option").each(function() {
-                    console.log(items[i].type);
                     if ($(this).text() === items[i].type) {
-                        console.log(items[i].type);
                         changeType($(this).text());
                         $(this).attr('selected', true);
                     } else {
@@ -497,7 +493,6 @@
 
                 });
                 if (items[i].type.indexOf('API') > -1) {
-                    console.log('123');
                     changeType('API');
                     $('#editType option[value="API"]').attr('selected', true);
                 }
@@ -519,7 +514,6 @@
                     $('#nid').prop('checked', true);
                     $('#minChar').prop('checked', true);
                     str = limitations.replace(/[^\d.]/g, '');
-                    console.log(str);
                     total = parseInt(str, 10);
                     $("#charCount").val(total);
                     $("#charCountDiv").removeClass("hidden");
@@ -529,11 +523,9 @@
                     $('#minChar').prop('checked', true);
                     $("#charCountDiv").removeClass("hidden");
                     str = limitations.replace(/[^\d.]/g, '');
-                    console.log(str);
                     total = parseInt(str, 10);
                     $("#charCount").val(total);
                 } else {
-                    // console.log(limitations);
                     // limitations.push('محدودیتی موجود نیست');
                 }
             }
@@ -589,7 +581,6 @@
         }
 
         function changeType(val) {
-            console.log(val);
             $("#showOptions").empty();
             $(".optionsLabel").empty();
             $(".subAssets").addClass('hidden');
@@ -601,7 +592,6 @@
             } else if (val === "هدایت گر به فرم دیگر") {
                 $(".forms").removeClass('hidden');
             } else if (val === 'API') {
-                console.log('api');
                 $(".options").removeClass('hidden');
                 $(".optionsLabel").text(
                     "آدرس url، سرویس دهنده را وارد نمایید. نام کاربری و رمزعبور جهت اتصال به سرویس دهنده را با علامت _ از هم جدا کنید و وارد نمایید"
