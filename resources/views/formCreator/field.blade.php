@@ -85,7 +85,7 @@
                                     <td>{!! html_entity_decode($field->limitation) !!}</td>
                                     <td>{{ $field->placeholder }}</td>
                                     <td>{{ $field->presenter ? 'بله' : 'خیر' }}</td>
-                                    <td>{{ $field->rtl ? 'rtl' : 'ltr' }}</td>
+                                    <td>{{ $field->rtl ? 'ltr' : 'rtl' }}</td>
                                     <td>{{ $field->half ? 'نمایش نصفه' : 'نمایش کامل' }}</td>
                                     <td>{{ $field->multiple ? 'بله' : 'خیر' }}</td>
                                     <td>{{ $field->key_ }}</td>
@@ -240,8 +240,8 @@
                         <div style="display: flex;width: 51%;justify-content: space-between;margin-bottom:5px">
                             <label for="half">آیا این فیلد کل عرض را بگیرد؟</label>
                             <select id="editHalf"name="half">
-                                <option value="1">بله</option>
-                                <option value="0">خیر</option>
+                                <option value="1">خیر</option>
+                                <option value="0">بله</option>
                             </select>
                         </div>
                     </div>
@@ -298,8 +298,8 @@
                                 <input type="text" name="name">
                             </div>
                             <div>
-                                <label for="key">کلید</label>
-                                <input type="text" name="key">
+                                <label for="key_">کلید</label>
+                                <input type="text" name="key_">
                             </div>
                         </div>
 
@@ -383,24 +383,24 @@
                             <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
                                 <label for="presenter">آیا فیلد منتخب است؟</label>
                                 <select name="presenter">
-                                    <option value="0">خیر</option>
                                     <option value="1">بله</option>
+                                    <option value="0">خیر</option>
                                 </select>
                             </div>
                             <div
                                 style="display: flex;width: 51%;justify-content: space-between;margin-left:5px;margin-bottom:5px">
                                 <label for="multiple">آیا کاربر می تواند چند ورودی داشته باشد؟</label>
                                 <select name="multiple">
-                                    <option value="0">خیر</option>
                                     <option value="1">بله</option>
+                                    <option value="0">خیر</option>
                                 </select>
                                 </span>
                             </div>
                             <div style="display: flex;width: 45%;justify-content: space-between;margin-bottom:5px">
                                 <label for="direction">نوع چینش</label>
                                 <select name="direction">
-                                    <option value="0">ltr</option>
                                     <option value="1">rtl</option>
+                                    <option value="0">ltr</option>
                                 </select>
                             </div>
 
@@ -408,8 +408,8 @@
                             <div style="display: flex;width: 51%;justify-content: space-between;margin-bottom:5px">
                                 <label for="half">آیا این فیلد کل عرض را بگیرد؟</label>
                                 <select name="half">
-                                    <option value="1">بله</option>
-                                    <option value="0">خیر</option>
+                                    <option value="1">خیر</option>
+                                    <option value="0">بله</option>
                                 </select>
                             </div>
                         </div>

@@ -130,6 +130,11 @@ class FormFieldController extends Controller
             $field->rtl = true;
         else
             $field->rtl = false;
+        if($request->has("presenter") && $request["presenter"] == "1")
+            $field->presenter = true;
+        else
+            $field->presenter = false;
+    
         if($request->has("half") && $request["half"] == "1")
             $field->half = true;
         else
@@ -145,6 +150,7 @@ class FormFieldController extends Controller
         $field->force_help = $request["force_help"];
         $field->placeholder = $request["placeholder"];
         $field->key_ = $request["key_"];
+        
 
         if($field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
