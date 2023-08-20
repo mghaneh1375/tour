@@ -273,10 +273,11 @@ class UserSubAssetController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public static function destroy(UserSubAsset $user_sub_asset, Request $request) {
-
-
-        if($request->user()->id != $user_sub_asset->user_id)
-            return abort(401);
+        
+        // if($request->user()->id != $user_sub_asset->user_id){
+        //     dd('111');
+        //         return abort(401);
+        // }
 
         try {
 

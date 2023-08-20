@@ -351,9 +351,9 @@
                                 if (filePic) {
                                     storePic(userAssetId, fields);
                                 } else {
-                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                        "/" +
-                                        userAssetId;
+                                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                    //     "/" +
+                                    //     userAssetId;
                                 }
 
                             } else {
