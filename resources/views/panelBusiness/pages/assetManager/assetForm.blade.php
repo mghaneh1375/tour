@@ -413,21 +413,26 @@
             }
             $inputs.each(function() {
                 $(this).parent().removeClass('errorInput');
-                if ($(this).attr('id') === 'selectStateForSelectCity')
+                var inputAttr = $(this).attr('id');
+                if (inputAttr === 'selectStateForSelectCity')
                     return;
-                if ($(this).attr('id') === 'searchInput')
+                if (inputAttr === 'searchInput')
                     return;
-                if ($(this).attr('id') === 'inputSearchCity')
+                if (inputAttr === 'inputSearchCity')
                     return;
                 if ($(this).attr('data-change') === '0')
                     return;
                 if (!$(this).attr('required') && $(this).val() === '') {
                     return;
                 }
-                // if ($(this).hasClass('mapMark')) {
-                //     $(this).val(z);
-                // }
-                if ($(this).attr('id') === calenderId) {
+                if (inputAttr == apiId) {
+                    fields.push({
+                        id: $(this).attr('id'),
+                        data: stateName + '$$' + cityName
+                    });
+                    return;
+                }
+                if (inputAttr === calenderId) {
                     if ($(this).val() !== '') {
                         underAgeValidate($(this).val());
                         if (ageVal === true) {
@@ -441,11 +446,14 @@
                 }
                 if ($(this).hasClass('phone')) {
                     if (multiple) {
+                        ;
                         if (moreItems.length > 0) {
                             fields.push({
-                                id: $(this).attr('id'),
+                                id: inputAttr,
                                 data: moreItems.join("_")
                             });
+
+                        } else {
                             if ($(this).attr('required')) {
                                 if (moreItems.length < 1) {
                                     errorText += '<ul class="errorList"> ';
@@ -457,6 +465,8 @@
                             return;
                         }
                     }
+
+
                 }
                 if ($(this).attr('type') === 'checkbox') {
                     let checkName = $(this).attr('name');
@@ -479,13 +489,7 @@
 
                     return;
                 }
-                if ($(this).attr('type') === 'API') {
-                    fields.push({
-                        id: $(this).attr('id'),
-                        data: stateName + '$$' + cityName
-                    });
-                    return;
-                }
+
                 if ($(this).attr('type') === 'radio') {
 
                     let id = $(this).attr('id');
@@ -521,7 +525,7 @@
                 }
 
                 fields.push({
-                    id: $(this).attr('id'),
+                    id: inputAttr,
                     data: $(this).val()
                 });
             });
@@ -550,10 +554,8 @@
 
             if (errorText.length > 0)
                 openErrorAlertBP(errorText);
-            else {
+            else
                 storeData(fields);
-
-            }
 
         }
 
@@ -648,7 +650,8 @@
 
         function searchForCity(_element) {
             var stateId = $("#selectStateForSelectCity").val();
-            cityName = $("#selectStateForSelectCity option[value=" + stateId + "]").text();
+            stateName = $("#selectStateForSelectCity option[value=" + stateId + "]").text();
+
             var value = $(_element).val().trim();
             var citySrcInput = $(_element);
             citySrcInput.next().empty();
@@ -706,7 +709,7 @@
         function selectThisCityForSrc(_element, _id) {
             $("#" + apiId).val($(_element).text());
             // $("#" + apiId).append($(_element).text());
-            stateName = $(_element).text();
+            cityName = $(_element).text();
             $("#srcCityId").val(_id);
             $("#addCityModal").modal("hide");
             $(_element).parent().empty();
@@ -934,7 +937,6 @@
 
         function addPhone() {
             var errorText = "";
-            // $('.inputBoxAdd').after('<div id="space"></div>');
             itemsVal = $("#" + addId).val();
             if (itemsVal.length > 7) {
                 let x = true;
@@ -1019,7 +1021,6 @@
         }
 
         function buildFormHtml(res, resultBox, modal) {
-
             if (!modal)
                 allData = res;
 
@@ -1045,18 +1046,22 @@
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
+                    text += '<div>';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' :
-                            '') + ' cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
-                            'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res.fields[i].options[x] + '';
+                        text += '<label style="white-space: nowrap;justify-content: center;display: inline-flex;" class="' +
+                            (res.fields[i].status == 'REJECT' ? 'errorInput' :
+                                '') + ' cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
+                                'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res.fields[i].options[x] +
+                            '';
                         text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
                             '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
                             '" ' + (res.fields[i].data == res.fields[i].options[x] ?
-                                'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '')
-                        '>';
+                                'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
+                            '>';
                         text += '</label>';
 
                     }
+                    text += '</div>';
                     text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'checkbox') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
@@ -1067,11 +1072,14 @@
                     text += '</div>';
                     let data = res.fields[i].data !== null && res.fields[i].data != '' ?
                         res.fields[i].data.split("_") : [];
+                    text += '<div>';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         let isSelected = data.indexOf(res.fields[i].options[x]) !== -1;
                         text += '<label class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
                             ' mg-rt-6 cursorPointer ' + (isSelected ? 'active' : '') + '" for="' + res
-                            .fields[i].options[x] + '">' + res.fields[i].options[x] + '';
+                            .fields[i].options[x] +
+                            '" style="white-space: nowrap;justify-content: center;display: inline-flex;">' + res.fields[i]
+                            .options[x] + '';
                         text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
                             '" name="' + res.fields[i].name + '"  data-id="' + res.fields[i].field_id +
                             '" ' + (isSelected ? 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
@@ -1079,6 +1087,7 @@
                         text += '</label>';
 
                     }
+                    text += '</div>';
                     text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'string') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
@@ -1150,13 +1159,58 @@
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
-                    addId = res.fields[i].field_id;
+
                     // itemsVal = res.fields[i].data;
-                    moreItems = res.fields[i].data !== null && res.fields[i].data != '' && res.fields[i].multiple ===
-                        1 ?
-                        res.fields[i].data.split("_") : [];
-                    if (moreItems.length < 2) {
-                        oneItems = true;
+
+                    if (res.fields[i].multiple === 1) {
+                        moreItems = res.fields[i].data !== null && res.fields[i].data != '' && res.fields[i].multiple ===
+                            1 ?
+                            res.fields[i].data.split("_") : [];
+                        if (moreItems.length < 2) {
+                            oneItems = true;
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
+                                '') + '"> ' + res.fields[i].name + '</div>';
+                            text += '</div>';
+                            text += '<input type="text" onkeypress="return isNumber(event)" value="' + (res.fields[i]
+                                    .data !=
+                                    null ?
+                                    '' +
+                                    res.fields[i].data +
+                                    '' :
+                                    '') + '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
+                                '" class="inputBoxInput  ' + (res.fields[i].multiple ===
+                                    1 ? 'phone' : '') + '  ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                                '" placeholder="' + (res
+                                    .fields[
+                                        i]
+                                    .placeholder !=
+                                    null ?
+                                    '' + res.fields[i].placeholder + '' : '') + '"' + (res
+                                    .fields[i]
+                                    .necessary == 1 ? 'required ' : '') + ' >';
+                        } else {
+                            multipleVal = true;
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="' + (res.fields[i].necessary == 1 ?
+                                ' importantFieldLabel' :
+                                '') + '"> ' + res.fields[i].name + '</div>';
+                            text += '</div>';
+                            text += '<input type="text" onkeypress="return isNumber(event)" name="' + res.fields[i].name +
+                                '" id="' + res.fields[i].field_id + '" class="inputBoxInput ' + (res.fields[i].multiple ==
+                                    1 ? 'phone' : '') + ' " placeholder="' + (res.fields[i].placeholder != null ? '' + res
+                                    .fields[i]
+                                    .placeholder + '' : '') + '"' + (res
+                                    .fields[i].necessary == 1 ? 'required ' : '') + ' >';
+
+                        }
+                        multiple = true;
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxAdd "onclick="addPhone()">';
+                        text += '<div class="plus2" style="font-size: 18px;font-weight: bold;"></div>';
+                        text += '<div style="font-size: 14px;" > اضافه کن</div>';
+                        text += '</div>';
+                    } else {
                         text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                         text += '<div class="' + (res.fields[i].necessary == 1 ?
                             ' importantFieldLabel' :
@@ -1169,7 +1223,8 @@
                                 res.fields[i].data +
                                 '' :
                                 '') + '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
-                            '" class="inputBoxInput phone ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                            '" class="inputBoxInput  ' + (res.fields[i].multiple ===
+                                1 ? 'phone' : '') + '  ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
                             '" placeholder="' + (res
                                 .fields[
                                     i]
@@ -1178,25 +1233,6 @@
                                 '' + res.fields[i].placeholder + '' : '') + '"' + (res
                                 .fields[i]
                                 .necessary == 1 ? 'required ' : '') + ' >';
-                    } else {
-                        multipleVal = true;
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
-                        text += '<div class="' + (res.fields[i].necessary == 1 ?
-                            ' importantFieldLabel' :
-                            '') + '"> ' + res.fields[i].name + '</div>';
-                        text += '</div>';
-                        text += '<input type="text" onkeypress="return isNumber(event)" name="' + res.fields[i].name +
-                            '" id="' + res.fields[i].field_id + '" class="inputBoxInput phone" placeholder="' +
-                            (res.fields[i].placeholder != null ? '' + res.fields[i].placeholder + '' : '') + '"' + (res
-                                .fields[i].necessary == 1 ? 'required ' : '') + ' >';
-
-                    }
-                    if (res.fields[i].multiple === 1) {
-                        multiple = true;
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxAdd "onclick="addPhone()">';
-                        text += '<div class="plus2" style="font-size: 18px;font-weight: bold;"></div>';
-                        text += '<div style="font-size: 14px;" > اضافه کن</div>';
-                        text += '</div>';
                     }
                     text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'listview') {
@@ -1518,19 +1554,20 @@
                         .replace(
                             "https",
                             "http");
+                    let myArray;
+                    cityFullName = res.fields[i].data;
+                    if (cityFullName !== null) {
+                        myArray = cityFullName.split("$$");
+                        cityName = myArray[1];
+                        stateName = myArray[0];
+                    }
                     apiId = res.fields[i].field_id;
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
-
-                    // text += '<input value=" " type="text" id="' + res.fields[i].field_id +
-                    //     '" class="inputBoxInput" placeholder="' + (res.fields[i].placeholder != null ?
-                    //         '' + res.fields[i].placeholder + '' : '') + '"' + (res.fields[i]
-                    //         .necessary == 1 ? 'required ' : '') + ' onkeyup="searchCityName(this)" >';
-
-                    text += '<input value="' + (res.fields[i].data != null ? '' + res.fields[i].data + '' : '') +
+                    text += '<input value="' + (res.fields[i].data != null ? '' + cityName + '' : '') +
                         '" type="text" id="' + res.fields[i]
                         .field_id +
                         '" class="inputBoxInput" name="' + res.fields[i].name +
@@ -1617,6 +1654,7 @@
                     text += '</div>';
                 }
                 if (res.fields[i].multiple === 1 || multipleVal) {
+                    addId = res.fields[i].field_id;
                     text += '<div id="input-' + res.fields[i].field_id +
                         '-items" style="display: flex;flex-direction: row;">';
                     if (multipleVal) {
