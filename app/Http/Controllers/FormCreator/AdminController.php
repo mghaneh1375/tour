@@ -35,7 +35,7 @@ class AdminController extends Controller {
 
         if($httpcode != 200)
             return response()->json([
-                'status' => '1',
+                'status' => '-1',
                 'msg' => 'داده وارد شده معتبر نمی باشد'
             ]);
 
@@ -43,7 +43,7 @@ class AdminController extends Controller {
         
         if($result->status == 'nok')
             return response()->json([
-                'status' => '1',
+                'status' => '-1',
                 'msg' => $result->msg
             ]);
 
@@ -83,6 +83,8 @@ class AdminController extends Controller {
                 ];
     
                 $representerData = $user_asset->get_presenter_data();
+                $features = [];
+
                 foreach($representerData as $itr) {
                     
                     if($itr->key_ == 'geo') {
@@ -95,9 +97,18 @@ class AdminController extends Controller {
                         $data['state'] = $d[0];
                         $data['city'] = $d[1];
                     }
+                    else if(str_contains($itr->key_, 'feature')) {
+                        array_push($features, [
+                            "key" => $itr->name,
+                            "features" => explode("_", $itr->data)
+                        ]);
+                    }
                     else
                         $data[$itr->key_] = $itr->data;
                 }
+
+                if(count($features) > 0)
+                    $data['features'] = $features;
     
                 $payload = json_encode( $data );
                 // dd($payload);
@@ -113,7 +124,7 @@ class AdminController extends Controller {
 
                 if($httpcode != 200)
                     return response()->json([
-                        'status' => '1',
+                        'status' => '-1',
                         'msg' => 'داده وارد شده معتبر نمی باشد'
                     ]);
 
@@ -122,7 +133,7 @@ class AdminController extends Controller {
                 
                 if($result->status == 'nok')
                     return response()->json([
-                        'status' => '1',
+                        'status' => '-1',
                         'msg' => $result->msg
                     ]);
             
@@ -154,7 +165,7 @@ class AdminController extends Controller {
 
             if($httpcode != 200)
                 return response()->json([
-                    'status' => '1',
+                    'status' => '-1',
                     'msg' => 'خطا در سامانه اتاق ها',
                     'errCode' => $httpcode
                 ]);
@@ -163,7 +174,7 @@ class AdminController extends Controller {
                 
             if($result->status == 'nok')
                 return response()->json([
-                    'status' => '1',
+                    'status' => '-1',
                     'msg' => $result->msg
                 ]);
         

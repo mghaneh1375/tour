@@ -425,7 +425,7 @@
                 if (!$(this).attr('required') && $(this).val() === '') {
                     return;
                 }
-                if (inputAttr == apiId) {
+                if (apiId !== null && inputAttr == apiId) {
                     fields.push({
                         id: $(this).attr('id'),
                         data: stateName + '$$' + cityName
