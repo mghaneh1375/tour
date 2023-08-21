@@ -274,11 +274,11 @@ class UserSubAssetController extends Controller
      */
     public static function destroy(UserSubAsset $user_sub_asset, Request $request) {
         
-        // if($request->user()->id != $user_sub_asset->user_id){
-        //     dd('111');
-        //         return abort(401);
-        // }
-
+        $user = $request->user();
+        
+        if($user->level != 2 && $user->id != $user_sub_asset->user_id)
+            return abort(401);
+        
         try {
 
             DB::transaction(function () use ($user_sub_asset) {

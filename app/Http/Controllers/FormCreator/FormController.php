@@ -369,8 +369,7 @@ class FormController extends Controller
         $form->description = $request["description"];
         $form->notice = $request["notice"];
 
-        if($form->step != $request["step"] && Form::where('step',$request["step"])->count() > 0)
-            dd("فرمی با این گام وجود دارد.");
+        
 
         $form->step = $request["step"];
         $form->save();

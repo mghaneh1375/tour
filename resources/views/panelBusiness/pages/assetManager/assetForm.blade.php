@@ -268,7 +268,6 @@
             }
             if (isInFirstStep) {
                 if (userAssetId === -1) {
-                    // todo: call store asset api
                     openLoading();
                     $.ajax({
                         type: 'post',
@@ -351,9 +350,9 @@
                                 if (filePic) {
                                     storePic(userAssetId, fields);
                                 } else {
-                                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                    //     "/" +
-                                    //     userAssetId;
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                        "/" +
+                                        userAssetId;
                                 }
 
                             } else {
@@ -446,13 +445,11 @@
                 }
                 if ($(this).hasClass('phone')) {
                     if (multiple) {
-                        ;
                         if (moreItems.length > 0) {
                             fields.push({
                                 id: inputAttr,
                                 data: moreItems.join("_")
                             });
-
                         } else {
                             if ($(this).attr('required')) {
                                 if (moreItems.length < 1) {
@@ -462,8 +459,8 @@
                                     $(this).parent().addClass('errorInput');
                                 }
                             }
-                            return;
                         }
+                        return;
                     }
 
 
@@ -512,7 +509,7 @@
 
                 }
                 if ($(this).attr('type') === 'file') {
-                    if ($(this).val() === '') {
+                    if ($(this).val() !== '') {
                         filePic = true;
                     }
                 }
@@ -569,7 +566,6 @@
         openLoading();
         $.ajax({
             type: 'get',
-            // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
             url: url + '/asset/' + assetId + "/form",
             complete: closeLoading,
             headers: {
@@ -612,9 +608,11 @@
                             html += '</div>';
                             html += '</div>';
                             html += '<div style="margin-top: 20px">';
-                            html += '<p class="bold">' + res.forms[i].description + '</p>';
+                            html += '<p class="bold">' + (res.forms[i].description != null ? '' + res.forms[i]
+                                .description + '' : '') + '</p>';
                             html += '<div>';
-                            html += '<p>' + res.forms[i].notice + '</p>';
+                            html += '<p>' + (res.forms[i].notice != null ? '' + res.forms[i].notice + '' : '') +
+                                '</p>';
                             html += '</div>';
                             html += '</div>';
 
@@ -708,14 +706,10 @@
 
         function selectThisCityForSrc(_element, _id) {
             $("#" + apiId).val($(_element).text());
-            // $("#" + apiId).append($(_element).text());
             cityName = $(_element).text();
             $("#srcCityId").val(_id);
             $("#addCityModal").modal("hide");
             $(_element).parent().empty();
-
-            // if (document.getElementById("sameSrcDestInput").checked)
-            //     $("#destPlaceId").val(_id);
         }
         $('#addCityModal').on('hidden.bs.modal', function(e) {
             $(this)
@@ -759,7 +753,6 @@
         function saveModal() {
             var errorText = "";
             var $inputs = $('#redirectList :input');
-            // An array of just the ids...
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
@@ -866,9 +859,6 @@
             } else {
                 storeDataModal(fields);
                 $('#addModal').attr("data-dismiss", "modal");
-                // if (nextFormId !== undefined) {
-                //     storeData(fields);
-                // }
             }
         }
 
@@ -913,7 +903,7 @@
             openLoading();
             $.ajax({
                 type: 'get',
-                // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
+
                 url: url + '/form/' + subAssetFromId,
                 complete: closeLoading,
                 headers: {
@@ -975,10 +965,8 @@
         }
 
         function deleteFromListview(id, el) {
-            // openLoading();
             $.ajax({
                 type: 'DELETE',
-                // complete: closeLoading,
                 url: url + '/user_sub_asset/' + id,
                 success: function(res) {
                     if (res.status === "0" || res.status === "ok") {
@@ -990,7 +978,6 @@
                     }
                 }
             })
-            // location.reload();
         }
 
         function editSubAsset(i, y) {
@@ -1160,7 +1147,6 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
 
-                    // itemsVal = res.fields[i].data;
 
                     if (res.fields[i].multiple === 1) {
                         moreItems = res.fields[i].data !== null && res.fields[i].data != '' && res.fields[i].multiple ===
@@ -1180,8 +1166,8 @@
                                     res.fields[i].data +
                                     '' :
                                     '') + '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput  ' + (res.fields[i].multiple ===
-                                    1 ? 'phone' : '') + '  ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                                '" class="inputBoxInput  ' + (res.fields[i].multiple === 1 ? 'phone' : '') + '  ' + (res
+                                    .fields[i].status == 'REJECT' ? 'errorInput' : '') +
                                 '" placeholder="' + (res
                                     .fields[
                                         i]
@@ -1277,20 +1263,6 @@
                                 'relative-position inputBoxTour boxRoom" style="order: 2;min-height: 150px;">';
 
                             text += '<div class="row" >';
-                            // for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
-
-                            //     if (res.fields[i].items[y].fields[m].type == 'string') {
-                            //         roomName.push(res.fields[i].items[y].fields[m].val);
-                            //         name = res.fields[i].items[y].fields[m].val;
-                            //         nameKey = res.fields[i].items[y].fields[m].key_;
-
-                            //     }
-                            //     if (res.fields[i].items[y].fields[m].type == 'textarea') {}
-                            //     if (res.fields[i].items[y].fields[m].type == 'int') {
-                            //         count = res.fields[i].items[y].fields[m].val;
-                            //         countKey = res.fields[i].items[y].fields[m].key_;
-                            //     }
-                            // }
 
                             text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
@@ -1314,8 +1286,6 @@
                                     nameKey = res.fields[i].items[y].fields[m].key_;
                                     text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
                                     text += '<div class="bold roomName">' + name + ' </div>';
-                                    // text += '<div class="colorOrag bold">تعداد ' + subAsserName + '</div>';
-                                    // text += '<div class="bold">' + count + ' </div>';
                                 }
                             }
                             text += '</div>';
@@ -1498,7 +1468,7 @@
                             ')"><i class="trashIcon iconStyle"></i></div>';
                         }
                         text +=
-                            '  <button class="fileBtn cursorPointer" style="display:block;width:60%; height:30px;" onclick="$(\'#' +
+                            '  <button class="fileBtn cursorPointer" style="display:block;width:60%; height:30px;white-space: nowrap;" onclick="$(\'#' +
                             fileId + '\').click()">تغییر فایل</button>';
                         text += '</div>';
                     } else {
@@ -1762,7 +1732,6 @@
                 if (marker !== undefined)
                     marker.remove();
 
-                //add marker
                 marker = new mapboxgl.Marker();
                 marker.setLngLat(e.lngLat).addTo(map);
 
@@ -1814,7 +1783,6 @@
                 openLoading();
                 $.ajax({
                     type: 'get',
-                    // url: 'http://myeghamat.com/api/form/' + formId,
                     url: url + '/form/' + formId,
                     complete: closeLoading,
                     headers: {
@@ -1925,9 +1893,7 @@
                     uploadProcess = true;
                     uploadProcessId = picQueue[index].id;
                     var file = document.getElementById(`picsInput_${uploadProcessId}`).files;
-                    uploadLargeFile(tourPicUrl, file[0], {
-                            //tourId: tour.id
-                        }, uploadPicResult,
+                    uploadLargeFile(tourPicUrl, file[0], {}, uploadPicResult,
                         token
                     );
                 }
@@ -2012,7 +1978,6 @@
                 complete: closeLoading,
                 url: deleteTourPicUrl,
                 data: {
-                    // tourId: tour.id,
                     pic: _fileName,
                 }
             })

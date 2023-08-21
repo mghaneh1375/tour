@@ -400,6 +400,7 @@
                         }
                         $("#" + id).empty().append(newStatus);
                         showSuccessNotifiBP('عملیات با موفقیت انجام شد', 'right', '#053a3e');
+                        location.reload();
                     } else {
                         showSuccessNotifiBP(res.msg, 'right', '#ac0020');
                     }

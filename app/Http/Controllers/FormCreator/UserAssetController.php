@@ -244,6 +244,11 @@ class UserAssetController extends Controller
         if($request['status'] == 'REJECT' && $request->has('err_text'))
             $user_form_data->err_text = $request['err_text'];
 
+        if($request['status'] == 'CONFIRM' &&  $user_form_data->err_text !=null){
+            $user_form_data->err_text = null;  
+        }
+            
+            
         $user_form_data->save();
 
         return response(['status' => '0']);
