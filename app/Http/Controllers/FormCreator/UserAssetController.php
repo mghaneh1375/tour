@@ -216,8 +216,6 @@ class UserAssetController extends Controller
             }
         }
 
-        // dd($forms);
-
         return view('formCreator.report.field', [
             'forms' => $forms, 
             'id' => $user_asset->id, 

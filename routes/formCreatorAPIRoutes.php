@@ -59,6 +59,8 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
 
     Route::post("set_asset_pic/{form_field}", [UserFormController::class, 'set_asset_pic']);
 
+    Route::post("set_formField_file/{form_field}", [UserFormController::class, 'set_formField_file']);
+
     Route::post("set_pic/{form_field}", [UserFormController::class, 'set_pic']);
 
     Route::delete("delete_pic_from_gallery/{form_field}", [UserFormController::class, 'delete_pic_from_gallery']);

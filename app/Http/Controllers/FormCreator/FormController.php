@@ -133,21 +133,29 @@ class FormController extends Controller
                 $fields = $form->form_fields()->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                     $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
                 })->select(['form_fields.id as field_id', 'user_forms_data.status', 'user_forms_data.err_text', 'user_forms_data.id as user_form_data_id', 'multiple', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'data', 'help', 'force_help', 'options'])->get();
-
+                foreach ($fields as $field) {
+                    if($field->type == "FILE")
+                        $field->data = $userAsset->file;
+                }
+dd($fields);
                 if($form->name == "اطلاعات مالک") {
                     if($fields[0]->data == null || empty($fields[0]->data)) {
                         foreach ($fields as $field) {
+                            
                             $data = UserFormsData::where('user_id',$userId)->where('field_id',$field->field_id)->select('data')->first();
                             if($data != null && !empty($data))
                                 $field->data = $data->data;
+
                             else
                                 break;
                         }
                     }
                 }
+                
             }
         }
         else {
+            
             $fields = $form->form_fields()->select(['form_fields.id as field_id', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'help', 'force_help', 'multiple', 'options','key_'])->get();
         }
 
@@ -157,12 +165,10 @@ class FormController extends Controller
         }
 
         $update = false;
-        
+        // dd($fields);
         foreach ($fields as $field) {
-
             if($userAssetId == -1)
                 $field->data = null;
-
             // if($field->data != null) {
             //     $update = true;
             //     break;
@@ -225,13 +231,13 @@ class FormController extends Controller
                     // todo: thinking pic = false
                 $pic = true;
 
+                dd($subAssets);
                 foreach ($subAssets as $subAsset) {
 
                     $subAsset->fields = DB::connection("formDB")->select("select lower(ff.type) as type from assets a, forms f, form_fields ff, user_forms_data u where " .
                         " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
                         " u.user_asset_id = " . $subAsset->id
                     );
-
                     foreach ($subAsset->fields as $ff) {
                         if($ff->type == "file") {
                             $pic = true;
@@ -311,7 +317,7 @@ class FormController extends Controller
 
                 $field->items = $subAssets;
             }
-
+            
             else if($field->type == "file" && $field->data != null) {
                 $field->data = URL::asset("storage/" . $field->data);
             }
@@ -333,7 +339,6 @@ class FormController extends Controller
                 $field->user_form_data_id = $userFormData->id;
             }
         }
-
         return response()->json([
             "status" => 0,
             "fields" => $fields,

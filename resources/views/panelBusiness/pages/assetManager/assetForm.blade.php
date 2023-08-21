@@ -230,6 +230,7 @@
         var multiple = false;
         var initMap = false;
         var callInitMap = false;
+        var formFieldPic = true;
         var cityName;
         var stateName;
         let url = '{{ route('formCreator.root') }}';
@@ -251,8 +252,47 @@
                 data: fileStore,
                 success: function(res) {
                     if (res.status === "0") {
-                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                        if (nextFormId !== undefined) {
+                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
+                        } else {
+                            lastPage();
+                        }
                     } else {}
+                }
+            });
+        }
+
+        function storeFieldFiles(fileIds, fields) {
+            openLoading();
+            storeFile($("#" + fileIds[0])[0].files[0], fields);
+        }
+
+        function storeFile(localFile, fields) {
+
+            var fileStore = new FormData();
+            fileStore.append('file', localFile);
+            $.ajax({
+                type: 'post',
+                url: url + '/user_asset/' + userAssetId + "/set_formField_file/" + fileId,
+                processData: false,
+                complete: closeLoading,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                },
+                data: fileStore,
+                success: function(res) {
+                    if (res.status === "0") {
+
+                        formFieldPic = true;
+
+                        if (fields.length > 0)
+                            storeData(fields);
+
+                    } else {
+                        console.log('nashod');
+                    }
                 }
             });
         }
@@ -260,7 +300,7 @@
         function storeData(fields) {
             if (fields.length == 0) {
                 if (nextFormId !== undefined) {
-                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
                     lastPage();
@@ -283,8 +323,8 @@
                                 if (filePic) {
                                     storePic(userAssetId, fields);
                                 } else {
-                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                        userAssetId;
+                                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                    //     userAssetId;
                                 }
                             } else {
 
@@ -309,15 +349,8 @@
                             },
                             success: function(res) {
                                 if (res.status === "0") {
-
-                                    if (filePic) {
-                                        storePic(userAssetId, fields);
-                                    } else {
-                                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                            "/" +
-                                            userAssetId;
-                                    }
-
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                        "/" + userAssetId;
                                 } else {
                                     showSuccessNotifiBP(res.errs, 'right', '#ac0020');
 
@@ -347,14 +380,9 @@
                     success: function(res) {
                         if (res.status === 0) {
                             if (nextFormId !== undefined) {
-                                if (filePic) {
-                                    storePic(userAssetId, fields);
-                                } else {
-                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                        "/" +
-                                        userAssetId;
-                                }
-
+                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                    "/" +
+                                    userAssetId;
                             } else {
                                 lastPage();
                             }
@@ -383,7 +411,7 @@
                 success: function(res) {
                     if (res.status === "0") {
 
-                        window.location.href = "{{ route('businessPanel.panel') }} "
+                        // window.location.href = "{{ route('businessPanel.panel') }} "
 
                     } else {
                         showSuccessNotifiBP(res.errs, 'right', '#ac0020');
@@ -403,6 +431,9 @@
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
+
+            let fileIds = [];
+
             if (ckeditorExist) {
                 const editorData = editor.getData();
                 fields.push({
@@ -410,9 +441,12 @@
                     data: editorData
                 });
             }
+
             $inputs.each(function() {
+
                 $(this).parent().removeClass('errorInput');
                 var inputAttr = $(this).attr('id');
+
                 if (inputAttr === 'selectStateForSelectCity')
                     return;
                 if (inputAttr === 'searchInput')
@@ -510,7 +544,8 @@
                 }
                 if ($(this).attr('type') === 'file') {
                     if ($(this).val() !== '') {
-                        filePic = true;
+                        fileIds.push(inputAttr);
+                        return;
                     }
                 }
                 if ($(this).attr('required')) {
@@ -526,6 +561,7 @@
                     data: $(this).val()
                 });
             });
+
             radioFields.forEach(e => {
                 if (e.isRequired && !e.hasSelected) {
                     errorText += '<ul class="errorList"> ';
@@ -551,8 +587,13 @@
 
             if (errorText.length > 0)
                 openErrorAlertBP(errorText);
-            else
-                storeData(fields);
+            else {
+
+                if (fileIds.length > 0)
+                    storeFieldFiles(fileIds, fields);
+                else if (fields.length > 0)
+                    storeData(fields);
+            }
 
         }
 
@@ -584,7 +625,7 @@
                             firstStepFormId = res.forms[i].id;
 
                         if (res.forms[i].id == formId) {
-
+                            console.log(filePic);
                             if (i == 0)
                                 isInFirstStep = true;
                             else if (userAssetId === -1)
