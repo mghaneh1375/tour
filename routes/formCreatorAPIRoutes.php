@@ -26,7 +26,7 @@ Route::get('/', [AssetController::class, 'indexAPI'])->name('formCreator.root');
 
 Route::get('asset', [AssetController::class, 'indexAPI']);
 Route::get('asset/{asset}/form', [FormController::class, 'indexAPI']);
-Route::get('form/{form}', [FormController::class, 'showAPI']);
+Route::get('form/{form}/', [FormController::class, 'showAPI']);
 Route::get("form/{form}/{userAssetId}", [FormController::class, "showAPI"]);
 
 // Route::apiResource('form_field', FormFieldController::class);

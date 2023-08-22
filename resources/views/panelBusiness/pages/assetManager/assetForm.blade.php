@@ -300,7 +300,7 @@
         function storeData(fields) {
             if (fields.length == 0) {
                 if (nextFormId !== undefined) {
-                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
                     return;
                 } else {
                     lastPage();
@@ -323,8 +323,8 @@
                                 if (filePic) {
                                     storePic(userAssetId, fields);
                                 } else {
-                                    // window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
-                                    //     userAssetId;
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                        userAssetId;
                                 }
                             } else {
 
@@ -410,12 +410,9 @@
 
                 success: function(res) {
                     if (res.status === "0") {
-
-                        // window.location.href = "{{ route('businessPanel.panel') }} "
-
+                        window.location.href = "{{ route('businessPanel.panel') }} "
                     } else {
                         showSuccessNotifiBP(res.errs, 'right', '#ac0020');
-
                     }
                 },
                 error: function(rejected) {
@@ -585,14 +582,23 @@
                 }
             });
 
-            if (errorText.length > 0)
+            if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
-            else {
-
-                if (fileIds.length > 0)
+            } else {
+                if (fileIds.length > 0) {
                     storeFieldFiles(fileIds, fields);
-                else if (fields.length > 0)
+                } else if (fields.length > 0) {
                     storeData(fields);
+                } else {
+                    if (nextFormId !== undefined) {
+                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                            "/" +
+                            userAssetId;
+                    } else {
+                        lastPage();
+                    }
+                }
+
             }
 
         }
@@ -625,7 +631,6 @@
                             firstStepFormId = res.forms[i].id;
 
                         if (res.forms[i].id == formId) {
-                            console.log(filePic);
                             if (i == 0)
                                 isInFirstStep = true;
                             else if (userAssetId === -1)
@@ -919,12 +924,9 @@
                 },
 
                 success: function(res) {
-                    if (res.status === 0) {
+                    if (res.status == '0') {
                         userAssetId = res.id;
-                        if (filePic) {
-                            storePic(userAssetId, fields);
-                        }
-                        // location.reload();
+                        location.reload();
                     } else {}
                 },
                 error: function(request, status, error) {
@@ -937,6 +939,7 @@
         }
 
         function openModal(callBack = undefined) {
+
             if (callBack === undefined)
                 roomId = -1;
             $("#listAdd").modal("show");
@@ -1070,7 +1073,7 @@
                 if (res.fields[i].type.toLowerCase() == 'radio') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i].half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1121,7 +1124,7 @@
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1142,7 +1145,7 @@
                         (res
                             .fields[i]
                             .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1160,7 +1163,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
                     text +=
-                        '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
+                        '<div class="inputBoxTextGeneralInfo inputBoxText   clockTitle">';
                     text += '<div class=" name' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1195,7 +1198,7 @@
                             res.fields[i].data.split("_") : [];
                         if (moreItems.length < 2) {
                             oneItems = true;
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                             text += '<div class="' + (res.fields[i].necessary == 1 ?
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
@@ -1219,7 +1222,7 @@
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else {
                             multipleVal = true;
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                             text += '<div class="' + (res.fields[i].necessary == 1 ?
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
@@ -1238,7 +1241,7 @@
                         text += '<div style="font-size: 14px;" > اضافه کن</div>';
                         text += '</div>';
                     } else {
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                         text += '<div class="' + (res.fields[i].necessary == 1 ?
                             ' importantFieldLabel' :
                             '') + '"> ' + res.fields[i].name + '</div>';
@@ -1281,7 +1284,7 @@
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
 
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام ' +
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;"> ' +
                             subAsserName + '</div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput " type="search" style="width:100%;border:0px;position:relative;">';
@@ -1325,7 +1328,7 @@
                                 if (res.fields[i].items[y].fields[m].type !== 'gallery') {
                                     name = res.fields[i].items[y].fields[m].val;
                                     nameKey = res.fields[i].items[y].fields[m].key_;
-                                    text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
+                                    text += '<div class="colorOrag bold"> ' + nameKey + '</div>';
                                     text += '<div class="bold roomName">' + name + ' </div>';
                                 }
                             }
@@ -1351,7 +1354,7 @@
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     picId = res.fields[i].field_id;
 
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1450,7 +1453,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1478,7 +1481,7 @@
                         (
                             res.fields[i]
                             .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1525,7 +1528,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1573,7 +1576,7 @@
                         stateName = myArray[0];
                     }
                     apiId = res.fields[i].field_id;
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1598,7 +1601,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1619,7 +1622,7 @@
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1646,7 +1649,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1721,14 +1724,13 @@
             $(".boxRoom:not(:last-child)").addClass('hidden');
 
             allData.fields.forEach((e, index) => {
-
                 if (e.type !== 'listview')
                     return;
 
                 e.items.forEach((ee, index2) => {
-
                     ee.fields.forEach((eee, index3) => {
-
+                        console.log(searchForLabel);
+                        console.log(eee.key_);
                         if (eee.key_ !== searchForLabel)
                             return;
 

@@ -373,7 +373,7 @@ class UserFormController extends Controller
         $oldPath = null;
         $field = $form_field->id;
         $userAssetId = $user_asset->id;
-        $isSubAsset = $user_asset->asset->super_id != null;
+        $isSubAsset = $user_asset->asset->super_id != -1;
 
         $user_data = UserFormsData::where('field_id', $field)->where('user_id', $uId)->where('user_asset_id', $userAssetId)->firstOr(function () use ($field, $path, $uId, $userAssetId, $isSubAsset) {
             $user_data = new UserFormsData();

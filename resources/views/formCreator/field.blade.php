@@ -163,7 +163,6 @@
                             @endforeach
                         </select>
                     </center>
-
                     <center id="forms" class="hidden forms">
                         <label for="form">فرم مورد نظر</label>
                         <select name="form">
@@ -171,9 +170,15 @@
                             @foreach ($forms as $f)
                                 <option value="{{ $f->id }}">{{ $f->name }}</option>
                             @endforeach
-                            @foreach ($subAssets as $subAsset)
-                                <option value="{{ $subAsset->id }}">{{ $subAsset->name }}</option>
-                            @endforeach
+
+                            @if (isset($subAssetForms))
+                                @foreach ($subAssetForms as $ff)
+                                    @foreach ($ff as $f)
+                                        <option value="{{ $f->id }}">{{ $f->name }}</option>
+                                    @endforeach
+                                @endforeach
+                            @endif
+
                         </select>
                     </center>
 
@@ -342,6 +347,14 @@
                                 @foreach ($forms as $f)
                                     <option value="{{ $f->id }}">{{ $f->name }}</option>
                                 @endforeach
+
+                                @if (isset($subAssetForms))
+                                    @foreach ($subAssetForms as $ff)
+                                        @foreach ($ff as $f)
+                                            <option value="{{ $f->id }}">{{ $f->name }}</option>
+                                        @endforeach
+                                    @endforeach
+                                @endif
                             </select>
                         </center>
 

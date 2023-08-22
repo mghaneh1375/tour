@@ -86,10 +86,17 @@ class FormFieldController extends Controller
                 
             $field->editUrl = route('form_field.update', ['form_field' => $field->id]);
         }
+        
+        $subAssets = Asset::where('super_id', $form->asset_id)->get();
+        $subAssetForms = [];
+        foreach($subAssets as $subAsset) {
+            array_push($subAssetForms, $subAsset->forms);
+        }
 
         return view('formCreator.field', ['form' => $form,
             'subAssets' => Asset::where('super_id',$form->asset_id)->get(),
-            'forms' => $form->asset->forms
+            'forms' => $form->asset->forms,
+            'subAssetForms' => $subAssetForms
         ]);
     }
 
@@ -150,7 +157,6 @@ class FormFieldController extends Controller
         $field->force_help = $request["force_help"];
         $field->placeholder = $request["placeholder"];
         $field->key_ = $request["key_"];
-        
 
         if($field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
@@ -161,12 +167,12 @@ class FormFieldController extends Controller
         }
 
         elseif($field->type == "REDIRECTOR") {
-
-            if($request->has("form") &&
-                Form::whereId($request["form"])->where('asset_id',$form->asset_id)->count() > 0)
+            // dd($request["form"]);
+            // if($request->has("form") &&
+                // Form::where('id',/$request["form"])->where('asset_id',$form->asset_id)->count() > 0)
                 $field->options = "form_" . $request["form"];
-            else
-                dd("خطا در ورودی");
+            // else
+            //     dd("خطا در ورودی");
         }
 
         else if($field->type == "CHECKBOX" || $field->type == "RADIO" ||
