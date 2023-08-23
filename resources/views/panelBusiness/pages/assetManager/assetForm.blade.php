@@ -174,7 +174,7 @@
 
     <script>
         var datePickerOptions = {
-            yearRange: "-100:+0",
+            yearRange: "-100:+10",
             changeYear: true,
             changeMonth: true,
             numberOfMonths: 1,
@@ -926,7 +926,7 @@
                 success: function(res) {
                     if (res.status == '0') {
                         userAssetId = res.id;
-                        location.reload();
+                        // location.reload();
                     } else {}
                 },
                 error: function(request, status, error) {
@@ -1042,6 +1042,10 @@
 
                     } else if (e.type === 'textarea') {
                         $("textarea[name='" + e.key_ + "']").val(e.val);
+                    } else if (e.type === 'radio') {
+                        $("input[value='" + e.val + "']").prop("checked", true);
+                    } else if (e.type === 'checkbox') {
+                        $("input[value='" + e.val + "']").prop("checked", true);
                     } else
                         $("input[name='" + e.key_ + "']").val(e.val);
                 });
@@ -1284,7 +1288,7 @@
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
 
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;"> ' +
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">' +
                             subAsserName + '</div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput " type="search" style="width:100%;border:0px;position:relative;">';
@@ -1436,6 +1440,7 @@
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     redirector = true;
                     for (let x = 0; x < res.fields[i].options.length; x++) {
+                        console.log(res);
                         subAssetFromId = res.fields[i].options[x];
                         text += '<div class="row" onclick="openModal()" style="display: flex;align-items: center;">';
                         text +=
@@ -1444,7 +1449,7 @@
                             '<path d="M126.999 58.6058V68.3794C127.017 69.6463 126.785 70.9044 126.317 72.0816C125.848 73.2588 125.152 74.332 124.269 75.2399C123.386 76.1478 122.332 76.8726 121.168 77.3727C120.004 77.8728 118.753 78.1385 117.487 78.1545H78.1727V117.224C78.2068 119.782 77.2236 122.249 75.4395 124.082C73.6554 125.916 71.2165 126.965 68.6592 126.999H58.5794C57.313 127.017 56.0556 126.785 54.8791 126.316C53.7025 125.847 52.6298 125.151 51.7224 124.267C50.815 123.384 50.0906 122.33 49.5908 121.166C49.0909 120.001 48.8254 118.75 48.8094 117.483C48.8094 117.397 48.8094 117.311 48.8094 117.225V78.1545H9.75752C7.20048 78.1846 4.73619 77.1975 2.90655 75.4103C1.07691 73.6231 0.0317299 71.1821 0.000855259 68.6241C0.000855259 68.5529 0.000855259 68.4832 0.000855259 68.4135V58.6058C-0.0331826 56.0475 0.949974 53.5805 2.73408 51.7473C4.51818 49.9142 6.95711 48.865 9.51441 48.8306H48.8272V9.76127C48.8111 8.49437 49.0449 7.23672 49.5151 6.06028C49.9854 4.88384 50.6829 3.81169 51.5677 2.90517C52.4526 1.99865 53.5074 1.27554 54.6719 0.777209C55.8363 0.278878 57.0876 0.0151043 58.354 0.000976567C58.4296 0.000976567 58.5023 0.000976567 58.5838 0.000976567H68.3538C69.6203 -0.0170586 70.8778 0.214871 72.0546 0.683497C73.2313 1.15212 74.3042 1.84825 75.2118 2.73205C76.1193 3.61585 76.8438 4.66999 77.3437 5.83415C77.8437 6.99831 78.1093 8.24966 78.1253 9.5166C78.1253 9.60261 78.1253 9.68861 78.1253 9.77462V48.8514H117.18C119.736 48.8042 122.207 49.7744 124.048 51.5488C125.889 53.3232 126.951 55.7565 126.999 58.3136C126.999 58.4115 126.999 58.5079 126.999 58.6058Z" fill="#444444"/> </svg>';
                         text += '</div>';
                         text += '<div class="col-md-8 col-sm-8 col-8" >';
-                        text += '<div> اتاق جدیدی اضافه کنید';
+                        text += '<div> ' + res.fields[i].name + '';
                         text += '</div>';
                         text += '</div>';
                     }
@@ -1508,8 +1513,8 @@
                         text += '</a>';
                         if (res.fields[i].necessary !== 1) {
 
-                            text += '<div class="colorBlack editBtn borderLeft" onclik="$(\'#' + fileId + '\').val('
-                            ')"><i class="trashIcon iconStyle"></i></div>';
+                            text += '<div class="colorBlack editBtn borderLeft" onclik="$(\'#' + fileId +
+                                '\').val(" ")"><i class="trashIcon iconStyle"></i></div>';
                         }
                         text +=
                             '  <button class="fileBtn cursorPointer" style="display:block;width:60%; height:30px;white-space: nowrap;" onclick="$(\'#' +
@@ -1729,8 +1734,6 @@
 
                 e.items.forEach((ee, index2) => {
                     ee.fields.forEach((eee, index3) => {
-                        console.log(searchForLabel);
-                        console.log(eee.key_);
                         if (eee.key_ !== searchForLabel)
                             return;
 

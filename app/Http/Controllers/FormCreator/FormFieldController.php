@@ -158,10 +158,11 @@ class FormFieldController extends Controller
         $field->placeholder = $request["placeholder"];
         $field->key_ = $request["key_"];
 
+
         if($field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
                 Asset::whereId($request["subAsset"])->where('super_id',$form->asset_id)->count() > 0)
-                $field->options = "sub_" . $request["subAsset"];
+                    $field->options = "sub_" . $request["subAsset"];
             else
                 dd("خطا در ورودی");
         }
@@ -231,7 +232,7 @@ class FormFieldController extends Controller
             'rtl' => 'nullable|boolean',
             'half' => 'nullable|boolean',
         ]);
-        
+                
         $form_field->name = $request["name"];
         $form_field->type = $request["type"];
         
@@ -266,19 +267,22 @@ class FormFieldController extends Controller
         $form_field->force_help = $request["force_help"];
         $form_field->placeholder = $request["placeholder"];
         $form_field->key_ = $request["key_"];
-
         if($form_field->type == "LISTVIEW") {
-            if($request->has("subAsset") &&
-                Asset::whereId($request["subAsset"])->where('super_id',$form_field-> form->asset_id)->count() > 0)
-                $form_field->options = "sub_" . $request["subAsset"];
+            $subAsset=  str_replace('sub_', '',  $form_field->options);
+        
+            if($subAsset != null &&Asset::whereId($subAsset)->where('super_id',$form_field-> form->asset_id)->count() > 0){
+                //todo
+                    $form_field->options = "sub_" . $request["subAsset"];
+            }
             else
                 dd("خطا در ورودی");
-        }
+        }   
 
         elseif($form_field->type == "REDIRECTOR") {
-
-            if($request->has("form") &&
-                Form::whereId($request["form"])->where('asset_id',$form_field->form->asset_id)->count() > 0)
+            // dd(Form::whereId($request["form"])->where('asset_id',$form_field->form->asset_id));
+            
+            if($request->has("options"))
+                //todo
                 $form_field->options = "form_" . $request["form"];
             else
                 dd("خطا در ورودی");

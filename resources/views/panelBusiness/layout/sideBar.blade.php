@@ -5,7 +5,6 @@
             Business
         </div>
     </div>
-
     <div class="sideMenuSection">
         @if (isset($businessName))
             <div class="businessName">
@@ -42,6 +41,7 @@
             </a>
         </div>
         @if (\auth()->user()->level === 2)
+
             <div class="sideNavRow able">
                 <div class="sideNavHeader hasBody">
                     <span>مدیریت</span>

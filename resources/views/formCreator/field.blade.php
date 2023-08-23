@@ -479,6 +479,7 @@
             items = forms.filter(x => x.id == id);
 
             for (let i = 0; i < items.length; i++) {
+                console.log(items[i]);
                 url = u;
                 $('#editType option').attr('selected', false);
                 // $("#editType option").attr('selected', false);
