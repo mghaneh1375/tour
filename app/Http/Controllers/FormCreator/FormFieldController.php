@@ -268,22 +268,22 @@ class FormFieldController extends Controller
         $form_field->placeholder = $request["placeholder"];
         $form_field->key_ = $request["key_"];
         if($form_field->type == "LISTVIEW") {
-            $subAsset=  str_replace('sub_', '',  $form_field->options);
-        
-            if($subAsset != null &&Asset::whereId($subAsset)->where('super_id',$form_field-> form->asset_id)->count() > 0){
-                //todo
-                    $form_field->options = "sub_" . $request["subAsset"];
-            }
-            else
+            if($request->has("options")){
+                 $subAssetId = explode('_', $request['options'])[1];
+                 if(Asset::whereId($subAssetId)->where('super_id',$form_field-> form->asset_id)->count() > 0)
+                    $form_field->options = "sub_" .$subAssetId;
+            }else
                 dd("خطا در ورودی");
         }   
 
         elseif($form_field->type == "REDIRECTOR") {
-            // dd(Form::whereId($request["form"])->where('asset_id',$form_field->form->asset_id));
-            
-            if($request->has("options"))
-                //todo
-                $form_field->options = "form_" . $request["form"];
+
+            if($request->has("options")) {
+                
+                $formId = explode('_', $request['options'])[1];
+                if(Form::whereId($formId)->where('asset_id',$form_field->form->asset_id)->count() > 0)
+                    $form_field->options = "form_" . $formId;
+            }
             else
                 dd("خطا در ورودی");
         }

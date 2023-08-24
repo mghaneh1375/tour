@@ -585,7 +585,7 @@
             if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
             } else {
-                if (fileIds.length > 0) {
+                if (fileIds.length > 0 && !isInFirstStep) {
                     storeFieldFiles(fileIds, fields);
                 } else if (fields.length > 0) {
                     storeData(fields);
@@ -1440,7 +1440,6 @@
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     redirector = true;
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        console.log(res);
                         subAssetFromId = res.fields[i].options[x];
                         text += '<div class="row" onclick="openModal()" style="display: flex;align-items: center;">';
                         text +=
@@ -1452,7 +1451,10 @@
                         text += '<div> ' + res.fields[i].name + '';
                         text += '</div>';
                         text += '</div>';
+                        text += '</div>';
+
                     }
+                    text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'float') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]

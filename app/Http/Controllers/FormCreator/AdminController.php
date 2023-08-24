@@ -71,7 +71,7 @@ class AdminController extends Controller {
         }
 
 
-        if($request['status'] == "CONFIRM") {
+        if($request['status'] == "CONFIRM" && 1 == 2) {
 
             if($user_asset->place_id == null) {
 

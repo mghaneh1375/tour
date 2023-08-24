@@ -41,7 +41,6 @@ class UserAssetController extends Controller
         ]);
     }
     public function all(Request $request) {
-        
         $assets = Asset::all();
         $output = [];
         $uId = Auth::user()->id;

@@ -41,8 +41,7 @@
                 <div class="modal-body" style="direction: rtl">
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
-                            <div id="stepView" style="width: 100%; height: 100px;flex-wrap: wrap;
-    display: flex;">
+                            <div id="stepView" style="width: 100%; height: 100px;flex-wrap: wrap;display: flex;">
                             </div>
                         </div>
                     </div>
