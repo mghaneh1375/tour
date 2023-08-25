@@ -4,9 +4,12 @@ namespace App\Http\Controllers\FormCreator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetDigest;
+use App\Http\Resources\UserAssetDigest;
 use App\models\FormCreator\Asset;
+use App\models\FormCreator\UserAsset;
 use App\models\FormCreator\UserSubAsset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -58,11 +61,59 @@ class AssetController extends Controller {
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function indexAPI() {
-        return response()->json([
-            'status' => 0,
-            'assets' => AssetDigest::collection(Asset::where('super_id',-1)->orderBy('view_index', 'asc')->get())
-        ]);
+    public function indexAPI(Request $request) {
+        
+        $user = $request->user();
+        $primitiveAssetIds = Asset::where([['super_id',-1],['pre_required',null]])->pluck('id');
+        $assets = UserAsset::where('user_id', $user->id)->count() > 0;
+        if($assets){
+            if(UserAsset::whereIn('asset_id', $primitiveAssetIds)->where('user_id', $user->id)->where('status', 'CONFIRM')->count() > 0){
+                return response()->json([
+                    'status' => 0,
+                    'assets' => AssetDigest::collection(Asset::where('super_id',-1)->whereNotNull('pre_required')->orderBy('view_index', 'asc')->get())
+                ]);
+            }else{
+                $assets = Asset::all();
+                $output = [];
+                $uId = Auth::user()->id;
+                
+                foreach($assets as $asset) {
+                    
+                    $userAssets = $asset->user_assets()->where('user_id', $uId)->get();
+                    
+                    if(count($userAssets) == 0)
+                        continue;
+
+                    $tmp = UserAssetDigest::collection($userAssets)->toArray($request);
+                    $arr = [];
+                    
+                    foreach($tmp as $itr) {
+                        $itr['asset'] = $asset->name;
+                        $itr['asset_id'] = $asset->id;
+                        array_push($arr, $itr);
+                    }
+
+                    array_push($output, $arr);
+                }
+
+                return response()->json([
+                    "status" => "0",
+                    "assets" => $output
+                ]);
+            }
+        }else{
+            //todo : check pre req
+            return response()->json([
+                'status' => 0,
+                'assets' => AssetDigest::collection(Asset::where([['super_id',-1],['pre_required',null]])->orderBy('view_index', 'asc')->get())
+            ]);
+        }
+
+
+        // return response()->json([
+        //     'status' => 0,
+        //     'assets' => AssetDigest::collection(Asset::where('super_id',-1)->orderBy('view_index', 'asc')->get())
+        // ]);
     }
 
     public function index() {

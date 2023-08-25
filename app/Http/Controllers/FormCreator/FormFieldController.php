@@ -86,10 +86,17 @@ class FormFieldController extends Controller
                 
             $field->editUrl = route('form_field.update', ['form_field' => $field->id]);
         }
+        
+        $subAssets = Asset::where('super_id', $form->asset_id)->get();
+        $subAssetForms = [];
+        foreach($subAssets as $subAsset) {
+            array_push($subAssetForms, $subAsset->forms);
+        }
 
         return view('formCreator.field', ['form' => $form,
             'subAssets' => Asset::where('super_id',$form->asset_id)->get(),
-            'forms' => $form->asset->forms
+            'forms' => $form->asset->forms,
+            'subAssetForms' => $subAssetForms
         ]);
     }
 
@@ -150,23 +157,23 @@ class FormFieldController extends Controller
         $field->force_help = $request["force_help"];
         $field->placeholder = $request["placeholder"];
         $field->key_ = $request["key_"];
-        
+
 
         if($field->type == "LISTVIEW") {
             if($request->has("subAsset") &&
                 Asset::whereId($request["subAsset"])->where('super_id',$form->asset_id)->count() > 0)
-                $field->options = "sub_" . $request["subAsset"];
+                    $field->options = "sub_" . $request["subAsset"];
             else
                 dd("خطا در ورودی");
         }
 
         elseif($field->type == "REDIRECTOR") {
-
-            if($request->has("form") &&
-                Form::whereId($request["form"])->where('asset_id',$form->asset_id)->count() > 0)
+            // dd($request["form"]);
+            // if($request->has("form") &&
+                // Form::where('id',/$request["form"])->where('asset_id',$form->asset_id)->count() > 0)
                 $field->options = "form_" . $request["form"];
-            else
-                dd("خطا در ورودی");
+            // else
+            //     dd("خطا در ورودی");
         }
 
         else if($field->type == "CHECKBOX" || $field->type == "RADIO" ||
@@ -225,7 +232,7 @@ class FormFieldController extends Controller
             'rtl' => 'nullable|boolean',
             'half' => 'nullable|boolean',
         ]);
-        
+                
         $form_field->name = $request["name"];
         $form_field->type = $request["type"];
         
@@ -260,20 +267,23 @@ class FormFieldController extends Controller
         $form_field->force_help = $request["force_help"];
         $form_field->placeholder = $request["placeholder"];
         $form_field->key_ = $request["key_"];
-
         if($form_field->type == "LISTVIEW") {
-            if($request->has("subAsset") &&
-                Asset::whereId($request["subAsset"])->where('super_id',$form_field-> form->asset_id)->count() > 0)
-                $form_field->options = "sub_" . $request["subAsset"];
-            else
+            if($request->has("options")){
+                 $subAssetId = explode('_', $request['options'])[1];
+                 if(Asset::whereId($subAssetId)->where('super_id',$form_field-> form->asset_id)->count() > 0)
+                    $form_field->options = "sub_" .$subAssetId;
+            }else
                 dd("خطا در ورودی");
-        }
+        }   
 
         elseif($form_field->type == "REDIRECTOR") {
 
-            if($request->has("form") &&
-                Form::whereId($request["form"])->where('asset_id',$form_field->form->asset_id)->count() > 0)
-                $form_field->options = "form_" . $request["form"];
+            if($request->has("options")) {
+                
+                $formId = explode('_', $request['options'])[1];
+                if(Form::whereId($formId)->where('asset_id',$form_field->form->asset_id)->count() > 0)
+                    $form_field->options = "form_" . $formId;
+            }
             else
                 dd("خطا در ورودی");
         }

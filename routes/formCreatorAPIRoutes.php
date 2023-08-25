@@ -26,7 +26,7 @@ Route::get('/', [AssetController::class, 'indexAPI'])->name('formCreator.root');
 
 Route::get('asset', [AssetController::class, 'indexAPI']);
 Route::get('asset/{asset}/form', [FormController::class, 'indexAPI']);
-Route::get('form/{form}', [FormController::class, 'showAPI']);
+Route::get('form/{form}/', [FormController::class, 'showAPI']);
 Route::get("form/{form}/{userAssetId}", [FormController::class, "showAPI"]);
 
 // Route::apiResource('form_field', FormFieldController::class);
@@ -58,6 +58,8 @@ Route::group(["prefix" => "user_asset/{user_asset}"], function () {
     Route::put("updateStatus", [UserAssetController::class, "updateStatus"]);
 
     Route::post("set_asset_pic/{form_field}", [UserFormController::class, 'set_asset_pic']);
+
+    Route::post("set_formField_file/{form_field}", [UserFormController::class, 'set_formField_file']);
 
     Route::post("set_pic/{form_field}", [UserFormController::class, 'set_pic']);
 

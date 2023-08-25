@@ -34,7 +34,8 @@ class AssetDigest extends JsonResource
             "view_index" => $this->view_index,
             "myAssets" => UserAsset::where('asset_id',$this->id)->where('user_id',Auth::user()->id)->count(),
             "create_pic" => URL::asset("assets/" . $this->create_pic),
-            "formIds" => $formIds
+            "formIds" => $formIds,
+            "pre_required" => $this->pre_required,
         ];
     }
 }

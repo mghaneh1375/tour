@@ -131,6 +131,9 @@ class UserFormController extends Controller
             $field = $id;
             $data = $d['data'];
 
+            if($formField->type == 'FILE')
+                return abort(401);
+
             $user_data = UserFormsData::where('field_id',$field)->where('user_id',$uId)->where('user_asset_id',$userAssetId)->firstOr(function () use ($field, $data, $uId, $userAssetId, $isSubAsset) {
 
                 $user_data = new UserFormsData();
@@ -349,6 +352,55 @@ class UserFormController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function set_formField_file(UserAsset $user_asset, FormField $form_field, Request $request) {
+
+        $uId = $request->user()->id;
+        if($user_asset->user_id != $uId)
+            return abort(401);
+
+        if(!$user_asset->is_in_form($form_field->id, true)) {
+            return response()->json([
+                "status" => -1
+            ]);
+        }
+
+        $request->validate([
+            "file" => "required|file"
+        ]);
+
+        $path = $request->file->store('public');
+        $path = str_replace('public/', '', $path);
+        $oldPath = null;
+        $field = $form_field->id;
+        $userAssetId = $user_asset->id;
+        $isSubAsset = $user_asset->asset->super_id != -1;
+
+        $user_data = UserFormsData::where('field_id', $field)->where('user_id', $uId)->where('user_asset_id', $userAssetId)->firstOr(function () use ($field, $path, $uId, $userAssetId, $isSubAsset) {
+            $user_data = new UserFormsData();
+            $user_data->field_id = $field;
+            $user_data->user_id = $uId;
+            $user_data->data = $path;
+            $user_data->user_asset_id = $userAssetId;
+            $user_data->is_sub_asset = $isSubAsset;
+            $user_data->save();
+            return null;
+            
+        });
+        if($user_data != null && $user_asset->data != null) {
+            
+            $oldPath = __DIR__ . '/../../../storage/app/public/' . $user_asset->data;
+            if(file_exists($oldPath))
+            unlink($oldPath);
+            
+            $user_asset->data = $path;
+            $user_asset->save();
+        }
+        
+        return response()->json([
+            "status" => "0"
+        ]);
+
+    }
     public function set_asset_pic(UserAsset $user_asset, FormField $form_field, Request $request) {
 
 

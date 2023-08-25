@@ -63,7 +63,7 @@ class FormController extends Controller
                 Rule::unique('formDB.forms')->where(function ($query) use($asset, $request) {
                 return $query->where('asset_id', $asset->id)->where('step', $request['step']);
               })],
-            'description' => ['nullable', 'max:1000'],
+            'description' => ['nullable', 'max:5000'],
             'notice' => ['nullable', 'max:1000'],
         ],['step.unique' => "گام باید منحصر به فرد باشد"]);
 
@@ -91,14 +91,15 @@ class FormController extends Controller
      * @param int $userAssetId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function showAPI(Form $form, $userAssetId = -1) {
-
+    public function showAPI(Form $form, $userAssetId =-1) {
+// dd($userAssetId);
         $isSubAsset = ($form->asset->super_id != -1);
         $userAsset = null;
         $userSubAsset = null;
 
         if($userAssetId != -1) {
             if ($isSubAsset) {
+                
                 $userSubAsset = UserSubAsset::where('id',$userAssetId)->first();
                 if ($userSubAsset == null)
                     return response()->json([
@@ -133,22 +134,27 @@ class FormController extends Controller
                 $fields = $form->form_fields()->leftJoin("user_forms_data", function ($join) use ($userId, $isSubAsset, $userAssetId) {
                     $join->on("form_fields.id", "=", "field_id")->where('user_id', $userId)->where('is_sub_asset', $isSubAsset)->where('user_asset_id', $userAssetId);
                 })->select(['form_fields.id as field_id', 'user_forms_data.status', 'user_forms_data.err_text', 'user_forms_data.id as user_form_data_id', 'multiple', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'data', 'help', 'force_help', 'options'])->get();
-
+                
+                
                 if($form->name == "اطلاعات مالک") {
                     if($fields[0]->data == null || empty($fields[0]->data)) {
                         foreach ($fields as $field) {
+                            
                             $data = UserFormsData::where('user_id',$userId)->where('field_id',$field->field_id)->select('data')->first();
                             if($data != null && !empty($data))
                                 $field->data = $data->data;
+
                             else
                                 break;
                         }
                     }
                 }
+                
             }
         }
         else {
             $fields = $form->form_fields()->select(['form_fields.id as field_id', 'name', 'type', 'necessary', 'placeholder', 'half', 'rtl', 'help', 'force_help', 'multiple', 'options','key_'])->get();
+            
         }
 
         foreach($fields as $field) {
@@ -157,12 +163,10 @@ class FormController extends Controller
         }
 
         $update = false;
-        
         foreach ($fields as $field) {
 
             if($userAssetId == -1)
                 $field->data = null;
-
             // if($field->data != null) {
             //     $update = true;
             //     break;
@@ -184,7 +188,6 @@ class FormController extends Controller
             }
 
             $field->type = strtolower($field->type);
-
             if($field->type == "gallery" && $field->data != null && $field->data != '') {
 
                 $splited = explode('_', $field->data);
@@ -219,8 +222,9 @@ class FormController extends Controller
                     else
                         $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id',$field->options[0])->where('user_asset_id',$userSubAsset->id)->select("id")->get();
                 }
-                else
+                else {
                     $subAssets = UserSubAsset::where('user_id',$userId)->where('asset_id',$field->options[0])->where('user_asset_id',$userAsset->id)->select("id")->get();
+                }
 
                     // todo: thinking pic = false
                 $pic = true;
@@ -231,7 +235,6 @@ class FormController extends Controller
                         " ff.presenter = 1 and ff.id = u.field_id and a.id = f.asset_id and u.is_sub_asset = true and f.id = ff.form_id and" .
                         " u.user_asset_id = " . $subAsset->id
                     );
-
                     foreach ($subAsset->fields as $ff) {
                         if($ff->type == "file") {
                             $pic = true;
@@ -311,8 +314,9 @@ class FormController extends Controller
 
                 $field->items = $subAssets;
             }
-
+            
             else if($field->type == "file" && $field->data != null) {
+
                 $field->data = URL::asset("storage/" . $field->data);
             }
 
@@ -333,14 +337,14 @@ class FormController extends Controller
                 $field->user_form_data_id = $userFormData->id;
             }
         }
-
+        
         return response()->json([
             "status" => 0,
             "fields" => $fields,
             "form" => $form,
             "update" => ($update) ? 1 : 0
         ]);
-
+        
     }
 
     /**
@@ -361,7 +365,7 @@ class FormController extends Controller
                 return $query->where('asset_id', $asset->id)->where('step', $request['step'])
                 ->where('id', '!=' , $form->id);
               })],
-            'description' => ['nullable', 'max:1000'],
+            'description' => ['nullable', 'max:5000'],
             'notice' => ['nullable', 'max:1000'],
         ],['step.unique' => "گام باید منحصر به فرد باشد"]);
 
@@ -369,8 +373,7 @@ class FormController extends Controller
         $form->description = $request["description"];
         $form->notice = $request["notice"];
 
-        if($form->step != $request["step"] && Form::where('step',$request["step"])->count() > 0)
-            dd("فرمی با این گام وجود دارد.");
+        
 
         $form->step = $request["step"];
         $form->save();

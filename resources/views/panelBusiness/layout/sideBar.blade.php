@@ -5,7 +5,6 @@
             Business
         </div>
     </div>
-
     <div class="sideMenuSection">
         @if (isset($businessName))
             <div class="businessName">
@@ -42,6 +41,7 @@
             </a>
         </div>
         @if (\auth()->user()->level === 2)
+
             <div class="sideNavRow able">
                 <div class="sideNavHeader hasBody">
                     <span>مدیریت</span>
@@ -102,10 +102,10 @@
                                 <a class="sideNavItem aligenCenter" href="{{ route('createForm') }}">
                                     ایجاد کسب وکارجدید</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.create') }}">
                                     هییت مدیر</a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.panel') }} ">کسب و
                                     کارهای
@@ -141,8 +141,8 @@
                     title="اعلانات">
                     <i class="fa-regular fa-bell icOff"></i>
                     <i class="fa-regular fa-bell-on icOn"></i>
-                    <div class="newNum">{{ $newNotificationCount }}</div>
                     <div class="paddingRight10"> اعلانات</div>
+                    <div class="newNum">{{ $newNotificationCount }}</div>
                 </a>
             </div>
             @if (auth()->user()->level == 0)
@@ -151,10 +151,10 @@
                     <a href="{{ route('ticket.page') }}" class="aligenCenter sideNavHeader headerButton"
                         title="پشتیبانی">
                         <i class="fa-solid fa-headset"></i>
-                        @if ($newTicketCount != 0)
-                            <div class="newNum">{{ $newTicketCount }}</div>
-                        @endif
                         <div class="paddingRight10"> پشتیبانی</div>
+                        @if ($newTicketCount != 0)
+                            <div class="newTicketCount" style="margin-right:3px">{{ $newTicketCount }}</div>
+                        @endif
                     </a>
                 </div>
             @endif

@@ -174,7 +174,7 @@
 
     <script>
         var datePickerOptions = {
-            yearRange: "-100:+0",
+            yearRange: "-100:+10",
             changeYear: true,
             changeMonth: true,
             numberOfMonths: 1,
@@ -230,6 +230,7 @@
         var multiple = false;
         var initMap = false;
         var callInitMap = false;
+        var formFieldPic = true;
         var cityName;
         var stateName;
         let url = '{{ route('formCreator.root') }}';
@@ -251,8 +252,47 @@
                 data: fileStore,
                 success: function(res) {
                     if (res.status === "0") {
-                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" + userAssetId;
+                        if (nextFormId !== undefined) {
+                            window.location.href = '/asset/' + assetId + "/step/" + nextFormId + "/" +
+                                userAssetId;
+                        } else {
+                            lastPage();
+                        }
                     } else {}
+                }
+            });
+        }
+
+        function storeFieldFiles(fileIds, fields) {
+            openLoading();
+            storeFile($("#" + fileIds[0])[0].files[0], fields);
+        }
+
+        function storeFile(localFile, fields) {
+
+            var fileStore = new FormData();
+            fileStore.append('file', localFile);
+            $.ajax({
+                type: 'post',
+                url: url + '/user_asset/' + userAssetId + "/set_formField_file/" + fileId,
+                processData: false,
+                complete: closeLoading,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                },
+                data: fileStore,
+                success: function(res) {
+                    if (res.status === "0") {
+
+                        formFieldPic = true;
+
+                        if (fields.length > 0)
+                            storeData(fields);
+
+                    } else {
+                        console.log('nashod');
+                    }
                 }
             });
         }
@@ -268,7 +308,6 @@
             }
             if (isInFirstStep) {
                 if (userAssetId === -1) {
-                    // todo: call store asset api
                     openLoading();
                     $.ajax({
                         type: 'post',
@@ -310,15 +349,8 @@
                             },
                             success: function(res) {
                                 if (res.status === "0") {
-
-                                    if (filePic) {
-                                        storePic(userAssetId, fields);
-                                    } else {
-                                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                            "/" +
-                                            userAssetId;
-                                    }
-
+                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                        "/" + userAssetId;
                                 } else {
                                     showSuccessNotifiBP(res.errs, 'right', '#ac0020');
 
@@ -348,14 +380,9 @@
                     success: function(res) {
                         if (res.status === 0) {
                             if (nextFormId !== undefined) {
-                                if (filePic) {
-                                    storePic(userAssetId, fields);
-                                } else {
-                                    window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
-                                        "/" +
-                                        userAssetId;
-                                }
-
+                                window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                                    "/" +
+                                    userAssetId;
                             } else {
                                 lastPage();
                             }
@@ -383,12 +410,9 @@
 
                 success: function(res) {
                     if (res.status === "0") {
-
                         window.location.href = "{{ route('businessPanel.panel') }} "
-
                     } else {
                         showSuccessNotifiBP(res.errs, 'right', '#ac0020');
-
                     }
                 },
                 error: function(rejected) {
@@ -404,6 +428,9 @@
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
+
+            let fileIds = [];
+
             if (ckeditorExist) {
                 const editorData = editor.getData();
                 fields.push({
@@ -411,9 +438,12 @@
                     data: editorData
                 });
             }
+
             $inputs.each(function() {
+
                 $(this).parent().removeClass('errorInput');
                 var inputAttr = $(this).attr('id');
+
                 if (inputAttr === 'selectStateForSelectCity')
                     return;
                 if (inputAttr === 'searchInput')
@@ -446,13 +476,11 @@
                 }
                 if ($(this).hasClass('phone')) {
                     if (multiple) {
-                        ;
                         if (moreItems.length > 0) {
                             fields.push({
                                 id: inputAttr,
                                 data: moreItems.join("_")
                             });
-
                         } else {
                             if ($(this).attr('required')) {
                                 if (moreItems.length < 1) {
@@ -462,8 +490,8 @@
                                     $(this).parent().addClass('errorInput');
                                 }
                             }
-                            return;
                         }
+                        return;
                     }
 
 
@@ -512,8 +540,9 @@
 
                 }
                 if ($(this).attr('type') === 'file') {
-                    if ($(this).val() === '') {
-                        filePic = true;
+                    if ($(this).val() !== '') {
+                        fileIds.push(inputAttr);
+                        return;
                     }
                 }
                 if ($(this).attr('required')) {
@@ -529,6 +558,7 @@
                     data: $(this).val()
                 });
             });
+
             radioFields.forEach(e => {
                 if (e.isRequired && !e.hasSelected) {
                     errorText += '<ul class="errorList"> ';
@@ -552,10 +582,24 @@
                 }
             });
 
-            if (errorText.length > 0)
+            if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
-            else
-                storeData(fields);
+            } else {
+                if (fileIds.length > 0 && !isInFirstStep) {
+                    storeFieldFiles(fileIds, fields);
+                } else if (fields.length > 0) {
+                    storeData(fields);
+                } else {
+                    if (nextFormId !== undefined) {
+                        window.location.href = '/asset/' + assetId + "/step/" + nextFormId +
+                            "/" +
+                            userAssetId;
+                    } else {
+                        lastPage();
+                    }
+                }
+
+            }
 
         }
 
@@ -569,7 +613,6 @@
         openLoading();
         $.ajax({
             type: 'get',
-            // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
             url: url + '/asset/' + assetId + "/form",
             complete: closeLoading,
             headers: {
@@ -588,7 +631,6 @@
                             firstStepFormId = res.forms[i].id;
 
                         if (res.forms[i].id == formId) {
-
                             if (i == 0)
                                 isInFirstStep = true;
                             else if (userAssetId === -1)
@@ -612,9 +654,11 @@
                             html += '</div>';
                             html += '</div>';
                             html += '<div style="margin-top: 20px">';
-                            html += '<p class="bold">' + res.forms[i].description + '</p>';
+                            html += '<p class="bold">' + (res.forms[i].description != null ? '' + res.forms[i]
+                                .description + '' : '') + '</p>';
                             html += '<div>';
-                            html += '<p>' + res.forms[i].notice + '</p>';
+                            html += '<p>' + (res.forms[i].notice != null ? '' + res.forms[i].notice + '' : '') +
+                                '</p>';
                             html += '</div>';
                             html += '</div>';
 
@@ -708,14 +752,10 @@
 
         function selectThisCityForSrc(_element, _id) {
             $("#" + apiId).val($(_element).text());
-            // $("#" + apiId).append($(_element).text());
             cityName = $(_element).text();
             $("#srcCityId").val(_id);
             $("#addCityModal").modal("hide");
             $(_element).parent().empty();
-
-            // if (document.getElementById("sameSrcDestInput").checked)
-            //     $("#destPlaceId").val(_id);
         }
         $('#addCityModal').on('hidden.bs.modal', function(e) {
             $(this)
@@ -759,7 +799,6 @@
         function saveModal() {
             var errorText = "";
             var $inputs = $('#redirectList :input');
-            // An array of just the ids...
             var fields = [];
             var radioFields = [];
             var checkBoxFields = [];
@@ -866,9 +905,6 @@
             } else {
                 storeDataModal(fields);
                 $('#addModal').attr("data-dismiss", "modal");
-                // if (nextFormId !== undefined) {
-                //     storeData(fields);
-                // }
             }
         }
 
@@ -888,11 +924,8 @@
                 },
 
                 success: function(res) {
-                    if (res.status === 0) {
+                    if (res.status == '0') {
                         userAssetId = res.id;
-                        if (filePic) {
-                            storePic(userAssetId, fields);
-                        }
                         // location.reload();
                     } else {}
                 },
@@ -906,6 +939,7 @@
         }
 
         function openModal(callBack = undefined) {
+
             if (callBack === undefined)
                 roomId = -1;
             $("#listAdd").modal("show");
@@ -913,7 +947,7 @@
             openLoading();
             $.ajax({
                 type: 'get',
-                // url: 'http://myeghamat.com/api/asset/' + assetId + "/form",
+
                 url: url + '/form/' + subAssetFromId,
                 complete: closeLoading,
                 headers: {
@@ -975,10 +1009,8 @@
         }
 
         function deleteFromListview(id, el) {
-            // openLoading();
             $.ajax({
                 type: 'DELETE',
-                // complete: closeLoading,
                 url: url + '/user_sub_asset/' + id,
                 success: function(res) {
                     if (res.status === "0" || res.status === "ok") {
@@ -990,7 +1022,6 @@
                     }
                 }
             })
-            // location.reload();
         }
 
         function editSubAsset(i, y) {
@@ -1011,6 +1042,10 @@
 
                     } else if (e.type === 'textarea') {
                         $("textarea[name='" + e.key_ + "']").val(e.val);
+                    } else if (e.type === 'radio') {
+                        $("input[value='" + e.val + "']").prop("checked", true);
+                    } else if (e.type === 'checkbox') {
+                        $("input[value='" + e.val + "']").prop("checked", true);
                     } else
                         $("input[name='" + e.key_ + "']").val(e.val);
                 });
@@ -1042,7 +1077,7 @@
                 if (res.fields[i].type.toLowerCase() == 'radio') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i].half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1093,7 +1128,7 @@
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1114,7 +1149,7 @@
                         (res
                             .fields[i]
                             .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
                     text += '</div>';
@@ -1132,7 +1167,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
                     text +=
-                        '<div class="inputBoxTextGeneralInfo inputBoxText clockTitle">';
+                        '<div class="inputBoxTextGeneralInfo inputBoxText   clockTitle">';
                     text += '<div class=" name' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1160,7 +1195,6 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
 
-                    // itemsVal = res.fields[i].data;
 
                     if (res.fields[i].multiple === 1) {
                         moreItems = res.fields[i].data !== null && res.fields[i].data != '' && res.fields[i].multiple ===
@@ -1168,7 +1202,7 @@
                             res.fields[i].data.split("_") : [];
                         if (moreItems.length < 2) {
                             oneItems = true;
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                             text += '<div class="' + (res.fields[i].necessary == 1 ?
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
@@ -1180,8 +1214,8 @@
                                     res.fields[i].data +
                                     '' :
                                     '') + '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
-                                '" class="inputBoxInput  ' + (res.fields[i].multiple ===
-                                    1 ? 'phone' : '') + '  ' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
+                                '" class="inputBoxInput  ' + (res.fields[i].multiple === 1 ? 'phone' : '') + '  ' + (res
+                                    .fields[i].status == 'REJECT' ? 'errorInput' : '') +
                                 '" placeholder="' + (res
                                     .fields[
                                         i]
@@ -1192,7 +1226,7 @@
                                     .necessary == 1 ? 'required ' : '') + ' >';
                         } else {
                             multipleVal = true;
-                            text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                            text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                             text += '<div class="' + (res.fields[i].necessary == 1 ?
                                 ' importantFieldLabel' :
                                 '') + '"> ' + res.fields[i].name + '</div>';
@@ -1211,7 +1245,7 @@
                         text += '<div style="font-size: 14px;" > اضافه کن</div>';
                         text += '</div>';
                     } else {
-                        text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                        text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                         text += '<div class="' + (res.fields[i].necessary == 1 ?
                             ' importantFieldLabel' :
                             '') + '"> ' + res.fields[i].name + '</div>';
@@ -1254,7 +1288,7 @@
                         elm += '<div class="inputBoxTextGeneralInfo inputBoxText">';
 
                         elm +=
-                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">نام ' +
+                            '<div style="white-space: nowrap;padding: 5px;border-left: 1px solid #D4D4D4;">' +
                             subAsserName + '</div>';
                         elm +=
                             '<input id="searchInput" class"inputBoxInput " type="search" style="width:100%;border:0px;position:relative;">';
@@ -1277,20 +1311,6 @@
                                 'relative-position inputBoxTour boxRoom" style="order: 2;min-height: 150px;">';
 
                             text += '<div class="row" >';
-                            // for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
-
-                            //     if (res.fields[i].items[y].fields[m].type == 'string') {
-                            //         roomName.push(res.fields[i].items[y].fields[m].val);
-                            //         name = res.fields[i].items[y].fields[m].val;
-                            //         nameKey = res.fields[i].items[y].fields[m].key_;
-
-                            //     }
-                            //     if (res.fields[i].items[y].fields[m].type == 'textarea') {}
-                            //     if (res.fields[i].items[y].fields[m].type == 'int') {
-                            //         count = res.fields[i].items[y].fields[m].val;
-                            //         countKey = res.fields[i].items[y].fields[m].key_;
-                            //     }
-                            // }
 
                             text += '<div class="col-md-5 col-sm-5 col-5"style="padding: 0px!important;">';
                             for (let m = 0; m < res.fields[i].items[y].fields.length; m++) {
@@ -1312,10 +1332,8 @@
                                 if (res.fields[i].items[y].fields[m].type !== 'gallery') {
                                     name = res.fields[i].items[y].fields[m].val;
                                     nameKey = res.fields[i].items[y].fields[m].key_;
-                                    text += '<div class="colorOrag bold"> ' + nameKey + ' ' + subAsserName + '</div>';
+                                    text += '<div class="colorOrag bold"> ' + nameKey + '</div>';
                                     text += '<div class="bold roomName">' + name + ' </div>';
-                                    // text += '<div class="colorOrag bold">تعداد ' + subAsserName + '</div>';
-                                    // text += '<div class="bold">' + count + ' </div>';
                                 }
                             }
                             text += '</div>';
@@ -1340,7 +1358,7 @@
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     picId = res.fields[i].field_id;
 
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1430,16 +1448,19 @@
                             '<path d="M126.999 58.6058V68.3794C127.017 69.6463 126.785 70.9044 126.317 72.0816C125.848 73.2588 125.152 74.332 124.269 75.2399C123.386 76.1478 122.332 76.8726 121.168 77.3727C120.004 77.8728 118.753 78.1385 117.487 78.1545H78.1727V117.224C78.2068 119.782 77.2236 122.249 75.4395 124.082C73.6554 125.916 71.2165 126.965 68.6592 126.999H58.5794C57.313 127.017 56.0556 126.785 54.8791 126.316C53.7025 125.847 52.6298 125.151 51.7224 124.267C50.815 123.384 50.0906 122.33 49.5908 121.166C49.0909 120.001 48.8254 118.75 48.8094 117.483C48.8094 117.397 48.8094 117.311 48.8094 117.225V78.1545H9.75752C7.20048 78.1846 4.73619 77.1975 2.90655 75.4103C1.07691 73.6231 0.0317299 71.1821 0.000855259 68.6241C0.000855259 68.5529 0.000855259 68.4832 0.000855259 68.4135V58.6058C-0.0331826 56.0475 0.949974 53.5805 2.73408 51.7473C4.51818 49.9142 6.95711 48.865 9.51441 48.8306H48.8272V9.76127C48.8111 8.49437 49.0449 7.23672 49.5151 6.06028C49.9854 4.88384 50.6829 3.81169 51.5677 2.90517C52.4526 1.99865 53.5074 1.27554 54.6719 0.777209C55.8363 0.278878 57.0876 0.0151043 58.354 0.000976567C58.4296 0.000976567 58.5023 0.000976567 58.5838 0.000976567H68.3538C69.6203 -0.0170586 70.8778 0.214871 72.0546 0.683497C73.2313 1.15212 74.3042 1.84825 75.2118 2.73205C76.1193 3.61585 76.8438 4.66999 77.3437 5.83415C77.8437 6.99831 78.1093 8.24966 78.1253 9.5166C78.1253 9.60261 78.1253 9.68861 78.1253 9.77462V48.8514H117.18C119.736 48.8042 122.207 49.7744 124.048 51.5488C125.889 53.3232 126.951 55.7565 126.999 58.3136C126.999 58.4115 126.999 58.5079 126.999 58.6058Z" fill="#444444"/> </svg>';
                         text += '</div>';
                         text += '<div class="col-md-8 col-sm-8 col-8" >';
-                        text += '<div> اتاق جدیدی اضافه کنید';
+                        text += '<div> ' + res.fields[i].name + '';
                         text += '</div>';
                         text += '</div>';
+                        text += '</div>';
+
                     }
+                    text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'float') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1467,7 +1488,7 @@
                         (
                             res.fields[i]
                             .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1494,11 +1515,11 @@
                         text += '</a>';
                         if (res.fields[i].necessary !== 1) {
 
-                            text += '<div class="colorBlack editBtn borderLeft" onclik="$(\'#' + fileId + '\').val('
-                            ')"><i class="trashIcon iconStyle"></i></div>';
+                            text += '<div class="colorBlack editBtn borderLeft" onclik="$(\'#' + fileId +
+                                '\').val(" ")"><i class="trashIcon iconStyle"></i></div>';
                         }
                         text +=
-                            '  <button class="fileBtn cursorPointer" style="display:block;width:60%; height:30px;" onclick="$(\'#' +
+                            '  <button class="fileBtn cursorPointer" style="display:block;width:60%; height:30px;white-space: nowrap;" onclick="$(\'#' +
                             fileId + '\').click()">تغییر فایل</button>';
                         text += '</div>';
                     } else {
@@ -1514,7 +1535,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1562,7 +1583,7 @@
                         stateName = myArray[0];
                     }
                     apiId = res.fields[i].field_id;
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1587,7 +1608,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1608,7 +1629,7 @@
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + ';">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1635,7 +1656,7 @@
                         .fields[i]
                         .half == 1 ? '49%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
-                    text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
+                    text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
                         '') + '"> ' + res.fields[i].name + '</div>';
@@ -1710,14 +1731,11 @@
             $(".boxRoom:not(:last-child)").addClass('hidden');
 
             allData.fields.forEach((e, index) => {
-
                 if (e.type !== 'listview')
                     return;
 
                 e.items.forEach((ee, index2) => {
-
                     ee.fields.forEach((eee, index3) => {
-
                         if (eee.key_ !== searchForLabel)
                             return;
 
@@ -1762,7 +1780,6 @@
                 if (marker !== undefined)
                     marker.remove();
 
-                //add marker
                 marker = new mapboxgl.Marker();
                 marker.setLngLat(e.lngLat).addTo(map);
 
@@ -1814,7 +1831,6 @@
                 openLoading();
                 $.ajax({
                     type: 'get',
-                    // url: 'http://myeghamat.com/api/form/' + formId,
                     url: url + '/form/' + formId,
                     complete: closeLoading,
                     headers: {
@@ -1925,9 +1941,7 @@
                     uploadProcess = true;
                     uploadProcessId = picQueue[index].id;
                     var file = document.getElementById(`picsInput_${uploadProcessId}`).files;
-                    uploadLargeFile(tourPicUrl, file[0], {
-                            //tourId: tour.id
-                        }, uploadPicResult,
+                    uploadLargeFile(tourPicUrl, file[0], {}, uploadPicResult,
                         token
                     );
                 }
@@ -2012,7 +2026,6 @@
                 complete: closeLoading,
                 url: deleteTourPicUrl,
                 data: {
-                    // tourId: tour.id,
                     pic: _fileName,
                 }
             })

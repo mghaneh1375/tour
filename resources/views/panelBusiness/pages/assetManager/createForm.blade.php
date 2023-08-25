@@ -17,14 +17,8 @@
                 <div class="mainBackWhiteBody">
                     <div class="head">نوع خدمت قابل ارائه</div>
                     <div style="margin-top: 20px">
-                        <h4>مایل به ارائه چه نوع خدمتی هستید؟</h4>
-                        <div>
-                            <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>
-                            <p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند
-                                اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم.</p>
-                        </div>
-                        <div id="hotel">
 
+                        <div id="hotel">
                         </div>
 
                     </div>
@@ -74,8 +68,20 @@
                 "Authorization": "Bearer " + localStorage.getItem("token")
             },
             success: function(res) {
+
                 var html = '';
+                console.log(res);
+                if (res.status === "0") {
+                    html += '<p>لطفا منتطر تایید احراز هویت بمانید</p>';
+                }
                 if (res.status === 0) {
+                    html += '<h4>مایل به ارائه چه نوع خدمتی هستید؟</h4>';
+                    html += '<div>';
+                    html += ' <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>';
+                    html +=
+                        '<p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند';
+                    html += 'اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم.</p>';
+                    html += '</div>';
                     for (var i = 0; i < res.assets.length; i++) {
                         html += '<div class="col-xs-12 col-md-8" style="margin-top: 10px">';
                         html += '<div data-id="' + res.assets[i].id + '" data-form-id="' + res.assets[i]

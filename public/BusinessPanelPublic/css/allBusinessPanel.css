@@ -1395,6 +1395,9 @@ label {
 .cursorPointer {
     cursor: pointer;
 }
+.height100Percent {
+    height: 100%;
+}
 .createTicketModal .filesSection .file .name {
 }
 .borderLeft {

@@ -41,8 +41,7 @@
                 <div class="modal-body" style="direction: rtl">
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
-                            <div id="stepView" style="width: 100%; height: 100px;flex-wrap: wrap;
-    display: flex;">
+                            <div id="stepView" style="width: 100%; height: 100px;flex-wrap: wrap;display: flex;">
                             </div>
                         </div>
                     </div>
@@ -78,6 +77,7 @@
                 var html = '';
 
                 if (res.status === "0") {
+                    console.log(res);
                     if (res.assets.length < 1) {
                         html += '<div class="row">';
                         html += '<div class="">';
@@ -92,19 +92,17 @@
                         html += '</div>';
                         html += '</div>';
                     } else {
-
+                        html += '<center>';
+                        html += '<table class="table table-striped">';
+                        html += '<tr style="background: #D4D4D4">';
+                        html += '<th>ردیف</th>';
+                        html += '<th>عملیات</th>';
+                        html += '<th>نام کسب و کار</th>';
+                        html += '<th>نوع کسب و کار</th>';
+                        html += '<th>وضعیت</th>';
+                        html += '<th>تاریخ ایجاد</th>';
+                        html += '</tr>';
                         for (let i = 0; i < res.assets.length; i++) {
-
-                            html += '<center>';
-                            html += '<table class="table table-striped">';
-                            html += '<tr style="background: #D4D4D4">';
-                            html += '<th>ردیف</th>';
-                            html += '<th>عملیات</th>';
-                            html += '<th>نام کسب و کار</th>';
-                            html += '<th>نوع کسب و کار</th>';
-                            html += '<th>وضعیت</th>';
-                            html += '<th>تاریخ ایجاد</th>';
-                            html += '</tr>';
                             for (let z = 0; z < res.assets[i].length; z++) {
                                 usreId = res.assets[i][z].id;
                                 itemsCount = z + 1;
@@ -154,9 +152,9 @@
                                 html += '</tr>';
 
                             }
-                            html += '</table>';
-                            html += '</center> ';
                         }
+                        html += '</table>';
+                        html += '</center> ';
                     }
 
                     $('#resultBox').empty().append(html);

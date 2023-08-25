@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use App\Http\Controllers\FormCreator\UserSubAssetController;
 use Illuminate\Validation\Rule;
+
 
 class UserAssetController extends Controller
 {
@@ -39,7 +41,6 @@ class UserAssetController extends Controller
         ]);
     }
     public function all(Request $request) {
-        
         $assets = Asset::all();
         $output = [];
         $uId = Auth::user()->id;
@@ -214,8 +215,6 @@ class UserAssetController extends Controller
             }
         }
 
-        // dd($forms);
-
         return view('formCreator.report.field', [
             'forms' => $forms, 
             'id' => $user_asset->id, 
@@ -242,6 +241,11 @@ class UserAssetController extends Controller
         if($request['status'] == 'REJECT' && $request->has('err_text'))
             $user_form_data->err_text = $request['err_text'];
 
+        if($request['status'] == 'CONFIRM' &&  $user_form_data->err_text !=null){
+            $user_form_data->err_text = null;  
+        }
+            
+            
         $user_form_data->save();
 
         return response(['status' => '0']);
@@ -439,6 +443,7 @@ class UserAssetController extends Controller
 
         }
         catch (\Exception $x) {
+            
             // dd($x->getMessage());
         }
         return response()->json([
