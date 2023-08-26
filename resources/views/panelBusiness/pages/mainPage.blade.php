@@ -9,7 +9,7 @@
 
 
 @section('body')
-    {{-- <style>
+    <style>
         .mainPage {}
 
         .mainPage .headerTitle {
@@ -75,8 +75,8 @@
         .mainPage .cards .infoSec .numSec .tex {
             font-size: 12px;
         }
-    </style> --}}
-    {{-- <div class="row mainPage">
+    </style>
+    <div class="row mainPage">
         <div class="col-md-12">
             @if ($newTicketCount > 0 || $newNotificationCount > 0)
                 <div class="mainBackWhiteBody">
@@ -148,9 +148,9 @@
                                 <div class="infoSec">
                                     <div class="text">{{ $mb->name }}</div>
                                     <div class="numSec">
-                                                     <span class="num">{{$newTicketCount}}</span>
-                                                        <span class="tex">پیام جدید</span>
-                                             </div>
+                                        <span class="num">{{ $newTicketCount }}</span>
+                                        <span class="tex">پیام جدید</span>
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
@@ -158,7 +158,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     <div class="createBusinessPage height100">
         <div class="row indicator_step height100 ">
 

@@ -68,9 +68,13 @@ function upload_fileLargeFile(start, _fileName) {
             error: function (jqXHR, textStatus, errorThrown) {
                 errorCountInLargeFileUploadedInJsFile--;
                 if (errorCountInLargeFileUploadedInJsFile <= 0) {
+                    console.log(errorCountInLargeFileUploadedInJsFile);
                     inProcessLargeFileUploadedInJsFile = false;
                     callBackFunctionLargeFileUploadedInJsFile("error");
-                } else upload_fileLargeFile(start, _fileName);
+                } else {
+                    console.log("111");
+                    upload_fileLargeFile(start, _fileName);
+                }
             },
             success: function (response) {
                 if (

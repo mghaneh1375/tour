@@ -153,7 +153,7 @@
                         <i class="fa-solid fa-headset"></i>
                         <div class="paddingRight10"> پشتیبانی</div>
                         @if ($newTicketCount != 0)
-                            <div class="newTicketCount" style="margin-right:3px">{{ $newTicketCount }}</div>
+                            <div class="newTicketCount" style="margin-right:3   px">{{ $newTicketCount }}</div>
                         @endif
                     </a>
                 </div>

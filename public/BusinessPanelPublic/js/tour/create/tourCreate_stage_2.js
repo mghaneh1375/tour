@@ -128,6 +128,7 @@ function chooseThisItem(_element, _kind) {
 }
 
 function searchForPlaces(_element, _kindPlaceId) {
+    kindPlaceId = _kindPlaceId;
     _element = $(_element);
     var value = _element.val();
     _element.next().empty();
@@ -137,17 +138,18 @@ function searchForPlaces(_element, _kindPlaceId) {
 
         ajaxProcess = $.ajax({
             type: "GET",
-            url: `${searchPlaceWithNameKinPlaceIdUrl}?kindPlaceId=${_kindPlaceId}&value=${value}`,
-            success: (response) => {
-                if (response.status == "ok") {
+            url: `https://koochita-server.bogenstudio.com/api/place/totalSearch?placeMode=${_kindPlaceId}&key=${value}`,
+            success: (res) => {
+                let data = JSON.parse(res);
+                if (data.status == "ok") {
                     var text = "";
-                    searchResults = response.result;
+                    searchResults = data.data.places;
                     searchResults.map((item, index) => {
                         item.stateAndCity =
-                            item.state && item.city
-                                ? `استان ${item.state.name} شهر ${item.city.name}`
+                            item.state_name && item.city_name
+                                ? `استان ${item.state_name} شهر ${item.city_name}`
                                 : "";
-                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this, ${_kindPlaceId})">${item.name}</div>`;
+                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this, kindPlaceId)">${item.target_name}</div>`;
                     });
                     _element.next().html(text);
                 }
@@ -167,10 +169,13 @@ function chooseThisPlaceForDate(_element, _kind) {
     _element.parent().empty().prev().val("");
 }
 function createPlaceCardForSelect(_place, _resultSec) {
+    console.log(_place);
     var text = placeCardSample;
     var fn = Object.keys(_place);
-    for (var x of fn)
+    console.log(text);
+    for (var x of fn) {
         text = text.replace(new RegExp(`##${x}##`, "g"), _place[x]);
+    }
 
     text = text.replace(new RegExp(`##dateIndex##`, "g"), openedDateEvent);
 
@@ -379,18 +384,20 @@ function searchForHotel(_element) {
     if (ajaxProcess != null) ajaxProcess.abort();
 
     var kindPlaceId = $("#hotelKind").val();
-
+    console.log(kindPlaceId);
     if (value.trim().length > 1) {
         ajaxProcess = $.ajax({
             type: "GET",
-            url: `${searchPlaceWithNameKinPlaceIdUrl}?value=${value}&kindPlaceId=${kindPlaceId}`,
-            success: (response) => {
-                if (response.status == "ok") {
+            url: `https://koochita-server.bogenstudio.com/api/place/totalSearch?placeMode=${kindPlaceId}&key=${value}`,
+            success: (res) => {
+                let data = JSON.parse(res);
+                console.log(data);
+                if (data.status == "ok") {
                     var text = "";
-                    searchResults = response.result;
+                    searchResults = data.data.places;
                     searchResults.map(
                         (item, key) =>
-                            (text += `<div class="searchHover blue" data-index="${key}" data-kindPlaceId="${kindPlaceId}" onclick="chooseThisHotel(this)" >${item.name} در ${item.state.name} , ${item.city.name}</div>`)
+                            (text += `<div class="searchHover blue" data-index="${key}" data-kindPlaceId="${kindPlaceId}" onclick="chooseThisHotel(this)" > ${item.target_name} ,${item.city_name} در ${item.state_name} </div>`)
                     );
                     $(_element).next().html(text);
                 }
@@ -407,11 +414,11 @@ function chooseThisHotel(_element) {
 
     planDate[day].hotelId = searchResults[index].id;
     planDate[day].hotelKindPlaceId = kindPlaceId;
-    planDate[day].hotelInfo.name = searchResults[index].name;
+    planDate[day].hotelInfo.name = searchResults[index].target_name;
     planDate[day].hotelInfo.pic = searchResults[index].pic;
     planDate[
         day
-    ].hotelInfo.stateAndCity = `استان ${searchResults[index].state.name} شهر ${searchResults[index].city.name}`;
+    ].hotelInfo.stateAndCity = `استان ${searchResults[index].state_name} شهر ${searchResults[index].city_name}`;
     $("#addHotelModal").modal("hide");
 
     showHotelInDay(day);
@@ -466,8 +473,8 @@ function submitSchedule() {
             tourId: tour.id,
             planDate: JSON.stringify(planDate),
         },
-        success: (response) => {
-            if (response.status == "ok") {
+        success: (res) => {
+            if (res.status == "ok") {
                 localStorage.removeItem(`planeDate_${tour.id}`);
                 location.href = nextStageUrl;
             } else {
