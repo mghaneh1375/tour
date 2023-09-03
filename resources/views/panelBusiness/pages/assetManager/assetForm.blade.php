@@ -972,35 +972,30 @@
         function addPhone() {
             var errorText = "";
             itemsVal = $("#" + addId).val();
-            if (itemsVal.length > 7) {
-                let x = true;
-                if (moreItems.length < 2 && oneItems) {
-                    oneItems = false;
-                    moreItems = [];
+            let x = true;
+            if (moreItems.length < 2 && oneItems) {
+                oneItems = false;
+                moreItems = [];
 
-                } else {
-                    moreItems.forEach((item) => {
-                        if (item === itemsVal) {
-                            x = false
-                            errorText += '<ul class="errorList"> ';
-                            errorText += "<li> شماره تلفن تکراری است</li></ul>";
-                            openErrorAlertBP(errorText);
-                        }
-                    })
-                }
-                if (x) {
-                    moreItems.push(itemsVal);
-                    $("#input-" + addId + "-items").append(
-                        '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
-                        ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
-                        itemsVal + '</div></div>');
-                    $("#" + addId).val('')
-                }
             } else {
-                errorText += '<ul class="errorList"> ';
-                errorText += "<li> تلفن حداقل باید 8 رقم باشد</li></ul>";
-                openErrorAlertBP(errorText);
+                moreItems.forEach((item) => {
+                    if (item === itemsVal) {
+                        x = false
+                        errorText += '<ul class="errorList"> ';
+                        errorText += "<li> محتوای وارد شده تکراری است</li></ul>";
+                        openErrorAlertBP(errorText);
+                    }
+                })
             }
+            if (x) {
+                moreItems.push(itemsVal);
+                $("#input-" + addId + "-items").append(
+                    '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                    ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
+                    itemsVal + '</div></div>');
+                $("#" + addId).val('')
+            }
+
         }
 
         function deleteItems(itemVal, el) {
