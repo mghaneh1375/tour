@@ -171,6 +171,9 @@
         @endif
 
     </div>
+    <div style="position: absolute; bottom:0px;right:10px;display: flex;align-items: center;">
+        <h1 style="padding-left: 5px">کوچیتا</h1>پنل کسب و کار
+    </div>
 </div>
 
 <script>

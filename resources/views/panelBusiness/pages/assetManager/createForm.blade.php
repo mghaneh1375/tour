@@ -70,7 +70,7 @@
             success: function(res) {
 
                 var html = '';
-                console.log(res);
+                console.log('123');
                 if (res.status === "0") {
                     html += '<p>لطفا منتطر تایید احراز هویت بمانید</p>';
                 }

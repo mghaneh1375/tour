@@ -925,7 +925,7 @@ input[type="radio"] {
     padding-left: 6px;
 }
 .progressBarSection .progressBarDiv {
-    width: 60%;
+    width: 70%;
     height: 10px;
     position: relative;
     background: #80808038;

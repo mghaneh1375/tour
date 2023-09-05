@@ -642,12 +642,12 @@
                                 '<div><h1 >' +
                                 res.forms[i].name + '</h1> </div>';
                             html += '<div class="formTitleProgress">';
-                            html += '<div class="progressBarSection">';
-                            html += '<div class="text">';
-                            html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
-                            html += '</div>';
+                            html += '<div class="progressBarSection" style="justify-content: space-evenly;">';
                             html += '<div class="progressBarDiv">';
                             html += '<div id="sideProgressBarFull" class="full"></div>';
+                            html += '</div>';
+                            html += '<div class="text" style="white-space: nowrap;">';
+                            html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
                             html += '</div>';
                             html += '</div>';
                             html += '';
