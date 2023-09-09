@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>دارایی</title>
     @parent
     <style>
         .modalForm {

@@ -80,11 +80,11 @@
                         </div>
                     </div>
                 @endif
-                <div id="lastItemOfSideMenu" class="sideNavRow able showInBottom">
+                {{-- <div id="lastItemOfSideMenu" class="sideNavRow able showInBottom">
                     <a href="{{ route('businessPanel.panel') }}" class="sideNavHeader hasBody">
                         <span>بازگشت به مدیریت کسب و کار</span>
                     </a>
-                </div>
+                </div> --}}
             @else
                 <div class="sideNavRow able">
                     <div class="sideNavHeader hasBody">
@@ -102,10 +102,10 @@
                                 <a class="sideNavItem aligenCenter" href="{{ route('createForm') }}">
                                     ایجاد کسب وکارجدید</a>
                             </li>
-                            {{-- <li>
+                            <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.create') }}">
                                     هییت مدیر</a>
-                            </li> --}}
+                            </li>
                             <li>
                                 <a class="sideNavItem aligenCenter" href="{{ route('businessPanel.panel') }} ">کسب و
                                     کارهای
@@ -113,9 +113,8 @@
                             </li>
                             <li>
                                 <a class="sideNavItem aligenCenter"
-                                    href="{{ route('businessPanel.completeUserInfo') }}">تغییر
-                                    اطلاعات
-                                    فردی</a>
+                                    href="{{ route('businessPanel.completeUserInfo') }}">تغییر اطلاعات صاحب کسب و
+                                    کار</a>
                             </li>
 
                         </ul>

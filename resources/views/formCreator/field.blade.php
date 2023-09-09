@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>فیلد ها</title>
     @parent
     <script>
         var delUrl = "{{ url('boom/form_field') }}" + "/";

@@ -2,8 +2,7 @@
 
 @section('head')
     @parent
-
-
+    <title>گزارش</title>
     <script>
         let delUrl = '{{ url('boom/user_asset') . '/' }}';
     </script>

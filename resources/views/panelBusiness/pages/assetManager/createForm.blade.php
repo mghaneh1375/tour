@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>پنل تعریف کسب و کار</title>
     <link rel="stylesheet" href="{{ URL::asset('css/pages/localShops/mainLocalShops.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" href="{{ URL::asset('css/pages/business.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">

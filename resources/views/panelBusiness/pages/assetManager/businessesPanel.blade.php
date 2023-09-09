@@ -104,6 +104,11 @@
                         html += '</tr>';
                         for (let i = 0; i < res.assets.length; i++) {
                             for (let z = 0; z < res.assets[i].length; z++) {
+                                if (res.assets[i][z].asset.indexOf('هیئت') > -1 && res.assets[i][z].status
+                                    .indexOf('تایید') > -1) {
+                                    console.log(res.assets[i][z].asset.indexOf('هیئت'));
+                                    break;
+                                }
                                 usreId = res.assets[i][z].id;
                                 itemsCount = z + 1;
                                 assetId = res.assets[i][z].asset_id;
