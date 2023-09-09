@@ -174,7 +174,7 @@
                 <div id="optBod3" class="optbodies hidden">
                     <div class="searchBox">
                         <input type="text" id="opt3Name" class="form-control" placeholder="نام محل بازدید..."
-                            onkeyup="searchForPlaces(this, 0)">
+                            onkeyup="searchForPlaces(this, 'attraction')">
                         <div class="searchResult"></div>
                     </div>
                     <div class="choosedPlace"></div>
@@ -191,7 +191,7 @@
                 <div id="optBod7" class="optbodies hidden">
                     <div class="searchBox">
                         <input type="text" id="opt7Name" class="form-control" placeholder="نام رستوران..."
-                            onkeyup="searchForPlaces(this, 3)">
+                            onkeyup="searchForPlaces(this, 'restaurant')">
                         <div class="searchResult"></div>
                     </div>
                     <div class="choosedPlace"></div>
@@ -296,8 +296,8 @@
                                     <i class="glyphicon glyphicon-triangle-bottom"></i>
                                 </div>
                                 <select id="hotelKind" class="inputBoxInput styled-select text-align-right">
-                                    <option value="4">هتل</option>
-                                    <option value="12">بوم گردی</option>
+                                    <option value="hotel">هتل</option>
+                                    <option value="boom">بوم گردی</option>
                                 </select>
                             </div>
                             <div class="placeNameAddingPlaceInputDiv inputBoxTour col-xs-8 relative-position">
@@ -327,7 +327,7 @@
                 <img src="##pic##" class="resizeImgClass" onload="fitThisImg(this)">
             </div>
             <div>
-                <div class="name">##name##</div>
+                <div class="name">##target_name##</div>
                 <div class="text">##stateAndCity##</div>
             </div>
         </div>

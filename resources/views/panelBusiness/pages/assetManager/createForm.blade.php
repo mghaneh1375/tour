@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>پنل تعریف کسب و کار</title>
     <link rel="stylesheet" href="{{ URL::asset('css/pages/localShops/mainLocalShops.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" href="{{ URL::asset('css/pages/business.css?v=' . $fileVersions) }}">
     <link rel="stylesheet" href="{{ URL::asset('BusinessPanelPublic/css/createBusinessPage.css?v=' . $fileVersions) }}">
@@ -70,7 +71,7 @@
             success: function(res) {
 
                 var html = '';
-                console.log(res);
+                console.log('123');
                 if (res.status === "0") {
                     html += '<p>لطفا منتطر تایید احراز هویت بمانید</p>';
                 }

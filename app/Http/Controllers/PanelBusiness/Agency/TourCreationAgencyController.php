@@ -418,9 +418,11 @@ class TourCreationAgencyController extends Controller{
 
         $start = microtime(true);
         $data = json_decode($request->data);
+   
 
         $tour = Tour::find($data->tourId);
         if($tour->userId == auth()->user()->id){
+
             $direction = "{$this->assetLocation}/_images/tour";
             if(!is_dir($direction))
                 mkdir($direction);

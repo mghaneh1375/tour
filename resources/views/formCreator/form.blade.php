@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>فرم ها</title>
     @parent
 
     <script>

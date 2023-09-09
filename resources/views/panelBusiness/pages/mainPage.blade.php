@@ -9,7 +9,7 @@
 
 
 @section('body')
-    {{-- <style>
+    <style>
         .mainPage {}
 
         .mainPage .headerTitle {
@@ -75,7 +75,7 @@
         .mainPage .cards .infoSec .numSec .tex {
             font-size: 12px;
         }
-    </style> --}}
+    </style>
     {{-- <div class="row mainPage">
         <div class="col-md-12">
             @if ($newTicketCount > 0 || $newNotificationCount > 0)
@@ -148,9 +148,9 @@
                                 <div class="infoSec">
                                     <div class="text">{{ $mb->name }}</div>
                                     <div class="numSec">
-                                                     <span class="num">{{$newTicketCount}}</span>
-                                                        <span class="tex">پیام جدید</span>
-                                             </div>
+                                        <span class="num">{{ $newTicketCount }}</span>
+                                        <span class="tex">پیام جدید</span>
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
@@ -183,137 +183,48 @@
     <script>
         let phone = '{{ Auth::user()->phone }}';
 
-        if (localStorage.getItem("token") === undefined ||
-            localStorage.getItem("token") === null ||
-            localStorage.getItem("token") === '') {
-            $.ajax({
-                type: 'post',
-                url: 'https://boom.bogenstudio.com/api/activation_code',
-                data: {
-                    'phone': phone
-                },
-                success: function(res) {
-                    console.log('====================================');
-                    console.log(res);
-                    console.log('====================================');
+        // if (localStorage.getItem("token") === undefined ||
+        //     localStorage.getItem("token") === null ||
+        //     localStorage.getItem("token") === '') {
+        //     $.ajax({
+        //         type: 'post',
+        //         url: 'https://boom.bogenstudio.com/api/activation_code',
+        //         data: {
+        //             'phone': phone
+        //         },
+        //         success: function(res) {
+        //             console.log('====================================');
+        //             console.log(res);
+        //             console.log('====================================');
 
-                    $.ajax({
-                        type: 'post',
-                        url: 'https://boom.bogenstudio.com/api/login',
-                        data: {
-                            'phone': phone,
-                            'verification_code': '1111'
-                        },
-                        success: function(res) {
+        //             $.ajax({
+        //                 type: 'post',
+        //                 url: 'https://boom.bogenstudio.com/api/login',
+        //                 data: {
+        //                     'phone': phone,
+        //                     'verification_code': '1111'
+        //                 },
+        //                 success: function(res) {
 
-                            if (res.status == '0') {
-                                localStorage.setItem('token', res.access_token);
-                            }
-                        }
-                    });
-                }
-            });
-        }
+        //                     if (res.status == '0') {
+        //                         localStorage.setItem('token', res.access_token);
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     });
+        // }
         let url = '{{ route('formCreator.root') }}';
         let token = 'Bearer ' + localStorage.getItem("token");
         var assetId = null;
         var step = null;
         var usreId = null;
-        openLoading();
-        $.ajax({
-            type: 'get',
-            url: url + '/asset/user_assets',
-            complete: closeLoading,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": token
-            },
-            success: function(res) {
-                var html = '';
-
-                if (res.status === "0") {
-                    if (res.assets.length < 1) {
-                        html += '<div id="BusinessType"></div>';
-                        firstStep();
-                    } else {
-                        console.log(res);
-                        html += '<center>';
-                        html += '<table class="table table-striped">';
-                        html += '<tr style="background: #D4D4D4">';
-                        html += '<th>ردیف</th>';
-                        html += '<th>عملیات</th>';
-                        html += '<th>نام کسب و کار</th>';
-                        html += '<th>نوع کسب و کار</th>';
-                        html += '<th>وضعیت</th>';
-                        html += '<th>تاریخ ایجاد</th>';
-                        html += '</tr>';
-                        for (let i = 0; i < res.assets.length; i++) {
-                            for (let z = 0; z < res.assets[i].length; z++) {
-                                usreId = res.assets[i][z].id;
-                                itemsCount = z + 1;
-                                assetId = res.assets[i][z].asset_id;
-
-                                html += '<tr id="' + res.assets[i][z].id + '">';
-                                html += '<td>' + itemsCount + '</td>';
-                                if (res.assets[i][z].status === "در حال ساخت") {
-
-                                    html +=
-                                        '<td><div class="btn btnError" style="font-size: 10px;" onclick="fillForm(' +
-                                        assetId + ',' + usreId + ')">تکمیل اطلاعات </div>';
-                                    html +=
-                                        '<a style="margin-right: 5px;" class="btn btn-danger circleButton"onclick="deleteBusiness(' +
-                                        res.assets[i][z].id + ',this)" title="حذف">';
-                                    html += '<i class="fa-solid fa-trash"></i></a>';
-                                    html += '</td>';
-                                } else if (res.assets[i][z].status === "در حال بررسی برای تایید") {
-                                    html +=
-                                        '<td><a href="{{ route('ticket.page') }}" class="btn btnSuccess" style="font-size: 10px;width:60%;">';
-                                    html += 'پشتیبانی';
-                                    html += '</a>';
-                                    html += '</td>';
-                                } else if (res.assets[i][z].status === "رد شده") {
-                                    html += '<td style="display:flex;">';
-                                    html +=
-                                        '<div class="btn btnError" style="font-size: 10px;margin-left: 5px;" onclick="fillForm(' +
-                                        assetId + ',' + usreId + ')">تکمیل اطلاعات </div>';
-                                    html +=
-                                        '<a href="{{ route('ticket.page') }}" class="btn btnAlert" style="font-size: 10px;">';
-                                    html += 'هشدارها';
-                                    html += '</a>';
-                                    html += '</td>';
-                                } else {
-                                    html +=
-                                        '<td><a href="#"class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل مدیریت</a></td>';
-                                }
-                                html += '<td>' + res.assets[i][z].title + '</td>';
-                                html += '<td>' + res.assets[i][z].asset + '</td>';
-                                html += '<td>' + res.assets[i][z].status + '</td>';
-                                html += '<td>' + res.assets[i][z].createdAt + '</td>';
-                                html += '</tr>';
-
-                            }
-                        }
-                        html += '</table>';
-                        html += '</center> ';
-                    }
-                    $('#resultBox').empty().append(html);
-                } else {}
-
-            },
-            error: function(request, status, error) {
-                if (request.status === 404) {
-                    window.location.href = '/404';
-                }
-            }
-        });
-
-        function fillForm(asset_Id, usreId_) {
-            $("#showStep").modal("show");
+        let level = '{{ auth()->user()->level }}';
+        if (level === '0') {
             openLoading();
             $.ajax({
                 type: 'get',
-                url: url + '/asset/' + asset_Id + "/form",
+                url: url + '/asset/user_assets',
                 complete: closeLoading,
                 headers: {
                     'Accept': 'application/json',
@@ -321,19 +232,80 @@
                     "Authorization": token
                 },
                 success: function(res) {
-                    var text = '';
+                    var html = '';
 
-                    if (res.status === 0) {
-                        for (let i = 0; i < res.forms.length; i++) {
-                            step = res.forms[i].id;
-                            text += '<div class="stepView" onclick="goStep(' + step + ',' + usreId_ + ',' +
-                                asset_Id + ' )">';
-                            text += '' + res.forms[i].name + '';
-                            text += '</div>';
+                    if (res.status === "0") {
+                        if (res.assets.length <= 1) {
+
+                            html += '<div id="BusinessType"></div>';
+                            firstStep();
+                        } else {
+                            html += '<center>';
+                            html += '<table class="table table-striped">';
+                            html += '<tr style="background: #D4D4D4">';
+                            html += '<th>ردیف</th>';
+                            html += '<th>عملیات</th>';
+                            html += '<th>نام کسب و کار</th>';
+                            html += '<th>نوع کسب و کار</th>';
+                            html += '<th>وضعیت</th>';
+                            html += '<th>تاریخ ایجاد</th>';
+                            html += '</tr>';
+                            for (let i = 0; i < res.assets.length; i++) {
+                                for (let z = 0; z < res.assets[i].length; z++) {
+                                    if (res.assets[i][z].asset.indexOf('هیئت') > -1 && res.assets[i][z].status
+                                        .indexOf('تایید') > -1) {
+                                        break;
+                                    }
+                                    usreId = res.assets[i][z].id;
+                                    itemsCount = z + 1;
+                                    assetId = res.assets[i][z].asset_id;
+
+                                    html += '<tr id="' + res.assets[i][z].id + '">';
+                                    html += '<td>' + itemsCount + '</td>';
+                                    if (res.assets[i][z].status === "در حال ساخت") {
+
+                                        html +=
+                                            '<td><div class="btn btnError" style="font-size: 10px;" onclick="fillForm(' +
+                                            assetId + ',' + usreId + ')">تکمیل اطلاعات </div>';
+                                        html +=
+                                            '<a style="margin-right: 5px;" class="btn btn-danger circleButton"onclick="deleteBusiness(' +
+                                            res.assets[i][z].id + ',this)" title="حذف">';
+                                        html += '<i class="fa-solid fa-trash"></i></a>';
+                                        html += '</td>';
+                                    } else if (res.assets[i][z].status === "در حال بررسی برای تایید") {
+                                        html +=
+                                            '<td><a href="{{ route('ticket.page') }}" class="btn btnSuccess" style="font-size: 10px;width:60%;">';
+                                        html += 'پشتیبانی';
+                                        html += '</a>';
+                                        html += '</td>';
+                                    } else if (res.assets[i][z].status === "رد شده") {
+                                        html += '<td style="display:flex;">';
+                                        html +=
+                                            '<div class="btn btnError" style="font-size: 10px;margin-left: 5px;" onclick="fillForm(' +
+                                            assetId + ',' + usreId + ')">تکمیل اطلاعات </div>';
+                                        html +=
+                                            '<a href="{{ route('ticket.page') }}" class="btn btnAlert" style="font-size: 10px;">';
+                                        html += 'هشدارها';
+                                        html += '</a>';
+                                        html += '</td>';
+                                    } else {
+                                        html +=
+                                            '<td><a href="#"class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل مدیریت</a></td>';
+                                    }
+                                    html += '<td>' + res.assets[i][z].title + '</td>';
+                                    html += '<td>' + res.assets[i][z].asset + '</td>';
+                                    html += '<td>' + res.assets[i][z].status + '</td>';
+                                    html += '<td>' + res.assets[i][z].createdAt + '</td>';
+                                    html += '</tr>';
+
+                                }
+                            }
+                            html += '</table>';
+                            html += '</center> ';
                         }
+                        $('#resultBox').empty().append(html);
                     } else {}
 
-                    $('#stepView').empty().append(text);
                 },
                 error: function(request, status, error) {
                     if (request.status === 404) {
@@ -341,97 +313,138 @@
                     }
                 }
             });
-        }
 
-        function goStep(step, usreId_, asset_Id) {
-            window.location.href = '/asset/' + asset_Id + "/step/" + step + "/" + usreId_;
-        }
+            function fillForm(asset_Id, usreId_) {
+                $("#showStep").modal("show");
+                openLoading();
+                $.ajax({
+                    type: 'get',
+                    url: url + '/asset/' + asset_Id + "/form",
+                    complete: closeLoading,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        "Authorization": token
+                    },
+                    success: function(res) {
+                        var text = '';
 
-        function deleteBusiness(id, el) {
-            openLoading();
-            $.ajax({
-                type: 'DELETE',
-                complete: closeLoading,
-                url: url + '/user_asset/' + id,
-                headers: {
-                    "Authorization": token
-                },
-                success: function(res) {
-                    if (res.status == '0')
-                        location.reload();
-                }
-            })
-        }
+                        if (res.status === 0) {
+                            for (let i = 0; i < res.forms.length; i++) {
+                                step = res.forms[i].id;
+                                text += '<div class="stepView" onclick="goStep(' + step + ',' + usreId_ +
+                                    ',' +
+                                    asset_Id + ' )">';
+                                text += '' + res.forms[i].name + '';
+                                text += '</div>';
+                            }
+                        } else {}
 
-        function firstStep() {
-            openLoading();
-            $.ajax({
-                type: 'get',
-                // url: 'http://myeghamat.com/api/asset',
-                url: url + '/asset',
-                complete: closeLoading,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    "Authorization": "Bearer " + localStorage.getItem("token")
-                },
-                success: function(res) {
-                    var text = '';
-                    if (res.status === 0) {
-                        console.log(res);
-                        text += '<h4>مایل به ارائه چه نوع خدمتی هستید؟</h4>';
-                        text += '<div>';
-                        text += ' <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>';
-                        text +=
-                            '<p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند';
-                        text +=
-                            'اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم. < /p>';
-                        text += '</div>';
-                        for (var i = 0; i < res.assets.length; i++) {
-                            text += '<div class="col-xs-12 col-md-8" style="margin-top: 10px">';
-                            text += '<div data-id="' + res.assets[i].id + '" data-form-id="' + res.assets[i]
-                                .formIds[0] +
-                                '" data-type="agency" class="businessType">';
-                            text += '<div class="picSection">';
+                        $('#stepView').empty().append(text);
+                    },
+                    error: function(request, status, error) {
+                        if (request.status === 404) {
+                            window.location.href = '/404';
+                        }
+                    }
+                });
+            }
+
+            function goStep(step, usreId_, asset_Id) {
+                window.location.href = '/asset/' + asset_Id + "/step/" + step + "/" + usreId_;
+            }
+
+            function deleteBusiness(id, el) {
+                openLoading();
+                $.ajax({
+                    type: 'DELETE',
+                    complete: closeLoading,
+                    url: url + '/user_asset/' + id,
+                    headers: {
+                        "Authorization": token
+                    },
+                    success: function(res) {
+                        if (res.status == '0')
+                            location.reload();
+                    }
+                })
+            }
+
+            function firstStep() {
+                openLoading();
+                $.ajax({
+                    type: 'get',
+                    // url: 'http://myeghamat.com/api/asset',
+                    url: url + '/asset',
+                    complete: closeLoading,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        "Authorization": "Bearer " + localStorage.getItem("token")
+                    },
+                    success: function(res) {
+                        var text = '';
+                        if (res.status === 0) {
+                            console.log(res);
+                            text += '<h4>مایل به ارائه چه نوع خدمتی هستید؟</h4>';
+                            text += '<div>';
+                            text += ' <p>از بین گزینه های زیر یک گزینه را می توانید انتخاب کنید.</p>';
                             text +=
-                                '<img class="resizeImgClass" src="' + res.assets[i].pic +
-                                '" onload="fitThisImg(this)">';
+                                '<p>توجه کنید، این انتخاب بعدها قابل تغییر می باشد، اما به سبب گزینه های انتخاب شده، ما نیازمند';
+                            text +=
+                                'اطلاعات مفصلی از شما هستیم و امکانات متفاوتی را در اختیار شما قرار می دهیم. < /p>';
                             text += '</div>';
-                            text += '<div class="textSec">';
-                            text += '<h5>' + res.assets[i].name + ' </h5>';
-                            text += '<p>شما می توانید برای فروش تورهای خود از امکانات ما استفاده کنید.</p>';
-                            text += ' </div>';
-                            text += '</div>';
+                            for (var i = 0; i < res.assets.length; i++) {
+
+                                text += '<div class="col-xs-12 col-md-8" style="margin-top: 10px">';
+                                text += '<div data-id="' + res.assets[i].id + '" data-form-id="' + res
+                                    .assets[i]
+                                    .formIds[0] +
+                                    '" data-type="agency" class="businessType">';
+                                text += '<div class="picSection">';
+                                text +=
+                                    '<img class="resizeImgClass" src="' + res.assets[i].pic +
+                                    '" onload="fitThisImg(this)">';
+                                text += '</div>';
+                                text += '<div class="textSec">';
+                                text += '<h5>' + res.assets[i].name + ' </h5>';
+                                text +=
+                                    '<p>شما می توانید برای فروش تورهای خود از امکانات ما استفاده کنید.</p>';
+                                text += ' </div>';
+                                text += '</div>';
+                                text += '</div>';
+                            }
+                            text +=
+                                '<div class="col-xs-12 fullyCenterContent rowReverse SpaceBetween" style="margin-top: 20px;">';
+                            text +=
+                                '<button onclick="startProcess()" disabled id="startProcessBtn" class="btn btn-success">';
+                            text += 'مرحله بعد</button>';
                             text += '</div>';
                         }
-                        text +=
-                            '<div class="col-xs-12 fullyCenterContent rowReverse SpaceBetween" style="margin-top: 20px;">';
-                        text +=
-                            '<button onclick="startProcess()" disabled id="startProcessBtn" class="btn btn-success">';
-                        text += 'مرحله بعد</button>';
-                        text += '</div>';
-                    }
-                    $('#BusinessType').empty().append(text);
+                        $('#BusinessType').empty().append(text);
 
+                    }
+                });
+            }
+            let selectedAssetId;
+            let firstStepFormId;
+
+            $(document).on("click", ".businessType", function() {
+                if (!this.getAttribute('disabled')) {
+                    $(".businessType").removeClass('selected');
+                    $(this).addClass("selected");
+                    selectedAssetId = $(this).attr('data-id');
+                    firstStepFormId = $(this).attr('data-form-id');
+
+                    $("#startProcessBtn").removeAttr('disabled');
                 }
             });
-        }
-        let selectedAssetId;
-        let firstStepFormId;
 
-        $(document).on("click", ".businessType", function() {
-            if (!this.getAttribute('disabled')) {
-                $(".businessType").removeClass('selected');
-                $(this).addClass("selected");
-                selectedAssetId = $(this).attr('data-id');
-                firstStepFormId = $(this).attr('data-form-id');
-
-                $("#startProcessBtn").removeAttr('disabled');
+            function startProcess() {
+                window.location.href = '/asset/' + selectedAssetId + "/step/" + firstStepFormId;
             }
-        });
-
-        function startProcess() {
-            window.location.href = '/asset/' + selectedAssetId + "/step/" + firstStepFormId;
+        } else {
+            window.location.href = "{{ route('report.index') }} "
         }
     </script>
 @endsection

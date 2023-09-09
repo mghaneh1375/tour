@@ -1,6 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
+    <title>پنل تعریف کسب و کار</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     <script async src="{{ URL::asset('js/bootstrap-datepicker.js') }}"></script>
@@ -439,9 +440,11 @@
                 });
             }
 
+            $("#boxMake").children().removeClass("errorInput");
             $inputs.each(function() {
 
-                $(this).parent().removeClass('errorInput');
+                // $(this).parent().removeClass('errorInput');
+
                 var inputAttr = $(this).attr('id');
 
                 if (inputAttr === 'selectStateForSelectCity')
@@ -497,6 +500,7 @@
 
                 }
                 if ($(this).attr('type') === 'checkbox') {
+                    $(this).parent().removeClass('errorInput');
                     let checkName = $(this).attr('name');
                     let tmp = checkBoxFields.find(e => e.name == checkName);
                     if (tmp === undefined) {
@@ -519,7 +523,6 @@
                 }
 
                 if ($(this).attr('type') === 'radio') {
-
                     let id = $(this).attr('id');
 
                     let tmp = radioFields.find(e => e.id == id);
@@ -563,6 +566,8 @@
                 if (e.isRequired && !e.hasSelected) {
                     errorText += '<ul class="errorList"> ';
                     errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                    $errors = $(".inputBoxTour .inputBoxText").find("[name='" + e.name + "']");
+                    $errors.parent().parent().addClass('errorInput');
                 }
             });
             checkBoxFields.forEach(e => {
@@ -572,6 +577,8 @@
                     if (e.isRequired && !e.hasSelected) {
                         errorText += '<ul class="errorList"> ';
                         errorText += "<li> " + e.name + ' ' + 'پر شود ' + "</li></ul>";
+                        $errors = $(".inputBoxTour .inputBoxText").find("[name='" + e.name + "']");
+                        $errors.parent().parent().addClass('errorInput');
                     } else {
 
                         fields.push({
@@ -642,12 +649,12 @@
                                 '<div><h1 >' +
                                 res.forms[i].name + '</h1> </div>';
                             html += '<div class="formTitleProgress">';
-                            html += '<div class="progressBarSection">';
-                            html += '<div class="text">';
-                            html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
-                            html += '</div>';
+                            html += '<div class="progressBarSection" style="justify-content: space-evenly;">';
                             html += '<div class="progressBarDiv">';
                             html += '<div id="sideProgressBarFull" class="full"></div>';
+                            html += '</div>';
+                            html += '<div class="text" style="white-space: nowrap;">';
+                            html += '<span id="sideProgressBarNumber">0%</span> کامل شده';
                             html += '</div>';
                             html += '</div>';
                             html += '';
@@ -972,35 +979,30 @@
         function addPhone() {
             var errorText = "";
             itemsVal = $("#" + addId).val();
-            if (itemsVal.length > 7) {
-                let x = true;
-                if (moreItems.length < 2 && oneItems) {
-                    oneItems = false;
-                    moreItems = [];
+            let x = true;
+            if (moreItems.length < 2 && oneItems) {
+                oneItems = false;
+                moreItems = [];
 
-                } else {
-                    moreItems.forEach((item) => {
-                        if (item === itemsVal) {
-                            x = false
-                            errorText += '<ul class="errorList"> ';
-                            errorText += "<li> شماره تلفن تکراری است</li></ul>";
-                            openErrorAlertBP(errorText);
-                        }
-                    })
-                }
-                if (x) {
-                    moreItems.push(itemsVal);
-                    $("#input-" + addId + "-items").append(
-                        '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
-                        ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
-                        itemsVal + '</div></div>');
-                    $("#" + addId).val('')
-                }
             } else {
-                errorText += '<ul class="errorList"> ';
-                errorText += "<li> تلفن حداقل باید 8 رقم باشد</li></ul>";
-                openErrorAlertBP(errorText);
+                moreItems.forEach((item) => {
+                    if (item === itemsVal) {
+                        x = false
+                        errorText += '<ul class="errorList"> ';
+                        errorText += "<li> محتوای وارد شده تکراری است</li></ul>";
+                        openErrorAlertBP(errorText);
+                    }
+                })
             }
+            if (x) {
+                moreItems.push(itemsVal);
+                $("#input-" + addId + "-items").append(
+                    '<div class="itemsAdd"><div class="itemsDelete"onclick="deleteItems(' + itemsVal +
+                    ',this)">حذف</div><div style="margin: auto;padding: 5px;">' +
+                    itemsVal + '</div></div>');
+                $("#" + addId).val('')
+            }
+
         }
 
         function deleteItems(itemVal, el) {
@@ -1076,21 +1078,23 @@
             for (let i = 0; i < res.fields.length; i++) {
                 if (res.fields[i].type.toLowerCase() == 'radio') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
-                        .fields[i].half == 1 ? '49%' : '100%') + ';">';
+                        .fields[i].half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
-                        ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
+                            ' importantFieldLabel' : '') + '" name="' + res.fields[i].name + '"> ' + res.fields[i].name +
+                        '</div>';
                     text += '</div>';
-                    text += '<div>';
+                    text += '<div class="select">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
-                        text += '<label style="white-space: nowrap;justify-content: center;display: inline-flex;" class="' +
+                        text +=
+                            '<label style="font-size: 15px;white-space: nowrap;justify-content: center;display: inline-flex;" class="' +
                             (res.fields[i].status == 'REJECT' ? 'errorInput' :
-                                '') + ' cursorPointer mg-rt-6 ' + (res.fields[i].data == res.fields[i].options[x] ?
+                                '') + ' cursorPointer mg-rt-10 ' + (res.fields[i].data == res.fields[i].options[x] ?
                                 'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res.fields[i].options[x] +
                             '';
                         text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
-                            '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id +
-                            '" ' + (res.fields[i].data == res.fields[i].options[x] ?
+                            '" name="' + res.fields[i].name + '" id="' + res.fields[i].options[x] + '" ' + (res.fields[i]
+                                .data == res.fields[i].options[x] ?
                                 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
                             '>';
                         text += '</label>';
@@ -1100,23 +1104,26 @@
                     text += '</div>';
                 } else if (res.fields[i].type.toLowerCase() == 'checkbox') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
-                        .fields[i].half == 1 ? '49%' : '100%') + ';">';
+                        .fields[i].half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
-                        ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
+                            ' importantFieldLabel' : '') + '"name="' + res.fields[i].name + '"> ' + res.fields[i].name +
+                        '</div>';
                     text += '</div>';
                     let data = res.fields[i].data !== null && res.fields[i].data != '' ?
                         res.fields[i].data.split("_") : [];
-                    text += '<div>';
+                    text += '<div class="select">';
                     for (let x = 0; x < res.fields[i].options.length; x++) {
                         let isSelected = data.indexOf(res.fields[i].options[x]) !== -1;
                         text += '<label class="' + (res.fields[i].status == 'REJECT' ? 'errorInput' : '') +
-                            ' mg-rt-6 cursorPointer ' + (isSelected ? 'active' : '') + '" for="' + res
-                            .fields[i].options[x] +
-                            '" style="white-space: nowrap;justify-content: center;display: inline-flex;">' + res.fields[i]
+                            ' mg-rt-10 cursorPointer ' + (isSelected ? 'active' : '') + '" for="c' + res.fields[i].options[
+                                x] +
+                            '" style="font-size: 15px;white-space: nowrap;justify-content: center;display: inline-flex;">' +
+                            res.fields[i]
                             .options[x] + '';
                         text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
-                            '" name="' + res.fields[i].name + '"  data-id="' + res.fields[i].field_id +
+                            '" name="' + res.fields[i].name + '" id="c' + res.fields[i].options[x] + '" data-id="' + res
+                            .fields[i].field_id +
                             '" ' + (isSelected ? 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
                             '>';
                         text += '</label>';
@@ -1127,7 +1134,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'string') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + ';">';
+                        .half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
@@ -1148,7 +1155,7 @@
                         '<div  class=" relative-position inputBoxTour" style="margin-left: 10px; width: ' +
                         (res
                             .fields[i]
-                            .half == 1 ? '49%' : '100%') + ';">';
+                            .half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' : '') + '"> ' + res.fields[i].name + '</div>';
@@ -1165,7 +1172,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'time') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + ';">';
+                        .half == 1 ? '48%' : '100%') + ';">';
                     text +=
                         '<div class="inputBoxTextGeneralInfo inputBoxText   clockTitle">';
                     text += '<div class=" name' + (res.fields[i].necessary == 1 ?
@@ -1193,7 +1200,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'int') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + ';">';
+                        .half == 1 ? '48%' : '100%') + ';">';
 
 
                     if (res.fields[i].multiple === 1) {
@@ -1354,7 +1361,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'gallery') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     picId = res.fields[i].field_id;
 
@@ -1458,7 +1465,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'float') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
@@ -1487,7 +1494,7 @@
                         '<div class="relative-position inputBoxTour SpaceBetween" style="align-items: center;margin-left: 10px; width: ' +
                         (
                             res.fields[i]
-                            .half == 1 ? '49%' : '100%') + ';">';
+                            .half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1533,7 +1540,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'map') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText  ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
@@ -1567,7 +1574,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'api') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     needSearchCityModal = true;
 
@@ -1606,7 +1613,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'textarea') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
@@ -1628,7 +1635,7 @@
                 } else if (res.fields[i].type.toLowerCase() == 'calendar') {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + ';">';
+                        .half == 1 ? '48%' : '100%') + ';">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
                         ' importantFieldLabel' :
@@ -1654,7 +1661,7 @@
                 } else {
                     text += '<div class="relative-position inputBoxTour" style="margin-left: 10px; width: ' + (res
                         .fields[i]
-                        .half == 1 ? '49%' : '100%') + '; order:' + (res
+                        .half == 1 ? '48%' : '100%') + '; order:' + (res
                         .fields[i].type == 'listview' ? '2' : '') + '">';
                     text += '<div class="inputBoxTextGeneralInfo inputBoxText ">';
                     text += '<div class="' + (res.fields[i].necessary == 1 ?
@@ -1677,7 +1684,7 @@
                 if (res.fields[i].multiple === 1 || multipleVal) {
                     addId = res.fields[i].field_id;
                     text += '<div id="input-' + res.fields[i].field_id +
-                        '-items" style="display: flex;flex-direction: row;">';
+                        '-items" style="display: flex;flex-direction: row;flex-wrap: wrap;">';
                     if (multipleVal) {
                         for (x = 0; x < moreItems.length; x++) {
                             itemsVal = moreItems[x];

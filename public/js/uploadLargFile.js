@@ -27,7 +27,6 @@ function uploadLargeFile(_url, _files, _data, _callBackFunction, jt = null) {
         return true;
     } else _callBackFunction("queue");
 }
-
 function upload_fileLargeFile(start, _fileName) {
     console.log("upload_fileLargeFile");
     let isLast = false;
@@ -48,10 +47,10 @@ function upload_fileLargeFile(start, _fileName) {
             last: isLast,
             file_data: event.target.result,
         };
-        if (jwtToken !== null) {
-            data = new FormData();
-            data.append("pic", fileLargeFileUploadedInJsFile);
-        }
+        // if (jwtToken !== null) {
+        //     data = new FormData();
+        //     data.append("pic", fileLargeFileUploadedInJsFile);
+        // }
 
         $.ajax({
             url: ajaxUrlLargeFile,
@@ -70,7 +69,9 @@ function upload_fileLargeFile(start, _fileName) {
                 if (errorCountInLargeFileUploadedInJsFile <= 0) {
                     inProcessLargeFileUploadedInJsFile = false;
                     callBackFunctionLargeFileUploadedInJsFile("error");
-                } else upload_fileLargeFile(start, _fileName);
+                } else {
+                    upload_fileLargeFile(start, _fileName);
+                }
             },
             success: function (response) {
                 if (
@@ -138,7 +139,6 @@ function upload_fileLargeFile2() {
         success: function (response) {
             if (response.status == "0") {
                 roomNum = response.id;
-                console.log(roomNum);
                 errorCountInLargeFileUploadedInJsFile = 5;
                 callBackFunctionLargeFileUploadedInJsFile(40, "");
                 setTimeout(() => {

@@ -1,7 +1,7 @@
 @extends('panelBusiness.layout.baseLayout')
 
 @section('head')
-    <title>عنوان</title>
+    <title>درخواست های تعیین تکلیف نشده</title>
     <style>
         td {
             padding: 5px;

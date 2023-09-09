@@ -21,7 +21,7 @@ var storeData = {
 $(window).ready(() => {
     autosize($("textarea"));
 
-    fillInputs();
+    // fillInputs();
 });
 
 function fillInputs() {
@@ -38,10 +38,12 @@ function fillInputs() {
 
     storeData.equipment.necessary.map((item) => {
         dragedElementId = item;
+        selectedEquipment["necessary"] = [];
         drop("necessary");
     });
     storeData.equipment.suggest.map((item) => {
         dragedElementId = item;
+        selectedEquipment["suggest"] = [];
         drop("suggest");
     });
 
@@ -89,10 +91,8 @@ function drop(_kind) {
                         <span>${element.text()}</span>
                         <i class="fa-regular fa-xmark"></i>
                     </div>`;
-
         selectedEquipment[_kind].push(dragedElementId);
         $(`#${_kind}ItemsTourCreation`).append(html);
-
         element.addClass("hidden");
         dragedElementId = 0;
     }
@@ -213,7 +213,7 @@ var lastData = localStorage.getItem(`stageFiveTourCreation_${tour.id}`);
 if (!(lastData == false || lastData == null))
     openWarningBP(
         "بازگرداندن اطلاعات قبلی",
-        doLastUpdate,
+        doLastUpdate(),
         "بله قبلی را ادامه می دهم"
     );
 setInterval(() => checkInput(false), 5000);
@@ -268,7 +268,6 @@ function checkUpload() {
             var file = document.getElementById(
                 `picsInput_${uploadProcessId}`
             ).files;
-            console.log(tour.id);
             uploadLargeFile(
                 tourPicUrl,
                 file[0],

@@ -62,7 +62,6 @@ class AssetController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexAPI(Request $request) {
-        
         $user = $request->user();
         $primitiveAssetIds = Asset::where([['super_id',-1],['pre_required',null]])->pluck('id');
         $assets = UserAsset::where('user_id', $user->id)->count() > 0;
@@ -102,13 +101,14 @@ class AssetController extends Controller {
                 ]);
             }
         }else{
+                        
             //todo : check pre req
             return response()->json([
                 'status' => 0,
                 'assets' => AssetDigest::collection(Asset::where([['super_id',-1],['pre_required',null]])->orderBy('view_index', 'asc')->get())
             ]);
+            
         }
-
 
         // return response()->json([
         //     'status' => 0,
