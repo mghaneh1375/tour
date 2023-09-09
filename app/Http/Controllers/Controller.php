@@ -23,7 +23,7 @@ class Controller extends BaseController
 
     public static function checkUsernameStatic($username, $add=false, $phoneOrParentId=null, $status=1) {
 
-        $u = User::whereUserName($username)->first();
+        $u = User::where('username', $username)->first();
 
         if($u)
             return -1;
