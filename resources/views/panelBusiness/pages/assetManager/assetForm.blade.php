@@ -500,7 +500,6 @@
 
                 }
                 if ($(this).attr('type') === 'checkbox') {
-                    $(this).parent().removeClass('errorInput');
                     let checkName = $(this).attr('name');
                     let tmp = checkBoxFields.find(e => e.name == checkName);
                     if (tmp === undefined) {
@@ -524,7 +523,7 @@
 
                 if ($(this).attr('type') === 'radio') {
                     let id = $(this).attr('id');
-
+                    console.log(id);
                     let tmp = radioFields.find(e => e.id == id);
                     if (tmp === undefined) {
                         tmp = {
@@ -560,6 +559,7 @@
                     id: inputAttr,
                     data: $(this).val()
                 });
+                console.log(fields);
             });
 
             radioFields.forEach(e => {
@@ -588,7 +588,7 @@
                     }
                 }
             });
-
+            console.log(radioFields);
             if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
             } else {
@@ -1090,10 +1090,10 @@
                             '<label style="font-size: 15px;white-space: nowrap;justify-content: center;display: inline-flex;" class="' +
                             (res.fields[i].status == 'REJECT' ? 'errorInput' :
                                 '') + ' cursorPointer mg-rt-10 ' + (res.fields[i].data == res.fields[i].options[x] ?
-                                'active' : '') + '" for="' + res.fields[i].options[x] + '">' + res.fields[i].options[x] +
+                                'active' : '') + '" for="' + res.fields[i].field_id + '">' + res.fields[i].options[x] +
                             '';
                         text += '<input class="cursorPointer mg-rt-6" type="radio" value="' + res.fields[i].options[x] +
-                            '" name="' + res.fields[i].name + '" id="' + res.fields[i].options[x] + '" ' + (res.fields[i]
+                            '" name="' + res.fields[i].name + '" id="' + res.fields[i].field_id + '" ' + (res.fields[i]
                                 .data == res.fields[i].options[x] ?
                                 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
                             '>';
@@ -1123,8 +1123,8 @@
                             .options[x] + '';
                         text += '<input class="mg-rt-6 cursorPointer " type="checkbox" value="' + res.fields[i].options[x] +
                             '" name="' + res.fields[i].name + '" id="c' + res.fields[i].options[x] + '" data-id="' + res
-                            .fields[i].field_id +
-                            '" ' + (isSelected ? 'checked ' : ' ') + (res.fields[i].necessary == 1 ? 'required ' : '') +
+                            .fields[i].field_id + '" ' + (isSelected ? 'checked ' : ' ') + (res.fields[i].necessary == 1 ?
+                                'required ' : '') +
                             '>';
                         text += '</label>';
 
