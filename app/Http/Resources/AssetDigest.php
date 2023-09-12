@@ -29,10 +29,11 @@ class AssetDigest extends JsonResource
         return [
             'id' => $this->id,
             "name" => $this->name,
+            "description"=>$this->description,
             "pic" => URL::asset("assets/" . $this->pic),
             "mode" => $this->mode,
             "view_index" => $this->view_index,
-            "myAssets" => UserAsset::where('asset_id',$this->id)->where('user_id',Auth::user()->id)->count(),
+            "myAssets" => UserAsset::where('asset_id',$this->id)->where('user_id', Auth::user()->_id)->count(),
             "create_pic" => URL::asset("assets/" . $this->create_pic),
             "formIds" => $formIds,
             "pre_required" => $this->pre_required,

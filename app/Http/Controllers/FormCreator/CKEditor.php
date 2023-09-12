@@ -12,7 +12,7 @@ class CKEditor extends Controller {
 
     public function storePic(UserFormsData $userFormsData, Request $request) {
 
-        if($userFormsData->user_id != Auth::user()->id) {
+        if($userFormsData->user_id != Auth::user()->_id) {
             return response()->json(["status" => "nok"]);
         }
 
@@ -38,7 +38,7 @@ class CKEditor extends Controller {
     public function show(UserFormsData $userFormsData) {
 
         if($userFormsData->form_field->type != "CKEDITOR" ||
-            $userFormsData->user_id != Auth::user()->id) {
+            $userFormsData->user_id != Auth::user()->_id) {
             return response()->json([
                 "status" => "nok"
             ]);

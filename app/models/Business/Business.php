@@ -97,10 +97,10 @@ class Business extends Model {
 
     public function hasAccess() {
 
-        if($this->userId == Auth::user()->id)
+        if($this->userId == Auth::user()->_id)
             return ["full"];
 
-        $acl = BusinessACL::whereUserId(Auth::user()->id)->whereBusinessId($this->id)->whereAccept(true)->first();
+        $acl = BusinessACL::whereUserId(Auth::user()->_id)->whereBusinessId($this->id)->whereAccept(true)->first();
         if($acl == null)
             return null;
 

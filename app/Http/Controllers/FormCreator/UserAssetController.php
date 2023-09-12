@@ -37,13 +37,13 @@ class UserAssetController extends Controller
     public function index(Asset $asset) {
         return response()->json([
             "status" => "0",
-            "assets" => UserAssetDigest::collection($asset->user_assets()->where('user_id', Auth::user()->id)->get())
+            "assets" => UserAssetDigest::collection($asset->user_assets()->where('user_id', Auth::user()->_id)->get())
         ]);
     }
     public function all(Request $request) {
         $assets = Asset::all();
         $output = [];
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         
         foreach($assets as $asset) {
             

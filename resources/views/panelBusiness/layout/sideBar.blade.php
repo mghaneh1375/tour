@@ -40,7 +40,7 @@
                 <i class="fa fa-home"></i> <span class="paddingRight10">خانه</span>
             </a>
         </div>
-        @if (\auth()->user()->level === 2)
+        @if (in_array('ADMIN', auth()->user()->roles))
 
             <div class="sideNavRow able">
                 <div class="sideNavHeader hasBody">
@@ -144,7 +144,7 @@
                     <div class="newNum">{{ $newNotificationCount }}</div>
                 </a>
             </div>
-            @if (auth()->user()->level == 0)
+            @if (!in_array('ADMIN', auth()->user()->roles))
 
                 <div class="sideNavRow able">
                     <a href="{{ route('ticket.page') }}" class="aligenCenter sideNavHeader headerButton"

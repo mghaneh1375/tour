@@ -95,7 +95,7 @@
                         html += '</div>';
                         html += '<div class="textSec">';
                         html += '<h5>' + res.assets[i].name + ' </h5>';
-                        html += '<p>شما می توانید برای فروش تورهای خود از امکانات ما استفاده کنید.</p>';
+                        html += '<p>' + res.assets[i].description + ' </p>';
                         html += ' </div>';
                         html += '</div>';
                         html += '</div>';

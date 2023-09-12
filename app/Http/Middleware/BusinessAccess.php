@@ -23,7 +23,7 @@ class BusinessAccess
                 "msg" => "لطفا کسب و کار خود را ارسال کنید."
             ]);
 
-        if($business->userId != Auth::user()->id && Auth::user()->level != 1)
+        if($business->userId != Auth::user()->_id && Auth::user()->level != 1)
             return response()->json([
                 "status" => "nok",
                 "msg" => "شما اجازه دسترسی به این کسب و کار را ندارید."

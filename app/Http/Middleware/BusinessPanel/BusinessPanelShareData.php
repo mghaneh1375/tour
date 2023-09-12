@@ -23,15 +23,15 @@ class BusinessPanelShareData
         $fileVersions = 12;
 
         if(\auth()->check()) {
+
             $userInfo = auth()->user();
-            $userInfo->pic = getUserPic($userInfo->id);
-            $businessList = Business::where('userId', $userInfo->id)->select(['name', 'id'])->get();
+            $userInfo->pic = getUserPic($userInfo->_id);
+            $businessList = Business::where('userId', $userInfo->_id)->select(['name', 'id'])->get();
 
-            if(\auth()->user()->level == 0)
-                $newTicketCount = Ticket::where('userId', $userInfo->id)->where('seen', 0)->count();
+            if(in_array('ADMIN', $userInfo->roles))
+                $newTicketCount = Ticket::where('adminSeen', 0)->count();            
             else
-                $newTicketCount = Ticket::where('adminSeen', 0)->count();
-
+                $newTicketCount = Ticket::where('userId', $userInfo->_id)->where('seen', 0)->count();
 
             $newNotificationCount = 0;
 

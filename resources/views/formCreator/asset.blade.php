@@ -40,6 +40,7 @@
                             <td>حالت نمایش</td>
                             <td>تصویر</td>
                             <td>تصویر ایجاد</td>
+                            <td>توضیحات</td>
                             <td>اولویت نمایش</td>
                             <td>وضعیت نمایش</td>
                             <td>عملیات</td>
@@ -61,6 +62,7 @@
                                     src="{{ URL::asset('assets/' . $asset->pic) }}"></td>
                             <td style="width: 100px"><img style="width:100%"
                                     src="{{ URL::asset('assets/' . $asset->create_pic) }}"></td>
+                            <td>{{ $asset->description }}</td>
                             <td>{{ $asset->view_index }}</td>
                             <td>{{ $asset->hidden ? 'عدم نمایش' : 'قابل نمایش' }}</td>
                             <td>
@@ -78,7 +80,7 @@
                                 @endif
 
                                 <button data-toggle="modal" data-target="#editModal"
-                                    onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}')"
+                                    onclick="editAsset('{{ $asset->id }}', '{{ $asset->hidden }}', '{{ $asset->mode }}', '{{ $asset->view_index }}', '{{ $asset->name }}', '{{ $asset->description }}')"
                                     class="btn btn-primary" data-placement="top" title="ویرایش دارایی"> <span
                                         class="glyphicon glyphicon-edit"></span></button>
                                 <button data-toggle="modal" data-target="#removeModal" class="btn btn-danger"
@@ -117,6 +119,10 @@
                         <div class="modalForm">
                             <label for="name">نام</label>
                             <input type="text" id="name" name="name">
+                        </div>
+                        <div class="modalForm" style="display: flex; align-items: center;">
+                            <div for="description" style="margin-left:10px ">توضیحات</div>
+                            <textarea id="description" name="description"></textarea>
                         </div>
 
                         <div class="modalForm">
@@ -185,6 +191,10 @@
                             <label for="name">نام</label>
                             <input type="text" name="name">
                         </div>
+                        <div class="modalForm" style="display: flex; align-items: center;">
+                            <div for="description" style="margin-left:10px ">توضیحات</div>
+                            <textarea name="description"></textarea>
+                        </div>
                         <div class="modalForm">
                             <label for="mode">حالت نمایش</label>
                             <select id="mode" name="mode">
@@ -234,7 +244,7 @@
 
         var delUrl = '{{ route('asset.index') }}' + "/";
 
-        function editAsset(id, h, m, vi, n) {
+        function editAsset(id, h, m, vi, n, d) {
 
             $("#editForm").attr("action",
                 "{{ $subAsset ? route('asset.index') . '/' . $assetId . '/subAsset' : route('asset.index') }}" + "/" +
@@ -242,6 +252,8 @@
             $("#name").val(n);
             $("#view_index").val(vi);
             $("#mode").val(m);
+            $("#description").val(d);
+
 
             if (h == 1)
                 $("#hidden").prop("checked", true);

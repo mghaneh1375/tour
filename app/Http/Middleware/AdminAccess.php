@@ -17,9 +17,9 @@ class AdminAccess {
     public function handle($request, Closure $next)
     {
 
-        if(Auth::user()->level == 2)
+        if(in_array('ADMIN', Auth::user()->roles))
             return $next($request);
 
-        return Redirect::to(route('profile'));
+        return Redirect::route('profile');
     }
 }

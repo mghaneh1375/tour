@@ -64,9 +64,9 @@ class AssetController extends Controller {
     public function indexAPI(Request $request) {
         $user = $request->user();
         $primitiveAssetIds = Asset::where([['super_id',-1],['pre_required',null]])->pluck('id');
-        $assets = UserAsset::where('user_id', $user->id)->count() > 0;
+        $assets = UserAsset::where('user_id', $user->_id)->count() > 0;
         if($assets){
-            if(UserAsset::whereIn('asset_id', $primitiveAssetIds)->where('user_id', $user->id)->where('status', 'CONFIRM')->count() > 0){
+            if(UserAsset::whereIn('asset_id', $primitiveAssetIds)->where('user_id', $user->_id)->where('status', 'CONFIRM')->count() > 0){
                 return response()->json([
                     'status' => 0,
                     'assets' => AssetDigest::collection(Asset::where('super_id',-1)->whereNotNull('pre_required')->orderBy('view_index', 'asc')->get())
@@ -74,7 +74,7 @@ class AssetController extends Controller {
             }else{
                 $assets = Asset::all();
                 $output = [];
-                $uId = Auth::user()->id;
+                $uId = Auth::user()->_id;
                 
                 foreach($assets as $asset) {
                     
@@ -130,6 +130,7 @@ class AssetController extends Controller {
 
         $request->validate([
             'name' => 'required',
+            'description' => [ "required", "max:300"],
             "mode" => ['required', Rule::in(["FULL", "HALF", "2/3", "1/3"])],
             'pic' => 'required|image',
             'create_pic' => 'required|image',
@@ -151,6 +152,7 @@ class AssetController extends Controller {
 
         Asset::create([
             'name' => $request["name"],
+            'description' => $request["description"],
             'mode' => $request["mode"],
             'view_index' => $request["view_index"],
             'hidden' => ($request->has("hidden")) ? true : false,
@@ -172,12 +174,14 @@ class AssetController extends Controller {
 
         $request->validate([
             'name' => 'required',
+            'description' => [ "required", "max:300"],
             "mode" => 'required|in:FULL,HALF,2/3,1/3',
             'view_index' => 'required|integer|min:1'
         ], self::$COMMON_ERRS);
 
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];
+        $asset->description = $request["description"];
 
         if($asset->view_index != $request["view_index"] &&
             Asset::where('view_index',$request["view_index"])->count() > 0)
