@@ -76,7 +76,7 @@
             font-size: 12px;
         }
     </style>
-    {{-- <div class="row mainPage">
+    <div class="row mainPage">
         <div class="col-md-12">
             @if ($newTicketCount > 0 || $newNotificationCount > 0)
                 <div class="mainBackWhiteBody">
@@ -158,7 +158,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     <div class="createBusinessPage height100">
         <div class="row indicator_step height100 ">
 
