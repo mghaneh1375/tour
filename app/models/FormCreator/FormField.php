@@ -63,7 +63,38 @@ class FormField extends FormCreatorBaseModel
             return true;
         return false;
     }
-
+    private function validateEmail($data){
+       if (!filter_var($data, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+        return true;
+    }
+    private function validateSite($data){
+       if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$data)){
+            return false;
+        }
+        return true;
+    }
+    private function validatePhoneNumber($data){
+       if(!preg_match("/^[0]{1}[9]{1}\d{9}$/", $data)){
+            return false;
+        }
+        return true;
+    }
+    private function validatePersianLanguage($data){
+        
+       if (!preg_match('/^[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأءًٌٍَُِّ\s]+$/u', $data)){
+            return false;
+        }
+        return true;
+    }
+    private function validateEnglishLanguage($data){
+        
+       if (!preg_match('/^[^\x{600}-\x{6FF}]+$/u', str_replace("\\\\","",$data))){
+            return false;
+        }
+        return true;
+    }
     public function validateData($data, $checkUnique=false) {
 
         if(!$checkUnique) {
@@ -80,9 +111,9 @@ class FormField extends FormCreatorBaseModel
 
         if ($this->limitation != null && !empty($this->limitation)) {
 
+            
             $limitations = explode('_', $this->limitation);
             foreach ($limitations as $limitation) {
-
                 if (empty($limitation))
                     continue;
 
@@ -90,6 +121,7 @@ class FormField extends FormCreatorBaseModel
                 $key = $limitation[0];
                 $val = $limitation[1];
 
+                
                 if($key != 3 && $checkUnique)
                     continue;
 
@@ -102,7 +134,31 @@ class FormField extends FormCreatorBaseModel
                     if(!$this->_custom_check_national_code($data))
                         return false;
                 }
-
+                else if($key == 4 && $val == 2) {
+                    if(!$this->validateEmail($data)){
+                        return false;
+                    }
+                }
+                else if($key == 5 && $val == 2) {
+                    if(!$this->validateSite($data)){
+                        return false;
+                    }
+                }
+                else if($key == 6 && $val == 2) {
+                    if(!$this->validatePhoneNumber($data)){
+                        return false;
+                    }
+                }
+                else if($key == 7 && $val == 2) {
+                    if(!$this->validatePersianLanguage($data)){
+                        return false;
+                    }
+                }
+                else if($key == 8 && $val == 2) {
+                    if(!$this->validateEnglishLanguage($data)){
+                        return false;
+                    }
+                }
                 else if($key == 3 && $checkUnique) {
                     $url = "http://" . $val;
                     $username = $limitation[2];

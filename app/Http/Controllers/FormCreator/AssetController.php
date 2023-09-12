@@ -130,6 +130,7 @@ class AssetController extends Controller {
 
         $request->validate([
             'name' => 'required',
+            'description' => [ "required", "max:300"],
             "mode" => ['required', Rule::in(["FULL", "HALF", "2/3", "1/3"])],
             'pic' => 'required|image',
             'create_pic' => 'required|image',
@@ -151,6 +152,7 @@ class AssetController extends Controller {
 
         Asset::create([
             'name' => $request["name"],
+            'description' => $request["description"],
             'mode' => $request["mode"],
             'view_index' => $request["view_index"],
             'hidden' => ($request->has("hidden")) ? true : false,
@@ -172,12 +174,14 @@ class AssetController extends Controller {
 
         $request->validate([
             'name' => 'required',
+            'description' => [ "required", "max:300"],
             "mode" => 'required|in:FULL,HALF,2/3,1/3',
             'view_index' => 'required|integer|min:1'
         ], self::$COMMON_ERRS);
 
         $asset->name = $request["name"];
         $asset->mode = $request["mode"];
+        $asset->description = $request["description"];
 
         if($asset->view_index != $request["view_index"] &&
             Asset::where('view_index',$request["view_index"])->count() > 0)

@@ -260,7 +260,31 @@
                                 <input id="nid" type="checkbox" onchange="change()" name="limitations[]"
                                     value="9">
                             </div>
-
+                            <div>
+                                <label for="email">صحت سنجی ایمیل</label>
+                                <input id="email" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="4">
+                            </div>
+                            <div>
+                                <label for="site">صحت سنجی سایت</label>
+                                <input id="site" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="5">
+                            </div>
+                            <div>
+                                <label for="mobileNumber">صحت سنجی شماره موبایل</label>
+                                <input id="mobileNumber" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="6">
+                            </div>
+                            <div>
+                                <label for="persianLan">صحت سنجی زبان فارسی</label>
+                                <input id="persianLan" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="7">
+                            </div>
+                            <div>
+                                <label for="englishLan">صحت سنجی زبان انگلیسی</label>
+                                <input id="englishLan" type="checkbox" onchange="change()" name="limitations[]"
+                                    value="8">
+                            </div>
                             <div>
                                 <label for="minChar">محدودیت تعداد کاراکتر</label>
                                 <input id="minChar" type="checkbox" onchange="changeCharLimitEdit()"
@@ -436,7 +460,26 @@
                                     <label for="nid">صحت سنجی کد ملی</label>
                                     <input id="nid" type="checkbox" name="limitations[]" value="9">
                                 </div>
-
+                                <div>
+                                    <label for="email">صحت سنجی ایمیل</label>
+                                    <input id="email" type="checkbox" name="limitations[]" value="4">
+                                </div>
+                                <div>
+                                    <label for="site">صحت سنجی سایت</label>
+                                    <input id="site" type="checkbox" name="limitations[]" value="5">
+                                </div>
+                                <div>
+                                    <label for="mobileNumber">صحت سنجی شماره موبایل</label>
+                                    <input id="mobileNumber" type="checkbox" name="limitations[]" value="6">
+                                </div>
+                                <div>
+                                    <label for="persianLan">صحت سنجی زبان فارسی</label>
+                                    <input id="persianLan" type="checkbox" name="limitations[]" value="7">
+                                </div>
+                                <div>
+                                    <label for="englishLan">صحت سنجی زبان انگلیسی</label>
+                                    <input id="englishLan" type="checkbox" name="limitations[]" value="8">
+                                </div>
                                 <div>
                                     <label for="minChar">محدودیت تعداد کاراکتر</label>
                                     <input id="minChar" class="minCharadd" type="checkbox"
@@ -534,6 +577,16 @@
                     $("#charCountDiv").removeClass("hidden");
                 } else if (limitations.indexOf('ملی') != -1) {
                     $('#nid').prop('checked', true);
+                } else if (limitations.indexOf('ایمیل') != -1) {
+                    $('#email').prop('checked', true);
+                } else if (limitations.indexOf('سایت') != -1) {
+                    $('#site').prop('checked', true);
+                } else if (limitations.indexOf('موبایل') != -1) {
+                    $('#mobileNumber').prop('checked', true);
+                } else if (limitations.indexOf('فارسی') != -1) {
+                    $('#persianLan').prop('checked', true);
+                } else if (limitations.indexOf('انگلیسی') != -1) {
+                    $('#englishLan').prop('checked', true);
                 } else if (limitations.indexOf('کاراکتر') != -1) {
                     $('#minChar').prop('checked', true);
                     $("#charCountDiv").removeClass("hidden");
@@ -553,6 +606,16 @@
                 limitations.push($('#minChar').val());
             } else if ($('#nid').is(':checked')) {
                 limitations.push($('#nid').val());
+            } else if ($('#email').is(':checked')) {
+                limitations.push($('#email').val());
+            } else if ($('#site').is(':checked')) {
+                limitations.push($('#site').val());
+            } else if ($('#mobileNumber').is(':checked')) {
+                limitations.push($('#mobileNumber').val());
+            } else if ($('#persianLan').is(':checked')) {
+                limitations.push($('#persianLan').val());
+            } else if ($('#englishLan').is(':checked')) {
+                limitations.push($('#englishLan').val());
             } else if ($('#minChar').is(':checked')) {
                 limitations.push($('#minChar').val());
             } else {

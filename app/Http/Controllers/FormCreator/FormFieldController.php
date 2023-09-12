@@ -77,6 +77,16 @@ class FormFieldController extends Controller
 
                     else if($key == 9 && $val == 1)
                         $str .= "صحت سنجی کد ملی " . '<br/>';
+                    else if($key == 4 && $val == 2)
+                        $str .= "صحت سنجی ایمیل " . '<br/>';
+                    else if($key == 5 && $val == 2)
+                        $str .= "صحت سنجی سایت " . '<br/>';
+                    else if($key == 6 && $val == 2)
+                        $str .= "صحت سنجی شماره موبایل " . '<br/>';
+                    else if($key == 7 && $val == 2)
+                        $str .= "صحت سنجی زبان فارسی " . '<br/>'; 
+                    else if($key == 8 && $val == 2)
+                        $str .= "صحت سنجی زبان انگلیسی " . '<br/>';                  
 
                 }
                 $field->limitation = $str;
@@ -197,6 +207,16 @@ class FormFieldController extends Controller
 
                 if($limit == 9)
                     $str .= '9:1';
+                else if($limit == 4)
+                    $str .= '4:2';  
+                else if($limit == 5)
+                    $str .= '5:2';
+                else if($limit == 6)
+                    $str .= '6:2';
+                else if($limit == 7)
+                    $str .= '7:2';   
+                else if($limit == 8)
+                    $str .= '7:2';                    
                 else if($limit == 1 && $request->has("charCount"))
                     $str .= "1:" . $request["charCount"];
             }
@@ -304,7 +324,6 @@ class FormFieldController extends Controller
             $first = true;
 
             foreach ($request["limitations"] as $limit) {
-
                 if($first)
                     $first = false;
                 else
@@ -312,6 +331,16 @@ class FormFieldController extends Controller
 
                 if($limit == 9)
                     $str .= '9:1';
+                else if($limit == 4)
+                    $str .= '4:2';
+                else if($limit == 5)
+                    $str .= '5:2';
+                else if($limit == 6)
+                    $str .= '6:2'; 
+                else if($limit == 7)
+                    $str .= '7:2';
+                else if($limit == 8)
+                    $str .= '8:2';                        
                 else if($limit == 1 && $request->has("charCount"))
                     $str .= "1:" . $request["charCount"];
             }

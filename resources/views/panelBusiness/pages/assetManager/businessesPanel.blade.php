@@ -101,6 +101,7 @@
                         html += '<th>نوع کسب و کار</th>';
                         html += '<th>وضعیت</th>';
                         html += '<th>تاریخ ایجاد</th>';
+                        html += '<th>تاریخ آخرین بروزرسانی </th>';
                         html += '</tr>';
                         for (let i = 0; i < res.assets.length; i++) {
                             for (let z = 0; z < res.assets[i].length; z++) {
@@ -126,8 +127,12 @@
                                     html += '<i class="fa-solid fa-trash"></i></a>';
                                     html += '</td>';
                                 } else if (res.assets[i][z].status === "در حال بررسی برای تایید") {
+                                    html += '<td style="display:flex;">';
                                     html +=
-                                        '<td><a href="{{ route('ticket.page') }}" class="btn btnSuccess" style="font-size: 10px;width:60%;">';
+                                        '<div class="btn btnError" style="font-size: 10px;margin-left: 5px;" onclick="fillForm(' +
+                                        assetId + ',' + usreId + ')">ویرایش اطلاعات </div>';
+                                    html +=
+                                        '<a href="{{ route('ticket.page') }}" class="btn btnSuccess" style="font-size: 10px">';
                                     html += 'پشتیبانی';
                                     html += '</a>';
                                     html += '</td>';
@@ -142,13 +147,19 @@
                                     html += '</a>';
                                     html += '</td>';
                                 } else {
+                                    html += '<td style="display:flex;">';
                                     html +=
-                                        '<td><a href="#"class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل مدیریت</a></td>';
+                                        '<div class="btn btnError" style="font-size: 10px;margin-left: 5px;" onclick="fillForm(' +
+                                        assetId + ',' + usreId + ')">ویرایش اطلاعات </div>';
+                                    html +=
+                                        '<a href="#"class="btn btnSuccess" style="font-size: 10px;">رفتن به پنل کسب و کار</a>';
+                                    html += '</td>';
                                 }
                                 html += '<td>' + res.assets[i][z].title + '</td>';
                                 html += '<td>' + res.assets[i][z].asset + '</td>';
                                 html += '<td>' + res.assets[i][z].status + '</td>';
                                 html += '<td>' + res.assets[i][z].createdAt + '</td>';
+                                html += '<td>' + res.assets[i][z].updatedAt + '</td>';
                                 html += '';
                                 html += '';
                                 html += '';

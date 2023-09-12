@@ -10,6 +10,6 @@ use Illuminate\Http\Request;
 class ReportController extends Controller {
 
     public function index(Request $request) {
-        return view('formCreator.report.userAssets', ['userAssets' => UserAssetResource::collection(UserAsset::orderBy('created_at', 'desc')->get())->toArray($request)]);
+        return view('formCreator.report.userAssets', ['userAssets' => UserAssetResource::collection(UserAsset::orderBy('updated_at', 'desc')->get())->toArray($request)]);
     }
 }

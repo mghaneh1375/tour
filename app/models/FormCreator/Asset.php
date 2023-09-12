@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Asset extends FormCreatorBaseModel
 {
 
-    protected $fillable = ['name', 'create_pic', 'pic', 'hidden', 'mode', 'super_id', 'view_index', 'pre_required'];
+    protected $fillable = ['name', 'create_pic', 'pic', 'hidden', 'mode', 'super_id', 'view_index', 'pre_required','description'];
     protected $hidden = [];
     protected  $connection = 'formDB';
     public $timestamps = false;

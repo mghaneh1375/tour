@@ -249,6 +249,7 @@
                             html += '<th>نوع کسب و کار</th>';
                             html += '<th>وضعیت</th>';
                             html += '<th>تاریخ ایجاد</th>';
+                            html += '<th>تاریخ آخرین بروزرسانی </th>';
                             html += '</tr>';
                             for (let i = 0; i < res.assets.length; i++) {
                                 for (let z = 0; z < res.assets[i].length; z++) {

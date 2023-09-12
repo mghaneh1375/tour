@@ -29,6 +29,7 @@ class AssetDigest extends JsonResource
         return [
             'id' => $this->id,
             "name" => $this->name,
+            "description"=>$this->description,
             "pic" => URL::asset("assets/" . $this->pic),
             "mode" => $this->mode,
             "view_index" => $this->view_index,

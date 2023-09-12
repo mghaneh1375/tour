@@ -376,7 +376,7 @@
                 },
             ]
         };
-        createNewMenuSideBar(sideMenuAdditional);
+        // createNewMenuSideBar(sideMenuAdditional);
     </script>
 
     <script src="{{ URL::asset('BusinessPanelPublic/js/tour/create/tourCreate_stage_2.js?v=' . $fileVersions) }}"></script>
