@@ -3,9 +3,10 @@
 
 namespace App\models;
 
-//use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable;
 //use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 
 /**
  * An Eloquent Model: 'User'
@@ -38,10 +39,9 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 //include_once 'app\Http\Controllers\Common.php';
 
-//class User extends Authenticatable{
-class User extends Model {
+class User extends Authenticatable {
 
-    // use Notifiable;
+    use Notifiable;
     /**
      * The attributes that are mass assignable.
      *

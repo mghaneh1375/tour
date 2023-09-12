@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin']);
 
 Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack']);
-
+Route::get('salam', function() { echo phpinfo(); });
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function() {
 
     Route::get('/loginPage', function() {
         
-        Redirect::to('https://koochita-server.bogenstudio.com/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
+        return Redirect::to('https://koochita-server.bogenstudio.com/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
 
     })->name('businessPanel.loginPage');
 
@@ -50,6 +50,7 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         });
 
         Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
+        Route::get('/profile', [MainPanelBusinessController::class, 'mainPage'])->name('profile');
         Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
        Route::view('businessesPanel', 'panelBusiness.pages.assetManager.businessesPanel')->name('businessPanel.panel');;
         Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');

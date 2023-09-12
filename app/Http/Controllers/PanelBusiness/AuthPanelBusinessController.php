@@ -60,7 +60,7 @@ EOD;
 		if($user == null)
 			return abort(401);
 
-		Auth::loginUsingId($user->id, TRUE);
+		Auth::loginUsingId($user->_id, TRUE);
 		return Redirect::to('/');
 
 	}
