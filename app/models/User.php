@@ -3,9 +3,9 @@
 
 namespace App\models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
+//use Illuminate\Notifications\Notifiable;
+//use Illuminate\Foundation\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 /**
  * An Eloquent Model: 'User'
@@ -38,23 +38,34 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 //include_once 'app\Http\Controllers\Common.php';
 
-class User extends Authenticatable{
+//class User extends Authenticatable{
+class User extends Model {
 
-    use Notifiable;
+    // use Notifiable;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
 
+    protected $connection = 'mongoDB';
+    protected $collection = 'users';
+
+
+/*
+
     protected $table = 'users';
     protected $primaryKey = 'id';
+
+*/
+
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
 
+/*
     protected $fillable = [
         'username', 'password'
     ];
@@ -82,7 +93,7 @@ class User extends Authenticatable{
     public function getAuthPassword() {
         return $this->password;
     }
-
+*/
     public static function whereId($value) {
         return User::find($value);
     }
