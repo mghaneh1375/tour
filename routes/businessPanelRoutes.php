@@ -11,10 +11,13 @@ use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\TicketController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
 use App\models\State;
+use App\models\User;
 use Illuminate\Support\Facades\Route;
 
 
-Route::view('salam', 'test.salam');
+Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin']);
+
+Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack']);
 
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
     Route::get('/loginPage', [AuthPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');

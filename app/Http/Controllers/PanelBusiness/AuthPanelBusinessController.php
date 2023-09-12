@@ -9,12 +9,63 @@ use App\models\RetrievePas;
 use App\models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 require_once(__DIR__.'/../glogin/libraries/Google/autoload.php');
 
 class AuthPanelBusinessController extends Controller
 {
+
+	private function getPublicKeys()
+    	{
+
+	$response = <<<EOD
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtx5XIQ7QRnKZRRDexf7X
+zZxMhf+hE807qwi0Ul1WWcLt5be7zsHGdOsn3BGGB8BAmeA54qespU7MJFNIW21l
+Qb/XqexShrsiOvVxs8Z75RZfA2UjYwV1tHW58MTIgRdER67aJj0hIofgOFztB0CN
+RHaehltR3up3tEPnz0HxsuSESmPccU86YJUKyu2QUW7hcrj0yUBeFiFrDhRKel5O
+9+X862FOE+aSWAaX69hTUTf8CDSXpAlH93xX27Uz5h/bTbSIB2fXbsINe0d4HdX2
+TQceyBQe+LoNmIfrnTPjyvf67ICGYFkCH8G7zF9851o63sbquWKA6NQ90ydkV/hO
+twIDAQAB
+-----END PUBLIC KEY-----
+EOD;
+
+	return $response;
+
+    }
+
+	public function myLogin(Request $request) {
+
+
+		if(!$request->has('token'))
+			return abort(401);
+
+		$token = $request['token'];
+		$payload = JWT::decode($token, new Key($this->getPublicKeys(), 'RS256'));
+
+		if($payload == null || !isset($payload->user_name))
+			return abort(401);
+
+		return response()->json(['status' => 'ok', 'data' => $payload->user_name]);
+	}
+
+
+	public function loginCallBack(Request $request) {
+
+		$user = User::where('username', $request->query('uuid'))->first();
+		if($user == null)
+			return abort(401);
+
+		Auth::loginUsingId($user->id, TRUE);
+		return Redirect::to('/');
+
+	}
+
+
     public function loginPage() {
 
         $googleClient_id = config('app.GOOGLE_CLIENT_ID');

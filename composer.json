@@ -10,11 +10,13 @@
     "require": {
         "php": "^7.2.5",
         "fideloper/proxy": "^4.2",
+        "firebase/php-jwt": "^6.8",
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.2",
         "guzzlehttp/guzzle": "^6.3",
         "hekmatinasser/verta": "~1.10",
         "intervention/image": "^2.5",
+        "jenssegers/mongodb": "3.7",
         "kavenegar/php": "1.2.*",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",

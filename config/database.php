@@ -86,6 +86,12 @@ return [
            ]) : [],
        ],
 
+       'mongoDB' => [
+           'driver' => 'mongodb',
+           'dsn' => env('DB_DSN', ''),
+           'database' => env('DB_DATABASE3', 'forge'),
+       ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
