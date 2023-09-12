@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Storage;
 class TicketController extends Controller {
 
     public function ticketPage(){
-        $tickets = Ticket::where('userId', \auth()->user()->id)->whereNull('parentId')->orderByDesc('updated_at')->get();
+        $tickets = Ticket::where('userId', \auth()->user()->_id)->whereNull('parentId')->orderByDesc('updated_at')->get();
         foreach($tickets as $tic){
-            $tic->hasNew = Ticket::where('userId', \auth()->user()->id)->where('parentId', $tic->id)->where('seen', 0)->count();
+            $tic->hasNew = Ticket::where('userId', \auth()->user()->_id)->where('parentId', $tic->id)->where('seen', 0)->count();
             $tic->closeType = $tic->close == 1 ? 'بسته شده' : 'باز';
             if($tic->businessId == 0)
                 $tic->businessName = 'آزاد';
@@ -37,7 +37,7 @@ class TicketController extends Controller {
         $parent = Ticket::find($parentId);
         $tickets = [];
         if($parent != null){
-            if($parent->userId === \auth()->user()->id){
+            if($parent->userId === \auth()->user()->_id){
                 Ticket::where('parentId', $parent->id)->update(['seen' => 1]);
 
                 $subs = Ticket::where('parentId', $parent->id)->orWhere('id', $parent->id)->get();
@@ -84,12 +84,12 @@ class TicketController extends Controller {
             $parent = Ticket::find($request->ticketId);
             if($parent->close == 1)
                 return response()->json(['status' => 'closed']);
-            else if($parent->userId != \auth()->user()->id)
+            else if($parent->userId != \auth()->user()->_id)
                 return response()->json(['status' => 'errorAuth']);
         }
 
         $newTicket = new Ticket();
-        $newTicket->userId = \auth()->user()->id;
+        $newTicket->userId = \auth()->user()->_id;
         $newTicket->adminSeen = 0;
         $newTicket->adminId = 0;
         $newTicket->seen = 1;
@@ -126,7 +126,7 @@ class TicketController extends Controller {
         $ticket = Ticket::find($request->id);
         if($ticket == null) return response()->json(['status' => 'error1']);
         if($ticket->adminId != 0) return response()->json(['status' => 'error2']);
-        if($ticket->userId != \auth()->user()->id) return response()->json(['status' => 'error3']);
+        if($ticket->userId != \auth()->user()->_id) return response()->json(['status' => 'error3']);
         if($ticket->adminSeen != 0) return response()->json(['status' => 'error4']);
         if($ticket->subject != null) return response()->json(['status' => 'error5']);
 
@@ -236,7 +236,7 @@ class TicketController extends Controller {
 
         $newTicket = new Ticket();
         $newTicket->userId = $parent->userId;
-        $newTicket->adminId = \auth()->user()->id;
+        $newTicket->adminId = \auth()->user()->_id;
         $newTicket->adminSeen = 1;
         $newTicket->seen = 0;
         $newTicket->parentId = $parent->id;
@@ -263,7 +263,7 @@ class TicketController extends Controller {
 
         $newTicket = new Ticket();
         $newTicket->subject = 'closed';
-        $newTicket->adminId = \auth()->user()->id;
+        $newTicket->adminId = \auth()->user()->_id;
         $newTicket->userId = $ticket->userId;
         $newTicket->businessId = $ticket->businessId;
         $newTicket->parentId = $ticket->id;

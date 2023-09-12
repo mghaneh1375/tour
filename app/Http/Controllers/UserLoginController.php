@@ -90,7 +90,7 @@ class UserLoginController extends Controller
     {
         if (isset($_POST["email"]) && $_POST['email'] != '') {
             if(\auth()->check())
-                echo (User::where('email',makeValidInput($_POST["email"]))->where('id', '!=', \auth()->user()->id)->count() > 0) ? 'nok' : 'ok';
+                echo (User::where('email',makeValidInput($_POST["email"]))->where('id', '!=', \auth()->user()->_id)->count() > 0) ? 'nok' : 'ok';
             else
                 echo (User::where('email',makeValidInput($_POST["email"]))->count() > 0) ? 'nok' : 'ok';
             return;
@@ -137,7 +137,7 @@ class UserLoginController extends Controller
             $invitationCode = "";
 
             if(\auth()->check()){
-                if(User::where('username',$username)->where('id', '!=', \auth()->user()->id)->count() > 0)
+                if(User::where('username',$username)->where('id', '!=', \auth()->user()->_id)->count() > 0)
                     echo 'nok1';
                 else
                     echo 'ok';
@@ -167,7 +167,7 @@ class UserLoginController extends Controller
             $phoneNum = convertNumber('en', $phoneNum);
 
             if(\auth()->check()){
-                if (User::where('phone', $phoneNum)->where('id', '!=', \auth()->user()->id)->count() > 0)
+                if (User::where('phone', $phoneNum)->where('id', '!=', \auth()->user()->_id)->count() > 0)
                     echo 'nok';
                 else {
                     if(isset($request->sendCode) && $request->sendCode == 1 && $phoneNum != \auth()->user()->phone)

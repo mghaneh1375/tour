@@ -340,7 +340,7 @@ class TourReservationController extends Controller
             $dailyDiscount = TourTimes::find($userReservation->tourTimeId)->getDailyDiscount();
 
             $tourBuy = new TourPurchased();
-            $tourBuy->userId = auth()->user()->id;
+            $tourBuy->userId = auth()->user()->_id;
             $tourBuy->koochitaTrackingCode = $trackingCode;
             $tourBuy->phone = $request->phone;
             $tourBuy->email = $request->email;
@@ -405,7 +405,7 @@ class TourReservationController extends Controller
                         $passportNumberForSearch = 0;
 
                     $findPassLastInfoId = \DB::table('passengerInfos')
-                        ->where('userId', auth()->user()->id)
+                        ->where('userId', auth()->user()->_id)
                         ->whereRaw("meliCode = '{$pass['codeMeli']}' OR (passportNum IS NOT NULL AND passportNum = '{$passportNumberForSearch}')")
                         ->select('id')
                         ->first();
@@ -427,7 +427,7 @@ class TourReservationController extends Controller
                 if($pass['passport'] != null) $newPassenger->passportNum = $pass['passport'];
                 if($pass['passportExpire'] != null) $newPassenger->passportExp = convertDateToString(convertNumber('en', $pass['passportExpire']), '/');
                 if($pass['countryCodeId'] != null) $newPassenger->countryId = $pass['countryCodeId'];
-                if($saveInfo == 1) $newPassenger->userId = auth()->user()->id;
+                if($saveInfo == 1) $newPassenger->userId = auth()->user()->_id;
                 $newPassenger->save();
 
                 if($pass['isMain'] == 1 && $mainUserInfoId == 0)

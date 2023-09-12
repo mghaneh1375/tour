@@ -20,7 +20,7 @@ class BusinessPanelTypeManager
     {
         $businessId = $request->route("business");
         $business = Business::find($businessId);
-        if($business == null || $business->userId != \auth()->user()->id || $business->finalStatus == 0)
+        if($business == null || $business->userId != \auth()->user()->_id || $business->finalStatus == 0)
             return redirect(route("businessPanel.myBusinesses"));
 
         View::share(['businessType' => $business->type, 'businessIdForUrl' => $business->id, 'businessName' => $business->name]);

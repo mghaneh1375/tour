@@ -49,7 +49,7 @@ class MultiDayTourCreationController extends Controller implements tourCreations
 
         if($isNewTour) {
             $newTour = new Tour();
-            $newTour->userId = auth()->user()->id;
+            $newTour->userId = auth()->user()->_id;
             $newTour->businessId = $business->id;
             $newTour->type = $request->tourType;
 
@@ -67,7 +67,7 @@ class MultiDayTourCreationController extends Controller implements tourCreations
             $newTour->codeNumber = $codeNumber;
         }
         else{
-            if($newTour->userId != auth()->user()->id)
+            if($newTour->userId != auth()->user()->_id)
                 return ['status' => 'nokUserAccess'];
         }
 

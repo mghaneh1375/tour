@@ -72,7 +72,7 @@ class cityTourismCreationController extends Controller implements tourCreations
         if(isset($request->tourId) && $request->tourId != 0){
             $tour = Tour::find($request->tourId);
 
-            if($tour != null && $tour->userId != auth()->user()->id)
+            if($tour != null && $tour->userId != auth()->user()->_id)
                 return response()->json(['status' => 'nokUserAccess']);
         }
 
@@ -87,7 +87,7 @@ class cityTourismCreationController extends Controller implements tourCreations
             while(Tour::where('codeNumber', $code)->first() != null);
 
             $tour = new Tour();
-            $tour->userId = auth()->user()->id;
+            $tour->userId = auth()->user()->_id;
             $tour->businessId = $business->id;
             $tour->type = 'cityTourism';
             $tour->code = $code;

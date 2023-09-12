@@ -16,12 +16,10 @@ use App\models\DefaultPic;
 use App\models\RetrievePas;
 use Illuminate\Support\Facades\Hash;
 
-require_once(__DIR__.'/../glogin/libraries/Google/autoload.php');
-
 class MainPanelBusinessController extends Controller {
 
     public function mainPage() {
-        $myBusiness = Business::where('userId', \auth()->user()->id)->get();
+        $myBusiness = Business::where('userId', \auth()->user()->_id)->get();
         foreach($myBusiness as $mb){
             $mb->url = route('businessManagement.panel', ['business' => $mb->id]);
         }

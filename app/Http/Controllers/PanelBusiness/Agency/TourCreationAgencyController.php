@@ -49,7 +49,7 @@ class TourCreationAgencyController extends Controller{
         
         if($tour != null){
             $business = Business::find($business);
-            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+            if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
             if($tour->type === 'cityTourism')
@@ -93,7 +93,7 @@ class TourCreationAgencyController extends Controller{
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
 
-        if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+        if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
             return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
         if($tour->type === 'cityTourism')
@@ -106,7 +106,7 @@ class TourCreationAgencyController extends Controller{
     public function tourStoreStageTwo(Request $request){
         $tour = Tour::find($request->tourId);
 
-        if($tour != null && $tour->userId == auth()->user()->id){
+        if($tour != null && $tour->userId == auth()->user()->_id){
 
             if($tour->type === 'cityTourism')
                 $createClass = new cityTourismCreationController();
@@ -130,7 +130,7 @@ class TourCreationAgencyController extends Controller{
         $tour = Tour::find($tourId);
 
         if($tour != null){
-            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+            if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
             $checkAccessToThisStage = $tour->checkAccessToThisStage('3');
@@ -151,7 +151,7 @@ class TourCreationAgencyController extends Controller{
     {
         $tour = Tour::find($request->tourId);
 
-        if($tour->userId == auth()->user()->id){
+        if($tour->userId == auth()->user()->_id){
             if($tour->type === 'cityTourism')
                 $createClass = new cityTourismCreationController();
             else
@@ -173,9 +173,9 @@ class TourCreationAgencyController extends Controller{
 
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
-        if(auth()->user()->id == $tour->userId){
+        if(auth()->user()->_id == $tour->userId){
             if($tour != null){
-                if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+                if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                     return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
                 $checkAccessToThisStage = $tour->checkAccessToThisStage('4');
@@ -196,7 +196,7 @@ class TourCreationAgencyController extends Controller{
     public function tourStoreStageFour(Request $request)
     {
         $tour = Tour::find($request->tourId);
-        if($tour->userId == auth()->user()->id){
+        if($tour->userId == auth()->user()->_id){
             if($tour->type === 'cityTourism')
                 $createClass = new cityTourismCreationController();
             else
@@ -220,8 +220,8 @@ class TourCreationAgencyController extends Controller{
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
 
-        if($tour->userId == auth()->user()->id){
-            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+        if($tour->userId == auth()->user()->_id){
+            if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
             $checkAccessToThisStage = $tour->checkAccessToThisStage('5');
@@ -242,7 +242,7 @@ class TourCreationAgencyController extends Controller{
 
         $tour = Tour::find($request->tourId);
 
-        if($tour->userId == auth()->user()->id){
+        if($tour->userId == auth()->user()->_id){
             if($tour->type === 'cityTourism')
                 $class = new cityTourismCreationController();
             else
@@ -265,8 +265,8 @@ class TourCreationAgencyController extends Controller{
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
 
-        if($tour->userId == auth()->user()->id){
-            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+        if($tour->userId == auth()->user()->_id){
+            if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                 return redirect(route('businessManagement.tour.list', ['business' => $business->id]));
 
             $checkAccessToThisStage = $tour->checkAccessToThisStage('6');
@@ -284,7 +284,7 @@ class TourCreationAgencyController extends Controller{
         $business = Business::find($businessId);
         $tour = Tour::find($tourId);
         if($tour != null){
-            if($business->id != $tour->businessId || \auth()->user()->id != $tour->userId)
+            if($business->id != $tour->businessId || \auth()->user()->_id != $tour->userId)
                 return redirect(route('businessManagement.tour.list'));
 
 
@@ -421,7 +421,7 @@ class TourCreationAgencyController extends Controller{
    
 
         $tour = Tour::find($data->tourId);
-        if($tour->userId == auth()->user()->id){
+        if($tour->userId == auth()->user()->_id){
 
             $direction = "{$this->assetLocation}/_images/tour";
             if(!is_dir($direction))
@@ -471,7 +471,7 @@ class TourCreationAgencyController extends Controller{
     public function tourDeletePic(Request $request){
         $tour = Tour::find($request->tourId);
         $picName = $request->fileName;
-        if($tour->userId == auth()->user()->id){
+        if($tour->userId == auth()->user()->_id){
             $location = "{$this->assetLocation}/_images/tour/{$tour->id}";
             $pic = TourPic::where('tourId', $tour->id)->where('pic', $picName)->first();
             if($pic != null){
@@ -493,7 +493,7 @@ class TourCreationAgencyController extends Controller{
         if($tourTime != null){
             $tour = Tour::find($tourTime->tourId);
             if($tour != null){
-                if($tour->userId == \auth()->user()->id){
+                if($tour->userId == \auth()->user()->_id){
                     $tourTime->isPublished = $tourTime->isPublished == 1 ? 0 : 1;
                     $tourTime->save();
 
@@ -512,7 +512,7 @@ class TourCreationAgencyController extends Controller{
     public function tourUpdateTourPublished(Request $request){
         $tour = Tour::find($request->tourId);
         if($tour != null){
-            if($tour->userId == \auth()->user()->id){
+            if($tour->userId == \auth()->user()->_id){
                 $tour->isPublished = $tour->isPublished == 1 ? 0 : 1;
                 $tour->save();
 
@@ -528,7 +528,7 @@ class TourCreationAgencyController extends Controller{
     public function deleteTour(Request $request){
         $tour = Tour::find($request->tourId);
         if($tour != null){
-            if($tour->userId == \auth()->user()->id){
+            if($tour->userId == \auth()->user()->_id){
                 $tourTimeCheck = TourTimes::where('tourId', $tour->id)->where('registered', '>', 0)->count();
 
                 $tourTimes = TourTimes::where('tourId', $tour->id)->pluck('id')->toArray();
