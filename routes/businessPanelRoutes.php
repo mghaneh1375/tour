@@ -11,7 +11,6 @@ use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\TicketController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
 use App\models\State;
-use App\models\User;
 use Illuminate\Support\Facades\Route;
 
 
