@@ -41,7 +41,7 @@
             <div class="newNum">{{$newNotificationCount}}</div>
         </a>
 
-        @if (auth()->user()->level == 0)
+        @if (!in_array('ADMIN', auth()->user()->roles))
             <a href="{{route('ticket.page')}}" class="headerButton" title="پشتیبانی">
                 <i class="fa-solid fa-headset"></i>
                 @if ($newTicketCount != 0)

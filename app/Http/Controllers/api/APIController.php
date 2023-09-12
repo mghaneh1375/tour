@@ -511,7 +511,7 @@ class APIController extends Controller {
 
             $badges = Medal::all();
 
-            $uId = Auth::user()->id;
+            $uId = Auth::user()->_id;
 
             foreach ($badges as $badge) {
 
@@ -540,7 +540,7 @@ class APIController extends Controller {
 
         if(Auth::check()) {
 
-            $condition = ['receiverId' => Auth::user()->id, 'receiverShow' => 1];
+            $condition = ['receiverId' => Auth::user()->_id, 'receiverShow' => 1];
             $this->content['inMsgCount'] = Message::where($condition)->count();
             return response()->json($this->content, 200);
         }
@@ -555,7 +555,7 @@ class APIController extends Controller {
 
         if(Auth::check()) {
 
-            $condition = ['senderId' => Auth::user()->id, 'senderShow' => 1];
+            $condition = ['senderId' => Auth::user()->_id, 'senderShow' => 1];
             $this->content['outMsgCount'] = Message::where($condition)->count();
             return response()->json($this->content, 200);
         }
@@ -681,7 +681,7 @@ class APIController extends Controller {
         if(!Auth::check())
             return response()->json($this->content, 401);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         if(isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["username"]) &&
             isset($_POST["email"]) && isset($_POST["cityName"])) {
@@ -764,7 +764,7 @@ class APIController extends Controller {
         if(!Auth::check())
             return response()->json($this->content, 401);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         if(isset($_POST["introduction"]) && isset($_POST["sex"]) && isset($_POST["ageId"])) {
 
@@ -796,7 +796,7 @@ class APIController extends Controller {
         if(!Auth::check())
             return response()->json($this->content, 401);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         if(!empty(Auth::user()->link))
             $this->content['msg'] = "شما اجازه تغییر رمز عبور خود را ندارید";
@@ -839,7 +839,7 @@ class APIController extends Controller {
         $uId = -1;
 
         if(Auth::check())
-            $uId = Auth::user()->id;
+            $uId = Auth::user()->_id;
         else
             $hasLogin = false;
 
@@ -1216,7 +1216,7 @@ class APIController extends Controller {
                 break;
         }
 
-        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => Auth::user()->id,
+        $condition = ['placeId' => $placeId, 'kindPlaceId' => $kindPlaceId, 'visitorId' => Auth::user()->_id,
             'activityId' => Activity::whereName('نظر')->first()->id];
 
         if($kindPlaceId != 8) {
@@ -1538,7 +1538,7 @@ class APIController extends Controller {
         $activityId = Activity::whereName('نظر')->first()->id;
         $seenActivityId = Activity::whereName('مشاهده')->first()->id;
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $condition = ['visitorId' => $uId, 'activityId' => $seenActivityId];
         $place2 = LogModel::where($condition)->orderBy('date', 'DESC')->take(4)->get();
 
@@ -1676,7 +1676,7 @@ class APIController extends Controller {
 
     public function getBookMarkMainAPI() {
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         $activityId = Activity::whereName('نشانه گذاری')->first()->id;
 
@@ -1790,7 +1790,7 @@ class APIController extends Controller {
                 return;
             }
 
-            $uId = Auth::user()->id;
+            $uId = Auth::user()->_id;
             $nums = DB::select("SELECT place.name as placeName, place.id as placeId, COUNT(kindPlaceId) as nums FROM log, place WHERE confirm = 1 and kindPlaceId = place.id and visitorId = " . $uId . " and activityId = " . $activityId . " GROUP BY(kindPlaceId)");
 
             echo json_encode(['data' => $nums]);
@@ -1863,7 +1863,7 @@ class APIController extends Controller {
             $rateActivityId = Activity::whereName('امتیاز')->first()->id;
             $reviewActivityId = Activity::whereName('نظر')->first()->id;
             $page = ($page - 1) * 5;
-            $uId = Auth::user()->id;
+            $uId = Auth::user()->_id;
 
 
             if($kindPlaceId != -1)
@@ -2170,7 +2170,7 @@ class APIController extends Controller {
 
         $badges = Medal::all();
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         foreach ($badges as $badge) {
 

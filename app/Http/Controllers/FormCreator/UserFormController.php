@@ -36,7 +36,7 @@ class UserFormController extends Controller
             "user_sub_asset_id" => ['nullable', new UserSubAssetExist(($request->has("sub_asset_id") ? $request["sub_asset_id"] : -1), true)]
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $userAssetId = $user_asset->id;
         $userSubAsset = null;
         $userSubAssetId = null;
@@ -212,7 +212,7 @@ class UserFormController extends Controller
             ]);
         }
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         // if(!$request->has("user_sub_sub_asset_id") && !$user_sub_asset->is_in_form($request["id"])) {
         //    return response()->json([
@@ -306,7 +306,7 @@ class UserFormController extends Controller
             "pic" => "image"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $path = $request->pic->store('public');
         $formFieldId = $form_field->id;
         $userAssetId = $user_asset->id;
@@ -354,7 +354,7 @@ class UserFormController extends Controller
      */
     public function set_formField_file(UserAsset $user_asset, FormField $form_field, Request $request) {
 
-        $uId = $request->user()->id;
+        $uId = $request->user()->_id;
         if($user_asset->user_id != $uId)
             return abort(401);
 
@@ -444,7 +444,7 @@ class UserFormController extends Controller
             "pic" => "required"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
             ->where('user_asset_id', $user_asset->id)->where('is_sub_asset', false)->first();
 
@@ -533,7 +533,7 @@ class UserFormController extends Controller
             "pic" => "image"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $userAssetId = $user_asset->id;
         $fieldId = $form_field->id;
 
@@ -616,7 +616,7 @@ class UserFormController extends Controller
             ]);
         }
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $userAssetId = $user_asset->id;
         $fieldId = $form_field->id;
 
@@ -677,7 +677,7 @@ class UserFormController extends Controller
 
     public function add_pic_to_gallery_sub(UserAsset $user_asset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         $request->validate([
             "pic" => "image"
@@ -774,7 +774,7 @@ class UserFormController extends Controller
 
     public function add_video_to_gallery_sub(UserAsset $user_asset, FormField $form_field, Asset $sub_asset, $user_sub_asset_id, Request $request) {
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
 
         if(!$request->has("video")) {
             return response()->json([
@@ -891,7 +891,7 @@ class UserFormController extends Controller
             "pic" => "image"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $pic = "public/" . $curr_file;
 
         $image = Image::wherePath($pic)->first();

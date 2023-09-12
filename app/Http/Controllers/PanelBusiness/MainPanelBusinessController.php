@@ -104,7 +104,7 @@ class MainPanelBusinessController extends Controller {
 
     public function viewInvitation($business) {
 
-        $acl = BusinessACL::where('userId', Auth::user()->id)->where('businessId', $business)->first();
+        $acl = BusinessACL::where('userId', Auth::user()->_id)->where('businessId', $business)->first();
 
         if($acl == null)
             return view('general.noAccess');
@@ -117,7 +117,7 @@ class MainPanelBusinessController extends Controller {
 
     public function acceptInvitation(BusinessACL $businessACL) {
 
-        if($businessACL->userId != Auth::user()->id)
+        if($businessACL->userId != Auth::user()->_id)
             return view('general.noAccess');
 
         if(!$businessACL->accept) {

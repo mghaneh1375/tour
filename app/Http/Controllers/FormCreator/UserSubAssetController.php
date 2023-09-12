@@ -59,7 +59,7 @@ class UserSubAssetController extends Controller
     public function edit_pic_gallery_sub(UserSubAsset $user_sub_asset, FormField $form_field, $curr_file, Request $request) {
 
 
-        if($request->user()->id != $user_sub_asset->user_id)
+        if($request->user()->_id != $user_sub_asset->user_id)
             return abort(401);
 
         if(!$user_sub_asset->is_in_form($form_field->id, false, true)) {
@@ -72,7 +72,7 @@ class UserSubAssetController extends Controller
             "pic" => "image"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $pic = $curr_file;
 
         $image = Image::wherePath($pic)->first();
@@ -146,7 +146,7 @@ class UserSubAssetController extends Controller
 
     public function delete_pic_from_gallery_sub(UserSubAsset $user_sub_asset, FormField $form_field, Request $request) {
 
-        if($request->user()->id != $user_sub_asset->user_id)
+        if($request->user()->_id != $user_sub_asset->user_id)
             return abort(401);
 
         if(!$user_sub_asset->is_in_form($form_field->id, false, true)) {
@@ -159,7 +159,7 @@ class UserSubAssetController extends Controller
             "pic" => "required"
         ]);
 
-        $uId = Auth::user()->id;
+        $uId = Auth::user()->_id;
         $data = UserFormsData::where('user_id', $uId)->where('field_id', $form_field->id)
             ->where('user_asset_id', $user_sub_asset->id)->where('is_sub_asset', true)->first();
 
@@ -276,7 +276,7 @@ class UserSubAssetController extends Controller
         
         $user = $request->user();
         
-        if($user->level != 2 && $user->id != $user_sub_asset->user_id)
+        if(!in_array('ADMIN', $user->roles) && $user->_id != $user_sub_asset->user_id)
             return abort(401);
         
         try {

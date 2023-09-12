@@ -19,14 +19,17 @@ Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin']);
 
 Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack']);
 
-Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function(){
-    Route::get('/loginPage', [AuthPanelBusinessController::class, 'loginPage'])->name('businessPanel.loginPage');
-    Route::get('/loginWithGoogle', [AuthPanelBusinessController::class, 'loginWithGoogle'])->name('businessPanel.loginWithGoogle');
+Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function() {
+
+    Route::get('/loginPage', function() {
+        
+        Redirect::to('https://koochita-server.bogenstudio.com/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
+
+    })->name('businessPanel.loginPage');
 
     Route::post('/user/checkRegisterInputs', [AuthPanelBusinessController::class, 'checkRegisterInputs'])->name('businessPanel.checkRegisterInputs');
     Route::post('/user/doSendVerificationPhoneCode', [AuthPanelBusinessController::class, 'doSendVerificationPhoneCode'])->name('businessPanel.doSendVerificationPhoneCode');
     Route::post('/user/doRegister', [AuthPanelBusinessController::class, 'doRegister'])->name('businessPanel.user.doRegister');
-    Route::post('/doLogin', [AuthPanelBusinessController::class, 'doLogin'])->name('businessPanel.doLogin');
 });
 
 

@@ -18,7 +18,7 @@ class BusinessModify {
         $business = $request->route("business");
         if($business == null)
             return response()->json(["status" => "nok", "msg" => "لطفا کسب و کار خود را ارسال کنید."]);
-        if($business->userId == Auth::user()->id || $business->readyForCheck || $business->finalStatus)
+        if($business->userId == Auth::user()->_id || $business->readyForCheck || $business->finalStatus)
             return $next($request);
         else
             return response()->json(["status" => "nok", "msg" => "شما اجازه تغییر این کسب و کار را ندارید."]);

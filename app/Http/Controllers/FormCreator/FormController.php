@@ -115,7 +115,7 @@ class FormController extends Controller
             }
         }
 
-        $userId = Auth::user()->id;
+        $userId = Auth::user()->_id;
 
         if($userAssetId != -1) {
 
@@ -323,7 +323,7 @@ class FormController extends Controller
             else if($userAssetId != -1 &&
                 $field->type == "ckeditor" && $field->user_form_data_id == null) {
                 $userFormData = new UserFormsData();
-                $userFormData->user_id = Auth::user()->id;
+                $userFormData->user_id = Auth::user()->_id;
                 $userFormData->data = "";
                 $userFormData->field_id =  $field->field_id;
                 if($isSubAsset) {

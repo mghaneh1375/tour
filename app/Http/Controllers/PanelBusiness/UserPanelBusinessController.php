@@ -208,7 +208,7 @@ class UserPanelBusinessController extends Controller {
 
     public function myBusinesses() {
 
-        $businesses = Business::where('userId', Auth::user()->id)->get();
+        $businesses = Business::where('userId', Auth::user()->_id)->get();
         foreach ($businesses as $business) {
             switch ($business->type) {
                 case "agency":
@@ -276,12 +276,12 @@ class UserPanelBusinessController extends Controller {
         }
 
         $name = $request["name"];
-        $assignUserId = self::checkUsernameStatic($name, true, Auth::user()->id, 0);
+        $assignUserId = self::checkUsernameStatic($name, true, Auth::user()->_id, 0);
 
         $business = new Business();
         $business->type = $request["type"];
         $business->haghighi = $haghighi;
-        $business->userId = Auth::user()->id;
+        $business->userId = Auth::user()->_id;
         $business->assignUserId = $assignUserId;
 
         if(!$haghighi)
