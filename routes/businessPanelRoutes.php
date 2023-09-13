@@ -11,13 +11,26 @@ use App\Http\Controllers\PanelBusiness\ReportPanelBusinessController;
 use App\Http\Controllers\PanelBusiness\TicketController;
 use App\Http\Controllers\PanelBusiness\UserPanelBusinessController;
 use App\models\State;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
 Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin']);
 
 Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack']);
-Route::get('salam', function() { echo phpinfo(); });
+
+Route::get('admin-login', function() { Auth::loginUsingId("607f046bdb19380d1ef94427"); });
+
+Route::get('user1-login', function() { Auth::loginUsingId("607f046cdb19380d1ef94929"); });
+
+Route::get('user2-login', function() { Auth::loginUsingId("607f046bdb19380d1ef9442c"); });
+
+Route::get('logout', function() {
+
+    Auth::logout();
+
+});
+
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function() {
 
     Route::get('/loginPage', function() {

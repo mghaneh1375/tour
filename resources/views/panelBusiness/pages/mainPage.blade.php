@@ -219,8 +219,8 @@
         var assetId = null;
         var step = null;
         var usreId = null;
-        let level = '{{ auth()->user()->level }}';
-        if (level === '0') {
+        let level = '{{ in_array('ADMIN', $userInfo->roles) ? 'ADMIN' : 'USER' }}';
+        if (level === 'USER') {
             openLoading();
             $.ajax({
                 type: 'get',
