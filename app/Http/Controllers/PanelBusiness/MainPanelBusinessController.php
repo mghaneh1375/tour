@@ -24,7 +24,11 @@ class MainPanelBusinessController extends Controller {
             $mb->url = route('businessManagement.panel', ['business' => $mb->id]);
         }
 
-        return view('panelBusiness.pages.mainPage', compact(['myBusiness']));
+	$fileVersions = 12;
+	$newTicketCount = 0;
+	$newNotificationCount = 0;
+
+        return view('panelBusiness.pages.mainPage', compact(['myBusiness', 'fileVersions', 'newTicketCount', 'newNotificationCount']));
     }
 
     public function completeUserInfo() {
