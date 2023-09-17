@@ -114,6 +114,8 @@
 
         function doRemove() {
             $.ajax({
+
+
                 type: 'delete',
                 url: delUrl + selectedFormRemoveId,
                 success: function(res) {
