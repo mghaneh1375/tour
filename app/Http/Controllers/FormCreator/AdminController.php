@@ -162,6 +162,7 @@ class AdminController extends Controller {
             $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             
             curl_close($ch);
+            dd($result);
 
             if($httpcode != 200)
                 return response()->json([
