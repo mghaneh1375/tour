@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 class AdminController extends Controller {
 
     private static $KOOCHITA_SERVER = "https://koochita-server.bogenstudio.com/api/";
-    private static $ROOM_SERVER = "http://193.151.137.75:8081/api/";
+    private static $ROOM_SERVER = "https://boom.bogenstudio.com/api/";
 
     public function setPlaceId(Request $request, UserAsset $user_asset) {
 
