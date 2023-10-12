@@ -71,8 +71,9 @@ class AdminController extends Controller {
         }
 
 
-        if($request['status'] == "CONFIRM" && 1 == 2) {
+        if($request['status'] == "CONFIRM" && $user_asset->asset->name === 'اقامتگاه') {
 
+            dd("qwe");
             if($user_asset->place_id == null) {
 
                 $ch = curl_init( self::$KOOCHITA_SERVER ."place/addPlace" );
