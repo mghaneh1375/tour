@@ -89,8 +89,8 @@ class AdminController extends Controller {
                     
                     if($itr->key_ == 'geo') {
                         $d = explode(' ', $itr->data);
-                        $data['c'] = (double)$d[0];
-                        $data['d'] = (double)$d[1];
+                        $data['c'] = $d[0];
+                        $data['d'] = $d[1];
                     }
                     else if($itr->key_ == 'city') {
                         $d = explode('$$', $itr->data);
