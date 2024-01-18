@@ -291,9 +291,7 @@
                         if (fields.length > 0)
                             storeData(fields);
 
-                    } else {
-                        console.log('nashod');
-                    }
+                    } else {}
                 }
             });
         }
@@ -523,7 +521,6 @@
 
                 if ($(this).attr('type') === 'radio') {
                     let id = $(this).attr('id');
-                    console.log(id);
                     let tmp = radioFields.find(e => e.id == id);
                     if (tmp === undefined) {
                         tmp = {
@@ -559,7 +556,6 @@
                     id: inputAttr,
                     data: $(this).val()
                 });
-                console.log(fields);
             });
 
             radioFields.forEach(e => {
@@ -588,7 +584,7 @@
                     }
                 }
             });
-            console.log(radioFields);
+
             if (errorText.length > 0) {
                 openErrorAlertBP(errorText);
             } else {

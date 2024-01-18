@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 class AdminController extends Controller {
 
     private static $KOOCHITA_SERVER = "https://koochita-server.bogenstudio.com/api/";
-    private static $ROOM_SERVER = "http://193.151.137.75:8081/api/";
+    private static $ROOM_SERVER = "https://boom.bogenstudio.com/api/";
 
     public function setPlaceId(Request $request, UserAsset $user_asset) {
 
@@ -71,7 +71,7 @@ class AdminController extends Controller {
         }
 
 
-        if($request['status'] == "CONFIRM" && 1 == 2) {
+        if($request['status'] == "CONFIRM" && $user_asset->asset->name === 'اقامتگاه') {
 
             if($user_asset->place_id == null) {
 
@@ -89,8 +89,8 @@ class AdminController extends Controller {
                     
                     if($itr->key_ == 'geo') {
                         $d = explode(' ', $itr->data);
-                        $data['c'] = (double)$d[0];
-                        $data['d'] = (double)$d[1];
+                        $data['c'] = $d[0];
+                        $data['d'] = $d[1];
                     }
                     else if($itr->key_ == 'city') {
                         $d = explode('$$', $itr->data);
