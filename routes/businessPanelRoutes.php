@@ -35,7 +35,7 @@ Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function() {
 
     Route::get('/loginPage', function() {
         
-        return Redirect::to('https://koochita-server.bogenstudio.com/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
+        return Redirect::to('https://tour.bogenstudio.com/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
 
     })->name('businessPanel.loginPage');
 
