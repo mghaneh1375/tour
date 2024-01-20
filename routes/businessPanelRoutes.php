@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 
-Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin']);
+Route::view('set-token', 'setToken');
 
-Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack']);
+Route::post('cas-auth', [AuthPanelBusinessController::class, 'myLogin'])->name('cas-auth');
+
+Route::get('login-callback', [AuthPanelBusinessController::class, 'loginCallBack'])->name('loginCallBack');
 
 Route::get('admin-login', function() { Auth::loginUsingId("607f046bdb19380d1ef94427"); });
 
@@ -35,9 +37,7 @@ Route::get('logout', function() {
 Route::middleware(['BusinessPanelGuest', 'csrfVeri'])->group(function() {
 
     Route::get('/loginPage', function() {
-        
         return Redirect::to('https://tour.bogenstudio.com/cas/login?redirectUrl=https://business.bogenstudio.com/login-callback&callback=https://business.bogenstudio.com/cas-auth');
-
     })->name('businessPanel.loginPage');
 
     Route::post('/user/checkRegisterInputs', [AuthPanelBusinessController::class, 'checkRegisterInputs'])->name('businessPanel.checkRegisterInputs');
