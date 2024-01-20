@@ -66,7 +66,7 @@ Route::middleware(['BusinessPanelAuth', 'csrfVeri'])->group( function () {
         Route::get('/', [MainPanelBusinessController::class, 'mainPage'])->name('businessPanel.mainPage');
         Route::get('/profile', [MainPanelBusinessController::class, 'mainPage'])->name('profile');
         Route::get('/create', [MainPanelBusinessController::class, 'create'])->name('businessPanel.create');
-       Route::view('businessesPanel', 'panelBusiness.pages.assetManager.businessesPanel')->name('businessPanel.panel');;
+        Route::view('businessesPanel', 'panelBusiness.pages.assetManager.businessesPanel')->name('businessPanel.panel');;
         Route::get('/myBusinesses', [UserPanelBusinessController::class, 'myBusinesses'])->name('businessPanel.myBusinesses');
         Route::get('/completeUserInfo', [MainPanelBusinessController::class, 'completeUserInfo'])->name('businessPanel.completeUserInfo');
     });
