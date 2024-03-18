@@ -63,6 +63,7 @@ class UserAsset extends FormCreatorBaseModel
     public function is_in_form($form_field_id, $is_pic = false, $gallery = false) {
 
         $uId = Auth::user()->_id;
+        
         if($is_pic)
             return (DB::connection('formDB')->select("select count(*) as countNum from user_assets u, forms f, form_fields ff where u.asset_id = f.asset_id " .
                     "and u.user_id = '" . $uId . "' and f.id = ff.form_id and ff.type = 'FILE' and ff.id = " . $form_field_id)[0]->countNum > 0);

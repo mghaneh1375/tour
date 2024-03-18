@@ -57,7 +57,6 @@ class AdminController extends Controller {
 
     public function setAssetStatus(Request $request, UserAsset $user_asset) {
 
-        
         $request->validate([
             'status' => ['required', Rule::in(['PENDING', 'REJECT', 'CONFIRM'])],
             'err_text' => 'nullable|string|min:2'

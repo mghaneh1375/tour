@@ -377,6 +377,7 @@
                         })
                     },
                     success: function(res) {
+                        console.log(res);
                         if (res.status === 0) {
                             if (nextFormId !== undefined) {
                                 window.location.href = '/asset/' + assetId + "/step/" + nextFormId +

@@ -10,23 +10,53 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\models\ActivationCode;
 use App\models\Business\Business;
+use App\models\FormCreator\UserAsset;
 use App\models\Business\BusinessMadarek;
 use App\models\Business\BusinessPic;
 use App\models\DefaultPic;
 use App\models\RetrievePas;
+use App\models\FormCreator\Asset;
+use App\Http\Resources\UserAssetDigest;
+
 use Illuminate\Support\Facades\Hash;
 
 class MainPanelBusinessController extends Controller {
 
     public function mainPage() {
-        $myBusiness = Business::where('userId', \auth()->user()->_id)->get();
+        $assets = Asset::all();
+        $output = [];
+        $uId = Auth::user()->_id;
+ 
+        
+        foreach($assets as $asset) {
+            
+            $userAssets = $asset->user_assets()->where('user_id', $uId)->get();
+            
+            if(count($userAssets) == 0)
+                continue;
+
+            $tmp = UserAssetDigest::collection($userAssets);
+
+            
+            foreach($tmp as $itr) {
+                $itr['asset'] = $asset->name;
+                $itr['asset_id'] = $asset->id;
+                $itr['type'] = $asset->type;
+                if($asset->type == 'Authentication'){
+                }else{
+                    array_push($output, $itr);
+                }   
+            }
+        }
+
+
+        $myBusiness = $output;
         foreach($myBusiness as $mb){
             $mb->url = route('businessManagement.panel', ['business' => $mb->id]);
         }
-
-	$fileVersions = 12;
-	$newTicketCount = 0;
-	$newNotificationCount = 0;
+        $fileVersions = 14;
+        $newTicketCount = 0;
+        $newNotificationCount = 0;
 
         return view('panelBusiness.pages.mainPage', compact(['myBusiness', 'fileVersions', 'newTicketCount', 'newNotificationCount']));
     }
@@ -135,6 +165,7 @@ class MainPanelBusinessController extends Controller {
     }
 
     public function getToBusinessManagementPage(){
+        
         return view('panelBusiness.pages.Agency.agencyMainPage');
     }
 

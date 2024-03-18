@@ -42,6 +42,7 @@
         let url = '{{ route('formCreator.root') }}';
         let selectedAssetId;
         let firstStepFormId;
+        let selectedAssetName;
 
         $(document).on("click", ".businessType", function() {
             if (!this.getAttribute('disabled')) {
@@ -49,13 +50,18 @@
                 $(this).addClass("selected");
                 selectedAssetId = $(this).attr('data-id');
                 firstStepFormId = $(this).attr('data-form-id');
+                selectedAssetName = $(this).attr('data-name');
 
                 $("#startProcessBtn").removeAttr('disabled');
             }
         });
 
         function startProcess() {
-            window.location.href = '/asset/' + selectedAssetId + "/step/" + firstStepFormId;
+            if (selectedAssetName == 'آژانس گردشگری') {
+                window.location.href = '/create';
+            } else {
+                window.location.href = '/asset/' + selectedAssetId + "/step/" + firstStepFormId;
+            }
         }
         openLoading();
         $.ajax({
@@ -71,7 +77,6 @@
             success: function(res) {
 
                 var html = '';
-                console.log('123');
                 if (res.status === "0") {
                     html += '<p>لطفا منتطر تایید احراز هویت بمانید</p>';
                 }
@@ -85,7 +90,8 @@
                     html += '</div>';
                     for (var i = 0; i < res.assets.length; i++) {
                         html += '<div class="col-xs-12 col-md-8" style="margin-top: 10px">';
-                        html += '<div data-id="' + res.assets[i].id + '" data-form-id="' + res.assets[i]
+                        html += '<div data-name="' + res.assets[i].name + '" data-id="' + res.assets[i].id +
+                            '" data-form-id="' + res.assets[i]
                             .formIds[0] +
                             '" data-type="agency" class="businessType">';
                         html += '<div class="picSection">';

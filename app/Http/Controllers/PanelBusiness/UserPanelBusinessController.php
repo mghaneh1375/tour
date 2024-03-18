@@ -269,6 +269,7 @@ class UserPanelBusinessController extends Controller {
         }
 
         if($haghighi && !_custom_check_national_code($request["nid"])) {
+
             return response()->json([
                 "status" => "nok",
                 "msg" => "شماره ملی وارد شده نامعبتر است."

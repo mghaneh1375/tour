@@ -3,7 +3,6 @@ var searchEventPlaceKind = null;
 var planDate = [];
 var searchResults = [];
 var ajaxProcess = null;
-
 var clockOptions = {
     placement: "left",
     donetext: "تایید",
@@ -149,7 +148,7 @@ function searchForPlaces(_element, _kindPlaceId) {
                             item.state_name && item.city_name
                                 ? `استان ${item.state_name} شهر ${item.city_name}`
                                 : "";
-                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this, kindPlaceId)">${item.target_name}</div>`;
+                        text += `<div class="res" data-index="${index}" onclick="chooseThisPlaceForDate(this,kindPlaceId)">${item.target_name}</div>`;
                     });
                     _element.next().html(text);
                 }
@@ -157,9 +156,8 @@ function searchForPlaces(_element, _kindPlaceId) {
         });
     }
 }
-function chooseThisPlaceForDate(_element, _kind) {
+function chooseThisPlaceForDate(_element, _kin) {
     _element = $(_element);
-
     var index = _element.attr("data-index");
     createPlaceCardForSelect(
         searchResults[index],
@@ -169,10 +167,8 @@ function chooseThisPlaceForDate(_element, _kind) {
     _element.parent().empty().prev().val("");
 }
 function createPlaceCardForSelect(_place, _resultSec) {
-    console.log(_place);
     var text = placeCardSample;
     var fn = Object.keys(_place);
-    console.log(text);
     for (var x of fn) {
         text = text.replace(new RegExp(`##${x}##`, "g"), _place[x]);
     }
@@ -384,14 +380,12 @@ function searchForHotel(_element) {
     if (ajaxProcess != null) ajaxProcess.abort();
 
     var kindPlaceId = $("#hotelKind").val();
-    console.log(kindPlaceId);
     if (value.trim().length > 1) {
         ajaxProcess = $.ajax({
             type: "GET",
             url: `https://koochita-server.bogenstudio.com/api/place/totalSearch?placeMode=${kindPlaceId}&key=${value}`,
             success: (res) => {
                 let data = JSON.parse(res);
-                console.log(data);
                 if (data.status == "ok") {
                     var text = "";
                     searchResults = data.data.places;
@@ -420,7 +414,8 @@ function chooseThisHotel(_element) {
         day
     ].hotelInfo.stateAndCity = `استان ${searchResults[index].state_name} شهر ${searchResults[index].city_name}`;
     $("#addHotelModal").modal("hide");
-
+    console.log(day);
+    console.log(planDate);
     showHotelInDay(day);
 }
 function showHotelInDay(_day) {

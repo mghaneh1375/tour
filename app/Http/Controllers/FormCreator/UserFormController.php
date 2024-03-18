@@ -95,7 +95,6 @@ class UserFormController extends Controller
                 array_push($errs, ($formField->err == null || empty($formField->err)) ? "داده وارد شده برای فیلد " . $formField->name . " نامعتبر است. " : $formField->err);
                     continue;
             }
-
             if(!$request->has("user_sub_asset_id") && !$user_asset->is_in_form($id)) {
                 return response()->json([
                     "status" => -1
@@ -113,7 +112,7 @@ class UserFormController extends Controller
             }
 
         }
-
+            
         if(count($errs) > 0) {
             return response()->json([
                 "status" => -2,

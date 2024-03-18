@@ -85,7 +85,7 @@ EOD;
 
         $url = $_SERVER['REQUEST_URI'];
 
-        $fileVersions = 14;
+        $fileVersions = 15;
 
         return view('panelBusiness.pages.auth.login', compact(['authUrl', 'fileVersions']));
     }

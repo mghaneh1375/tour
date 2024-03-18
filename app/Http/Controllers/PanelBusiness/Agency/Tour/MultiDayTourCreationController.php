@@ -32,6 +32,8 @@ use App\models\tour\TourStyle_Tour;
 use App\models\tour\TourTimes;
 use App\models\tour\Transport_Tour;
 use App\models\tour\TransportKind;
+use App\models\FormCreator\Asset;
+
 use App\User;
 use Illuminate\Http\Request;
 
@@ -46,12 +48,25 @@ class MultiDayTourCreationController extends Controller implements tourCreations
             if($newTour != null)
                 $isNewTour = false;
         }
-
+        $assets = Asset::all();
+        
+        foreach($assets as $asset) {
+            
+            $userAssetss = $asset->user_assets()->where('id', $request->businessId)->get();
+            if(count($userAssetss) == 0)
+                continue;
+            foreach($userAssetss as $userAssets) {
+                $businessName = $userAssets->title;
+            }
+            
+        }
         if($isNewTour) {
             $newTour = new Tour();
             $newTour->userId = auth()->user()->_id;
             $newTour->businessId = $business->id;
             $newTour->type = $request->tourType;
+            $newTour->businessName = $businessName;
+
 
             do
                 $code = generateRandomString('10');
@@ -67,6 +82,7 @@ class MultiDayTourCreationController extends Controller implements tourCreations
             $newTour->codeNumber = $codeNumber;
         }
         else{
+            
             if($newTour->userId != auth()->user()->_id)
                 return ['status' => 'nokUserAccess'];
         }
@@ -106,7 +122,6 @@ class MultiDayTourCreationController extends Controller implements tourCreations
                 $tourTime->save();
             }
         }
-
         return ['status' => 'ok', 'result' => $newTour];
     }
 
@@ -195,11 +210,12 @@ class MultiDayTourCreationController extends Controller implements tourCreations
                 $newEvent->eTime = $event->eTime;
                 $newEvent->description = $event->description;
                 if(!is_array($event->moreData)){
-                    $newEvent->text = $event->moreData;
+                    $newEvent->title = $event->moreData;
                     $newEvent->hasPlace = 0;
                 }
                 else
                     $newEvent->hasPlace = 1;
+
                 $newEvent->save();
 
                 if(is_array($event->moreData)){
@@ -375,6 +391,11 @@ class MultiDayTourCreationController extends Controller implements tourCreations
 
         $counter = 0;
         $prices = TourPrices::where('tourId', $tour->id)->get();
+        $tourTimes=TourTimes::where('tourId',  $tour->id)->get();
+        foreach($tourTimes as $tourTime){
+            $tourTime->cost = $tour->minCost;
+            $tourTime->save();
+        }
         if(count($prices) > count($data->prices)){
             for(; $counter < count($data->prices); $counter++){
                 $pri = $data->prices[$counter];

@@ -410,13 +410,13 @@
                             <div class="select-side">
                                 <i class="glyphicon glyphicon-triangle-bottom"></i>
                             </div>
-                            <select id="selectStateForSelectCity" class="inputBoxInput styled-select text-align-right"
-                                type="text">
+                            <div id="selectStateForSelectCity"></div>
+                            {{-- <select id="selectStateForSelectCity" class="inputBoxInput styled-select text-align-right"type="text">
                                 <option value="0">انتخاب کنید</option>
                                 @foreach ($states as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                         </div>
 
                         <div class="inputBoxTour col-xs-5 relative-position placeNameAddingPlaceInputDiv">
@@ -465,13 +465,14 @@
                                 <div class="select-side">
                                     <i class="glyphicon glyphicon-triangle-bottom"></i>
                                 </div>
-                                <select id="selectStateForDestination"
+                                <div id="selectStateForSelectCityDest"></div>
+                                {{-- <select id="selectStateForDestination"
                                     class="inputBoxInput styled-select text-align-right" type="text">
                                     <option value="0">انتخاب کنید</option>
                                     @foreach ($states as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
                         <div class="col-xs-4">

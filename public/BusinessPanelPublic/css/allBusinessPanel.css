@@ -1101,6 +1101,7 @@ label {
     border-radius: 20px;
     box-shadow: 0 0 4px 1px #cccccc;
     padding: 10px;
+    padding-bottom: 40px;
     overflow: auto;
     max-height: 100%;
 }

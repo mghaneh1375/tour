@@ -44,6 +44,7 @@ class UserAssetController extends Controller
         $assets = Asset::all();
         $output = [];
         $uId = Auth::user()->_id;
+ 
         
         foreach($assets as $asset) {
             
@@ -58,6 +59,8 @@ class UserAssetController extends Controller
             foreach($tmp as $itr) {
                 $itr['asset'] = $asset->name;
                 $itr['asset_id'] = $asset->id;
+                $itr['type'] = $asset->type;
+
                 array_push($arr, $itr);
             }
 
@@ -88,7 +91,6 @@ class UserAssetController extends Controller
 
         $title = $request["data"];
         $user = Auth::user();
-
         // $token = self::createToken();
 
         // $apiRes = Http::asForm()->withoutVerifying()->post(self::$apiBaseUrl . "addUser", [
@@ -115,9 +117,8 @@ class UserAssetController extends Controller
 
         $user_asset = new UserAsset();
         $user_asset->asset_id = $asset->id;
-        $user_asset->user_id = $user->id;
+        $user_asset->user_id = $user->_id;
         $user_asset->title = $title;
-
         $user_asset->save();
 
         return response()->json([

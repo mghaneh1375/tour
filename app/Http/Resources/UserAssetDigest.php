@@ -17,7 +17,6 @@ class UserAssetDigest extends JsonResource
 
     public function toArray($request)
     {
-        
         return [
             'id' => $this->id,
             'status' => ($this->status == "INIT") ? "در حال ساخت" : (($this->status == "PENDING") ? "در حال بررسی برای تایید" : (($this->status == "REJECT") ? "رد شده" : "تایید شده")),

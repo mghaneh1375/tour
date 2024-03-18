@@ -1,4 +1,5 @@
 var ajaxVar = null;
+var cityId;
 var calendarIndex = 2;
 var timeRowSample = $("#timeRowSample").html();
 $("#timeRowSample").remove();
@@ -38,10 +39,54 @@ function deleteCalendar(_index) {
 
 function chooseSrcCityModal() {
     $("#addCityModal").modal("show");
+    state();
+}
+
+function state() {
+    stateList = "";
+
+    $.ajax({
+        type: "get",
+        url: "https://boom.bogenstudio.com/api/v1/general/user/get-list-of-province",
+        headers: {
+            Accept: "application/json",
+            // 'Content-Type': 'application/json',
+            // Authorization: TOKEN,
+        },
+        success: function (myRes) {
+            stateList += "";
+            stateList +=
+                '<select  class="inputBoxInput styled-select text-align-right"type="text" id="stateId" onChange="">';
+            stateList += "<option>انتخاب کنید</option>";
+            for (let i = 0; i < myRes.length; i++) {
+                if (1 == 2) {
+                    stateList +=
+                        ' <option selected id="' +
+                        myRes[i]._id +
+                        '" value="' +
+                        myRes[i].name +
+                        '">' +
+                        myRes[i].name +
+                        "</option>";
+                } else {
+                    stateList +=
+                        ' <option id="' +
+                        myRes[i]._id +
+                        '" value="' +
+                        myRes[i].name +
+                        '">' +
+                        myRes[i].name +
+                        "</option>";
+                }
+            }
+            stateList += "</select>";
+            $("#selectStateForSelectCity").empty().append(stateList);
+        },
+    });
 }
 
 function searchForCity(_element) {
-    var stateId = $("#selectStateForSelectCity").val();
+    var stateId = $("#stateId").val();
     var value = $(_element).val().trim();
     var citySrcInput = $(_element);
     citySrcInput.next().empty();
@@ -51,14 +96,24 @@ function searchForCity(_element) {
 
         ajaxVar = $.ajax({
             type: "GET",
-            url: `${findCityWithStateUrl}?stateId=${stateId}&value=${value}`,
-            success: (response) => {
-                if (response.status == "ok") {
+            url:
+                "https://koochita-server.bogenstudio.com/api/place/searchForCitiesOrStates?state=" +
+                stateId +
+                "&key=" +
+                value,
+            success: (myRes) => {
+                let res = JSON.parse(myRes);
+
+                if (res.status == "ok") {
                     var text = "";
-                    response.result.map(
-                        (item) =>
-                            (text += `<div class="searchHover blue" onclick="selectThisCityForSrc(this, ${item.id})">${item.name}</div>`)
-                    );
+                    for (let i = 0; i < res.data.cities.length; i++) {
+                        cityId = res.data.cities[i].id;
+                        text +=
+                            '<div class="searchHover blue" onclick="selectThisCityForSrc(this,cityId )">';
+                        text += "" + res.data.cities[i].target_name + "";
+                        text += "</div>";
+                    }
+
                     citySrcInput.next().html(text);
                 }
             },
@@ -78,11 +133,52 @@ function selectThisCityForSrc(_element, _id) {
 
 function chooseDestModal() {
     $("#addDestinationModal").modal("show");
+    stateForDest();
 }
+function stateForDest() {
+    stateList = "";
 
+    $.ajax({
+        type: "get",
+        url: "https://boom.bogenstudio.com/api/v1/general/user/get-list-of-province",
+        headers: {
+            Accept: "application/json",
+            // 'Content-Type': 'application/json',
+            // Authorization: TOKEN,
+        },
+        success: function (myRes) {
+            stateList += "";
+            stateList +=
+                '<select  class="inputBoxInput styled-select text-align-right"type="text" id="stateDestId" onChange="">';
+            stateList += "<option>انتخاب کنید</option>";
+            for (let i = 0; i < myRes.length; i++) {
+                if (1 == 2) {
+                    stateList +=
+                        ' <option selected id="' +
+                        myRes[i]._id +
+                        '" value="' +
+                        myRes[i].name +
+                        '">' +
+                        myRes[i].name +
+                        "</option>";
+                } else {
+                    stateList +=
+                        ' <option id="' +
+                        myRes[i]._id +
+                        '" value="' +
+                        myRes[i].name +
+                        '">' +
+                        myRes[i].name +
+                        "</option>";
+                }
+            }
+            stateList += "</select>";
+            $("#selectStateForSelectCityDest").empty().append(stateList);
+        },
+    });
+}
 function searchForDestination(_element) {
-    var stateId = $("#selectStateForDestination").val();
-    var kind = $("#selectDestinationKind").val();
+    var stateId = $("#stateDestId").val();
     var value = $(_element).val().trim();
     var citySrcInput = $(_element);
     citySrcInput.next().empty();
@@ -90,21 +186,25 @@ function searchForDestination(_element) {
     if (value.length > 1 && stateId != 0) {
         if (ajaxVar != null) ajaxVar.abort();
 
-        var url =
-            kind == "city"
-                ? `${findCityWithStateUrl}?stateId=${stateId}&value=${value}`
-                : `${findPlaceWithKindPlaceIdUrl}?value=${value}&kindPlaceId=6`;
-
         ajaxVar = $.ajax({
             type: "GET",
-            url,
-            success: (response) => {
-                if (response.status == "ok") {
+            url:
+                "https://koochita-server.bogenstudio.com/api/place/searchForCitiesOrStates?state=" +
+                stateId +
+                "&key=" +
+                value,
+            success: (myRes) => {
+                let res = JSON.parse(myRes);
+                if (res.status == "ok") {
                     var text = "";
-                    response.result.map(
-                        (item) =>
-                            (text += `<div class="searchHover blue" onclick="selectThisForDest(this, ${item.id}, '${kind}')">${item.name}</div>`)
-                    );
+                    for (let i = 0; i < res.data.cities.length; i++) {
+                        cityId = res.data.cities[i].id;
+                        text +=
+                            '<div class="searchHover blue" onclick="selectThisForDest(this,cityId)">';
+                        text += "" + res.data.cities[i].target_name + "";
+                        text += "</div>";
+                    }
+
                     citySrcInput.next().html(text);
                 }
             },
@@ -112,7 +212,9 @@ function searchForDestination(_element) {
     }
 }
 
-function selectThisForDest(_element, _id, _kind) {
+function selectThisForDest(_element, _id) {
+    var _kind = $("#selectDestinationKind").val();
+
     $("#destInput").val($(_element).text());
     $("#destPlaceId").val(_id);
     $("#destKind").val(_kind);
@@ -272,8 +374,8 @@ function checkInput() {
         tourId: document.getElementById("tourId").value,
         businessId: document.getElementById("businessId").value,
         tourName: document.getElementById("tourName").value,
-        srcCityId: document.getElementById("srcCityId").value,
-        destPlaceId: document.getElementById("destPlaceId").value,
+        srcCityId: $("#srcCityId").val(),
+        destPlaceId: $("#destPlaceId").val(),
         kindDest: document.getElementById("destKind").value,
         sameSrcDestInput: document.getElementById("sameSrcDestInput").checked,
         tourDay: parseInt(p2e(document.getElementById("tourDay").value)),
@@ -298,9 +400,9 @@ function checkInput() {
     var errorText = "";
     if (dataToSend.tourName.trim().length < 2)
         errorText += "<li>نام تور خود را مشخص کنید.</li>";
-    if (!(dataToSend.srcCityId >= 1))
+    if (!(dataToSend.srcCityId.length >= 1))
         errorText += "<li>مبدا تور خود را مشخص کنید.</li>";
-    if (!(dataToSend.destPlaceId >= 1))
+    if (!(dataToSend.destPlaceId.length >= 1))
         errorText += "<li>مقصد تور خود را مشخص کنید.</li>";
     if (!(Number.isInteger(dataToSend.tourDay) && dataToSend.tourDay >= 0))
         errorText += "<li>تعداد روزهای تور خود را مشخص کنید.</li>";
@@ -357,9 +459,9 @@ function submitInputs() {
             url: stageOneStoreUrl,
             data: dataToSend,
             success: (response) => {
-                if (response.status === "ok")
+                if (response.status === "ok") {
                     location.href = `${stageTwoUrl}/${response.result}`;
-                else {
+                } else {
                     closeLoading();
                     showSuccessNotifiBP("در ثبت مشکلی پیش آمده", "left", "red");
                 }
@@ -373,7 +475,8 @@ function submitInputs() {
 }
 
 $(window).ready(() => {
-    console.log(tour);
+    stateForDest();
+    state();
     $(".observer-example").datepicker(datePickerOptions);
     $(".tourBasicKindsCheckbox")
         .mouseenter(() => $(this).addClass("green-border"))

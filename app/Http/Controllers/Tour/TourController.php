@@ -23,6 +23,10 @@ use Illuminate\Http\Request;
 use Illuminate\Mail\Transport\Transport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use App\models\FormCreator\Asset;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class TourController extends Controller{
 
@@ -39,7 +43,7 @@ class TourController extends Controller{
     public function tourMainPage(){
         return view('pages.tour.mainPageTourF.mainPageTour');
     }
-
+    
     public function getMainPageTours(){
 
         $type = $_GET['type'];
@@ -133,10 +137,24 @@ class TourController extends Controller{
 
     public function showTour($code){
         $this->defaultActions();
+        $assets = Asset::all();
+        $uId = Auth::user()->_id;
 
-        $tour = Tour::join('business', 'business.id', 'tour.businessId')
-                    ->where('tour.code', $code)
-                    ->select(['tour.*', 'business.name AS agencyName', 'business.logo AS agencyLogo', 'business.tel AS agencyPhone'])
+        foreach($assets as $asset) {
+            
+
+            $userAssetss = $asset->user_assets()->where('user_id', $uId)->get();
+             if(count($userAssetss) == 0)
+                continue;
+            foreach($userAssetss as $userAssets) {
+                $business = $userAssets;
+                $business['type'] = $asset->type;
+            }
+            
+        }
+        $tour = Tour::where('businessId',$business['id'] )
+                    ->where('code', $code)
+                    ->select(['tour.*'])
                     ->first();
 
         $places = $tour->getAllPlaces();

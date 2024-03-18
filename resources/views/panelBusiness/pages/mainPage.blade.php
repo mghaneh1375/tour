@@ -119,7 +119,6 @@
             <div class="mainBackWhiteBody" style="margin-top: 10px">
                 <div class="headerTitle">کسب و کارهای من</div>
                 <div class="cardsSection">
-
                     @if (count($myBusiness) == 0)
                         <div class="row">
                             <div class="">
@@ -146,7 +145,7 @@
                                     @endif
                                 </div>
                                 <div class="infoSec">
-                                    <div class="text">{{ $mb->name }}</div>
+                                    <div class="text">{{ $mb->title }}</div>
                                     <div class="numSec">
                                         <span class="num">{{ $newTicketCount }}</span>
                                         <span class="tex">پیام جدید</span>
